@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2013-02-07T11:13:04Z" product-name="maps2">
+		<header/>
+		<body>
+
+			<trans-unit id="tx_maps2_domain_model_poi" xml:space="preserve" approved="yes">
+				<source>Google Maps Address</source>
+				<target></target>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poi_collection" xml:space="preserve">
+				<source>Marking</source>
+				<target>Markierung</target>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poi_collection.title" xml:space="preserve">
+				<source>Title</source>
+				<target>Titel</target>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poi_collection.configuration_map" xml:space="preserve" approved="yes">
+				<source>configurationMap</source>
+				<target></target>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poi_collection.pois" xml:space="preserve">
+				<source>POIs</source>
+				<target></target>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poi_collection.latitude" xml:space="preserve" approved="yes">
+				<source>latitude</source>
+				<target></target>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poi_collection.longitude" xml:space="preserve" approved="yes">
+				<source>longitude</source>
+				<target></target>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poi_collection.address" xml:space="preserve" approved="yes">
+				<source>address</source>
+				<target></target>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poi_collection.marker" xml:space="preserve" approved="yes">
+				<source>marker</source>
+				<target></target>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poi_collection.image_size" xml:space="preserve" approved="yes">
+				<source>imageSize</source>
+				<target></target>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poi_collection.image_width" xml:space="preserve" approved="yes">
+				<source>imageWidth</source>
+				<target></target>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poi_collection.image_height" xml:space="preserve" approved="yes">
+				<source>imageHeight</source>
+				<target></target>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poi_collection.shadow" xml:space="preserve" approved="yes">
+				<source>shadow</source>
+				<target></target>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poi_collection.shadow_size" xml:space="preserve" approved="yes">
+				<source>shadowSize</source>
+				<target></target>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poi_collection.shadow_width" xml:space="preserve" approved="yes">
+				<source>shadowWidth</source>
+				<target></target>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poi_collection.shadow_height" xml:space="preserve" approved="yes">
+				<source>shadowHeight</source>
+				<target></target>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poi_collection.info_window_content" xml:space="preserve" approved="yes">
+				<source>infoWindowContent</source>
+				<target></target>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poi_collection.info_window_link" xml:space="preserve" approved="yes">
+				<source>infoWindowLink</source>
+				<target></target>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poi_collection.close_by_click" xml:space="preserve" approved="yes">
+				<source>closeByClick</source>
+				<target></target>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poi_collection.open_by_click" xml:space="preserve" approved="yes">
+				<source>openByClick</source>
+				<target></target>
+			</trans-unit>
+
+			<trans-unit id="searchStreet" xml:space="preserve" approved="yes">
+				<source>Search for street</source>
+				<target>Suche Straße</target>
+			</trans-unit>
+
+		</body>
+	</file>
+</xliff>

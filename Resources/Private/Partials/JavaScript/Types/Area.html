@@ -1,0 +1,22 @@
+var coordinatesArray = [];
+
+<f:for each="{poiCollection.pois}" as="area" iteration="iterator">
+	coordinatesArray.push(new google.maps.LatLng({area.latitude}, {area.longitude}));
+</f:for>
+
+/*<![CDATA[*/
+if (coordinatesArray.length == 0) {
+	coordinatesArray.push(mapPosition);
+}
+
+var area = new google.maps.Polygon({
+	paths: coordinatesArray,
+	strokeColor: strokeColor,
+	strokeOpacity: strokeOpacity,
+	strokeWeight: strokeWeight,
+	fillColor: fillColor,
+	fillOpacity: fillOpacity
+});
+
+area.setMap(map);
+/*]]>*/

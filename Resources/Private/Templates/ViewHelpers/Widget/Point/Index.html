@@ -1,0 +1,28 @@
+<script type="text/javascript">
+	// define location
+	var latitude = {center.latitude};
+	var longitude = {center.longitude};
+
+	{f:render(partial: 'JavaScript/MapOptions', arguments: {mapOptions: mapOptions})}
+
+	TYPO3.jQuery(document).ready(function() {
+		/*<![CDATA[*/
+		var mapPosition = new google.maps.LatLng(latitude, longitude);
+		var mapOptions = {
+			center: mapPosition,
+			zoom: zoom,
+			mapTypeId: mapTypeId,
+			panControl: panControl,
+			zoomControl: zoomControl,
+			mapTypeControl: mapTypeControl,
+			scaleControl: scaleControl,
+			streetViewControl: streetViewControl,
+			overviewMapControl: overviewMapControl
+		};
+		/*]]>*/
+
+		var map = new google.maps.Map(document.getElementById("maps2"), mapOptions);
+	});
+</script>
+
+<div id="maps2" style="width: {width}px; height: {height}px"></div>

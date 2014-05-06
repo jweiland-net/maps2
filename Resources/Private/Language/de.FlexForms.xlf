@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2013-02-18T15:03:04Z" product-name="maps2">
+		<header/>
+		<body>
+			<trans-unit id="sheetGeneral" xml:space="preserve">
+				<source>General</source>
+				<target>Allgemein</target>
+			</trans-unit>
+			<trans-unit id="chooseAction" xml:space="preserve">
+				<source>Choose view</source>
+				<target>Ansicht wählen</target>
+			</trans-unit>
+			<trans-unit id="actionShow" xml:space="preserve">
+				<source>Show one single point of interest</source>
+				<target>Zeige einen gewählten Punkt</target>
+			</trans-unit>
+			<trans-unit id="actionShowPoisOfCategory" xml:space="preserve">
+				<source>Show all point of interest of a choosen category</source>
+				<target>Zeige alle Punkte einer gewählten Kategorie</target>
+			</trans-unit>
+			<trans-unit id="poiCollection" xml:space="preserve">
+				<source>Collection of interessting points</source>
+				<target>UID der Sammlung von interessanten Punkten</target>
+			</trans-unit>
+			<trans-unit id="autoAppend" xml:space="preserve">
+				<source>Append a fixed string to search value. Maybe a cityname. That way the user has only to insert a streetname.</source>
+				<target>Fügt den hier angegebenen Text an die Eingabe des Webseitenbesuchers an. Tragen Sie hier z.B. den Stadtnamen ein. Auf diese Weise braucht der Besucher nur noch den Straßennamen einzutragen.</target>
+			</trans-unit>
+			<trans-unit id="mapWidth" xml:space="preserve">
+				<source>Map width</source>
+				<target>Breite der Karte</target>
+			</trans-unit>
+			<trans-unit id="mapHeight" xml:space="preserve">
+				<source>Map height</source>
+				<target>Höhe der Karte</target>
+			</trans-unit>
+
+			<trans-unit id="sheetMapOptions" xml:space="preserve">
+				<source>Map Options</source>
+				<target>Kartenoptionen</target>
+			</trans-unit>
+			<trans-unit id="zoom" xml:space="preserve">
+				<source>Default zoom</source>
+				<target>Vorgegebener Zoomfaktor</target>
+			</trans-unit>
+			<trans-unit id="mapTypeId" xml:space="preserve">
+				<source>Default map view</source>
+				<target>Vorgegebene Kartenansict</target>
+			</trans-unit>
+			<trans-unit id="mapTypeId.Hybrid" xml:space="preserve">
+				<source>Hybrid</source>
+				<target>Hybrid</target>
+			</trans-unit>
+			<trans-unit id="mapTypeId.RoadMap" xml:space="preserve">
+				<source>Road Map</source>
+				<target>Straßenansicht</target>
+			</trans-unit>
+			<trans-unit id="mapTypeId.Satellite" xml:space="preserve">
+				<source>Satellit</source>
+				<target>Sattelit</target>
+			</trans-unit>
+			<trans-unit id="mapTypeId.Terrain" xml:space="preserve">
+				<source>Terrain</source>
+				<target>Terrain</target>
+			</trans-unit>
+			<trans-unit id="panControl" xml:space="preserve">
+				<source>Show Pan Control</source>
+				<target></target>
+			</trans-unit>
+			<trans-unit id="zoomControl" xml:space="preserve">
+				<source>Show Zoom Control</source>
+				<target>Zeige Steuerelement: Zoom</target>
+			</trans-unit>
+			<trans-unit id="mapTypeControl" xml:space="preserve">
+				<source>Show Map Type Control</source>
+				<target>Zeige Steuerelement zum Wechseln der Kartenansichten</target>
+			</trans-unit>
+			<trans-unit id="scaleControl" xml:space="preserve">
+				<source>Show Scale Control</source>
+				<target></target>
+			</trans-unit>
+			<trans-unit id="streetViewControl" xml:space="preserve">
+				<source>Show StreetView Control</source>
+				<target>Zeige Steuerelement für StreetView</target>
+			</trans-unit>
+			<trans-unit id="overviewMapControl" xml:space="preserve">
+				<source>Show Overview Control</source>
+				<target>Zeige Steuerelement für Übersicht</target>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

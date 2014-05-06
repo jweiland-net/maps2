@@ -1,0 +1,17 @@
+<f:layout name="Default" />
+
+<f:section name="main">
+
+	<f:flashMessages />
+
+	<p>Check for Multiple</p>
+
+	<f:if condition="{radiusResults}">
+		<ul>
+			<f:for each="{radiusResults}" as="radiusResult">
+				<li><f:link.action action="listRadius" arguments="{latitude: radiusResult.geometry.location.lat, longitude: radiusResult.geometry.location.lng, radius: newSearch.radius}">{radiusResult.formattedAddress}</f:link.action></li>
+			</f:for>
+		</ul>
+	</f:if>
+
+</f:section>

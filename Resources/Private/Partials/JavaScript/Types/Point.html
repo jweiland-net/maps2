@@ -1,0 +1,14 @@
+{namespace maps2=JWeiland\Maps2\ViewHelpers}
+
+var pointPosition = new google.maps.LatLng({poiCollection.latitude}, {poiCollection.longitude});
+
+<f:if condition="{maps2:cache.hasCache(cacheIdentifier: 'htmlCache{poiCollection.uid}')}">
+	<f:then>
+		infoWindowContent = '{maps2:cache.getCache(cacheIdentifier: 'htmlCache{poiCollection.uid}')}';
+	</f:then>
+	<f:else>
+		{maps2:cache.setCache(cacheIdentifier: 'htmlCache{poiCollection.uid}', data: '{f:render(partial: \'InfoWindowContent\', arguments: {poiCollection: poiCollection})->maps2:formatHtmlForJavaScript()}', tags: {0: poiCollection.pid}, lifetime: 3600)}
+		infoWindowContent = '{f:render(partial: 'InfoWindowContent', arguments: {poiCollection: poiCollection})->maps2:formatHtmlForJavaScript()}';
+	</f:else>
+</f:if>
+createMarker({poiCollection.uid}, pointPosition, infoWindowContent);

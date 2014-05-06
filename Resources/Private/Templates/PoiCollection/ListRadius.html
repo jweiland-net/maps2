@@ -1,0 +1,18 @@
+<f:layout name="Default" />
+
+<f:section name="main">
+
+	<f:flashMessages />
+
+	<f:if condition="{poiCollections}">
+		<f:then>
+			<script type="text/javascript">
+				<f:render partial="JavaScript" arguments="{poiCollections: poiCollections, extConf: extConf}" />
+			</script>
+			<div id="maps2" style="width: {settings.mapWidth}px; height: {settings.mapHeight}px"></div>
+		</f:then>
+		<f:else>
+			<div class="noPositionFound">Sorry, there are no results within your given radius</div>
+		</f:else>
+	</f:if>
+</f:section>

@@ -1,0 +1,51 @@
+{namespace maps2=JWeiland\Maps2\ViewHelpers}
+
+<f:layout name="Default" />
+
+<f:section name="main">
+
+	<script type="text/javascript">
+		// define location
+		var latitude = {latitude};
+		var longitude = {longitude};
+
+		// define map options
+		var zoom = {settings.zoom};
+		var mapTypeId = {settings.mapTypeId};
+		var panControl = {settings.panControl};
+		var zoomControl = {settings.zoomControl};
+		var mapTypeControl = {settings.mapTypeControl};
+		var scaleControl = {settings.scaleControl};
+		var streetViewControl = {settings.streetViewControl};
+		var overviewMapControl = {settings.overviewMapControl};
+
+		jQuery(document).ready(function() {
+			/*<![CDATA[*/
+			var mapPosition = new google.maps.LatLng(latitude, longitude);
+			var mapOptions = {
+				center: mapPosition,
+				zoom: zoom,
+				mapTypeId: mapTypeId,
+				panControl: panControl,
+				zoomControl: zoomControl,
+				mapTypeControl: mapTypeControl,
+				scaleControl: scaleControl,
+				streetViewControl: streetViewControl,
+				overviewMapControl: overviewMapControl
+			};
+			/*]]>*/
+
+			var map = new google.maps.Map(document.getElementById("maps2"), mapOptions);
+			var marker = new google.maps.Marker({
+				position: mapPosition,
+				map: map
+			});
+		});
+	</script>
+	<form action="/index.php" method="get">
+		<maps2:form.renderHiddenFieldsForGet action="search" controller="CityMap" />
+		<input type="text" name="tx_maps2_citymap[street]" value="{address}" />
+		<input type="submit" value="{f:translate(key: 'searchStreet')}" />
+	</form>
+	<div id="maps2" style="width: {settings.mapWidth}px; height: {settings.mapHeight}px"></div>
+</f:section>

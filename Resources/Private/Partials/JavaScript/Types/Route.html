@@ -1,0 +1,17 @@
+var coordinatesArray = [];
+
+<f:for each="{poiCollection.pois}" as="route" iteration="iterator">
+	coordinatesArray.push(new google.maps.LatLng({route.latitude}, {route.longitude}));
+</f:for>
+
+/*<![CDATA[*/
+var route = new google.maps.Polyline({
+	path: coordinatesArray,
+	strokeColor: strokeColor,
+	strokeOpacity: strokeOpacity,
+	strokeWeight: strokeWeight
+});
+
+/* add route to map */
+route.setMap(map);
+/*]]>*/

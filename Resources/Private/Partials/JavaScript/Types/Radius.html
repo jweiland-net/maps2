@@ -1,0 +1,16 @@
+var radius = {poiCollection.radius};
+var centerPosition = new google.maps.LatLng({poiCollection.latitude}, {poiCollection.longitude});
+
+/*<![CDATA[*/
+circleOptions = {
+	strokeColor: strokeColor,
+	strokeOpacity: strokeOpacity,
+	strokeWeight: strokeWeight,
+	fillColor: fillColor,
+	fillOpacity: fillOpacity,
+	center: centerPosition,
+	radius: radius,
+	map: map
+};
+circle = new google.maps.Circle(circleOptions);
+/*]]>*/

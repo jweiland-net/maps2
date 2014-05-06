@@ -1,0 +1,92 @@
+<script type="text/javascript">
+
+	if (typeof TxMaps2.config.pois != 'undefined') {
+		for (var i = 0; i < TxMaps2.config.pois.length; i++) {
+			coordinatesArray.push(new google.maps.LatLng(TxMaps2.config.pois[i].latitude, TxMaps2.config.pois[i].longitude));
+		}
+	}
+
+	/* the function was called by window.onLoad and initializes API to show the map */
+	TxMaps2.init = function() {
+		/* <![CDATA[ */
+		var mapPosition = new google.maps.LatLng(TxMaps2.config.latitude, TxMaps2.config.longitude);
+		var mapOptions = {
+			zoom: 12,
+			center: mapPosition,
+			mapTypeId: google.maps.MapTypeId.ROADMAP
+		};
+
+		/* Create google map and make it globally available */
+		map = new google.maps.Map(document.getElementById('maps2ConfigurationMap'), mapOptions);
+
+		if (coordinatesArray.length == 0) {
+			coordinatesArray.push(mapPosition);
+		}
+
+		/* create route overlay */
+		var route = new google.maps.Polyline({
+			path: coordinatesArray,
+			strokeColor: TxMaps2.design.strokeColor,
+			strokeOpacity: TxMaps2.design.strokeOpacity,
+			strokeWeight: TxMaps2.design.strokeWeight,
+			editable: true
+		});
+
+		/* add route to map */
+		route.setMap(map);
+
+		/* save route */
+		path = route.getPath();
+
+		/* we need a listener for moving a position */
+		google.maps.event.addListener(path, 'set_at', function() {
+			TxMaps2.insertRouteToDb(TxMaps2.config.uid, route);
+		});
+		/* we need a listener to add new coordinates between existing positions */
+		google.maps.event.addListener(path, 'insert_at', function() {
+			TxMaps2.insertRouteToDb(TxMaps2.config.uid, route);
+		});
+		/* we need a listener to remove route coordinates */
+		google.maps.event.addListener(route, 'rightclick', function(event) {
+			route.getPath().removeAt(event.vertex);
+			TxMaps2.insertRouteToDb(TxMaps2.config.uid, route);
+		});
+		/* we need a listener to add new route coordinates */
+		google.maps.event.addListener(map, 'click', function(event) {
+			route.getPath().push(event.latLng);
+			TxMaps2.insertRouteToDb(TxMaps2.config.uid, route);
+		});
+		/* update fields for saving map position */
+		google.maps.event.addListener(map, 'dragend', function() {
+			TxMaps2.setLatLngFields(map.getCenter().lat().toFixed(6), map.getCenter().lng().toFixed(6), 0);
+		});
+		/* ]]> */
+	};
+
+	/* save coordinates to DB */
+	TxMaps2.insertRouteToDb = function(uid, route) {
+		/* <![CDATA[ */
+		TYPO3.jQuery.ajax({
+			type: "GET",
+			url: TxMaps2.config.TYPO3_SITE_URL + "typo3/ajax.php",
+			data: {
+				ajaxID: 'maps2Ajax',
+				tx_maps2_maps2: {
+					objectName: "InsertRoute",
+					hash: TxMaps2.config.hash,
+					arguments: {
+						uid: uid,
+						route: TxMaps2.getUriForRoute(route)
+					}
+				}
+			}
+		});
+		/* ]]> */
+	}
+
+	TYPO3.jQuery(document).ready(function() {
+		TxMaps2.init();
+	});
+</script>
+
+<div id="maps2ConfigurationMap" style="height:400px;margin:10px 0;width:400px"></div>

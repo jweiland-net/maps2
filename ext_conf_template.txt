@@ -1,0 +1,29 @@
+# cat=basic; type=boolean; label = LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:useHttps
+useHttps = 0
+
+# cat=basic; type=string; label = LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:googleMapsLibrary
+googleMapsLibrary =
+
+# cat=basic; type=string; label = LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:defaultLatitude
+defaultLatitude =
+
+# cat=basic; type=string; label = LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:defaultLongitude
+defaultLongitude =
+
+# cat=basic; type=int+; label = LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:defaultRadius
+defaultRadius = 250
+
+# cat=design/color/a; type=string; label = LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:strokeColor
+strokeColor = #FF0000
+
+# cat=design/color/b; type=string; label = LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:strokeOpacity
+strokeOpacity = 0.8
+
+# cat=design/color/c; type=int+; label = LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:strokeWeight
+strokeWeight = 2
+
+# cat=design/color/d; type=string; label = LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:fillColor
+fillColor = #FF0000
+
+# cat=design/color/e; type=string; label = LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:fillOpacity
+fillOpacity = 0.35

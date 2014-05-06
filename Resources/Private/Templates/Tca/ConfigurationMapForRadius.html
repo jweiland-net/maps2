@@ -1,0 +1,55 @@
+<script type="text/javascript">
+	/* the function was called by window.onLoad and initializes API to show the map */
+	TxMaps2.init = function() {
+		/* <![CDATA[ */
+		var mapPosition = new google.maps.LatLng(TxMaps2.config.latitude, TxMaps2.config.longitude);
+		var mapOptions = {
+			zoom: 12,
+			center: mapPosition,
+			mapTypeId: google.maps.MapTypeId.ROADMAP
+		};
+
+		/* Create google map and make it globally available */
+		map = new google.maps.Map(document.getElementById('maps2ConfigurationMap'), mapOptions);
+
+		/* add draggable circle */
+		var markerOptions = {
+			strokeColor: TxMaps2.design.strokeColor,
+			strokeOpacity: TxMaps2.design.strokeOpacity,
+			strokeWeight: TxMaps2.design.strokeWeight,
+			fillColor: TxMaps2.design.fillColor,
+			fillOpacity: TxMaps2.design.fillOpacity,
+			center: mapPosition,
+			radius: TxMaps2.config.radius,
+			map: map,
+			editable: true
+		};
+		marker = new google.maps.Circle(markerOptions);
+
+		/* update fields and marker while dragging */
+		google.maps.event.addListener(marker, 'center_changed', function() {
+			TxMaps2.setLatLngFields(marker.getCenter().lat().toFixed(6), marker.getCenter().lng().toFixed(6), marker.getRadius());
+		});
+
+		/* update fields and marker while resizing the radius */
+		google.maps.event.addListener(marker, 'radius_changed', function() {
+			TxMaps2.setLatLngFields(marker.getCenter().lat().toFixed(6), marker.getCenter().lng().toFixed(6), marker.getRadius());
+		});
+
+		/* update fields and marker when clicking on the map */
+		google.maps.event.addListener(map, 'click', function(event) {
+			marker.setCenter(event.latLng);
+			TxMaps2.setLatLngFields(event.latLng.lat().toFixed(6), event.latLng.lng().toFixed(6), marker.getRadius());
+		});
+
+		TxMaps2.setLatLngFields(TxMaps2.config.latitude, TxMaps2.config.longitude, TxMaps2.config.radius);
+		/* ]]> */
+	};
+
+	TYPO3.jQuery(document).ready(function() {
+		TxMaps2.init();
+	});
+	/* ]]> */
+</script>
+
+<div id="maps2ConfigurationMap" style="height:400px;margin:10px 0;width:400px"></div>

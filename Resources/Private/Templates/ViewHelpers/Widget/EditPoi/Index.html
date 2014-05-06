@@ -1,0 +1,62 @@
+<f:form.hidden name="{prepend}[txMaps2Uid][__identity]" value="{poiCollection.uid}" />
+<f:form.hidden id="latitude-{poiCollection.uid}" name="{prepend}[txMaps2Uid][latitude]" value="{poiCollection.latitude}" />
+<f:form.hidden id="longitude-{poiCollection.uid}" name="{prepend}[txMaps2Uid][longitude]" value="{poiCollection.longitude}" />
+<div id="{id}" class="maps2" style="width: {width}px; height: {height}px"></div>
+
+<script type="text/javascript">
+	// define location
+	var latitude{poiCollection.uid} = {poiCollection.latitude};
+	var longitude{poiCollection.uid} = {poiCollection.longitude};
+	var id{poiCollection.uid} = "{id}";
+	var poiCollectionUid{poiCollection.uid} = "{poiCollection.uid}";
+
+	{f:render(partial: 'JavaScript/MapOptions', arguments: {mapOptions: mapOptions})}
+
+	var mapPosition{poiCollection.uid} = new google.maps.LatLng(latitude{poiCollection.uid}, longitude{poiCollection.uid});
+	/*<[!CDATA[*/
+	var mapOptions{poiCollection.uid} = {
+	/*]]>*/
+		center: mapPosition{poiCollection.uid},
+		zoom: zoom,
+		mapTypeId: mapTypeId,
+		panControl: panControl,
+		zoomControl: zoomControl,
+		mapTypeControl: mapTypeControl,
+		scaleControl: scaleControl,
+		streetViewControl: streetViewControl,
+		overviewMapControl: overviewMapControl
+	};
+
+	var map{poiCollection.uid} = new google.maps.Map(document.getElementById(id{poiCollection.uid}), mapOptions{poiCollection.uid});
+
+	/* add draggable marker */
+	/*<[!CDATA[*/
+	var markerOptions{poiCollection.uid} = {
+	/*]]>*/
+		position: mapPosition{poiCollection.uid},
+		map: map{poiCollection.uid},
+		draggable: true
+	};
+	var marker{poiCollection.uid} = new google.maps.Marker(markerOptions{poiCollection.uid});
+
+	/* update fields and marker while dragging */
+	/*<[!CDATA[*/
+	google.maps.event.addListener(marker{poiCollection.uid}, 'dragend', function() {
+	/*]]>*/
+		var lat = marker{poiCollection.uid}.getPosition().lat().toFixed(6);
+		var lng = marker{poiCollection.uid}.getPosition().lng().toFixed(6);
+
+		jQuery( "input#latitude-" + poiCollectionUid{poiCollection.uid} ).val(lat);
+		jQuery( "input#longitude-" + poiCollectionUid{poiCollection.uid} ).val(lng);
+	});
+
+	/* update fields and marker when clicking on the map */
+	/*<[!CDATA[*/
+	google.maps.event.addListener(map{poiCollection.uid}, 'click', function(event) {
+	/*]]>*/
+		marker{poiCollection.uid}.setPosition(event.latLng);
+
+		jQuery( "input#latitude-" + poiCollectionUid{poiCollection.uid} ).val(event.latLng.lat().toFixed(6));
+		jQuery( "input#longitude-" + poiCollectionUid{poiCollection.uid} ).val(event.latLng.lng().toFixed(6));
+	});
+</script>

@@ -1,0 +1,25 @@
+<f:layout name="Default" />
+
+<f:section name="main">
+
+	<f:flashMessages />
+
+	<form action="{f:uri.action(action: 'checkForMultiple')}" method="get" object="search" objectName="newSearch" action="checkForMultiple">
+		<input type="hidden" name="tx_maps2_searchwithinradius[controller]" value="PoiCollection" />
+		<input type="hidden" name="tx_maps2_searchwithinradius[action]" value="checkForMultiple" />
+		<input type="hidden" name="id" value="{id}" />
+		<input type="hidden" name="cHash" value="{cHash}" />
+		<dl>
+			<dt>Address</dt>
+			<dd><input type="text" name="tx_maps2_searchwithinradius[search][address]" value="" /></dd>
+		</dl>
+		<dl>
+			<dt>Radius</dt>
+			<dd><input type="text" name="tx_maps2_searchwithinradius[search][radius]" value="" /></dd>
+		</dl>
+		<dl>
+			<dt>&nbsp;</dt>
+			<dd><input type="submit" value="Send" /></dd>
+		</dl>
+	</form>
+</f:section>

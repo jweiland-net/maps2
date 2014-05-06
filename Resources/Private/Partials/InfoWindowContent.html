@@ -1,0 +1,13 @@
+{namespace maps2=JWeiland\Maps2\ViewHelpers}
+
+<div class="titleWrapper">{poiCollection.title}</div>
+<div class="addressWrapper">
+	<f:for each="{poiCollection.address -> maps2:TrimExplode()}" as="address" iteration="iterator">
+		<f:if condition="{iterator.isLast}">
+			<f:else>
+				<div>{address}</div>
+			</f:else>
+		</f:if>
+	</f:for>
+</div>
+<div class="infoWindowContent">{poiCollection.infoWindowContent->f:format.html()}</div>

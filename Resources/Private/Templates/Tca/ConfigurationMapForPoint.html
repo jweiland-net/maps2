@@ -1,0 +1,46 @@
+<script type="text/javascript">
+	/* the function was called by window.onLoad and initializes API to show the map */
+	TxMaps2.init = function() {
+		/* <![CDATA[ */
+		var mapPosition = new google.maps.LatLng(TxMaps2.config.latitude, TxMaps2.config.longitude);
+		var mapOptions = {
+			zoom: 12,
+			center: mapPosition,
+			mapTypeId: google.maps.MapTypeId.ROADMAP
+		};
+
+		/* Create google map and make it globally available */
+		map = new google.maps.Map(document.getElementById('maps2ConfigurationMap'), mapOptions);
+
+		/* add draggable marker */
+		var markerOptions = {
+			position: mapPosition,
+			map: map,
+			draggable: true
+		};
+		marker = new google.maps.Marker(markerOptions);
+
+		/* update fields and marker while dragging */
+		google.maps.event.addListener(marker, 'dragend', function() {
+			var lat = marker.getPosition().lat().toFixed(6);
+			var lng = marker.getPosition().lng().toFixed(6);
+
+			TxMaps2.setLatLngFields(lat, lng, 0);
+		});
+
+		/* update fields and marker when clicking on the map */
+		google.maps.event.addListener(map, 'click', function(event) {
+			marker.setPosition(event.latLng);
+			TxMaps2.setLatLngFields(event.latLng.lat().toFixed(6), event.latLng.lng().toFixed(6), 0);
+		});
+
+		TxMaps2.setLatLngFields(TxMaps2.config.latitude, TxMaps2.config.longitude, 0);
+		/* ]]> */
+	};
+
+	TYPO3.jQuery(document).ready(function() {
+		TxMaps2.init();
+	});
+</script>
+
+<div id="maps2ConfigurationMap" style="height:400px;margin:10px 0;width:400px"></div>

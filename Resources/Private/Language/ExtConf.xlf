@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2013-02-07T11:13:04Z" product-name="maps2">
+		<header/>
+		<body>
+			<trans-unit id="useHttps" xml:space="preserve">
+				<source>Use https as protocol: You can't call the http protocol when your page is running on https. So here you can decide to use the same protocol.</source>
+			</trans-unit>
+			<trans-unit id="googleMapsLibrary" xml:space="preserve">
+				<source>Link to Google Maps API: Leave empty to use default API. You only need to fill this field if you want to use an older or beta version.</source>
+			</trans-unit>
+			<trans-unit id="defaultLatitude" xml:space="preserve">
+				<source>Default Latitude: If you leave this empty Google Maps points to somewhere over the ocean on startup. So it's better to enter some coordinates: http://universimmedia.pagesperso-orange.fr/geo/loc.htm</source>
+			</trans-unit>
+			<trans-unit id="defaultLongitude" xml:space="preserve">
+				<source>Default Longitude: If you leave this empty Google Maps points to somewhere over the ocean on startup. So it's better to enter some coordinates: http://universimmedia.pagesperso-orange.fr/geo/loc.htm</source>
+			</trans-unit>
+			<trans-unit id="defaultRadius" xml:space="preserve">
+				<source>Default Radius (in meters): When using collection type "Radius" you should set a default radius. Else you just see one single point</source>
+			</trans-unit>
+			<trans-unit id="strokeColor" xml:space="preserve">
+				<source>Stroke Color: You can set a border color for a overly here</source>
+			</trans-unit>
+			<trans-unit id="strokeOpacity" xml:space="preserve">
+				<source>Stroke Opacity: If you set this to 1, you can't see th map behind the border. So it's better to find a value between 0.3 and 0.6</source>
+			</trans-unit>
+			<trans-unit id="strokeWeight" xml:space="preserve">
+				<source>Stroke Weight (in pixel): How thick the border of the overlay should be? A good value is 1 or 2</source>
+			</trans-unit>
+			<trans-unit id="fillColor" xml:space="preserve">
+				<source>Fill Color: Which color the overlay should have?</source>
+			</trans-unit>
+			<trans-unit id="fillOpacity" xml:space="preserve">
+				<source>Fill Opacity:  If you set this to 1, you can't see th map behind the overlay. So it's better to find a value between 0.3 and 0.6. But it should be less than the value of strokeOpacity</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

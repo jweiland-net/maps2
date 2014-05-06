@@ -1,0 +1,159 @@
+<script type="text/javascript">
+	if (typeof TxMaps2 == 'undefined') TxMaps2 = {};
+	TxMaps2.config = {config->f:format.raw()};
+	TxMaps2.design = {design->f:format.raw()};
+
+	/* initialize some global variables */
+	var map;
+	var marker;
+	var coordinatesArray = [];
+
+	String.prototype.trim = function() { return this.replace(/^\s+|\s+$/g, ''); }
+
+	/* set lat lng fields of TYPO3 TCA */
+	TxMaps2.setLatLngFields = function(lat, lng, rad, address) {
+		TxMaps2.setFieldValue('latitude', lat);
+		TxMaps2.setFieldValue('longitude', lng);
+		TBE_EDITOR.fieldChanged('tx_maps2_domain_model_poicollection', TxMaps2.config.uid, 'latitude', TxMaps2.createFieldName('latitude', false));
+		TBE_EDITOR.fieldChanged('tx_maps2_domain_model_poicollection', TxMaps2.config.uid, 'longitude', TxMaps2.createFieldName('longitude', false));
+
+		if (typeof rad != "undefined" && rad > 0) {
+			TxMaps2.setFieldValue('radius', parseInt(rad));
+			TBE_EDITOR.fieldChanged('tx_maps2_domain_model_poicollection', TxMaps2.config.uid, 'radius', TxMaps2.createFieldName('radius', false));
+		}
+
+		if (typeof address != 'undefined') {
+			TxMaps2.setFieldValue('address', address);
+			TBE_EDITOR.fieldChanged('tx_maps2_domain_model_poicollection', TxMaps2.config.uid, 'address', TxMaps2.createFieldName('address', false));
+			TYPO3.jQuery( "#infoWindowAddress").html(address.replace(/, /gi,"<br />"));
+		}
+	}
+
+	/* generate an uri to save all coordinates */
+	TxMaps2.getUriForRoute = function(route) {
+		/* <![CDATA[ */
+		var routeObject = {};
+		route.getPath().forEach(function(latLng, index) {
+			routeObject[index] = latLng.toUrlValue();
+		});
+		return routeObject;
+		/* ]]> */
+	}
+
+	// create fieldName
+	TxMaps2.createFieldName = function(field, hiddenRecord) {
+		if (hiddenRecord == true) {
+			return 'data[tx_maps2_domain_model_poicollection][' + TxMaps2.config.uid + '][' + field + ']_hr';
+		}
+		return 'data[tx_maps2_domain_model_poicollection][' + TxMaps2.config.uid + '][' + field + ']';
+	}
+
+	// get field value
+	TxMaps2.getFieldValue = function(field, hiddenRecord) {
+		var fieldName = TxMaps2.createFieldName(field, hiddenRecord);
+		return document[TBE_EDITOR.formname][fieldName].value;
+	}
+
+	// set field value
+	TxMaps2.setFieldValue = function(field, value) {
+		var fieldName = TxMaps2.createFieldName(field, true);
+		document[TBE_EDITOR.formname][fieldName].value = value;
+		fieldName = TxMaps2.createFieldName(field, false);
+		document[TBE_EDITOR.formname][fieldName].value = value;
+	}
+
+	// if user has moved marker after searching for an address he can reset marker to its original position
+	TxMaps2.resetMarkerToAddress = function(lat, lng) {
+		// Move map and marker to new position
+		latLng = new google.maps.LatLng(lat, lng);
+		map.setCenter(latLng);
+
+		if(typeof marker.setPosition == "function") {
+			marker.setPosition(latLng);
+			TxMaps2.setLatLngFields(lat, lng, 0);
+		} else {
+			marker.setCenter(latLng);
+			TxMaps2.setLatLngFields(lat, lng, marker.getRadius());
+		}
+	}
+
+	// read address, send it to Google and move map/marker to new location
+	// this works only for point and radius
+	TxMaps2.findAddressOnMap = function() {
+		/* <![CDATA[ */
+		var address = TxMaps2.getFieldValue('address');
+		var geocoder = new google.maps.Geocoder();
+		var geocoderRequest = {
+			address: address
+		};
+		geocoder.geocode(geocoderRequest, function(results, status) {
+			if (status == "OK") {
+				var lat = results[0].geometry.location.lat().toFixed(6);
+				var lng = results[0].geometry.location.lng().toFixed(6);
+
+				// Move map and marker to new position
+				map.setCenter(results[0].geometry.location);
+
+				if(typeof marker.setPosition == "function") {
+					marker.setPosition(results[0].geometry.location);
+					TxMaps2.setLatLngFields(lat, lng, 0, results[0].formatted_address);
+				} else {
+					marker.setCenter(results[0].geometry.location);
+					TxMaps2.setLatLngFields(lat, lng, marker.getRadius(), results[0].formatted_address);
+				}
+
+				// save new location
+				TxMaps2.modifyMarkerInDb(lat, lng);
+
+			} else {
+				switch(status) {
+					case "ERROR":
+					default:
+						alert("There was a problem contacting the Google servers.");
+						break;
+					case "INVALID_REQUEST":
+						alert("This GeocoderRequest was invalid.");
+						break;
+					case "OVER_QUERY_LIMIT":
+						alert("The webpage has gone over the requests limit in too short a period of time.");
+						break;
+					case "REQUEST_DENIED":
+						alert("The webpage is not allowed to use the geocoder.");
+						break;
+					case "UNKNOWN_ERROR":
+						alert("A geocoding request could not be processed due to a server error. The request may succeed if you try again.");
+						break;
+					case "ZERO_RESULTS":
+						alert("No result was found for this GeocoderRequest.");
+						break;
+				}
+			}
+		});
+		/* ]]> */
+	}
+
+	/* save coordinates into DB */
+	TxMaps2.modifyMarkerInDb = function(lat, lng, rad) {
+		/* <![CDATA[ */
+		TYPO3.jQuery.ajax({
+			type: "POST",
+			url: TxMaps2.config.TYPO3_SITE_URL + "typo3/ajax.php",
+			data: {
+				ajaxID: 'maps2Ajax',
+				tx_maps2_maps2: {
+					objectName: "ModifyMarker",
+					hash: TxMaps2.config.hash,
+					arguments: {
+						uid: TxMaps2.config.uid,
+						radius: rad,
+						coords: {
+							latitude: lat,
+							longitude: lng
+						}
+					}
+				}
+			}
+		});
+		/* ]]> */
+	}
+</script>

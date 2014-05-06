@@ -1,0 +1,127 @@
+// define map options
+var zoom = {settings.zoom};
+var mapTypeId = {settings.mapTypeId};
+var panControl = {settings.panControl};
+var zoomControl = {settings.zoomControl};
+var mapTypeControl = {settings.mapTypeControl};
+var scaleControl = {settings.scaleControl};
+var streetViewControl = {settings.streetViewControl};
+var overviewMapControl = {settings.overviewMapControl};
+
+// define map options
+var infoWindow = new Array();
+var infoWindowIsOpen = new Array();
+
+// define design vars
+var strokeColor = "{extConf.strokeColor}";
+var strokeOpacity = {extConf.strokeOpacity};
+var strokeWeight = {extConf.strokeWeight};
+var fillColor = "{extConf.fillColor}";
+var fillOpacity = {extConf.fillOpacity};
+
+// define location
+<f:if condition="{poiCollection}">
+	<f:then>
+		var latitude = {poiCollection.latitude};
+		var longitude = {poiCollection.longitude};
+
+		jQuery(document).ready(function() {
+			/* <![CDATA[ */
+			var mapPosition = new google.maps.LatLng(latitude, longitude);
+			var mapOptions = {
+				center: mapPosition,
+				zoom: zoom,
+				mapTypeId: mapTypeId,
+				panControl: panControl,
+				zoomControl: zoomControl,
+				mapTypeControl: mapTypeControl,
+				scaleControl: scaleControl,
+				streetViewControl: streetViewControl,
+				overviewMapControl: overviewMapControl
+			};
+			/* ]]> */
+
+			var map = new google.maps.Map(document.getElementById("maps2"), mapOptions);
+
+			function createMarker(uid, pointPosition, infoWindowContent) {
+				/* <![CDATA[ */
+				var marker = new google.maps.Marker({
+					position: pointPosition,
+					map: map
+				});
+				/* ]]> */
+
+				/* <![CDATA[ */
+				infoWindow[uid] = new google.maps.InfoWindow({
+					content: infoWindowContent
+				});
+				/* ]]> */
+				infoWindowIsOpen[uid] = false;
+
+				google.maps.event.addListener( marker, "click", function() {
+					if ( infoWindowIsOpen[uid] == false ) {
+						infoWindow[uid].open( map, marker );
+						infoWindowIsOpen[uid] = true;
+					} else {
+						infoWindow[uid].close();
+						infoWindowIsOpen[uid] = false;
+					}
+				});
+			}
+			<f:render partial="JavaScript/Types/{poiCollection.collectionType}" arguments="{poiCollection: poiCollection}" />
+		});
+	</f:then>
+	<f:else>
+		var bounds = new google.maps.LatLngBounds();
+
+		jQuery(document).ready(function() {
+			/* <![CDATA[ */
+			var mapOptions = {
+				zoom: zoom,
+				mapTypeId: mapTypeId,
+				panControl: panControl,
+				zoomControl: zoomControl,
+				mapTypeControl: mapTypeControl,
+				scaleControl: scaleControl,
+				streetViewControl: streetViewControl,
+				overviewMapControl: overviewMapControl
+			};
+			/* ]]> */
+
+			var map = new google.maps.Map(document.getElementById("maps2"), mapOptions);
+
+			function createMarker(uid, pointPosition, infoWindowContent) {
+				/* <![CDATA[ */
+				var marker = new google.maps.Marker({
+					position: pointPosition,
+					map: map
+				});
+				/* ]]> */
+
+				bounds.extend(marker.position);
+
+				/* <![CDATA[ */
+				infoWindow[uid] = new google.maps.InfoWindow({
+					content: infoWindowContent
+				});
+				/* ]]> */
+				infoWindowIsOpen[uid] = false;
+
+				google.maps.event.addListener( marker, "click", function() {
+					if ( infoWindowIsOpen[uid] == false ) {
+						infoWindow[uid].open( map, marker );
+						infoWindowIsOpen[uid] = true;
+					} else {
+						infoWindow[uid].close();
+						infoWindowIsOpen[uid] = false;
+					}
+				});
+			}
+			<f:for each="{poiCollections}" as="poiCollection">
+				<f:render partial="JavaScript/Types/{poiCollection.collectionType}" arguments="{poiCollection: poiCollection}" />
+			</f:for>
+
+			map.fitBounds(bounds);
+		});
+	</f:else>
+</f:if>

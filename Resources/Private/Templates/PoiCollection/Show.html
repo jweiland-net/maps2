@@ -1,0 +1,7 @@
+{namespace maps2=JWeiland\Maps2\ViewHelpers}
+
+<f:layout name="Default" />
+
+<f:section name="main">
+	<maps2:widget.poiCollection poiCollection="{poiCollection}" width="{settings.mapWidth}" height="{settings.mapHeight}" mapOptions="{zoom: settings.zoom, mapTypeId: settings.mapTypeId, panControl: settings.panControl, zoomControl: settings.zoomControl, mapTypeControl: settings.mapTypeControl, scaleControl: settings.scaleControl, streetViewControl: settings.streetViewControl, overviewMapControl: settings.overviewMapControl}" />
+</f:section>
