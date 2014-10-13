@@ -74,12 +74,6 @@ class PoiCollectionController extends \TYPO3\CMS\Fluid\Core\Widget\AbstractWidge
 		ArrayUtility::mergeRecursiveWithOverrule($this->mapOptions, $this->getMapOptions(), TRUE);
 		$this->width = $this->widgetConfiguration['width'];
 		$this->height = $this->widgetConfiguration['height'];
-
-		if ($this->settings['includeJQueryLibrary']) {
-			$this->pageRenderer->addJsLibrary('maps2JQuery', '//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js', 'text/javascript', FALSE, TRUE, '', TRUE);
-		}
-		$this->pageRenderer->addJsLibrary('maps2GoogleMapsApi', $this->extConf->getGoogleMapsLibrary(), 'text/javascript', FALSE, TRUE, '', TRUE);
-
 	}
 
 	/**

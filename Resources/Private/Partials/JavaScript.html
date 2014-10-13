@@ -68,7 +68,7 @@ var fillOpacity = {extConf.fillOpacity};
 					}
 				});
 			}
-			<f:render partial="JavaScript/Types/{poiCollection.collectionType}" arguments="{poiCollection: poiCollection}" />
+			<f:render partial="JavaScript/Types/{poiCollection.collectionType}" arguments="{poiCollection: poiCollection, bound: 0}" />
 		});
 	</f:then>
 	<f:else>
@@ -118,7 +118,7 @@ var fillOpacity = {extConf.fillOpacity};
 				});
 			}
 			<f:for each="{poiCollections}" as="poiCollection">
-				<f:render partial="JavaScript/Types/{poiCollection.collectionType}" arguments="{poiCollection: poiCollection}" />
+				<f:render partial="JavaScript/Types/{poiCollection.collectionType}" arguments="{poiCollection: poiCollection, bound: 1}" />
 			</f:for>
 
 			map.fitBounds(bounds);

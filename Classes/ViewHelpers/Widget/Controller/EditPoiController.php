@@ -68,12 +68,6 @@ class EditPoiController extends \TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetContr
 	public function initializeAction() {
 		$this->poiCollection = $this->widgetConfiguration['poiCollection'];
 		ArrayUtility::mergeRecursiveWithOverrule($this->mapOptions, $this->getMapOptions(), TRUE);
-
-		if ($this->settings['includeJQueryLibrary']) {
-			$this->pageRenderer->addJsLibrary('maps2JQuery', '//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js', 'text/javascript', false, true, '', true);
-		}
-		$this->pageRenderer->addJsLibrary('maps2GoogleMapsApi', $this->extConf->getGoogleMapsLibrary(), 'text/javascript', false, true, '', true);
-
 	}
 
 	/**
