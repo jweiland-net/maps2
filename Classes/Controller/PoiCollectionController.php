@@ -50,6 +50,18 @@ class PoiCollectionController extends \JWeiland\Maps2\Controller\AbstractControl
 
 
 	/**
+	 * initialize show action
+	 *
+	 * @return void
+	 */
+	public function initializeAction() {
+		if ($this->settings['includeJQueryLibrary']) {
+			$this->pageRenderer->addJsLibrary('maps2JQuery', '//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js', 'text/javascript', false, true, '', true);
+		}
+		$this->pageRenderer->addJsLibrary('maps2GoogleMapsApi', $this->extConf->getGoogleMapsLibrary(), 'text/javascript', false, true, '', true);
+	}
+
+	/**
 	 * initialize view
 	 * add some global vars to view
 	 *

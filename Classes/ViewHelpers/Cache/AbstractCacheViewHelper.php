@@ -25,6 +25,8 @@ namespace JWeiland\Maps2\ViewHelpers\Cache;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 use \TYPO3\CMS\Core\Cache\Cache;
+use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * @package maps2
@@ -37,15 +39,14 @@ class AbstractCacheViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractV
 	 */
 	protected $cache;
 
-
 	/**
 	 * initializes the caching framework for this view helper
 	 */
 	public function initialize() {
 		Cache::initializeCachingFramework();
 		try {
-			$this->cache = $GLOBALS['typo3CacheManager']->getCache('maps2_cachedHtml');
-		} catch (\TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException $e) {
+			$this->cache = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Cache\\CacheManager')->getCache('maps2_cachedHtml');
+		} catch (NoSuchCacheException $e) {
 			$this->cache = $GLOBALS['typo3CacheFactory']->create(
 				'maps2_cachedHtml',
 				$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['maps2_cachedHtml']['frontend'],
