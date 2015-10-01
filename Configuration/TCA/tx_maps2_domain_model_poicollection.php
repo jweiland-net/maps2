@@ -115,11 +115,30 @@ return array(
 				'default' => 'Empty',
 				'eval' => 'required',
 				'items' => array(
-					array('LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.collectionType.empty', 'Empty'),
-					array('LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.collectionType.point', 'Point'),
-					array('LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.collectionType.area', 'Area'),
-					array('LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.collectionType.route', 'Route'),
-					array('LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.collectionType.radius', 'Radius'),
+					array(
+						'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.collectionType.empty',
+						'Empty'
+					),
+					array(
+						'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.collectionType.point',
+						'Point',
+						'EXT:maps2/Resources/Public/Icons/TypeSelectPointSmall.png'
+					),
+					array(
+						'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.collectionType.area',
+						'Area',
+						'EXT:maps2/Resources/Public/Icons/TypeSelectAreaSmall.png'
+					),
+					array(
+						'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.collectionType.route',
+						'Route',
+						'EXT:maps2/Resources/Public/Icons/TypeSelectRouteSmall.png'
+					),
+					array(
+						'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.collectionType.radius',
+						'Radius',
+						'EXT:maps2/Resources/Public/Icons/TypeSelectRadiusSmall.png'
+					),
 				),
 			),
 		),
