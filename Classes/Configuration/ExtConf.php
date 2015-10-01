@@ -158,11 +158,14 @@ class ExtConf implements \TYPO3\CMS\Core\SingletonInterface {
 			$library = $this->googleMapsLibrary;
 		}
 		// $parts: 0 = full string; 1 = s or empty; 2 = needed url
-		preg_match('|^http(s)?://(.*)$|i', $library, $parts);
-		if ($this->getUseHttps()) {
-			return 'https://' . $parts[2];
+		if (preg_match('|^http(s)?://(.*)$|i', $library, $parts)) {
+			if ($this->getUseHttps()) {
+				return 'https://' . $parts[2];
+			} else {
+				return 'http://' . $parts[2];
+			}
 		} else {
-			return 'http://' . $parts[2];
+			throw new \InvalidArgumentException('Google Maps library path does not start with http or https. Please reconfigure maps2 in ExtensionManager', 1443676365);
 		}
 	}
 

@@ -24,6 +24,8 @@ namespace JWeiland\Maps2\Tca;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+use JWeiland\Maps2\Domain\Model\PoiCollection;
+use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
@@ -64,10 +66,6 @@ class ConfigurationMap {
 	 */
 	protected $poiCollectionRepository;
 
-
-
-
-
 	/**
 	 * initializes this class
 	 */
@@ -82,18 +80,33 @@ class ConfigurationMap {
 
 	/**
 	 * Renders the Google map.
-	 *
-	 * @param array $PA
-	 * @param \TYPO3\CMS\Backend\Form\FormEngine $pObj
+
+	 * @param array $parentArray
+	 * @param object $pObj
 	 * @return string
 	 */
-	public function render(array &$PA, \TYPO3\CMS\Backend\Form\FormEngine $pObj) {
+	public function render(array $parentArray, $pObj) {
 		$this->init();
+		$parentArray = $this->cleanUpParentArray($parentArray);
 
 		// add Google Maps API
 		$this->pageRenderer->addJsLibrary('maps2GoogleMapsApi', $this->extConf->getGoogleMapsLibrary(), 'text/javascript', false, true, '', true);
 
-		return $this->getMapHtml($this->getConfiguration($PA));
+		return $this->getMapHtml($this->getConfiguration($parentArray));
+	}
+
+	/**
+	 * since TYPO3 7.5 $PA['row'] consists of arrays where TCA was configured as type "select"
+	 * Convert these types back to strings/int
+	 *
+	 * @param array $parentArray
+	 * @return array
+	 */
+	protected function cleanUpParentArray(array $parentArray) {
+		foreach ($parentArray['row'] as $field => $value) {
+			$parentArray['row'][$field] = is_array($value) ? $value[0] : $value;
+		}
+		return $parentArray;
 	}
 
 	/**
@@ -102,13 +115,13 @@ class ConfigurationMap {
 	 * @param array $PA
 	 * @return array
 	 */
-	public function getConfiguration(array &$PA) {
+	public function getConfiguration(array $PA) {
 		$config = array();
 
 		// get poi collection model
-		$uid = (int) $PA['row']['uid'];
+		$uid = (int)$PA['row']['uid'];
 		$poiCollection = $this->poiCollectionRepository->findByUid($uid);
-		if ($poiCollection instanceof \JWeiland\Maps2\Domain\Model\PoiCollection) {
+		if ($poiCollection instanceof PoiCollection) {
 			// set map center
 			$config['latitude'] = ($poiCollection->getLatitude()) ? $poiCollection->getLatitude() : $this->extConf->getDefaultLatitude();
 			$config['longitude'] = ($poiCollection->getLongitude()) ? $poiCollection->getLongitude() : $this->extConf->getDefaultLongitude();
@@ -123,7 +136,7 @@ class ConfigurationMap {
 						$config['pois'][] = $latLng;
 					}
 					if (!isset($config['pois'])) $config['pois'] = array();
-				break;
+					break;
 				case 'Radius':
 					$config['radius'] = ($poiCollection->getRadius()) ? $poiCollection->getRadius() : $this->extConf->getDefaultRadius();
 					$config['radius'] = $poiCollection->getRadius();
@@ -133,9 +146,14 @@ class ConfigurationMap {
 			}
 
 			$config['address'] =  $PA['row']['address'];
-			$config['collectionType'] =  $PA['row']['collection_type'];
+			$config['collectionType'] = is_array($PA['row']['collection_type']) ? $PA['row']['collection_type'][0] : $PA['row']['collection_type'];
 			$config['uid'] =  $uid;
-			$config['TYPO3_SITE_URL'] =  GeneralUtility::getIndpEnv('TYPO3_SITE_URL');
+			$config['TYPO3_SITE_URL'] = GeneralUtility::getIndpEnv('TYPO3_SITE_URL');
+			if (GeneralUtility::compat_version('7.3')) {
+				$config['ajaxUrlForModifyMarker'] = BackendUtility::getAjaxUrl('maps2Ajax');
+			} else {
+				$config['ajaxUrlForModifyMarker'] = $config['TYPO3_SITE_URL'] . 'typo3/ajax.php?ajaxID=maps2Ajax';
+			}
 
 			$hashArray['uid'] = $uid;
 			$hashArray['collectionType'] = $PA['row']['collection_type'];
@@ -150,12 +168,13 @@ class ConfigurationMap {
 	 * @param array $config
 	 * @return string
 	 */
-	public function getMapHtml(array $config) {
-		$this->view->setTemplatePathAndFilename(ExtensionManagementUtility::extPath('maps2') . 'Resources/Private/Templates/Tca/ConfigurationMap.html');
+	protected function getMapHtml(array $config) {
+		$extPath = ExtensionManagementUtility::extPath('maps2');
+		$this->view->setTemplatePathAndFilename($extPath . 'Resources/Private/Templates/Tca/ConfigurationMap.html');
 		$this->view->assign('config', json_encode($config));
 		$this->view->assign('design', json_encode(ObjectAccess::getGettableProperties($this->extConf)));
 		$content = $this->view->render() . CHR(10);
-		$content .= file_get_contents(ExtensionManagementUtility::extPath('maps2') . 'Resources/Private/Templates/Tca/ConfigurationMapFor' . ucfirst($config['collectionType']) . '.html');
+		$content .= file_get_contents($extPath . 'Resources/Private/Templates/Tca/ConfigurationMapFor' . ucfirst($config['collectionType']) . '.html');
 
 		return $content;
 	}

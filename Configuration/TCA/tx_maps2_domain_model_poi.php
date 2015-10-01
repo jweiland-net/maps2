@@ -1,18 +1,31 @@
 <?php
-if (!defined ('TYPO3_MODE')) {
-	die ('Access denied.');
-}
-
-$TCA['tx_maps2_domain_model_poi'] = array(
-	'ctrl' => $TCA['tx_maps2_domain_model_poi']['ctrl'],
+return array(
+	'ctrl' => array(
+		'title'	=> 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poi',
+		'label' => 'uid',
+		'tstamp' => 'tstamp',
+		'crdate' => 'crdate',
+		'cruser_id' => 'cruser_id',
+		'dividers2tabs' => TRUE,
+		'hideTable' => TRUE,
+		'sortby' => 'sorting',
+		'versioningWS' => 2,
+		'versioning_followPages' => TRUE,
+		'origUid' => 't3_origuid',
+		'languageField' => 'sys_language_uid',
+		'transOrigPointerField' => 'l10n_parent',
+		'transOrigDiffSourceField' => 'l10n_diffsource',
+		'delete' => 'deleted',
+		'enablecolumns' => array(
+			'disabled' => 'hidden',
+			'starttime' => 'starttime',
+			'endtime' => 'endtime',
+		),
+		'searchFields' => 'title,',
+		'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('maps2') . 'Resources/Public/Icons/tx_maps2_domain_model_poi.png'
+	),
 	'interface' => array(
 		'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, latitude, longitude, pos_index',
-	),
-	'types' => array (
-		'0' => array('showitem' => 'latitude, longitude, pos_index')
-	),
-	'palettes' => array (
-		'1' => array('showitem' => ''),
 	),
 	'columns' => array(
 		'sys_language_uid' => array(
@@ -121,5 +134,10 @@ $TCA['tx_maps2_domain_model_poi'] = array(
 			),
 		),
 	),
+	'types' => array (
+		'0' => array('showitem' => 'latitude, longitude, pos_index')
+	),
+	'palettes' => array (
+		'1' => array('showitem' => ''),
+	),
 );
-?>

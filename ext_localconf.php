@@ -41,13 +41,21 @@ if (!defined('TYPO3_MODE')) {
 	)
 );
 
-if(TYPO3_MODE == 'BE') {
-	$TYPO3_CONF_VARS['BE']['AJAX']['maps2Ajax'] = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('maps2') . 'Classes/Dispatch/AjaxRequest.php:JWeiland\\Maps2\\Dispatch\\AjaxRequest->dispatch';
+if(TYPO3_MODE === 'BE') {
+	if (\TYPO3\CMS\Core\Utility\GeneralUtility::compat_version('7.3')) {
+		\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::registerAjaxHandler(
+			'maps2Ajax',
+			'JWeiland\\Maps2\\Dispatch\\AjaxRequest->dispatch',
+			FALSE
+		);
+	} else {
+		$GLOBALS['TYPO3_CONF_VARS']['BE']['AJAX']['maps2Ajax'] = 'JWeiland\\Maps2\\Dispatch\\AjaxRequest->dispatch';
+	}
 }
 
 // activate caching for info window content
-if (!is_array($TYPO3_CONF_VARS['SYS']['caching']['cacheConfigurations']['maps2_cachedHtml'])) {
-	$TYPO3_CONF_VARS['SYS']['caching']['cacheConfigurations']['maps2_cachedHtml'] = array();
+if (!is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['maps2_cachedHtml'])) {
+	$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['maps2_cachedHtml'] = array();
 }
 
 // This is a solution to build GET forms.

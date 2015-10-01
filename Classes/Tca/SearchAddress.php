@@ -35,15 +35,15 @@ class SearchAddress {
 	 * create a button to search for the given address
 	 *
 	 * @param array $PA parent Array
-	 * @param \TYPO3\CMS\Backend\Form\FormEngine $fObj parent object
+	 * @param object $fObj parent object
 	 * @return string
 	 */
-	public function searchAddress(array $PA, \TYPO3\CMS\Backend\Form\FormEngine $fObj) {
+	public function searchAddress(array $PA, $fObj) {
 		$onClick = 'TxMaps2.findAddressOnMap()';
-		$buttonUpdate = '<input type="button" value="Update" onclick="' . $onClick . '">';
+		$buttonUpdate = '<input type="button" class="btn btn-default" value="Update" onclick="' . $onClick . '">';
 
 		$onClick = 'TxMaps2.resetMarkerToAddress(' . $PA['row']['latitude_orig'] . ', ' . $PA['row']['longitude_orig'] . ')';
-		$buttonReset = '<input type="button" value="Reset" onclick="' . $onClick . '">';
+		$buttonReset = '<input type="button" class="btn btn-default" value="Reset" onclick="' . $onClick . '">';
 
 		return $buttonUpdate . $buttonReset;
 	}

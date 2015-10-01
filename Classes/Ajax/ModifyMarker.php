@@ -24,22 +24,28 @@ namespace JWeiland\Maps2\Ajax;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+use JWeiland\Maps2\Domain\Model\PoiCollection;
 
 /**
  * @package maps2
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class ModifyMarker extends \JWeiland\Maps2\Ajax\AbstractAjaxRequest {
+class ModifyMarker extends AbstractAjaxRequest {
 
 	/**
 	 * @var \JWeiland\Maps2\Domain\Repository\PoiCollectionRepository
-	 * @inject
 	 */
 	protected $poiCollectionRepository;
 
-
-
-
+	/**
+	 * inject poiCollectionRepository
+	 *
+	 * @param \JWeiland\Maps2\Domain\Repository\PoiCollectionRepository $poiCollectionRepository
+	 * @return void
+	 */
+	public function injectPoiCollectionRepository(\JWeiland\Maps2\Domain\Repository\PoiCollectionRepository $poiCollectionRepository) {
+		$this->poiCollectionRepository = $poiCollectionRepository;
+	}
 
 	/**
 	 * process ajax request
@@ -56,7 +62,7 @@ class ModifyMarker extends \JWeiland\Maps2\Ajax\AbstractAjaxRequest {
 
 		$poiCollection = $this->poiCollectionRepository->findByUid($uid);
 
-		if ($poiCollection instanceof \JWeiland\Maps2\Domain\Model\PoiCollection) {
+		if ($poiCollection instanceof PoiCollection) {
 			// validate uri arguments
 			if (!$this->validateArguments($poiCollection, $hash)) {
 				return 'arguments are not valid';
@@ -66,7 +72,9 @@ class ModifyMarker extends \JWeiland\Maps2\Ajax\AbstractAjaxRequest {
 			$this->poiCollectionRepository->update($poiCollection);
 			$this->persistenceManager->persistAll();
 			return '1';
-		} else return '0';
+		} else {
+			return '0';
+		}
 	}
 
 	/**
@@ -78,7 +86,7 @@ class ModifyMarker extends \JWeiland\Maps2\Ajax\AbstractAjaxRequest {
 	 * @param float $lng Longitude
 	 * @return \JWeiland\Maps2\Domain\Model\PoiCollection
 	 */
-	public function updateMarker(\JWeiland\Maps2\Domain\Model\PoiCollection $poiCollection, $lat, $lng) {
+	public function updateMarker(PoiCollection $poiCollection, $lat, $lng) {
 		$poiCollection->setLatitude($lat);
 		$poiCollection->setLongitude($lng);
 

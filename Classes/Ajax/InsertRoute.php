@@ -24,22 +24,29 @@ namespace JWeiland\Maps2\Ajax;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+use JWeiland\Maps2\Domain\Model\Poi;
+use JWeiland\Maps2\Domain\Model\PoiCollection;
 
 /**
  * @package maps2
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class InsertRoute extends \JWeiland\Maps2\Ajax\AbstractAjaxRequest {
+class InsertRoute extends AbstractAjaxRequest {
 
 	/**
 	 * @var \JWeiland\Maps2\Domain\Repository\PoiCollectionRepository
-	 * @inject
 	 */
 	protected $poiCollectionRepository;
 
-
-
-
+	/**
+	 * inject poiCollectionRepository
+	 *
+	 * @param \JWeiland\Maps2\Domain\Repository\PoiCollectionRepository $poiCollectionRepository
+	 * @return void
+	 */
+	public function injectPoiCollectionRepository(\JWeiland\Maps2\Domain\Repository\PoiCollectionRepository $poiCollectionRepository) {
+		$this->poiCollectionRepository = $poiCollectionRepository;
+	}
 
 	/**
 	 * process ajax request
@@ -55,7 +62,7 @@ class InsertRoute extends \JWeiland\Maps2\Ajax\AbstractAjaxRequest {
 
 		$poiCollection = $this->poiCollectionRepository->findByUid($uid);
 
-		if ($poiCollection instanceof \JWeiland\Maps2\Domain\Model\PoiCollection) {
+		if ($poiCollection instanceof PoiCollection) {
 			// validate uri arguments
 			if (!$this->validateArguments($poiCollection, $hash)) {
 				return 'arguments are not valid';
@@ -73,13 +80,13 @@ class InsertRoute extends \JWeiland\Maps2\Ajax\AbstractAjaxRequest {
 	 * get updated position records
 	 * this method loops through all route positions and insert or updates the expected record in db
 	 *
-	 * @param \JWeiland\Maps2\Domain\Model\PoiCollection $poiCollection The parent object for pois
+	 * @param PoiCollection $poiCollection The parent object for pois
 	 * @param array $routes Array containing all positions of the route
-	 * @return \JWeiland\Maps2\Domain\Model\PoiCollection A collection of position records
+	 * @return PoiCollection A collection of position records
 	 */
-	public function getUpdatedPositionRecords(\JWeiland\Maps2\Domain\Model\PoiCollection $poiCollection, array $routes) {
+	public function getUpdatedPositionRecords(PoiCollection $poiCollection, array $routes) {
 		if (count($routes)) {
-			foreach($routes as $posIndex => $route) {
+			foreach ($routes as $posIndex => $route) {
 				// get latitude and longitude from current route
 				$latLng = explode(',', $route);
 				$lat = (float)$latLng[0];
@@ -88,7 +95,7 @@ class InsertRoute extends \JWeiland\Maps2\Ajax\AbstractAjaxRequest {
 				// check if we have such a record already
 				$poi = $this->getPoiFromPoiArray($poiCollection, $posIndex);
 
-				if ($poi instanceof \JWeiland\Maps2\Domain\Model\Poi) {
+				if ($poi instanceof Poi) {
 					// update poi if lat or lng differs
 					if ($poi->getLatitude() != $lat || $poi->getLongitude() != $lng) {
 						$poiCollection->getPois()->detach($poi);
@@ -99,7 +106,7 @@ class InsertRoute extends \JWeiland\Maps2\Ajax\AbstractAjaxRequest {
 				} else {
 					// create a new poi
 					/** @var $poi \JWeiland\Maps2\Domain\Model\Poi */
-					$poi = $this->objectManager->get('\JWeiland\Maps2\Domain\Model\Poi');
+					$poi = $this->objectManager->get('JWeiland\\Maps2\\Domain\\Model\\Poi');
 
 					// TODO set cruser_id
 					$poi->setPid($poiCollection->getPid());
@@ -114,7 +121,9 @@ class InsertRoute extends \JWeiland\Maps2\Ajax\AbstractAjaxRequest {
 			$amountOfRoutes = count($routes);
 			if ($amountOfRoutes < count($poiCollection->getPois())) {
 				$poi = $this->getPoiFromPoiArray($poiCollection, $amountOfRoutes);
-				$poiCollection->getPois()->detach($poi);
+				if ($poi instanceof Poi) {
+					$poiCollection->getPois()->detach($poi);
+				}
 			}
 		}
 
@@ -124,13 +133,13 @@ class InsertRoute extends \JWeiland\Maps2\Ajax\AbstractAjaxRequest {
 	/**
 	 * get poi from poi array
 	 *
-	 * @param \JWeiland\Maps2\Domain\Model\PoiCollection $poiCollection
+	 * @param PoiCollection $poiCollection
 	 * @param $posIndex
-	 * @return null|\JWeiland\Maps2\Domain\Model\Poi
+	 * @return null|Poi
 	 */
-	public function getPoiFromPoiArray(\JWeiland\Maps2\Domain\Model\PoiCollection $poiCollection, $posIndex) {
+	public function getPoiFromPoiArray(PoiCollection $poiCollection, $posIndex) {
 		/** @var $poi \JWeiland\Maps2\Domain\Model\Poi */
-		foreach($poiCollection->getPois() as $poi) {
+		foreach ($poiCollection->getPois() as $poi) {
 			if ($poi->getPosIndex() == $posIndex) {
 				return $poi;
 			}

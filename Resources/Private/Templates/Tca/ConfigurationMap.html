@@ -27,7 +27,7 @@
 			TBE_EDITOR.fieldChanged('tx_maps2_domain_model_poicollection', TxMaps2.config.uid, 'address', TxMaps2.createFieldName('address', false));
 			TYPO3.jQuery( "#infoWindowAddress").html(address.replace(/, /gi,"<br />"));
 		}
-	}
+	};
 
 	/* generate an uri to save all coordinates */
 	TxMaps2.getUriForRoute = function(route) {
@@ -38,7 +38,7 @@
 		});
 		return routeObject;
 		/* ]]> */
-	}
+	};
 
 	// create fieldName
 	TxMaps2.createFieldName = function(field, hiddenRecord) {
@@ -46,21 +46,30 @@
 			return 'data[tx_maps2_domain_model_poicollection][' + TxMaps2.config.uid + '][' + field + ']_hr';
 		}
 		return 'data[tx_maps2_domain_model_poicollection][' + TxMaps2.config.uid + '][' + field + ']';
-	}
+	};
 
 	// get field value
 	TxMaps2.getFieldValue = function(field, hiddenRecord) {
 		var fieldName = TxMaps2.createFieldName(field, hiddenRecord);
 		return document[TBE_EDITOR.formname][fieldName].value;
-	}
+	};
 
 	// set field value
 	TxMaps2.setFieldValue = function(field, value) {
 		var fieldName = TxMaps2.createFieldName(field, true);
-		document[TBE_EDITOR.formname][fieldName].value = value;
+		// set the old (< TYPO3 7.5) hidden record fields "*_hr"
+		if (typeof document[TBE_EDITOR.formname][fieldName] != 'undefined') {
+			document[TBE_EDITOR.formname][fieldName].value = value;
+		}
+		// set the new (>= TYPO3 7.5) data fields "data-formengine-input-name"
 		fieldName = TxMaps2.createFieldName(field, false);
+		var $humanReadableField = TYPO3.jQuery('[data-formengine-input-name="' + fieldName + '"]')
+		if ($humanReadableField.length) {
+			$humanReadableField.val(value);
+		}
+		// set the normal field which contains the data, which will be send by POST
 		document[TBE_EDITOR.formname][fieldName].value = value;
-	}
+	};
 
 	// if user has moved marker after searching for an address he can reset marker to its original position
 	TxMaps2.resetMarkerToAddress = function(lat, lng) {
@@ -68,14 +77,14 @@
 		latLng = new google.maps.LatLng(lat, lng);
 		map.setCenter(latLng);
 
-		if(typeof marker.setPosition == "function") {
+		if (typeof marker.setPosition == "function") {
 			marker.setPosition(latLng);
 			TxMaps2.setLatLngFields(lat, lng, 0);
 		} else {
 			marker.setCenter(latLng);
 			TxMaps2.setLatLngFields(lat, lng, marker.getRadius());
 		}
-	}
+	};
 
 	// read address, send it to Google and move map/marker to new location
 	// this works only for point and radius
@@ -94,7 +103,7 @@
 				// Move map and marker to new position
 				map.setCenter(results[0].geometry.location);
 
-				if(typeof marker.setPosition == "function") {
+				if (typeof marker.setPosition == "function") {
 					marker.setPosition(results[0].geometry.location);
 					TxMaps2.setLatLngFields(lat, lng, 0, results[0].formatted_address);
 				} else {
@@ -106,7 +115,7 @@
 				TxMaps2.modifyMarkerInDb(lat, lng);
 
 			} else {
-				switch(status) {
+				switch (status) {
 					case "ERROR":
 					default:
 						alert("There was a problem contacting the Google servers.");
@@ -130,16 +139,15 @@
 			}
 		});
 		/* ]]> */
-	}
+	};
 
 	/* save coordinates into DB */
 	TxMaps2.modifyMarkerInDb = function(lat, lng, rad) {
 		/* <![CDATA[ */
 		TYPO3.jQuery.ajax({
 			type: "POST",
-			url: TxMaps2.config.TYPO3_SITE_URL + "typo3/ajax.php",
+			url: TxMaps2.config.ajaxUrlForModifyMarker,
 			data: {
-				ajaxID: 'maps2Ajax',
 				tx_maps2_maps2: {
 					objectName: "ModifyMarker",
 					hash: TxMaps2.config.hash,
@@ -153,7 +161,11 @@
 					}
 				}
 			}
+		}).done(function() {
+			// alert("Juhuu");
+		}).fail(function() {
+			// alert("Shit");
 		});
 		/* ]]> */
-	}
+	};
 </script>

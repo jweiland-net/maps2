@@ -1,27 +1,32 @@
 <?php
-if (!defined ('TYPO3_MODE')) {
-	die ('Access denied.');
-}
-
-$_EXTCONF = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['maps2']);
-
-$TCA['tx_maps2_domain_model_poicollection'] = array(
-	'ctrl' => $TCA['tx_maps2_domain_model_poicollection']['ctrl'],
+return array(
+	'ctrl' => array(
+		'title'	=> 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection',
+		'label' => 'title',
+		'label_alt' => 'address',
+		'tstamp' => 'tstamp',
+		'crdate' => 'crdate',
+		'cruser_id' => 'cruser_id',
+		'dividers2tabs' => TRUE,
+		'default_sortby' => 'ORDER BY title',
+		'type' => 'collection_type',
+		'versioningWS' => 2,
+		'versioning_followPages' => TRUE,
+		'origUid' => 't3_origuid',
+		'languageField' => 'sys_language_uid',
+		'transOrigPointerField' => 'l10n_parent',
+		'transOrigDiffSourceField' => 'l10n_diffsource',
+		'delete' => 'deleted',
+		'enablecolumns' => array(
+			'disabled' => 'hidden',
+			'starttime' => 'starttime',
+			'endtime' => 'endtime',
+		),
+		'searchFields' => 'title,pois',
+		'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('maps2') . 'Resources/Public/Icons/tx_maps2_domain_model_poicollection.gif'
+	),
 	'interface' => array(
 		'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, collection_type, title, address, latitude, longitude, latitude_orig, longitude_orig, configuration_map, pois, info_window_content, info_window_open_close',
-	),
-	'types' => array(
-		'Empty' => array('showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, hidden, collection_type, title,--div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access,starttime, endtime'),
-		'Point' => array('showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, hidden, collection_type, title, address;;1, configuration_map, pois,--div--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poicollection.info_window,info_window_content;;;richtext[]:rte_transform[mode=ts_css],--div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access,starttime, endtime'),
-		'Area' => array('showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, hidden, collection_type, title, latitude, longitude, configuration_map, pois,--div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access,starttime, endtime'),
-		'Route' => array('showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, hidden, collection_type, title, latitude, longitude, configuration_map, pois,--div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access,starttime, endtime'),
-		'Radius' => array('showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, hidden, collection_type, title, address;;2, configuration_map, pois,--div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access,starttime, endtime'),
-	),
-	'palettes' => array(
-		'1' => array('showitem' => 'latitude, longitude, --linebreak--, latitude_orig, longitude_orig', 'isHiddenPalette' => TRUE),
-		'2' => array('showitem' => 'latitude, longitude, radius, --linebreak--, latitude_orig, longitude_orig', 'isHiddenPalette' => TRUE),
-		'3' => array('showitem' => 'image_width, image_height'),
-		'4' => array('showitem' => 'shadow_width, shadow_height')
 	),
 	'columns' => array(
 		'sys_language_uid' => array(
@@ -148,7 +153,6 @@ $TCA['tx_maps2_domain_model_poicollection'] = array(
 			'config' => array(
 				'type' => 'input',
 				'size' => 12,
-				'default' => number_format((float)$_EXTCONF['defaultLatitude'], 6),
 				'eval' => 'JWeiland\\Maps2\\Tca\\Type\\Float',
 			),
 		),
@@ -158,7 +162,6 @@ $TCA['tx_maps2_domain_model_poicollection'] = array(
 			'config' => array(
 				'type' => 'input',
 				'size' => 12,
-				'default' => number_format((float)$_EXTCONF['defaultLongitude'], 6),
 				'eval' => 'JWeiland\\Maps2\\Tca\\Type\\Float',
 			),
 		),
@@ -213,16 +216,6 @@ $TCA['tx_maps2_domain_model_poicollection'] = array(
 				'cols' => 40,
 				'rows' => 15,
 				'eval' => 'trim',
-				'wizards' => array(
-					'RTE' => array(
-						'icon' => 'wizard_rte2.gif',
-						'notNewRecords'=> 1,
-						'RTEonly' => 1,
-						'script' => 'wizard_rte.php',
-						'title' => 'LLL:EXT:cms/locallang_ttc.xml:bodytext.W.RTE',
-						'type' => 'script'
-					)
-				)
 			),
 			'defaultExtras' => 'richtext[]',
 		),
@@ -234,5 +227,18 @@ $TCA['tx_maps2_domain_model_poicollection'] = array(
 				'default' => 0
 			),
 		),
+	),
+	'types' => array(
+		'Empty' => array('showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, hidden, collection_type, title,--div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access,starttime, endtime'),
+		'Point' => array('showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, hidden, collection_type, title, address;;1, configuration_map, pois,--div--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poicollection.info_window,info_window_content;;;richtext[]:rte_transform[mode=ts_css],--div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access,starttime, endtime'),
+		'Area' => array('showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, hidden, collection_type, title, latitude, longitude, configuration_map, pois,--div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access,starttime, endtime'),
+		'Route' => array('showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, hidden, collection_type, title, latitude, longitude, configuration_map, pois,--div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access,starttime, endtime'),
+		'Radius' => array('showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, hidden, collection_type, title, address;;2, configuration_map, pois,--div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access,starttime, endtime'),
+	),
+	'palettes' => array(
+		'1' => array('showitem' => 'latitude, longitude, --linebreak--, latitude_orig, longitude_orig'),
+		'2' => array('showitem' => 'latitude, longitude, radius, --linebreak--, latitude_orig, longitude_orig'),
+		'3' => array('showitem' => 'image_width, image_height'),
+		'4' => array('showitem' => 'shadow_width, shadow_height')
 	),
 );

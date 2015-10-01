@@ -68,9 +68,8 @@
 		/* <![CDATA[ */
 		TYPO3.jQuery.ajax({
 			type: "GET",
-			url: TxMaps2.config.TYPO3_SITE_URL + "typo3/ajax.php",
+			url: TxMaps2.config.ajaxUrlForModifyMarker,
 			data: {
-				ajaxID: 'maps2Ajax',
 				tx_maps2_maps2: {
 					objectName: "InsertRoute",
 					hash: TxMaps2.config.hash,
@@ -82,11 +81,11 @@
 			}
 		});
 		/* ]]> */
-	}
+	};
 
 	TYPO3.jQuery(document).ready(function() {
 		TxMaps2.init();
 	});
 </script>
 
-<div id="maps2ConfigurationMap" style="height:400px;margin:10px 0;width:400px"></div>
+<div id="maps2ConfigurationMap" style="height: 400px; width: 100%"></div>
