@@ -19,6 +19,39 @@
 			<trans-unit id="title.syntax">
 				<source>The title is mandatory</source>
 			</trans-unit>
+			<trans-unit id="address.description">
+				<source>Insert an address to search for. The map below will set the result as center after pressing "Update"</source>
+			</trans-unit>
+			<trans-unit id="address.syntax">
+				<source>Type in as much information about the address as you have, to get the best results</source>
+			</trans-unit>
+			<trans-unit id="address.details">
+				<source>
+					&lt;b&gt;Update&lt;/b&gt;
+					Press "Update" and the map below will move its center to the best result. All latitude and longitude including the backup fields will be set to this position. After that you can justify the center of the map a little bit by dragging the map with the mouse, if the position have not matched perfectly. Now only the values of latitude and longitude will update. The backup fields will be kept untouched.
+
+					&lt;b&gt;Reset&lt;/b&gt;
+					Press "Reset" to center back the map to the last stored position after pressing "Update".
+
+					&lt;b&gt;Setting the Default center&lt;/b&gt;
+					Maps2 delivers an extension configuration where you can change the default center of the map. Please open the Extensionmanager, choose maps2 and open the configuration.
+				</source>
+			</trans-unit>
+			<trans-unit id="latitude.description">
+				<source>Search for an address or drag the map manually to update this field. Of cause you can edit this field manually, too.</source>
+			</trans-unit>
+			<trans-unit id="longitude.description">
+				<source>Search for an address or drag the map manually to update this field. Of cause you can edit this field manually, too.</source>
+			</trans-unit>
+			<trans-unit id="radius.description">
+				<source>Pull the center marker on the map to change this field automatically. For sure you can change it manually, too.</source>
+			</trans-unit>
+			<trans-unit id="latitude_orig.description">
+				<source>Search for an address and press "Update" to update this field. You can't change it, because it saves the position of your last search "Update"</source>
+			</trans-unit>
+			<trans-unit id="longitude_orig.description">
+				<source>Search for an address and press "Update" to update this field. You can't change it, because it saves the position of your last search "Update"</source>
+			</trans-unit>
 			<trans-unit id="pois.description">
 				<source>List of POIs</source>
 			</trans-unit>
