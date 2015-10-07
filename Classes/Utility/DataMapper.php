@@ -4,7 +4,7 @@ namespace JWeiland\Maps2\Utility;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2014 Stefan Froemken <sfroemken@jweiland.net>, jweiland.net
+ *  (c) 2014 Stefan Froemken <projects@jweiland.net>, jweiland.net
  *
  *  All rights reserved
  *
@@ -34,19 +34,33 @@ class DataMapper {
 
 	/**
 	 * @var \TYPO3\CMS\Extbase\Reflection\ReflectionService
-	 * @inject
 	 */
 	protected $reflectionService;
 
 	/**
 	 * @var \TYPO3\CMS\Extbase\Object\ObjectManager
-	 * @inject
 	 */
 	protected $objectManager;
 
+	/**
+	 * inject reflectionService
+	 *
+	 * @param \TYPO3\CMS\Extbase\Reflection\ReflectionService $reflectionService
+	 * @return void
+	 */
+	public function injectReflectionService(\TYPO3\CMS\Extbase\Reflection\ReflectionService $reflectionService) {
+		$this->reflectionService = $reflectionService;
+	}
 
-
-
+	/**
+	 * inject objectManager
+	 *
+	 * @param \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager
+	 * @return void
+	 */
+	public function injectObjectManager(\TYPO3\CMS\Extbase\Object\ObjectManager $objectManager) {
+		$this->objectManager = $objectManager;
+	}
 
 	/**
 	 * Maps a single row on an object of the given class

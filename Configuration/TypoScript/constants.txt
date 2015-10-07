@@ -6,6 +6,8 @@ plugin.tx_maps2 {
 		partialRootPath = EXT:maps2/Resources/Private/Partials/
 		# cat=plugin.tx_maps2/file; type=string; label=Path to template layouts (FE)
 		layoutRootPath = EXT:maps2/Resources/Private/Layouts/
+		# cat=plugin.tx_maps2/enable; type=boolean; label=Include jQuery
+		includeJQuery = 1
 	}
 	persistence {
 		# cat=plugin.tx_maps2//a; type=string; label=Default storage PID

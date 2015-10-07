@@ -4,7 +4,7 @@ namespace JWeiland\Maps2\ViewHelpers\Cache;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Stefan Froemken <sfroemken@jweiland.net>, jweiland.net
+ *  (c) 2015 Stefan Froemken <projects@jweiland.net>, jweiland.net
  *
  *  All rights reserved
  *
@@ -29,7 +29,7 @@ namespace JWeiland\Maps2\ViewHelpers\Cache;
  * @package maps2
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class GetCacheViewHelper extends \JWeiland\Maps2\ViewHelpers\Cache\AbstractCacheViewHelper {
+class GetCacheViewHelper extends AbstractCacheViewHelper {
 
 	/**
 	 * returns cache entry by given cache identifier

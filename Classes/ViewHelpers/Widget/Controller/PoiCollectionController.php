@@ -4,7 +4,7 @@ namespace JWeiland\Maps2\ViewHelpers\Widget\Controller;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Stefan Froemken <sfroemken@jweiland.net>, jweiland.net
+ *  (c) 2015 Stefan Froemken <projects@jweiland.net>, jweiland.net
  *
  *  All rights reserved
  *
@@ -26,12 +26,13 @@ namespace JWeiland\Maps2\ViewHelpers\Widget\Controller;
  ***************************************************************/
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
+use TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetController;
 
 /**
  * @package maps2
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class PoiCollectionController extends \TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetController {
+class PoiCollectionController extends AbstractWidgetController {
 
 	/**
 	 * @var \JWeiland\Maps2\Domain\Model\PoiCollection
@@ -39,17 +40,23 @@ class PoiCollectionController extends \TYPO3\CMS\Fluid\Core\Widget\AbstractWidge
 	protected $poiCollection;
 
 	/**
-	 * @var \TYPO3\CMS\Core\Page\PageRenderer
-	 * @inject
-	 */
-	protected $pageRenderer;
-
-	/**
 	 * @var \JWeiland\Maps2\Configuration\ExtConf
-	 * @inject
 	 */
 	protected $extConf;
 
+	/**
+	 * inject extConf
+	 *
+	 * @param \JWeiland\Maps2\Configuration\ExtConf $extConf
+	 * @return void
+	 */
+	public function injectExtConf(\JWeiland\Maps2\Configuration\ExtConf $extConf) {
+		$this->extConf = $extConf;
+	}
+
+	/**
+	 * @var array
+	 */
 	protected $mapOptions = array(
 		'zoom' => 12,
 		'mapTypeId' => 'google.maps.MapTypeId.ROADMAP',
@@ -60,9 +67,16 @@ class PoiCollectionController extends \TYPO3\CMS\Fluid\Core\Widget\AbstractWidge
 		'streetViewControl' => 1,
 		'overviewMapControl' => 1,
 	);
-	protected $width = 400;
-	protected $height = 300;
 
+	/**
+	 * @var int
+	 */
+	protected $width = 400;
+
+	/**
+	 * @var int
+	 */
+	protected $height = 300;
 
 	/**
 	 * initializes the index action
@@ -74,12 +88,6 @@ class PoiCollectionController extends \TYPO3\CMS\Fluid\Core\Widget\AbstractWidge
 		ArrayUtility::mergeRecursiveWithOverrule($this->mapOptions, $this->getMapOptions(), TRUE);
 		$this->width = $this->widgetConfiguration['width'];
 		$this->height = $this->widgetConfiguration['height'];
-
-		if ($this->settings['includeJQueryLibrary']) {
-			$this->pageRenderer->addJsLibrary('maps2JQuery', '//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js', 'text/javascript', FALSE, TRUE, '', TRUE);
-		}
-		$this->pageRenderer->addJsLibrary('maps2GoogleMapsApi', $this->extConf->getGoogleMapsLibrary(), 'text/javascript', FALSE, TRUE, '', TRUE);
-
 	}
 
 	/**

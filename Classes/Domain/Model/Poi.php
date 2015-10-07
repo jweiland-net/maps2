@@ -4,7 +4,7 @@ namespace JWeiland\Maps2\Domain\Model;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Stefan Froemken <sfroemken@jweiland.net>, jweiland.net
+ *  (c) 2015 Stefan Froemken <projects@jweiland.net>, jweiland.net
  *
  *  All rights reserved
  *
@@ -24,12 +24,13 @@ namespace JWeiland\Maps2\Domain\Model;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 /**
  * @package maps2
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class Poi extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
+class Poi extends AbstractEntity {
 
 	/**
 	 * cruser_id
@@ -58,10 +59,6 @@ class Poi extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @var float
 	 */
 	protected $longitude;
-
-
-
-
 
 	/**
 	 * Returns the cruserId

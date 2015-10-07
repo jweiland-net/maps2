@@ -4,7 +4,7 @@ namespace JWeiland\Maps2\ViewHelpers\Cache;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Stefan Froemken <sfroemken@jweiland.net>, jweiland.net
+ *  (c) 2015 Stefan Froemken <projects@jweiland.net>, jweiland.net
  *
  *  All rights reserved
  *
@@ -24,15 +24,14 @@ namespace JWeiland\Maps2\ViewHelpers\Cache;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-use \TYPO3\CMS\Core\Cache\Cache;
-use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * @package maps2
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class AbstractCacheViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
+class AbstractCacheViewHelper extends AbstractViewHelper {
 
 	/**
 	 * @var \TYPO3\CMS\Core\Cache\Frontend\AbstractFrontend
@@ -43,17 +42,7 @@ class AbstractCacheViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractV
 	 * initializes the caching framework for this view helper
 	 */
 	public function initialize() {
-		Cache::initializeCachingFramework();
-		try {
-			$this->cache = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Cache\\CacheManager')->getCache('maps2_cachedHtml');
-		} catch (NoSuchCacheException $e) {
-			$this->cache = $GLOBALS['typo3CacheFactory']->create(
-				'maps2_cachedHtml',
-				$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['maps2_cachedHtml']['frontend'],
-				$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['maps2_cachedHtml']['backend'],
-				$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['maps2_cachedHtml']['options']
-			);
-		}
+		$this->cache = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Cache\\CacheManager')->getCache('maps2_cachedHtml');
 	}
 
 }

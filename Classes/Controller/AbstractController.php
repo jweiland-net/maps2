@@ -4,7 +4,7 @@ namespace JWeiland\Maps2\Controller;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Stefan Froemken <sfroemken@jweiland.net>, jweiland.net
+ *  (c) 2015 Stefan Froemken <projects@jweiland.net>, jweiland.net
  *
  *  All rights reserved
  *
@@ -25,34 +25,43 @@ namespace JWeiland\Maps2\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 use TYPO3\CMS\Core\Utility\MathUtility;
+use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 
 /**
  * @package maps2
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class AbstractController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
-
-	/**
-	 * @var \TYPO3\CMS\Core\Page\PageRenderer
-	 * @inject
-	 */
-	protected $pageRenderer;
+class AbstractController extends ActionController {
 
 	/**
 	 * @var \JWeiland\Maps2\Configuration\ExtConf
-	 * @inject
 	 */
 	protected $extConf;
 
 	/**
 	 * @var \JWeiland\Maps2\Utility\DataMapper
-	 * @inject
 	 */
 	protected $dataMapper;
 
+	/**
+	 * inject extConf
+	 *
+	 * @param \JWeiland\Maps2\Configuration\ExtConf $extConf
+	 * @return void
+	 */
+	public function injectExtConf(\JWeiland\Maps2\Configuration\ExtConf $extConf) {
+		$this->extConf = $extConf;
+	}
 
-
-
+	/**
+	 * inject dataMapper
+	 *
+	 * @param \JWeiland\Maps2\Utility\DataMapper $dataMapper
+	 * @return void
+	 */
+	public function injectDataMapper(\JWeiland\Maps2\Utility\DataMapper $dataMapper) {
+		$this->dataMapper = $dataMapper;
+	}
 
 	/**
 	 * prepare address for an uri
@@ -63,7 +72,7 @@ class AbstractController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControl
 	 */
 	public function updateAddressForUri($address) {
 		// check if it can be interpreted as a zip code
-		if (MathUtility::canBeInterpretedAsInteger($address) && strlen($address) == 5) {
+		if (MathUtility::canBeInterpretedAsInteger($address) && strlen($address) === 5) {
 			$address .= ' Deutschland';
 		}
 		return rawurlencode($address);

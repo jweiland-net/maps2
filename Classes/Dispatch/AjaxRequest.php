@@ -4,7 +4,7 @@ namespace JWeiland\Maps2\Dispatch;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Stefan Froemken <sfroemken@jweiland.net>, jweiland.net
+ *  (c) 2015 Stefan Froemken <projects@jweiland.net>, jweiland.net
  *
  *  All rights reserved
  *
@@ -38,10 +38,6 @@ class AjaxRequest {
 	 * @var \TYPO3\CMS\Extbase\Object\ObjectManager
 	 */
 	protected $objectManager;
-
-
-
-
 
 	/**
 	 * contructor of this class

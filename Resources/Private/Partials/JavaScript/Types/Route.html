@@ -15,3 +15,6 @@ var route = new google.maps.Polyline({
 /* add route to map */
 route.setMap(map);
 /*]]>*/
+if (typeof bounds !== "undefined") {
+	bounds.extend(new google.maps.LatLng({poiCollection.latitude}, {poiCollection.longitude}));
+}

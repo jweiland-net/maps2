@@ -4,7 +4,7 @@ namespace JWeiland\Maps2\Utility;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Stefan Froemken <sfroemken@jweiland.net>, jweiland.net
+ *  (c) 2015 Stefan Froemken <projects@jweiland.net>, jweiland.net
  *
  *  All rights reserved
  *
@@ -33,17 +33,25 @@ use TYPO3\CMS\Core\Utility\MathUtility;
  */
 class GoogleMaps {
 
+	/**
+	 * @var string
+	 */
 	protected $urlGeocode = 'http://maps.googleapis.com/maps/api/geocode/json?address=|&sensor=false';
 
 	/**
 	 * @var \JWeiland\Maps2\Utility\DataMapper
-	 * @inject
 	 */
 	protected $dataMapper;
 
-
-
-
+	/**
+	 * inject dataMapper
+	 *
+	 * @param \JWeiland\Maps2\Utility\DataMapper $dataMapper
+	 * @return void
+	 */
+	public function injectDataMapper(\JWeiland\Maps2\Utility\DataMapper $dataMapper) {
+		$this->dataMapper = $dataMapper;
+	}
 
 	/**
 	 * find position by address

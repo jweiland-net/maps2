@@ -4,7 +4,7 @@ namespace JWeiland\Maps2\ViewHelpers\Widget\Controller;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Stefan Froemken <sfroemken@jweiland.net>, jweiland.net
+ *  (c) 2015 Stefan Froemken <projects@jweiland.net>, jweiland.net
  *
  *  All rights reserved
  *
@@ -25,21 +25,37 @@ namespace JWeiland\Maps2\ViewHelpers\Widget\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 use TYPO3\CMS\Core\Utility\ArrayUtility;
+use TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetController;
 
 /**
  * @package maps2
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class PointController extends \TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetController {
+class PointController extends AbstractWidgetController {
 
 	/**
 	 * @var \JWeiland\Maps2\Configuration\ExtConf
-	 * @inject
 	 */
 	protected $extConf;
 
+	/**
+	 * inject extConf
+	 *
+	 * @param \JWeiland\Maps2\Configuration\ExtConf $extConf
+	 * @return void
+	 */
+	public function injectExtConf(\JWeiland\Maps2\Configuration\ExtConf $extConf) {
+		$this->extConf = $extConf;
+	}
+
+	/**
+	 * @var array
+	 */
 	protected $center = array();
 
+	/**
+	 * @var array
+	 */
 	protected $mapOptions = array(
 		'zoom' => 12,
 		'mapTypeId' => 'google.maps.MapTypeId.ROADMAP',
@@ -50,11 +66,21 @@ class PointController extends \TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetControl
 		'streetViewControl' => 1,
 		'overviewMapControl' => 1,
 	);
+
+	/**
+	 * @var int
+	 */
 	protected $width = 400;
+
+	/**
+	 * @var int
+	 */
 	protected $height = 300;
 
 	/**
-	 * initialize action
+	 * initializes the index action
+	 *
+	 * @return void
 	 */
 	public function initializeAction() {
 		$this->center = array(

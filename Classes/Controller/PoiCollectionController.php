@@ -4,7 +4,7 @@ namespace JWeiland\Maps2\Controller;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Stefan Froemken <sfroemken@jweiland.net>, jweiland.net
+ *  (c) 2015 Stefan Froemken <projects@jweiland.net>, jweiland.net
  *
  *  All rights reserved
  *
@@ -24,6 +24,8 @@ namespace JWeiland\Maps2\Controller;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+use JWeiland\Maps2\Domain\Model\PoiCollection;
+use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 
@@ -31,34 +33,36 @@ use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
  * @package maps2
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class PoiCollectionController extends \JWeiland\Maps2\Controller\AbstractController {
+class PoiCollectionController extends AbstractController {
 
 	/**
 	 * @var \JWeiland\Maps2\Domain\Repository\PoiCollectionRepository
-	 * @inject
 	 */
 	protected $poiCollectionRepository;
 
 	/**
 	 * @var \TYPO3\CMS\Frontend\Page\CacheHashCalculator
-	 * @inject
 	 */
-	protected $cacheHash;
-
-
-
-
+	protected $cacheHashCalculator;
 
 	/**
-	 * initialize show action
+	 * inject poiCollectionRepository
 	 *
+	 * @param \JWeiland\Maps2\Domain\Repository\PoiCollectionRepository $poiCollectionRepository
 	 * @return void
 	 */
-	public function initializeAction() {
-		if ($this->settings['includeJQueryLibrary']) {
-			$this->pageRenderer->addJsLibrary('maps2JQuery', '//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js', 'text/javascript', false, true, '', true);
-		}
-		$this->pageRenderer->addJsLibrary('maps2GoogleMapsApi', $this->extConf->getGoogleMapsLibrary(), 'text/javascript', false, true, '', true);
+	public function injectPoiCollectionRepository(\JWeiland\Maps2\Domain\Repository\PoiCollectionRepository $poiCollectionRepository) {
+		$this->poiCollectionRepository = $poiCollectionRepository;
+	}
+
+	/**
+	 * inject cacheHashCalculator
+	 *
+	 * @param \TYPO3\CMS\Frontend\Page\CacheHashCalculator $cacheHashCalculator
+	 * @return void
+	 */
+	public function injectCacheHashCalculator(\TYPO3\CMS\Frontend\Page\CacheHashCalculator $cacheHashCalculator) {
+		$this->cacheHashCalculator = $cacheHashCalculator;
 	}
 
 	/**
@@ -83,7 +87,7 @@ class PoiCollectionController extends \JWeiland\Maps2\Controller\AbstractControl
 		if (!empty($this->settings['poiCollection'])) {
 			$poiCollection = $this->poiCollectionRepository->findByUid((int)$this->settings['poiCollection']);
 		};
-		if ($poiCollection instanceof \JWeiland\Maps2\Domain\Model\PoiCollection) {
+		if ($poiCollection instanceof PoiCollection) {
 			$this->view->assign('poiCollection', $poiCollection);
 		};
 	}
@@ -115,8 +119,8 @@ class PoiCollectionController extends \JWeiland\Maps2\Controller\AbstractControl
 		$parameters['id'] = $GLOBALS['TSFE']->id;
 		$parameters['tx_maps2_searchwithinradius']['controller'] = 'PoiCollection';
 		$parameters['tx_maps2_searchwithinradius']['action'] = 'checkForMultiple';
-		$cachHashArray = $this->cacheHash->getRelevantParameters(GeneralUtility::implodeArrayForUrl('', $parameters));
-		$this->view->assign('cHash', $this->cacheHash->calculateCacheHash($cachHashArray));
+		$cachHashArray = $this->cacheHashCalculator->getRelevantParameters(GeneralUtility::implodeArrayForUrl('', $parameters));
+		$this->view->assign('cHash', $this->cacheHashCalculator->calculateCacheHash($cachHashArray));
 	}
 
 	/**
@@ -156,7 +160,7 @@ class PoiCollectionController extends \JWeiland\Maps2\Controller\AbstractControl
 		} else {
 			// add error message and return to search form
 			// @ToDo
-			$this->flashMessageContainer->add('Your position was not found. Please reenter a more detailed address', 'no result found', \TYPO3\CMS\Core\Messaging\FlashMessage::NOTICE);
+			$this->flashMessageContainer->add('Your position was not found. Please reenter a more detailed address', 'no result found', FlashMessage::NOTICE);
 			$this->forward('search');
 		}
 	}

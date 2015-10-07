@@ -4,7 +4,7 @@ namespace JWeiland\Maps2\Ajax;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Stefan Froemken <sfroemken@jweiland.net>, jweiland.net
+ *  (c) 2015 Stefan Froemken <projects@jweiland.net>, jweiland.net
  *
  *  All rights reserved
  *
@@ -24,40 +24,76 @@ namespace JWeiland\Maps2\Ajax;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+use TYPO3\CMS\Extbase\Reflection\PropertyReflection;
 
 /**
  * @package maps2
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-abstract class AbstractAjaxRequest implements \JWeiland\Maps2\Ajax\AjaxInterface {
+abstract class AbstractAjaxRequest implements AjaxInterface {
 
 	/**
 	 * @var \TYPO3\CMS\Extbase\Object\ObjectManager
-	 * @inject
 	 */
 	protected $objectManager;
 
 	/**
 	 * @var \TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface
-	 * @inject
 	 */
 	protected $persistenceManager;
 
 	/**
 	 * @var \TYPO3\CMS\Extbase\Security\Cryptography\HashService
-	 * @inject
 	 */
 	protected $hashService;
 
 	/**
 	 * @var \TYPO3\CMS\Extbase\Configuration\BackendConfigurationManager
-	 * @inject
 	 */
 	protected $backendConfigurationManager;
 
+	/**
+	 * inject objectManager
+	 *
+	 * @param \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager
+	 * @return void
+	 */
+	public function injectObjectManager(\TYPO3\CMS\Extbase\Object\ObjectManager $objectManager) {
+		$this->objectManager = $objectManager;
+	}
 
 	/**
-	 * In Typo3QuerySettings is a feature check which loads whole TS which needs about 250ms
+	 * inject persistenceManager
+	 *
+	 * @param \TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface $persistenceManager
+	 * @return void
+	 */
+	public function injectPersistenceManager(\TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface $persistenceManager) {
+		$this->persistenceManager = $persistenceManager;
+	}
+
+	/**
+	 * inject hashService
+	 *
+	 * @param \TYPO3\CMS\Extbase\Security\Cryptography\HashService $hashService
+	 * @return void
+	 */
+	public function injectHashService(\TYPO3\CMS\Extbase\Security\Cryptography\HashService $hashService) {
+		$this->hashService = $hashService;
+	}
+
+	/**
+	 * inject backendConfigurationManager
+	 *
+	 * @param \TYPO3\CMS\Extbase\Configuration\BackendConfigurationManager $backendConfigurationManager
+	 * @return void
+	 */
+	public function injectBackendConfigurationManager(\TYPO3\CMS\Extbase\Configuration\BackendConfigurationManager $backendConfigurationManager) {
+		$this->backendConfigurationManager = $backendConfigurationManager;
+	}
+
+	/**
+	 * In Typo3QuerySettings there is a feature check which loads whole TS which needs about 250ms
 	 * With this workaround I modify the 1st level cache of configuration manager
 	 *
 	 * @return void
@@ -69,7 +105,7 @@ abstract class AbstractAjaxRequest implements \JWeiland\Maps2\Ajax\AjaxInterface
 
 		// transport our minimal configuration into backendConfigurationManagers 1st-level Cache
 		if (property_exists(get_class($this->backendConfigurationManager), 'configurationCache')) {
-			$propertyReflection = new \TYPO3\CMS\Extbase\Reflection\PropertyReflection(get_class($this->backendConfigurationManager), 'configurationCache');
+			$propertyReflection = new PropertyReflection(get_class($this->backendConfigurationManager), 'configurationCache');
 			$propertyReflection->setAccessible(TRUE);
 			$propertyReflection->setValue($this->backendConfigurationManager, $configuration);
 		}

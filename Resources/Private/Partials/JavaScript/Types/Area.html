@@ -20,3 +20,6 @@ var area = new google.maps.Polygon({
 
 area.setMap(map);
 /*]]>*/
+if (typeof bounds !== "undefined") {
+	bounds.extend(new google.maps.LatLng({poiCollection.latitude}, {poiCollection.longitude}));
+}

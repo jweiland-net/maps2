@@ -4,7 +4,7 @@ namespace JWeiland\Maps2\ViewHelpers\Form;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Stefan Froemken <sfroemken@jweiland.net>, jweiland.net
+ *  (c) 2015 Stefan Froemken <projects@jweiland.net>, jweiland.net
  *
  *  All rights reserved
  *
@@ -25,24 +25,43 @@ namespace JWeiland\Maps2\ViewHelpers\Form;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * @package maps2
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class RenderHiddenFieldsForGetViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
+class RenderHiddenFieldsForGetViewHelper extends AbstractViewHelper {
 
 	/**
 	 * @var \TYPO3\CMS\Extbase\Service\ExtensionService
-	 * @inject
 	 */
 	protected $extensionService;
 
 	/**
 	 * @var \TYPO3\CMS\Frontend\Page\CacheHashCalculator
-	 * @inject
 	 */
 	protected $cacheHashCalculator;
+
+	/**
+	 * inject extensionService
+	 *
+	 * @param \TYPO3\CMS\Extbase\Service\ExtensionService $extensionService
+	 * @return void
+	 */
+	public function injectExtensionService(\TYPO3\CMS\Extbase\Service\ExtensionService $extensionService) {
+		$this->extensionService = $extensionService;
+	}
+
+	/**
+	 * inject cacheHashCalculator
+	 *
+	 * @param \TYPO3\CMS\Frontend\Page\CacheHashCalculator $cacheHashCalculator
+	 * @return void
+	 */
+	public function injectCacheHashCalculator(\TYPO3\CMS\Frontend\Page\CacheHashCalculator $cacheHashCalculator) {
+		$this->cacheHashCalculator = $cacheHashCalculator;
+	}
 
 	/**
 	 * implements a vievHelper to trim explode comma separated strings

@@ -4,7 +4,7 @@ namespace JWeiland\Maps2\Configuration;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Stefan Froemken <sfroemken@jweiland.net>, jweiland.net
+ *  (c) 2015 Stefan Froemken <projects@jweiland.net>, jweiland.net
  *
  *  All rights reserved
  *
@@ -24,86 +24,83 @@ namespace JWeiland\Maps2\Configuration;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+use TYPO3\CMS\Core\SingletonInterface;
 
 /**
  * @package maps2
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class ExtConf implements \TYPO3\CMS\Core\SingletonInterface {
+class ExtConf implements SingletonInterface {
 
 	/**
 	 * use https
 	 *
 	 * @var boolean
 	 */
-	protected $useHttps;
+	protected $useHttps = false;
 
 	/**
 	 * google maps library
 	 *
 	 * @var string
 	 */
-	protected $googleMapsLibrary;
+	protected $googleMapsLibrary = '';
 
 	/**
 	 * default latitude
 	 *
 	 * @var float
 	 */
-	protected $defaultLatitude;
+	protected $defaultLatitude = 0;
 
 	/**
 	 * default longitude
 	 *
 	 * @var float
 	 */
-	protected $defaultLongitude;
+	protected $defaultLongitude = 0;
 
 	/**
 	 * default radius
 	 *
 	 * @var integer
 	 */
-	protected $defaultRadius;
+	protected $defaultRadius = 0;
 
 	/**
 	 * stroke color
 	 *
 	 * @var string
 	 */
-	protected $strokeColor;
+	protected $strokeColor = '';
 
 	/**
 	 * stroke opacity
 	 *
 	 * @var float
 	 */
-	protected $strokeOpacity;
+	protected $strokeOpacity = 0;
 
 	/**
 	 * stroke weight
 	 *
 	 * @var integer
 	 */
-	protected $strokeWeight;
+	protected $strokeWeight = 0;
 
 	/**
 	 * fill color
 	 *
 	 * @var string
 	 */
-	protected $fillColor;
+	protected $fillColor = '';
 
 	/**
 	 * fill opacity
 	 *
 	 * @var float
 	 */
-	protected $fillOpacity;
-
-
-
-
+	protected $fillOpacity = 0;
 
 	/**
 	 * constructor of this class
@@ -187,7 +184,9 @@ class ExtConf implements \TYPO3\CMS\Core\SingletonInterface {
 	public function getDefaultLatitude() {
 		if (empty($this->defaultLatitude)) {
 			return 0.00;
-		} else return $this->defaultLatitude;
+		} else {
+			return $this->defaultLatitude;
+		}
 	}
 
 	/**
@@ -208,7 +207,9 @@ class ExtConf implements \TYPO3\CMS\Core\SingletonInterface {
 	public function getDefaultLongitude() {
 		if (empty($this->defaultLongitude)) {
 			return 0.00;
-		} else return $this->defaultLongitude;
+		} else {
+			return $this->defaultLongitude;
+		}
 	}
 
 	/**
@@ -229,7 +230,9 @@ class ExtConf implements \TYPO3\CMS\Core\SingletonInterface {
 	public function getDefaultRadius() {
 		if (empty($this->defaultRadius)) {
 			return 250;
-		} else return $this->defaultRadius;
+		} else {
+			return $this->defaultRadius;
+		}
 	}
 
 	/**
@@ -250,7 +253,9 @@ class ExtConf implements \TYPO3\CMS\Core\SingletonInterface {
 	public function getStrokeColor() {
 		if (empty($this->strokeColor)) {
 			return '#FF0000';
-		} else return $this->strokeColor;
+		} else {
+			return $this->strokeColor;
+		}
 	}
 
 	/**
@@ -271,7 +276,9 @@ class ExtConf implements \TYPO3\CMS\Core\SingletonInterface {
 	public function getStrokeOpacity() {
 		if (empty($this->strokeOpacity)) {
 			return 0.8;
-		} else return $this->strokeOpacity;
+		} else {
+			return $this->strokeOpacity;
+		}
 	}
 
 	/**
@@ -292,7 +299,9 @@ class ExtConf implements \TYPO3\CMS\Core\SingletonInterface {
 	public function getStrokeWeight() {
 		if (empty($this->strokeWeight)) {
 			return 2;
-		} else return $this->strokeWeight;
+		} else {
+			return $this->strokeWeight;
+		}
 	}
 
 	/**
@@ -313,7 +322,9 @@ class ExtConf implements \TYPO3\CMS\Core\SingletonInterface {
 	public function getFillColor() {
 		if (empty($this->fillColor)) {
 			return '#FF0000';
-		} else return $this->fillColor;
+		} else {
+			return $this->fillColor;
+		}
 	}
 
 	/**
@@ -334,7 +345,9 @@ class ExtConf implements \TYPO3\CMS\Core\SingletonInterface {
 	public function getFillOpacity() {
 		if (empty($this->fillOpacity)) {
 			return 0.35;
-		} else return $this->fillOpacity;
+		} else {
+			return $this->fillOpacity;
+		}
 	}
 
 	/**

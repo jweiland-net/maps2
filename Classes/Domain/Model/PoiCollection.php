@@ -4,7 +4,7 @@ namespace JWeiland\Maps2\Domain\Model;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2013 Stefan Froemken <sfroemken@jweiland.net>, jweiland.net
+ *  (c) 2015 Stefan Froemken <projects@jweiland.net>, jweiland.net
  *
  *  All rights reserved
  *
@@ -24,20 +24,21 @@ namespace JWeiland\Maps2\Domain\Model;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
  * @package maps2
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class PoiCollection extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
+class PoiCollection extends AbstractEntity {
 
 	/**
 	 * Collection_type
 	 *
 	 * @var string
 	 */
-	protected $collectionType;
+	protected $collectionType = '';
 
 	/**
 	 * Title
@@ -45,49 +46,49 @@ class PoiCollection extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @var string
 	 * @validate NotEmpty
 	 */
-	protected $title;
+	protected $title = '';
 
 	/**
 	 * Address
 	 *
 	 * @var string
 	 */
-	protected $address;
+	protected $address = '';
 
 	/**
 	 * Latitude
 	 *
 	 * @var float
 	 */
-	protected $latitude;
+	protected $latitude = 0;
 
 	/**
 	 * Longitude
 	 *
 	 * @var float
 	 */
-	protected $longitude;
+	protected $longitude = 0;
 
 	/**
 	 * LatitudeOrig
 	 *
 	 * @var float
 	 */
-	protected $latitudeOrig;
+	protected $latitudeOrig = 0;
 
 	/**
 	 * LongitudeOrig
 	 *
 	 * @var float
 	 */
-	protected $longitudeOrig;
+	protected $longitudeOrig = 0;
 
 	/**
 	 * Radius
 	 *
 	 * @var integer
 	 */
-	protected $radius;
+	protected $radius = 0;
 
 	/**
 	 * List of POIs
@@ -96,28 +97,28 @@ class PoiCollection extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @cascade remove
 	 * @lazy
 	 */
-	protected $pois;
+	protected $pois = NULL;
 
 	/**
 	 * infoWindowContent
 	 *
 	 * @var string
 	 */
-	protected $infoWindowContent;
+	protected $infoWindowContent = '';
 
 	/**
 	 * infoWindowOpenClose
 	 *
 	 * @var boolean
 	 */
-	protected $infoWindowOpenClose;
+	protected $infoWindowOpenClose = false;
 
 	/**
 	 * categories
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\Category>
 	 */
-	protected $categories;
+	protected $categories = null;
 
 	/**
 	 * distance
@@ -125,11 +126,7 @@ class PoiCollection extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @var float
 	 */
-	protected $distance;
-
-
-
-
+	protected $distance = 0;
 
 	/**
 	 * contructor of this model class

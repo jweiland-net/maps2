@@ -26,6 +26,7 @@
 										<numIndex index="1"><![CDATA[PoiCollection->showPoisOfCategory]]></numIndex>
 									</numIndex>
 								</items>
+								<default><![CDATA[PoiCollection->show]]></default>
 							</config>
 						</TCEforms>
 					</switchableControllerActions>
