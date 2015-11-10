@@ -1,0 +1,23 @@
+########################
+# jweiland.net MAPS2
+# global ignore file
+########################
+#
+# Ignore temporary files (left by editors)
+*~
+*.bak
+*.swp
+#
+# Ignore by common IDEs used directories/files
+nbproject
+*.idea
+*.project
+.buildpath
+.project
+.settings
+.TemporaryItems
+.webprj
+#
+# Ignore composer stuff
+bin/*
+vendor/*
