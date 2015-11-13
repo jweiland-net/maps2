@@ -46,7 +46,7 @@ if(TYPO3_MODE === 'BE') {
 		\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::registerAjaxHandler(
 			'maps2Ajax',
 			'JWeiland\\Maps2\\Dispatch\\AjaxRequest->dispatch',
-			FALSE
+			false
 		);
 	} else {
 		$GLOBALS['TYPO3_CONF_VARS']['BE']['AJAX']['maps2Ajax'] = 'JWeiland\\Maps2\\Dispatch\\AjaxRequest->dispatch';

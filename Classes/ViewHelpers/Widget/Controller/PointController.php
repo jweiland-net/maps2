@@ -1,107 +1,106 @@
 <?php
 namespace JWeiland\Maps2\ViewHelpers\Widget\Controller;
 
-/***************************************************************
- *  Copyright notice
+/**
+ * This file is part of the TYPO3 CMS project.
  *
- *  (c) 2015 Stefan Froemken <projects@jweiland.net>, jweiland.net
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
  *
- *  All rights reserved
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
  *
- *  This script is part of the TYPO3 project. The TYPO3 project is
- *  free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
- *
- *  This script is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
+ * The TYPO3 project - inspiring people to share!
+ */
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 
 /**
- * @package maps2
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * Class PointController
+ *
+ * @category ViewHelpers/Widget/Controller
+ * @package  Maps2
+ * @author   Stefan Froemken <projects@jweiland.net>
+ * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
+ * @link     https://github.com/jweiland-net/maps2
  */
-class PointController extends AbstractController {
+class PointController extends AbstractController
+{
 
-	/**
-	 * @var array
-	 */
-	protected $center = array();
+    /**
+     * @var array
+     */
+    protected $center = array();
 
-	/**
-	 * @var array
-	 */
-	protected $mapOptions = array(
-		'zoom' => 12,
-		'mapTypeId' => 'google.maps.MapTypeId.ROADMAP',
-		'panControl' => 1,
-		'zoomControl' => 1,
-		'mapTypeControl' => 1,
-		'scaleControl' => 1,
-		'streetViewControl' => 1,
-		'overviewMapControl' => 1,
-	);
+    /**
+     * @var array
+     */
+    protected $mapOptions = array(
+        'zoom' => 12,
+        'mapTypeId' => 'google.maps.MapTypeId.ROADMAP',
+        'panControl' => 1,
+        'zoomControl' => 1,
+        'mapTypeControl' => 1,
+        'scaleControl' => 1,
+        'streetViewControl' => 1,
+        'overviewMapControl' => 1,
+    );
 
-	/**
-	 * @var int
-	 */
-	protected $width = 400;
+    /**
+     * @var int
+     */
+    protected $width = 400;
 
-	/**
-	 * @var int
-	 */
-	protected $height = 300;
+    /**
+     * @var int
+     */
+    protected $height = 300;
 
-	/**
-	 * initializes the index action
-	 *
-	 * @return void
-	 */
-	public function initializeAction() {
-		$this->center = array(
-			'latitude' => $this->extConf->getDefaultLatitude(),
-			'longitude' => $this->extConf->getDefaultLongitude()
-		);
-		ArrayUtility::mergeRecursiveWithOverrule($this->center, $this->widgetConfiguration['center'], TRUE);
-		ArrayUtility::mergeRecursiveWithOverrule($this->mapOptions, $this->getMapOptions(), TRUE);
-		$this->width = $this->widgetConfiguration['width'];
-		$this->height = $this->widgetConfiguration['height'];
-	}
+    /**
+     * initializes the index action
+     *
+     * @return void
+     */
+    public function initializeAction()
+    {
+        $this->center = array(
+            'latitude' => $this->extConf->getDefaultLatitude(),
+            'longitude' => $this->extConf->getDefaultLongitude()
+        );
+        ArrayUtility::mergeRecursiveWithOverrule($this->center, $this->widgetConfiguration['center'], true);
+        ArrayUtility::mergeRecursiveWithOverrule($this->mapOptions, $this->getMapOptions(), true);
+        $this->width = $this->widgetConfiguration['width'];
+        $this->height = $this->widgetConfiguration['height'];
+    }
 
-	/**
-	 * index action
-	 *
-	 * @return string
-	 */
-	public function indexAction() {
-		$this->view->assign('center', $this->center);
-		$this->view->assign('mapOptions', $this->mapOptions);
-		$this->view->assign('width', $this->width);
-		$this->view->assign('height', $this->height);
-	}
+    /**
+     * index action
+     *
+     * @return string
+     */
+    public function indexAction()
+    {
+        $this->view->assign('center', $this->center);
+        $this->view->assign('mapOptions', $this->mapOptions);
+        $this->view->assign('width', $this->width);
+        $this->view->assign('height', $this->height);
+    }
 
-	/**
-	 * if some values are set to FALSE in template, they were set to NULL
-	 * This method returns this values back to FALSE
-	 *
-	 * @return array
-	 */
-	public function getMapOptions() {
-		foreach ($this->widgetConfiguration['mapOptions'] as $key => $value) {
-			if (empty($this->widgetConfiguration['mapOptions'][$key])) {
-				$this->widgetConfiguration['mapOptions'][$key] = 0;
-			} else $this->widgetConfiguration['mapOptions'][$key] = 1;
-		}
-		return $this->widgetConfiguration['mapOptions'];
-	}
-
+    /**
+     * if some values are set to false in template, they were set to null
+     * This method returns this values back to false
+     *
+     * @return array
+     */
+    public function getMapOptions()
+    {
+        foreach ($this->widgetConfiguration['mapOptions'] as $key => $value) {
+            if (empty($this->widgetConfiguration['mapOptions'][$key])) {
+                $this->widgetConfiguration['mapOptions'][$key] = 0;
+            } else {
+                $this->widgetConfiguration['mapOptions'][$key] = 1;
+            }
+        }
+        return $this->widgetConfiguration['mapOptions'];
+    }
 }

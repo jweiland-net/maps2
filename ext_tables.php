@@ -54,15 +54,15 @@ $tempColumns = array (
 			'type' => 'group',
 			'internal_type' => 'db',
 			'allowed' => 'tx_maps2_domain_model_poicollection',
-			'prepend_tname' => FALSE,
-			'show_thumbs' => FALSE,
+			'prepend_tname' => false,
+			'show_thumbs' => false,
 			'size' => 1,
 			'maxitems' => 1,
 			'wizards' => array(
 				'suggest' => array(
 					'type' => 'suggest',
 					'default' => array(
-						'searchWholePhrase' => TRUE
+						'searchWholePhrase' => true
 					)
 				)
 			)
