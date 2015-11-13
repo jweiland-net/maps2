@@ -26,6 +26,7 @@ namespace JWeiland\Maps2\Controller;
  ***************************************************************/
 use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 
 /**
  * @package maps2
@@ -61,6 +62,18 @@ class AbstractController extends ActionController {
 	 */
 	public function injectDataMapper(\JWeiland\Maps2\Utility\DataMapper $dataMapper) {
 		$this->dataMapper = $dataMapper;
+	}
+
+	/**
+	 * initialize view
+	 * add some global vars to view
+	 *
+	 * @return void
+	 */
+	public function initializeView() {
+		$this->view->assign('extConf', ObjectAccess::getGettableProperties($this->extConf));
+		$this->view->assign('id', $GLOBALS['TSFE']->id);
+		$this->view->assign('data', $this->configurationManager->getContentObject()->data);
 	}
 
 	/**

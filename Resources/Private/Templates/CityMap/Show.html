@@ -35,7 +35,7 @@
 			};
 			/*]]>*/
 
-			var map = new google.maps.Map(document.getElementById("maps2"), mapOptions);
+			var map = new google.maps.Map(document.getElementById("maps2-{data.uid}"), mapOptions);
 		});
 	</script>
 	<form action="/index.php" method="get">
@@ -43,5 +43,5 @@
 		<input type="text" name="tx_maps2_citymap[street]" />
 		<input type="submit" value="{f:translate(key: 'searchStreet')}" />
 	</form>
-	<div id="maps2" style="width: {settings.mapWidth}px; height: {settings.mapHeight}px"></div>
+	<div id="maps2-{data.uid}" style="width: {settings.mapWidth}px; height: {settings.mapHeight}px"></div>
 </f:section>

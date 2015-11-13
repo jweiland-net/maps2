@@ -21,8 +21,8 @@
 		};
 		/*]]>*/
 
-		var map = new google.maps.Map(document.getElementById("maps2"), mapOptions);
+		var map = new google.maps.Map(document.getElementById("maps2-{data.uid}"), mapOptions);
 	});
 </script>
 
-<div id="maps2" style="width: {width}px; height: {height}px"></div>
+<div id="maps2-{data.uid}" style="width: {width}px; height: {height}px"></div>

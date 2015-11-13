@@ -27,7 +27,6 @@ namespace JWeiland\Maps2\Controller;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 
 /**
  * @package maps2
@@ -63,17 +62,6 @@ class PoiCollectionController extends AbstractController {
 	 */
 	public function injectCacheHashCalculator(\TYPO3\CMS\Frontend\Page\CacheHashCalculator $cacheHashCalculator) {
 		$this->cacheHashCalculator = $cacheHashCalculator;
-	}
-
-	/**
-	 * initialize view
-	 * add some global vars to view
-	 *
-	 * @return void
-	 */
-	public function initializeView() {
-		$this->view->assign('extConf', ObjectAccess::getGettableProperties($this->extConf));
-		$this->view->assign('id', $GLOBALS['TSFE']->id);
 	}
 
 	/**

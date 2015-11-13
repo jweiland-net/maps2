@@ -25,28 +25,12 @@ namespace JWeiland\Maps2\ViewHelpers\Widget\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 use TYPO3\CMS\Core\Utility\ArrayUtility;
-use TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetController;
 
 /**
  * @package maps2
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class PointController extends AbstractWidgetController {
-
-	/**
-	 * @var \JWeiland\Maps2\Configuration\ExtConf
-	 */
-	protected $extConf;
-
-	/**
-	 * inject extConf
-	 *
-	 * @param \JWeiland\Maps2\Configuration\ExtConf $extConf
-	 * @return void
-	 */
-	public function injectExtConf(\JWeiland\Maps2\Configuration\ExtConf $extConf) {
-		$this->extConf = $extConf;
-	}
+class PointController extends AbstractController {
 
 	/**
 	 * @var array

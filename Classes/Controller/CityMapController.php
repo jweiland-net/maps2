@@ -25,24 +25,12 @@ namespace JWeiland\Maps2\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 
 /**
  * @package maps2
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class CityMapController extends \JWeiland\Maps2\Controller\AbstractController {
-
-	/**
-	 * initialize view
-	 * add some global vars to view
-	 *
-	 * @return void
-	 */
-	public function initializeView() {
-		$this->view->assign('extConf', ObjectAccess::getGettableProperties($this->extConf));
-		$this->view->assign('id', $GLOBALS['TSFE']->id);
-	}
+class CityMapController extends AbstractController {
 
 	/**
 	 * action show

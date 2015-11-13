@@ -1,5 +1,5 @@
 <script type="text/javascript">
-	<f:render partial="JavaScript" arguments="{poiCollection: poiCollection, extConf: extConf, settings: mapOptions}" />
+	<f:render partial="JavaScript" arguments="{poiCollection: poiCollection, extConf: extConf, settings: mapOptions, data: data}" />
 </script>
 
-<div id="maps2" style="width: {width}px; height: {height}px"></div>
+<div id="maps2-{data.uid}" style="width: {width}px; height: {height}px"></div>

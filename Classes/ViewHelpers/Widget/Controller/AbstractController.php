@@ -25,35 +25,39 @@ namespace JWeiland\Maps2\ViewHelpers\Widget\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
+use TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetController;
 
 /**
  * @package maps2
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class PoiCollectionsOfCategoryController extends AbstractController {
+abstract class AbstractController extends AbstractWidgetController {
 
 	/**
-	 * @var \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+	 * @var \JWeiland\Maps2\Configuration\ExtConf
 	 */
-	protected $poiCollections;
+	protected $extConf = null;
 
 	/**
-	 * initializes the index action
+	 * inject extConf
 	 *
+	 * @param \JWeiland\Maps2\Configuration\ExtConf $extConf
 	 * @return void
 	 */
-	public function initializeAction() {
-		$this->poiCollections = $this->widgetConfiguration['poiCollections'];
+	public function injectExtConf(\JWeiland\Maps2\Configuration\ExtConf $extConf) {
+		$this->extConf = $extConf;
 	}
 
 	/**
-	 * index action
+	 * initialize view
+	 * add some global vars to view
 	 *
-	 * @return string
+	 * @return void
 	 */
-	public function indexAction() {
+	public function initializeView() {
 		$this->view->assign('extConf', ObjectAccess::getGettableProperties($this->extConf));
-		$this->view->assign('poiCollections', $this->poiCollections);
+		$this->view->assign('id', $GLOBALS['TSFE']->id);
+		$this->view->assign('data', $this->configurationManager->getContentObject()->data);
 	}
 
 }

@@ -26,33 +26,17 @@ namespace JWeiland\Maps2\ViewHelpers\Widget\Controller;
  ***************************************************************/
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
-use TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetController;
 
 /**
  * @package maps2
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class PoiCollectionController extends AbstractWidgetController {
+class PoiCollectionController extends AbstractController {
 
 	/**
 	 * @var \JWeiland\Maps2\Domain\Model\PoiCollection
 	 */
 	protected $poiCollection;
-
-	/**
-	 * @var \JWeiland\Maps2\Configuration\ExtConf
-	 */
-	protected $extConf;
-
-	/**
-	 * inject extConf
-	 *
-	 * @param \JWeiland\Maps2\Configuration\ExtConf $extConf
-	 * @return void
-	 */
-	public function injectExtConf(\JWeiland\Maps2\Configuration\ExtConf $extConf) {
-		$this->extConf = $extConf;
-	}
 
 	/**
 	 * @var array
