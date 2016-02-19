@@ -30,7 +30,7 @@ class ExtConf implements SingletonInterface
     /**
      * Use https
      *
-     * @var boolean
+     * @var bool
      */
     protected $useHttps = false;
 
@@ -44,21 +44,21 @@ class ExtConf implements SingletonInterface
     /**
      * default latitude
      *
-     * @var float
+     * @var string
      */
-    protected $defaultLatitude = 0;
+    protected $defaultLatitude = '0';
 
     /**
      * default longitude
      *
-     * @var float
+     * @var string
      */
-    protected $defaultLongitude = 0;
+    protected $defaultLongitude = '0';
 
     /**
      * default radius
      *
-     * @var integer
+     * @var int
      */
     protected $defaultRadius = 0;
 
@@ -72,14 +72,14 @@ class ExtConf implements SingletonInterface
     /**
      * stroke opacity
      *
-     * @var float
+     * @var string
      */
-    protected $strokeOpacity = 0;
+    protected $strokeOpacity = '0';
 
     /**
      * stroke weight
      *
-     * @var integer
+     * @var int
      */
     protected $strokeWeight = 0;
 
@@ -93,9 +93,9 @@ class ExtConf implements SingletonInterface
     /**
      * fill opacity
      *
-     * @var float
+     * @var string
      */
-    protected $fillOpacity = 0;
+    protected $fillOpacity = '0';
 
     /**
      * constructor of this class
@@ -119,7 +119,7 @@ class ExtConf implements SingletonInterface
     /**
      * getter for useHttps
      *
-     * @return boolean
+     * @return bool
      */
     public function getUseHttps()
     {
@@ -133,12 +133,12 @@ class ExtConf implements SingletonInterface
     /**
      * setter for useHttps
      *
-     * @param boolean $useHttps
+     * @param bool $useHttps
      * @return void
      */
     public function setUseHttps($useHttps)
     {
-        $this->useHttps = (bool) $useHttps;
+        $this->useHttps = (bool)$useHttps;
     }
 
     /**
@@ -183,12 +183,12 @@ class ExtConf implements SingletonInterface
     /**
      * getter for defaultLatitude
      *
-     * @return float
+     * @return string
      */
     public function getDefaultLatitude()
     {
         if (empty($this->defaultLatitude)) {
-            return 0.00;
+            return '0.00';
         } else {
             return $this->defaultLatitude;
         }
@@ -197,23 +197,23 @@ class ExtConf implements SingletonInterface
     /**
      * setter for defaultLatitude
      *
-     * @param float $defaultLatitude
+     * @param string $defaultLatitude
      * @return void
      */
     public function setDefaultLatitude($defaultLatitude)
     {
-        $this->defaultLatitude = (float) $defaultLatitude;
+        $this->defaultLatitude = number_format((float)$defaultLatitude, 6, '.', '');
     }
 
     /**
      * getter for defaultLongitude
      *
-     * @return float
+     * @return string
      */
     public function getDefaultLongitude()
     {
         if (empty($this->defaultLongitude)) {
-            return 0.00;
+            return '0.00';
         } else {
             return $this->defaultLongitude;
         }
@@ -222,18 +222,18 @@ class ExtConf implements SingletonInterface
     /**
      * setter for defaultLongitude
      *
-     * @param float $defaultLongitude
+     * @param string $defaultLongitude
      * @return void
      */
     public function setDefaultLongitude($defaultLongitude)
     {
-        $this->defaultLongitude = (float) $defaultLongitude;
+        $this->defaultLongitude = number_format((float)$defaultLongitude, 6, '.', '');
     }
 
     /**
      * getter for defaultRadius
      *
-     * @return integer
+     * @return int
      */
     public function getDefaultRadius()
     {
@@ -247,12 +247,12 @@ class ExtConf implements SingletonInterface
     /**
      * setter for defaultRadius
      *
-     * @param integer $defaultRadius
+     * @param int $defaultRadius
      * @return void
      */
     public function setDefaultRadius($defaultRadius)
     {
-        $this->defaultRadius = (int) $defaultRadius;
+        $this->defaultRadius = (int)$defaultRadius;
     }
 
     /**
@@ -277,18 +277,18 @@ class ExtConf implements SingletonInterface
      */
     public function setStrokeColor($strokeColor)
     {
-        $this->strokeColor = (string) $strokeColor;
+        $this->strokeColor = (string)$strokeColor;
     }
 
     /**
      * getter for strokeOpacity
      *
-     * @return float
+     * @return string
      */
     public function getStrokeOpacity()
     {
         if (empty($this->strokeOpacity)) {
-            return 0.8;
+            return '0.8';
         } else {
             return $this->strokeOpacity;
         }
@@ -297,18 +297,18 @@ class ExtConf implements SingletonInterface
     /**
      * setter for strokeOpacity
      *
-     * @param float $strokeOpacity
+     * @param string $strokeOpacity
      * @return void
      */
     public function setStrokeOpacity($strokeOpacity)
     {
-        $this->strokeOpacity = (float) $strokeOpacity;
+        $this->strokeOpacity = number_format((float)$strokeOpacity, 6, '.', '');
     }
 
     /**
      * getter for strokeWeight
      *
-     * @return integer
+     * @return int
      */
     public function getStrokeWeight()
     {
@@ -322,12 +322,12 @@ class ExtConf implements SingletonInterface
     /**
      * setter for strokeWeight
      *
-     * @param integer $strokeWeight
+     * @param int $strokeWeight
      * @return void
      */
     public function setStrokeWeight($strokeWeight)
     {
-        $this->strokeWeight = (int) $strokeWeight;
+        $this->strokeWeight = (int)$strokeWeight;
     }
 
     /**
@@ -358,12 +358,12 @@ class ExtConf implements SingletonInterface
     /**
      * getter for fillOpacity
      *
-     * @return float
+     * @return string
      */
     public function getFillOpacity()
     {
         if (empty($this->fillOpacity)) {
-            return 0.35;
+            return '0.35';
         } else {
             return $this->fillOpacity;
         }
@@ -372,11 +372,11 @@ class ExtConf implements SingletonInterface
     /**
      * setter for fillOpacity
      *
-     * @param float $fillOpacity
+     * @param string $fillOpacity
      * @return void
      */
     public function setFillOpacity($fillOpacity)
     {
-        $this->fillOpacity = (float) $fillOpacity;
+        $this->fillOpacity = number_format((float)$fillOpacity, 6, '.', '');
     }
 }

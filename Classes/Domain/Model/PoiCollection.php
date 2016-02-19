@@ -53,35 +53,35 @@ class PoiCollection extends AbstractEntity
     /**
      * Latitude
      *
-     * @var float
+     * @var string
      */
-    protected $latitude = 0;
+    protected $latitude = '0';
 
     /**
      * Longitude
      *
-     * @var float
+     * @var string
      */
-    protected $longitude = 0;
+    protected $longitude = '0';
 
     /**
      * LatitudeOrig
      *
-     * @var float
+     * @var string
      */
-    protected $latitudeOrig = 0;
+    protected $latitudeOrig = '0';
 
     /**
      * LongitudeOrig
      *
-     * @var float
+     * @var string
      */
-    protected $longitudeOrig = 0;
+    protected $longitudeOrig = '0';
 
     /**
      * Radius
      *
-     * @var integer
+     * @var int
      */
     protected $radius = 0;
 
@@ -104,7 +104,7 @@ class PoiCollection extends AbstractEntity
     /**
      * infoWindowOpenClose
      *
-     * @var boolean
+     * @var bool
      */
     protected $infoWindowOpenClose = false;
 
@@ -119,7 +119,7 @@ class PoiCollection extends AbstractEntity
      * distance
      * this is a helper var. This is not part of the db
      *
-     * @var float
+     * @var int
      */
     protected $distance = 0;
 
@@ -160,7 +160,7 @@ class PoiCollection extends AbstractEntity
      */
     public function setCollectionType($collectionType)
     {
-        $this->collectionType = $collectionType;
+        $this->collectionType = (string)$collectionType;
     }
 
     /**
@@ -181,7 +181,7 @@ class PoiCollection extends AbstractEntity
      */
     public function setTitle($title)
     {
-        $this->title = $title;
+        $this->title = (string)$title;
     }
 
     /**
@@ -202,13 +202,13 @@ class PoiCollection extends AbstractEntity
      */
     public function setAddress($address)
     {
-        $this->address = $address;
+        $this->address = (string)$address;
     }
 
     /**
      * Returns the latitude
      *
-     * @return float $latitude
+     * @return string $latitude
      */
     public function getLatitude()
     {
@@ -218,18 +218,18 @@ class PoiCollection extends AbstractEntity
     /**
      * Sets the latitude
      *
-     * @param float $latitude
+     * @param string $latitude
      * @return void
      */
     public function setLatitude($latitude)
     {
-        $this->latitude = $latitude;
+        $this->latitude = number_format((float)$latitude, 6, '.', '');
     }
 
     /**
      * Returns the longitude
      *
-     * @return float $longitude
+     * @return string $longitude
      */
     public function getLongitude()
     {
@@ -239,18 +239,18 @@ class PoiCollection extends AbstractEntity
     /**
      * Sets the longitude
      *
-     * @param float $longitude
+     * @param string $longitude
      * @return void
      */
     public function setLongitude($longitude)
     {
-        $this->longitude = $longitude;
+        $this->longitude = number_format((float)$longitude, 6, '.', '');
     }
 
     /**
      * Returns the latitudeOrig
      *
-     * @return float $latitudeOrig
+     * @return string $latitudeOrig
      */
     public function getLatitudeOrig()
     {
@@ -260,18 +260,18 @@ class PoiCollection extends AbstractEntity
     /**
      * Sets the latitudeOrig
      *
-     * @param float $latitudeOrig
+     * @param string $latitudeOrig
      * @return void
      */
     public function setLatitudeOrig($latitudeOrig)
     {
-        $this->latitudeOrig = $latitudeOrig;
+        $this->latitudeOrig = number_format((float)$latitudeOrig, 6, '.', '');
     }
 
     /**
      * Returns the longitudeOrig
      *
-     * @return float $longitudeOrig
+     * @return string $longitudeOrig
      */
     public function getLongitudeOrig()
     {
@@ -281,18 +281,18 @@ class PoiCollection extends AbstractEntity
     /**
      * Sets the longitudeOrig
      *
-     * @param float $longitudeOrig
+     * @param string $longitudeOrig
      * @return void
      */
     public function setLongitudeOrig($longitudeOrig)
     {
-        $this->longitudeOrig = $longitudeOrig;
+        $this->longitudeOrig = number_format((float)$longitudeOrig, 6, '.', '');
     }
 
     /**
      * Returns the radius
      *
-     * @return integer $radius
+     * @return int $radius
      */
     public function getRadius()
     {
@@ -302,12 +302,12 @@ class PoiCollection extends AbstractEntity
     /**
      * Sets the radius
      *
-     * @param integer $radius
+     * @param int $radius
      * @return void
      */
     public function setRadius($radius)
     {
-        $this->radius = $radius;
+        $this->radius = (int)$radius;
     }
 
     /**
@@ -366,18 +366,18 @@ class PoiCollection extends AbstractEntity
     /**
      * Sets the infoWindowContent
      *
-     * @param integer $infoWindowContent
+     * @param string $infoWindowContent
      * @return void
      */
     public function setInfoWindowContent($infoWindowContent)
     {
-        $this->infoWindowContent = $infoWindowContent;
+        $this->infoWindowContent = (string)$infoWindowContent;
     }
 
     /**
      * Returns the infoWindowOpenClose
      *
-     * @return boolean $infoWindowOpenClose
+     * @return bool $infoWindowOpenClose
      */
     public function getInfoWindowOpenClose()
     {
@@ -387,12 +387,12 @@ class PoiCollection extends AbstractEntity
     /**
      * Sets the infoWindowOpenClose
      *
-     * @param boolean $infoWindowOpenClose
+     * @param bool $infoWindowOpenClose
      * @return void
      */
     public function setInfoWindowOpenClose($infoWindowOpenClose)
     {
-        $this->infoWindowOpenClose = $infoWindowOpenClose;
+        $this->infoWindowOpenClose = (bool)$infoWindowOpenClose;
     }
 
     /**
@@ -441,7 +441,7 @@ class PoiCollection extends AbstractEntity
     /**
      * Returns the distance
      *
-     * @return float $distance
+     * @return int $distance
      */
     public function getDistance()
     {
@@ -451,11 +451,11 @@ class PoiCollection extends AbstractEntity
     /**
      * Sets the distance
      *
-     * @param float $distance
+     * @param int $distance
      * @return void
      */
     public function setDistance($distance)
     {
-        $this->distance = $distance;
+        $this->distance = (int)$distance;
     }
 }

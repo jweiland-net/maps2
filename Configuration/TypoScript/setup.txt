@@ -1,4 +1,4 @@
-page.includeJSLibs {
+page.includeJSlibs {
 	jQueryForMaps2 = //ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js
 	jQueryForMaps2.external = 1
 	jQueryForMaps2.if.isTrue = {$plugin.tx_maps2.view.includeJQuery}
