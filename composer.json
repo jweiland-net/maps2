@@ -1,0 +1,11 @@
+{
+    "name": "jweiland/maps2",
+    "type": "typo3-cms-extension",
+    "description": "Maps2",
+    "version": "1.2.0",
+    "autoload": {
+        "psr-4": {
+            "JWeiland\\Maps2\\": "Classes"
+        }
+    }
+}
