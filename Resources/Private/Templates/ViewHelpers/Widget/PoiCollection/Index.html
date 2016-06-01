@@ -1,5 +1,3 @@
-<script type="text/javascript">
-	<f:render partial="JavaScript" arguments="{poiCollection: poiCollection, extConf: extConf, settings: mapOptions, data: data}" />
-</script>
+{namespace maps2=JWeiland\Maps2\ViewHelpers}
 
-<div id="maps2-{data.uid}" style="width: {width}px; height: {height}px"></div>
+<div id="maps2-{data.uid}" class="maps2" data-override="{override->maps2:convertToJson()}" data-environment="{environment}" data-pois="{poiCollections}"></div>

@@ -15,17 +15,13 @@ CREATE TABLE tx_maps2_domain_model_poicollection (
 	longitude_orig double(11,6) DEFAULT '0.000000' NOT NULL,
 	radius int(11) unsigned DEFAULT '0' NOT NULL,
 	pois int(11) unsigned DEFAULT '0' NOT NULL,
+	stroke_color varchar(7) DEFAULT '' NOT NULL,
+	stroke_opacity varchar(5) DEFAULT '' NOT NULL,
+	stroke_weight varchar(5) DEFAULT '' NOT NULL,
+	fill_color varchar(7) DEFAULT '' NOT NULL,
+	fill_opacity varchar(5) DEFAULT '' NOT NULL,
 	address varchar(255) DEFAULT '' NOT NULL,
-	marker text NOT NULL,
-	image_size tinyint(1) unsigned DEFAULT '0' NOT NULL,
-	image_width int(11) DEFAULT '0' NOT NULL,
-	image_height int(11) DEFAULT '0' NOT NULL,
-	shadow text NOT NULL,
-	shadow_size tinyint(1) unsigned DEFAULT '0' NOT NULL,
-	shadow_width int(11) DEFAULT '0' NOT NULL,
-	shadow_height int(11) DEFAULT '0' NOT NULL,
 	info_window_content text NOT NULL,
-	info_window_open_close tinyint(1) unsigned DEFAULT '0' NOT NULL,
 
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,
@@ -99,13 +95,6 @@ CREATE TABLE tx_maps2_domain_model_poi (
 	KEY parent (pid),
 	KEY t3ver_oid (t3ver_oid,t3ver_wsid),
 	KEY language (l10n_parent,sys_language_uid)
-);
-
-#
-# Table structure for table 'tx_maps2_domain_model_poi'
-#
-CREATE TABLE tx_maps2_domain_model_poi (
-	poicollection  int(11) unsigned DEFAULT '0' NOT NULL,
 );
 
 #

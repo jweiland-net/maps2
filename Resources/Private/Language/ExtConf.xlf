@@ -9,6 +9,9 @@
 			<trans-unit id="googleMapsLibrary" xml:space="preserve">
 				<source>Link to Google Maps API: Leave empty to use default API. You only need to fill this field if you want to use an older or beta version.</source>
 			</trans-unit>
+			<trans-unit id="googleMapsApiKey" xml:space="preserve">
+				<source>Google Maps ApiKey: Visit https://console.developers.google.com Create a new project for Google Maps JavaScript API and insert here the retrieved ApiKey.</source>
+			</trans-unit>
 			<trans-unit id="defaultLatitude" xml:space="preserve">
 				<source>Default Latitude: If you leave this empty Google Maps points to somewhere over the ocean on startup. So it's better to enter some coordinates: http://universimmedia.pagesperso-orange.fr/geo/loc.htm</source>
 			</trans-unit>

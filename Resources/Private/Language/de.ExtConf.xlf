@@ -12,6 +12,10 @@
 				<source>Link to Google Maps API: Leave empty to use default API. You only need to fill this field if you want to use an older or beta version.</source>
 				<target>Link zur Google Maps API: Leer lassen, um die Standard API zu verwenden. Füllen Sie dieses Feld nur, wenn Sie eine ältere oder eine der Betaversionen verwenden wollen.</target>
 			</trans-unit>
+			<trans-unit id="googleMapsApiKey" xml:space="preserve">
+				<source>Google Maps ApiKey: Visit https://console.developers.google.com Create a new project for Google Maps JavaScript API and insert here the retrieved ApiKey.</source>
+				<target>Google Maps ApiKey: Besuchen Sie https://console.developers.google.com Erstellen Sie ein neues Projekt vom Typ Google Maps JavaScript API und fügen Sie den erhaltenen ApiKey hier ein.</target>
+			</trans-unit>
 			<trans-unit id="defaultLatitude" xml:space="preserve">
 				<source>Default Latitude: If you leave this empty Google Maps points to somewhere over the ocean on startup. So it's better to enter some coordinates: http://universimmedia.pagesperso-orange.fr/geo/loc.htm</source>
 				<target>Standard Breitengrad: Wenn dieses Feld leer gelassen wird, dann kann es sein, dass Sie beim Starten der Karte irgendwo über dem Ozean landen. Geben Sie hier zum Beispiel den Breitengrad von Ihrer Firma an: http://universimmedia.pagesperso-orange.fr/geo/loc.htm</target>

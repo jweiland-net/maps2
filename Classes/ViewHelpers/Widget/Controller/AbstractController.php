@@ -13,6 +13,11 @@ namespace JWeiland\Maps2\ViewHelpers\Widget\Controller;
  *
  * The TYPO3 project - inspiring people to share!
  */
+use JWeiland\Maps2\Domain\Model\Poi;
+use JWeiland\Maps2\Domain\Model\PoiCollection;
+use TYPO3\CMS\Core\Utility\ArrayUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Persistence\Generic\LazyObjectStorage;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 use TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetController;
 
@@ -27,6 +32,19 @@ use TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetController;
  */
 abstract class AbstractController extends AbstractWidgetController
 {
+    /**
+     * @var array
+     */
+    protected $defaultSettings = array(
+        'zoom' => 10,
+        'panControl' => 1,
+        'zoomControl' => 1,
+        'mapTypeControl' => 1,
+        'scaleControl' => 1,
+        'streetViewControl' => 1,
+        'overviewMapControl' => 1,
+        'mapTypeId' => 'google.maps.MapTypeId.ROADMAP'
+    );
 
     /**
      * @var \JWeiland\Maps2\Configuration\ExtConf
@@ -52,8 +70,57 @@ abstract class AbstractController extends AbstractWidgetController
      */
     public function initializeView()
     {
-        $this->view->assign('extConf', ObjectAccess::getGettableProperties($this->extConf));
-        $this->view->assign('id', $GLOBALS['TSFE']->id);
+        ArrayUtility::mergeRecursiveWithOverrule($this->defaultSettings, $this->settings);
         $this->view->assign('data', $this->configurationManager->getContentObject()->data);
+        $this->view->assign('environment', json_encode(array(
+            'settings' => $this->defaultSettings,
+            'extConf' => ObjectAccess::getGettableProperties($this->extConf),
+            'id' => $GLOBALS['TSFE']->id,
+            'contentRecord' => $this->configurationManager->getContentObject()->data
+        )));
+    }
+    
+    /**
+     * Render InfoWindow for marker
+     *
+     * @param PoiCollection $poiCollection
+     * @return string
+     */
+    protected function renderInfoWindow(PoiCollection $poiCollection)
+    {
+        /** @var \TYPO3\CMS\Fluid\View\StandaloneView $view */
+        $view = $this->objectManager->get('TYPO3\\CMS\\Fluid\\View\\StandaloneView');
+        $view->assign('poiCollection', $poiCollection);
+        $view->setTemplatePathAndFilename(
+            GeneralUtility::getFileAbsFileName(
+                'EXT:maps2/Resources/Private/Templates/InfoWindowContent.html'
+            )
+        );
+        return $view->render();
+    }
+    
+    /**
+     * Convert poiCollections to array and pass them through json_encode
+     *
+     * @param array $poiCollections
+     * @return string
+     */
+    protected function getPoiCollectionsAsJson($poiCollections)
+    {
+        $poiCollectionsAsArray = array();
+        /** @var PoiCollection $poiCollection */
+        foreach ($poiCollections as $poiCollection) {
+            $poiCollectionAsArray = ObjectAccess::getGettableProperties($poiCollection);
+            /** @var LazyObjectStorage $pois */
+            $pois = $poiCollectionAsArray['pois'];
+            $poiCollectionAsArray['pois'] = array();
+
+            /** @var Poi $poi */
+            foreach ($pois->toArray() as $key => $poi) {
+                $poiCollectionAsArray['pois'][$key] = ObjectAccess::getGettableProperties($poi);
+            }
+            $poiCollectionsAsArray[] = $poiCollectionAsArray;
+        }
+        return json_encode($poiCollectionsAsArray);
     }
 }

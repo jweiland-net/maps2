@@ -175,7 +175,7 @@ class ConfigurationMap
         $this->view->setTemplatePathAndFilename($extPath . 'Resources/Private/Templates/Tca/ConfigurationMap.html');
         $this->view->assign('config', json_encode($config));
         $this->view->assign('design', json_encode(ObjectAccess::getGettableProperties($this->extConf)));
-        $content = $this->view->render() . CHR(10);
+        $content = $this->view->render() . chr(10);
         $content .= file_get_contents(
             $extPath . 'Resources/Private/Templates/Tca/ConfigurationMapFor' .
             ucfirst($config['collectionType']) . '.html'

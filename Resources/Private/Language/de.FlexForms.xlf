@@ -7,21 +7,13 @@
 				<source>General</source>
 				<target>Allgemein</target>
 			</trans-unit>
-			<trans-unit id="chooseAction" xml:space="preserve">
-				<source>Choose view</source>
-				<target>Ansicht wählen</target>
-			</trans-unit>
-			<trans-unit id="actionShow" xml:space="preserve">
-				<source>Show one single point of interest</source>
-				<target>Zeige einen gewählten Punkt</target>
-			</trans-unit>
-			<trans-unit id="actionShowPoisOfCategory" xml:space="preserve">
-				<source>Show all point of interest of a choosen category</source>
-				<target>Zeige alle Punkte einer gewählten Kategorie</target>
-			</trans-unit>
 			<trans-unit id="poiCollection" xml:space="preserve">
-				<source>Collection of interessting points</source>
-				<target>UID der Sammlung von interessanten Punkten</target>
+				<source>Which marking should be shown? If there is a marking defined in website uri, that one has priority.</source>
+				<target>Welche Markierung soll angezeigt werden? Falls über die Webseiten URI bereits eine Markierung angegeben wurde, dann hat diese Priorität</target>
+			</trans-unit>
+			<trans-unit id="categories" xml:space="preserve">
+				<source>Show all markings of given categories. This will only work, if there is no marking in website uri nor if a marking is selected above.</source>
+				<target>Zeige alle Markierungen dieser Kategorien. Dies funktioniert nur, sofern keine Markierung über die URI angegeben wurde oder Sie eine individuelle Markierung oben ausgewählt haben.</target>
 			</trans-unit>
 			<trans-unit id="autoAppend" xml:space="preserve">
 				<source>Append a fixed string to search value. Maybe a cityname. That way the user has only to insert a streetname.</source>

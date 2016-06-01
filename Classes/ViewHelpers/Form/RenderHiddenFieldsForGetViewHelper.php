@@ -97,6 +97,6 @@ class RenderHiddenFieldsForGetViewHelper extends AbstractViewHelper
             $cachHashArray
         ) . '" />';
 
-        return implode(CHR(10), $fields);
+        return implode(chr(10), $fields);
     }
 }

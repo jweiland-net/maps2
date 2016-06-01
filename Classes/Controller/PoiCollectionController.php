@@ -14,8 +14,10 @@ namespace JWeiland\Maps2\Controller;
  * The TYPO3 project - inspiring people to share!
  */
 use JWeiland\Maps2\Domain\Model\PoiCollection;
+use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\Page\CacheHashCalculator;
 
 /**
  * Class PoiCollectionController
@@ -42,58 +44,48 @@ class PoiCollectionController extends AbstractController
     /**
      * inject poiCollectionRepository
      *
-     * @param \JWeiland\Maps2\Domain\Repository\PoiCollectionRepository $poiCollectionRepository
+     * @param PoiCollectionRepository $poiCollectionRepository
      * @return void
      */
-    public function injectPoiCollectionRepository(
-        \JWeiland\Maps2\Domain\Repository\PoiCollectionRepository $poiCollectionRepository
-    ) {
+    public function injectPoiCollectionRepository(PoiCollectionRepository $poiCollectionRepository)
+    {
         $this->poiCollectionRepository = $poiCollectionRepository;
     }
 
     /**
      * inject cacheHashCalculator
      *
-     * @param \TYPO3\CMS\Frontend\Page\CacheHashCalculator $cacheHashCalculator
+     * @param CacheHashCalculator $cacheHashCalculator
      * @return void
      */
-    public function injectCacheHashCalculator(
-        \TYPO3\CMS\Frontend\Page\CacheHashCalculator $cacheHashCalculator
-    ) {
+    public function injectCacheHashCalculator(CacheHashCalculator $cacheHashCalculator)
+    {
         $this->cacheHashCalculator = $cacheHashCalculator;
     }
 
     /**
      * action show
      *
-     * @param \JWeiland\Maps2\Domain\Model\PoiCollection $poiCollection
+     * @param PoiCollection $poiCollection PoiCollection from URI has highest priority
      * @return void
      */
-    public function showAction(
-        \JWeiland\Maps2\Domain\Model\PoiCollection $poiCollection = null
-    ) {
-        // overwrite poiCollection if it was set in FlexForm
-        if (!empty($this->settings['poiCollection'])) {
-            $poiCollection = $this->poiCollectionRepository->findByUid((int)$this->settings['poiCollection']);
-        };
-        if ($poiCollection instanceof PoiCollection) {
-            $this->view->assign('poiCollection', $poiCollection);
-        };
-    }
-
-    /**
-     * action all pois of a specific category
-     *
-     * @return void
-     */
-    public function showPoisOfCategoryAction()
+    public function showAction(PoiCollection $poiCollection = null)
     {
-        if (!empty($this->settings['categories'])) {
+        // if uri is empty and a poiCollection is set in FlexForm
+        if ($poiCollection === null && !empty($this->settings['poiCollection'])) {
+            $poiCollection = $this->poiCollectionRepository->findByUid((int)$this->settings['poiCollection']);
+        }
+        if ($poiCollection instanceof PoiCollection) {
+            $poiCollection->setInfoWindowContent($this->renderInfoWindow($poiCollection));
+            $this->view->assign('poiCollections', $this->getPoiCollectionsAsJson(array($poiCollection)));
+        } elseif (!empty($this->settings['categories'])) {
+            // if no poiCollection could be retrieved, but a category is set
             $poiCollections = $this->poiCollectionRepository->findPoisByCategories($this->settings['categories']);
-            if (!empty($poiCollections)) {
-                $this->view->assign('poiCollections', $poiCollections);
-            };
-        };
+            foreach ($poiCollections as $poiCollection) {
+                $poiCollection->setInfoWindowContent($this->renderInfoWindow($poiCollection));
+            }
+            $this->view->assign('poiCollections', $this->getPoiCollectionsAsJson($poiCollections->toArray()));
+        }
     }
 
     /**

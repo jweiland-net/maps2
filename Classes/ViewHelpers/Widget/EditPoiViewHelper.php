@@ -13,6 +13,7 @@ namespace JWeiland\Maps2\ViewHelpers\Widget;
  *
  * The TYPO3 project - inspiring people to share!
  */
+use JWeiland\Maps2\Domain\Model\PoiCollection;
 use TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetViewHelper;
 
 /**
@@ -44,16 +45,11 @@ class EditPoiViewHelper extends AbstractWidgetViewHelper
     }
 
     /**
-     *
-     * @param \JWeiland\Maps2\Domain\Model\PoiCollection $poiCollection
-     * @param integer $width Width of the map
-     * @param integer $height Height of the map
-     * @param string $prepend Extension/Plugin combination to identify GET/POST vars: tx_yellowpages2_directory
-     * @param string $id This is the id-Attribute of the div, where to show the map. Defaults to "maps2" if not given. This is good to display multiple maps on one page.
-     * @param array $mapOptions Google Map Options
+     * @param PoiCollection $poiCollection
+     * @param array $override Override any configuration option
      * @return string
      */
-    public function render(\JWeiland\Maps2\Domain\Model\PoiCollection $poiCollection, $width = 400, $height = 300, $prepend = '', $id = 'maps2', array $mapOptions = array())
+    public function render(\JWeiland\Maps2\Domain\Model\PoiCollection $poiCollection, $override = array())
     {
         return $this->initiateSubRequest();
     }

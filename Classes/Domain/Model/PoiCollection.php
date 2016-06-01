@@ -95,18 +95,46 @@ class PoiCollection extends AbstractEntity
     protected $pois = null;
 
     /**
+     * StrokeColor
+     *
+     * @var string
+     */
+    protected $strokeColor = '';
+
+    /**
+     * StrokeOpacity
+     *
+     * @var string
+     */
+    protected $strokeOpacity = '';
+
+    /**
+     * StrokeWeight
+     *
+     * @var string
+     */
+    protected $strokeWeight = '';
+
+    /**
+     * FillColor
+     *
+     * @var string
+     */
+    protected $fillColor = '';
+
+    /**
+     * FillOpacity
+     *
+     * @var string
+     */
+    protected $fillOpacity = '';
+
+    /**
      * infoWindowContent
      *
      * @var string
      */
     protected $infoWindowContent = '';
-
-    /**
-     * infoWindowOpenClose
-     *
-     * @var boolean
-     */
-    protected $infoWindowOpenClose = false;
 
     /**
      * categories
@@ -124,7 +152,7 @@ class PoiCollection extends AbstractEntity
     protected $distance = 0;
 
     /**
-     * contructor of this model class
+     * Constructor of this model class
      */
     public function __construct()
     {
@@ -354,6 +382,111 @@ class PoiCollection extends AbstractEntity
     }
 
     /**
+     * Returns the strokeColor
+     *
+     * @return string $strokeColor
+     */
+    public function getStrokeColor()
+    {
+        return $this->strokeColor;
+    }
+
+    /**
+     * Sets the strokeColor
+     *
+     * @param string $strokeColor
+     * @return void
+     */
+    public function setStrokeColor($strokeColor)
+    {
+        $this->strokeColor = (string)$strokeColor;
+    }
+
+    /**
+     * Returns the strokeOpacity
+     *
+     * @return string $strokeOpacity
+     */
+    public function getStrokeOpacity()
+    {
+        return $this->strokeOpacity;
+    }
+
+    /**
+     * Sets the strokeOpacity
+     *
+     * @param string $strokeOpacity
+     * @return void
+     */
+    public function setStrokeOpacity($strokeOpacity)
+    {
+        $this->strokeOpacity = (string)$strokeOpacity;
+    }
+
+    /**
+     * Returns the strokeWeight
+     *
+     * @return string $strokeWeight
+     */
+    public function getStrokeWeight()
+    {
+        return $this->strokeWeight;
+    }
+
+    /**
+     * Sets the strokeWeight
+     *
+     * @param string $strokeWeight
+     * @return void
+     */
+    public function setStrokeWeight($strokeWeight)
+    {
+        $this->strokeWeight = (string)$strokeWeight;
+    }
+
+    /**
+     * Returns the fillColor
+     *
+     * @return string $fillColor
+     */
+    public function getFillColor()
+    {
+        return $this->fillColor;
+    }
+
+    /**
+     * Sets the fillColor
+     *
+     * @param string $fillColor
+     * @return void
+     */
+    public function setFillColor($fillColor)
+    {
+        $this->fillColor = (string)$fillColor;
+    }
+
+    /**
+     * Returns the fillOpacity
+     *
+     * @return string $fillOpacity
+     */
+    public function getFillOpacity()
+    {
+        return $this->fillOpacity;
+    }
+
+    /**
+     * Sets the fillOpacity
+     *
+     * @param string $fillOpacity
+     * @return void
+     */
+    public function setFillOpacity($fillOpacity)
+    {
+        $this->fillOpacity = (string)$fillOpacity;
+    }
+
+    /**
      * Returns the infoWindowContent
      *
      * @return string $infoWindowContent
@@ -372,27 +505,6 @@ class PoiCollection extends AbstractEntity
     public function setInfoWindowContent($infoWindowContent)
     {
         $this->infoWindowContent = $infoWindowContent;
-    }
-
-    /**
-     * Returns the infoWindowOpenClose
-     *
-     * @return boolean $infoWindowOpenClose
-     */
-    public function getInfoWindowOpenClose()
-    {
-        return $this->infoWindowOpenClose;
-    }
-
-    /**
-     * Sets the infoWindowOpenClose
-     *
-     * @param boolean $infoWindowOpenClose
-     * @return void
-     */
-    public function setInfoWindowOpenClose($infoWindowOpenClose)
-    {
-        $this->infoWindowOpenClose = $infoWindowOpenClose;
     }
 
     /**

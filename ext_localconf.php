@@ -1,61 +1,63 @@
 <?php
 if (!defined('TYPO3_MODE')) {
-	die ('Access denied.');
+    die ('Access denied.');
 }
 
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-	'JWeiland.' . $_EXTKEY,
-	'Maps2',
-	array(
-		'PoiCollection' => 'show',
-		'Ajax' => 'callAjaxObject',
-	),
-	// non-cacheable actions
-	array(
-		'PoiCollection' => '',
-		'Ajax' => 'callAjaxObject',
-	)
+    'JWeiland.' . $_EXTKEY,
+    'Maps2',
+    array(
+        'PoiCollection' => 'show',
+        'Ajax' => 'callAjaxObject',
+    ),
+    // non-cacheable actions
+    array(
+        'PoiCollection' => '',
+        'Ajax' => 'callAjaxObject',
+    )
 );
 
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-	'JWeiland.' . $_EXTKEY,
-	'SearchWithinRadius',
-	array(
-		'PoiCollection' => 'search, checkForMultiple, listRadius',
-	),
-	// non-cacheable actions
-	array(
-		'PoiCollection' => 'checkForMultiple, listRadius',
-	)
+    'JWeiland.' . $_EXTKEY,
+    'SearchWithinRadius',
+    array(
+        'PoiCollection' => 'search, checkForMultiple, listRadius',
+    ),
+    // non-cacheable actions
+    array(
+        'PoiCollection' => 'checkForMultiple, listRadius',
+    )
 );
 
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-	'JWeiland.' . $_EXTKEY,
-	'CityMap',
-	array(
-		'CityMap' => 'show, search',
-	),
-	// non-cacheable actions
-	array(
-		'CityMap' => 'search',
-	)
+    'JWeiland.' . $_EXTKEY,
+    'CityMap',
+    array(
+        'CityMap' => 'show, search',
+    ),
+    // non-cacheable actions
+    array(
+        'CityMap' => 'search',
+    )
 );
 
 if(TYPO3_MODE === 'BE') {
-	if (\TYPO3\CMS\Core\Utility\GeneralUtility::compat_version('7.3')) {
-		\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::registerAjaxHandler(
-			'maps2Ajax',
-			'JWeiland\\Maps2\\Dispatch\\AjaxRequest->dispatch',
-			false
-		);
-	} else {
-		$GLOBALS['TYPO3_CONF_VARS']['BE']['AJAX']['maps2Ajax'] = 'JWeiland\\Maps2\\Dispatch\\AjaxRequest->dispatch';
-	}
+    if (\TYPO3\CMS\Core\Utility\GeneralUtility::compat_version('7.3')) {
+        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::registerAjaxHandler(
+            'maps2Ajax',
+            'JWeiland\\Maps2\\Dispatch\\AjaxRequest->dispatch',
+            false
+        );
+    } else {
+        $GLOBALS['TYPO3_CONF_VARS']['BE']['AJAX']['maps2Ajax'] = 'JWeiland\\Maps2\\Dispatch\\AjaxRequest->dispatch';
+    }
 }
 
 // activate caching for info window content
 if (!is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['maps2_cachedHtml'])) {
-	$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['maps2_cachedHtml'] = array();
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['maps2_cachedHtml'] = array(
+        'groups' => array('pages', 'all')
+    );
 }
 
 // This is a solution to build GET forms.

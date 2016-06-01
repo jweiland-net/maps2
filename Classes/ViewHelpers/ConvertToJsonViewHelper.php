@@ -13,10 +13,11 @@ namespace JWeiland\Maps2\ViewHelpers;
  *
  * The TYPO3 project - inspiring people to share!
  */
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
- * Class FormatHtmlForJavaScriptViewHelper
+ * Class ConvertToJsonViewHelper
  *
  * @category ViewHelpers
  * @package  Maps2
@@ -24,23 +25,21 @@ use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
  * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
  * @link     https://github.com/jweiland-net/maps2
  */
-class FormatHtmlForJavaScriptViewHelper extends AbstractViewHelper
+class ConvertToJsonViewHelper extends AbstractViewHelper
 {
 
     /**
-     * format html for javascript output
+     * implements a ViewHelper to convert an array into JSON format
      *
-     * @return string the parsed string.
+     * @return array
      */
     public function render()
     {
-        $content = $this->renderChildren();
-
-        // we have to convert the returns
-        $content = str_replace('\'', '\\\'', $content);
-        $content = str_replace(CHR(10), '\'+' . CHR(10) . '\'', $content);
-        $content = str_replace(CHR(13), '\'+' . CHR(13) . '\'', $content);
-
-        return $content;
+        $value = $this->renderChildren();
+        if (is_array($value)) {
+            return htmlspecialchars(json_encode($value));
+        } else {
+            return '{}';
+        }
     }
 }

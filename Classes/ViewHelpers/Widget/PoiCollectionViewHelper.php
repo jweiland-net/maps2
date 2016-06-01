@@ -13,6 +13,8 @@ namespace JWeiland\Maps2\ViewHelpers\Widget;
  *
  * The TYPO3 project - inspiring people to share!
  */
+use JWeiland\Maps2\Domain\Model\PoiCollection;
+use JWeiland\Maps2\ViewHelpers\Widget\Controller\PoiCollectionController;
 use TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetViewHelper;
 
 /**
@@ -26,38 +28,29 @@ use TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetViewHelper;
  */
 class PoiCollectionViewHelper extends AbstractWidgetViewHelper
 {
-
     /**
-     * @var \JWeiland\Maps2\ViewHelpers\Widget\Controller\PoiCollectionController
+     * @var PoiCollectionController
      */
     protected $controller;
 
     /**
      * inject controller
      *
-     * @param \JWeiland\Maps2\ViewHelpers\Widget\Controller\PoiCollectionController $controller
+     * @param PoiCollectionController $controller
      * @return void
      */
-    public function injectController(
-        \JWeiland\Maps2\ViewHelpers\Widget\Controller\PoiCollectionController $controller
+    public function injectController(PoiCollectionController $controller
     ) {
         $this->controller = $controller;
     }
 
     /**
-     *
-     * @param \JWeiland\Maps2\Domain\Model\PoiCollection $poiCollection
-     * @param integer $width Width of the map
-     * @param integer $height Height of the map
-     * @param array $mapOptions Google Map Options
+     * @param PoiCollection $poiCollection
+     * @param \Traversable $poiCollections
+     * @param array $override Override any configuration option
      * @return string
      */
-    public function render(
-        \JWeiland\Maps2\Domain\Model\PoiCollection $poiCollection,
-        $width = 400,
-        $height = 300,
-        array $mapOptions = array()
-    ) {
+    public function render(PoiCollection $poiCollection = null, $poiCollections = null, $override = array()) {
         return $this->initiateSubRequest();
     }
 }

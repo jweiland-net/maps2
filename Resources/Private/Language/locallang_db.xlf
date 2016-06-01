@@ -69,38 +69,26 @@
 			<trans-unit id="tx_maps2_domain_model_poicollection.radius" xml:space="preserve">
 				<source>Radius</source>
 			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poicollection.pois" xml:space="preserve">
-				<source>POIs</source>
-			</trans-unit>
 			<trans-unit id="tx_maps2_domain_model_poicollection.address" xml:space="preserve">
 				<source>Address</source>
 			</trans-unit>
 			<trans-unit id="tx_maps2_domain_model_poicollection.style" xml:space="preserve">
 				<source>Style</source>
 			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poicollection.marker" xml:space="preserve">
-				<source>Marker</source>
+			<trans-unit id="tx_maps2_domain_model_poicollection.stroke_color" xml:space="preserve">
+				<source>Stroke color (f.e. #FF0000)</source>
 			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poicollection.image_size" xml:space="preserve">
-				<source>Image size</source>
+			<trans-unit id="tx_maps2_domain_model_poicollection.stroke_opacity" xml:space="preserve">
+				<source>Stroke opacity (f.e. 0.8)</source>
 			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poicollection.image_width" xml:space="preserve">
-				<source>Image width</source>
+			<trans-unit id="tx_maps2_domain_model_poicollection.stroke_weight" xml:space="preserve">
+				<source>Stroke weight (f.e. 2)</source>
 			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poicollection.image_height" xml:space="preserve">
-				<source>Image Height</source>
+			<trans-unit id="tx_maps2_domain_model_poicollection.fill_color" xml:space="preserve">
+				<source>Fill color (f.e. #FF0000)</source>
 			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poicollection.shadow" xml:space="preserve">
-				<source>Shadow</source>
-			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poicollection.shadow_size" xml:space="preserve">
-				<source>Shadow size</source>
-			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poicollection.shadow_width" xml:space="preserve">
-				<source>Shadow width</source>
-			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poicollection.shadow_height" xml:space="preserve">
-				<source>Shadow height</source>
+			<trans-unit id="tx_maps2_domain_model_poicollection.fill_opacity" xml:space="preserve">
+				<source>Fill opacity (f.e. 0.35)</source>
 			</trans-unit>
 			<trans-unit id="tx_maps2_domain_model_poicollection.info_window" xml:space="preserve">
 				<source>Info Window</source>

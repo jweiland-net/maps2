@@ -6,17 +6,11 @@
 			<trans-unit id="sheetGeneral" xml:space="preserve">
 				<source>General</source>
 			</trans-unit>
-			<trans-unit id="chooseAction" xml:space="preserve">
-				<source>Ansicht wählen</source>
-			</trans-unit>
-			<trans-unit id="actionShow" xml:space="preserve">
-				<source>Show one single point of interest</source>
-			</trans-unit>
-			<trans-unit id="actionShowPoisOfCategory" xml:space="preserve">
-				<source>Show all point of interest of a choosen category</source>
-			</trans-unit>
 			<trans-unit id="poiCollection" xml:space="preserve">
-				<source>Collection of interessting points</source>
+				<source>Which marking should be shown? If there is a marking defined in website uri, that one has priority.</source>
+			</trans-unit>
+			<trans-unit id="categories" xml:space="preserve">
+				<source>Show all markings of given categories. This will only work, if there is no marking in website uri nor if a marking is selected above.</source>
 			</trans-unit>
 			<trans-unit id="autoAppend" xml:space="preserve">
 				<source>Append a fixed string to search value. Maybe a cityname. That way the user has only to insert a streetname.</source>

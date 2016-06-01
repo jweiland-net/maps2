@@ -1,34 +1,38 @@
 <?php
 namespace JWeiland\Maps2\Configuration;
 
-/**
- * This file is part of the TYPO3 CMS project.
+/***************************************************************
+ *  Copyright notice
  *
- * It is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
+ *  (c) 2013 Stefan Froemken <sfroemken@jweiland.net>, jweiland.net
  *
- * For the full copyright and license information, please read the
- * LICENSE.txt file that was distributed with this source code.
+ *  All rights reserved
  *
- * The TYPO3 project - inspiring people to share!
- */
-use TYPO3\CMS\Core\SingletonInterface;
+ *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
 
 /**
- * Class ExtConf
- *
- * @category Configuration
- * @package  Maps2
- * @author   Stefan Froemken <projects@jweiland.net>
- * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
- * @link     https://github.com/jweiland-net/maps2
+ * @package maps2
+ * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class ExtConf implements SingletonInterface
-{
+class ExtConf implements \TYPO3\CMS\Core\SingletonInterface {
 
     /**
-     * Use https
+     * use https
      *
      * @var boolean
      */
@@ -42,23 +46,30 @@ class ExtConf implements SingletonInterface
     protected $googleMapsLibrary = '';
 
     /**
+     * google maps ApiKey
+     *
+     * @var string
+     */
+    protected $googleMapsApiKey = '';
+
+    /**
      * default latitude
      *
      * @var float
      */
-    protected $defaultLatitude = 0;
+    protected $defaultLatitude;
 
     /**
      * default longitude
      *
      * @var float
      */
-    protected $defaultLongitude = 0;
+    protected $defaultLongitude;
 
     /**
      * default radius
      *
-     * @var integer
+     * @var int
      */
     protected $defaultRadius = 0;
 
@@ -74,12 +85,12 @@ class ExtConf implements SingletonInterface
      *
      * @var float
      */
-    protected $strokeOpacity = 0;
+    protected $strokeOpacity;
 
     /**
      * stroke weight
      *
-     * @var integer
+     * @var int
      */
     protected $strokeWeight = 0;
 
@@ -95,7 +106,7 @@ class ExtConf implements SingletonInterface
      *
      * @var float
      */
-    protected $fillOpacity = 0;
+    protected $fillOpacity;
 
     /**
      * constructor of this class
@@ -107,7 +118,7 @@ class ExtConf implements SingletonInterface
         $extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['maps2']);
         if (is_array($extConf) && count($extConf)) {
             // call setter method foreach configuration entry
-            foreach ($extConf as $key => $value) {
+            foreach($extConf as $key => $value) {
                 $methodName = 'set' . ucfirst($key);
                 if (method_exists($this, $methodName)) {
                     $this->$methodName($value);
@@ -149,23 +160,18 @@ class ExtConf implements SingletonInterface
     public function getGoogleMapsLibrary()
     {
         if (empty($this->googleMapsLibrary)) {
-            $library = 'http://maps.google.com/maps/api/js?v=3.10&sensor=false';
+            $library = 'https://maps.googleapis.com/maps/api/js?key=|&callback=initMap';
         } else {
             $library = $this->googleMapsLibrary;
         }
+        // insert ApiKey
+        $library = str_replace('|', $this->getGoogleMapsApiKey(), $library);
         // $parts: 0 = full string; 1 = s or empty; 2 = needed url
-        if (preg_match('|^http(s)?://(.*)$|i', $library, $parts)) {
-            if ($this->getUseHttps()) {
-                return 'https://' . $parts[2];
-            } else {
-                return 'http://' . $parts[2];
-            }
+        preg_match('|^http(s)?://(.*)$|i', $library, $parts);
+        if ($this->getUseHttps()) {
+            return 'https://' . $parts[2];
         } else {
-            throw new \InvalidArgumentException(
-                'Google Maps library path does not start with http or https.
-                Please reconfigure maps2 in ExtensionManager',
-                1443676365
-            );
+            return 'http://' . $parts[2];
         }
     }
 
@@ -181,6 +187,27 @@ class ExtConf implements SingletonInterface
     }
 
     /**
+     * Returns the googleMapsApiKey
+     *
+     * @return string $googleMapsApiKey
+     */
+    public function getGoogleMapsApiKey()
+    {
+        return $this->googleMapsApiKey;
+    }
+
+    /**
+     * Sets the googleMapsApiKey
+     *
+     * @param string $googleMapsApiKey
+     * @return void
+     */
+    public function setGoogleMapsApiKey($googleMapsApiKey)
+    {
+        $this->googleMapsApiKey = (string)$googleMapsApiKey;
+    }
+
+    /**
      * getter for defaultLatitude
      *
      * @return float
@@ -189,9 +216,7 @@ class ExtConf implements SingletonInterface
     {
         if (empty($this->defaultLatitude)) {
             return 0.00;
-        } else {
-            return $this->defaultLatitude;
-        }
+        } else return $this->defaultLatitude;
     }
 
     /**
@@ -214,9 +239,7 @@ class ExtConf implements SingletonInterface
     {
         if (empty($this->defaultLongitude)) {
             return 0.00;
-        } else {
-            return $this->defaultLongitude;
-        }
+        } else return $this->defaultLongitude;
     }
 
     /**
@@ -239,9 +262,7 @@ class ExtConf implements SingletonInterface
     {
         if (empty($this->defaultRadius)) {
             return 250;
-        } else {
-            return $this->defaultRadius;
-        }
+        } else return $this->defaultRadius;
     }
 
     /**
@@ -264,9 +285,7 @@ class ExtConf implements SingletonInterface
     {
         if (empty($this->strokeColor)) {
             return '#FF0000';
-        } else {
-            return $this->strokeColor;
-        }
+        } else return $this->strokeColor;
     }
 
     /**
@@ -289,9 +308,7 @@ class ExtConf implements SingletonInterface
     {
         if (empty($this->strokeOpacity)) {
             return 0.8;
-        } else {
-            return $this->strokeOpacity;
-        }
+        } else return $this->strokeOpacity;
     }
 
     /**
@@ -314,9 +331,7 @@ class ExtConf implements SingletonInterface
     {
         if (empty($this->strokeWeight)) {
             return 2;
-        } else {
-            return $this->strokeWeight;
-        }
+        } else return $this->strokeWeight;
     }
 
     /**
@@ -339,9 +354,7 @@ class ExtConf implements SingletonInterface
     {
         if (empty($this->fillColor)) {
             return '#FF0000';
-        } else {
-            return $this->fillColor;
-        }
+        } else return $this->fillColor;
     }
 
     /**
@@ -364,9 +377,7 @@ class ExtConf implements SingletonInterface
     {
         if (empty($this->fillOpacity)) {
             return 0.35;
-        } else {
-            return $this->fillOpacity;
-        }
+        } else return $this->fillOpacity;
     }
 
     /**
@@ -379,4 +390,5 @@ class ExtConf implements SingletonInterface
     {
         $this->fillOpacity = (float) $fillOpacity;
     }
+
 }

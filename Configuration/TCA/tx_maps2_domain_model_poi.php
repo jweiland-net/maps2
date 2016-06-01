@@ -134,10 +134,10 @@ return array(
             ),
         ),
     ),
-    'types' => array (
+    'types' => array(
         '0' => array('showitem' => 'latitude, longitude, pos_index')
     ),
-    'palettes' => array (
+    'palettes' => array(
         '1' => array('showitem' => ''),
     ),
 );

@@ -10,30 +10,9 @@
 				</TCEforms>
 				<type>array</type>
 				<el>
-					<switchableControllerActions>
-						<TCEforms>
-							<label>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:chooseAction</label>
-							<onChange>reload</onChange>
-							<config>
-								<type>select</type>
-								<items>
-									<numIndex index="0">
-										<numIndex index="0">LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:actionShow</numIndex>
-										<numIndex index="1"><![CDATA[PoiCollection->show]]></numIndex>
-									</numIndex>
-									<numIndex index="1">
-										<numIndex index="0">LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:actionShowPoisOfCategory</numIndex>
-										<numIndex index="1"><![CDATA[PoiCollection->showPoisOfCategory]]></numIndex>
-									</numIndex>
-								</items>
-								<default><![CDATA[PoiCollection->show]]></default>
-							</config>
-						</TCEforms>
-					</switchableControllerActions>
 					<settings.poiCollection>
 						<TCEforms>
 							<label>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:poiCollection</label>
-							<displayCond><![CDATA[FIELD:switchableControllerActions:=:PoiCollection->show]]></displayCond>
 							<config>
 								<type>group</type>
 								<internal_type>db</internal_type>
@@ -55,7 +34,6 @@
 					<settings.categories>
 						<TCEforms>
 							<label>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:categories</label>
-							<displayCond><![CDATA[FIELD:switchableControllerActions:=:PoiCollection->showPoisOfCategory]]></displayCond>
 							<config>
 								<type>select</type>
 								<foreign_table>sys_category</foreign_table>
