@@ -13,12 +13,9 @@ namespace JWeiland\Maps2\Controller;
  *
  * The TYPO3 project - inspiring people to share!
  */
-use JWeiland\Maps2\Domain\Model\Poi;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use TYPO3\CMS\Extbase\Persistence\Generic\LazyObjectStorage;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 
 /**
@@ -80,22 +77,6 @@ class AbstractController extends ActionController
             'id' => $GLOBALS['TSFE']->id,
             'contentRecord' => $this->configurationManager->getContentObject()->data
         )));
-    }
-
-    /**
-     * prepare address for an uri
-     * further it will add some additional informations like country
-     *
-     * @param string $address The address to update
-     * @return string A prepared address which is valid for an uri
-     */
-    public function updateAddressForUri($address)
-    {
-        // check if it can be interpreted as a zip code
-        if (MathUtility::canBeInterpretedAsInteger($address) && strlen($address) === 5) {
-            $address .= ' Deutschland';
-        }
-        return rawurlencode($address);
     }
 
     /**

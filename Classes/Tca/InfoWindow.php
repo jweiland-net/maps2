@@ -34,10 +34,10 @@ class InfoWindow
      * @param array $row The current record
      * @param mixed $out String (normal) or array(palettes)
      * @param array $PA The field parameter array
-     * @param \TYPO3\CMS\Backend\Form\FormEngine $pObj The parent object
+     * @param object $pObj The parent object
      * @return string
      */
-    public function getSingleField_postProcess($table, $field, array $row, &$out, array $PA, \TYPO3\CMS\Backend\Form\FormEngine $pObj)
+    public function getSingleField_postProcess($table, $field, array $row, &$out, array $PA, $pObj)
     {
         if ($table === 'tx_maps2_domain_model_poicollection' && $field === 'info_window_content') {
             $address = GeneralUtility::trimExplode(',', $row['address']);

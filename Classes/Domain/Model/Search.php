@@ -25,7 +25,6 @@ namespace JWeiland\Maps2\Domain\Model;
  */
 class Search
 {
-
     /**
      * address
      *
@@ -58,7 +57,7 @@ class Search
      */
     public function setAddress($address)
     {
-        $this->address = $address;
+        $this->address = (string)$address;
     }
 
     /**

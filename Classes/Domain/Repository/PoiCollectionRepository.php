@@ -15,6 +15,7 @@ namespace JWeiland\Maps2\Domain\Repository;
  */
 use TYPO3\CMS\Core\Database\PreparedStatement;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Persistence\Generic\Query;
 use TYPO3\CMS\Extbase\Persistence\Repository;
 use TYPO3\CMS\Frontend\Page\PageRepository;
 
@@ -79,6 +80,7 @@ class PoiCollectionRepository extends Repository
     public function searchWithinRadius($latitude, $longitude, $radius)
     {
         $radiusOfEarth = 6380;
+        /** @var Query $query */
         $query = $this->createQuery();
         $sql = '
             SELECT *, ACOS(SIN(RADIANS(?)) * SIN(RADIANS(latitude)) + COS(RADIANS(?)) * COS(RADIANS(latitude)) * COS(RADIANS(?) - RADIANS(longitude))) * ? AS distance
@@ -106,6 +108,7 @@ class PoiCollectionRepository extends Repository
      */
     public function findPoisByCategories($categories)
     {
+        /** @var Query $query */
         $query = $this->createQuery();
         $tableName = 'tx_maps2_domain_model_poicollection';
 

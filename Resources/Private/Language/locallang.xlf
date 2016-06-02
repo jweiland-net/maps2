@@ -17,9 +17,21 @@
 				<source>Title</source>
 			</trans-unit>
 
+			<trans-unit id="rangeSearch.address" xml:space="preserve" approved="yes">
+				<source>Address</source>
+			</trans-unit>
+			<trans-unit id="rangeSearch.radius" xml:space="preserve" approved="yes">
+				<source>Radius</source>
+			</trans-unit>
+			<trans-unit id="rangeSearch.send" xml:space="preserve" approved="yes">
+				<source>Search</source>
+			</trans-unit>
+			<trans-unit id="rangeSearch.multipleResults" xml:space="preserve" approved="yes">
+				<source>For your given address we have found multiple addresses. Please choose one.</source>
+			</trans-unit>
+
 			<trans-unit id="searchStreet" xml:space="preserve" approved="yes">
 				<source>Search for street</source>
-				<target>Suche Straße</target>
 			</trans-unit>
 
 		</body>

@@ -21,11 +21,11 @@ if (!defined('TYPO3_MODE')) {
     'JWeiland.' . $_EXTKEY,
     'SearchWithinRadius',
     array(
-        'PoiCollection' => 'search, checkForMultiple, listRadius',
+        'PoiCollection' => 'search, multipleResults, listRadius',
     ),
     // non-cacheable actions
     array(
-        'PoiCollection' => 'checkForMultiple, listRadius',
+        'PoiCollection' => 'multipleResults, listRadius',
     )
 );
 

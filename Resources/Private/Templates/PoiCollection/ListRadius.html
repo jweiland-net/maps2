@@ -1,15 +1,13 @@
+{namespace maps2=JWeiland\Maps2\ViewHelpers}
+
 <f:layout name="Default" />
 
 <f:section name="main">
-
 	<f:flashMessages />
 
 	<f:if condition="{poiCollections}">
 		<f:then>
-			<script type="text/javascript">
-				<f:render partial="JavaScript" arguments="{poiCollections: poiCollections, extConf: extConf, data: data}" />
-			</script>
-			<div id="maps2-{data.uid}" style="width: {settings.mapWidth}px; height: {settings.mapHeight}px"></div>
+			<div id="maps2-{data.uid}" class="maps2" data-environment="{environment}" data-pois="{poiCollections->maps2:convertToJson()}"></div>
 		</f:then>
 		<f:else>
 			<div class="noPositionFound">Sorry, there are no results within your given radius</div>

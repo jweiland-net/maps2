@@ -13,8 +13,12 @@
 				<target>Link zur Google Maps API: Leer lassen, um die Standard API zu verwenden. Füllen Sie dieses Feld nur, wenn Sie eine ältere oder eine der Betaversionen verwenden wollen.</target>
 			</trans-unit>
 			<trans-unit id="googleMapsApiKey" xml:space="preserve">
-				<source>Google Maps ApiKey: Visit https://console.developers.google.com Create a new project for Google Maps JavaScript API and insert here the retrieved ApiKey.</source>
-				<target>Google Maps ApiKey: Besuchen Sie https://console.developers.google.com Erstellen Sie ein neues Projekt vom Typ Google Maps JavaScript API und fügen Sie den erhaltenen ApiKey hier ein.</target>
+				<source>Google Maps ApiKey: Visit https://console.developers.google.com Create a new project for Google Maps JavaScript API and insert here the retrieved Browser ApiKey.</source>
+				<target>Google Maps ApiKey: Besuchen Sie https://console.developers.google.com Erstellen Sie ein neues Projekt vom Typ Google Maps JavaScript API und fügen Sie den erhaltenen Browser ApiKey hier ein.</target>
+			</trans-unit>
+			<trans-unit id="googleGeocodeApiKey" xml:space="preserve">
+				<source>Google Geocode ApiKey: Visit https://console.developers.google.com Create a new project for Google Maps Geocode API and insert here the retrieved Server ApiKey.</source>
+				<target>Google Geocode ApiKey: Besuchen Sie https://console.developers.google.com Erstellen Sie ein neues Projekt vom Typ Google Maps Geocode API und fügen Sie den erhaltenen Server ApiKey hier ein.</target>
 			</trans-unit>
 			<trans-unit id="defaultLatitude" xml:space="preserve">
 				<source>Default Latitude: If you leave this empty Google Maps points to somewhere over the ocean on startup. So it's better to enter some coordinates: http://universimmedia.pagesperso-orange.fr/geo/loc.htm</source>

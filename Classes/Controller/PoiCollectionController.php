@@ -14,10 +14,9 @@ namespace JWeiland\Maps2\Controller;
  * The TYPO3 project - inspiring people to share!
  */
 use JWeiland\Maps2\Domain\Model\PoiCollection;
+use JWeiland\Maps2\Domain\Model\Search;
 use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Frontend\Page\CacheHashCalculator;
 
 /**
  * Class PoiCollectionController
@@ -30,16 +29,15 @@ use TYPO3\CMS\Frontend\Page\CacheHashCalculator;
  */
 class PoiCollectionController extends AbstractController
 {
-
     /**
      * @var \JWeiland\Maps2\Domain\Repository\PoiCollectionRepository
      */
     protected $poiCollectionRepository;
 
     /**
-     * @var \TYPO3\CMS\Frontend\Page\CacheHashCalculator
+     * @var \JWeiland\Maps2\Utility\GeocodeUtility
      */
-    protected $cacheHashCalculator;
+    protected $geocodeUtility;
 
     /**
      * inject poiCollectionRepository
@@ -53,14 +51,14 @@ class PoiCollectionController extends AbstractController
     }
 
     /**
-     * inject cacheHashCalculator
+     * inject geocodeUtility
      *
-     * @param CacheHashCalculator $cacheHashCalculator
+     * @param \JWeiland\Maps2\Utility\GeocodeUtility $geocodeUtility
      * @return void
      */
-    public function injectCacheHashCalculator(CacheHashCalculator $cacheHashCalculator)
+    public function injectGeocodeUtility(\JWeiland\Maps2\Utility\GeocodeUtility $geocodeUtility)
     {
-        $this->cacheHashCalculator = $cacheHashCalculator;
+        $this->geocodeUtility = $geocodeUtility;
     }
 
     /**
@@ -92,20 +90,13 @@ class PoiCollectionController extends AbstractController
      * action search
      * This action shows a form to start a new radius search
      *
-     * @param \JWeiland\Maps2\Domain\Model\Search $search
+     * @param Search $search
      * @return void
      */
-    public function searchAction(\JWeiland\Maps2\Domain\Model\Search $search = null)
+    public function searchAction(Search $search = null)
     {
         $this->view->assign('search', $search);
-        $parameters = array();
-        $parameters['id'] = $GLOBALS['TSFE']->id;
-        $parameters['tx_maps2_searchwithinradius']['controller'] = 'PoiCollection';
-        $parameters['tx_maps2_searchwithinradius']['action'] = 'checkForMultiple';
-        $cachHashArray = $this->cacheHashCalculator->getRelevantParameters(
-            GeneralUtility::implodeArrayForUrl('', $parameters)
-        );
-        $this->view->assign('cHash', $this->cacheHashCalculator->calculateCacheHash($cachHashArray));
+        $this->view->assign('id', $GLOBALS['TSFE']->id);
     }
 
     /**
@@ -113,7 +104,7 @@ class PoiCollectionController extends AbstractController
      *
      * @return void
      */
-    public function initializeCheckForMultipleAction()
+    public function initializeMultipleResultsAction()
     {
         $this->arguments->getArgument('search')
             ->getPropertyMappingConfiguration()
@@ -121,24 +112,17 @@ class PoiCollectionController extends AbstractController
     }
 
     /**
-     * action checkForMultiple
-     * after the search action it could be that multiple positions were found.
-     * With this action the user has the possibility to decide which position to use.
+     * action multipleResults
      *
-     * @param \JWeiland\Maps2\Domain\Model\Search $search
+     * after search action it could be that multiple positions are found.
+     * With this action the user has the possibility to decide which position he want to see.
+     *
+     * @param Search $search
      * @return void
      */
-    public function checkForMultipleAction(\JWeiland\Maps2\Domain\Model\Search $search)
+    public function multipleResultsAction(Search $search)
     {
-        $jSon = GeneralUtility::getUrl(
-            'http://maps.googleapis.com/maps/api/geocode/json?address=' .
-            $this->updateAddressForUri($search->getAddress()) . '&sensor=false'
-        );
-        $response = json_decode($jSon, true);
-        $radiusResults = $this->dataMapper->mapObjectStorage(
-            'JWeiland\\Maps2\\Domain\\Model\\RadiusResult',
-            $response['results']
-        );
+        $radiusResults = $this->geocodeUtility->findPositionByAddress($search->getAddress());
 
         if ($radiusResults->count() == 1) {
             /* @var $radiusResult \JWeiland\Maps2\Domain\Model\RadiusResult */
@@ -154,8 +138,7 @@ class PoiCollectionController extends AbstractController
             $this->view->assign('newSearch', $search);
         } else {
             // add error message and return to search form
-            // @ToDo
-            $this->flashMessageContainer->add(
+            $this->addFlashMessage(
                 'Your position was not found. Please reenter a more detailed address',
                 'No result found',
                 FlashMessage::NOTICE
@@ -177,6 +160,9 @@ class PoiCollectionController extends AbstractController
     public function listRadiusAction($latitude, $longitude, $radius)
     {
         $poiCollections = $this->poiCollectionRepository->searchWithinRadius($latitude, $longitude, $radius);
+        foreach ($poiCollections as $poiCollection) {
+            $poiCollection->setInfoWindowContent($this->renderInfoWindow($poiCollection));
+        }
 
         $this->view->assign('latitude', $latitude);
         $this->view->assign('longitude', $longitude);

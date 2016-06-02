@@ -4,22 +4,19 @@
 
 	<f:flashMessages />
 
-	<form action="{f:uri.action(action: 'checkForMultiple')}" method="get" object="search" objectName="newSearch" action="checkForMultiple">
+	<form action="{f:uri.action(action: 'multipleResults')}" method="get">
 		<input type="hidden" name="tx_maps2_searchwithinradius[controller]" value="PoiCollection" />
-		<input type="hidden" name="tx_maps2_searchwithinradius[action]" value="checkForMultiple" />
+		<input type="hidden" name="tx_maps2_searchwithinradius[action]" value="multipleResults" />
 		<input type="hidden" name="id" value="{id}" />
 		<input type="hidden" name="cHash" value="{cHash}" />
-		<dl>
-			<dt>Address</dt>
-			<dd><input type="text" name="tx_maps2_searchwithinradius[search][address]" value="" /></dd>
-		</dl>
-		<dl>
-			<dt>Radius</dt>
-			<dd><input type="text" name="tx_maps2_searchwithinradius[search][radius]" value="" /></dd>
-		</dl>
-		<dl>
-			<dt>&nbsp;</dt>
-			<dd><input type="submit" value="Send" /></dd>
-		</dl>
+		<div class="form-group">
+			<label for="address"><f:translate key="rangeSearch.address" /></label>
+			<input type="text" name="tx_maps2_searchwithinradius[search][address]" value="" class="form-control" id="address" placeholder="{f:translate(key: 'rangeSearch.address')}">
+		</div>
+		<div class="form-group">
+			<label for="radius"><f:translate key="rangeSearch.radius" /></label>
+			<input type="text" name="tx_maps2_searchwithinradius[search][radius]" value="" class="form-control" id="radius" placeholder="{f:translate(key: 'rangeSearch.radius')}">
+		</div>
+		<input type="submit" value="{f:translate(key: 'rangeSearch.send')}" class="btn btn-default" />
 	</form>
 </f:section>

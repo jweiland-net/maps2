@@ -47,11 +47,18 @@ class ExtConf implements \TYPO3\CMS\Core\SingletonInterface
     protected $googleMapsLibrary = '';
 
     /**
-     * google maps ApiKey
+     * Google Maps JavaScript ApiKey
      *
      * @var string
      */
-    protected $googleMapsApiKey = '';
+    protected $googleMapsJavaScriptApiKey = '';
+
+    /**
+     * Google Maps Geocode ApiKey
+     *
+     * @var string
+     */
+    protected $googleMapsGeocodeApiKey = '';
 
     /**
      * default latitude
@@ -166,7 +173,7 @@ class ExtConf implements \TYPO3\CMS\Core\SingletonInterface
             $library = $this->googleMapsLibrary;
         }
         // insert ApiKey
-        $library = str_replace('|', $this->getGoogleMapsApiKey(), $library);
+        $library = str_replace('|', $this->getGoogleMapsJavaScriptApiKey(), $library);
         // $parts: 0 = full string; 1 = s or empty; 2 = needed url
         preg_match('|^http(s)?://(.*)$|i', $library, $parts);
         if ($this->getUseHttps()) {
@@ -184,28 +191,62 @@ class ExtConf implements \TYPO3\CMS\Core\SingletonInterface
      */
     public function setGoogleMapsLibrary($googleMapsLibrary)
     {
-        $this->googleMapsLibrary = $googleMapsLibrary;
+        $this->googleMapsLibrary = trim($googleMapsLibrary);
     }
 
     /**
-     * Returns the googleMapsApiKey
+     * Returns the googleMapsJavaScriptApiKey
      *
-     * @return string $googleMapsApiKey
+     * @return string $googleMapsJavaScriptApiKey
+     *
+     * @throws \Exception
      */
-    public function getGoogleMapsApiKey()
+    public function getGoogleMapsJavaScriptApiKey()
     {
-        return $this->googleMapsApiKey;
+        if (empty($this->googleMapsJavaScriptApiKey)) {
+            throw new \Exception('You have forgotten to set a JavaScript ApiKey in Extensionmanager.', 1464871544);
+        }
+        return $this->googleMapsJavaScriptApiKey;
     }
 
     /**
-     * Sets the googleMapsApiKey
+     * Sets the googleMapsJavaScriptApiKey
      *
-     * @param string $googleMapsApiKey
+     * @param string $googleMapsJavaScriptApiKey
      * @return void
      */
-    public function setGoogleMapsApiKey($googleMapsApiKey)
+    public function setGoogleMapsJavaScriptApiKey($googleMapsJavaScriptApiKey)
     {
-        $this->googleMapsApiKey = (string)$googleMapsApiKey;
+        $this->googleMapsJavaScriptApiKey = trim((string)$googleMapsJavaScriptApiKey);
+    }
+
+    /**
+     * Returns the googleMapsGeocodeApiKey
+     *
+     * @return string $googleMapsGeocodeApiKey
+     *
+     * @throws \Exception
+     */
+    public function getGoogleMapsGeocodeApiKey()
+    {
+        if (empty($this->googleMapsGeocodeApiKey)) {
+            throw new \Exception('You have forgotten to set a Geocode ApiKey in Extensionmanager.', 1464871560);
+        }
+        if ($this->googleMapsGeocodeApiKey === $this->googleMapsJavaScriptApiKey) {
+            throw new \Exception('The ApiKeys for JavaScript APi and Geocode API can not be the same.', 1464871571);
+        }
+        return $this->googleMapsGeocodeApiKey;
+    }
+
+    /**
+     * Sets the googleMapsGeocodeApiKey
+     *
+     * @param string $googleMapsGeocodeApiKey
+     * @return void
+     */
+    public function setGoogleMapsGeocodeApiKey($googleMapsGeocodeApiKey)
+    {
+        $this->googleMapsGeocodeApiKey = trim((string)$googleMapsGeocodeApiKey);
     }
 
     /**

@@ -13,6 +13,7 @@ namespace JWeiland\Maps2\Utility;
  *
  * The TYPO3 project - inspiring people to share!
  */
+use JWeiland\Maps2\Configuration\ExtConf;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
 
@@ -25,18 +26,33 @@ use TYPO3\CMS\Core\Utility\MathUtility;
  * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
  * @link     https://github.com/jweiland-net/maps2
  */
-class GoogleMaps
+class GeocodeUtility
 {
-
     /**
      * @var string
      */
-    protected $urlGeocode = 'http://maps.googleapis.com/maps/api/geocode/json?address=|&sensor=false';
+    protected $uriForGeocode = 'https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=%s';
+
+    /**
+     * @var ExtConf
+     */
+    protected $extConf = null;
 
     /**
      * @var \JWeiland\Maps2\Utility\DataMapper
      */
     protected $dataMapper;
+
+    /**
+     * inject extConf
+     *
+     * @param \JWeiland\Maps2\Configuration\ExtConf $extConf
+     * @return void
+     */
+    public function injectExtConf(\JWeiland\Maps2\Configuration\ExtConf $extConf)
+    {
+        $this->extConf = $extConf;
+    }
 
     /**
      * inject dataMapper
@@ -57,12 +73,32 @@ class GoogleMaps
      */
     public function findPositionByAddress($address)
     {
-        $url = str_replace('|', $this->updateAddressForUri($address), $this->urlGeocode);
-        $json = GeneralUtility::getUrl($url);
+        $json = GeneralUtility::getUrl($this->getUri($address));
         $response = json_decode($json, true);
-        return $this->dataMapper->mapObjectStorage(
-            'JWeiland\\Maps2\\Domain\\Model\\RadiusResult',
-            $response['results']
+        if ($response['status'] === 'OK') {
+            return $this->dataMapper->mapObjectStorage(
+                'JWeiland\\Maps2\\Domain\\Model\\RadiusResult',
+                $response['results']
+            );
+        } else {
+            /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
+            $objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
+            return $objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\ObjectStorage');
+        }
+    }
+
+    /**
+     * Get URI for Geocode
+     *
+     * @param string $address
+     * @return string
+     */
+    protected function getUri($address)
+    {
+        return sprintf(
+            $this->uriForGeocode,
+            $this->updateAddressForUri($address),
+            $this->extConf->getGoogleMapsGeocodeApiKey()
         );
     }
 
@@ -76,7 +112,7 @@ class GoogleMaps
     protected function updateAddressForUri($address)
     {
         // check if it can be interpreted as a zip code
-        if (MathUtility::canBeInterpretedAsInteger($address) && strlen($address) == 5) {
+        if (MathUtility::canBeInterpretedAsInteger($address) && strlen($address) === 5) {
             $address .= ' Deutschland';
         }
         return rawurlencode($address);
