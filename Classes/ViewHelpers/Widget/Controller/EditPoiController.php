@@ -37,7 +37,6 @@ class EditPoiController extends AbstractController
         if ($poiCollection instanceof PoiCollection) {
             $poiCollection->setInfoWindowContent($this->renderInfoWindow($poiCollection));
             $this->view->assign('poiCollection', $poiCollection);
-            $this->view->assign('poiCollections', $this->getPoiCollectionsAsJson(array($poiCollection)));
         }
         $this->view->assign('override', $this->widgetConfiguration['override']);
     }

@@ -121,7 +121,7 @@ abstract class AbstractAjaxRequest implements AjaxInterface
      *
      * @param PoiCollection $poiCollection Model to validate hash against
      * @param string $hash A generated hash value to verify that there are no modifications in the uri
-     * @return boolean
+     * @return bool
      */
     public function validateArguments(PoiCollection $poiCollection, $hash)
     {

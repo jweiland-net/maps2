@@ -32,7 +32,7 @@ class SetCacheViewHelper extends AbstractCacheViewHelper
      * @param string $cacheIdentifier An identifier for this specific cache entry
      * @param string $data The data to be stored
      * @param array $tags Tags to associate with this cache entry
-     * @param integer $lifetime Lifetime of this cache entry in seconds. If null is specified, the default lifetime is used. "0" means unlimited liftime.
+     * @param int $lifetime Lifetime of this cache entry in seconds. If null is specified, the default lifetime is used. "0" means unlimited liftime.
      * @return void
      * @throws \TYPO3\CMS\Core\Cache\Exception if no cache frontend has been set.
      * @throws \TYPO3\CMS\Core\Cache\Exception\InvalidDataException if the data to be stored is not a string.

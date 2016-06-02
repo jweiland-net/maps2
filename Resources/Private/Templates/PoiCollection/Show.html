@@ -1,5 +1,7 @@
+{namespace maps2=JWeiland\Maps2\ViewHelpers}
+
 <f:layout name="Default" />
 
 <f:section name="main">
-	<div id="maps2-{data.uid}" class="maps2" data-environment="{environment}" data-pois="{poiCollections}"></div>
+	<div id="maps2-{data.uid}" class="maps2" data-environment="{environment}" data-pois="{poiCollections->maps2:convertToJson()}"></div>
 </f:section>

@@ -36,16 +36,13 @@ class PoiCollectionController extends AbstractController
         $poiCollection = $this->widgetConfiguration['poiCollection'];
         if ($poiCollection instanceof PoiCollection) {
             $poiCollection->setInfoWindowContent($this->renderInfoWindow($poiCollection));
-            $this->view->assign('poiCollections', $this->getPoiCollectionsAsJson(array($poiCollection)));
+            $this->view->assign('poiCollections', array($poiCollection));
         } elseif ($this->widgetConfiguration['poiCollections'] instanceof \Traversable) {
             /** @var PoiCollection $poiCollection */
             foreach ($this->widgetConfiguration['poiCollections'] as $poiCollection) {
                 $poiCollection->setInfoWindowContent($this->renderInfoWindow($poiCollection));
             }
-            $this->view->assign(
-                'poiCollections',
-                $this->getPoiCollectionsAsJson($this->widgetConfiguration['poiCollections'])
-            );
+            $this->view->assign('poiCollections', $this->widgetConfiguration['poiCollections']);
         }
         $this->view->assign('override', $this->widgetConfiguration['override']);
     }

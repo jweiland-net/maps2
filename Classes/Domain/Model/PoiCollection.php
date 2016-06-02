@@ -81,7 +81,7 @@ class PoiCollection extends AbstractEntity
     /**
      * Radius
      *
-     * @var integer
+     * @var int
      */
     protected $radius = 0;
 
@@ -320,7 +320,7 @@ class PoiCollection extends AbstractEntity
     /**
      * Returns the radius
      *
-     * @return integer $radius
+     * @return int $radius
      */
     public function getRadius()
     {
@@ -330,7 +330,7 @@ class PoiCollection extends AbstractEntity
     /**
      * Sets the radius
      *
-     * @param integer $radius
+     * @param int $radius
      * @return void
      */
     public function setRadius($radius)
@@ -499,7 +499,7 @@ class PoiCollection extends AbstractEntity
     /**
      * Sets the infoWindowContent
      *
-     * @param integer $infoWindowContent
+     * @param int $infoWindowContent
      * @return void
      */
     public function setInfoWindowContent($infoWindowContent)

@@ -77,14 +77,14 @@ class PoiCollectionController extends AbstractController
         }
         if ($poiCollection instanceof PoiCollection) {
             $poiCollection->setInfoWindowContent($this->renderInfoWindow($poiCollection));
-            $this->view->assign('poiCollections', $this->getPoiCollectionsAsJson(array($poiCollection)));
+            $this->view->assign('poiCollections', $poiCollection);
         } elseif (!empty($this->settings['categories'])) {
             // if no poiCollection could be retrieved, but a category is set
             $poiCollections = $this->poiCollectionRepository->findPoisByCategories($this->settings['categories']);
             foreach ($poiCollections as $poiCollection) {
                 $poiCollection->setInfoWindowContent($this->renderInfoWindow($poiCollection));
             }
-            $this->view->assign('poiCollections', $this->getPoiCollectionsAsJson($poiCollections->toArray()));
+            $this->view->assign('poiCollections', $poiCollections);
         }
     }
 
@@ -171,7 +171,7 @@ class PoiCollectionController extends AbstractController
      *
      * @param float $latitude
      * @param float $longitude
-     * @param integer $radius
+     * @param int $radius
      * @return void
      */
     public function listRadiusAction($latitude, $longitude, $radius)

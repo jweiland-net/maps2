@@ -4,4 +4,4 @@
 <f:form.hidden id="latitude-{data.uid}" name="tx_maps2[latitude]" value="{poiCollection.latitude}" />
 <f:form.hidden id="longitude-{data.uid}" name="tx_maps2[longitude]" value="{poiCollection.longitude}" />
 
-<div id="maps2-{data.uid}" class="maps2 editMarker" data-override="{override->maps2:convertToJson()}" data-environment="{environment}" data-pois="{poiCollections}"></div>
+<div id="maps2-{data.uid}" class="maps2 editMarker" data-override="{override->maps2:convertToJson()}" data-environment="{environment}" data-pois="{poiCollection->maps2:convertToJson()}"></div>

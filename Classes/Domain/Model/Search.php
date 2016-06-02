@@ -36,7 +36,7 @@ class Search
     /**
      * radius
      *
-     * @var integer
+     * @var int
      */
     protected $radius;
 
@@ -64,7 +64,7 @@ class Search
     /**
      * Returns the radius
      *
-     * @return integer $radius
+     * @return int $radius
      */
     public function getRadius()
     {
@@ -74,7 +74,7 @@ class Search
     /**
      * Sets the radius
      *
-     * @param integer $radius
+     * @param int $radius
      * @return void
      */
     public function setRadius($radius)

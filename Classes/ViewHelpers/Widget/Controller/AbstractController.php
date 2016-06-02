@@ -79,7 +79,7 @@ abstract class AbstractController extends AbstractWidgetController
             'contentRecord' => $this->configurationManager->getContentObject()->data
         )));
     }
-    
+
     /**
      * Render InfoWindow for marker
      *
@@ -97,30 +97,5 @@ abstract class AbstractController extends AbstractWidgetController
             )
         );
         return $view->render();
-    }
-    
-    /**
-     * Convert poiCollections to array and pass them through json_encode
-     *
-     * @param array $poiCollections
-     * @return string
-     */
-    protected function getPoiCollectionsAsJson($poiCollections)
-    {
-        $poiCollectionsAsArray = array();
-        /** @var PoiCollection $poiCollection */
-        foreach ($poiCollections as $poiCollection) {
-            $poiCollectionAsArray = ObjectAccess::getGettableProperties($poiCollection);
-            /** @var LazyObjectStorage $pois */
-            $pois = $poiCollectionAsArray['pois'];
-            $poiCollectionAsArray['pois'] = array();
-
-            /** @var Poi $poi */
-            foreach ($pois->toArray() as $key => $poi) {
-                $poiCollectionAsArray['pois'][$key] = ObjectAccess::getGettableProperties($poi);
-            }
-            $poiCollectionsAsArray[] = $poiCollectionAsArray;
-        }
-        return json_encode($poiCollectionsAsArray);
     }
 }

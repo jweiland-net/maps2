@@ -30,7 +30,7 @@ class HasCacheViewHelper extends AbstractCacheViewHelper
      * checks if caching framework has the requested cache entry
      *
      * @param string $cacheIdentifier String to identify the cache entry
-     * @return boolean
+     * @return bool
      */
     public function render($cacheIdentifier)
     {

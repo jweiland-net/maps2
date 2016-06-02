@@ -63,7 +63,7 @@ class RenderHiddenFieldsForGetViewHelper extends AbstractViewHelper
     /**
      * implements a vievHelper to trim explode comma separated strings
      *
-     * @param integer $pageUid UID of target page
+     * @param int $pageUid UID of target page
      * @param string $action Target action
      * @param string $controller Target controller. If null current controllerName is used
      * @return array

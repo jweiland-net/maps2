@@ -30,14 +30,14 @@ class Poi extends AbstractEntity
     /**
      * cruser_id
      *
-     * @var integer
+     * @var int
      */
     protected $cruserId;
 
     /**
      * Position Index
      *
-     * @var integer
+     * @var int
      */
     protected $posIndex;
 
@@ -68,7 +68,7 @@ class Poi extends AbstractEntity
     /**
      * Sets the cruserId
      *
-     * @param integer $cruserId
+     * @param int $cruserId
      * @return void
      */
     public function setCruserId($cruserId)
@@ -121,7 +121,7 @@ class Poi extends AbstractEntity
     /**
      * Returns the pos_index
      *
-     * @return integer $posIndex
+     * @return int $posIndex
      */
     public function getPosIndex()
     {
@@ -131,7 +131,7 @@ class Poi extends AbstractEntity
     /**
      * Sets the pos_index
      *
-     * @param integer $posIndex
+     * @param int $posIndex
      * @return void
      */
     public function setPosIndex($posIndex)

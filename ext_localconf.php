@@ -1,6 +1,6 @@
 <?php
 if (!defined('TYPO3_MODE')) {
-    die ('Access denied.');
+    die('Access denied.');
 }
 
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
@@ -41,7 +41,7 @@ if (!defined('TYPO3_MODE')) {
     )
 );
 
-if(TYPO3_MODE === 'BE') {
+if (TYPO3_MODE === 'BE') {
     if (\TYPO3\CMS\Core\Utility\GeneralUtility::compat_version('7.3')) {
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::registerAjaxHandler(
             'maps2Ajax',

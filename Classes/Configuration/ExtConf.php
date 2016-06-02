@@ -29,12 +29,13 @@ namespace JWeiland\Maps2\Configuration;
  * @package maps2
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class ExtConf implements \TYPO3\CMS\Core\SingletonInterface {
+class ExtConf implements \TYPO3\CMS\Core\SingletonInterface
+{
 
     /**
      * use https
      *
-     * @var boolean
+     * @var bool
      */
     protected $useHttps = false;
 
@@ -118,7 +119,7 @@ class ExtConf implements \TYPO3\CMS\Core\SingletonInterface {
         $extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['maps2']);
         if (is_array($extConf) && count($extConf)) {
             // call setter method foreach configuration entry
-            foreach($extConf as $key => $value) {
+            foreach ($extConf as $key => $value) {
                 $methodName = 'set' . ucfirst($key);
                 if (method_exists($this, $methodName)) {
                     $this->$methodName($value);
@@ -130,7 +131,7 @@ class ExtConf implements \TYPO3\CMS\Core\SingletonInterface {
     /**
      * getter for useHttps
      *
-     * @return boolean
+     * @return bool
      */
     public function getUseHttps()
     {
@@ -144,7 +145,7 @@ class ExtConf implements \TYPO3\CMS\Core\SingletonInterface {
     /**
      * setter for useHttps
      *
-     * @param boolean $useHttps
+     * @param bool $useHttps
      * @return void
      */
     public function setUseHttps($useHttps)
@@ -216,7 +217,9 @@ class ExtConf implements \TYPO3\CMS\Core\SingletonInterface {
     {
         if (empty($this->defaultLatitude)) {
             return 0.00;
-        } else return $this->defaultLatitude;
+        } else {
+            return $this->defaultLatitude;
+        }
     }
 
     /**
@@ -239,7 +242,9 @@ class ExtConf implements \TYPO3\CMS\Core\SingletonInterface {
     {
         if (empty($this->defaultLongitude)) {
             return 0.00;
-        } else return $this->defaultLongitude;
+        } else {
+            return $this->defaultLongitude;
+        }
     }
 
     /**
@@ -256,19 +261,21 @@ class ExtConf implements \TYPO3\CMS\Core\SingletonInterface {
     /**
      * getter for defaultRadius
      *
-     * @return integer
+     * @return int
      */
     public function getDefaultRadius()
     {
         if (empty($this->defaultRadius)) {
             return 250;
-        } else return $this->defaultRadius;
+        } else {
+            return $this->defaultRadius;
+        }
     }
 
     /**
      * setter for defaultRadius
      *
-     * @param integer $defaultRadius
+     * @param int $defaultRadius
      * @return void
      */
     public function setDefaultRadius($defaultRadius)
@@ -285,7 +292,9 @@ class ExtConf implements \TYPO3\CMS\Core\SingletonInterface {
     {
         if (empty($this->strokeColor)) {
             return '#FF0000';
-        } else return $this->strokeColor;
+        } else {
+            return $this->strokeColor;
+        }
     }
 
     /**
@@ -308,7 +317,9 @@ class ExtConf implements \TYPO3\CMS\Core\SingletonInterface {
     {
         if (empty($this->strokeOpacity)) {
             return 0.8;
-        } else return $this->strokeOpacity;
+        } else {
+            return $this->strokeOpacity;
+        }
     }
 
     /**
@@ -325,19 +336,21 @@ class ExtConf implements \TYPO3\CMS\Core\SingletonInterface {
     /**
      * getter for strokeWeight
      *
-     * @return integer
+     * @return int
      */
     public function getStrokeWeight()
     {
         if (empty($this->strokeWeight)) {
             return 2;
-        } else return $this->strokeWeight;
+        } else {
+            return $this->strokeWeight;
+        }
     }
 
     /**
      * setter for strokeWeight
      *
-     * @param integer $strokeWeight
+     * @param int $strokeWeight
      * @return void
      */
     public function setStrokeWeight($strokeWeight)
@@ -354,7 +367,9 @@ class ExtConf implements \TYPO3\CMS\Core\SingletonInterface {
     {
         if (empty($this->fillColor)) {
             return '#FF0000';
-        } else return $this->fillColor;
+        } else {
+            return $this->fillColor;
+        }
     }
 
     /**
@@ -377,7 +392,9 @@ class ExtConf implements \TYPO3\CMS\Core\SingletonInterface {
     {
         if (empty($this->fillOpacity)) {
             return 0.35;
-        } else return $this->fillOpacity;
+        } else {
+            return $this->fillOpacity;
+        }
     }
 
     /**
@@ -390,5 +407,4 @@ class ExtConf implements \TYPO3\CMS\Core\SingletonInterface {
     {
         $this->fillOpacity = (float) $fillOpacity;
     }
-
 }

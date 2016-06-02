@@ -96,14 +96,19 @@ MapOptions.prototype.setMapTypeId = function(mapTypeId) {
  * @constructor
  */
 function Maps2(poiCollections, environment, editable) {
+	this.markers = {};
 	this.bounds = new google.maps.LatLngBounds();
 	this.infoWindow = new google.maps.InfoWindow();
 	this.$element = jQuery("#maps2-" + environment.contentRecord.uid).css({
 		height: environment.settings.mapHeight,
 		width: environment.settings.mapWidth
 	});
+
 	this.createMap(environment);
 	this.createPointByCollectionType(poiCollections, environment, editable);
+	if (this.countObjectProperties(this.markers) > 1) {
+		this.showSwitchableCategories(poiCollections, environment.contentRecord);
+	}
 
 	// enable auto zoom only if we have more than 1 poiCollection
 	if (poiCollections.length > 1) {
@@ -123,6 +128,96 @@ Maps2.prototype.createMap = function(environment) {
 		this.$element.get(0),
 		new MapOptions(environment.settings)
 	);
+};
+
+/**
+ * Group Categories
+ *
+ * @param poiCollections
+ */
+Maps2.prototype.groupCategories = function(poiCollections) {
+	var groupedCategories = {};
+	var categoryUid = "0";
+	for (var x = 0; x < poiCollections.length; x++) {
+		for (var y = 0; y < poiCollections[x].categories.length; y++) {
+			categoryUid = String(poiCollections[x].categories[y].uid);
+			if (!groupedCategories.hasOwnProperty(categoryUid)) {
+				groupedCategories[categoryUid] = poiCollections[x].categories[y];
+			}
+		}
+	}
+	return groupedCategories;
+};
+
+/**
+ * Show switchable categories
+ *
+ * @param poiCollections
+ * @param contentRecord
+ */
+Maps2.prototype.showSwitchableCategories = function(poiCollections, contentRecord) {
+	var categories = this.groupCategories(poiCollections);
+	var $form = jQuery("<form>")
+		.addClass("txMaps2Form")
+		.attr("id", "txMaps2Form-" + contentRecord.uid);
+
+	// Add checkbox for category
+	for (var categoryUid in categories) {
+		if (categories.hasOwnProperty(categoryUid)) {
+			$form.append(this.getCheckbox(categories[categoryUid]));
+		}
+	}
+	// create form
+	var markers = this.markers;
+	$form.find("input").on("click", function() {
+		var isChecked = jQuery(this).is(":checked");
+		var categoryUid = jQuery(this).val();
+		if (markers.hasOwnProperty(categoryUid)) {
+			for (var i = 0; i < markers[categoryUid].length; i++) {
+				markers[categoryUid][i].setVisible(isChecked);
+			}
+		}
+	});
+	this.$element.after($form);
+
+};
+
+/**
+ * Get Checkbox for Category
+ *
+ * @param category
+ */
+Maps2.prototype.getCheckbox = function(category) {
+	return jQuery("<div />")
+		.addClass("form-group").append(
+			jQuery("<div />")
+				.addClass("checkbox").append(
+				jQuery("<label />").append(
+					jQuery("<input />")
+						.attr({
+							type: "checkbox",
+							checked: "checked",
+							value: category.uid
+						})
+						.after(category.title)
+				)
+			)
+		);
+};
+
+/**
+ * Count Object properties
+ *
+ * @param obj
+ */
+Maps2.prototype.countObjectProperties = function(obj) {
+	var count = 0;
+	for (var key in obj) {
+		if (obj.hasOwnProperty(key)) {
+			count++;
+		}
+	}
+	return count;
 };
 
 /**
@@ -174,11 +269,19 @@ Maps2.prototype.createPointByCollectionType = function(poiCollections, environme
  * @param editable
  */
 Maps2.prototype.createMarker = function(poiCollection, environment, editable) {
+	var categoryUid = "0";
 	var marker = new google.maps.Marker({
 		position: new google.maps.LatLng(poiCollection.latitude, poiCollection.longitude),
 		map: this.map
 	});
 	marker.setDraggable(editable);
+	for (var i = 0; i < poiCollection.categories.length; i++) {
+		categoryUid = poiCollection.categories[i].uid;
+		if (!this.markers.hasOwnProperty(categoryUid)) {
+			this.markers[categoryUid] = [];
+		}
+		this.markers[categoryUid].push(marker);
+	}
 	this.bounds.extend(marker.position);
 
 	// we need these both vars to be set global. So that we can access them in Listener
