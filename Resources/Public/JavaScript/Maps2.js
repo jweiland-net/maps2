@@ -105,16 +105,30 @@ function Maps2(poiCollections, environment, editable) {
 	});
 
 	this.createMap(environment);
-	this.createPointByCollectionType(poiCollections, environment, editable);
-	if (this.countObjectProperties(this.markers) > 1) {
-		this.showSwitchableCategories(poiCollections, environment.contentRecord);
-	}
 
-	// enable auto zoom only if we have more than 1 poiCollection
-	if (poiCollections.length > 1) {
-		this.map.fitBounds(this.bounds);
+	if (typeof poiCollections == "undefined") {
+		// Plugin: CityMap
+		var lat = this.$element.data("latitude");
+		var lng = this.$element.data("longitude");
+		if (lat && lng) {
+			this.createMarkerByLatLng(lat, lng);
+			this.map.setCenter(new google.maps.LatLng(lat, lng));
+			this.map.setZoom(15);
+		} else {
+			// Fallback
+			this.map.setCenter(new google.maps.LatLng(environment.extConf.defaultLatitude, environment.extConf.defaultLongitude));
+		}
 	} else {
-		this.map.setCenter(new google.maps.LatLng(poiCollections[0].latitude, poiCollections[0].longitude));
+		// normal case
+		this.createPointByCollectionType(poiCollections, environment, editable);
+		if (this.countObjectProperties(this.markers) > 1) {
+			this.showSwitchableCategories(poiCollections, environment.contentRecord);
+		}
+		if (poiCollections.length > 1) {
+			this.map.fitBounds(this.bounds);
+		} else {
+			this.map.setCenter(new google.maps.LatLng(poiCollections[0].latitude, poiCollections[0].longitude));
+		}
 	}
 }
 
@@ -297,6 +311,20 @@ Maps2.prototype.createMarker = function(poiCollection, environment, editable) {
 			infoWindow.open(map, marker);
 		});
 	}
+};
+
+/**
+ * Create Marker with InfoWindow
+ *
+ * @param latitude
+ * @param longitude
+ */
+Maps2.prototype.createMarkerByLatLng = function(latitude, longitude) {
+	var marker = new google.maps.Marker({
+		position: new google.maps.LatLng(latitude, longitude),
+		map: this.map
+	});
+	this.bounds.extend(marker.position);
 };
 
 /**

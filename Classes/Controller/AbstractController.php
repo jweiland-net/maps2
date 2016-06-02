@@ -41,6 +41,11 @@ class AbstractController extends ActionController
     protected $dataMapper;
 
     /**
+     * @var \JWeiland\Maps2\Utility\GeocodeUtility
+     */
+    protected $geocodeUtility;
+
+    /**
      * inject extConf
      *
      * @param \JWeiland\Maps2\Configuration\ExtConf $extConf
@@ -60,6 +65,17 @@ class AbstractController extends ActionController
     public function injectDataMapper(\JWeiland\Maps2\Utility\DataMapper $dataMapper)
     {
         $this->dataMapper = $dataMapper;
+    }
+
+    /**
+     * inject geocodeUtility
+     *
+     * @param \JWeiland\Maps2\Utility\GeocodeUtility $geocodeUtility
+     * @return void
+     */
+    public function injectGeocodeUtility(\JWeiland\Maps2\Utility\GeocodeUtility $geocodeUtility)
+    {
+        $this->geocodeUtility = $geocodeUtility;
     }
 
     /**

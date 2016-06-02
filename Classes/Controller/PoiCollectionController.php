@@ -35,11 +35,6 @@ class PoiCollectionController extends AbstractController
     protected $poiCollectionRepository;
 
     /**
-     * @var \JWeiland\Maps2\Utility\GeocodeUtility
-     */
-    protected $geocodeUtility;
-
-    /**
      * inject poiCollectionRepository
      *
      * @param PoiCollectionRepository $poiCollectionRepository
@@ -48,17 +43,6 @@ class PoiCollectionController extends AbstractController
     public function injectPoiCollectionRepository(PoiCollectionRepository $poiCollectionRepository)
     {
         $this->poiCollectionRepository = $poiCollectionRepository;
-    }
-
-    /**
-     * inject geocodeUtility
-     *
-     * @param \JWeiland\Maps2\Utility\GeocodeUtility $geocodeUtility
-     * @return void
-     */
-    public function injectGeocodeUtility(\JWeiland\Maps2\Utility\GeocodeUtility $geocodeUtility)
-    {
-        $this->geocodeUtility = $geocodeUtility;
     }
 
     /**
