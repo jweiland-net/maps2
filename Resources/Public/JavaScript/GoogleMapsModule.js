@@ -31,13 +31,17 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
 	function CircleOptions(map, config, extConf) {
 		this.map = map;
 		this.center = new gmaps.LatLng(config.latitude, config.longitude);
-		this.radius = config.radius;
 		this.strokeColor = extConf.strokeColor;
 		this.strokeOpacity = extConf.strokeOpacity;
 		this.strokeWeight = extConf.strokeWeight;
 		this.fillColor = extConf.fillColor;
 		this.fillOpacity = extConf.fillOpacity;
 		this.editable = true;
+		if (config.radius == 0) {
+			this.radius = extConf.defaultRadius;
+		} else {
+			this.radius = config.radius;
+		}
 	}
 
 	/**
