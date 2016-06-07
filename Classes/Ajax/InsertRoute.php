@@ -15,6 +15,7 @@ namespace JWeiland\Maps2\Ajax;
  */
 use JWeiland\Maps2\Domain\Model\Poi;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
+use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
 
 /**
  * Class InsertRoute
@@ -27,20 +28,19 @@ use JWeiland\Maps2\Domain\Model\PoiCollection;
  */
 class InsertRoute extends AbstractAjaxRequest
 {
-
     /**
-     * @var \JWeiland\Maps2\Domain\Repository\PoiCollectionRepository
+     * @var PoiCollectionRepository
      */
     protected $poiCollectionRepository;
 
     /**
      * inject poiCollectionRepository
      *
-     * @param \JWeiland\Maps2\Domain\Repository\PoiCollectionRepository $poiCollectionRepository
+     * @param PoiCollectionRepository $poiCollectionRepository
      * @return void
      */
     public function injectPoiCollectionRepository(
-        \JWeiland\Maps2\Domain\Repository\PoiCollectionRepository $poiCollectionRepository
+        PoiCollectionRepository $poiCollectionRepository
     ) {
         $this->poiCollectionRepository = $poiCollectionRepository;
     }

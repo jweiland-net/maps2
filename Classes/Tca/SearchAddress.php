@@ -35,11 +35,8 @@ class SearchAddress
      */
     public function searchAddress(array $PA, $fObj)
     {
-        $onClick = 'TxMaps2.findAddressOnMap()';
-        $buttonUpdate = '<input type="button" class="btn btn-default" value="Update" onclick="' . $onClick . '">';
-
-        $onClick = 'TxMaps2.resetMarkerToAddress(' . $PA['row']['latitude_orig'] . ', ' . $PA['row']['longitude_orig'] . ')';
-        $buttonReset = '<input type="button" class="btn btn-default" value="Reset" onclick="' . $onClick . '">';
+        $buttonUpdate = '<input type="button" id="txMaps2Update" class="btn btn-default" value="Update">';
+        $buttonReset = '<input type="button" id="txMaps2Reset" class="btn btn-default" value="Reset">';
 
         return $buttonUpdate . $buttonReset;
     }

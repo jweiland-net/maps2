@@ -51,8 +51,8 @@
 			<trans-unit id="tx_maps2_domain_model_poicollection.title" xml:space="preserve">
 				<source>Title</source>
 			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poicollection.configuration_map" xml:space="preserve">
-				<source>Configuration Map</source>
+			<trans-unit id="tx_maps2_domain_model_poicollection.configuration_map" xml:space="preserve" approved="yes">
+				<source>Configure position on Google Maps</source>
 			</trans-unit>
 			<trans-unit id="tx_maps2_domain_model_poicollection.latitude" xml:space="preserve">
 				<source>Latitude for map position</source>

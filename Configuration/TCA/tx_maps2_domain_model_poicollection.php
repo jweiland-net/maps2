@@ -207,7 +207,7 @@ return array(
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poicollection.configuration_map',
             'config' => array(
                 'type' => 'user',
-                'userFunc' => 'JWeiland\\Maps2\\Tca\\ConfigurationMap->render',
+                'userFunc' => 'JWeiland\\Maps2\\Tca\\GoogleMaps->render',
             ),
         ),
         'radius' => array(

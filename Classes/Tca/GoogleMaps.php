@@ -17,10 +17,11 @@ use JWeiland\Maps2\Domain\Model\PoiCollection;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 
 /**
- * Class ConfigurationMap
+ * Class GoogleMaps
  *
  * @category Tca
  * @package  Maps2
@@ -28,9 +29,8 @@ use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
  * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
  * @link     https://github.com/jweiland-net/maps2
  */
-class ConfigurationMap
+class GoogleMaps
 {
-
     /**
      * @var \TYPO3\CMS\Extbase\Object\ObjectManager
      */
@@ -86,8 +86,33 @@ class ConfigurationMap
         $this->init();
         $parentArray = $this->cleanUpParentArray($parentArray);
 
-        // add Google Maps API
-        $this->pageRenderer->addJsLibrary('maps2GoogleMapsApi', $this->extConf->getGoogleMapsLibrary(), 'text/javascript', false, true, '', true);
+        // add our GoogleMaps library as RequireJS module
+        $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/Maps2/GoogleMapsModule');
+        // loadRequireJsModule has to be loaded before configuring additional paths, else all ext paths will not be initialized
+        $this->pageRenderer->addRequireJsConfiguration(array(
+            'paths' => array(
+                'async' => rtrim(
+                    PathUtility::getRelativePath(
+                        PATH_typo3,
+                        GeneralUtility::getFileAbsFileName('EXT:maps2/Resources/Public/JavaScript/async')
+                    ),
+                    '/'
+                )
+            )
+        ));
+        // make gmaps available as dependency for all RequireJS modules
+        $this->pageRenderer->addJsInlineCode(
+            'definegooglemaps',
+            sprintf('// convert Google Maps into an AMD module
+                define("gmaps", ["async!%s"],
+                function() {
+                    // return the gmaps namespace for brevity
+                    return window.google.maps;
+                });',
+                $this->extConf->getGoogleMapsLibrary()
+            ),
+            false
+        );
 
         return $this->getMapHtml($this->getConfiguration($parentArray));
     }
@@ -122,8 +147,10 @@ class ConfigurationMap
         $poiCollection = $this->poiCollectionRepository->findByUid($uid);
         if ($poiCollection instanceof PoiCollection) {
             // set map center
-            $config['latitude'] = ($poiCollection->getLatitude()) ? $poiCollection->getLatitude() : $this->extConf->getDefaultLatitude();
-            $config['longitude'] = ($poiCollection->getLongitude()) ? $poiCollection->getLongitude() : $this->extConf->getDefaultLongitude();
+            $config['latitude'] = $poiCollection->getLatitude();
+            $config['longitude'] = $poiCollection->getLongitude();
+            $config['latitudeOrig'] = $poiCollection->getLatitudeOrig();
+            $config['longitudeOrig'] = $poiCollection->getLongitudeOrig();
             switch ($poiCollection->getCollectionType()) {
                 case 'Route':
                 case 'Area':
@@ -149,12 +176,6 @@ class ConfigurationMap
             $config['address'] =  $PA['row']['address'];
             $config['collectionType'] = is_array($PA['row']['collection_type']) ? $PA['row']['collection_type'][0] : $PA['row']['collection_type'];
             $config['uid'] =  $uid;
-            $config['TYPO3_SITE_URL'] = GeneralUtility::getIndpEnv('TYPO3_SITE_URL');
-            if (GeneralUtility::compat_version('7.3')) {
-                $config['ajaxUrlForModifyMarker'] = BackendUtility::getAjaxUrl('maps2Ajax');
-            } else {
-                $config['ajaxUrlForModifyMarker'] = $config['TYPO3_SITE_URL'] . 'typo3/ajax.php?ajaxID=maps2Ajax';
-            }
 
             $hashArray['uid'] = $uid;
             $hashArray['collectionType'] = $PA['row']['collection_type'];
@@ -172,15 +193,10 @@ class ConfigurationMap
     protected function getMapHtml(array $config)
     {
         $extPath = ExtensionManagementUtility::extPath('maps2');
-        $this->view->setTemplatePathAndFilename($extPath . 'Resources/Private/Templates/Tca/ConfigurationMap.html');
+        $this->view->setTemplatePathAndFilename($extPath . 'Resources/Private/Templates/Tca/GoogleMaps.html');
         $this->view->assign('config', json_encode($config));
-        $this->view->assign('design', json_encode(ObjectAccess::getGettableProperties($this->extConf)));
-        $content = $this->view->render() . chr(10);
-        $content .= file_get_contents(
-            $extPath . 'Resources/Private/Templates/Tca/ConfigurationMapFor' .
-            ucfirst($config['collectionType']) . '.html'
-        );
+        $this->view->assign('extConf', json_encode(ObjectAccess::getGettableProperties($this->extConf)));
 
-        return $content;
+        return $this->view->render();
     }
 }

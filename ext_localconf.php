@@ -42,15 +42,10 @@ if (!defined('TYPO3_MODE')) {
 );
 
 if (TYPO3_MODE === 'BE') {
-    if (\TYPO3\CMS\Core\Utility\GeneralUtility::compat_version('7.3')) {
-        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::registerAjaxHandler(
-            'maps2Ajax',
-            'JWeiland\\Maps2\\Dispatch\\AjaxRequest->dispatch',
-            false
-        );
-    } else {
-        $GLOBALS['TYPO3_CONF_VARS']['BE']['AJAX']['maps2Ajax'] = 'JWeiland\\Maps2\\Dispatch\\AjaxRequest->dispatch';
-    }
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::registerAjaxHandler(
+        'maps2Ajax',
+        'JWeiland\\Maps2\\Dispatch\\AjaxRequest->dispatch'
+    );
 }
 
 // activate caching for info window content
