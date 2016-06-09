@@ -92,7 +92,11 @@ class PoiCollectionRepository extends Repository
             ORDER BY distance;';
 
         /** @var PreparedStatement $preparedStatement */
-        $preparedStatement = $this->objectManager->get(PreparedStatement::class, $sql, 'tx_maps2_domain_model_poicollection');
+        $preparedStatement = $this->objectManager->get(
+            'TYPO3\\CMS\\Core\\Database\\PreparedStatement',
+            $sql,
+            'tx_maps2_domain_model_poicollection'
+        );
 
         return $query->statement(
             $preparedStatement,
@@ -122,7 +126,11 @@ class PoiCollectionRepository extends Repository
             $this->getPageRepository()->enableFields('tx_maps2_domain_model_poicollection');
 
         /** @var PreparedStatement $preparedStatement */
-        $preparedStatement = $this->objectManager->get(PreparedStatement::class, $sql, $tableName);
+        $preparedStatement = $this->objectManager->get(
+            'TYPO3\\CMS\\Core\\Database\\PreparedStatement',
+            $sql,
+            $tableName
+        );
 
         return $query->statement(
             $preparedStatement,
