@@ -49,7 +49,7 @@ class EditPoiViewHelper extends AbstractWidgetViewHelper
      * @param array $override Override any configuration option
      * @return string
      */
-    public function render(\JWeiland\Maps2\Domain\Model\PoiCollection $poiCollection, $override = array())
+    public function render(\JWeiland\Maps2\Domain\Model\PoiCollection $poiCollection = null, $override = array())
     {
         return $this->initiateSubRequest();
     }

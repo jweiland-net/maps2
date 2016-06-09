@@ -36,8 +36,16 @@ class EditPoiController extends AbstractController
         $poiCollection = $this->widgetConfiguration['poiCollection'];
         if ($poiCollection instanceof PoiCollection) {
             $poiCollection->setInfoWindowContent($this->renderInfoWindow($poiCollection));
-            $this->view->assign('poiCollection', $poiCollection);
+        } else {
+            // this is more a fallback. It would be better that the foreign extension author generates a PoiCollection on its own
+            /** @var PoiCollection $poiCollection */
+            $poiCollection = $this->objectManager->get('JWeiland\\Maps2\\Domain\\Model\\PoiCollection');
+            $poiCollection->setTitle('Temporary Fallback');
+            $poiCollection->setLatitude($this->extConf->getDefaultLatitude());
+            $poiCollection->setLongitude($this->extConf->getDefaultLongitude());
+            $poiCollection->setCollectionType('Point');
         }
+        $this->view->assign('poiCollection', $poiCollection);
         $this->view->assign('override', $this->widgetConfiguration['override']);
     }
 }
