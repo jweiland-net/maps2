@@ -16,6 +16,7 @@ namespace JWeiland\Maps2\Utility;
 use JWeiland\Maps2\Configuration\ExtConf;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
  * Class GoogleMaps
@@ -69,7 +70,10 @@ class GeocodeUtility
      * find position by address
      *
      * @param string $address
+     *
      * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+     *
+     * @throws \Exception
      */
     public function findPositionByAddress($address)
     {
@@ -81,9 +85,8 @@ class GeocodeUtility
                 $response['results']
             );
         } else {
-            /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
-            $objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
-            return $objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\ObjectStorage');
+            DebuggerUtility::var_dump($response, 'Response of Google Maps GeoCode API');
+            throw new \Exception('Can\'t find a result for address: ' . $address . '. Activate Debugging for a more detailed output.', 1465475325);
         }
     }
 
