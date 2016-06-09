@@ -68,6 +68,13 @@ class PoiCollectionController extends AbstractController
             }
             $this->view->assign('poiCollections', $poiCollections);
         }
+        if ($poiCollection === null) {
+            $this->addFlashMessage(
+                'There are currently no PoiCollections defined. Either in URI nor in Plugin configuration',
+                'No POIs found',
+                FlashMessage::NOTICE
+            );
+        }
     }
 
     /**

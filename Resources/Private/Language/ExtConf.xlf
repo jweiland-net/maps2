@@ -7,13 +7,13 @@
 				<source>Use https as protocol: You can't call the http protocol when your page is running on https. So here you can decide to use the same protocol.</source>
 			</trans-unit>
 			<trans-unit id="googleMapsLibrary" xml:space="preserve">
-				<source>Link to Google Maps API: Leave empty to use default API. You only need to fill this field if you want to use an older or beta version.</source>
+				<source>Link to Google Maps API: This setting is for TYPO3 Backend only. Visit your TypoScript-Templates if you want to change the library for Frontend. You only need to fill this field if you want to use an older or beta version.</source>
 			</trans-unit>
 			<trans-unit id="googleMapsApiKey" xml:space="preserve">
-				<source>Google Maps ApiKey: Visit https://console.developers.google.com Create a new project for Google Maps JavaScript API and insert here the retrieved Browser ApiKey.</source>
+				<source>Google Maps JavaScript ApiKey: This setting is for TYPO3 Backend only. Visit your TypoScript-Templates if you want to change the library for Frontend. Visit https://console.developers.google.com Create a new project for Google Maps JavaScript API and insert the retrieved Browser ApiKey here.</source>
 			</trans-unit>
 			<trans-unit id="googleGeocodeApiKey" xml:space="preserve">
-				<source>Google Geocode ApiKey: Visit https://console.developers.google.com Create a new project for Google Maps Geocode API and insert here the retrieved Server ApiKey.</source>
+				<source>Google Maps Geocode ApiKey: Visit https://console.developers.google.com Create a new project for Google Maps Geocode API and insert here the retrieved Server ApiKey.</source>
 			</trans-unit>
 			<trans-unit id="defaultLatitude" xml:space="preserve">
 				<source>Default Latitude: If you leave this empty Google Maps points to somewhere over the ocean on startup. So it's better to enter some coordinates: http://universimmedia.pagesperso-orange.fr/geo/loc.htm</source>
