@@ -44,7 +44,7 @@ See maps2 in action.
 Point
 ^^^^^
 
-.. figure:: ../Images/Introduction/maps2-type-Point.png
+.. figure:: ../Images/Introduction/maps2-type-Point.jpg
    :width: 500px
    :alt: Type: Point
 
@@ -55,7 +55,7 @@ Point
 Radius
 ^^^^^^
 
-.. figure:: ../Images/Introduction/maps2-type-Radius.png
+.. figure:: ../Images/Introduction/maps2-type-Radius.jpg
    :width: 500px
    :alt: Type: Radius
 
@@ -66,7 +66,7 @@ Radius
 Area
 ^^^^
 
-.. figure:: ../Images/Introduction/maps2-type-Area.png
+.. figure:: ../Images/Introduction/maps2-type-Area.jpg
    :width: 500px
    :alt: Type: Area
 
@@ -77,7 +77,7 @@ Area
 Route
 ^^^^^
 
-.. figure:: ../Images/Introduction/maps2-type-Route.png
+.. figure:: ../Images/Introduction/maps2-type-Route.jpg
    :width: 500px
    :alt: Type: Route
 
@@ -88,7 +88,7 @@ Route
 Multiple
 ^^^^^^^^
 
-.. figure:: ../Images/Introduction/maps2-type-Multiple.png
+.. figure:: ../Images/Introduction/maps2-type-Multiple.jpg
    :width: 500px
    :alt: Type: Multiple
 
