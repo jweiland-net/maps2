@@ -19,6 +19,7 @@ Administrator manual
 	:titlesonly:
 
   Installation/Index
+  GoogleApiKeys/Index
   Update/Index
   Configuration/Index
   Templates/Index
