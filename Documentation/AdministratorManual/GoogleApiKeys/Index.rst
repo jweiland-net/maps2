@@ -22,7 +22,7 @@ Google Console
 
 #. Create a new project at the upper right of the console.
 
-.. figure:: /Images/GoogleApiKeys/google-create-project.png
+.. figure:: /Images/GoogleApiKeys/google-create-project.jpg
    :width: 500px
    :align: left
    :alt: DashBoard of Google Console
@@ -34,7 +34,7 @@ Google Console
 
 #. Click on ``Create``
 
-.. figure:: /Images/GoogleApiKeys/google-create-project-form.png
+.. figure:: /Images/GoogleApiKeys/google-create-project-form.jpg
    :width: 500px
    :align: left
    :alt: Create new project form
@@ -46,21 +46,21 @@ Get Google Maps JavaScript Api Key
 
 #. Choose ``Google Maps JavaScript API``
 
-.. figure:: /Images/GoogleApiKeys/google-link-javascript-api.png
+.. figure:: /Images/GoogleApiKeys/google-link-javascript-api.jpg
    :width: 500px
    :align: left
    :alt: Link to create API for Google Maps JavaScript API
 
 #. ``Activate`` the Google Maps JavaScript API
 
-.. figure:: /Images/GoogleApiKeys/google-activate-javascript-api.png
+.. figure:: /Images/GoogleApiKeys/google-activate-javascript-api.jpg
    :width: 500px
    :align: left
    :alt: Activate Google Maps JavaScript API
 
 #. Assign an authentication to your just created API
 
-.. figure:: /Images/GoogleApiKeys/google-login-javascript-api.png
+.. figure:: /Images/GoogleApiKeys/google-login-javascript-api.jpg
    :width: 500px
    :align: left
    :alt: Add Authentication
@@ -68,14 +68,14 @@ Get Google Maps JavaScript Api Key
 #. Start the wizard to add an authentication to your API. Give it a name like ``JavaScript``
    and set a domain name like ``*.your-domain.com/*``. Else everybody can use your Api Key.
 
-.. figure:: /Images/GoogleApiKeys/google-create-javascript-api.png
+.. figure:: /Images/GoogleApiKeys/google-create-javascript-api.jpg
    :width: 500px
    :align: left
    :alt: Start authentication wizard
 
 #. Finish the wizard
 
-.. figure:: /Images/GoogleApiKeys/google-javascript-api-finished.png
+.. figure:: /Images/GoogleApiKeys/google-javascript-api-finished.jpg
    :width: 500px
    :align: left
    :alt: Finish the authentication wizard
@@ -87,7 +87,7 @@ Nearly the same as above.
 
 #. Choose ``Google Maps Geocoding API``
 
-.. figure:: /Images/GoogleApiKeys/google-link-geocoding-api.png
+.. figure:: /Images/GoogleApiKeys/google-link-geocoding-api.jpg
    :width: 500px
    :align: left
    :alt: Link to create API for Google Maps Geocoding API
@@ -98,7 +98,7 @@ Nearly the same as above.
 
 #. Choose authentication wizard
 
-.. figure:: /Images/GoogleApiKeys/google-choose-login.png
+.. figure:: /Images/GoogleApiKeys/google-choose-login.jpg
    :width: 500px
    :align: left
    :alt: Choose authentication wizard
@@ -106,14 +106,14 @@ Nearly the same as above.
 #. Start the wizard to add an authentication to your API. Give it a name like ``GeoCoding``,
    choose ``webserver`` from selectbox and set an ip address. Else everybody can use your Api Key.
 
-.. figure:: /Images/GoogleApiKeys/google-login-geocoding-api.png
+.. figure:: /Images/GoogleApiKeys/google-login-geocoding-api.jpg
    :width: 500px
    :align: left
    :alt: Start authentication wizard
 
 #. Attach an ip address to your authentication. Else everybody can use your Api Key.
 
-.. figure:: /Images/GoogleApiKeys/google-login-ip-geocoding-api.png
+.. figure:: /Images/GoogleApiKeys/google-login-ip-geocoding-api.jpg
    :width: 500px
    :align: left
    :alt: Attach ip address
@@ -122,7 +122,7 @@ Nearly the same as above.
 
 #. Back in the overview you can see the registered Api Keys
 
-.. figure:: /Images/GoogleApiKeys/google-api-keys.png
+.. figure:: /Images/GoogleApiKeys/google-api-keys.jpg
    :width: 500px
    :align: left
    :alt: Show Google Api Keys
