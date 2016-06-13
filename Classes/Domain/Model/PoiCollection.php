@@ -139,7 +139,7 @@ class PoiCollection extends AbstractEntity
     /**
      * categories
      *
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\Category>
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\JWeiland\Maps2\Domain\Model\Category>
      */
     protected $categories = null;
 

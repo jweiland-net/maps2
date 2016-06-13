@@ -11,16 +11,12 @@
 Introduction
 ============
 
-* This extension was build for the www.pforzheim.de project started in March 2013
-* It was my first extension at www.jweiland.net
-* You can `contribute <https://github.com/jweiland-net/maps2/issues>`_ to this extension at Github
-
 Releases
 --------
 
-* Currently the source code is only available at `Github <https://github.com/jweiland-net/maps2>`_
+* Currently the source code is available at `Github <https://github.com/jweiland-net/maps2>`_
 * We have tagged all versions at Github and added a compoeser.json,
-so you can install different versions of maps2 with composer.
+  so you can install different versions of maps2 with composer.
 
 Bugs and Known Issues
 ---------------------
@@ -46,6 +42,7 @@ Point
 
 .. figure:: ../Images/Introduction/maps2-type-Point.jpg
    :width: 500px
+   :align: left
    :alt: Type: Point
 
          Introduction Package just after installation (caption of the image)
@@ -57,6 +54,7 @@ Radius
 
 .. figure:: ../Images/Introduction/maps2-type-Radius.jpg
    :width: 500px
+   :align: left
    :alt: Type: Radius
 
          Introduction Package just after installation (caption of the image)
@@ -68,6 +66,7 @@ Area
 
 .. figure:: ../Images/Introduction/maps2-type-Area.jpg
    :width: 500px
+   :align: left
    :alt: Type: Area
 
          Introduction Package just after installation (caption of the image)
@@ -79,6 +78,7 @@ Route
 
 .. figure:: ../Images/Introduction/maps2-type-Route.jpg
    :width: 500px
+   :align: left
    :alt: Type: Route
 
          Introduction Package just after installation (caption of the image)
@@ -90,9 +90,9 @@ Multiple
 
 .. figure:: ../Images/Introduction/maps2-type-Multiple.jpg
    :width: 500px
+   :align: left
    :alt: Type: Multiple
 
          Introduction Package just after installation (caption of the image)
 
          How the Frontend of the Introduction Package looks like just after installation (legend of the image)
-

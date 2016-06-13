@@ -294,6 +294,15 @@ Maps2.prototype.createMarker = function(poiCollection, environment, editable) {
 		if (!this.markers.hasOwnProperty(categoryUid)) {
 			this.markers[categoryUid] = [];
 		}
+		// assign first category icon to marker
+		if (i === 0 && poiCollection.categories[i].markerIcon != "") {
+			var icon = {
+				url: poiCollection.categories[i].markerIcon,
+				scaledSize: new google.maps.Size(25, 40),
+				anchor: new google.maps.Point(13, 40)
+			};
+			marker.setIcon(icon);
+		}
 		this.markers[categoryUid].push(marker);
 	}
 	this.bounds.extend(marker.position);

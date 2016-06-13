@@ -135,6 +135,15 @@
 				<source>Connect this record to a google maps record</source>
 				<target>Verbinden Sie diesen Datensatz mit einer Google Maps Karte</target>
 			</trans-unit>
+
+			<trans-unit id="tab.maps2" xml:space="preserve">
+				<source>Google Maps (maps2)</source>
+				<target>Google Maps (maps2)</target>
+			</trans-unit>
+			<trans-unit id="sys_category.marker_icon" xml:space="preserve">
+				<source>Marker icon for Google Maps (maps2)</source>
+				<target>Marker Icon für Google Maps (maps2)</target>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

@@ -14,11 +14,11 @@ User manual
 
    This chapter describes how to use the extension from a user point of view.
 
-   The sections "*Records*" lists all the fields of the various records and "*Plugin*" describes all availble plugins.
+   The section "*Maps2Record*" lists all the fields of the record and "*HowToStart*" describes all available plugins.
 
 .. toctree::
    :maxdepth: 2
    :titlesonly:
 
    HowToStart/Index
-   Records/Index
+   Maps2Record/Index

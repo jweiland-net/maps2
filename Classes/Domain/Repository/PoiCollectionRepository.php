@@ -114,27 +114,12 @@ class PoiCollectionRepository extends Repository
     {
         /** @var Query $query */
         $query = $this->createQuery();
-        $tableName = 'tx_maps2_domain_model_poicollection';
-
-        $sql = '
-            SELECT DISTINCT tx_maps2_domain_model_poicollection.*
-            FROM tx_maps2_domain_model_poicollection
-            LEFT JOIN sys_category_record_mm ON tx_maps2_domain_model_poicollection.uid=sys_category_record_mm.uid_foreign
-            WHERE sys_category_record_mm.uid_local IN (' . $categories . ')
-            AND sys_category_record_mm.tablenames = ?
-            AND tx_maps2_domain_model_poicollection.pid IN (' . implode(',', $query->getQuerySettings()->getStoragePageIds()) . ')' .
-            $this->getPageRepository()->enableFields('tx_maps2_domain_model_poicollection');
-
-        /** @var PreparedStatement $preparedStatement */
-        $preparedStatement = $this->objectManager->get(
-            'TYPO3\\CMS\\Core\\Database\\PreparedStatement',
-            $sql,
-            $tableName
-        );
-
-        return $query->statement(
-            $preparedStatement,
-            array($tableName)
+        $orConstraint = array();
+        foreach (GeneralUtility::trimExplode(',', $categories) as $category) {
+            $orConstraint[] = $query->contains('categories', $category);
+        }
+        return $query->matching(
+            $query->logicalOr($orConstraint)
         )->execute();
     }
 }

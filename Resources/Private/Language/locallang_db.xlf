@@ -103,6 +103,13 @@
 			<trans-unit id="tx_maps2_uid" xml:space="preserve">
 				<source>Connect this record to a google maps record</source>
 			</trans-unit>
+
+			<trans-unit id="tab.maps2" xml:space="preserve">
+				<source>Google Maps (maps2)</source>
+			</trans-unit>
+			<trans-unit id="sys_category.marker_icon" xml:space="preserve">
+				<source>Marker icon for Google Maps (maps2)</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

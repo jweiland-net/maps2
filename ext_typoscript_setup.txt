@@ -23,3 +23,14 @@ maps2AjaxResponse {
 		userFunc = tx_extbase_core_bootstrap->run
 	}
 }
+
+# ==============================================
+# Persistence object mapping configuration
+# ==============================================
+config.tx_extbase.persistence.classes {
+  JWeiland\Maps2\Domain\Model\Category {
+    mapping {
+      tableName = sys_category
+    }
+  }
+}

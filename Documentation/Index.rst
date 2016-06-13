@@ -27,12 +27,10 @@ The content of this document is related to TYPO3, a GNU/GPL CMS/Framework availa
 **Table of Contents**
 
 .. toctree::
-	:maxdepth: 2
+  :maxdepth: 2
 
-	Introduction/Index
-	UserManual/Index
-	AdministratorManual/Index
-	DeveloperManual/Index
-
-.. include:: ../Readme.rst
+  Introduction/Index
+  UserManual/Index
+  AdministratorManual/Index
+  DeveloperManual/Index
 
