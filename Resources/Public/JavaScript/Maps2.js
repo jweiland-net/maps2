@@ -202,6 +202,9 @@ Maps2.prototype.showSwitchableCategories = function(poiCollections, contentRecor
  * @param category
  */
 Maps2.prototype.getCheckbox = function(category) {
+	var $span = jQuery("<span />")
+		.addClass("map-category")
+		.text(category.title);
 	return jQuery("<div />")
 		.addClass("form-group").append(
 			jQuery("<div />")
@@ -213,11 +216,7 @@ Maps2.prototype.getCheckbox = function(category) {
 							checked: "checked",
 							value: category.uid
 						})
-						.after(
-							jQuery("<span />")
-								.addClass("map-category")
-								.text(category.title)
-						)
+						.after($span.prop("outerHTML"))
 				)
 			)
 		);
