@@ -213,7 +213,11 @@ Maps2.prototype.getCheckbox = function(category) {
 							checked: "checked",
 							value: category.uid
 						})
-						.after(category.title)
+						.after(
+							jQuery("<span />")
+								.addClass("map-category")
+								.text(category.title)
+						)
 				)
 			)
 		);
