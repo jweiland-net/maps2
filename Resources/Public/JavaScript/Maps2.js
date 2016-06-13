@@ -179,6 +179,9 @@ Maps2.prototype.showSwitchableCategories = function(poiCollections, contentRecor
 	for (var categoryUid in categories) {
 		if (categories.hasOwnProperty(categoryUid)) {
 			$form.append(this.getCheckbox(categories[categoryUid]));
+			$form.find("#checkCategory_" + categoryUid).after(jQuery("<span />")
+				.addClass("map-category")
+				.text(categories[categoryUid].title));
 		}
 	}
 	// create form
@@ -202,9 +205,6 @@ Maps2.prototype.showSwitchableCategories = function(poiCollections, contentRecor
  * @param category
  */
 Maps2.prototype.getCheckbox = function(category) {
-	var $span = jQuery("<span />")
-		.addClass("map-category")
-		.text(category.title);
 	return jQuery("<div />")
 		.addClass("form-group").append(
 			jQuery("<div />")
@@ -213,10 +213,11 @@ Maps2.prototype.getCheckbox = function(category) {
 					jQuery("<input />")
 						.attr({
 							type: "checkbox",
+							class: "checkCategory",
+							id: "checkCategory_" + category.uid,
 							checked: "checked",
 							value: category.uid
 						})
-						.after($span.prop("outerHTML"))
 				)
 			)
 		);
