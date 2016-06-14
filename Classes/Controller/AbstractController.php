@@ -16,6 +16,7 @@ namespace JWeiland\Maps2\Controller;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 
 /**
@@ -82,12 +83,14 @@ class AbstractController extends ActionController
      * initialize view
      * add some global vars to view
      *
+     * @param ViewInterface $view The view to be initialized
+     *
      * @return void
      */
-    public function initializeView()
+    public function initializeView(ViewInterface $view)
     {
-        $this->view->assign('data', $this->configurationManager->getContentObject()->data);
-        $this->view->assign('environment', json_encode(array(
+        $view->assign('data', $this->configurationManager->getContentObject()->data);
+        $view->assign('environment', json_encode(array(
             'settings' => $this->settings,
             'extConf' => ObjectAccess::getGettableProperties($this->extConf),
             'id' => $GLOBALS['TSFE']->id,
