@@ -356,10 +356,10 @@ Maps2.prototype.createArea = function(poiCollection) {
 
 	if (paths.length == 0) {
 		paths.push(this.mapPosition);
+	} else {
+		var area = new google.maps.Polygon(new PolygonOptions(paths, poiCollection));
+		area.setMap(this.map);
 	}
-
-	var area = new google.maps.Polygon(new PolygonOptions(paths, poiCollection));
-	area.setMap(this.map);
 };
 
 /**
@@ -378,10 +378,10 @@ Maps2.prototype.createRoute = function(poiCollection) {
 
 	if (paths.length == 0) {
 		paths.push(this.mapPosition);
+	} else {
+		var route = new google.maps.Polyline(new PolylineOptions(paths, poiCollection));
+		route.setMap(this.map);
 	}
-
-	var route = new google.maps.Polyline(new PolylineOptions(paths, poiCollection));
-	route.setMap(this.map);
 };
 
 /**
