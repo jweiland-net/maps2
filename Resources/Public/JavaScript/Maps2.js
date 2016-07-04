@@ -122,7 +122,7 @@ function Maps2(poiCollections, environment, editable) {
 		// normal case
 		this.createPointByCollectionType(poiCollections, environment, editable);
 		if (this.countObjectProperties(this.markers) > 1) {
-			this.showSwitchableCategories(poiCollections, environment.contentRecord);
+			this.showSwitchableCategories(poiCollections, environment);
 		}
 		if (poiCollections.length > 1) {
 			this.map.fitBounds(this.bounds);
@@ -148,14 +148,15 @@ Maps2.prototype.createMap = function(environment) {
  * Group Categories
  *
  * @param poiCollections
+ * @param environment
  */
-Maps2.prototype.groupCategories = function(poiCollections) {
+Maps2.prototype.groupCategories = function(poiCollections, environment) {
 	var groupedCategories = {};
 	var categoryUid = "0";
 	for (var x = 0; x < poiCollections.length; x++) {
 		for (var y = 0; y < poiCollections[x].categories.length; y++) {
 			categoryUid = String(poiCollections[x].categories[y].uid);
-			if (!groupedCategories.hasOwnProperty(categoryUid)) {
+			if (this.inList(environment.settings.categories, categoryUid) > -1 && !groupedCategories.hasOwnProperty(categoryUid)) {
 				groupedCategories[categoryUid] = poiCollections[x].categories[y];
 			}
 		}
@@ -167,13 +168,13 @@ Maps2.prototype.groupCategories = function(poiCollections) {
  * Show switchable categories
  *
  * @param poiCollections
- * @param contentRecord
+ * @param environment
  */
-Maps2.prototype.showSwitchableCategories = function(poiCollections, contentRecord) {
-	var categories = this.groupCategories(poiCollections);
+Maps2.prototype.showSwitchableCategories = function(poiCollections, environment) {
+	var categories = this.groupCategories(poiCollections, environment);
 	var $form = jQuery("<form>")
 		.addClass("txMaps2Form")
-		.attr("id", "txMaps2Form-" + contentRecord.uid);
+		.attr("id", "txMaps2Form-" + environment.contentRecord.uid);
 
 	// Add checkbox for category
 	for (var categoryUid in categories) {
@@ -295,19 +296,21 @@ Maps2.prototype.createMarker = function(poiCollection, environment, editable) {
 	marker.setDraggable(editable);
 	for (var i = 0; i < poiCollection.categories.length; i++) {
 		categoryUid = poiCollection.categories[i].uid;
-		if (!this.markers.hasOwnProperty(categoryUid)) {
-			this.markers[categoryUid] = [];
-		}
-		// assign first category icon to marker
-		if (i === 0 && poiCollection.categories[i].markerIcon != "") {
-			var icon = {
-				url: poiCollection.categories[i].markerIcon,
-				scaledSize: new google.maps.Size(25, 40),
-				anchor: new google.maps.Point(13, 40)
-			};
-			marker.setIcon(icon);
-		}
-		this.markers[categoryUid].push(marker);
+		//if (this.inList(environment.settings.categories, categoryUid) > -1) {
+			if (!this.markers.hasOwnProperty(categoryUid)) {
+				this.markers[categoryUid] = [];
+			}
+			// assign first category icon to marker
+			if (i === 0 && poiCollection.categories[i].markerIcon != "") {
+				var icon = {
+					url: poiCollection.categories[i].markerIcon,
+					scaledSize: new google.maps.Size(25, 40),
+					anchor: new google.maps.Point(13, 40)
+				};
+				marker.setIcon(icon);
+			}
+			this.markers[categoryUid].push(marker);
+		//}
 	}
 	this.bounds.extend(marker.position);
 
@@ -324,6 +327,20 @@ Maps2.prototype.createMarker = function(poiCollection, environment, editable) {
 			infoWindow.open(map, marker);
 		});
 	}
+};
+
+/**
+ * Check for item in list
+ * Check if an item exists in a comma-separated list of items.
+ *
+ * @param list
+ * @param item
+ */
+Maps2.prototype.inList = function(list, item) {
+	var catSearch = ',' + list + ',';
+	item = ',' + item + ',';
+	var tmp = catSearch.search(item);
+	return tmp;
 };
 
 /**
