@@ -61,6 +61,9 @@
 			<trans-unit id="overviewMapControl" xml:space="preserve">
 				<source>Show Overview Control</source>
 			</trans-unit>
+			<trans-unit id="activateScrollWheel" xml:space="preserve">
+				<source>Activate zoom with mouse scroll wheel</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

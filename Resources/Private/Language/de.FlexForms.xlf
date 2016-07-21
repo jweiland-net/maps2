@@ -80,6 +80,10 @@
 				<source>Show Overview Control</source>
 				<target>Zeige Steuerelement für Übersicht</target>
 			</trans-unit>
+			<trans-unit id="activateScrollWheel" xml:space="preserve">
+				<source>Activate zoom with mouse scroll wheel</source>
+				<target>Zoom mit Hilfe des Mausrades aktivieren</target>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

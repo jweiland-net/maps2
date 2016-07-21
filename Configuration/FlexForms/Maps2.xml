@@ -187,6 +187,15 @@
 							</config>
 						</TCEforms>
 					</settings.overviewMapControl>
+					<settings.activateScrollWheel>
+						<TCEforms>
+							<label>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:activateScrollWheel</label>
+							<config>
+								<type>check</type>
+								<default>1</default>
+							</config>
+						</TCEforms>
+					</settings.activateScrollWheel>
 				</el>
 			</ROOT>
 		</sMapOptions>

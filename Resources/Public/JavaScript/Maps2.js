@@ -12,6 +12,7 @@ function MapOptions(settings) {
 	this.scaleControl = settings.scaleControl;
 	this.streetViewControl = settings.streetViewControl;
 	this.overviewMapControl = settings.overviewMapControl;
+	this.scrollwheel = settings.activateScrollWheel;
 	this.setMapTypeId(settings.mapTypeId);
 }
 
