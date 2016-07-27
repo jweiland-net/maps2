@@ -31,6 +31,7 @@ plugin.tx_maps2 {
     }
   }
   settings {
+    infoWindowContentTemplatePath = EXT:maps2/Resources/Private/Templates/InfoWindowContent.html
   }
 }
 

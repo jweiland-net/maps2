@@ -30,23 +30,24 @@ Properties
 
 .. container:: ts-properties
 
-  ===================== ===================== ============ ========
-  Property              Title                 Sheet        Type
-  ===================== ===================== ============ ========
-  poiCollection_        Show poiCollection    General      integer
-  categories_           Categories            General      string
-  mapWidth_             Map width             General      string
-  mapHeight_            Map height            General      string
-  zoom_                 Zoom                  Map Options  integer
-  mapTypeId_            Map type              Map Options  string
-  panControl_           Pan control           Map Options  boolean
-  zoomControl_          Zoom control          Map Options  boolean
-  mapTypeControl_       Map type control      Map Options  boolean
-  scaleControl_         Scale control         Map Options  boolean
-  streetViewControl_    Street view control   Map Options  boolean
-  overviewMapControl_   Overview map control  Map Options  boolean
-  activateScrollWheel_  Overview map control  Map Options  boolean
-  ===================== ===================== ============ ========
+  =============================== ===================== ============ ========
+  Property                        Title                 Sheet        Type
+  =============================== ===================== ============ ========
+  poiCollection_                  Show poiCollection    General      integer
+  categories_                     Categories            General      string
+  mapWidth_                       Map width             General      string
+  mapHeight_                      Map height            General      string
+  zoom_                           Zoom                  Map Options  integer
+  mapTypeId_                      Map type              Map Options  string
+  panControl_                     Pan control           Map Options  boolean
+  zoomControl_                    Zoom control          Map Options  boolean
+  mapTypeControl_                 Map type control      Map Options  boolean
+  scaleControl_                   Scale control         Map Options  boolean
+  streetViewControl_              Street view control   Map Options  boolean
+  overviewMapControl_             Overview map control  Map Options  boolean
+  activateScrollWheel_            Overview map control  Map Options  boolean
+  infoWindowContentTemplatePath_  Overview map control  Map Options  boolean
+  =============================== ===================== ============ ========
 
 .. _tsPoiCollection:
 
@@ -231,3 +232,17 @@ activateScrollWheel
          boolean
    Description
          If deactivated you can not zoom via your mouse scroll wheel.
+
+infoWindowContentTemplatePath
+"""""""""""""""""""""""""""""
+
+.. container:: table-row
+
+   Property
+         infoWindowContentTemplatePath
+   Data type
+         string
+   Description
+         The info-window of a marker has its own html template, which you can set to your own destination. This
+         setting it not part of the plugin configuration and can only be set within the settings-part in TS
+         setup. File prefixes like EXT: are allowed.

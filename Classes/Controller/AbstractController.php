@@ -111,7 +111,7 @@ class AbstractController extends ActionController
         $view->assign('poiCollection', $poiCollection);
         $view->setTemplatePathAndFilename(
             GeneralUtility::getFileAbsFileName(
-                'EXT:maps2/Resources/Private/Templates/InfoWindowContent.html'
+                $this->settings['infoWindowContentTemplatePath']
             )
         );
         return $view->render();
