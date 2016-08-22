@@ -39,6 +39,6 @@ class AbstractCacheViewHelper extends AbstractViewHelper
     public function initialize()
     {
         $this->cache = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Cache\\CacheManager')
-            ->getCache('maps2_cachedHtml');
+            ->getCache('maps2_cachedhtml');
     }
 }
