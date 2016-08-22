@@ -25,3 +25,14 @@ remove that setting of each plugin in tt_content record field pi_flexform on you
 .. important::
 
    It does not help to open and save the record in backend!
+
+Update to Version 2.4.1
+^^^^^^^^^^^^^^^^^^^^^^^
+
+With version 2.4.1 we have solved a camelcase problem of the cache table.
+It was renamed from cf_maps2_cachedHtml to cf_maps2_cachedhtml. Please delete
+the old tables cf_maps2_cachedHtml and cf_maps2_cachedHtml_tags, deactivate maps2
+in extension manager and activate it again.
+
+On LIVE-Systems you can rename these tables directly on database with PhpMyAdmin
+or Adminer. No need to de- and activate the extension.
