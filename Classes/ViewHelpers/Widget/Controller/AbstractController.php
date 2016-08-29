@@ -91,9 +91,28 @@ abstract class AbstractController extends AbstractWidgetController
         $view->assign('poiCollection', $poiCollection);
         $view->setTemplatePathAndFilename(
             GeneralUtility::getFileAbsFileName(
-                $this->settings['infoWindowContentTemplatePath']
+                $this->getInfoWindowContentTemplatePath()
             )
         );
         return $view->render();
+    }
+    
+    /**
+     * Get template path for info window content
+     *
+     * @return string
+     */
+    protected function getInfoWindowContentTemplatePath()
+    {
+        // get default template path
+        $path = $this->extConf->getInfoWindowContentTemplatePath();
+        if (
+            isset($this->settings['infoWindowContentTemplatePath']) &&
+            !empty($this->settings['infoWindowContentTemplatePath'])
+        ) {
+            $path = $this->settings['infoWindowContentTemplatePath'];
+        }
+        
+        return $path;
     }
 }

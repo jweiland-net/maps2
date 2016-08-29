@@ -12,6 +12,8 @@ defaultLatitude =
 defaultLongitude =
 # cat=basic; type=int+; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:defaultRadius
 defaultRadius = 250
+# cat=basic; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:infoWindowContentTemplatePath
+infoWindowContentTemplatePath = EXT:maps2/Resources/Private/Templates/InfoWindowContent.html
 # cat=design/color/a; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:strokeColor
 strokeColor = #FF0000
 # cat=design/color/b; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:strokeOpacity

@@ -30,7 +30,6 @@ use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
  */
 class AbstractController extends ActionController
 {
-
     /**
      * @var \JWeiland\Maps2\Configuration\ExtConf
      */
@@ -78,6 +77,16 @@ class AbstractController extends ActionController
     {
         $this->geocodeUtility = $geocodeUtility;
     }
+    
+    /**
+     * Initializes the controller before invoking an action method.
+     *
+     * @return void
+     */
+    public function initializeAction()
+    {
+        $this->settings['infoWindowContentTemplatePath'] = trim($this->settings['infoWindowContentTemplatePath']);
+    }
 
     /**
      * initialize view
@@ -111,9 +120,28 @@ class AbstractController extends ActionController
         $view->assign('poiCollection', $poiCollection);
         $view->setTemplatePathAndFilename(
             GeneralUtility::getFileAbsFileName(
-                $this->settings['infoWindowContentTemplatePath']
+                $this->getInfoWindowContentTemplatePath()
             )
         );
         return $view->render();
+    }
+    
+    /**
+     * Get template path for info window content
+     *
+     * @return string
+     */
+    protected function getInfoWindowContentTemplatePath()
+    {
+        // get default template path
+        $path = $this->extConf->getInfoWindowContentTemplatePath();
+        if (
+            isset($this->settings['infoWindowContentTemplatePath']) &&
+            !empty($this->settings['infoWindowContentTemplatePath'])
+        ) {
+            $path = $this->settings['infoWindowContentTemplatePath'];
+        }
+        
+        return $path;
     }
 }

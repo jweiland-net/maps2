@@ -24,14 +24,14 @@ namespace JWeiland\Maps2\Configuration;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+use TYPO3\CMS\Core\SingletonInterface;
 
 /**
  * @package maps2
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class ExtConf implements \TYPO3\CMS\Core\SingletonInterface
+class ExtConf implements SingletonInterface
 {
-
     /**
      * use https
      *
@@ -80,6 +80,13 @@ class ExtConf implements \TYPO3\CMS\Core\SingletonInterface
      * @var int
      */
     protected $defaultRadius = 0;
+    
+    /**
+     * infoWindowContentTemplatePath
+     *
+     * @var string
+     */
+    protected $infoWindowContentTemplatePath = '';
 
     /**
      * stroke color
@@ -157,7 +164,7 @@ class ExtConf implements \TYPO3\CMS\Core\SingletonInterface
      */
     public function setUseHttps($useHttps)
     {
-        $this->useHttps = (bool) $useHttps;
+        $this->useHttps = (bool)$useHttps;
     }
 
     /**
@@ -271,7 +278,7 @@ class ExtConf implements \TYPO3\CMS\Core\SingletonInterface
      */
     public function setDefaultLatitude($defaultLatitude)
     {
-        $this->defaultLatitude = (float) $defaultLatitude;
+        $this->defaultLatitude = (float)$defaultLatitude;
     }
 
     /**
@@ -296,7 +303,7 @@ class ExtConf implements \TYPO3\CMS\Core\SingletonInterface
      */
     public function setDefaultLongitude($defaultLongitude)
     {
-        $this->defaultLongitude = (float) $defaultLongitude;
+        $this->defaultLongitude = (float)$defaultLongitude;
     }
 
     /**
@@ -321,9 +328,33 @@ class ExtConf implements \TYPO3\CMS\Core\SingletonInterface
      */
     public function setDefaultRadius($defaultRadius)
     {
-        $this->defaultRadius = (int) $defaultRadius;
+        $this->defaultRadius = (int)$defaultRadius;
     }
-
+    
+    /**
+     * Returns the infoWindowContentTemplatePath
+     *
+     * @return string $infoWindowContentTemplatePath
+     */
+    public function getInfoWindowContentTemplatePath()
+    {
+        if (empty($this->infoWindowContentTemplatePath)) {
+            $this->infoWindowContentTemplatePath = 'EXT:maps2/Resources/Private/Templates/InfoWindowContent.html';
+        }
+        return $this->infoWindowContentTemplatePath;
+    }
+    
+    /**
+     * Sets the infoWindowContentTemplatePath
+     *
+     * @param string $infoWindowContentTemplatePath
+     * @return void
+     */
+    public function setInfoWindowContentTemplatePath($infoWindowContentTemplatePath)
+    {
+        $this->infoWindowContentTemplatePath = (string)$infoWindowContentTemplatePath;
+    }
+    
     /**
      * getter for strokeColor
      *
@@ -346,7 +377,7 @@ class ExtConf implements \TYPO3\CMS\Core\SingletonInterface
      */
     public function setStrokeColor($strokeColor)
     {
-        $this->strokeColor = (string) $strokeColor;
+        $this->strokeColor = (string)$strokeColor;
     }
 
     /**
@@ -371,7 +402,7 @@ class ExtConf implements \TYPO3\CMS\Core\SingletonInterface
      */
     public function setStrokeOpacity($strokeOpacity)
     {
-        $this->strokeOpacity = (float) $strokeOpacity;
+        $this->strokeOpacity = (float)$strokeOpacity;
     }
 
     /**
@@ -396,7 +427,7 @@ class ExtConf implements \TYPO3\CMS\Core\SingletonInterface
      */
     public function setStrokeWeight($strokeWeight)
     {
-        $this->strokeWeight = (int) $strokeWeight;
+        $this->strokeWeight = (int)$strokeWeight;
     }
 
     /**
@@ -421,7 +452,7 @@ class ExtConf implements \TYPO3\CMS\Core\SingletonInterface
      */
     public function setFillColor($fillColor)
     {
-        $this->fillColor = (string) $fillColor;
+        $this->fillColor = (string)$fillColor;
     }
 
     /**
@@ -446,6 +477,6 @@ class ExtConf implements \TYPO3\CMS\Core\SingletonInterface
      */
     public function setFillOpacity($fillOpacity)
     {
-        $this->fillOpacity = (float) $fillOpacity;
+        $this->fillOpacity = (float)$fillOpacity;
     }
 }

@@ -107,7 +107,7 @@ function Maps2(poiCollections, environment, editable) {
 
 	this.createMap(environment);
 
-	if (typeof poiCollections == "undefined") {
+	if (typeof poiCollections == "undefined" || jQuery.isEmptyObject(poiCollections)) {
 		// Plugin: CityMap
 		var lat = this.$element.data("latitude");
 		var lng = this.$element.data("longitude");

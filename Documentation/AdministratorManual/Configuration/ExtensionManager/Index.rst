@@ -24,22 +24,23 @@ Properties
 
 .. container:: ts-properties
 
-  ============================ ======== ====================================================================
-  Property                     Tab      Default
-  ============================ ======== ====================================================================
-  googleMapsLibrary_            basic    ``https://maps.googleapis.com/maps/api/js?key=|&callback=initMap``
-  useHttps_                     basic    0
-  googleMapsJavaScriptApiKey_   basic
-  googleMapsGeocodeApiKey_      basic
-  defaultLongitude_             basic    0.000000
-  defaultLatitude_              basic    0.000000
-  defaultRadius_                basic    250
-  strokeColor_                  design   #FF0000
-  strokeOpacity_                design   0.8
-  strokeWeight_                 design   2
-  fillColor_                    design   #FF0000
-  fillOpacity_                  design   0.3
-  ============================ ======== ====================================================================
+  ============================== ======== ====================================================================
+  Property                       Tab      Default
+  ============================== ======== ====================================================================
+  googleMapsLibrary_              basic    ``https://maps.googleapis.com/maps/api/js?key=|&callback=initMap``
+  useHttps_                       basic    0
+  googleMapsJavaScriptApiKey_     basic
+  googleMapsGeocodeApiKey_        basic
+  defaultLongitude_               basic    0.000000
+  defaultLatitude_                basic    0.000000
+  defaultRadius_                  basic    250
+  infoWindowContentTemplatePath_
+  strokeColor_                    design   #FF0000
+  strokeOpacity_                  design   0.8
+  strokeWeight_                   design   2
+  fillColor_                      design   #FF0000
+  fillOpacity_                    design   0.3
+  ============================== ======== ====================================================================
 
 Property details
 ^^^^^^^^^^^^^^^^
@@ -109,6 +110,14 @@ defaultRadius
 """""""""""""
 
 Default radius
+
+.. _extensionManager-infoWindowContentTemplatePath::
+
+infoWindowContentTemplatePath
+"""""""""""""""""""""""""""""
+
+You can define your own default template for these little info window content when clicking on a marker.
+Further you can override this template path again with TypoScript at settings.infoWindowContentTemplatePath = [path]
 
 .. _extensionManager-strokeColor::
 

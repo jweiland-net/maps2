@@ -246,3 +246,6 @@ infoWindowContentTemplatePath
          The info-window of a marker has its own html template, which you can set to your own destination. This
          setting it not part of the plugin configuration and can only be set within the settings-part in TS
          setup. File prefixes like EXT: are allowed.
+         For extension developers: If you have build your own extension and you want to use the maps2 widgets, you
+         have to provide this setting with the exact same name to your extension, too. If not, we will use the
+         default template path of extension configuration in extension manager.
