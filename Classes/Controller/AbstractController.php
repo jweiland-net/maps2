@@ -99,12 +99,12 @@ class AbstractController extends ActionController
     public function initializeView(ViewInterface $view)
     {
         $view->assign('data', $this->configurationManager->getContentObject()->data);
-        $view->assign('environment', json_encode(array(
+        $view->assign('environment', array(
             'settings' => $this->settings,
             'extConf' => ObjectAccess::getGettableProperties($this->extConf),
             'id' => $GLOBALS['TSFE']->id,
             'contentRecord' => $this->configurationManager->getContentObject()->data
-        )));
+        ));
     }
 
     /**

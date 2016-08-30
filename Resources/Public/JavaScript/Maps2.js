@@ -91,23 +91,24 @@ MapOptions.prototype.setMapTypeId = function(mapTypeId) {
 /**
  * Initialize a Google Map
  *
- * @param poiCollections
+ * @param $element
  * @param environment contains settings, current PageId, extConf and current tt_content record
- * @param editable
  * @constructor
  */
-function Maps2(poiCollections, environment, editable) {
+function Maps2($element, environment) {
 	this.markers = {};
 	this.bounds = new google.maps.LatLngBounds();
 	this.infoWindow = new google.maps.InfoWindow();
-	this.$element = jQuery("#maps2-" + environment.contentRecord.uid).css({
+	this.$element = $element.css({
 		height: environment.settings.mapHeight,
 		width: environment.settings.mapWidth
 	});
+	this.poiCollections = this.$element.data("pois");
+	this.editable = this.$element.hasClass("editMarker");
 
 	this.createMap(environment);
 
-	if (typeof poiCollections == "undefined" || jQuery.isEmptyObject(poiCollections)) {
+	if (typeof this.poiCollections == "undefined" || jQuery.isEmptyObject(this.poiCollections)) {
 		// Plugin: CityMap
 		var lat = this.$element.data("latitude");
 		var lng = this.$element.data("longitude");
@@ -121,14 +122,14 @@ function Maps2(poiCollections, environment, editable) {
 		}
 	} else {
 		// normal case
-		this.createPointByCollectionType(poiCollections, environment, editable);
+		this.createPointByCollectionType(environment);
 		if (this.countObjectProperties(this.markers) > 1) {
-			this.showSwitchableCategories(poiCollections, environment);
+			this.showSwitchableCategories(environment);
 		}
-		if (poiCollections.length > 1) {
+		if (this.poiCollections.length > 1) {
 			this.map.fitBounds(this.bounds);
 		} else {
-			this.map.setCenter(new google.maps.LatLng(poiCollections[0].latitude, poiCollections[0].longitude));
+			this.map.setCenter(new google.maps.LatLng(this.poiCollections[0].latitude, this.poiCollections[0].longitude));
 		}
 	}
 }
@@ -148,17 +149,16 @@ Maps2.prototype.createMap = function(environment) {
 /**
  * Group Categories
  *
- * @param poiCollections
  * @param environment
  */
-Maps2.prototype.groupCategories = function(poiCollections, environment) {
+Maps2.prototype.groupCategories = function(environment) {
 	var groupedCategories = {};
 	var categoryUid = "0";
-	for (var x = 0; x < poiCollections.length; x++) {
-		for (var y = 0; y < poiCollections[x].categories.length; y++) {
-			categoryUid = String(poiCollections[x].categories[y].uid);
+	for (var x = 0; x < this.poiCollections.length; x++) {
+		for (var y = 0; y < this.poiCollections[x].categories.length; y++) {
+			categoryUid = String(this.poiCollections[x].categories[y].uid);
 			if (this.inList(environment.settings.categories, categoryUid) > -1 && !groupedCategories.hasOwnProperty(categoryUid)) {
-				groupedCategories[categoryUid] = poiCollections[x].categories[y];
+				groupedCategories[categoryUid] = this.poiCollections[x].categories[y];
 			}
 		}
 	}
@@ -168,11 +168,10 @@ Maps2.prototype.groupCategories = function(poiCollections, environment) {
 /**
  * Show switchable categories
  *
- * @param poiCollections
  * @param environment
  */
-Maps2.prototype.showSwitchableCategories = function(poiCollections, environment) {
-	var categories = this.groupCategories(poiCollections, environment);
+Maps2.prototype.showSwitchableCategories = function(environment) {
+	var categories = this.groupCategories(environment);
 	var $form = jQuery("<form>")
 		.addClass("txMaps2Form")
 		.attr("id", "txMaps2Form-" + environment.contentRecord.uid);
@@ -243,39 +242,37 @@ Maps2.prototype.countObjectProperties = function(obj) {
 /**
  * Create Point by CollectionType
  *
- * @param poiCollections
  * @param environment
- * @param editable
  */
-Maps2.prototype.createPointByCollectionType = function(poiCollections, environment, editable) {
-	for (var i = 0; i < poiCollections.length; i++) {
-		if (poiCollections[i].strokeColor == "") {
-			poiCollections[i].strokeColor = environment.extConf.strokeColor;
+Maps2.prototype.createPointByCollectionType = function(environment) {
+	for (var i = 0; i < this.poiCollections.length; i++) {
+		if (this.poiCollections[i].strokeColor == "") {
+			this.poiCollections[i].strokeColor = environment.extConf.strokeColor;
 		}
-		if (poiCollections[i].strokeOpacity == "") {
-			poiCollections[i].strokeOpacity = environment.extConf.strokeOpacity;
+		if (this.poiCollections[i].strokeOpacity == "") {
+			this.poiCollections[i].strokeOpacity = environment.extConf.strokeOpacity;
 		}
-		if (poiCollections[i].strokeWeight == "") {
-			poiCollections[i].strokeWeight = environment.extConf.strokeWeight;
+		if (this.poiCollections[i].strokeWeight == "") {
+			this.poiCollections[i].strokeWeight = environment.extConf.strokeWeight;
 		}
-		if (poiCollections[i].fillColor == "") {
-			poiCollections[i].fillColor = environment.extConf.fillColor;
+		if (this.poiCollections[i].fillColor == "") {
+			this.poiCollections[i].fillColor = environment.extConf.fillColor;
 		}
-		if (poiCollections[i].fillOpacity == "") {
-			poiCollections[i].fillOpacity = environment.extConf.fillOpacity;
+		if (this.poiCollections[i].fillOpacity == "") {
+			this.poiCollections[i].fillOpacity = environment.extConf.fillOpacity;
 		}
-		switch (poiCollections[i].collectionType) {
+		switch (this.poiCollections[i].collectionType) {
 			case "Point":
-				this.createMarker(poiCollections[i], environment, editable);
+				this.createMarker(this.poiCollections[i], environment);
 				break;
 			case "Area":
-				this.createArea(poiCollections[i], environment.extConf);
+				this.createArea(this.poiCollections[i], environment.extConf);
 				break;
 			case "Route":
-				this.createRoute(poiCollections[i], environment.extConf);
+				this.createRoute(this.poiCollections[i], environment.extConf);
 				break;
 			case "Radius":
-				this.createRadius(poiCollections[i], environment.extConf);
+				this.createRadius(this.poiCollections[i], environment.extConf);
 				break;
 		}
 	}
@@ -286,15 +283,14 @@ Maps2.prototype.createPointByCollectionType = function(poiCollections, environme
  *
  * @param poiCollection
  * @param environment
- * @param editable
  */
-Maps2.prototype.createMarker = function(poiCollection, environment, editable) {
+Maps2.prototype.createMarker = function(poiCollection, environment) {
 	var categoryUid = "0";
 	var marker = new google.maps.Marker({
 		position: new google.maps.LatLng(poiCollection.latitude, poiCollection.longitude),
 		map: this.map
 	});
-	marker.setDraggable(editable);
+	marker.setDraggable(this.editable);
 	for (var i = 0; i < poiCollection.categories.length; i++) {
 		categoryUid = poiCollection.categories[i].uid;
 		//if (this.inList(environment.settings.categories, categoryUid) > -1) {
@@ -319,8 +315,8 @@ Maps2.prototype.createMarker = function(poiCollection, environment, editable) {
 	var infoWindow = this.infoWindow;
 	var map = this.map;
 
-	if (editable) {
-		this.addEditListeners(marker, poiCollection, environment);
+	if (this.editable) {
+		this.addEditListeners(this.$element, marker, poiCollection, environment);
 	} else {
 		google.maps.event.addListener(marker, "click", function() {
 			infoWindow.close();
@@ -340,8 +336,7 @@ Maps2.prototype.createMarker = function(poiCollection, environment, editable) {
 Maps2.prototype.inList = function(list, item) {
 	var catSearch = ',' + list + ',';
 	item = ',' + item + ',';
-	var tmp = catSearch.search(item);
-	return tmp;
+	return catSearch.search(item);
 };
 
 /**
@@ -422,24 +417,25 @@ Maps2.prototype.createRadius = function(poiCollection) {
  * Add Edit Listeners
  * This will only work for Markers (Point)
  *
+ * @param $mapContainer
  * @param marker
  * @param poiCollection
  * @param environment
  */
-Maps2.prototype.addEditListeners = function(marker, poiCollection, environment) {
+Maps2.prototype.addEditListeners = function($mapContainer, marker, poiCollection, environment) {
 	// update fields and marker while dragging
 	google.maps.event.addListener(marker, 'dragend', function() {
 		var lat = marker.getPosition().lat().toFixed(6);
 		var lng = marker.getPosition().lng().toFixed(6);
-		jQuery("input#latitude-" + environment.contentRecord.uid).val(lat);
-		jQuery("input#longitude-" + environment.contentRecord.uid).val(lng);
+		$mapContainer.prevAll("input.latitude-" + environment.contentRecord.uid).val(lat);
+		$mapContainer.prevAll("input.longitude-" + environment.contentRecord.uid).val(lng);
 	});
 
 	// update fields and marker when clicking on the map
 	google.maps.event.addListener(this.map, 'click', function(event) {
 		marker.setPosition(event.latLng);
-		jQuery("input#latitude-" + environment.contentRecord.uid).val(event.latLng.lat().toFixed(6));
-		jQuery("input#longitude-" + environment.contentRecord.uid).val(event.latLng.lng().toFixed(6));
+		$mapContainer.prevAll("input.latitude-" + environment.contentRecord.uid).val(event.latLng.lat().toFixed(6));
+		$mapContainer.prevAll("input.longitude-" + environment.contentRecord.uid).val(event.latLng.lng().toFixed(6));
 	});
 };
 
@@ -453,6 +449,6 @@ function initMap() {
 		$element = jQuery(this);
 		// override environment with settings of override
 		environment = jQuery.extend(true, $element.data("environment"), $element.data("override"));
-		new Maps2($element.data("pois"), environment, $element.hasClass("editMarker"));
+		new Maps2($element, environment);
 	});
 }

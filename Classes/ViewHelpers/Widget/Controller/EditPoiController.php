@@ -14,6 +14,13 @@ namespace JWeiland\Maps2\ViewHelpers\Widget\Controller;
  * The TYPO3 project - inspiring people to share!
  */
 use JWeiland\Maps2\Domain\Model\PoiCollection;
+use TYPO3\CMS\Core\Utility\ArrayUtility;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
+use TYPO3\CMS\Fluid\Core\Parser\ParsedTemplateInterface;
+use TYPO3\CMS\Fluid\Core\Parser\TemplateParser;
+use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
+use TYPO3\CMS\Fluid\Core\Widget\WidgetRequest;
 
 /**
  * Class EditPoiController
@@ -26,6 +33,41 @@ use JWeiland\Maps2\Domain\Model\PoiCollection;
  */
 class EditPoiController extends AbstractController
 {
+    /**
+     * @var RenderingContext
+     */
+    protected $renderingContext;
+    
+    /**
+     * initializes all actions
+     *
+     * @return void
+     */
+    public function initializeAction()
+    {
+        /** @var WidgetRequest $widgetRequest */
+        $widgetRequest = $this->request;
+        $this->renderingContext = $widgetRequest->getWidgetContext()->getViewHelperChildNodeRenderingContext();
+    }
+    
+    /**
+     * initialize view
+     * add some global vars to view
+     *
+     * @return void
+     */
+    public function initializeView()
+    {
+        ArrayUtility::mergeRecursiveWithOverrule($this->defaultSettings, $this->settings);
+        $this->assign('data', $this->configurationManager->getContentObject()->data);
+        $this->assign('environment', array(
+            'settings' => $this->defaultSettings,
+            'extConf' => ObjectAccess::getGettableProperties($this->extConf),
+            'id' => $GLOBALS['TSFE']->id,
+            'contentRecord' => $this->configurationManager->getContentObject()->data
+        ));
+    }
+    
     /**
      * index action
      *
@@ -45,7 +87,41 @@ class EditPoiController extends AbstractController
             $poiCollection->setLongitude($this->extConf->getDefaultLongitude());
             $poiCollection->setCollectionType('Point');
         }
-        $this->view->assign('poiCollection', $poiCollection);
-        $this->view->assign('override', $this->widgetConfiguration['override']);
+        $this->assign('poiCollection', $poiCollection);
+        $this->assign('override', $this->widgetConfiguration['override']);
+        
+        return $this->getParsingState()->render($this->renderingContext);
+    }
+    
+    /**
+     * get parsing state
+     *
+     * @return ParsedTemplateInterface
+     */
+    protected function getParsingState()
+    {
+        $templateSource = file_get_contents(sprintf(
+            '%sResources/Private/Templates/ViewHelpers/Widget/EditPoi/Index.html',
+            ExtensionManagementUtility::extPath('maps2')
+        ));
+        /** @var TemplateParser $templateParser */
+        $templateParser = $this->objectManager->get(TemplateParser::class);
+        return $templateParser->parse($templateSource);
+    }
+    
+    /**
+     * Assign a value to the variable container.
+     *
+     * @param string $key The key of a view variable to set
+     * @param mixed $value The value of the view variable
+     *
+     * @return void
+     */
+    public function assign($key, $value) {
+        $templateVariableContainer = $this->renderingContext->getTemplateVariableContainer();
+        if ($templateVariableContainer->exists($key)) {
+            $templateVariableContainer->remove($key);
+        }
+        $templateVariableContainer->add($key, $value);
     }
 }

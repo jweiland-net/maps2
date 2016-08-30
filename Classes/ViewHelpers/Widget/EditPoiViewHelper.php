@@ -14,7 +14,11 @@ namespace JWeiland\Maps2\ViewHelpers\Widget;
  * The TYPO3 project - inspiring people to share!
  */
 use JWeiland\Maps2\Domain\Model\PoiCollection;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Fluid\Core\Parser\TemplateParser;
 use TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetViewHelper;
+use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
  * Class EditPoiViewHelper
@@ -27,7 +31,6 @@ use TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetViewHelper;
  */
 class EditPoiViewHelper extends AbstractWidgetViewHelper
 {
-
     /**
      * @var \JWeiland\Maps2\ViewHelpers\Widget\Controller\EditPoiController
      */

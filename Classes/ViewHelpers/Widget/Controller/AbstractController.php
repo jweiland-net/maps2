@@ -47,7 +47,7 @@ abstract class AbstractController extends AbstractWidgetController
     /**
      * @var \JWeiland\Maps2\Configuration\ExtConf
      */
-    protected $extConf = null;
+    protected $extConf;
 
     /**
      * inject extConf
@@ -59,7 +59,7 @@ abstract class AbstractController extends AbstractWidgetController
     {
         $this->extConf = $extConf;
     }
-
+    
     /**
      * initialize view
      * add some global vars to view
@@ -70,14 +70,14 @@ abstract class AbstractController extends AbstractWidgetController
     {
         ArrayUtility::mergeRecursiveWithOverrule($this->defaultSettings, $this->settings);
         $this->view->assign('data', $this->configurationManager->getContentObject()->data);
-        $this->view->assign('environment', json_encode(array(
+        $this->view->assign('environment', array(
             'settings' => $this->defaultSettings,
             'extConf' => ObjectAccess::getGettableProperties($this->extConf),
             'id' => $GLOBALS['TSFE']->id,
             'contentRecord' => $this->configurationManager->getContentObject()->data
-        )));
+        ));
     }
-
+    
     /**
      * Render InfoWindow for marker
      *

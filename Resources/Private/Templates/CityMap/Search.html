@@ -10,5 +10,5 @@
 		</div>
 		<input type="submit" value="{f:translate(key: 'searchStreet')}" class="btn btn-default" />
 	</form>
-	<div id="maps2-{data.uid}" class="maps2" data-environment="{environment}" data-longitude="{longitude}" data-latitude="{latitude}"></div>
+	<div id="maps2-{data.uid}" class="maps2" data-environment="{environment->maps2:convertToJson()}" data-longitude="{longitude}" data-latitude="{latitude}"></div>
 </f:section>
