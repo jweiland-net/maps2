@@ -89,6 +89,7 @@ class EditPoiController extends AbstractController
         }
         $this->assign('poiCollection', $poiCollection);
         $this->assign('override', $this->widgetConfiguration['override']);
+        $this->assign('property', $this->widgetConfiguration['property']);
         
         return $this->getParsingState()->render($this->renderingContext);
     }

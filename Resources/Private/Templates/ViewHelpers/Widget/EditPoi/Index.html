@@ -1,6 +1,6 @@
 {namespace maps2=JWeiland\Maps2\ViewHelpers}
 
-<f:form.hidden class="latitude-{data.uid}" property="txMaps2Uid.latitude" />
-<f:form.hidden class="longitude-{data.uid}" property="txMaps2Uid.longitude" />
+<f:form.hidden class="latitude-{data.uid}" property="{property}.latitude" />
+<f:form.hidden class="longitude-{data.uid}" property="{property}.longitude" />
 
 <div class="maps2 maps2-{data.uid} editMarker" data-override="{override->maps2:convertToJson()}" data-environment="{environment->maps2:convertToJson()}" data-pois="{poiCollection->maps2:convertToJson()}"></div>
