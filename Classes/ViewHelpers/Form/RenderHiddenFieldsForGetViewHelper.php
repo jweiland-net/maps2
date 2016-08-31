@@ -27,7 +27,16 @@ use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
  */
 class RenderHiddenFieldsForGetViewHelper extends AbstractViewHelper
 {
-
+    /**
+     * @var boolean
+     */
+    protected $escapeChildren = false;
+    
+    /**
+     * @var boolean
+     */
+    protected $escapeOutput = false;
+    
     /**
      * @var \TYPO3\CMS\Extbase\Service\ExtensionService
      */

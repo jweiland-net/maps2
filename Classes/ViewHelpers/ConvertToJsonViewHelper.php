@@ -34,6 +34,16 @@ use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 class ConvertToJsonViewHelper extends AbstractViewHelper
 {
     /**
+     * @var boolean
+     */
+    protected $escapeChildren = false;
+    
+    /**
+     * @var boolean
+     */
+    protected $escapeOutput = false;
+    
+    /**
      * implements a ViewHelper to convert an array into JSON format
      *
      * @return array

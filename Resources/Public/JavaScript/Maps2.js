@@ -448,7 +448,9 @@ function initMap() {
 	jQuery(".maps2").each(function() {
 		$element = jQuery(this);
 		// override environment with settings of override
-		environment = jQuery.extend(true, $element.data("environment"), $element.data("override"));
+		var environment = $element.data("environment");
+		var override = $element.data("override");
+		environment = jQuery.extend(true, environment, override);
 		new Maps2($element, environment);
 	});
 }
