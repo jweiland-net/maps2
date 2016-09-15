@@ -106,7 +106,7 @@ class EditPoiController extends AbstractController
             ExtensionManagementUtility::extPath('maps2')
         ));
         /** @var TemplateParser $templateParser */
-        $templateParser = $this->objectManager->get(TemplateParser::class);
+        $templateParser = $this->objectManager->get('TYPO3\\CMS\\Fluid\\Core\\Parser\\TemplateParser');
         return $templateParser->parse($templateSource);
     }
     
