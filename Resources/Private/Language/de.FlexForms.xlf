@@ -84,6 +84,10 @@
 				<source>Activate zoom with mouse scroll wheel</source>
 				<target>Zoom mit Hilfe des Mausrades aktivieren</target>
 			</trans-unit>
+			<trans-unit id="styles" xml:space="preserve">
+				<source>Map Style. Have a look at https://snazzymaps.com to copy some cool styles for you map</source>
+				<target>Karten Stil: Schau mal bei https://snazzymaps.com vorbei und kopier den Quellcode eines Designs hier rein</target>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

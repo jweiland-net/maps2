@@ -64,6 +64,9 @@
 			<trans-unit id="activateScrollWheel" xml:space="preserve">
 				<source>Activate zoom with mouse scroll wheel</source>
 			</trans-unit>
+			<trans-unit id="styles" xml:space="preserve">
+				<source>Map Style. Have a look at https://snazzymaps.com to copy some cool styles for you map</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

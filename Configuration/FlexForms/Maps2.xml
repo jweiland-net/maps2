@@ -196,6 +196,17 @@
 							</config>
 						</TCEforms>
 					</settings.activateScrollWheel>
+					<settings.styles>
+						<TCEforms>
+							<label>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:styles</label>
+							<config>
+								<type>text</type>
+								<rows>10</rows>
+								<cols>50</cols>
+								<eval>trim</eval>
+							</config>
+						</TCEforms>
+					</settings.styles>
 				</el>
 			</ROOT>
 		</sMapOptions>

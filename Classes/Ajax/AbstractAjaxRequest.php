@@ -14,7 +14,11 @@ namespace JWeiland\Maps2\Ajax;
  * The TYPO3 project - inspiring people to share!
  */
 use JWeiland\Maps2\Domain\Model\PoiCollection;
+use TYPO3\CMS\Extbase\Configuration\BackendConfigurationManager;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
 use TYPO3\CMS\Extbase\Reflection\PropertyReflection;
+use TYPO3\CMS\Extbase\Security\Cryptography\HashService;
 
 /**
  * Class AbstractAjaxRequest
@@ -29,32 +33,32 @@ abstract class AbstractAjaxRequest implements AjaxInterface
 {
 
     /**
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
     /**
-     * @var \TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface
+     * @var PersistenceManagerInterface
      */
     protected $persistenceManager;
 
     /**
-     * @var \TYPO3\CMS\Extbase\Security\Cryptography\HashService
+     * @var HashService
      */
     protected $hashService;
 
     /**
-     * @var \TYPO3\CMS\Extbase\Configuration\BackendConfigurationManager
+     * @var BackendConfigurationManager
      */
     protected $backendConfigurationManager;
 
     /**
      * inject objectManager
      *
-     * @param \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager
+     * @param ObjectManager $objectManager
      * @return void
      */
-    public function injectObjectManager(\TYPO3\CMS\Extbase\Object\ObjectManager $objectManager)
+    public function injectObjectManager(ObjectManager $objectManager)
     {
         $this->objectManager = $objectManager;
     }
@@ -62,22 +66,20 @@ abstract class AbstractAjaxRequest implements AjaxInterface
     /**
      * inject persistenceManager
      *
-     * @param \TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface $persistenceManager
+     * @param PersistenceManagerInterface $persistenceManager
      * @return void
      */
-    public function injectPersistenceManager(
-        \TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface $persistenceManager
-    ) {
+    public function injectPersistenceManager(PersistenceManagerInterface $persistenceManager) {
         $this->persistenceManager = $persistenceManager;
     }
 
     /**
      * inject hashService
      *
-     * @param \TYPO3\CMS\Extbase\Security\Cryptography\HashService $hashService
+     * @param HashService $hashService
      * @return void
      */
-    public function injectHashService(\TYPO3\CMS\Extbase\Security\Cryptography\HashService $hashService)
+    public function injectHashService(HashService $hashService)
     {
         $this->hashService = $hashService;
     }
@@ -85,12 +87,10 @@ abstract class AbstractAjaxRequest implements AjaxInterface
     /**
      * inject backendConfigurationManager
      *
-     * @param \TYPO3\CMS\Extbase\Configuration\BackendConfigurationManager $backendConfigurationManager
+     * @param BackendConfigurationManager $backendConfigurationManager
      * @return void
      */
-    public function injectBackendConfigurationManager(
-        \TYPO3\CMS\Extbase\Configuration\BackendConfigurationManager $backendConfigurationManager
-    ) {
+    public function injectBackendConfigurationManager(BackendConfigurationManager $backendConfigurationManager) {
         $this->backendConfigurationManager = $backendConfigurationManager;
     }
 
