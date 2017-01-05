@@ -16,6 +16,7 @@ namespace JWeiland\Maps2;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Configuration\FlexForm\FlexFormTools;
+use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 
 /**
  * Update class for the extension manager.
@@ -135,7 +136,11 @@ class ext_update
                 $messageItem[2],
                 $messageItem[1],
                 $messageItem[0]);
-            $output .= $flashMessage->render();
+            if (GeneralUtility::compat_version('8.0')) {
+                $output .= $flashMessage->getMessageAsMarkup();
+            } else {
+                $output .= $flashMessage->render();
+            }
         }
         return $output;
     }
