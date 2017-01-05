@@ -1,6 +1,8 @@
 page.includeJSFooter {
   jQueryForMaps2 = //ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js
   jQueryForMaps2.external = 1
+  jQueryForMaps2.disableCompression = 1
+  jQueryForMaps2.excludeFromConcatenation = 1
   jQueryForMaps2.if.isTrue = {$plugin.tx_maps2.view.includeJQuery}
   maps2 = EXT:maps2/Resources/Public/JavaScript/Maps2.js
   googleMapsForMaps2 = //maps.googleapis.com/maps/api/js?key={$plugin.tx_maps2.view.googleMapsJavaScriptApiKey}&callback=initMap
