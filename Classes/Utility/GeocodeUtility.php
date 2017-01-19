@@ -105,7 +105,7 @@ class GeocodeUtility
             $defaultFlashMessageQueue = $flashMessageService->getMessageQueueByIdentifier();
             $defaultFlashMessageQueue->enqueue($flashMessage);
             
-            if ($GLOBALS['TYPO§_CONF_VARS']['BE']['debug']) {
+            if ($GLOBALS['TYPO3_CONF_VARS']['BE']['debug']) {
                 DebugUtility::debug($response, 'Response of Google Maps GeoCode API');
             }
     
