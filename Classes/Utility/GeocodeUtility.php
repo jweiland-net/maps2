@@ -14,9 +14,13 @@ namespace JWeiland\Maps2\Utility;
  * The TYPO3 project - inspiring people to share!
  */
 use JWeiland\Maps2\Configuration\ExtConf;
+use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Messaging\FlashMessageQueue;
+use TYPO3\CMS\Core\Messaging\FlashMessageService;
+use TYPO3\CMS\Core\Utility\DebugUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * Class GoogleMaps
@@ -71,7 +75,7 @@ class GeocodeUtility
      *
      * @param string $address
      *
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage|null
      *
      * @throws \Exception
      */
@@ -85,8 +89,27 @@ class GeocodeUtility
                 $response['results']
             );
         } else {
-            DebuggerUtility::var_dump($response, 'Response of Google Maps GeoCode API');
-            throw new \Exception('Can\'t find a result for address: ' . $address . '. Activate Debugging for a more detailed output.', 1465475325);
+            $message = LocalizationUtility::translate('error.noAddressFound', 'maps2', array(
+                $address
+            ));
+            /** @var $flashMessage \TYPO3\CMS\Core\Messaging\FlashMessage */
+            $flashMessage = GeneralUtility::makeInstance(
+                FlashMessage::class,
+                $message,
+                '',
+                FlashMessage::WARNING
+            );
+            /** @var $flashMessageService \TYPO3\CMS\Core\Messaging\FlashMessageService */
+            $flashMessageService = GeneralUtility::makeInstance(FlashMessageService::class);
+            /** @var $defaultFlashMessageQueue FlashMessageQueue */
+            $defaultFlashMessageQueue = $flashMessageService->getMessageQueueByIdentifier();
+            $defaultFlashMessageQueue->enqueue($flashMessage);
+            
+            if ($GLOBALS['TYPO§_CONF_VARS']['BE']['debug']) {
+                DebugUtility::debug($response, 'Response of Google Maps GeoCode API');
+            }
+    
+            return null;
         }
     }
 

@@ -34,6 +34,10 @@
 				<source>Search for street</source>
 			</trans-unit>
 
+			<trans-unit id="error.noAddressFound" xml:space="preserve" approved="yes">
+				<source>Google can't find a result for address: "%s". Please check your address data and try again.</source>
+			</trans-unit>
+
 		</body>
 	</file>
 </xliff>

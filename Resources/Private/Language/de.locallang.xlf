@@ -43,6 +43,11 @@
 				<target>Suche Straße</target>
 			</trans-unit>
 
+			<trans-unit id="error.noAddressFound" xml:space="preserve" approved="yes">
+				<source>Google can't find a result for address: "%s". Please check your address data and try again.</source>
+				<target>Google konnte zu Ihrer Adresse "%s" keine Ergebnisse finden. Bitte überprüfen Sie nochmals Ihre Adressdaten und versuchen Sie es erneut</target>
+			</trans-unit>
+
 		</body>
 	</file>
 </xliff>
