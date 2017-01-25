@@ -75,9 +75,7 @@ class GeocodeUtility
      *
      * @param string $address
      *
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage|null
-     *
-     * @throws \Exception
+     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage|array ObjectStorage if status = OK. Returns array if something went false
      */
     public function findPositionByAddress($address)
     {
@@ -109,7 +107,7 @@ class GeocodeUtility
                 DebugUtility::debug($response, 'Response of Google Maps GeoCode API');
             }
     
-            return null;
+            return $response;
         }
     }
 
