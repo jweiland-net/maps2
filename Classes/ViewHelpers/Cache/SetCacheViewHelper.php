@@ -39,6 +39,6 @@ class SetCacheViewHelper extends AbstractCacheViewHelper
      */
     public function render($cacheIdentifier, $data, array $tags = array(), $lifetime = null)
     {
-        $this->cache->set($cacheIdentifier, $data, $tags, $lifetime);
+        $this->cache->set($cacheIdentifier, $data, $tags, ($lifetime === null ? null : (int)$lifetime));
     }
 }
