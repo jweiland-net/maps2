@@ -13,7 +13,10 @@ namespace JWeiland\Maps2\Controller;
  *
  * The TYPO3 project - inspiring people to share!
  */
+use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
+use JWeiland\Maps2\Utility\DataMapper;
+use JWeiland\Maps2\Utility\GeocodeUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
@@ -31,27 +34,27 @@ use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 class AbstractController extends ActionController
 {
     /**
-     * @var \JWeiland\Maps2\Configuration\ExtConf
+     * @var ExtConf
      */
     protected $extConf;
 
     /**
-     * @var \JWeiland\Maps2\Utility\DataMapper
+     * @var DataMapper
      */
     protected $dataMapper;
 
     /**
-     * @var \JWeiland\Maps2\Utility\GeocodeUtility
+     * @var GeocodeUtility
      */
     protected $geocodeUtility;
 
     /**
      * inject extConf
      *
-     * @param \JWeiland\Maps2\Configuration\ExtConf $extConf
+     * @param ExtConf $extConf
      * @return void
      */
-    public function injectExtConf(\JWeiland\Maps2\Configuration\ExtConf $extConf)
+    public function injectExtConf(ExtConf $extConf)
     {
         $this->extConf = $extConf;
     }
@@ -59,10 +62,10 @@ class AbstractController extends ActionController
     /**
      * inject dataMapper
      *
-     * @param \JWeiland\Maps2\Utility\DataMapper $dataMapper
+     * @param DataMapper $dataMapper
      * @return void
      */
-    public function injectDataMapper(\JWeiland\Maps2\Utility\DataMapper $dataMapper)
+    public function injectDataMapper(DataMapper $dataMapper)
     {
         $this->dataMapper = $dataMapper;
     }
@@ -70,10 +73,10 @@ class AbstractController extends ActionController
     /**
      * inject geocodeUtility
      *
-     * @param \JWeiland\Maps2\Utility\GeocodeUtility $geocodeUtility
+     * @param GeocodeUtility $geocodeUtility
      * @return void
      */
-    public function injectGeocodeUtility(\JWeiland\Maps2\Utility\GeocodeUtility $geocodeUtility)
+    public function injectGeocodeUtility(GeocodeUtility $geocodeUtility)
     {
         $this->geocodeUtility = $geocodeUtility;
     }

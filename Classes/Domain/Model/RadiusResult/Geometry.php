@@ -13,6 +13,8 @@ namespace JWeiland\Maps2\Domain\Model\RadiusResult;
  *
  * The TYPO3 project - inspiring people to share!
  */
+use JWeiland\Maps2\Domain\Model\Location;
+use JWeiland\Maps2\Domain\Model\Position;
 
 /**
  * Class Geometry
@@ -25,18 +27,17 @@ namespace JWeiland\Maps2\Domain\Model\RadiusResult;
  */
 class Geometry
 {
-
     /**
      * bounds
      *
-     * @var \JWeiland\Maps2\Domain\Model\Position
+     * @var Position
      */
     protected $bounds;
 
     /**
      * location
      *
-     * @var \JWeiland\Maps2\Domain\Model\Location
+     * @var Location
      */
     protected $location;
 
@@ -50,16 +51,16 @@ class Geometry
     /**
      * viewport
      *
-     * @var \JWeiland\Maps2\Domain\Model\Position
+     * @var Position
      */
     protected $viewport;
 
     /**
      * Setter for bounds
      *
-     * @param \JWeiland\Maps2\Domain\Model\Position $bounds
+     * @param Position $bounds
      */
-    public function setBounds(\JWeiland\Maps2\Domain\Model\Position $bounds)
+    public function setBounds(Position $bounds)
     {
         $this->bounds = $bounds;
     }
@@ -67,7 +68,7 @@ class Geometry
     /**
      * Getter for bounds
      *
-     * @return \JWeiland\Maps2\Domain\Model\Position
+     * @return Position
      */
     public function getBounds()
     {
@@ -77,9 +78,9 @@ class Geometry
     /**
      * Setter for location
      *
-     * @param \JWeiland\Maps2\Domain\Model\Location $location
+     * @param Location $location
      */
-    public function setLocation(\JWeiland\Maps2\Domain\Model\Location $location)
+    public function setLocation(Location $location)
     {
         $this->location = $location;
     }
@@ -87,7 +88,7 @@ class Geometry
     /**
      * Getter for location
      *
-     * @return \JWeiland\Maps2\Domain\Model\Location
+     * @return Location
      */
     public function getLocation()
     {
@@ -117,9 +118,9 @@ class Geometry
     /**
      * Setter for viewport
      *
-     * @param \JWeiland\Maps2\Domain\Model\Position $viewport
+     * @param Position $viewport
      */
-    public function setViewport(\JWeiland\Maps2\Domain\Model\Position $viewport)
+    public function setViewport(Position $viewport)
     {
         $this->viewport = $viewport;
     }
@@ -127,7 +128,7 @@ class Geometry
     /**
      * Getter for viewport
      *
-     * @return \JWeiland\Maps2\Domain\Model\Position
+     * @return Position
      */
     public function getViewport()
     {

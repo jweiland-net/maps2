@@ -41,20 +41,20 @@ class GeocodeUtility
     /**
      * @var ExtConf
      */
-    protected $extConf = null;
+    protected $extConf;
 
     /**
-     * @var \JWeiland\Maps2\Utility\DataMapper
+     * @var DataMapper
      */
     protected $dataMapper;
 
     /**
      * inject extConf
      *
-     * @param \JWeiland\Maps2\Configuration\ExtConf $extConf
+     * @param ExtConf $extConf
      * @return void
      */
-    public function injectExtConf(\JWeiland\Maps2\Configuration\ExtConf $extConf)
+    public function injectExtConf(ExtConf $extConf)
     {
         $this->extConf = $extConf;
     }
@@ -65,7 +65,7 @@ class GeocodeUtility
      * @param \JWeiland\Maps2\Utility\DataMapper $dataMapper
      * @return void
      */
-    public function injectDataMapper(\JWeiland\Maps2\Utility\DataMapper $dataMapper)
+    public function injectDataMapper(DataMapper $dataMapper)
     {
         $this->dataMapper = $dataMapper;
     }

@@ -14,11 +14,7 @@ namespace JWeiland\Maps2\ViewHelpers\Widget;
  * The TYPO3 project - inspiring people to share!
  */
 use JWeiland\Maps2\Domain\Model\PoiCollection;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Fluid\Core\Parser\TemplateParser;
 use TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetViewHelper;
-use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
  * Class EditPoiViewHelper
@@ -32,17 +28,17 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
 class EditPoiViewHelper extends AbstractWidgetViewHelper
 {
     /**
-     * @var \JWeiland\Maps2\ViewHelpers\Widget\Controller\EditPoiController
+     * @var Controller\EditPoiController
      */
     protected $controller;
 
     /**
      * inject controller
      *
-     * @param \JWeiland\Maps2\ViewHelpers\Widget\Controller\EditPoiController $controller
+     * @param Controller\EditPoiController $controller
      * @return void
      */
-    public function injectController(\JWeiland\Maps2\ViewHelpers\Widget\Controller\EditPoiController $controller)
+    public function injectController(Controller\EditPoiController $controller)
     {
         $this->controller = $controller;
     }
@@ -54,7 +50,7 @@ class EditPoiViewHelper extends AbstractWidgetViewHelper
      *
      * @return string
      */
-    public function render(\JWeiland\Maps2\Domain\Model\PoiCollection $poiCollection = null, $property = 'txMaps2Uid', $override = array())
+    public function render(PoiCollection $poiCollection = null, $property = 'txMaps2Uid', $override = array())
     {
         return $this->initiateSubRequest();
     }

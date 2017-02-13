@@ -14,6 +14,7 @@ namespace JWeiland\Maps2\Ajax;
  * The TYPO3 project - inspiring people to share!
  */
 use JWeiland\Maps2\Domain\Model\PoiCollection;
+use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
 
 /**
  * Class ModifyMarker
@@ -26,21 +27,18 @@ use JWeiland\Maps2\Domain\Model\PoiCollection;
  */
 class ModifyMarker extends AbstractAjaxRequest
 {
-
     /**
-     * @var \JWeiland\Maps2\Domain\Repository\PoiCollectionRepository
+     * @var PoiCollectionRepository
      */
     protected $poiCollectionRepository;
 
     /**
      * inject poiCollectionRepository
      *
-     * @param \JWeiland\Maps2\Domain\Repository\PoiCollectionRepository $poiCollectionRepository
+     * @param PoiCollectionRepository $poiCollectionRepository
      * @return void
      */
-    public function injectPoiCollectionRepository(
-        \JWeiland\Maps2\Domain\Repository\PoiCollectionRepository $poiCollectionRepository
-    ) {
+    public function injectPoiCollectionRepository(PoiCollectionRepository $poiCollectionRepository) {
         $this->poiCollectionRepository = $poiCollectionRepository;
     }
 

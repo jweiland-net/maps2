@@ -36,16 +36,16 @@ class Position
     /**
      * southwest
      *
-     * @var \JWeiland\Maps2\Domain\Model\Location
+     * @var Location
      */
     protected $southwest;
 
     /**
      * Setter for northeast
      *
-     * @param \JWeiland\Maps2\Domain\Model\Location $northeast
+     * @param Location $northeast
      */
-    public function setNortheast(\JWeiland\Maps2\Domain\Model\Location $northeast)
+    public function setNortheast(Location $northeast)
     {
         $this->northeast = $northeast;
     }
@@ -53,7 +53,7 @@ class Position
     /**
      * Getter for northeast
      *
-     * @return \JWeiland\Maps2\Domain\Model\Location
+     * @return Location
      */
     public function getNortheast()
     {
@@ -63,9 +63,9 @@ class Position
     /**
      * Setter for southwest
      *
-     * @param \JWeiland\Maps2\Domain\Model\Location $southwest
+     * @param Location $southwest
      */
-    public function setSouthwest(\JWeiland\Maps2\Domain\Model\Location $southwest)
+    public function setSouthwest(Location $southwest)
     {
         $this->southwest = $southwest;
     }
@@ -73,7 +73,7 @@ class Position
     /**
      * Getter for southwest
      *
-     * @return \\JWeiland\Maps2\Domain\Model\Location
+     * @return Location
      */
     public function getSouthwest()
     {

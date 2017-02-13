@@ -14,7 +14,6 @@ namespace JWeiland\Maps2\ViewHelpers\Widget;
  * The TYPO3 project - inspiring people to share!
  */
 use JWeiland\Maps2\Domain\Model\PoiCollection;
-use JWeiland\Maps2\ViewHelpers\Widget\Controller\PoiCollectionController;
 use TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetViewHelper;
 
 /**
@@ -29,18 +28,18 @@ use TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetViewHelper;
 class PoiCollectionViewHelper extends AbstractWidgetViewHelper
 {
     /**
-     * @var PoiCollectionController
+     * @var Controller\PoiCollectionController
      */
     protected $controller;
 
     /**
      * inject controller
      *
-     * @param PoiCollectionController $controller
+     * @param Controller\PoiCollectionController $controller
      * @return void
      */
-    public function injectController(PoiCollectionController $controller
-    ) {
+    public function injectController(Controller\PoiCollectionController $controller)
+    {
         $this->controller = $controller;
     }
 

@@ -14,7 +14,9 @@ namespace JWeiland\Maps2\ViewHelpers\Form;
  * The TYPO3 project - inspiring people to share!
  */
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Service\ExtensionService;
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3\CMS\Frontend\Page\CacheHashCalculator;
 
 /**
  * Class RenderHiddenFieldsForGetViewHelper
@@ -38,22 +40,22 @@ class RenderHiddenFieldsForGetViewHelper extends AbstractViewHelper
     protected $escapeOutput = false;
     
     /**
-     * @var \TYPO3\CMS\Extbase\Service\ExtensionService
+     * @var ExtensionService
      */
     protected $extensionService;
 
     /**
-     * @var \TYPO3\CMS\Frontend\Page\CacheHashCalculator
+     * @var CacheHashCalculator
      */
     protected $cacheHashCalculator;
 
     /**
      * inject extensionService
      *
-     * @param \TYPO3\CMS\Extbase\Service\ExtensionService $extensionService
+     * @param ExtensionService $extensionService
      * @return void
      */
-    public function injectExtensionService(\TYPO3\CMS\Extbase\Service\ExtensionService $extensionService)
+    public function injectExtensionService(ExtensionService $extensionService)
     {
         $this->extensionService = $extensionService;
     }
@@ -61,10 +63,10 @@ class RenderHiddenFieldsForGetViewHelper extends AbstractViewHelper
     /**
      * inject cacheHashCalculator
      *
-     * @param \TYPO3\CMS\Frontend\Page\CacheHashCalculator $cacheHashCalculator
+     * @param CacheHashCalculator $cacheHashCalculator
      * @return void
      */
-    public function injectCacheHashCalculator(\TYPO3\CMS\Frontend\Page\CacheHashCalculator $cacheHashCalculator)
+    public function injectCacheHashCalculator(CacheHashCalculator $cacheHashCalculator)
     {
         $this->cacheHashCalculator = $cacheHashCalculator;
     }

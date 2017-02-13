@@ -13,9 +13,11 @@ namespace JWeiland\Maps2\ViewHelpers\Widget\Controller;
  *
  * The TYPO3 project - inspiring people to share!
  */
+use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 use TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetController;
 
@@ -45,17 +47,17 @@ abstract class AbstractController extends AbstractWidgetController
     );
 
     /**
-     * @var \JWeiland\Maps2\Configuration\ExtConf
+     * @var ExtConf
      */
     protected $extConf;
 
     /**
      * inject extConf
      *
-     * @param \JWeiland\Maps2\Configuration\ExtConf $extConf
+     * @param ExtConf $extConf
      * @return void
      */
-    public function injectExtConf(\JWeiland\Maps2\Configuration\ExtConf $extConf)
+    public function injectExtConf(ExtConf $extConf)
     {
         $this->extConf = $extConf;
     }
@@ -64,13 +66,15 @@ abstract class AbstractController extends AbstractWidgetController
      * initialize view
      * add some global vars to view
      *
+     * @param ViewInterface $view
+     *
      * @return void
      */
-    public function initializeView()
+    public function initializeView(ViewInterface $view)
     {
         ArrayUtility::mergeRecursiveWithOverrule($this->defaultSettings, $this->settings);
-        $this->view->assign('data', $this->configurationManager->getContentObject()->data);
-        $this->view->assign('environment', array(
+        $view->assign('data', $this->configurationManager->getContentObject()->data);
+        $view->assign('environment', array(
             'settings' => $this->defaultSettings,
             'extConf' => ObjectAccess::getGettableProperties($this->extConf),
             'id' => $GLOBALS['TSFE']->id,

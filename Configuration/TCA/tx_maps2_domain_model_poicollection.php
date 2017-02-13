@@ -172,7 +172,7 @@ return array(
             'config' => array(
                 'type' => 'input',
                 'size' => 12,
-                'eval' => 'JWeiland\\Maps2\\Tca\\Type\\Float',
+                'eval' => 'JWeiland\\Maps2\\Tca\\Type\\FloatType',
             ),
         ),
         'longitude' => array(
@@ -181,7 +181,7 @@ return array(
             'config' => array(
                 'type' => 'input',
                 'size' => 12,
-                'eval' => 'JWeiland\\Maps2\\Tca\\Type\\Float',
+                'eval' => 'JWeiland\\Maps2\\Tca\\Type\\FloatType',
             ),
         ),
         'latitude_orig' => array(

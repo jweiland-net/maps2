@@ -29,7 +29,7 @@ class PoiCollectionController extends AbstractController
     /**
      * index action
      *
-     * @return string
+     * @return void
      */
     public function indexAction()
     {

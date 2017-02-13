@@ -13,6 +13,8 @@ namespace JWeiland\Maps2\Domain\Model;
  *
  * The TYPO3 project - inspiring people to share!
  */
+use JWeiland\Maps2\Domain\Model\RadiusResult\Geometry;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
  * Class RadiusResult
@@ -64,9 +66,9 @@ class RadiusResult
     /**
      * Setter for addressComponents
      *
-     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage $addressComponents
+     * @param ObjectStorage $addressComponents
      */
-    public function setAddressComponents(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $addressComponents)
+    public function setAddressComponents(ObjectStorage $addressComponents)
     {
         $this->addressComponents = $addressComponents;
     }
@@ -74,7 +76,7 @@ class RadiusResult
     /**
      * Getter for addressComponents
      *
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+     * @return ObjectStorage
      */
     public function getAddressComponents()
     {
@@ -104,9 +106,9 @@ class RadiusResult
     /**
      * Setter for geometry
      *
-     * @param \JWeiland\Maps2\Domain\Model\RadiusResult\Geometry $geometry
+     * @param Geometry $geometry
      */
-    public function setGeometry(\JWeiland\Maps2\Domain\Model\RadiusResult\Geometry $geometry)
+    public function setGeometry(Geometry $geometry)
     {
         $this->geometry = $geometry;
     }
@@ -114,7 +116,7 @@ class RadiusResult
     /**
      * Getter for geometry
      *
-     * @return \JWeiland\Maps2\Domain\Model\RadiusResult\Geometry
+     * @return Geometry
      */
     public function getGeometry()
     {

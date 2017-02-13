@@ -341,10 +341,10 @@ class PoiCollection extends AbstractEntity
     /**
      * Adds a Poi
      *
-     * @param \JWeiland\Maps2\Domain\Model\Poi $poi
+     * @param Poi $poi
      * @return void
      */
-    public function addPoi(\JWeiland\Maps2\Domain\Model\Poi $poi)
+    public function addPoi(Poi $poi)
     {
         $this->pois->attach($poi);
     }
@@ -352,10 +352,10 @@ class PoiCollection extends AbstractEntity
     /**
      * Removes a Poi
      *
-     * @param \JWeiland\Maps2\Domain\Model\Poi $poiToRemove The Poi to be removed
+     * @param Poi $poiToRemove The Poi to be removed
      * @return void
      */
-    public function removePoi(\JWeiland\Maps2\Domain\Model\Poi $poiToRemove)
+    public function removePoi(Poi $poiToRemove)
     {
         $this->pois->detach($poiToRemove);
     }
@@ -363,7 +363,7 @@ class PoiCollection extends AbstractEntity
     /**
      * Returns the pois
      *
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage $pois
+     * @return ObjectStorage $pois
      */
     public function getPois()
     {
@@ -373,10 +373,10 @@ class PoiCollection extends AbstractEntity
     /**
      * Sets the pois
      *
-     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage $pois
+     * @param ObjectStorage $pois
      * @return void
      */
-    public function setPois(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $pois)
+    public function setPois(ObjectStorage $pois)
     {
         $this->pois = $pois;
     }
@@ -510,10 +510,10 @@ class PoiCollection extends AbstractEntity
     /**
      * Adds a Category
      *
-     * @param \TYPO3\CMS\Extbase\Domain\Model\Category $category
+     * @param Category $category
      * @return void
      */
-    public function addCategory(\TYPO3\CMS\Extbase\Domain\Model\Category $category)
+    public function addCategory(Category $category)
     {
         $this->categories->attach($category);
     }
@@ -521,10 +521,10 @@ class PoiCollection extends AbstractEntity
     /**
      * Removes a Category
      *
-     * @param \TYPO3\CMS\Extbase\Domain\Model\Category $category The Category to be removed
+     * @param Category $category The Category to be removed
      * @return void
      */
-    public function removeCategory(\TYPO3\CMS\Extbase\Domain\Model\Category $category)
+    public function removeCategory(Category $category)
     {
         $this->categories->detach($category);
     }
@@ -532,7 +532,7 @@ class PoiCollection extends AbstractEntity
     /**
      * Returns the categories
      *
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage $categories
+     * @return ObjectStorage $categories
      */
     public function getCategories()
     {
@@ -542,10 +542,10 @@ class PoiCollection extends AbstractEntity
     /**
      * Sets the categories
      *
-     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage $categories
+     * @param ObjectStorage $categories
      * @return void
      */
-    public function setCategories(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $categories)
+    public function setCategories(ObjectStorage $categories)
     {
         $this->categories = $categories;
     }

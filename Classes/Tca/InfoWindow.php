@@ -35,7 +35,8 @@ class InfoWindow
      * @param mixed $out String (normal) or array(palettes)
      * @param array $PA The field parameter array
      * @param object $pObj The parent object
-     * @return string
+     *
+     * @return void
      */
     public function getSingleField_postProcess($table, $field, array $row, &$out, array $PA, $pObj)
     {

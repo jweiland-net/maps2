@@ -16,7 +16,6 @@ namespace JWeiland\Maps2;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Configuration\FlexForm\FlexFormTools;
-use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 
 /**
  * Update class for the extension manager.

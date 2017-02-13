@@ -16,6 +16,7 @@ namespace JWeiland\Maps2\ViewHelpers\Widget\Controller;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 use TYPO3\CMS\Fluid\Core\Parser\ParsedTemplateInterface;
 use TYPO3\CMS\Fluid\Core\Parser\TemplateParser;
@@ -54,9 +55,11 @@ class EditPoiController extends AbstractController
      * initialize view
      * add some global vars to view
      *
+     * @param ViewInterface $view
+     *
      * @return void
      */
-    public function initializeView()
+    public function initializeView(ViewInterface $view)
     {
         ArrayUtility::mergeRecursiveWithOverrule($this->defaultSettings, $this->settings);
         $this->assign('data', $this->configurationManager->getContentObject()->data);

@@ -23,7 +23,7 @@ namespace JWeiland\Maps2\Tca\Type;
  * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
  * @link     https://github.com/jweiland-net/maps2
  */
-class Float
+class FloatType
 {
 
     /**
@@ -49,7 +49,6 @@ class Float
     public function evaluateFieldValue($value, $is_in, &$set)
     {
         $floatValue = number_format((float)$value, 6);
-        //var_dump($floatValue);
         return $floatValue;
     }
 }
