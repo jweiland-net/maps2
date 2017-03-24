@@ -30,14 +30,14 @@ class Geometry
     /**
      * bounds
      *
-     * @var Position
+     * @var \JWeiland\Maps2\Domain\Model\Position
      */
     protected $bounds;
 
     /**
      * location
      *
-     * @var Location
+     * @var \JWeiland\Maps2\Domain\Model\Location
      */
     protected $location;
 
@@ -51,7 +51,7 @@ class Geometry
     /**
      * viewport
      *
-     * @var Position
+     * @var \JWeiland\Maps2\Domain\Model\Position
      */
     protected $viewport;
 

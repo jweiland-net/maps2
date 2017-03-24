@@ -25,7 +25,6 @@ namespace JWeiland\Maps2\Domain\Model;
  */
 class Position
 {
-
     /**
      * northeast
      *
@@ -36,7 +35,7 @@ class Position
     /**
      * southwest
      *
-     * @var Location
+     * @var \JWeiland\Maps2\Domain\Model\Location
      */
     protected $southwest;
 

@@ -27,7 +27,6 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  */
 class PoiCollection extends AbstractEntity
 {
-
     /**
      * Collection_type
      *

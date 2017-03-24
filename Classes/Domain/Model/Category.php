@@ -27,7 +27,6 @@ use TYPO3\CMS\Core\Utility\PathUtility;
  */
 class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
 {
-
     /**
      * markerIcon
      *

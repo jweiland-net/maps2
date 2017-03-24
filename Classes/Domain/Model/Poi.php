@@ -26,7 +26,6 @@ use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
  */
 class Poi extends AbstractEntity
 {
-
     /**
      * cruser_id
      *

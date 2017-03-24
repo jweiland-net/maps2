@@ -25,7 +25,6 @@ namespace JWeiland\Maps2\Domain\Model\RadiusResult;
  */
 class AddressComponent
 {
-
     /**
      * longName
      *
