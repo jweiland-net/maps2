@@ -13,7 +13,7 @@ function MapOptions(settings) {
 	this.streetViewControl = settings.streetViewControl;
 	this.overviewMapControl = settings.overviewMapControl;
 	this.scrollwheel = settings.activateScrollWheel;
-	if (settings.styles != "") {
+	if (settings.styles) {
 		this.styles = eval(settings.styles);
 	}
 	this.setMapTypeId(settings.mapTypeId);
@@ -77,15 +77,19 @@ function PolylineOptions(paths, poiCollection) {
 MapOptions.prototype.setMapTypeId = function(mapTypeId) {
 	switch (mapTypeId) {
 		case "google.maps.MapTypeId.HYBRID":
+		case "hybrid":
 			this.mapTypeId = google.maps.MapTypeId.HYBRID;
 			break;
 		case "google.maps.MapTypeId.ROADMAP":
+		case "roadmap":
 			this.mapTypeId = google.maps.MapTypeId.ROADMAP;
 			break;
 		case "google.maps.MapTypeId.SATELLITE":
+		case "satellite":
 			this.mapTypeId = google.maps.MapTypeId.SATELLITE;
 			break;
 		case "google.maps.MapTypeId.TERRAIN":
+		case "terrain":
 			this.mapTypeId = google.maps.MapTypeId.TERRAIN;
 			break;
 	}
