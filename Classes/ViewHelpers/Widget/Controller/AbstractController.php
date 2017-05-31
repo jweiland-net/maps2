@@ -37,10 +37,9 @@ abstract class AbstractController extends AbstractWidgetController
      */
     protected $defaultSettings = array(
         'zoom' => 10,
-        'panControl' => 1,
         'zoomControl' => 1,
         'mapTypeControl' => 1,
-        'scaleControl' => 1,
+        'scaleControl' => true,
         'streetViewControl' => 1,
         'overviewMapControl' => 1,
         'mapTypeId' => 'google.maps.MapTypeId.ROADMAP'
@@ -61,7 +60,7 @@ abstract class AbstractController extends AbstractWidgetController
     {
         $this->extConf = $extConf;
     }
-    
+
     /**
      * initialize view
      * add some global vars to view
@@ -81,7 +80,7 @@ abstract class AbstractController extends AbstractWidgetController
             'contentRecord' => $this->configurationManager->getContentObject()->data
         ));
     }
-    
+
     /**
      * Render InfoWindow for marker
      *
@@ -100,7 +99,7 @@ abstract class AbstractController extends AbstractWidgetController
         );
         return $view->render();
     }
-    
+
     /**
      * Get template path for info window content
      *
@@ -116,7 +115,7 @@ abstract class AbstractController extends AbstractWidgetController
         ) {
             $path = $this->settings['infoWindowContentTemplatePath'];
         }
-        
+
         return $path;
     }
 }

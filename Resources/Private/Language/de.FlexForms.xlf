@@ -56,10 +56,6 @@
 				<source>Terrain</source>
 				<target>Terrain</target>
 			</trans-unit>
-			<trans-unit id="panControl" xml:space="preserve">
-				<source>Show Pan Control</source>
-				<target></target>
-			</trans-unit>
 			<trans-unit id="zoomControl" xml:space="preserve">
 				<source>Show Zoom Control</source>
 				<target>Zeige Steuerelement: Zoom</target>

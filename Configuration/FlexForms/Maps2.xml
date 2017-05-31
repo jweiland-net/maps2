@@ -133,15 +133,6 @@
 							</config>
 						</TCEforms>
 					</settings.mapTypeId>
-					<settings.panControl>
-						<TCEforms>
-							<label>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:panControl</label>
-							<config>
-								<type>check</type>
-								<default>1</default>
-							</config>
-						</TCEforms>
-					</settings.panControl>
 					<settings.zoomControl>
 						<TCEforms>
 							<label>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:zoomControl</label>

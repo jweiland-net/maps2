@@ -6,12 +6,11 @@
  */
 function MapOptions(settings) {
 	this.zoom = parseInt(settings.zoom);
-	this.panControl = settings.panControl;
-	this.zoomControl = settings.zoomControl;
-	this.mapTypeControl = settings.mapTypeControl;
-	this.scaleControl = settings.scaleControl;
-	this.streetViewControl = settings.streetViewControl;
-	this.overviewMapControl = settings.overviewMapControl;
+	this.zoomControl = (parseInt(settings.zoomControl) !== 0);
+	this.mapTypeControl = (parseInt(settings.mapTypeControl) !== 0);
+	this.scaleControl = (parseInt(settings.scaleControl) !== 0);
+	this.streetViewControl = (parseInt(settings.streetViewControl) !== 0);
+	this.overviewMapControl = (parseInt(settings.overviewMapControl) !== 0);
 	this.scrollwheel = settings.activateScrollWheel;
 	if (settings.styles) {
 		this.styles = eval(settings.styles);

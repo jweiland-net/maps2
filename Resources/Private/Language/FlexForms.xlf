@@ -43,9 +43,6 @@
 			<trans-unit id="mapTypeId.Terrain" xml:space="preserve">
 				<source>Terrain</source>
 			</trans-unit>
-			<trans-unit id="panControl" xml:space="preserve">
-				<source>Show Pan Control</source>
-			</trans-unit>
 			<trans-unit id="zoomControl" xml:space="preserve">
 				<source>Show Zoom Control</source>
 			</trans-unit>

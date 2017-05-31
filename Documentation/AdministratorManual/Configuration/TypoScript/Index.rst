@@ -39,7 +39,6 @@ Properties
   mapHeight_                      Map height            General      string
   zoom_                           Zoom                  Map Options  integer
   mapTypeId_                      Map type              Map Options  string
-  panControl_                     Pan control           Map Options  boolean
   zoomControl_                    Zoom control          Map Options  boolean
   mapTypeControl_                 Map type control      Map Options  boolean
   scaleControl_                   Scale control         Map Options  boolean
@@ -134,20 +133,6 @@ mapTypeId
          string
    Description
          Show Roadmap, Earthview or Streetview
-
-.. _tsPanControl:
-
-panControl
-""""""""""
-
-.. container:: table-row
-
-   Property
-         panControl
-   Data type
-         boolean
-   Description
-         Show a pan control.
 
 .. _tsZoomControl:
 
