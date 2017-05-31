@@ -38,7 +38,7 @@
 			</trans-unit>
 			<trans-unit id="mapTypeId" xml:space="preserve">
 				<source>Default map view</source>
-				<target>Vorgegebene Kartenansict</target>
+				<target>Vorgegebene Kartenansicht</target>
 			</trans-unit>
 			<trans-unit id="mapTypeId.Hybrid" xml:space="preserve">
 				<source>Hybrid</source>
