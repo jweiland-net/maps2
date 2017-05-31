@@ -1,0 +1,13 @@
+mod.wizards.newContentElement.wizardItems.plugins {
+  elements {
+    maps2 {
+      icon = ../typo3conf/ext/maps2/Resources/Public/Icons/maps2.svg
+      title = LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.maps2.title
+      description = LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.maps2.description
+      tt_content_defValues {
+        CType = list
+        list_type = maps2_maps2
+      }
+    }
+  }
+}

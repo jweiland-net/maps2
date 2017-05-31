@@ -1,149 +1,158 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <xliff version="1.0">
-	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2013-02-07T11:13:04Z" product-name="maps2">
-		<header/>
-		<body>
+  <file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2013-02-07T11:13:04Z" product-name="maps2">
+    <header/>
+    <body>
 
-			<trans-unit id="plugin.maps.title">
-				<source>Google Maps</source>
-				<target>Google Maps</target>
-			</trans-unit>
-			<trans-unit id="plugin.radius.title">
-				<source>Google Maps: Search Radius</source>
-				<target>Google Maps: Radiussuche</target>
-			</trans-unit>
-			<trans-unit id="plugin.cityMap.title">
-				<source>Google Maps: City Map</source>
-				<target>Google Maps: Stadtplan</target>
-			</trans-unit>
+      <trans-unit id="plugin.maps.title">
+        <source>Google Maps</source>
+        <target>Google Maps</target>
+      </trans-unit>
+      <trans-unit id="plugin.radius.title">
+        <source>Google Maps: Search Radius</source>
+        <target>Google Maps: Radiussuche</target>
+      </trans-unit>
+      <trans-unit id="plugin.cityMap.title">
+        <source>Google Maps: City Map</source>
+        <target>Google Maps: Stadtplan</target>
+      </trans-unit>
 
-			<trans-unit id="tx_maps2_domain_model_poi" xml:space="preserve" approved="yes">
-				<source>Map Position</source>
-				<target>Kartenposition</target>
-			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poi.latitude" xml:space="preserve" approved="yes">
-				<source>latitude</source>
-				<target>Breitengrad</target>
-			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poi.longitude" xml:space="preserve" approved="yes">
-				<source>longitude</source>
-				<target>Längengrad</target>
-			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poi.posIndex" xml:space="preserve" approved="yes">
-				<source>Position Index</source>
-				<target>Position Index</target>
-			</trans-unit>
+      <trans-unit id="plugin.maps2.title">
+        <source>Google Maps</source>
+        <target>Google Maps</target>
+      </trans-unit>
+      <trans-unit id="plugin.maps2.description">
+        <source>Add a Google Map to your website</source>
+        <target>Fügt eine Google Karte Ihrer Webseite hinzu</target>
+      </trans-unit>
 
-			<trans-unit id="tx_maps2_domain_model_poicollection" xml:space="preserve">
-				<source>Marking</source>
-				<target>Markierung</target>
-			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poicollection.collectionType" xml:space="preserve">
-				<source>Type</source>
-				<target>Typ</target>
-			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poicollection.collectionType.empty" xml:space="preserve">
-				<source>Please choose a type</source>
-				<target>Bitte wählen Sie einen Typ</target>
-			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poicollection.collectionType.point" xml:space="preserve">
-				<source>Point of Interest</source>
-				<target>Punkt</target>
-			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poicollection.collectionType.area" xml:space="preserve">
-				<source>Area</source>
-				<target>Bereich</target>
-			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poicollection.collectionType.route" xml:space="preserve">
-				<source>Route</source>
-				<target>Strecke</target>
-			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poicollection.collectionType.radius" xml:space="preserve">
-				<source>Radius</source>
-				<target>Radius</target>
-			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poicollection.title" xml:space="preserve">
-				<source>Title</source>
-				<target>Titel</target>
-			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poicollection.configuration_map" xml:space="preserve" approved="yes">
-				<source>Configure position on Google Maps</source>
-				<target>Google Karte zum Konfigurieren</target>
-			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poicollection.latitude" xml:space="preserve">
-				<source>Latitude for map position</source>
-				<target>Breitengrad der Karte</target>
-			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poicollection.longitude" xml:space="preserve">
-				<source>Longitude for map position</source>
-				<target>Längengrad der Karte</target>
-			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poicollection.latitudeOrig" xml:space="preserve" approved="yes">
-				<source>Backup Latitude</source>
-				<target>Backup Breitengrad</target>
-			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poicollection.longitudeOrig" xml:space="preserve" approved="yes">
-				<source>Backup Latitude</source>
-				<target>Backup Längengrad</target>
-			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poicollection.radius" xml:space="preserve">
-				<source>Radius</source>
-				<target>Radius</target>
-			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poicollection.address" xml:space="preserve" approved="yes">
-				<source>address</source>
-				<target>Adresse</target>
-			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poicollection.style" xml:space="preserve">
-				<source>Style</source>
-				<target>Design</target>
-			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poicollection.stroke_color" xml:space="preserve">
-				<source>Stroke color (f.e. #FF0000)</source>
-				<target>Linienfarbe (z.B. #FF0000)</target>
-			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poicollection.stroke_opacity" xml:space="preserve">
-				<source>Stroke opacity (f.e. 0.8)</source>
-				<target>Durchsichtigkeit der Linie (z.B. 0.8)</target>
-			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poicollection.stroke_weight" xml:space="preserve">
-				<source>Stroke weight (f.e. 2)</source>
-				<target>Liniendicke (z.B. 2)</target>
-			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poicollection.fill_color" xml:space="preserve">
-				<source>Fill color (f.e. #FF0000)</source>
-				<target>Füllfarbe (z.B. #FF0000)</target>
-			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poicollection.fill_opacity" xml:space="preserve">
-				<source>Fill opacity (f.e. 0.35)</source>
-				<target>Durchsichtigkeit der Füllfläche (z.B. 0.35)</target>
-			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poicollection.info_window" xml:space="preserve">
-				<source>Info Window</source>
-				<target>Infofenster</target>
-			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poicollection.info_window_address" xml:space="preserve">
-				<source>Info Window Content</source>
-				<target>Inhalt des Infofensters</target>
-			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poicollection.info_window_content" xml:space="preserve">
-				<source>Additional Info Window Content</source>
-				<target>Inhalt der dem Infofenster hinzugefügt werden soll</target>
-			</trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poi" xml:space="preserve" approved="yes">
+        <source>Map Position</source>
+        <target>Kartenposition</target>
+      </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poi.latitude" xml:space="preserve" approved="yes">
+        <source>latitude</source>
+        <target>Breitengrad</target>
+      </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poi.longitude" xml:space="preserve" approved="yes">
+        <source>longitude</source>
+        <target>Längengrad</target>
+      </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poi.posIndex" xml:space="preserve" approved="yes">
+        <source>Position Index</source>
+        <target>Position Index</target>
+      </trans-unit>
 
-			<trans-unit id="tx_maps2_uid" xml:space="preserve">
-				<source>Connect this record to a google maps record</source>
-				<target>Verbinden Sie diesen Datensatz mit einer Google Maps Karte</target>
-			</trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection" xml:space="preserve">
+        <source>Marking</source>
+        <target>Markierung</target>
+      </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.collectionType" xml:space="preserve">
+        <source>Type</source>
+        <target>Typ</target>
+      </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.collectionType.empty" xml:space="preserve">
+        <source>Please choose a type</source>
+        <target>Bitte wählen Sie einen Typ</target>
+      </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.collectionType.point" xml:space="preserve">
+        <source>Point of Interest</source>
+        <target>Punkt</target>
+      </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.collectionType.area" xml:space="preserve">
+        <source>Area</source>
+        <target>Bereich</target>
+      </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.collectionType.route" xml:space="preserve">
+        <source>Route</source>
+        <target>Strecke</target>
+      </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.collectionType.radius" xml:space="preserve">
+        <source>Radius</source>
+        <target>Radius</target>
+      </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.title" xml:space="preserve">
+        <source>Title</source>
+        <target>Titel</target>
+      </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.configuration_map" xml:space="preserve" approved="yes">
+        <source>Configure position on Google Maps</source>
+        <target>Google Karte zum Konfigurieren</target>
+      </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.latitude" xml:space="preserve">
+        <source>Latitude for map position</source>
+        <target>Breitengrad der Karte</target>
+      </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.longitude" xml:space="preserve">
+        <source>Longitude for map position</source>
+        <target>Längengrad der Karte</target>
+      </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.latitudeOrig" xml:space="preserve" approved="yes">
+        <source>Backup Latitude</source>
+        <target>Backup Breitengrad</target>
+      </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.longitudeOrig" xml:space="preserve" approved="yes">
+        <source>Backup Latitude</source>
+        <target>Backup Längengrad</target>
+      </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.radius" xml:space="preserve">
+        <source>Radius</source>
+        <target>Radius</target>
+      </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.address" xml:space="preserve" approved="yes">
+        <source>address</source>
+        <target>Adresse</target>
+      </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.style" xml:space="preserve">
+        <source>Style</source>
+        <target>Design</target>
+      </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.stroke_color" xml:space="preserve">
+        <source>Stroke color (f.e. #FF0000)</source>
+        <target>Linienfarbe (z.B. #FF0000)</target>
+      </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.stroke_opacity" xml:space="preserve">
+        <source>Stroke opacity (f.e. 0.8)</source>
+        <target>Durchsichtigkeit der Linie (z.B. 0.8)</target>
+      </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.stroke_weight" xml:space="preserve">
+        <source>Stroke weight (f.e. 2)</source>
+        <target>Liniendicke (z.B. 2)</target>
+      </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.fill_color" xml:space="preserve">
+        <source>Fill color (f.e. #FF0000)</source>
+        <target>Füllfarbe (z.B. #FF0000)</target>
+      </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.fill_opacity" xml:space="preserve">
+        <source>Fill opacity (f.e. 0.35)</source>
+        <target>Durchsichtigkeit der Füllfläche (z.B. 0.35)</target>
+      </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.info_window" xml:space="preserve">
+        <source>Info Window</source>
+        <target>Infofenster</target>
+      </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.info_window_address" xml:space="preserve">
+        <source>Info Window Content</source>
+        <target>Inhalt des Infofensters</target>
+      </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.info_window_content" xml:space="preserve">
+        <source>Additional Info Window Content</source>
+        <target>Inhalt der dem Infofenster hinzugefügt werden soll</target>
+      </trans-unit>
 
-			<trans-unit id="tab.maps2" xml:space="preserve">
-				<source>Google Maps (maps2)</source>
-				<target>Google Maps (maps2)</target>
-			</trans-unit>
-			<trans-unit id="sys_category.marker_icon" xml:space="preserve">
-				<source>Marker icon for Google Maps (maps2)</source>
-				<target>Marker Icon für Google Maps (maps2)</target>
-			</trans-unit>
-		</body>
-	</file>
+      <trans-unit id="tx_maps2_uid" xml:space="preserve">
+        <source>Connect this record to a google maps record</source>
+        <target>Verbinden Sie diesen Datensatz mit einer Google Maps Karte</target>
+      </trans-unit>
+
+      <trans-unit id="tab.maps2" xml:space="preserve">
+        <source>Google Maps (maps2)</source>
+        <target>Google Maps (maps2)</target>
+      </trans-unit>
+      <trans-unit id="sys_category.marker_icon" xml:space="preserve">
+        <source>Marker icon for Google Maps (maps2)</source>
+        <target>Marker Icon für Google Maps (maps2)</target>
+      </trans-unit>
+    </body>
+  </file>
 </xliff>
