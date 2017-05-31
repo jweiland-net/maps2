@@ -66,15 +66,15 @@
 			</trans-unit>
 			<trans-unit id="scaleControl" xml:space="preserve">
 				<source>Show Scale Control</source>
-				<target></target>
+				<target>Zeige einen Maßstab unten rechts an</target>
 			</trans-unit>
 			<trans-unit id="streetViewControl" xml:space="preserve">
 				<source>Show StreetView Control</source>
 				<target>Zeige Steuerelement für StreetView</target>
 			</trans-unit>
-			<trans-unit id="overviewMapControl" xml:space="preserve">
-				<source>Show Overview Control</source>
-				<target>Zeige Steuerelement für Übersicht</target>
+			<trans-unit id="fullScreenControl" xml:space="preserve">
+				<source>Show full screen Control</source>
+				<target>Zeige Steuerelement für Vollbild</target>
 			</trans-unit>
 			<trans-unit id="activateScrollWheel" xml:space="preserve">
 				<source>Activate zoom with mouse scroll wheel</source>

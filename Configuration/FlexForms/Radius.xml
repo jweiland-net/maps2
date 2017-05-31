@@ -137,15 +137,15 @@
 							</config>
 						</TCEforms>
 					</settings.streetViewControl>
-					<settings.overviewMapControl>
+					<settings.fullScreenControl>
 						<TCEforms>
-							<label>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:overviewMapControl</label>
+							<label>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:fullScreenControl</label>
 							<config>
 								<type>check</type>
 								<default>1</default>
 							</config>
 						</TCEforms>
-					</settings.overviewMapControl>
+					</settings.fullScreenControl>
 				</el>
 			</ROOT>
 		</sMapOptions>

@@ -10,7 +10,7 @@ function MapOptions(settings) {
 	this.mapTypeControl = (parseInt(settings.mapTypeControl) !== 0);
 	this.scaleControl = (parseInt(settings.scaleControl) !== 0);
 	this.streetViewControl = (parseInt(settings.streetViewControl) !== 0);
-	this.overviewMapControl = (parseInt(settings.overviewMapControl) !== 0);
+	this.fullscreenControl = (parseInt(settings.fullScreenControl) !== 0);
 	this.scrollwheel = settings.activateScrollWheel;
 	if (settings.styles) {
 		this.styles = eval(settings.styles);

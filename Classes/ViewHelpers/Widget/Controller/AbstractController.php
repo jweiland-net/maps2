@@ -37,11 +37,11 @@ abstract class AbstractController extends AbstractWidgetController
      */
     protected $defaultSettings = array(
         'zoom' => 10,
-        'zoomControl' => 1,
-        'mapTypeControl' => 1,
+        'zoomControl' => true,
+        'mapTypeControl' => true,
         'scaleControl' => true,
-        'streetViewControl' => 1,
-        'overviewMapControl' => 1,
+        'streetViewControl' => true,
+        'fullscreenMapControl' => true,
         'mapTypeId' => 'google.maps.MapTypeId.ROADMAP'
     );
 

@@ -55,8 +55,8 @@
 			<trans-unit id="streetViewControl" xml:space="preserve">
 				<source>Show StreetView Control</source>
 			</trans-unit>
-			<trans-unit id="overviewMapControl" xml:space="preserve">
-				<source>Show Overview Control</source>
+			<trans-unit id="fullScreenControl" xml:space="preserve">
+				<source>Show full screen Control</source>
 			</trans-unit>
 			<trans-unit id="activateScrollWheel" xml:space="preserve">
 				<source>Activate zoom with mouse scroll wheel</source>

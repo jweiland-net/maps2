@@ -30,23 +30,23 @@ Properties
 
 .. container:: ts-properties
 
-  =============================== ===================== ============ ========
-  Property                        Title                 Sheet        Type
-  =============================== ===================== ============ ========
-  poiCollection_                  Show poiCollection    General      integer
-  categories_                     Categories            General      string
-  mapWidth_                       Map width             General      string
-  mapHeight_                      Map height            General      string
-  zoom_                           Zoom                  Map Options  integer
-  mapTypeId_                      Map type              Map Options  string
-  zoomControl_                    Zoom control          Map Options  boolean
-  mapTypeControl_                 Map type control      Map Options  boolean
-  scaleControl_                   Scale control         Map Options  boolean
-  streetViewControl_              Street view control   Map Options  boolean
-  overviewMapControl_             Overview map control  Map Options  boolean
-  activateScrollWheel_            Overview map control  Map Options  boolean
-  infoWindowContentTemplatePath_  Overview map control  Map Options  boolean
-  =============================== ===================== ============ ========
+  =============================== =========================== ========== ========
+  Property                        Title                       Sheet        Type
+  =============================== =========================== ============ ========
+  poiCollection_                  Show poiCollection          General      integer
+  categories_                     Categories                  General      string
+  mapWidth_                       Map width                   General      string
+  mapHeight_                      Map height                  General      string
+  zoom_                           Zoom                        Map Options  integer
+  mapTypeId_                      Map type                    Map Options  string
+  zoomControl_                    Zoom control                Map Options  boolean
+  mapTypeControl_                 Map type control            Map Options  boolean
+  scaleControl_                   Scale control               Map Options  boolean
+  streetViewControl_              Street view control         Map Options  boolean
+  fullScreenControl_              Full Screen control         Map Options  boolean
+  activateScrollWheel_            Activate Scroll Wheel zoom  Map Options  boolean
+  infoWindowContentTemplatePath_  Overview map control        Map Options  boolean
+  =============================== =========================== ============ ========
 
 .. _tsPoiCollection:
 
@@ -192,17 +192,17 @@ streetViewControl
 
 .. _tsOverviewMapControl:
 
-overviewMapControl
-""""""""""""""""""
+fullScreenControl
+"""""""""""""""""
 
 .. container:: table-row
 
    Property
-         overviewMapControl
+         fullScreenControl
    Data type
          boolean
    Description
-         Show an overview map control.
+         Toggle between normal and full screen mode.
 
 .. _tsActivateScrollWheel:
 
