@@ -49,8 +49,8 @@
 				<target>Straßenansicht</target>
 			</trans-unit>
 			<trans-unit id="mapTypeId.Satellite" xml:space="preserve">
-				<source>Satellit</source>
-				<target>Sattelit</target>
+				<source>Satellite</source>
+				<target>Satellit</target>
 			</trans-unit>
 			<trans-unit id="mapTypeId.Terrain" xml:space="preserve">
 				<source>Terrain</source>
