@@ -25,12 +25,19 @@ namespace JWeiland\Maps2\ViewHelpers\Cache;
  */
 class GetCacheViewHelper extends AbstractCacheViewHelper
 {
+    /**
+     * The result of this ViewHelper should not be escaped
+     *
+     * @var bool
+     */
+    protected $escapeOutput = false;
 
     /**
      * returns cache entry by given cache identifier
      * Info: here is no check if cache entry exists. Please use maps:cache.hasCache instead/before
      *
      * @param string $cacheIdentifier String to identify the cache entry
+     *
      * @return string
      */
     public function render($cacheIdentifier)
