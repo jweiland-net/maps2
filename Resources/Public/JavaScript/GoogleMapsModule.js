@@ -37,7 +37,7 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
     this.fillColor = extConf.fillColor;
     this.fillOpacity = extConf.fillOpacity;
     this.editable = true;
-    if (config.radius == 0) {
+    if (config.radius === 0) {
       this.radius = extConf.defaultRadius;
     } else {
       this.radius = config.radius;
@@ -106,7 +106,7 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
         break;
     }
 
-    if (this.marker != null) {
+    if (this.marker !== null) {
       this.findAddressOnClick(config, this.marker);
       this.resetMarkerToAddress(config, this.marker);
     }
@@ -174,13 +174,13 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
   TxMaps2.prototype.createArea = function(config, extConf) {
     var coordinatesArray = [];
 
-    if (typeof config.pois != 'undefined') {
+    if (typeof config.pois !== 'undefined') {
       for (var i = 0; i < config.pois.length; i++) {
         coordinatesArray.push(new gmaps.LatLng(config.pois[i].latitude, config.pois[i].longitude));
       }
     }
 
-    if (coordinatesArray.length == 0) {
+    if (coordinatesArray.length === 0) {
       coordinatesArray.push(new gmaps.LatLng(config.latitude, config.longitude));
     }
 
@@ -228,13 +228,13 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
   TxMaps2.prototype.createRoute = function(config, extConf) {
     var coordinatesArray = [];
 
-    if (typeof config.pois != 'undefined') {
+    if (typeof config.pois !== 'undefined') {
       for (var i = 0; i < config.pois.length; i++) {
         coordinatesArray.push(new gmaps.LatLng(config.pois[i].latitude, config.pois[i].longitude));
       }
     }
 
-    if (coordinatesArray.length == 0) {
+    if (coordinatesArray.length === 0) {
       coordinatesArray.push(new gmaps.LatLng(config.latitude, config.longitude));
     }
 
@@ -334,12 +334,12 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
     TBE_EDITOR.fieldChanged("tx_maps2_domain_model_poicollection", config.uid, "latitude", createFieldName(config, "latitude", false));
     TBE_EDITOR.fieldChanged("tx_maps2_domain_model_poicollection", config.uid, "longitude", createFieldName(config, "longitude", false));
 
-    if (typeof rad != "undefined" && rad > 0) {
+    if (typeof rad !== "undefined" && rad > 0) {
       setFieldValue(config, "radius", parseInt(rad));
       TBE_EDITOR.fieldChanged("tx_maps2_domain_model_poicollection", config.uid, "radius", createFieldName(config, "radius", false));
     }
 
-    if (typeof address != "undefined") {
+    if (typeof address !== "undefined") {
       setFieldValue(config, "address", address);
       TBE_EDITOR.fieldChanged("tx_maps2_domain_model_poicollection", config.uid, "address", createFieldName(config, "address", false));
       $("#infoWindowAddress").html(address.replace(/, /gi, "<br />"));
@@ -368,7 +368,7 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
    * @returns {string}
    */
   TxMaps2.prototype.createFieldName = createFieldName = function(config, field, hiddenRecord) {
-    if (hiddenRecord == true) {
+    if (hiddenRecord === true) {
       return 'data[tx_maps2_domain_model_poicollection][' + config.uid + '][' + field + ']_hr';
     }
     return 'data[tx_maps2_domain_model_poicollection][' + config.uid + '][' + field + ']';
@@ -383,7 +383,7 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
   TxMaps2.prototype.setFieldValue = setFieldValue = function(config, field, value) {
     var fieldName = createFieldName(config, field, true);
     // set the old (< TYPO3 7.5) hidden record fields "*_hr"
-    if (typeof document[TBE_EDITOR.formname][fieldName] != 'undefined') {
+    if (typeof document[TBE_EDITOR.formname][fieldName] !== 'undefined') {
       document[TBE_EDITOR.formname][fieldName].value = value;
     }
     // set the new (>= TYPO3 7.5) data fields "data-formengine-input-name"
@@ -422,7 +422,7 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
       var latLng = new gmaps.LatLng(config.latitudeOrig, config.longitudeOrig);
       map.setCenter(latLng);
 
-      if (typeof marker.setPosition == "function") {
+      if (typeof marker.setPosition === "function") {
         marker.setPosition(latLng);
         setLatLngFields(config, config.latitudeOrig, config.longitudeOrig, 0);
       } else {
@@ -470,14 +470,14 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
         address: address
       };
       geocoder.geocode(geocoderRequest, function(results, status) {
-        if (status == "OK") {
+        if (status === "OK") {
           var lat = results[0].geometry.location.lat().toFixed(6);
           var lng = results[0].geometry.location.lng().toFixed(6);
 
           // Move map and marker to new position
           map.setCenter(results[0].geometry.location);
 
-          if (typeof marker.setPosition == "function") {
+          if (typeof marker.setPosition === "function") {
             marker.setPosition(results[0].geometry.location);
             setLatLngFields(config, lat, lng, 0, results[0].formatted_address);
           } else {

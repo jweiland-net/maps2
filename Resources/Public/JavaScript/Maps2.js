@@ -252,19 +252,19 @@ Maps2.prototype.countObjectProperties = function(obj) {
  */
 Maps2.prototype.createPointByCollectionType = function(environment) {
   for (var i = 0; i < this.poiCollections.length; i++) {
-    if (this.poiCollections[i].strokeColor == "") {
+    if (this.poiCollections[i].strokeColor === "") {
       this.poiCollections[i].strokeColor = environment.extConf.strokeColor;
     }
-    if (this.poiCollections[i].strokeOpacity == "") {
+    if (this.poiCollections[i].strokeOpacity === "") {
       this.poiCollections[i].strokeOpacity = environment.extConf.strokeOpacity;
     }
-    if (this.poiCollections[i].strokeWeight == "") {
+    if (this.poiCollections[i].strokeWeight === "") {
       this.poiCollections[i].strokeWeight = environment.extConf.strokeWeight;
     }
-    if (this.poiCollections[i].fillColor == "") {
+    if (this.poiCollections[i].fillColor === "") {
       this.poiCollections[i].fillColor = environment.extConf.fillColor;
     }
-    if (this.poiCollections[i].fillOpacity == "") {
+    if (this.poiCollections[i].fillOpacity === "") {
       this.poiCollections[i].fillOpacity = environment.extConf.fillOpacity;
     }
     switch (this.poiCollections[i].collectionType) {
@@ -304,7 +304,7 @@ Maps2.prototype.createMarker = function(poiCollection, environment) {
         this.markers[categoryUid] = [];
       }
       // assign first category icon to marker
-      if (i === 0 && poiCollection.categories[i].markerIcon != "") {
+      if (i === 0 && poiCollection.categories[i].markerIcon !== "") {
         var icon = {
           url: poiCollection.categories[i].markerIcon,
           scaledSize: new google.maps.Size(25, 40),
@@ -373,7 +373,7 @@ Maps2.prototype.createArea = function(poiCollection) {
     paths.push(latLng);
   }
 
-  if (paths.length == 0) {
+  if (paths.length === 0) {
     paths.push(this.mapPosition);
   } else {
     var area = new google.maps.Polygon(new PolygonOptions(paths, poiCollection));
@@ -395,7 +395,7 @@ Maps2.prototype.createRoute = function(poiCollection) {
     paths.push(latLng);
   }
 
-  if (paths.length == 0) {
+  if (paths.length === 0) {
     paths.push(this.mapPosition);
   } else {
     var route = new google.maps.Polyline(new PolylineOptions(paths, poiCollection));
