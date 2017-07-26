@@ -1,27 +1,27 @@
 {namespace maps2=JWeiland\Maps2\ViewHelpers}
 
 <f:if condition="{maps2:cache.hasCache(cacheIdentifier: 'htmlCache{poiCollection.uid}')}">
-	<f:then>
-		{maps2:cache.getCache(cacheIdentifier: 'htmlCache{poiCollection.uid}')}
-	</f:then>
-	<f:else>
-		<f:alias map="{content: '{f:render(section: \'infoWindowContent\', arguments: {poiCollection: poiCollection})}'}">
-			{maps2:cache.setCache(cacheIdentifier: 'htmlCache{poiCollection.uid}', data: '{content->f:format.raw()}', tags: {0: poiCollection.pid}, lifetime: 3600)}
-			{content->f:format.raw()}
-		</f:alias>
-	</f:else>
+  <f:then>
+    {maps2:cache.getCache(cacheIdentifier: 'htmlCache{poiCollection.uid}')}
+  </f:then>
+  <f:else>
+    <f:alias map="{content: '{f:render(section: \'infoWindowContent\', arguments: {poiCollection: poiCollection})}'}">
+      {maps2:cache.setCache(cacheIdentifier: 'htmlCache{poiCollection.uid}', data: '{content->f:format.raw()}', tags: {0: poiCollection.pid}, lifetime: 3600)}
+      {content->f:format.raw()}
+    </f:alias>
+  </f:else>
 </f:if>
 
 <f:section name="infoWindowContent">
-	<div class="titleWrapper">{poiCollection.title}</div>
-	<div class="addressWrapper">
-		<f:for each="{poiCollection.address -> maps2:TrimExplode()}" as="address" iteration="iterator">
-			<f:if condition="{iterator.isLast}">
-				<f:else>
-					<div>{address}</div>
-				</f:else>
-			</f:if>
-		</f:for>
-	</div>
-	<div class="infoWindowContent">{poiCollection.infoWindowContent->f:format.html()}</div>
+  <div class="titleWrapper">{poiCollection.title}</div>
+  <div class="addressWrapper">
+    <f:for each="{poiCollection.address -> maps2:TrimExplode()}" as="address" iteration="iterator">
+      <f:if condition="{iterator.isLast}">
+        <f:else>
+          <div>{address}</div>
+        </f:else>
+      </f:if>
+    </f:for>
+  </div>
+  <div class="infoWindowContent">{poiCollection.infoWindowContent->f:format.html()}</div>
 </f:section>

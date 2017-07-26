@@ -1,53 +1,53 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <xliff version="1.0">
-	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2013-02-07T11:13:04Z" product-name="maps2">
-		<header/>
-		<body>
+  <file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2013-02-07T11:13:04Z" product-name="maps2">
+    <header/>
+    <body>
 
-			<trans-unit id="tx_maps2_domain_model_poi.latitude" xml:space="preserve" approved="yes">
-				<source>latitude</source>
-				<target>Latitude</target>
-			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poi.longitude" xml:space="preserve" approved="yes">
-				<source>longitude</source>
-				<target>longitude</target>
-			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poi_collection" xml:space="preserve">
-				<source>Marking</source>
-				<target>Markierung</target>
-			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poi_collection.title" xml:space="preserve">
-				<source>Title</source>
-				<target>Titel</target>
-			</trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poi.latitude" xml:space="preserve" approved="yes">
+        <source>latitude</source>
+        <target>Latitude</target>
+      </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poi.longitude" xml:space="preserve" approved="yes">
+        <source>longitude</source>
+        <target>longitude</target>
+      </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poi_collection" xml:space="preserve">
+        <source>Marking</source>
+        <target>Markierung</target>
+      </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poi_collection.title" xml:space="preserve">
+        <source>Title</source>
+        <target>Titel</target>
+      </trans-unit>
 
-			<trans-unit id="rangeSearch.address" xml:space="preserve" approved="yes">
-				<source>Address</source>
-				<target>Adresse</target>
-			</trans-unit>
-			<trans-unit id="rangeSearch.radius" xml:space="preserve" approved="yes">
-				<source>Radius</source>
-				<target>Radius</target>
-			</trans-unit>
-			<trans-unit id="rangeSearch.send" xml:space="preserve" approved="yes">
-				<source>Search</source>
-				<target>Suchen</target>
-			</trans-unit>
-			<trans-unit id="rangeSearch.multipleResults" xml:space="preserve" approved="yes">
-				<source>For your given address we have found multiple addresses. Please choose one.</source>
-				<target>Zu Ihrer angegebenen Adresse haben wir mehrere Ergebnisse gefunden. Bitte wählen Sie einen der Einträge.</target>
-			</trans-unit>
+      <trans-unit id="rangeSearch.address" xml:space="preserve" approved="yes">
+        <source>Address</source>
+        <target>Adresse</target>
+      </trans-unit>
+      <trans-unit id="rangeSearch.radius" xml:space="preserve" approved="yes">
+        <source>Radius</source>
+        <target>Radius</target>
+      </trans-unit>
+      <trans-unit id="rangeSearch.send" xml:space="preserve" approved="yes">
+        <source>Search</source>
+        <target>Suchen</target>
+      </trans-unit>
+      <trans-unit id="rangeSearch.multipleResults" xml:space="preserve" approved="yes">
+        <source>For your given address we have found multiple addresses. Please choose one.</source>
+        <target>Zu Ihrer angegebenen Adresse haben wir mehrere Ergebnisse gefunden. Bitte wählen Sie einen der Einträge.</target>
+      </trans-unit>
 
-			<trans-unit id="searchStreet" xml:space="preserve" approved="yes">
-				<source>Search for street</source>
-				<target>Suche Straße</target>
-			</trans-unit>
+      <trans-unit id="searchStreet" xml:space="preserve" approved="yes">
+        <source>Search for street</source>
+        <target>Suche Straße</target>
+      </trans-unit>
 
-			<trans-unit id="error.noAddressFound" xml:space="preserve" approved="yes">
-				<source>Google can't find a result for address: "%s". Please check your address data and try again.</source>
-				<target>Google konnte zu Ihrer Adresse "%s" keine Ergebnisse finden. Bitte überprüfen Sie nochmals Ihre Adressdaten und versuchen Sie es erneut</target>
-			</trans-unit>
+      <trans-unit id="error.noAddressFound" xml:space="preserve" approved="yes">
+        <source>Google can't find a result for address: "%s". Please check your address data and try again.</source>
+        <target>Google konnte zu Ihrer Adresse "%s" keine Ergebnisse finden. Bitte überprüfen Sie nochmals Ihre Adressdaten und versuchen Sie es erneut</target>
+      </trans-unit>
 
-		</body>
-	</file>
+    </body>
+  </file>
 </xliff>

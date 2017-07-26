@@ -3,12 +3,12 @@
 <f:layout name="Default" />
 
 <f:section name="main">
-	<form action="/index.php" method="get">
-		<maps2:form.renderHiddenFieldsForGet action="search" controller="CityMap" />
-		<div class="form-group">
-			<input type="text" name="tx_maps2_citymap[street]" value="{address}" class="form-control" id="street">
-		</div>
-		<input type="submit" value="{f:translate(key: 'searchStreet')}" class="btn btn-default" />
-	</form>
-	<div id="maps2-{data.uid}" class="maps2" data-environment="{environment->maps2:convertToJson()}" data-longitude="{longitude}" data-latitude="{latitude}"></div>
+  <form action="/index.php" method="get">
+    <maps2:form.renderHiddenFieldsForGet action="search" controller="CityMap" />
+    <div class="form-group">
+      <input type="text" name="tx_maps2_citymap[street]" value="{address}" class="form-control" id="street">
+    </div>
+    <input type="submit" value="{f:translate(key: 'searchStreet')}" class="btn btn-default" />
+  </form>
+  <div id="maps2-{data.uid}" class="maps2" data-environment="{environment->maps2:convertToJson()}" data-longitude="{longitude}" data-latitude="{latitude}"></div>
 </f:section>

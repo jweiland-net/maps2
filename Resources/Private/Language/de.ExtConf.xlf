@@ -1,63 +1,63 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <xliff version="1.0">
-	<file source-language="en" datatype="plaintext" original="messages" date="2013-02-07T11:13:04Z" product-name="maps2">
-		<header/>
-		<body>
+  <file source-language="en" datatype="plaintext" original="messages" date="2013-02-07T11:13:04Z" product-name="maps2">
+    <header/>
+    <body>
 
-			<trans-unit id="useHttps" xml:space="preserve">
-				<source>Use https as protocol: You can't call the http protocol when your page is running on https. So here you can decide to use the same protocol.</source>
-				<target>https Protokoll verwenden: Das http-Protokoll kann nicht geladen werden, wenn Ihre eigene Seite über das https-Protokoll läuft. Setzen Sie hier das gleiche Protokoll wie das von Ihrer Webseite.</target>
-			</trans-unit>
-			<trans-unit id="googleMapsLibrary" xml:space="preserve">
-				<source>Link to Google Maps API: This setting is for TYPO3 Backend only. Visit your TypoScript-Templates if you want to change the library for Frontend. You only need to fill this field if you want to use an older or beta version.</source>
-				<target>Link zur Google Maps API: Diese Einstellung ist nur für das TYPO3 Backend. Wenn Sie diese Einstellung für das Frontend vornehmen wollen, dann müssen Sie dies in Ihren TypoScript-Templates vornehmen. Füllen Sie dieses Feld nur, wenn Sie eine ältere oder eine der Betaversionen verwenden wollen.</target>
-			</trans-unit>
-			<trans-unit id="googleMapsApiKey" xml:space="preserve">
-				<source>Google Maps JavaScript ApiKey: This setting is for TYPO3 Backend only. Visit your TypoScript-Templates if you want to change the library for Frontend. Visit https://console.developers.google.com Create a new project for Google Maps JavaScript API and insert the retrieved Browser ApiKey here.</source>
-				<target>Google Maps JavaScript ApiKey: Diese Einstellung ist nur für das TYPO3 Backend. Wenn Sie diese Einstellung für das Frontend vornehmen wollen, dann müssen Sie dies in Ihren TypoScript-Templates vornehmen. Besuchen Sie https://console.developers.google.com Erstellen Sie ein neues Projekt vom Typ Google Maps JavaScript API und fügen Sie den erhaltenen Browser ApiKey hier ein.</target>
-			</trans-unit>
-			<trans-unit id="googleGeocodeApiKey" xml:space="preserve">
-				<source>Google Maps Geocode ApiKey: Visit https://console.developers.google.com Create a new project for Google Maps Geocode API and insert here the retrieved Server ApiKey.</source>
-				<target>Google Maps Geocode ApiKey: Besuchen Sie https://console.developers.google.com Erstellen Sie ein neues Projekt vom Typ Google Maps Geocode API und fügen Sie den erhaltenen Server ApiKey hier ein.</target>
-			</trans-unit>
-			<trans-unit id="defaultLatitude" xml:space="preserve">
-				<source>Default Latitude: If you leave this empty Google Maps points to somewhere over the ocean on startup. So it's better to enter some coordinates: http://universimmedia.pagesperso-orange.fr/geo/loc.htm</source>
-				<target>Standard Breitengrad: Wenn dieses Feld leer gelassen wird, dann kann es sein, dass Sie beim Starten der Karte irgendwo über dem Ozean landen. Geben Sie hier zum Beispiel den Breitengrad von Ihrer Firma an: http://universimmedia.pagesperso-orange.fr/geo/loc.htm</target>
-			</trans-unit>
-			<trans-unit id="defaultLongitude" xml:space="preserve">
-				<source>Default Longitude: If you leave this empty Google Maps points to somewhere over the ocean on startup. So it's better to enter some coordinates: http://universimmedia.pagesperso-orange.fr/geo/loc.htm</source>
-				<target>Standard Längengrad: Wenn dieses Feld leer gelassen wird, dann kann es sein, dass Sie beim Starten der Karte irgendwo über dem Ozean landen. Geben Sie hier zum Beispiel den Längengrad von Ihrer Firma an: http://universimmedia.pagesperso-orange.fr/geo/loc.htm</target>
-			</trans-unit>
-			<trans-unit id="defaultRadius" xml:space="preserve">
-				<source>Default Radius (in meters): When using collection type "Radius" you should set a default radius. Else you just see one single point</source>
-				<target>Standard Radius (in Meter): Wenn Sie den Typ "Radius" verwenden, sollten Sie hier eine Meterangabe machen, da es sonst passieren kann, dass Sie nur einen einfachen kleinen Punkt auf der Karte sehen.</target>
-			</trans-unit>
-			<trans-unit id="infoWindowContentTemplatePath" xml:space="preserve">
-				<source>Template path for info window: If you click on a marker a little info window will appear. With this setting you can change that template to your own needs.</source>
-				<target>Templatevorlage für Info PopUp: Wenn Sie auf einen Marker klicken öffnet sich ein kleines Info Fenster. Mit dieser Einstellung können Sie ein eigenes Template hinterlegen.</target>
-			</trans-unit>
+      <trans-unit id="useHttps" xml:space="preserve">
+        <source>Use https as protocol: You can't call the http protocol when your page is running on https. So here you can decide to use the same protocol.</source>
+        <target>https Protokoll verwenden: Das http-Protokoll kann nicht geladen werden, wenn Ihre eigene Seite über das https-Protokoll läuft. Setzen Sie hier das gleiche Protokoll wie das von Ihrer Webseite.</target>
+      </trans-unit>
+      <trans-unit id="googleMapsLibrary" xml:space="preserve">
+        <source>Link to Google Maps API: This setting is for TYPO3 Backend only. Visit your TypoScript-Templates if you want to change the library for Frontend. You only need to fill this field if you want to use an older or beta version.</source>
+        <target>Link zur Google Maps API: Diese Einstellung ist nur für das TYPO3 Backend. Wenn Sie diese Einstellung für das Frontend vornehmen wollen, dann müssen Sie dies in Ihren TypoScript-Templates vornehmen. Füllen Sie dieses Feld nur, wenn Sie eine ältere oder eine der Betaversionen verwenden wollen.</target>
+      </trans-unit>
+      <trans-unit id="googleMapsApiKey" xml:space="preserve">
+        <source>Google Maps JavaScript ApiKey: This setting is for TYPO3 Backend only. Visit your TypoScript-Templates if you want to change the library for Frontend. Visit https://console.developers.google.com Create a new project for Google Maps JavaScript API and insert the retrieved Browser ApiKey here.</source>
+        <target>Google Maps JavaScript ApiKey: Diese Einstellung ist nur für das TYPO3 Backend. Wenn Sie diese Einstellung für das Frontend vornehmen wollen, dann müssen Sie dies in Ihren TypoScript-Templates vornehmen. Besuchen Sie https://console.developers.google.com Erstellen Sie ein neues Projekt vom Typ Google Maps JavaScript API und fügen Sie den erhaltenen Browser ApiKey hier ein.</target>
+      </trans-unit>
+      <trans-unit id="googleGeocodeApiKey" xml:space="preserve">
+        <source>Google Maps Geocode ApiKey: Visit https://console.developers.google.com Create a new project for Google Maps Geocode API and insert here the retrieved Server ApiKey.</source>
+        <target>Google Maps Geocode ApiKey: Besuchen Sie https://console.developers.google.com Erstellen Sie ein neues Projekt vom Typ Google Maps Geocode API und fügen Sie den erhaltenen Server ApiKey hier ein.</target>
+      </trans-unit>
+      <trans-unit id="defaultLatitude" xml:space="preserve">
+        <source>Default Latitude: If you leave this empty Google Maps points to somewhere over the ocean on startup. So it's better to enter some coordinates: http://universimmedia.pagesperso-orange.fr/geo/loc.htm</source>
+        <target>Standard Breitengrad: Wenn dieses Feld leer gelassen wird, dann kann es sein, dass Sie beim Starten der Karte irgendwo über dem Ozean landen. Geben Sie hier zum Beispiel den Breitengrad von Ihrer Firma an: http://universimmedia.pagesperso-orange.fr/geo/loc.htm</target>
+      </trans-unit>
+      <trans-unit id="defaultLongitude" xml:space="preserve">
+        <source>Default Longitude: If you leave this empty Google Maps points to somewhere over the ocean on startup. So it's better to enter some coordinates: http://universimmedia.pagesperso-orange.fr/geo/loc.htm</source>
+        <target>Standard Längengrad: Wenn dieses Feld leer gelassen wird, dann kann es sein, dass Sie beim Starten der Karte irgendwo über dem Ozean landen. Geben Sie hier zum Beispiel den Längengrad von Ihrer Firma an: http://universimmedia.pagesperso-orange.fr/geo/loc.htm</target>
+      </trans-unit>
+      <trans-unit id="defaultRadius" xml:space="preserve">
+        <source>Default Radius (in meters): When using collection type "Radius" you should set a default radius. Else you just see one single point</source>
+        <target>Standard Radius (in Meter): Wenn Sie den Typ "Radius" verwenden, sollten Sie hier eine Meterangabe machen, da es sonst passieren kann, dass Sie nur einen einfachen kleinen Punkt auf der Karte sehen.</target>
+      </trans-unit>
+      <trans-unit id="infoWindowContentTemplatePath" xml:space="preserve">
+        <source>Template path for info window: If you click on a marker a little info window will appear. With this setting you can change that template to your own needs.</source>
+        <target>Templatevorlage für Info PopUp: Wenn Sie auf einen Marker klicken öffnet sich ein kleines Info Fenster. Mit dieser Einstellung können Sie ein eigenes Template hinterlegen.</target>
+      </trans-unit>
 
-			<trans-unit id="strokeColor" xml:space="preserve">
-				<source>Stroke Color: You can set a border color for a overly here</source>
-				<target>Randfarbe: Geben Sie eine Randfarbe für den Overlay an.</target>
-			</trans-unit>
-			<trans-unit id="strokeOpacity" xml:space="preserve">
-				<source>Stroke Opacity: If you set this to 1, you can't see th map behind the border. So it's better to find a value between 0.3 and 0.6</source>
-				<target>Rand Transparenz: Wenn Sie diesen Wert auf 1 setzen, dann können Sie die Karte unter dem Rand nicht mehr sehen. Von daher wäre ein Wert zwischen 0.3 und 0.6 angemessen.</target>
-			</trans-unit>
-			<trans-unit id="strokeWeight" xml:space="preserve">
-				<source>Stroke Weight (in pixel): How thick the border of the overlay should be? A good value is 1 or 2</source>
-				<target>Randbreite (in Pixel): Wie dick soll der Rand der Ebene sein? Ein Wert von 1 oder 2 ist ganz ok.</target>
-			</trans-unit>
-			<trans-unit id="fillColor" xml:space="preserve">
-				<source>Fill Color: Which color the overlay should have?</source>
-				<target>Füllfarbe: Geben Sie hier eine Füllfarbe für die Ebene an.</target>
-			</trans-unit>
-			<trans-unit id="fillOpacity" xml:space="preserve">
-				<source>Transparenz der Füllfarbe:  Wenn Sie diesen Wert auf 1 setzen, dann können Sie die Karte hinter der Füllung nicht mehr sehen. Von daher wäre ein Wert zwischen 0.3 und 0.6 angemessen. Wie empfehlen Ihnen aber einen Wert kleiner als strokeOpacity zu verwenden.</source>
-				<target>Fill Opacity:  If you set this to 1, you can't see th map behind the overlay. So it's better to find a value between 0.3 and 0.6. But it should be less than the value of strokeOpacity</target>
-			</trans-unit>
+      <trans-unit id="strokeColor" xml:space="preserve">
+        <source>Stroke Color: You can set a border color for a overly here</source>
+        <target>Randfarbe: Geben Sie eine Randfarbe für den Overlay an.</target>
+      </trans-unit>
+      <trans-unit id="strokeOpacity" xml:space="preserve">
+        <source>Stroke Opacity: If you set this to 1, you can't see th map behind the border. So it's better to find a value between 0.3 and 0.6</source>
+        <target>Rand Transparenz: Wenn Sie diesen Wert auf 1 setzen, dann können Sie die Karte unter dem Rand nicht mehr sehen. Von daher wäre ein Wert zwischen 0.3 und 0.6 angemessen.</target>
+      </trans-unit>
+      <trans-unit id="strokeWeight" xml:space="preserve">
+        <source>Stroke Weight (in pixel): How thick the border of the overlay should be? A good value is 1 or 2</source>
+        <target>Randbreite (in Pixel): Wie dick soll der Rand der Ebene sein? Ein Wert von 1 oder 2 ist ganz ok.</target>
+      </trans-unit>
+      <trans-unit id="fillColor" xml:space="preserve">
+        <source>Fill Color: Which color the overlay should have?</source>
+        <target>Füllfarbe: Geben Sie hier eine Füllfarbe für die Ebene an.</target>
+      </trans-unit>
+      <trans-unit id="fillOpacity" xml:space="preserve">
+        <source>Transparenz der Füllfarbe:  Wenn Sie diesen Wert auf 1 setzen, dann können Sie die Karte hinter der Füllung nicht mehr sehen. Von daher wäre ein Wert zwischen 0.3 und 0.6 angemessen. Wie empfehlen Ihnen aber einen Wert kleiner als strokeOpacity zu verwenden.</source>
+        <target>Fill Opacity:  If you set this to 1, you can't see th map behind the overlay. So it's better to find a value between 0.3 and 0.6. But it should be less than the value of strokeOpacity</target>
+      </trans-unit>
 
-		</body>
-	</file>
+    </body>
+  </file>
 </xliff>

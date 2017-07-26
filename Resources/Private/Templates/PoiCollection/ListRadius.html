@@ -3,14 +3,14 @@
 <f:layout name="Default" />
 
 <f:section name="main">
-	<f:flashMessages />
+  <f:flashMessages />
 
-	<f:if condition="{poiCollections}">
-		<f:then>
-			<div id="maps2-{data.uid}" class="maps2" data-environment="{environment->maps2:convertToJson()}" data-pois="{poiCollections->maps2:convertToJson()}"></div>
-		</f:then>
-		<f:else>
-			<div class="noPositionFound">Sorry, there are no results within your given radius</div>
-		</f:else>
-	</f:if>
+  <f:if condition="{poiCollections}">
+    <f:then>
+      <div id="maps2-{data.uid}" class="maps2" data-environment="{environment->maps2:convertToJson()}" data-pois="{poiCollections->maps2:convertToJson()}"></div>
+    </f:then>
+    <f:else>
+      <div class="noPositionFound">Sorry, there are no results within your given radius</div>
+    </f:else>
+  </f:if>
 </f:section>

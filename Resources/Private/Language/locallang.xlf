@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <xliff version="1.0">
-	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2013-02-07T11:13:04Z" product-name="maps2">
-		<header/>
-		<body>
+  <file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2013-02-07T11:13:04Z" product-name="maps2">
+    <header/>
+    <body>
 
-			<trans-unit id="tx_maps2_domain_model_poi.latitude" xml:space="preserve" approved="yes">
-				<source>latitude</source>
-			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poi.longitude" xml:space="preserve" approved="yes">
-				<source>longitude</source>
-			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poicollection" xml:space="preserve">
-				<source>Marking</source>
-			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poicollection.title" xml:space="preserve">
-				<source>Title</source>
-			</trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poi.latitude" xml:space="preserve" approved="yes">
+        <source>latitude</source>
+      </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poi.longitude" xml:space="preserve" approved="yes">
+        <source>longitude</source>
+      </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection" xml:space="preserve">
+        <source>Marking</source>
+      </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.title" xml:space="preserve">
+        <source>Title</source>
+      </trans-unit>
 
-			<trans-unit id="rangeSearch.address" xml:space="preserve" approved="yes">
-				<source>Address</source>
-			</trans-unit>
-			<trans-unit id="rangeSearch.radius" xml:space="preserve" approved="yes">
-				<source>Radius</source>
-			</trans-unit>
-			<trans-unit id="rangeSearch.send" xml:space="preserve" approved="yes">
-				<source>Search</source>
-			</trans-unit>
-			<trans-unit id="rangeSearch.multipleResults" xml:space="preserve" approved="yes">
-				<source>For your given address we have found multiple addresses. Please choose one.</source>
-			</trans-unit>
+      <trans-unit id="rangeSearch.address" xml:space="preserve" approved="yes">
+        <source>Address</source>
+      </trans-unit>
+      <trans-unit id="rangeSearch.radius" xml:space="preserve" approved="yes">
+        <source>Radius</source>
+      </trans-unit>
+      <trans-unit id="rangeSearch.send" xml:space="preserve" approved="yes">
+        <source>Search</source>
+      </trans-unit>
+      <trans-unit id="rangeSearch.multipleResults" xml:space="preserve" approved="yes">
+        <source>For your given address we have found multiple addresses. Please choose one.</source>
+      </trans-unit>
 
-			<trans-unit id="searchStreet" xml:space="preserve" approved="yes">
-				<source>Search for street</source>
-			</trans-unit>
+      <trans-unit id="searchStreet" xml:space="preserve" approved="yes">
+        <source>Search for street</source>
+      </trans-unit>
 
-			<trans-unit id="error.noAddressFound" xml:space="preserve" approved="yes">
-				<source>Google can't find a result for address: "%s". Please check your address data and try again.</source>
-			</trans-unit>
+      <trans-unit id="error.noAddressFound" xml:space="preserve" approved="yes">
+        <source>Google can't find a result for address: "%s". Please check your address data and try again.</source>
+      </trans-unit>
 
-		</body>
-	</file>
+    </body>
+  </file>
 </xliff>

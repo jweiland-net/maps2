@@ -1,69 +1,69 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <xliff version="1.0">
-	<file source-language="en" datatype="plaintext" original="messages" date="2013-02-18T15:03:04Z" product-name="maps2">
-		<header/>
-		<body>
-			<trans-unit id="sheetGeneral" xml:space="preserve">
-				<source>General</source>
-			</trans-unit>
-			<trans-unit id="poiCollection" xml:space="preserve">
-				<source>Which marking should be shown? If there is a marking defined in website uri, that one has priority.</source>
-			</trans-unit>
-			<trans-unit id="categories" xml:space="preserve">
-				<source>Show all markings of given categories. This will only work, if there is no marking in website uri nor if a marking is selected above.</source>
-			</trans-unit>
-			<trans-unit id="autoAppend" xml:space="preserve">
-				<source>Append a fixed string to search value. Maybe a cityname. That way the user has only to insert a streetname.</source>
-			</trans-unit>
-			<trans-unit id="mapWidth" xml:space="preserve">
-				<source>Map width</source>
-			</trans-unit>
-			<trans-unit id="mapHeight" xml:space="preserve">
-				<source>Map height</source>
-			</trans-unit>
+  <file source-language="en" datatype="plaintext" original="messages" date="2013-02-18T15:03:04Z" product-name="maps2">
+    <header/>
+    <body>
+      <trans-unit id="sheetGeneral" xml:space="preserve">
+        <source>General</source>
+      </trans-unit>
+      <trans-unit id="poiCollection" xml:space="preserve">
+        <source>Which marking should be shown? If there is a marking defined in website uri, that one has priority.</source>
+      </trans-unit>
+      <trans-unit id="categories" xml:space="preserve">
+        <source>Show all markings of given categories. This will only work, if there is no marking in website uri nor if a marking is selected above.</source>
+      </trans-unit>
+      <trans-unit id="autoAppend" xml:space="preserve">
+        <source>Append a fixed string to search value. Maybe a cityname. That way the user has only to insert a streetname.</source>
+      </trans-unit>
+      <trans-unit id="mapWidth" xml:space="preserve">
+        <source>Map width</source>
+      </trans-unit>
+      <trans-unit id="mapHeight" xml:space="preserve">
+        <source>Map height</source>
+      </trans-unit>
 
-			<trans-unit id="sheetMapOptions" xml:space="preserve">
-				<source>Map Options</source>
-			</trans-unit>
-			<trans-unit id="zoom" xml:space="preserve">
-				<source>Initial Zoom</source>
-			</trans-unit>
-			<trans-unit id="mapTypeId" xml:space="preserve">
-				<source>Initial Map Type</source>
-			</trans-unit>
-			<trans-unit id="mapTypeId.Hybrid" xml:space="preserve">
-				<source>Hybrid</source>
-			</trans-unit>
-			<trans-unit id="mapTypeId.RoadMap" xml:space="preserve">
-				<source>Road Map</source>
-			</trans-unit>
-			<trans-unit id="mapTypeId.Satellite" xml:space="preserve">
-				<source>Satellite</source>
-			</trans-unit>
-			<trans-unit id="mapTypeId.Terrain" xml:space="preserve">
-				<source>Terrain</source>
-			</trans-unit>
-			<trans-unit id="zoomControl" xml:space="preserve">
-				<source>Show Zoom Control</source>
-			</trans-unit>
-			<trans-unit id="mapTypeControl" xml:space="preserve">
-				<source>Show Map Type Control</source>
-			</trans-unit>
-			<trans-unit id="scaleControl" xml:space="preserve">
-				<source>Show Scale Control</source>
-			</trans-unit>
-			<trans-unit id="streetViewControl" xml:space="preserve">
-				<source>Show StreetView Control</source>
-			</trans-unit>
-			<trans-unit id="fullScreenControl" xml:space="preserve">
-				<source>Show full screen Control</source>
-			</trans-unit>
-			<trans-unit id="activateScrollWheel" xml:space="preserve">
-				<source>Activate zoom with mouse scroll wheel</source>
-			</trans-unit>
-			<trans-unit id="styles" xml:space="preserve">
-				<source>Map Style. Have a look at https://snazzymaps.com to copy some cool styles for you map</source>
-			</trans-unit>
-		</body>
-	</file>
+      <trans-unit id="sheetMapOptions" xml:space="preserve">
+        <source>Map Options</source>
+      </trans-unit>
+      <trans-unit id="zoom" xml:space="preserve">
+        <source>Initial Zoom</source>
+      </trans-unit>
+      <trans-unit id="mapTypeId" xml:space="preserve">
+        <source>Initial Map Type</source>
+      </trans-unit>
+      <trans-unit id="mapTypeId.Hybrid" xml:space="preserve">
+        <source>Hybrid</source>
+      </trans-unit>
+      <trans-unit id="mapTypeId.RoadMap" xml:space="preserve">
+        <source>Road Map</source>
+      </trans-unit>
+      <trans-unit id="mapTypeId.Satellite" xml:space="preserve">
+        <source>Satellite</source>
+      </trans-unit>
+      <trans-unit id="mapTypeId.Terrain" xml:space="preserve">
+        <source>Terrain</source>
+      </trans-unit>
+      <trans-unit id="zoomControl" xml:space="preserve">
+        <source>Show Zoom Control</source>
+      </trans-unit>
+      <trans-unit id="mapTypeControl" xml:space="preserve">
+        <source>Show Map Type Control</source>
+      </trans-unit>
+      <trans-unit id="scaleControl" xml:space="preserve">
+        <source>Show Scale Control</source>
+      </trans-unit>
+      <trans-unit id="streetViewControl" xml:space="preserve">
+        <source>Show StreetView Control</source>
+      </trans-unit>
+      <trans-unit id="fullScreenControl" xml:space="preserve">
+        <source>Show full screen Control</source>
+      </trans-unit>
+      <trans-unit id="activateScrollWheel" xml:space="preserve">
+        <source>Activate zoom with mouse scroll wheel</source>
+      </trans-unit>
+      <trans-unit id="styles" xml:space="preserve">
+        <source>Map Style. Have a look at https://snazzymaps.com to copy some cool styles for you map</source>
+      </trans-unit>
+    </body>
+  </file>
 </xliff>
