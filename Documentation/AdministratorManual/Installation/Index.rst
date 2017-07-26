@@ -75,3 +75,11 @@ The extension ships some TypoScript code which needs to be included.
 .. figure:: /Images/AdministratorManual/maps2-include-TypoScript.png
    :width: 500px
    :alt: How to include the static template for maps2
+
+Preparation: Update values in Constant Editor
+---------------------------------------------
+
+#. Switch to the **Template module** and select *Constant Editor*.
+
+#. Add Google Maps JavaScript API Key. Maybe you already have set an API Key in Extensionmanager. But that one is
+   for Backend usage only. This setting here is for Frontend output.
