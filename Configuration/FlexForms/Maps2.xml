@@ -93,7 +93,7 @@
                 <eval>trim,int</eval>
                 <range>
                   <lower>1</lower>
-                  <upper>15</upper>
+                  <upper>20</upper>
                 </range>
                 <wizards>
                   <zoom>
