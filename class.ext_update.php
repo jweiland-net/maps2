@@ -14,6 +14,7 @@ namespace JWeiland\Maps2;
  * The TYPO3 project - inspiring people to share!
  */
 use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Messaging\FlashMessageRendererResolver;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Configuration\FlexForm\FlexFormTools;
 
@@ -135,7 +136,10 @@ class ext_update
                 $messageItem[2],
                 $messageItem[1],
                 $messageItem[0]);
-            if (GeneralUtility::compat_version('8.0')) {
+
+            if (version_compare(TYPO3_branch, '8.6') >= 0) {
+                $output .= GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Messaging\\FlashMessageRendererResolver')->resolve()->render();
+            } elseif (version_compare(TYPO3_branch, '8.0') >= 0) {
                 $output .= $flashMessage->getMessageAsMarkup();
             } else {
                 $output .= $flashMessage->render();

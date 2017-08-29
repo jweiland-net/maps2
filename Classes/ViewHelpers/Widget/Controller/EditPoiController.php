@@ -18,10 +18,10 @@ use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
-use TYPO3\CMS\Fluid\Core\Parser\ParsedTemplateInterface;
-use TYPO3\CMS\Fluid\Core\Parser\TemplateParser;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
 use TYPO3\CMS\Fluid\Core\Widget\WidgetRequest;
+use TYPO3Fluid\Fluid\Core\Parser\ParsedTemplateInterface;
+use TYPO3Fluid\Fluid\Core\Parser\TemplateParser;
 
 /**
  * Class EditPoiController
@@ -38,7 +38,7 @@ class EditPoiController extends AbstractController
      * @var RenderingContext
      */
     protected $renderingContext;
-    
+
     /**
      * initializes all actions
      *
@@ -50,7 +50,7 @@ class EditPoiController extends AbstractController
         $widgetRequest = $this->request;
         $this->renderingContext = $widgetRequest->getWidgetContext()->getViewHelperChildNodeRenderingContext();
     }
-    
+
     /**
      * initialize view
      * add some global vars to view
@@ -70,7 +70,7 @@ class EditPoiController extends AbstractController
             'contentRecord' => $this->configurationManager->getContentObject()->data
         ));
     }
-    
+
     /**
      * index action
      *
@@ -93,10 +93,10 @@ class EditPoiController extends AbstractController
         $this->assign('poiCollection', $poiCollection);
         $this->assign('override', $this->widgetConfiguration['override']);
         $this->assign('property', $this->widgetConfiguration['property']);
-        
+
         return $this->getParsingState()->render($this->renderingContext);
     }
-    
+
     /**
      * get parsing state
      *
@@ -108,11 +108,18 @@ class EditPoiController extends AbstractController
             '%sResources/Private/Templates/ViewHelpers/Widget/EditPoi/Index.html',
             ExtensionManagementUtility::extPath('maps2')
         ));
-        /** @var TemplateParser $templateParser */
-        $templateParser = $this->objectManager->get('TYPO3\\CMS\\Fluid\\Core\\Parser\\TemplateParser');
-        return $templateParser->parse($templateSource);
+
+        if (version_compare(TYPO3_branch, '8.7') >= 0) {
+            /** @var TemplateParser $templateParser */
+            $templateParser = $this->objectManager->get('TYPO3Fluid\\Fluid\\Core\\Parser\\TemplateParser');
+            return $templateParser->parse($templateSource);
+        } else {
+            /** @var TemplateParser $templateParser */
+            $templateParser = $this->objectManager->get('TYPO3\\CMS\\Fluid\\Core\\Parser\\TemplateParser');
+            return $templateParser->parse($templateSource);
+        }
     }
-    
+
     /**
      * Assign a value to the variable container.
      *
