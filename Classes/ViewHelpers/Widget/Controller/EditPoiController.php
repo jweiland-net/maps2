@@ -100,7 +100,7 @@ class EditPoiController extends AbstractController
     /**
      * get parsing state
      *
-     * @return ParsedTemplateInterface
+     * @return ParsedTemplateInterface|\TYPO3\CMS\Fluid\Core\Parser\ParsedTemplateInterface
      */
     protected function getParsingState()
     {
@@ -114,7 +114,7 @@ class EditPoiController extends AbstractController
             $templateParser = $this->objectManager->get('TYPO3Fluid\\Fluid\\Core\\Parser\\TemplateParser');
             return $templateParser->parse($templateSource);
         } else {
-            /** @var TemplateParser $templateParser */
+            /** @var \TYPO3\CMS\Fluid\Core\Parser\TemplateParser $templateParser */
             $templateParser = $this->objectManager->get('TYPO3\\CMS\\Fluid\\Core\\Parser\\TemplateParser');
             return $templateParser->parse($templateSource);
         }
