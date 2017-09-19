@@ -35,23 +35,6 @@ use TYPO3Fluid\Fluid\Core\Parser\TemplateParser;
 class EditPoiController extends AbstractController
 {
     /**
-     * @var RenderingContext
-     */
-    protected $renderingContext;
-
-    /**
-     * initializes all actions
-     *
-     * @return void
-     */
-    public function initializeAction()
-    {
-        /** @var WidgetRequest $widgetRequest */
-        $widgetRequest = $this->request;
-        $this->renderingContext = $widgetRequest->getWidgetContext()->getViewHelperChildNodeRenderingContext();
-    }
-
-    /**
      * initialize view
      * add some global vars to view
      *
@@ -62,8 +45,8 @@ class EditPoiController extends AbstractController
     public function initializeView(ViewInterface $view)
     {
         ArrayUtility::mergeRecursiveWithOverrule($this->defaultSettings, $this->settings);
-        $this->assign('data', $this->configurationManager->getContentObject()->data);
-        $this->assign('environment', array(
+        $this->view->assign('data', $this->configurationManager->getContentObject()->data);
+        $this->view->assign('environment', array(
             'settings' => $this->defaultSettings,
             'extConf' => ObjectAccess::getGettableProperties($this->extConf),
             'id' => $GLOBALS['TSFE']->id,
@@ -94,45 +77,6 @@ class EditPoiController extends AbstractController
         $this->assign('override', $this->widgetConfiguration['override']);
         $this->assign('property', $this->widgetConfiguration['property']);
 
-        return $this->getParsingState()->render($this->renderingContext);
-    }
-
-    /**
-     * get parsing state
-     *
-     * @return ParsedTemplateInterface|\TYPO3\CMS\Fluid\Core\Parser\ParsedTemplateInterface
-     */
-    protected function getParsingState()
-    {
-        $templateSource = file_get_contents(sprintf(
-            '%sResources/Private/Templates/ViewHelpers/Widget/EditPoi/Index.html',
-            ExtensionManagementUtility::extPath('maps2')
-        ));
-
-        if (version_compare(TYPO3_branch, '8.7') >= 0) {
-            /** @var TemplateParser $templateParser */
-            $templateParser = $this->objectManager->get('TYPO3Fluid\\Fluid\\Core\\Parser\\TemplateParser');
-            return $templateParser->parse($templateSource);
-        } else {
-            /** @var \TYPO3\CMS\Fluid\Core\Parser\TemplateParser $templateParser */
-            $templateParser = $this->objectManager->get('TYPO3\\CMS\\Fluid\\Core\\Parser\\TemplateParser');
-            return $templateParser->parse($templateSource);
-        }
-    }
-
-    /**
-     * Assign a value to the variable container.
-     *
-     * @param string $key The key of a view variable to set
-     * @param mixed $value The value of the view variable
-     *
-     * @return void
-     */
-    public function assign($key, $value) {
-        $templateVariableContainer = $this->getTrenderingContext->getTemplateVariableContainer();
-        if ($templateVariableContainer->exists($key)) {
-            $templateVariableContainer->remove($key);
-        }
-        $templateVariableContainer->add($key, $value);
+        return $this->view->render();
     }
 }
