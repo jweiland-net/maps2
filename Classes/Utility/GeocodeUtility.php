@@ -92,21 +92,23 @@ class GeocodeUtility
             ));
             /** @var $flashMessage \TYPO3\CMS\Core\Messaging\FlashMessage */
             $flashMessage = GeneralUtility::makeInstance(
-                FlashMessage::class,
+                'TYPO3\\CMS\\Core\\Messaging\\FlashMessage',
                 $message,
                 '',
                 FlashMessage::WARNING
             );
             /** @var $flashMessageService \TYPO3\CMS\Core\Messaging\FlashMessageService */
-            $flashMessageService = GeneralUtility::makeInstance(FlashMessageService::class);
+            $flashMessageService = GeneralUtility::makeInstance(
+                'TYPO3\\CMS\\Core\\Messaging\\FlashMessageService'
+            );
             /** @var $defaultFlashMessageQueue FlashMessageQueue */
             $defaultFlashMessageQueue = $flashMessageService->getMessageQueueByIdentifier();
             $defaultFlashMessageQueue->enqueue($flashMessage);
-            
+
             if ($GLOBALS['TYPO3_CONF_VARS']['BE']['debug']) {
                 DebugUtility::debug($response, 'Response of Google Maps GeoCode API');
             }
-    
+
             return $response;
         }
     }

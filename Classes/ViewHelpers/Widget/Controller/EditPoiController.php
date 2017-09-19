@@ -129,7 +129,7 @@ class EditPoiController extends AbstractController
      * @return void
      */
     public function assign($key, $value) {
-        $templateVariableContainer = $this->renderingContext->getTemplateVariableContainer();
+        $templateVariableContainer = $this->getTrenderingContext->getTemplateVariableContainer();
         if ($templateVariableContainer->exists($key)) {
             $templateVariableContainer->remove($key);
         }
