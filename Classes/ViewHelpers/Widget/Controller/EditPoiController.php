@@ -45,8 +45,8 @@ class EditPoiController extends AbstractController
     public function initializeView(ViewInterface $view)
     {
         ArrayUtility::mergeRecursiveWithOverrule($this->defaultSettings, $this->settings);
-        $this->view->assign('data', $this->configurationManager->getContentObject()->data);
-        $this->view->assign('environment', array(
+        $view->assign('data', $this->configurationManager->getContentObject()->data);
+        $view->assign('environment', array(
             'settings' => $this->defaultSettings,
             'extConf' => ObjectAccess::getGettableProperties($this->extConf),
             'id' => $GLOBALS['TSFE']->id,
@@ -73,9 +73,9 @@ class EditPoiController extends AbstractController
             $poiCollection->setLongitude($this->extConf->getDefaultLongitude());
             $poiCollection->setCollectionType('Point');
         }
-        $this->assign('poiCollection', $poiCollection);
-        $this->assign('override', $this->widgetConfiguration['override']);
-        $this->assign('property', $this->widgetConfiguration['property']);
+        $this->view->assign('poiCollection', $poiCollection);
+        $this->view->assign('override', $this->widgetConfiguration['override']);
+        $this->view->assign('property', $this->widgetConfiguration['property']);
 
         return $this->view->render();
     }
