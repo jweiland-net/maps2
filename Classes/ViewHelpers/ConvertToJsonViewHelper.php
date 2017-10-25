@@ -1,8 +1,8 @@
 <?php
 namespace JWeiland\Maps2\ViewHelpers;
 
-/**
- * This file is part of the TYPO3 CMS project.
+/*
+ * This file is part of the maps2 project.
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 2
@@ -13,6 +13,7 @@ namespace JWeiland\Maps2\ViewHelpers;
  *
  * The TYPO3 project - inspiring people to share!
  */
+
 use JWeiland\Maps2\Domain\Model\Poi;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Domain\Model\Category;
@@ -37,12 +38,12 @@ class ConvertToJsonViewHelper extends AbstractViewHelper
      * @var boolean
      */
     protected $escapeChildren = false;
-    
+
     /**
      * @var boolean
      */
     protected $escapeOutput = false;
-    
+
     /**
      * implements a ViewHelper to convert an array into JSON format
      *

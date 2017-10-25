@@ -1,8 +1,8 @@
 <?php
 namespace JWeiland\Maps2\Controller;
 
-/**
- * This file is part of the TYPO3 CMS project.
+/*
+ * This file is part of the maps2 project.
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 2
@@ -13,6 +13,7 @@ namespace JWeiland\Maps2\Controller;
  *
  * The TYPO3 project - inspiring people to share!
  */
+
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Utility\DataMapper;
@@ -80,7 +81,7 @@ class AbstractController extends ActionController
     {
         $this->geocodeUtility = $geocodeUtility;
     }
-    
+
     /**
      * Initializes the controller before invoking an action method.
      *
@@ -128,7 +129,7 @@ class AbstractController extends ActionController
         );
         return $view->render();
     }
-    
+
     /**
      * Get template path for info window content
      *
@@ -144,7 +145,7 @@ class AbstractController extends ActionController
         ) {
             $path = $this->settings['infoWindowContentTemplatePath'];
         }
-        
+
         return $path;
     }
 }

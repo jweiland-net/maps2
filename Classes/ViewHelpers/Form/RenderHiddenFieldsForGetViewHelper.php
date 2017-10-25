@@ -1,8 +1,8 @@
 <?php
 namespace JWeiland\Maps2\ViewHelpers\Form;
 
-/**
- * This file is part of the TYPO3 CMS project.
+/*
+ * This file is part of the maps2 project.
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 2
@@ -13,6 +13,7 @@ namespace JWeiland\Maps2\ViewHelpers\Form;
  *
  * The TYPO3 project - inspiring people to share!
  */
+
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Service\ExtensionService;
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
@@ -33,12 +34,12 @@ class RenderHiddenFieldsForGetViewHelper extends AbstractViewHelper
      * @var boolean
      */
     protected $escapeChildren = false;
-    
+
     /**
      * @var boolean
      */
     protected $escapeOutput = false;
-    
+
     /**
      * @var ExtensionService
      */

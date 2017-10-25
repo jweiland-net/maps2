@@ -1,8 +1,8 @@
 <?php
 namespace JWeiland\Maps2\ViewHelpers\Widget;
 
-/**
- * This file is part of the TYPO3 CMS project.
+/*
+ * This file is part of the maps2 project.
  *
  * It is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, either version 2
@@ -13,6 +13,7 @@ namespace JWeiland\Maps2\ViewHelpers\Widget;
  *
  * The TYPO3 project - inspiring people to share!
  */
+
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetViewHelper;
 
