@@ -62,9 +62,13 @@ class EditPoiController extends AbstractController
      */
     public function indexAction()
     {
+        if (!$this->mapService->isGoogleMapRequestAllowed()) {
+            return $this->mapService->showAllowMapForm($this->getControllerContext()->getRequest());
+        }
+
         $poiCollection = $this->widgetConfiguration['poiCollection'];
         if ($poiCollection instanceof PoiCollection) {
-            $poiCollection->setInfoWindowContent($this->renderInfoWindow($poiCollection));
+            $this->mapService->setInfoWindow($poiCollection);
         } else {
             // this is more a fallback. It would be better that the foreign extension author generates a PoiCollection on its own
             /** @var PoiCollection $poiCollection */

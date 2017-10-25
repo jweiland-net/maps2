@@ -15,6 +15,10 @@ namespace JWeiland\Maps2\ViewHelpers\Widget\Controller;
  */
 
 use JWeiland\Maps2\Domain\Model\PoiCollection;
+use JWeiland\Maps2\Service\MapService;
+use TYPO3\CMS\Core\Utility\HttpUtility;
+use TYPO3\CMS\Extbase\Mvc\Web\Request;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
  * Class PoiCollectionController
@@ -30,18 +34,22 @@ class PoiCollectionController extends AbstractController
     /**
      * index action
      *
-     * @return void
+     * @return string
      */
     public function indexAction()
     {
+        if (!$this->mapService->isGoogleMapRequestAllowed()) {
+            return $this->mapService->showAllowMapForm($this->getControllerContext()->getRequest());
+        }
+
         $poiCollection = $this->widgetConfiguration['poiCollection'];
         if ($poiCollection instanceof PoiCollection) {
-            $poiCollection->setInfoWindowContent($this->renderInfoWindow($poiCollection));
+            $this->mapService->setInfoWindow($poiCollection);
             $this->view->assign('poiCollections', array($poiCollection));
         } elseif ($this->widgetConfiguration['poiCollections'] instanceof \Traversable) {
             /** @var PoiCollection $poiCollection */
             foreach ($this->widgetConfiguration['poiCollections'] as $poiCollection) {
-                $poiCollection->setInfoWindowContent($this->renderInfoWindow($poiCollection));
+                $this->mapService->setInfoWindow($poiCollection);
             }
             $this->view->assign('poiCollections', $this->widgetConfiguration['poiCollections']);
         }

@@ -28,10 +28,13 @@ class CityMapController extends AbstractController
     /**
      * action show
      *
-     * @return void
+     * @return string
      */
     public function showAction()
     {
+        if (!$this->mapService->isGoogleMapRequestAllowed()) {
+            return $this->mapService->showAllowMapForm($this->getControllerContext()->getRequest());
+        }
     }
 
     /**

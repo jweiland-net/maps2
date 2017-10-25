@@ -16,6 +16,7 @@ namespace JWeiland\Maps2\ViewHelpers\Widget\Controller;
 
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
+use JWeiland\Maps2\Service\MapService;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
@@ -52,14 +53,43 @@ abstract class AbstractController extends AbstractWidgetController
     protected $extConf;
 
     /**
+     * @var MapService
+     */
+    protected $mapService;
+
+    /**
      * inject extConf
      *
      * @param ExtConf $extConf
+     *
      * @return void
      */
     public function injectExtConf(ExtConf $extConf)
     {
         $this->extConf = $extConf;
+    }
+
+    /**
+     * inject mapService
+     *
+     * @param MapService $mapService
+     *
+     * @return void
+     */
+    public function injectMapService(MapService $mapService)
+    {
+        $this->mapService = $mapService;
+    }
+
+    /**
+     * Initializes the controller before invoking an action method.
+     *
+     * @return void
+     */
+    public function initializeAction()
+    {
+        $this->settings['infoWindowContentTemplatePath'] = trim($this->settings['infoWindowContentTemplatePath']);
+        $this->mapService->explicitAllowGoogleMapRequests($this->request);
     }
 
     /**
@@ -80,43 +110,5 @@ abstract class AbstractController extends AbstractWidgetController
             'id' => $GLOBALS['TSFE']->id,
             'contentRecord' => $this->configurationManager->getContentObject()->data
         ));
-    }
-
-    /**
-     * Render InfoWindow for marker
-     *
-     * @param PoiCollection $poiCollection
-     * @return string
-     */
-    protected function renderInfoWindow(PoiCollection $poiCollection)
-    {
-        /** @var \TYPO3\CMS\Fluid\View\StandaloneView $view */
-        $view = $this->objectManager->get('TYPO3\\CMS\\Fluid\\View\\StandaloneView');
-        $view->assign('poiCollection', $poiCollection);
-        $view->setTemplatePathAndFilename(
-            GeneralUtility::getFileAbsFileName(
-                $this->getInfoWindowContentTemplatePath()
-            )
-        );
-        return $view->render();
-    }
-
-    /**
-     * Get template path for info window content
-     *
-     * @return string
-     */
-    protected function getInfoWindowContentTemplatePath()
-    {
-        // get default template path
-        $path = $this->extConf->getInfoWindowContentTemplatePath();
-        if (
-            isset($this->settings['infoWindowContentTemplatePath']) &&
-            !empty($this->settings['infoWindowContentTemplatePath'])
-        ) {
-            $path = $this->settings['infoWindowContentTemplatePath'];
-        }
-
-        return $path;
     }
 }

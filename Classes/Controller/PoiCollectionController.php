@@ -24,7 +24,6 @@ use TYPO3\CMS\Extbase\Mvc\Web\Request;
 /**
  * Class PoiCollectionController
  *
- * @category Controller
  * @package  Maps2
  * @author   Stefan Froemken <projects@jweiland.net>
  * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
@@ -50,33 +49,40 @@ class PoiCollectionController extends AbstractController
     }
 
     /**
+     * Initialize all actions in this class
+     *
+     * @return void
+     */
+    public function initializeAction()
+    {
+        $this->mapService->explicitAllowGoogleMapRequests($this->request);
+    }
+
+    /**
      * action show
      *
      * @param PoiCollection $poiCollection PoiCollection from URI has highest priority
      *
-     * @return void
+     * @return string
      */
     public function showAction(PoiCollection $poiCollection = null)
     {
-        if (!$this->isMaps2Allowed()) {
-            /** @var Request $request */
-            $request = $this->getControllerContext()->getRequest();
-            $this->forward('allowMap', null, null, array(
-                'previousRequestUri' => $request->getRequestUri()
-            ));
+        if (!$this->mapService->isGoogleMapRequestAllowed()) {
+            return $this->mapService->showAllowMapForm($this->getControllerContext()->getRequest());
         }
+
         // if uri is empty and a poiCollection is set in FlexForm
         if ($poiCollection === null && !empty($this->settings['poiCollection'])) {
             $poiCollection = $this->poiCollectionRepository->findByUid((int)$this->settings['poiCollection']);
         }
         if ($poiCollection instanceof PoiCollection) {
-            $poiCollection->setInfoWindowContent($this->renderInfoWindow($poiCollection));
+            $this->mapService->setInfoWindow($poiCollection);
             $this->view->assign('poiCollections', $poiCollection);
         } elseif (!empty($this->settings['categories'])) {
             // if no poiCollection could be retrieved, but a category is set
             $poiCollections = $this->poiCollectionRepository->findPoisByCategories($this->settings['categories']);
             foreach ($poiCollections as $poiCollection) {
-                $poiCollection->setInfoWindowContent($this->renderInfoWindow($poiCollection));
+                $this->mapService->setInfoWindow($poiCollection);
             }
             $this->view->assign('poiCollections', $poiCollections);
         }
@@ -92,32 +98,17 @@ class PoiCollectionController extends AbstractController
     /**
      * Show Form/Button to explicit allow Google Map
      *
-     * @param string $previousRequestUri
      * @param bool $explicitAllowed
      *
      * @return void
      */
-    public function allowMapAction($previousRequestUri, $explicitAllowed = false)
+    public function allowMapAction($explicitAllowed = false)
     {
         if ($explicitAllowed) {
-            $this->getTypoScriptFrontendController()->fe_user->setAndSaveSessionData('allowMaps2', 1);
             $this->cacheService->clearPageCache([$GLOBALS['TSFE']->id]);
-            HttpUtility::redirect($previousRequestUri);
-        }
-        $this->view->assign('requestUri', $previousRequestUri);
-    }
-
-    /**
-     * Check, if Google Maps is allowed to be shown in frontend
-     *
-     * @return bool
-     */
-    protected function isMaps2Allowed()
-    {
-        if ($this->extConf->getExplicitAllowGoogleMaps()) {
-            return (bool)$this->getTypoScriptFrontendController()->fe_user->getKey('ses', 'allowMaps2');
-        } else {
-            return true;
+            /** @var Request $originalRequest */
+            $originalRequest = $this->request->getOriginalRequest();
+            HttpUtility::redirect($originalRequest->getRequestUri());
         }
     }
 
@@ -199,7 +190,7 @@ class PoiCollectionController extends AbstractController
     {
         $poiCollections = $this->poiCollectionRepository->searchWithinRadius($latitude, $longitude, $radius);
         foreach ($poiCollections as $poiCollection) {
-            $poiCollection->setInfoWindowContent($this->renderInfoWindow($poiCollection));
+            $this->mapService->setInfoWindow($poiCollection);
         }
 
         $this->view->assign('latitude', $latitude);
