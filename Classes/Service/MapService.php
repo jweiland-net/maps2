@@ -129,6 +129,7 @@ class MapService
     public function explicitAllowGoogleMapRequests(Request $request)
     {
         if ($this->isGoogleMapRequestAllowed($request)) {
+            $this->cacheService->clearPageCache([$this->getTypoScriptFrontendController()->id]);
             $this->getTypoScriptFrontendController()->fe_user->setSessionData('allowMaps2', 1);
         }
     }
