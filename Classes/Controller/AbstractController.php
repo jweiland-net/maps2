@@ -22,6 +22,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
  * Class AbstractController
@@ -53,6 +54,7 @@ class AbstractController extends ActionController
      * inject extConf
      *
      * @param ExtConf $extConf
+     *
      * @return void
      */
     public function injectExtConf(ExtConf $extConf)
@@ -64,6 +66,7 @@ class AbstractController extends ActionController
      * inject dataMapper
      *
      * @param DataMapper $dataMapper
+     *
      * @return void
      */
     public function injectDataMapper(DataMapper $dataMapper)
@@ -75,6 +78,7 @@ class AbstractController extends ActionController
      * inject geocodeUtility
      *
      * @param GeocodeUtility $geocodeUtility
+     *
      * @return void
      */
     public function injectGeocodeUtility(GeocodeUtility $geocodeUtility)
@@ -115,6 +119,7 @@ class AbstractController extends ActionController
      * Render InfoWindow for marker
      *
      * @param PoiCollection $poiCollection
+     *
      * @return string
      */
     protected function renderInfoWindow(PoiCollection $poiCollection)
@@ -147,5 +152,13 @@ class AbstractController extends ActionController
         }
 
         return $path;
+    }
+
+    /**
+     * @return TypoScriptFrontendController
+     */
+    protected function getTypoScriptFrontendController()
+    {
+        return $GLOBALS['TSFE'];
     }
 }

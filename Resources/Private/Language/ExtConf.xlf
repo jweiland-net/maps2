@@ -15,6 +15,9 @@
       <trans-unit id="googleGeocodeApiKey" xml:space="preserve">
         <source>Google Maps Geocode ApiKey: Visit https://console.developers.google.com Create a new project for Google Maps Geocode API and insert here the retrieved Server ApiKey.</source>
       </trans-unit>
+      <trans-unit id="explicitAllowGoogleMaps" xml:space="preserve">
+        <source>Explicit allow Map: While showing Google Maps in frontend the browser sends multiple requests to Google Servers. These requests contains the IP address of the website visitor which is a user internal information. In some countries the user has to explizit allow sending theses informations to third party servers.</source>
+      </trans-unit>
       <trans-unit id="defaultLatitude" xml:space="preserve">
         <source>Default Latitude: If you leave this empty Google Maps points to somewhere over the ocean on startup. So it's better to enter some coordinates: http://universimmedia.pagesperso-orange.fr/geo/loc.htm</source>
       </trans-unit>

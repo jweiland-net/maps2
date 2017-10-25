@@ -3,6 +3,18 @@
   <file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2013-02-07T11:13:04Z" product-name="maps2">
     <header/>
     <body>
+      <trans-unit id="google.map" xml:space="preserve" approved="yes">
+        <source>Google Map</source>
+      </trans-unit>
+      <trans-unit id="google.protectData" xml:space="preserve" approved="yes">
+        <source>Protect your data</source>
+      </trans-unit>
+      <trans-unit id="google.explainActivation" xml:space="preserve" approved="yes">
+        <source>Click on "activate" to allow us requesting google servers to show maps.</source>
+      </trans-unit>
+      <trans-unit id="google.activate" xml:space="preserve" approved="yes">
+        <source>Activate</source>
+      </trans-unit>
 
       <trans-unit id="tx_maps2_domain_model_poi.latitude" xml:space="preserve" approved="yes">
         <source>latitude</source>
@@ -37,7 +49,6 @@
       <trans-unit id="error.noAddressFound" xml:space="preserve" approved="yes">
         <source>Google can't find a result for address: "%s". Please check your address data and try again.</source>
       </trans-unit>
-
     </body>
   </file>
 </xliff>

@@ -18,6 +18,8 @@ use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Domain\Model\Search;
 use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Utility\HttpUtility;
+use TYPO3\CMS\Extbase\Mvc\Web\Request;
 
 /**
  * Class PoiCollectionController
@@ -51,10 +53,18 @@ class PoiCollectionController extends AbstractController
      * action show
      *
      * @param PoiCollection $poiCollection PoiCollection from URI has highest priority
+     *
      * @return void
      */
     public function showAction(PoiCollection $poiCollection = null)
     {
+        if (!$this->isMaps2Allowed()) {
+            /** @var Request $request */
+            $request = $this->getControllerContext()->getRequest();
+            $this->forward('allowMap', null, null, array(
+                'previousRequestUri' => $request->getRequestUri()
+            ));
+        }
         // if uri is empty and a poiCollection is set in FlexForm
         if ($poiCollection === null && !empty($this->settings['poiCollection'])) {
             $poiCollection = $this->poiCollectionRepository->findByUid((int)$this->settings['poiCollection']);
@@ -80,10 +90,43 @@ class PoiCollectionController extends AbstractController
     }
 
     /**
+     * Show Form/Button to explicit allow Google Map
+     *
+     * @param string $previousRequestUri
+     * @param bool $explicitAllowed
+     *
+     * @return void
+     */
+    public function allowMapAction($previousRequestUri, $explicitAllowed = false)
+    {
+        if ($explicitAllowed) {
+            $this->getTypoScriptFrontendController()->fe_user->setAndSaveSessionData('allowMaps2', 1);
+            $this->cacheService->clearPageCache([$GLOBALS['TSFE']->id]);
+            HttpUtility::redirect($previousRequestUri);
+        }
+        $this->view->assign('requestUri', $previousRequestUri);
+    }
+
+    /**
+     * Check, if Google Maps is allowed to be shown in frontend
+     *
+     * @return bool
+     */
+    protected function isMaps2Allowed()
+    {
+        if ($this->extConf->getExplicitAllowGoogleMaps()) {
+            return (bool)$this->getTypoScriptFrontendController()->fe_user->getKey('ses', 'allowMaps2');
+        } else {
+            return true;
+        }
+    }
+
+    /**
      * action search
      * This action shows a form to start a new radius search
      *
      * @param Search $search
+     *
      * @return void
      */
     public function searchAction(Search $search = null)
@@ -111,6 +154,7 @@ class PoiCollectionController extends AbstractController
      * With this action the user has the possibility to decide which position he want to see.
      *
      * @param Search $search
+     *
      * @return void
      */
     public function multipleResultsAction(Search $search)
@@ -148,6 +192,7 @@ class PoiCollectionController extends AbstractController
      * @param float $latitude
      * @param float $longitude
      * @param int $radius
+     *
      * @return void
      */
     public function listRadiusAction($latitude, $longitude, $radius)

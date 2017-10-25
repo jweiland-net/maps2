@@ -7,7 +7,7 @@ if (!defined('TYPO3_MODE')) {
     'JWeiland.' . $_EXTKEY,
     'Maps2',
     array(
-        'PoiCollection' => 'show',
+        'PoiCollection' => 'show, allowMap',
         'Ajax' => 'callAjaxObject',
     ),
     // non-cacheable actions
