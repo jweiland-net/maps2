@@ -19,8 +19,10 @@ use JWeiland\Maps2\Domain\Model\PoiCollection;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\Request;
+use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Service\CacheService;
+use TYPO3\CMS\Fluid\Core\Widget\WidgetRequest;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
@@ -128,9 +130,12 @@ class MapService
      */
     public function explicitAllowGoogleMapRequests(Request $request)
     {
-        if ($this->isGoogleMapRequestAllowed($request)) {
+        if (
+            (bool)$this->getTypoScriptFrontendController()->fe_user->getSessionData('allowMaps2') === false
+            && $this->isGoogleMapRequestAllowed($request)
+        ) {
             $this->cacheService->clearPageCache([$this->getTypoScriptFrontendController()->id]);
-            $this->getTypoScriptFrontendController()->fe_user->setSessionData('allowMaps2', 1);
+            $this->getTypoScriptFrontendController()->fe_user->setAndSaveSessionData('allowMaps2', 1);
         }
     }
 
@@ -150,8 +155,50 @@ class MapService
                 'EXT:maps2/Resources/Private/Templates/AllowMapForm.html'
             ));
         $view->assign('settings', $this->settings);
-        $view->assign('request', $request);
+        $view->assign('requestUri', $this->getRequestUri($request));
         return $view->render();
+    }
+
+    /**
+     * Get request URI
+     *
+     * @param Request $request
+     *
+     * @return string
+     */
+    protected function getRequestUri(Request $request)
+    {
+        /** @var UriBuilder $uriBuilder */
+        $uriBuilder = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Mvc\\Web\\Routing\\UriBuilder');
+
+        if ($request instanceof WidgetRequest) {
+            $widgetContext = $request->getWidgetContext();
+
+            return $uriBuilder->reset()
+                ->setArguments(array(
+                    $widgetContext->getParentPluginNamespace() => array(
+                        $widgetContext->getWidgetIdentifier() => array(
+                            'explicitAllowed' => 1
+                        )
+                    )
+                ))
+                ->setAddQueryString(true)
+                ->setArgumentsToBeExcludedFromQueryString(['cHash'])
+                ->build();
+        } else {
+            return $uriBuilder->reset()
+                ->setAddQueryString(true)
+                ->setArgumentsToBeExcludedFromQueryString(['cHash'])
+                ->uriFor(
+                    $request->getControllerActionName(),
+                    array(
+                        'explicitAllowed' => 1
+                    ),
+                    $request->getControllerName(),
+                    $request->getControllerExtensionName(),
+                    $request->getPluginName()
+                );
+        }
     }
 
     /**

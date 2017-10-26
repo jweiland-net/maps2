@@ -3,12 +3,6 @@
   <p>{f:translate(key: 'google.protectData', extensionName: 'maps2')}<br />
     {f:translate(key: 'google.explainActivation', extensionName: 'maps2')}</p>
   <p>
-    <f:link.action
-      action="{request.controllerActionName}"
-      controller="{request.controllerName}"
-      extensionName="{request.controllerExtensionName}"
-      arguments="{explicitAllowed: 1}"
-      addQueryString="1"
-      argumentsToBeExcludedFromQueryString="{0: 'id'}"
-    >{f:translate(key: 'google.activate', extensionName: 'maps2')}</f:link.action></p>
+    <a href="{requestUri}">{f:translate(key: 'google.activate', extensionName: 'maps2')}</a>
+  </p>
 </div>
