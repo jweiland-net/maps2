@@ -41,10 +41,15 @@ class CityMapController extends AbstractController
      * action search
      *
      * @param string $street
-     * @return void
+     *
+     * @return string
      */
     public function searchAction($street)
     {
+        if (!$this->mapService->isGoogleMapRequestAllowed()) {
+            return $this->mapService->showAllowMapForm($this->getControllerContext()->getRequest());
+        }
+
         $response = $this->geocodeUtility->findPositionByAddress(
             strip_tags($street) . ' ' . $this->settings['autoAppend']
         );

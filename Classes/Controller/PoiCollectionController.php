@@ -96,23 +96,6 @@ class PoiCollectionController extends AbstractController
     }
 
     /**
-     * Show Form/Button to explicit allow Google Map
-     *
-     * @param bool $explicitAllowed
-     *
-     * @return void
-     */
-    public function allowMapAction($explicitAllowed = false)
-    {
-        if ($explicitAllowed) {
-            $this->cacheService->clearPageCache([$GLOBALS['TSFE']->id]);
-            /** @var Request $originalRequest */
-            $originalRequest = $this->request->getOriginalRequest();
-            HttpUtility::redirect($originalRequest->getRequestUri());
-        }
-    }
-
-    /**
      * action search
      * This action shows a form to start a new radius search
      *
@@ -146,12 +129,15 @@ class PoiCollectionController extends AbstractController
      *
      * @param Search $search
      *
-     * @return void
+     * @return string
      */
     public function multipleResultsAction(Search $search)
     {
-        $radiusResults = $this->geocodeUtility->findPositionByAddress($search->getAddress());
+        if (!$this->mapService->isGoogleMapRequestAllowed()) {
+            return $this->mapService->showAllowMapForm($this->getControllerContext()->getRequest());
+        }
 
+        $radiusResults = $this->geocodeUtility->findPositionByAddress($search->getAddress());
         if ($radiusResults->count() == 1) {
             /* @var $radiusResult \JWeiland\Maps2\Domain\Model\RadiusResult */
             $radiusResult = $radiusResults->current();
@@ -184,10 +170,14 @@ class PoiCollectionController extends AbstractController
      * @param float $longitude
      * @param int $radius
      *
-     * @return void
+     * @return string
      */
     public function listRadiusAction($latitude, $longitude, $radius)
     {
+        if (!$this->mapService->isGoogleMapRequestAllowed()) {
+            return $this->mapService->showAllowMapForm($this->getControllerContext()->getRequest());
+        }
+
         $poiCollections = $this->poiCollectionRepository->searchWithinRadius($latitude, $longitude, $radius);
         foreach ($poiCollections as $poiCollection) {
             $this->mapService->setInfoWindow($poiCollection);
