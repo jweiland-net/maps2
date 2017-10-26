@@ -84,6 +84,13 @@ class ExtConf implements SingletonInterface
     protected $infoWindowContentTemplatePath = '';
 
     /**
+     * allowMapTemplatePath
+     *
+     * @var string
+     */
+    protected $allowMapTemplatePath = '';
+
+    /**
      * stroke color
      *
      * @var string
@@ -370,6 +377,31 @@ class ExtConf implements SingletonInterface
     public function setInfoWindowContentTemplatePath($infoWindowContentTemplatePath)
     {
         $this->infoWindowContentTemplatePath = (string)$infoWindowContentTemplatePath;
+    }
+
+    /**
+     * Returns the allowMapTemplatePath
+     *
+     * @return string $allowMapTemplatePath
+     */
+    public function getAllowMapTemplatePath()
+    {
+        if (empty($this->allowMapTemplatePath)) {
+            $this->allowMapTemplatePath = 'EXT:maps2/Resources/Private/Templates/AllowMapForm.html';
+        }
+        return $this->allowMapTemplatePath;
+    }
+
+    /**
+     * Sets the allowMapTemplatePath
+     *
+     * @param string $allowMapTemplatePath
+     *
+     * @return void
+     */
+    public function setAllowMapTemplatePath($allowMapTemplatePath)
+    {
+        $this->allowMapTemplatePath = (string)$allowMapTemplatePath;
     }
 
     /**

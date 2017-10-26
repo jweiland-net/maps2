@@ -31,10 +31,12 @@ Properties
   useHttps_                       basic    0
   googleMapsJavaScriptApiKey_     basic
   googleMapsGeocodeApiKey_        basic
+  explicitAllowGoogleMaps_        basic    0
   defaultLongitude_               basic    0.000000
   defaultLatitude_                basic    0.000000
   defaultRadius_                  basic    250
-  infoWindowContentTemplatePath_
+  infoWindowContentTemplatePath_  basic    EXT:maps2/Resources/Private/Templates/InfoWindowContent.html
+  allowMapTemplatePath_           basic    EXT:maps2/Resources/Private/Templates/AllowMapForm.html
   strokeColor_                    design   #FF0000
   strokeOpacity_                  design   0.8
   strokeWeight_                   design   2
@@ -80,6 +82,16 @@ googleMapsJavaScriptApiKey
 Since version 2.0.0 this extension needs a Google Maps JavaScript ApiKey which you have to get
 over `Google Console<http://console.developers.google.com>`_
 
+.. _extensionManager-explicitAllowGoogleMaps:
+
+explicitAllowGoogleMaps
+"""""""""""""""""""""""
+
+If you use our maps2 extension your browser will send requests to Google Servers to retrieve the map images.
+These requests contains the IP address of the website visitors which is a user defined information in some countries.
+User defined information which will be sent to third party servers needs to be explicit allowed by the visitor.
+Enable this option, if you need this explicit activation of Google Maps.
+
 .. _extensionManager-googleMapsGeocodeApiKey:
 
 googleMapsGeocodeApiKey
@@ -118,6 +130,16 @@ infoWindowContentTemplatePath
 
 You can define your own default template for these little info window content when clicking on a marker.
 Further you can override this template path again with TypoScript at settings.infoWindowContentTemplatePath = [path]
+
+.. _extensionManager-allowMapTemplatePath::
+
+allowMapTemplatePath
+""""""""""""""""""""
+
+This option is only valid if explicitAllowGoogleMaps is activ.
+Define your own template which will be shown, as long as the visitor has not explicit allowed requests
+to Google Servers
+You can override this template path again with TypoScript at settings.allowMapTemplatePath = [path]
 
 .. _extensionManager-strokeColor::
 

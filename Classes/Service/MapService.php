@@ -152,7 +152,7 @@ class MapService
         $view = $this->objectManager->get('TYPO3\\CMS\\Fluid\\View\\StandaloneView');
         $view->setTemplatePathAndFilename(
             GeneralUtility::getFileAbsFileName(
-                'EXT:maps2/Resources/Private/Templates/AllowMapForm.html'
+                $this->getAllowMapTemplatePath()
             ));
         $view->assign('settings', $this->settings);
         $view->assign('requestUri', $this->getRequestUri($request));
@@ -247,6 +247,25 @@ class MapService
             !empty($this->settings['infoWindowContentTemplatePath'])
         ) {
             $path = $this->settings['infoWindowContentTemplatePath'];
+        }
+
+        return $path;
+    }
+
+    /**
+     * Get template path for info window content
+     *
+     * @return string
+     */
+    protected function getAllowMapTemplatePath()
+    {
+        // get default template path
+        $path = $this->extConf->getAllowMapTemplatePath();
+        if (
+            isset($this->settings['allowMapTemplatePath']) &&
+            !empty($this->settings['allowMapTemplatePath'])
+        ) {
+            $path = $this->settings['allowMapTemplatePath'];
         }
 
         return $path;

@@ -37,6 +37,8 @@ Properties
   categories_                     Categories                  General      string
   mapWidth_                       Map width                   General      string
   mapHeight_                      Map height                  General      string
+  infoWindowContentTemplatePath_  InfoWindow Template path    General      string
+  allowMapTemplatePath_           AllowMap template path      General      string
   zoom_                           Zoom                        Map Options  integer
   mapTypeId_                      Map type                    Map Options  string
   zoomControl_                    Zoom control                Map Options  boolean
@@ -45,7 +47,6 @@ Properties
   streetViewControl_              Street view control         Map Options  boolean
   fullScreenControl_              Full Screen control         Map Options  boolean
   activateScrollWheel_            Activate Scroll Wheel zoom  Map Options  boolean
-  infoWindowContentTemplatePath_  Overview map control        Map Options  boolean
   =============================== =========================== ============ ========
 
 .. _tsPoiCollection:
@@ -107,6 +108,38 @@ mapHeight
          The height of the map.
 
 .. _tsZoom:
+
+infoWindowContentTemplatePath
+"""""""""""""""""""""""""""""
+
+.. container:: table-row
+
+   Property
+         infoWindowContentTemplatePath
+   Data type
+         string
+   Description
+         The info-window of a marker has its own html template, which you can set to your own destination. This
+         setting it not part of the plugin configuration and can only be set within the settings-part in TS
+         setup. File prefixes like EXT: are allowed.
+         For extension developers: If you have build your own extension and you want to use the maps2 widgets, you
+         have to provide this setting with the exact same name to your extension, too. If not, we will use the
+         default template path of extension configuration in extension manager.
+
+allowMapTemplatePath
+""""""""""""""""""""
+
+.. container:: table-row
+
+   Property
+         allowMapTemplatePath
+   Data type
+         string
+   Description
+         With this setting you can override the default template from extension configuration. This
+         setting it not part of the plugin configuration and can only be set within the settings-part in TS
+         setup. File prefixes like EXT: are allowed. Please have a look into the extension configuration
+         for a detailed explaination.
 
 zoom
 """"
@@ -217,20 +250,3 @@ activateScrollWheel
          boolean
    Description
          If deactivated you can not zoom via your mouse scroll wheel.
-
-infoWindowContentTemplatePath
-"""""""""""""""""""""""""""""
-
-.. container:: table-row
-
-   Property
-         infoWindowContentTemplatePath
-   Data type
-         string
-   Description
-         The info-window of a marker has its own html template, which you can set to your own destination. This
-         setting it not part of the plugin configuration and can only be set within the settings-part in TS
-         setup. File prefixes like EXT: are allowed.
-         For extension developers: If you have build your own extension and you want to use the maps2 widgets, you
-         have to provide this setting with the exact same name to your extension, too. If not, we will use the
-         default template path of extension configuration in extension manager.

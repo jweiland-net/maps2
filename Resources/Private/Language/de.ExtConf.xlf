@@ -40,6 +40,10 @@
         <source>Template path for info window: If you click on a marker a little info window will appear. With this setting you can change that template to your own needs.</source>
         <target>Templatevorlage für Info PopUp: Wenn Sie auf einen Marker klicken öffnet sich ein kleines Info Fenster. Mit dieser Einstellung können Sie ein eigenes Template hinterlegen.</target>
       </trans-unit>
+      <trans-unit id="allowMapTemplatePath" xml:space="preserve">
+        <source>Template path for Google Requests: Define a template which will be shown, if a user has to accept sending requests to Google Servers.</source>
+        <target>Templatevorlage für Google Anfragen: Dieses Template wird verwendet, wenn Benutzer zunächst Ihr Einverständnis erklären müssen, dass Anfragen vom Browser an Google Server erfolgen dürfen.</target>
+      </trans-unit>
 
       <trans-unit id="strokeColor" xml:space="preserve">
         <source>Stroke Color: You can set a border color for a overly here</source>
