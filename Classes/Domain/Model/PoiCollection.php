@@ -499,7 +499,7 @@ class PoiCollection extends AbstractEntity
     /**
      * Sets the infoWindowContent
      *
-     * @param int $infoWindowContent
+     * @param string $infoWindowContent
      * @return void
      */
     public function setInfoWindowContent($infoWindowContent)
