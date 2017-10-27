@@ -15,10 +15,6 @@ namespace JWeiland\Maps2\ViewHelpers\Widget\Controller;
  */
 
 use JWeiland\Maps2\Domain\Model\PoiCollection;
-use JWeiland\Maps2\Service\MapService;
-use TYPO3\CMS\Core\Utility\HttpUtility;
-use TYPO3\CMS\Extbase\Mvc\Web\Request;
-use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
  * Class PoiCollectionController

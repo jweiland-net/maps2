@@ -15,10 +15,9 @@ namespace JWeiland\Maps2\ViewHelpers\Widget\Controller;
  */
 
 use JWeiland\Maps2\Configuration\ExtConf;
-use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Service\MapService;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 use TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetController;
@@ -102,7 +101,7 @@ abstract class AbstractController extends AbstractWidgetController
      */
     public function initializeView(ViewInterface $view)
     {
-        ArrayUtility::mergeRecursiveWithOverrule($this->defaultSettings, $this->settings);
+        ArrayUtility::mergeRecursiveWithOverrule($this->defaultSettings, $this->getMaps2TypoScriptSettings());
         $view->assign('data', $this->configurationManager->getContentObject()->data);
         $view->assign('environment', array(
             'settings' => $this->defaultSettings,
@@ -110,5 +109,19 @@ abstract class AbstractController extends AbstractWidgetController
             'id' => $GLOBALS['TSFE']->id,
             'contentRecord' => $this->configurationManager->getContentObject()->data
         ));
+    }
+
+    /**
+     * Get TypoScript settings of maps2
+     *
+     * @return array
+     */
+    protected function getMaps2TypoScriptSettings()
+    {
+        $fullTypoScript = $this->configurationManager->getConfiguration(
+            ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT
+        );
+        $settings = ArrayUtility::getValueByPath($fullTypoScript, 'plugin./tx_maps2.');
+        return is_array($settings) ? $settings : array();
     }
 }
