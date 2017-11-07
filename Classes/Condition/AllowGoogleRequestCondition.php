@@ -70,6 +70,14 @@ class AllowGoogleRequestCondition extends AbstractCondition
             $result = true;
         }
 
+        if (
+            !empty($conditionParameters)
+            && isset($conditionParameters[0])
+            && trim($conditionParameters[0]) === 'negate'
+        ) {
+            $result = !$result;
+        }
+
         return $result;
     }
 
