@@ -47,6 +47,7 @@ class AllowGoogleRequestCondition
 
         if (
             $extConf->getExplicitAllowGoogleMaps()
+            && isset($GLOBALS['TSFE']) && is_object($GLOBALS['TSFE'])
             && $GLOBALS['TSFE']->fe_user->getKey('ses', 'allowMaps2')
         ) {
             $result = true;
