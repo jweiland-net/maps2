@@ -8,12 +8,12 @@
         <target>Google Karte</target>
       </trans-unit>
       <trans-unit id="google.protectData" xml:space="preserve" approved="yes">
-        <source>Protect your data</source>
-        <target>Schutz Ihrer Daten</target>
+        <source>The protection of your data is important for us.</source>
+        <target>Der Schutz Ihrer Daten ist uns wichtig.</target>
       </trans-unit>
       <trans-unit id="google.explainActivation" xml:space="preserve" approved="yes">
-        <source>Click on "activate" to allow us requesting google servers to show maps.</source>
-        <target>Klicken Sie auf "Aktivieren", um uns zu berechtigen Karten von Google Servern zu laden.</target>
+        <source>Click on "Activate" to allow us requesting google servers to show Google Maps.</source>
+        <target>Erst wenn Sie hier auf "Aktivieren" klicken, erlauben Sie uns Daten von Dritt-Anbieter-Servern (Google) zu laden.</target>
       </trans-unit>
       <trans-unit id="google.activate" xml:space="preserve" approved="yes">
         <source>Activate</source>

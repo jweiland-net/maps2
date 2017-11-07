@@ -7,10 +7,10 @@
         <source>Google Map</source>
       </trans-unit>
       <trans-unit id="google.protectData" xml:space="preserve" approved="yes">
-        <source>Protect your data</source>
+        <source>The protection of your data is important for us.</source>
       </trans-unit>
       <trans-unit id="google.explainActivation" xml:space="preserve" approved="yes">
-        <source>Click on "activate" to allow us requesting google servers to show maps.</source>
+        <source>Click on "Activate" to allow us requesting google servers to show Google Maps.</source>
       </trans-unit>
       <trans-unit id="google.activate" xml:space="preserve" approved="yes">
         <source>Activate</source>
