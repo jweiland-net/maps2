@@ -1,7 +1,7 @@
 [JWeiland\Maps2\Condition\AllowGoogleRequestCondition negate]
   # Do not cache maps2 output as long as user has not activated requests to google servers
   tt_content.list.20.maps2_maps2 = USER_INT
-[else]
+[ELSE]
   page.includeJSFooter {
     jQueryForMaps2 = //ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js
     jQueryForMaps2.external = 1
@@ -14,7 +14,7 @@
     googleMapsForMaps2.disableCompression = 1
     googleMapsForMaps2.excludeFromConcatenation = 1
   }
-[global]
+[END]
 
 plugin.tx_maps2 {
   view {
