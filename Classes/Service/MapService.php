@@ -168,7 +168,7 @@ class MapService
         /** @var UriBuilder $uriBuilder */
         $uriBuilder = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Mvc\\Web\\Routing\\UriBuilder');
 
-        if ($request instanceof WidgetRequest) {
+        /*if ($request instanceof WidgetRequest) {
             $widgetContext = $request->getWidgetContext();
 
             return $uriBuilder->reset()
@@ -195,7 +195,16 @@ class MapService
                     $request->getControllerExtensionName(),
                     $request->getPluginName()
                 );
-        }
+        }*/
+        return $uriBuilder->reset()
+            ->setAddQueryString(true)
+            ->setArguments(array(
+                'tx_maps2_maps2' => array(
+                    'explicitAllowed' => 1
+                )
+            ))
+            ->setArgumentsToBeExcludedFromQueryString(['cHash'])
+            ->build();
     }
 
     /**

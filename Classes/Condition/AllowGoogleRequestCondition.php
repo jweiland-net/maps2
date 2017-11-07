@@ -15,7 +15,6 @@ namespace JWeiland\Maps2\Condition;
  */
 
 use JWeiland\Maps2\Configuration\ExtConf;
-use TYPO3\CMS\Core\Configuration\TypoScript\ConditionMatching\AbstractCondition;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
@@ -29,64 +28,31 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
  * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
  * @link     https://github.com/jweiland-net/maps2
  */
-class AllowGoogleRequestCondition extends AbstractCondition
+class AllowGoogleRequestCondition
 {
-    /**
-     * @var ObjectManager
-     */
-    protected $objectManager;
-
-    /**
-     * AllowGoogleRequestCondition constructor.
-     *
-     * @param ObjectManager $objectManager
-     */
-    public function __construct(ObjectManager $objectManager = null)
-    {
-        if (!$objectManager) {
-            $objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
-        }
-        $this->objectManager = $objectManager;
-    }
-
     /**
      * Check, if extension configuration is set
      * and user has not explicit allowed google requests
      *
-     * @param array $conditionParameters
-     *
      * @return bool
      */
-    public function matchCondition(array $conditionParameters) {
+    public function match() {
         $result = false;
 
+        /** @var ObjectManager $objectManager */
+        $objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
+
         /** @var ExtConf $extConf */
-        $extConf = $this->objectManager->get('JWeiland\\Maps2\\Configuration\\ExtConf');
+        $extConf = $objectManager->get('JWeiland\\Maps2\\Configuration\\ExtConf');
 
         if (
             $extConf->getExplicitAllowGoogleMaps()
-            && $this->getTypoScriptFrontendController()->fe_user->getKey('ses', 'allowMaps2')
+            && $GLOBALS['TSFE']->fe_user->getKey('ses', 'allowMaps2')
         ) {
             $result = true;
         }
 
-        if (
-            !empty($conditionParameters)
-            && isset($conditionParameters[0])
-            && trim($conditionParameters[0]) === 'negate'
-        ) {
-            $result = !$result;
-        }
-
         return $result;
-    }
-
-    /**
-     * @return TypoScriptFrontendController
-     */
-    protected function getTypoScriptFrontendController()
-    {
-        return $GLOBALS['TSFE'];
     }
 }
 
