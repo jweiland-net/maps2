@@ -64,6 +64,10 @@ $GLOBALS['TYPO3_CONF_VARS']['FE']['cacheHash']['excludedParameters'][] = 'tx_map
 $classRef = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('maps2') . 'Classes/Tca/InfoWindow.php';
 $GLOBALS['T3_VAR']['getUserObj'][$classRef] = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('JWeiland\\Maps2\\Tca\\InfoWindow');
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tceforms.php']['getSingleFieldClass'][] = $classRef;
+unset($classRef);
+
+// We have to save the permission to allow google requests before TS-Template rendering. It's needed by our own TS Condition object
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['initFEuser'][] = 'JWeiland\\Maps2\\Hook\\InitFeSessionHook->saveAllowGoogleRequestsInSession';
 
 // add maps2 plugin to new element wizard
 if (version_compare(TYPO3_branch, '6.3.0', '<') ) {

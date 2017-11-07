@@ -1,19 +1,19 @@
-page.includeJSFooter {
-  jQueryForMaps2 = //ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js
-  jQueryForMaps2.external = 1
-  jQueryForMaps2.disableCompression = 1
-  jQueryForMaps2.excludeFromConcatenation = 1
-  jQueryForMaps2.if.isTrue = {$plugin.tx_maps2.view.includeJQuery}
-  maps2 = EXT:maps2/Resources/Public/JavaScript/Maps2.js
-  googleMapsForMaps2 = //maps.googleapis.com/maps/api/js?key={$plugin.tx_maps2.view.googleMapsJavaScriptApiKey}&callback=initMap
-  googleMapsForMaps2.external = 1
-  googleMapsForMaps2.disableCompression = 1
-  googleMapsForMaps2.excludeFromConcatenation = 1
-}
-
 [JWeiland\Maps2\Condition\AllowGoogleRequestCondition negate]
   # Do not cache maps2 output as long as user has not activated requests to google servers
   tt_content.list.20.maps2_maps2 = USER_INT
+[else]
+  page.includeJSFooter {
+    jQueryForMaps2 = //ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js
+    jQueryForMaps2.external = 1
+    jQueryForMaps2.disableCompression = 1
+    jQueryForMaps2.excludeFromConcatenation = 1
+    jQueryForMaps2.if.isTrue = {$plugin.tx_maps2.view.includeJQuery}
+    maps2 = EXT:maps2/Resources/Public/JavaScript/Maps2.js
+    googleMapsForMaps2 = //maps.googleapis.com/maps/api/js?key={$plugin.tx_maps2.view.googleMapsJavaScriptApiKey}&callback=initMap
+    googleMapsForMaps2.external = 1
+    googleMapsForMaps2.disableCompression = 1
+    googleMapsForMaps2.excludeFromConcatenation = 1
+  }
 [global]
 
 plugin.tx_maps2 {

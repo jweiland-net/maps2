@@ -88,7 +88,6 @@ abstract class AbstractController extends AbstractWidgetController
     public function initializeAction()
     {
         $this->settings['infoWindowContentTemplatePath'] = trim($this->settings['infoWindowContentTemplatePath']);
-        $this->mapService->explicitAllowGoogleMapRequests($this->request);
     }
 
     /**

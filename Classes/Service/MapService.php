@@ -104,35 +104,32 @@ class MapService
     }
 
     /**
-     * Check, if Browser is allowed to request Google Maps Servers
-     *
-     * @param Request $request
+     * Check, if Browser(Cookie) is allowed to request Google Maps Servers
      *
      * @return bool
      */
-    public function isGoogleMapRequestAllowed(Request $request = null)
+    public function isGoogleMapRequestAllowed()
     {
-        // request parameters have highest priority
-        if ($request && $request->hasArgument('explicitAllowed')) {
-            return (bool)$request->getArgument('explicitAllowed');
-        }
-
-        // if not in request check configuration and session
         if ($this->extConf->getExplicitAllowGoogleMaps()) {
-            return (bool)$this->getTypoScriptFrontendController()->fe_user->getKey('ses', 'allowMaps2');
+            return (bool)$this->getTypoScriptFrontendController()->fe_user->getSessionData('allowMaps2');
         } else {
             return true;
         }
     }
 
     /**
-     * @param Request $request
+     * Explicit allow google map requests and store to session
+     *
+     * @return void
      */
-    public function explicitAllowGoogleMapRequests(Request $request)
+    public function explicitAllowGoogleMapRequests()
     {
+        $parameters = GeneralUtility::_GPmerged('tx_maps2_maps2');
         if (
-            (bool)$this->getTypoScriptFrontendController()->fe_user->getSessionData('allowMaps2') === false
-            && $this->isGoogleMapRequestAllowed($request)
+            isset($parameters['explicitAllowed'])
+            && (int)$parameters['explicitAllowed'] === 1
+            && $this->extConf->getExplicitAllowGoogleMaps()
+            && (bool)$this->getTypoScriptFrontendController()->fe_user->getSessionData('allowMaps2') === false
         ) {
             $this->cacheService->clearPageCache([$this->getTypoScriptFrontendController()->id]);
             $this->getTypoScriptFrontendController()->fe_user->setAndSaveSessionData('allowMaps2', 1);

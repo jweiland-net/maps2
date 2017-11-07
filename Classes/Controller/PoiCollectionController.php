@@ -47,16 +47,6 @@ class PoiCollectionController extends AbstractController
     }
 
     /**
-     * Initialize all actions in this class
-     *
-     * @return void
-     */
-    public function initializeAction()
-    {
-        $this->mapService->explicitAllowGoogleMapRequests($this->request);
-    }
-
-    /**
      * action show
      *
      * @param PoiCollection $poiCollection PoiCollection from URI has highest priority
@@ -91,6 +81,7 @@ class PoiCollectionController extends AbstractController
                 FlashMessage::NOTICE
             );
         }
+        return $this->view->render();
     }
 
     /**
