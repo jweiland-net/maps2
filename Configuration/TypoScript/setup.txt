@@ -11,6 +11,11 @@ page.includeJSFooter {
   googleMapsForMaps2.excludeFromConcatenation = 1
 }
 
+[JWeiland\Maps2\Condition\AllowGoogleRequestCondition != 0]
+  # Do not cache maps2 output as long as user has not activated requests to google servers
+  tt_content.list.20.maps2_maps2 = USER_INT
+[global]
+
 plugin.tx_maps2 {
   view {
     templateRootPath = {$plugin.tx_maps2.view.templateRootPath}
