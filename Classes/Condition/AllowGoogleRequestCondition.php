@@ -17,6 +17,7 @@ namespace JWeiland\Maps2\Condition;
 use JWeiland\Maps2\Configuration\ExtConf;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
@@ -48,6 +49,7 @@ class AllowGoogleRequestCondition
         if (
             $extConf->getExplicitAllowGoogleMaps()
             && isset($GLOBALS['TSFE']) && is_object($GLOBALS['TSFE'])
+            && $GLOBALS['TSFE']->fe_user instanceof FrontendUserAuthentication
             && $GLOBALS['TSFE']->fe_user->getKey('ses', 'allowMaps2')
         ) {
             $result = true;
