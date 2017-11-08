@@ -8,6 +8,8 @@ googleMapsJavaScriptApiKey =
 googleMapsGeocodeApiKey =
 # cat=basic; type=boolean; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:explicitAllowGoogleMaps
 explicitAllowGoogleMaps = 0
+# cat=basic; type=boolean; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:explicitAllowGoogleMapsBySessionOnly
+explicitAllowGoogleMapsBySessionOnly = 0
 # cat=basic; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:defaultLatitude
 defaultLatitude =
 # cat=basic; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:defaultLongitude

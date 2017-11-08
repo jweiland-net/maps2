@@ -111,7 +111,11 @@ class MapService
     public function isGoogleMapRequestAllowed()
     {
         if ($this->extConf->getExplicitAllowGoogleMaps()) {
-            return (bool)$this->getTypoScriptFrontendController()->fe_user->getSessionData('allowMaps2');
+            if ($this->extConf->getExplicitAllowGoogleMapsBySessionOnly()) {
+                return (bool)$_SESSION['googleRequestsAllowedForMaps2'];
+            } else {
+                return (bool)$this->getTypoScriptFrontendController()->fe_user->getSessionData('googleRequestsAllowedForMaps2');
+            }
         } else {
             return true;
         }
@@ -126,13 +130,25 @@ class MapService
     {
         $parameters = GeneralUtility::_GPmerged('tx_maps2_maps2');
         if (
-            isset($parameters['explicitAllowed'])
-            && (int)$parameters['explicitAllowed'] === 1
+            isset($parameters['googleRequestsAllowedForMaps2'])
+            && (int)$parameters['googleRequestsAllowedForMaps2'] === 1
             && $this->extConf->getExplicitAllowGoogleMaps()
-            && (bool)$this->getTypoScriptFrontendController()->fe_user->getSessionData('allowMaps2') === false
         ) {
-            $this->cacheService->clearPageCache([$this->getTypoScriptFrontendController()->id]);
-            $this->getTypoScriptFrontendController()->fe_user->setAndSaveSessionData('allowMaps2', 1);
+            // $this->cacheService->clearPageCache([$this->getTypoScriptFrontendController()->id]);
+
+            if (
+                $this->extConf->getExplicitAllowGoogleMapsBySessionOnly()
+                && empty($_SESSION['googleRequestsAllowedForMaps2'])
+            ) {
+                $_SESSION['googleRequestsAllowedForMaps2'] = 1;
+            }
+
+            if (
+                !$this->extConf->getExplicitAllowGoogleMapsBySessionOnly()
+                && (bool)$this->getTypoScriptFrontendController()->fe_user->getSessionData('googleRequestsAllowedForMaps2') === false
+            ) {
+                $this->getTypoScriptFrontendController()->fe_user->setAndSaveSessionData('googleRequestsAllowedForMaps2', 1);
+            }
         }
     }
 
@@ -168,39 +184,11 @@ class MapService
         /** @var UriBuilder $uriBuilder */
         $uriBuilder = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Mvc\\Web\\Routing\\UriBuilder');
 
-        /*if ($request instanceof WidgetRequest) {
-            $widgetContext = $request->getWidgetContext();
-
-            return $uriBuilder->reset()
-                ->setArguments(array(
-                    $widgetContext->getParentPluginNamespace() => array(
-                        $widgetContext->getWidgetIdentifier() => array(
-                            'explicitAllowed' => 1
-                        )
-                    )
-                ))
-                ->setAddQueryString(true)
-                ->setArgumentsToBeExcludedFromQueryString(['cHash'])
-                ->build();
-        } else {
-            return $uriBuilder->reset()
-                ->setAddQueryString(true)
-                ->setArgumentsToBeExcludedFromQueryString(['cHash'])
-                ->uriFor(
-                    $request->getControllerActionName(),
-                    array(
-                        'explicitAllowed' => 1
-                    ),
-                    $request->getControllerName(),
-                    $request->getControllerExtensionName(),
-                    $request->getPluginName()
-                );
-        }*/
         return $uriBuilder->reset()
             ->setAddQueryString(true)
             ->setArguments(array(
                 'tx_maps2_maps2' => array(
-                    'explicitAllowed' => 1
+                    'googleRequestsAllowedForMaps2' => 1
                 )
             ))
             ->setArgumentsToBeExcludedFromQueryString(['cHash'])
