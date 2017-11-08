@@ -33,7 +33,7 @@ class CityMapController extends AbstractController
     public function showAction()
     {
         if (!$this->mapService->isGoogleMapRequestAllowed()) {
-            return $this->mapService->showAllowMapForm($this->getControllerContext()->getRequest());
+            return $this->mapService->showAllowMapForm();
         }
     }
 
@@ -47,7 +47,7 @@ class CityMapController extends AbstractController
     public function searchAction($street)
     {
         if (!$this->mapService->isGoogleMapRequestAllowed()) {
-            return $this->mapService->showAllowMapForm($this->getControllerContext()->getRequest());
+            return $this->mapService->showAllowMapForm();
         }
 
         $response = $this->geocodeUtility->findPositionByAddress(

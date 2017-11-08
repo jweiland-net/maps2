@@ -56,7 +56,7 @@ class PoiCollectionController extends AbstractController
     public function showAction(PoiCollection $poiCollection = null)
     {
         if (!$this->mapService->isGoogleMapRequestAllowed()) {
-            return $this->mapService->showAllowMapForm($this->getControllerContext()->getRequest());
+            return $this->mapService->showAllowMapForm();
         }
 
         // if uri is empty and a poiCollection is set in FlexForm
@@ -123,7 +123,7 @@ class PoiCollectionController extends AbstractController
     public function multipleResultsAction(Search $search)
     {
         if (!$this->mapService->isGoogleMapRequestAllowed()) {
-            return $this->mapService->showAllowMapForm($this->getControllerContext()->getRequest());
+            return $this->mapService->showAllowMapForm();
         }
 
         $radiusResults = $this->geocodeUtility->findPositionByAddress($search->getAddress());
@@ -164,7 +164,7 @@ class PoiCollectionController extends AbstractController
     public function listRadiusAction($latitude, $longitude, $radius)
     {
         if (!$this->mapService->isGoogleMapRequestAllowed()) {
-            return $this->mapService->showAllowMapForm($this->getControllerContext()->getRequest());
+            return $this->mapService->showAllowMapForm();
         }
 
         $poiCollections = $this->poiCollectionRepository->searchWithinRadius($latitude, $longitude, $radius);

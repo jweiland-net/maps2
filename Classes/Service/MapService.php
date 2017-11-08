@@ -16,20 +16,20 @@ namespace JWeiland\Maps2\Service;
 
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
+use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\Request;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Service\CacheService;
-use TYPO3\CMS\Fluid\Core\Widget\WidgetRequest;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
  * Class MapService
  */
-class MapService
+class MapService implements SingletonInterface
 {
     /**
      * Contains the settings of the current extension
@@ -92,6 +92,18 @@ class MapService
     }
 
     /**
+     * inject objectManager
+     *
+     * @param ObjectManager $objectManager
+     *
+     * @return void
+     */
+    public function injectObjectManager(ObjectManager $objectManager)
+    {
+        $this->objectManager = $objectManager;
+    }
+
+    /**
      * Initialize Session var, if configured
      *
      * @return void
@@ -104,18 +116,6 @@ class MapService
         ) {
             session_start();
         }
-    }
-
-    /**
-     * inject objectManager
-     *
-     * @param ObjectManager $objectManager
-     *
-     * @return void
-     */
-    public function injectObjectManager(ObjectManager $objectManager)
-    {
-        $this->objectManager = $objectManager;
     }
 
     /**
@@ -174,11 +174,9 @@ class MapService
     /**
      * Show form to allow requests to google map servers
      *
-     * @param Request $request
-     *
      * @return string
      */
-    public function showAllowMapForm(Request $request)
+    public function showAllowMapForm()
     {
         /** @var StandaloneView $view */
         $view = $this->objectManager->get('TYPO3\\CMS\\Fluid\\View\\StandaloneView');
@@ -187,18 +185,16 @@ class MapService
                 $this->getAllowMapTemplatePath()
             ));
         $view->assign('settings', $this->settings);
-        $view->assign('requestUri', $this->getRequestUri($request));
+        $view->assign('requestUri', $this->getRequestUri());
         return $view->render();
     }
 
     /**
      * Get request URI
      *
-     * @param Request $request
-     *
      * @return string
      */
-    protected function getRequestUri(Request $request)
+    protected function getRequestUri()
     {
         /** @var UriBuilder $uriBuilder */
         $uriBuilder = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Mvc\\Web\\Routing\\UriBuilder');
