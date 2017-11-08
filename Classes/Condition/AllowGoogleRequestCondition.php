@@ -14,7 +14,7 @@ namespace JWeiland\Maps2\Condition;
  * The TYPO3 project - inspiring people to share!
  */
 
-use JWeiland\Maps2\Configuration\ExtConf;
+use JWeiland\Maps2\Service\MapService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
@@ -43,15 +43,10 @@ class AllowGoogleRequestCondition
         /** @var ObjectManager $objectManager */
         $objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
 
-        /** @var ExtConf $extConf */
-        $extConf = $objectManager->get('JWeiland\\Maps2\\Configuration\\ExtConf');
+        /** @var MapService $mapService */
+        $mapService = $objectManager->get('JWeiland\\Maps2\\Service\\MapService');
 
-        if (
-            $extConf->getExplicitAllowGoogleMaps()
-            && isset($GLOBALS['TSFE']) && is_object($GLOBALS['TSFE'])
-            && $GLOBALS['TSFE']->fe_user instanceof FrontendUserAuthentication
-            && $GLOBALS['TSFE']->fe_user->getKey('ses', 'googleRequestsAllowedForMaps2')
-        ) {
+        if ($mapService->isGoogleMapRequestAllowed()) {
             $result = true;
         }
 

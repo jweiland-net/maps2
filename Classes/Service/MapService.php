@@ -92,6 +92,21 @@ class MapService
     }
 
     /**
+     * Initialize Session var, if configured
+     *
+     * @return void
+     */
+    public function initializeObject()
+    {
+        if (
+            $this->extConf->getExplicitAllowGoogleMapsBySessionOnly()
+            && (!isset($_SESSION) || !is_array($_SESSION))
+        ) {
+            session_start();
+        }
+    }
+
+    /**
      * inject objectManager
      *
      * @param ObjectManager $objectManager
@@ -114,7 +129,11 @@ class MapService
             if ($this->extConf->getExplicitAllowGoogleMapsBySessionOnly()) {
                 return (bool)$_SESSION['googleRequestsAllowedForMaps2'];
             } else {
-                return (bool)$this->getTypoScriptFrontendController()->fe_user->getSessionData('googleRequestsAllowedForMaps2');
+                if ($this->getTypoScriptFrontendController() instanceof TypoScriptFrontendController) {
+                    return (bool)$this->getTypoScriptFrontendController()->fe_user->getSessionData('googleRequestsAllowedForMaps2');
+                } else {
+                    return false;
+                }
             }
         } else {
             return true;
@@ -266,7 +285,7 @@ class MapService
     }
 
     /**
-     * @return TypoScriptFrontendController
+     * @return TypoScriptFrontendController|null
      */
     protected function getTypoScriptFrontendController()
     {
