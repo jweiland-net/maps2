@@ -24,13 +24,26 @@ maps2AjaxResponse {
   }
 }
 
-# ==============================================
-# Persistence object mapping configuration
-# ==============================================
-config.tx_extbase.persistence.classes {
-  JWeiland\Maps2\Domain\Model\Category {
-    mapping {
-      tableName = sys_category
+config.tx_extbase {
+  mvc {
+    requestHandlers {
+      # show overlay if user has to explicit allow google map requests
+      JWeiland\Maps2\Mvc\GoogleMapOverlayRequestHandler = JWeiland\Maps2\Mvc\GoogleMapOverlayRequestHandler
     }
+  }
+  persistence.classes {
+    # needed because of our own icon column
+    JWeiland\Maps2\Domain\Model\Category {
+      mapping {
+        tableName = sys_category
+      }
+    }
+  }
+}
+
+config.tx_extbase {
+
+
+    throwPageNotFoundExceptionIfActionCantBeResolved = 0
   }
 }
