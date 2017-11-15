@@ -28,13 +28,10 @@ class CityMapController extends AbstractController
     /**
      * action show
      *
-     * @return string
+     * @return void
      */
     public function showAction()
     {
-        if (!$this->mapService->isGoogleMapRequestAllowed()) {
-            return $this->mapService->showAllowMapForm();
-        }
     }
 
     /**
@@ -42,14 +39,10 @@ class CityMapController extends AbstractController
      *
      * @param string $street
      *
-     * @return string
+     * @return void
      */
     public function searchAction($street)
     {
-        if (!$this->mapService->isGoogleMapRequestAllowed()) {
-            return $this->mapService->showAllowMapForm();
-        }
-
         $response = $this->geocodeUtility->findPositionByAddress(
             strip_tags($street) . ' ' . $this->settings['autoAppend']
         );

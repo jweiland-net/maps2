@@ -51,7 +51,7 @@ class EditPoiViewHelper extends AbstractWidgetViewHelper
      *
      * @return string
      */
-    public function render(PoiCollection $poiCollection = null, $property = 'txMaps2Uid', $override = array())
+    public function render(PoiCollection $poiCollection = null, $property = 'txMaps2Uid', $override = [])
     {
         return $this->initiateSubRequest();
     }

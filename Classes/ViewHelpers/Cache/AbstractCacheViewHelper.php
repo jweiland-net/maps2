@@ -14,6 +14,7 @@ namespace JWeiland\Maps2\ViewHelpers\Cache;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 
@@ -39,7 +40,6 @@ class AbstractCacheViewHelper extends AbstractViewHelper
      */
     public function initialize()
     {
-        $this->cache = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Cache\\CacheManager')
-            ->getCache('maps2_cachedhtml');
+        $this->cache = GeneralUtility::makeInstance(CacheManager::class)->getCache('maps2_cachedhtml');
     }
 }

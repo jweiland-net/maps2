@@ -104,7 +104,7 @@ abstract class AbstractAjaxRequest implements AjaxInterface
     public function initializeObject()
     {
         // set minimal configuration
-        $configuration = array();
+        $configuration = [];
         $configuration['_']['features']['ignoreAllEnableFieldsInBe'] = 0;
 
         // transport our minimal configuration into backendConfigurationManagers 1st-level Cache

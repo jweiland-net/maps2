@@ -41,10 +41,10 @@ class AllowGoogleRequestCondition
         $result = false;
 
         /** @var ObjectManager $objectManager */
-        $objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
 
         /** @var MapService $mapService */
-        $mapService = $objectManager->get('JWeiland\\Maps2\\Service\\MapService');
+        $mapService = $objectManager->get(MapService::class);
 
         if ($mapService->isGoogleMapRequestAllowed()) {
             $result = true;

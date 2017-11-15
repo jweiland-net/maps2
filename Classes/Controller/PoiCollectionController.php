@@ -51,14 +51,10 @@ class PoiCollectionController extends AbstractController
      *
      * @param PoiCollection $poiCollection PoiCollection from URI has highest priority
      *
-     * @return string
+     * @return void
      */
     public function showAction(PoiCollection $poiCollection = null)
     {
-        if (!$this->mapService->isGoogleMapRequestAllowed()) {
-            return $this->mapService->showAllowMapForm();
-        }
-
         // if uri is empty and a poiCollection is set in FlexForm
         if ($poiCollection === null && !empty($this->settings['poiCollection'])) {
             $poiCollection = $this->poiCollectionRepository->findByUid((int)$this->settings['poiCollection']);
@@ -118,19 +114,15 @@ class PoiCollectionController extends AbstractController
      *
      * @param Search $search
      *
-     * @return string
+     * @return void
      */
     public function multipleResultsAction(Search $search)
     {
-        if (!$this->mapService->isGoogleMapRequestAllowed()) {
-            return $this->mapService->showAllowMapForm();
-        }
-
         $radiusResults = $this->geocodeUtility->findPositionByAddress($search->getAddress());
         if ($radiusResults->count() == 1) {
             /* @var $radiusResult \JWeiland\Maps2\Domain\Model\RadiusResult */
             $radiusResult = $radiusResults->current();
-            $arguments = array();
+            $arguments = [];
             $arguments['latitude'] = $radiusResult->getGeometry()->getLocation()->getLatitude();
             $arguments['longitude'] = $radiusResult->getGeometry()->getLocation()->getLongitude();
             $arguments['radius'] = $search->getRadius();
@@ -159,14 +151,10 @@ class PoiCollectionController extends AbstractController
      * @param float $longitude
      * @param int $radius
      *
-     * @return string
+     * @return void
      */
     public function listRadiusAction($latitude, $longitude, $radius)
     {
-        if (!$this->mapService->isGoogleMapRequestAllowed()) {
-            return $this->mapService->showAllowMapForm();
-        }
-
         $poiCollections = $this->poiCollectionRepository->searchWithinRadius($latitude, $longitude, $radius);
         foreach ($poiCollections as $poiCollection) {
             $this->mapService->setInfoWindow($poiCollection);

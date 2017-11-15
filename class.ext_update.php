@@ -29,7 +29,7 @@ class ext_update
      *
      * @var array
      */
-    protected $messageArray = array();
+    protected $messageArray = [];
 
     /**
      * @var FlexFormTools
@@ -97,13 +97,13 @@ class ext_update
                 $this->getDatabaseConnection()->exec_UPDATEquery(
                     'tt_content',
                     'uid=' . (int)$row['uid'],
-                    array(
+                    [
                         'pi_flexform' => $this->getFlexFormTools()->flexArray2Xml($flexFormFields)
-                    )
+                    ]
                 );
                 $affectedRows += $this->getDatabaseConnection()->sql_affected_rows();
             }
-            $this->messageArray[] = array(
+            $this->messageArray[] = [
                 FlashMessage::OK,
                 'Update records successful',
                 sprintf(
@@ -111,13 +111,13 @@ class ext_update
                     (int)$affectedRows,
                     count($rows)
                 )
-            );
+            ];
         } else {
-            $this->messageArray[] = array(
+            $this->messageArray[] = [
                 FlashMessage::ERROR,
                 'Error while selecting tt_content records',
                 'SQL-Error: ' . $this->getDatabaseConnection()->sql_error()
-            );
+            ];
         }
     }
 
@@ -133,13 +133,13 @@ class ext_update
         foreach ($this->messageArray as $messageItem) {
             /** @var \TYPO3\CMS\Core\Messaging\FlashMessage $flashMessage */
             $flashMessage = GeneralUtility::makeInstance(
-                'TYPO3\\CMS\\Core\\Messaging\\FlashMessage',
+                FlashMessage::class,
                 $messageItem[2],
                 $messageItem[1],
                 $messageItem[0]);
 
             if (version_compare(TYPO3_branch, '8.6') >= 0) {
-                $output .= GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Messaging\\FlashMessageRendererResolver')->resolve()->render();
+                $output .= GeneralUtility::makeInstance(FlashMessageRendererResolver::class)->resolve()->render();
             } elseif (version_compare(TYPO3_branch, '8.0') >= 0) {
                 $output .= $flashMessage->getMessageAsMarkup();
             } else {
@@ -167,9 +167,7 @@ class ext_update
     protected function getFlexFormTools()
     {
         if (!$this->flexFormTools instanceof FlexFormTools) {
-            $this->flexFormTools = GeneralUtility::makeInstance(
-                'TYPO3\\CMS\\Core\\Configuration\\FlexForm\\FlexFormTools'
-            );
+            $this->flexFormTools = GeneralUtility::makeInstance(FlexFormTools::class);
         }
         return $this->flexFormTools;
     }

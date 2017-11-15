@@ -179,7 +179,7 @@ class MapService implements SingletonInterface
     public function showAllowMapForm()
     {
         /** @var StandaloneView $view */
-        $view = $this->objectManager->get('TYPO3\\CMS\\Fluid\\View\\StandaloneView');
+        $view = $this->objectManager->get(StandaloneView::class);
         $view->setTemplatePathAndFilename(
             GeneralUtility::getFileAbsFileName(
                 $this->getAllowMapTemplatePath()
@@ -197,23 +197,25 @@ class MapService implements SingletonInterface
     protected function getRequestUri()
     {
         /** @var UriBuilder $uriBuilder */
-        $uriBuilder = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Mvc\\Web\\Routing\\UriBuilder');
+        $uriBuilder = $this->objectManager->get(UriBuilder::class);
 
         return $uriBuilder->reset()
             ->setAddQueryString(true)
-            ->setArguments(array(
-                'tx_maps2_maps2' => array(
+            ->setArguments([
+                'tx_maps2_maps2' => [
                     'googleRequestsAllowedForMaps2' => 1
-                )
-            ))
+                ]
+            ])
             ->setArgumentsToBeExcludedFromQueryString(['cHash'])
             ->build();
     }
 
     /**
-     * Set info window for poi colleciton
+     * Set info window for Poi Collection
      *
      * @param PoiCollection $poiCollection
+     *
+     * @return void
      */
     public function setInfoWindow(PoiCollection $poiCollection)
     {
@@ -232,7 +234,7 @@ class MapService implements SingletonInterface
     protected function renderInfoWindow(PoiCollection $poiCollection)
     {
         /** @var \TYPO3\CMS\Fluid\View\StandaloneView $view */
-        $view = $this->objectManager->get('TYPO3\\CMS\\Fluid\\View\\StandaloneView');
+        $view = $this->objectManager->get(StandaloneView::class);
         $view->assign('poiCollection', $poiCollection);
         $view->setTemplatePathAndFilename(
             GeneralUtility::getFileAbsFileName(

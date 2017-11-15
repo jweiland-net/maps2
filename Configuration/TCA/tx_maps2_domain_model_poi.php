@@ -1,6 +1,6 @@
 <?php
-return array(
-    'ctrl' => array(
+return [
+    'ctrl' => [
         'title' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poi',
         'label' => 'uid',
         'tstamp' => 'tstamp',
@@ -16,128 +16,138 @@ return array(
         'transOrigPointerField' => 'l10n_parent',
         'transOrigDiffSourceField' => 'l10n_diffsource',
         'delete' => 'deleted',
-        'enablecolumns' => array(
+        'enablecolumns' => [
             'disabled' => 'hidden',
             'starttime' => 'starttime',
             'endtime' => 'endtime',
-        ),
+        ],
         'searchFields' => 'title,',
         'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('maps2') . 'Resources/Public/Icons/tx_maps2_domain_model_poi.png'
-    ),
-    'interface' => array(
+    ],
+    'interface' => [
         'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, latitude, longitude, pos_index',
-    ),
-    'columns' => array(
-        'sys_language_uid' => array(
+    ],
+    'columns' => [
+        'sys_language_uid' => [
             'exclude' => 1,
-            'label' => 'LLL:EXT:lang/locallang_general.xml:LGL.language',
-            'config' => array(
+            'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.language',
+            'config' => [
                 'type' => 'select',
-                'foreign_table' => 'sys_language',
-                'foreign_table_where' => 'ORDER BY sys_language.title',
-                'items' => array(
-                    array('LLL:EXT:lang/locallang_general.xml:LGL.allLanguages', -1),
-                    array('LLL:EXT:lang/locallang_general.xml:LGL.default_value', 0)
-                ),
-            ),
-        ),
-        'l10n_parent' => array(
+                'renderType' => 'selectSingle',
+                'special' => 'languages',
+                'items' => [
+                    [
+                        'LLL:EXT:lang/locallang_general.xlf:LGL.allLanguages',
+                        -1,
+                        'flags-multiple'
+                    ],
+                ],
+                'default' => 0,
+            ]
+        ],
+        'l10n_parent' => [
+            'exclude' => 1,
             'displayCond' => 'FIELD:sys_language_uid:>:0',
-            'exclude' => 1,
-            'label' => 'LLL:EXT:lang/locallang_general.xml:LGL.l18n_parent',
-            'config' => array(
+            'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.l18n_parent',
+            'config' => [
                 'type' => 'select',
-                'items' => array(
-                    array('', 0),
-                ),
-                'foreign_table' => 'tx_maps2_domain_model_poi',
-                'foreign_table_where' => 'AND tx_maps2_domain_model_poi.pid=###CURRENT_PID### AND tx_maps2_domain_model_poi.sys_language_uid IN (-1,0)',
-            ),
-        ),
-        'l10n_diffsource' => array(
-            'config' => array(
+                'renderType' => 'selectSingle',
+                'items' => [
+                    [
+                        '',
+                        0
+                    ]
+                ],
+                'foreign_table' => 'tt_content',
+                'foreign_table_where' => 'AND tt_content.pid=###CURRENT_PID### AND tt_content.sys_language_uid IN (-1,0)',
+                'default' => 0
+            ]
+        ],
+        'l10n_diffsource' => [
+            'config' => [
                 'type' => 'passthrough',
-            ),
-        ),
-        't3ver_label' => array(
-            'label' => 'LLL:EXT:lang/locallang_general.xml:LGL.versionLabel',
-            'config' => array(
+                'default' => ''
+            ]
+        ],
+        't3ver_label' => [
+            'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.versionLabel',
+            'config' => [
                 'type' => 'input',
-                'size' => 30,
-                'max' => 255,
-            )
-        ),
-        'hidden' => array(
+                'size' => '30',
+                'max' => '255'
+            ]
+        ],
+        'hidden' => [
             'exclude' => 1,
-            'label' => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
-            'config' => array(
+            'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.hidden',
+            'config' => [
                 'type' => 'check',
-            ),
-        ),
-        'starttime' => array(
+                'items' => [
+                    '1' => [
+                        '0' => 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:hidden.I.0'
+                    ]
+                ]
+            ]
+        ],
+        'starttime' => [
             'exclude' => 1,
-            'l10n_mode' => 'mergeIfNotBlank',
-            'label' => 'LLL:EXT:lang/locallang_general.xml:LGL.starttime',
-            'config' => array(
+            'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.starttime',
+            'config' => [
                 'type' => 'input',
-                'size' => 13,
-                'max' => 20,
+                'size' => '13',
                 'eval' => 'datetime',
-                'checkbox' => 0,
-                'default' => 0,
-                'range' => array(
-                    'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y'))
-                ),
-            ),
-        ),
-        'endtime' => array(
+                'default' => 0
+            ],
+            'l10n_mode' => 'exclude',
+            'l10n_display' => 'defaultAsReadonly'
+        ],
+        'endtime' => [
             'exclude' => 1,
-            'l10n_mode' => 'mergeIfNotBlank',
-            'label' => 'LLL:EXT:lang/locallang_general.xml:LGL.endtime',
-            'config' => array(
+            'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.endtime',
+            'config' => [
                 'type' => 'input',
-                'size' => 13,
-                'max' => 20,
+                'size' => '13',
                 'eval' => 'datetime',
-                'checkbox' => 0,
                 'default' => 0,
-                'range' => array(
-                    'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y'))
-                ),
-            ),
-        ),
-        'latitude' => array(
+                'range' => [
+                    'upper' => mktime(0, 0, 0, 1, 1, 2038)
+                ]
+            ],
+            'l10n_mode' => 'exclude',
+            'l10n_display' => 'defaultAsReadonly'
+        ],
+        'latitude' => [
             'exclude' => 1,
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poi.latitude',
-            'config' => array(
+            'config' => [
                 'type' => 'input',
                 'size' => 30,
                 'eval' => 'double,trim,required'
-            ),
-        ),
-        'longitude' => array(
+            ],
+        ],
+        'longitude' => [
             'exclude' => 1,
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poi.longitude',
-            'config' => array(
+            'config' => [
                 'type' => 'input',
                 'size' => 30,
                 'eval' => 'double,trim,required'
-            ),
-        ),
-        'pos_index' => array(
+            ],
+        ],
+        'pos_index' => [
             'exclude' => 1,
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poi.posIndex',
-            'config' => array(
+            'config' => [
                 'type' => 'input',
                 'size' => 5,
                 'eval' => 'int,trim'
-            ),
-        ),
-    ),
-    'types' => array(
-        '0' => array('showitem' => 'latitude, longitude, pos_index')
-    ),
-    'palettes' => array(
-        '1' => array('showitem' => ''),
-    ),
-);
+            ],
+        ],
+    ],
+    'types' => [
+        '0' => ['showitem' => 'latitude, longitude, pos_index']
+    ],
+    'palettes' => [
+        '1' => ['showitem' => ''],
+    ],
+];

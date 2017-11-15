@@ -14,6 +14,6 @@ call_user_func(function() {
         'maps2',
         'tx_maps2_domain_model_poicollection',
         'categories',
-        array()
+        []
     );
 });

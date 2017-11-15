@@ -36,7 +36,7 @@ abstract class AbstractController extends AbstractWidgetController
     /**
      * @var array
      */
-    protected $defaultSettings = array(
+    protected $defaultSettings = [
         'zoom' => 10,
         'zoomControl' => true,
         'mapTypeControl' => true,
@@ -44,7 +44,7 @@ abstract class AbstractController extends AbstractWidgetController
         'streetViewControl' => true,
         'fullscreenMapControl' => true,
         'mapTypeId' => 'google.maps.MapTypeId.ROADMAP'
-    );
+    ];
 
     /**
      * @var ExtConf
@@ -102,12 +102,12 @@ abstract class AbstractController extends AbstractWidgetController
     {
         ArrayUtility::mergeRecursiveWithOverrule($this->defaultSettings, $this->getMaps2TypoScriptSettings());
         $view->assign('data', $this->configurationManager->getContentObject()->data);
-        $view->assign('environment', array(
+        $view->assign('environment', [
             'settings' => $this->defaultSettings,
             'extConf' => ObjectAccess::getGettableProperties($this->extConf),
             'id' => $GLOBALS['TSFE']->id,
             'contentRecord' => $this->configurationManager->getContentObject()->data
-        ));
+        ]);
     }
 
     /**
@@ -121,6 +121,6 @@ abstract class AbstractController extends AbstractWidgetController
             ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT
         );
         $settings = ArrayUtility::getValueByPath($fullTypoScript, 'plugin./tx_maps2.');
-        return is_array($settings) ? $settings : array();
+        return is_array($settings) ? $settings : [];
     }
 }

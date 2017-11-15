@@ -13,11 +13,17 @@ namespace JWeiland\Maps2\Tca;
  *
  * The TYPO3 project - inspiring people to share!
  */
+use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
+use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
+use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
+use TYPO3\CMS\Extbase\Security\Cryptography\HashService;
+use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
  * Class GoogleMaps
@@ -65,12 +71,12 @@ class GoogleMaps
      */
     public function init()
     {
-        $this->objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
-        $this->extConf = $this->objectManager->get('JWeiland\\Maps2\\Configuration\\ExtConf');
-        $this->hashService = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Security\\Cryptography\\HashService');
-        $this->view = $this->objectManager->get('TYPO3\\CMS\\Fluid\\View\\StandaloneView');
-        $this->pageRenderer = $this->objectManager->get('TYPO3\\CMS\\Core\\Page\\PageRenderer');
-        $this->poiCollectionRepository = $this->objectManager->get('JWeiland\\Maps2\\Domain\\Repository\\PoiCollectionRepository');
+        $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        $this->extConf = $this->objectManager->get(ExtConf::class);
+        $this->hashService = $this->objectManager->get(HashService::class);
+        $this->view = $this->objectManager->get(StandaloneView::class);
+        $this->pageRenderer = $this->objectManager->get(PageRenderer::class);
+        $this->poiCollectionRepository = $this->objectManager->get(PoiCollectionRepository::class);
     }
 
     /**
@@ -88,8 +94,8 @@ class GoogleMaps
         // add our GoogleMaps library as RequireJS module
         $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/Maps2/GoogleMapsModule');
         // loadRequireJsModule has to be loaded before configuring additional paths, else all ext paths will not be initialized
-        $this->pageRenderer->addRequireJsConfiguration(array(
-            'paths' => array(
+        $this->pageRenderer->addRequireJsConfiguration([
+            'paths' => [
                 'async' => rtrim(
                     PathUtility::getRelativePath(
                         PATH_typo3,
@@ -97,8 +103,8 @@ class GoogleMaps
                     ),
                     '/'
                 )
-            )
-        ));
+            ]
+        ]);
         // make gmaps available as dependency for all RequireJS modules
         $this->pageRenderer->addJsInlineCode(
             'definegooglemaps',
@@ -139,7 +145,7 @@ class GoogleMaps
      */
     public function getConfiguration(array $PA)
     {
-        $config = array();
+        $config = [];
 
         // get poi collection model
         $uid = (int)$PA['row']['uid'];
@@ -161,7 +167,7 @@ class GoogleMaps
                         $config['pois'][] = $latLng;
                     }
                     if (!isset($config['pois'])) {
-                        $config['pois'] = array();
+                        $config['pois'] = [];
                     }
                     break;
                 case 'Radius':

@@ -53,7 +53,7 @@ class ConvertToJsonViewHelper extends AbstractViewHelper
     {
         $value = $this->renderChildren();
         if ($value instanceof PoiCollection) {
-            $json = $this->getPoiCollectionsAsJson(array($value));
+            $json = $this->getPoiCollectionsAsJson([$value]);
         } elseif (
             $value instanceof QueryResultInterface ||
             $value instanceof ObjectStorage ||
@@ -76,7 +76,7 @@ class ConvertToJsonViewHelper extends AbstractViewHelper
      */
     protected function getPoiCollectionsAsJson($poiCollections)
     {
-        $poiCollectionsAsArray = array();
+        $poiCollectionsAsArray = [];
         /** @var PoiCollection $poiCollection */
         foreach ($poiCollections as $poiCollection) {
             if ($poiCollection instanceof PoiCollection) {
@@ -84,14 +84,14 @@ class ConvertToJsonViewHelper extends AbstractViewHelper
 
                 /** @var LazyObjectStorage $pois */
                 $pois = $poiCollectionAsArray['pois'];
-                $poiCollectionAsArray['pois'] = array();
+                $poiCollectionAsArray['pois'] = [];
                 /** @var Poi $poi */
                 foreach ($pois->toArray() as $key => $poi) {
                     // do not remove toArray() as it converts the long hash keys to 0, 1, 2, ...
                     $poiCollectionAsArray['pois'][$key] = ObjectAccess::getGettableProperties($poi);
                 }
 
-                $poiCollectionAsArray['categories'] = array();
+                $poiCollectionAsArray['categories'] = [];
                 /** @var Category $category */
                 foreach ($poiCollection->getCategories() as $category) {
                     $poiCollectionAsArray['categories'][] = ObjectAccess::getGettableProperties($category);

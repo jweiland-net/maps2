@@ -43,7 +43,7 @@ class InitFeSessionHook
     {
         if (!$objectManager) {
             /** @var ObjectManager $objectManager */
-            $objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
+            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         }
         $this->objectManager = $objectManager;
     }
@@ -56,7 +56,7 @@ class InitFeSessionHook
     public function saveAllowGoogleRequestsInSession()
     {
         /** @var MapService $mapService */
-        $mapService = $this->objectManager->get('JWeiland\\Maps2\\Service\\MapService');
+        $mapService = $this->objectManager->get(MapService::class);
         $mapService->explicitAllowGoogleMapRequests();
     }
 }

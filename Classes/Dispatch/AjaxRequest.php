@@ -15,6 +15,7 @@ namespace JWeiland\Maps2\Dispatch;
  */
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * Class AjaxRequest
@@ -27,7 +28,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class AjaxRequest
 {
-
     /**
      * objectManager
      *
@@ -40,7 +40,7 @@ class AjaxRequest
      */
     public function __construct()
     {
-        $this->objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
+        $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
     }
 
     /**

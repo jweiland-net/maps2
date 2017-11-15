@@ -15,6 +15,7 @@ namespace JWeiland\Maps2\Utility;
  */
 
 use JWeiland\Maps2\Configuration\ExtConf;
+use JWeiland\Maps2\Domain\Model\RadiusResult;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageQueue;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
@@ -83,25 +84,18 @@ class GeocodeUtility
         $json = GeneralUtility::getUrl($this->getUri($address));
         $response = json_decode($json, true);
         if ($response['status'] === 'OK') {
-            return $this->dataMapper->mapObjectStorage(
-                'JWeiland\\Maps2\\Domain\\Model\\RadiusResult',
-                $response['results']
-            );
+            return $this->dataMapper->mapObjectStorage(RadiusResult::class, $response['results']);
         } else {
-            $message = LocalizationUtility::translate('error.noAddressFound', 'maps2', array(
-                $address
-            ));
+            $message = LocalizationUtility::translate('error.noAddressFound', 'maps2', [$address]);
             /** @var $flashMessage \TYPO3\CMS\Core\Messaging\FlashMessage */
             $flashMessage = GeneralUtility::makeInstance(
-                'TYPO3\\CMS\\Core\\Messaging\\FlashMessage',
+                FlashMessage::class,
                 $message,
                 '',
                 FlashMessage::WARNING
             );
             /** @var $flashMessageService \TYPO3\CMS\Core\Messaging\FlashMessageService */
-            $flashMessageService = GeneralUtility::makeInstance(
-                'TYPO3\\CMS\\Core\\Messaging\\FlashMessageService'
-            );
+            $flashMessageService = GeneralUtility::makeInstance(FlashMessageService::class);
             /** @var $defaultFlashMessageQueue FlashMessageQueue */
             $defaultFlashMessageQueue = $flashMessageService->getMessageQueueByIdentifier();
             $defaultFlashMessageQueue->enqueue($flashMessage);

@@ -64,7 +64,7 @@ class PoiCollectionRepository extends Repository
             if ($this->environmentService->isEnvironmentInFrontendMode() && is_object($GLOBALS['TSFE'])) {
                 $this->pageRepository = $GLOBALS['TSFE']->sys_page;
             } else {
-                $this->pageRepository = GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\Page\\PageRepository');
+                $this->pageRepository = GeneralUtility::makeInstance(PageRepository::class);
             }
         }
         return $this->pageRepository;
@@ -94,14 +94,14 @@ class PoiCollectionRepository extends Repository
 
         /** @var PreparedStatement $preparedStatement */
         $preparedStatement = $this->objectManager->get(
-            'TYPO3\\CMS\\Core\\Database\\PreparedStatement',
+            PreparedStatement::class,
             $sql,
             'tx_maps2_domain_model_poicollection'
         );
 
         return $query->statement(
             $preparedStatement,
-            array($latitude, $latitude, $longitude, $radiusOfEarth, $radius)
+            [$latitude, $latitude, $longitude, $radiusOfEarth, $radius]
         )->execute();
     }
 
@@ -115,7 +115,7 @@ class PoiCollectionRepository extends Repository
     {
         /** @var Query $query */
         $query = $this->createQuery();
-        $orConstraint = array();
+        $orConstraint = [];
         foreach (GeneralUtility::trimExplode(',', $categories) as $category) {
             $orConstraint[] = $query->contains('categories', $category);
         }

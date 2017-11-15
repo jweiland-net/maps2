@@ -47,32 +47,28 @@ class EditPoiController extends AbstractController
     {
         ArrayUtility::mergeRecursiveWithOverrule($this->defaultSettings, $this->settings);
         $view->assign('data', $this->configurationManager->getContentObject()->data);
-        $view->assign('environment', array(
+        $view->assign('environment', [
             'settings' => $this->defaultSettings,
             'extConf' => ObjectAccess::getGettableProperties($this->extConf),
             'id' => $GLOBALS['TSFE']->id,
             'contentRecord' => $this->configurationManager->getContentObject()->data
-        ));
+        ]);
     }
 
     /**
      * index action
      *
-     * @return string
+     * @return void
      */
     public function indexAction()
     {
-        if (!$this->mapService->isGoogleMapRequestAllowed()) {
-            return $this->mapService->showAllowMapForm();
-        }
-
         $poiCollection = $this->widgetConfiguration['poiCollection'];
         if ($poiCollection instanceof PoiCollection) {
             $this->mapService->setInfoWindow($poiCollection);
         } else {
             // this is more a fallback. It would be better that the foreign extension author generates a PoiCollection on its own
             /** @var PoiCollection $poiCollection */
-            $poiCollection = $this->objectManager->get('JWeiland\\Maps2\\Domain\\Model\\PoiCollection');
+            $poiCollection = $this->objectManager->get(PoiCollection::class);
             $poiCollection->setTitle('Temporary Fallback');
             $poiCollection->setLatitude($this->extConf->getDefaultLatitude());
             $poiCollection->setLongitude($this->extConf->getDefaultLongitude());
@@ -81,7 +77,5 @@ class EditPoiController extends AbstractController
         $this->view->assign('poiCollection', $poiCollection);
         $this->view->assign('override', $this->widgetConfiguration['override']);
         $this->view->assign('property', $this->widgetConfiguration['property']);
-
-        return $this->view->render();
     }
 }

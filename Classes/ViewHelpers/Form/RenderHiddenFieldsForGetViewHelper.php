@@ -90,7 +90,7 @@ class RenderHiddenFieldsForGetViewHelper extends AbstractViewHelper
         $pageUid = $pageUid ? $pageUid : $GLOBALS['TSFE']->id;
 
         // create array for cHash calculation
-        $parameters = array();
+        $parameters = [];
         $parameters['id'] = $pageUid;
         $parameters[$pluginNamespace]['controller'] = $controller;
         $parameters[$pluginNamespace]['action'] = $action;
@@ -99,7 +99,7 @@ class RenderHiddenFieldsForGetViewHelper extends AbstractViewHelper
         );
 
         // create array of hidden fields for GET forms
-        $fields = array();
+        $fields = [];
         $fields[] = '<input type="hidden" name="id" value="' . $pageUid . '" />';
         $fields[] = '<input type="hidden" name="' . $pluginNamespace . '[controller]" value="' . $controller . '" />';
         $fields[] = '<input type="hidden" name="' . $pluginNamespace . '[action]" value="' . $action . '" />';

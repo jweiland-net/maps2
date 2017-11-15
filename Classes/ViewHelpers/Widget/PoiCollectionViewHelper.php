@@ -50,7 +50,7 @@ class PoiCollectionViewHelper extends AbstractWidgetViewHelper
      * @param array $override Override any configuration option
      * @return string
      */
-    public function render(PoiCollection $poiCollection = null, $poiCollections = null, $override = array())
+    public function render(PoiCollection $poiCollection = null, $poiCollections = null, $override = [])
     {
         return $this->initiateSubRequest();
     }

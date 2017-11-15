@@ -108,7 +108,7 @@ class InsertRoute extends AbstractAjaxRequest
                 } else {
                     // create a new poi
                     /** @var $poi \JWeiland\Maps2\Domain\Model\Poi */
-                    $poi = $this->objectManager->get('JWeiland\\Maps2\\Domain\\Model\\Poi');
+                    $poi = $this->objectManager->get(Poi::class);
 
                     // TODO set cruser_id
                     $poi->setPid($poiCollection->getPid());

@@ -27,15 +27,15 @@ use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
  */
 class AjaxController extends ActionController
 {
-
     /**
      * action ajax
      *
      * @param string $objectName Which Ajax Object has to be called
      * @param array $arguments Arguments which have to be send to the Ajax Object
+     *
      * @return string
      */
-    public function callAjaxObjectAction($objectName, $arguments = array())
+    public function callAjaxObjectAction($objectName, $arguments = [])
     {
         $className = 'JWeiland\\Maps2\\Ajax\\' . $objectName;
         if (class_exists($className)) {
