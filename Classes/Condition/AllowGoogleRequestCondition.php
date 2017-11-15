@@ -15,10 +15,9 @@ namespace JWeiland\Maps2\Condition;
  */
 
 use JWeiland\Maps2\Service\MapService;
+use TYPO3\CMS\Core\Configuration\TypoScript\ConditionMatching\AbstractCondition;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
-use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
-use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
  * Class AllowGoogleRequestCondition
@@ -29,15 +28,17 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
  * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
  * @link     https://github.com/jweiland-net/maps2
  */
-class AllowGoogleRequestCondition
+class AllowGoogleRequestCondition extends AbstractCondition
 {
     /**
      * Check, if extension configuration is set
      * and user has not explicit allowed google requests
      *
+     * @param array $conditionParameters
+     *
      * @return bool
      */
-    public function match() {
+    public function matchCondition(array $conditionParameters) {
         $result = false;
 
         /** @var ObjectManager $objectManager */

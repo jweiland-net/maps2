@@ -1,4 +1,4 @@
-[userFunc = googleRequestsAreAllowed()]
+[JWeiland\Maps2\Condition\AllowGoogleRequestCondition]
   page.includeJSFooter {
     jQueryForMaps2 = //ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js
     jQueryForMaps2.external = 1
