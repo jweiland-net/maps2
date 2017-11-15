@@ -15,6 +15,7 @@ namespace JWeiland\Maps2\ViewHelpers\Widget;
  */
 
 use JWeiland\Maps2\Domain\Model\PoiCollection;
+use JWeiland\Maps2\Service\MapService;
 use TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetViewHelper;
 
 /**
@@ -34,14 +35,32 @@ class EditPoiViewHelper extends AbstractWidgetViewHelper
     protected $controller;
 
     /**
+     * @var MapService
+     */
+    protected $mapService;
+
+    /**
      * inject controller
      *
      * @param Controller\EditPoiController $controller
+     *
      * @return void
      */
     public function injectController(Controller\EditPoiController $controller)
     {
         $this->controller = $controller;
+    }
+
+    /**
+     * inject mapService
+     *
+     * @param MapService $mapService
+     *
+     * @return void
+     */
+    public function injectMapService(MapService $mapService)
+    {
+        $this->mapService = $mapService;
     }
 
     /**
@@ -53,6 +72,10 @@ class EditPoiViewHelper extends AbstractWidgetViewHelper
      */
     public function render(PoiCollection $poiCollection = null, $property = 'txMaps2Uid', $override = [])
     {
+        if (!$this->mapService->isGoogleMapRequestAllowed()) {
+            return $this->mapService->showAllowMapForm();
+        }
+
         return $this->initiateSubRequest();
     }
 }

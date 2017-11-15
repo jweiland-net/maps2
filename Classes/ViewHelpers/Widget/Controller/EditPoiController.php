@@ -21,8 +21,6 @@ use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
 use TYPO3\CMS\Fluid\Core\Widget\WidgetRequest;
-use TYPO3Fluid\Fluid\Core\Parser\ParsedTemplateInterface;
-use TYPO3Fluid\Fluid\Core\Parser\TemplateParser;
 
 /**
  * Class EditPoiController
@@ -35,26 +33,6 @@ use TYPO3Fluid\Fluid\Core\Parser\TemplateParser;
  */
 class EditPoiController extends AbstractController
 {
-    /**
-     * initialize view
-     * add some global vars to view
-     *
-     * @param ViewInterface $view
-     *
-     * @return void
-     */
-    public function initializeView(ViewInterface $view)
-    {
-        ArrayUtility::mergeRecursiveWithOverrule($this->defaultSettings, $this->settings);
-        $view->assign('data', $this->configurationManager->getContentObject()->data);
-        $view->assign('environment', [
-            'settings' => $this->defaultSettings,
-            'extConf' => ObjectAccess::getGettableProperties($this->extConf),
-            'id' => $GLOBALS['TSFE']->id,
-            'contentRecord' => $this->configurationManager->getContentObject()->data
-        ]);
-    }
-
     /**
      * index action
      *

@@ -23,7 +23,7 @@ return [
             'endtime' => 'endtime',
         ],
         'searchFields' => 'title,pois',
-        'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('maps2') . 'Resources/Public/Icons/tx_maps2_domain_model_poicollection.gif'
+        'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::siteRelPath('maps2') . 'Resources/Public/Icons/tx_maps2_domain_model_poicollection.gif'
     ],
     'interface' => [
         'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, collection_type, title, address, latitude, longitude, latitude_orig, longitude_orig, configuration_map, pois, stroke_color, stroke_opacity, stroke_weight, fill_color, fill_opacity, info_window_content',

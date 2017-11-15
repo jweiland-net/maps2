@@ -22,7 +22,7 @@ return [
             'endtime' => 'endtime',
         ],
         'searchFields' => 'title,',
-        'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('maps2') . 'Resources/Public/Icons/tx_maps2_domain_model_poi.png'
+        'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::siteRelPath('maps2') . 'Resources/Public/Icons/tx_maps2_domain_model_poi.png'
     ],
     'interface' => [
         'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, latitude, longitude, pos_index',

@@ -77,7 +77,6 @@ class PoiCollectionController extends AbstractController
                 FlashMessage::NOTICE
             );
         }
-        return $this->view->render();
     }
 
     /**

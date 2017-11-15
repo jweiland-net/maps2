@@ -30,14 +30,10 @@ class PoiCollectionController extends AbstractController
     /**
      * index action
      *
-     * @return string
+     * @return void
      */
     public function indexAction()
     {
-        if (!$this->mapService->isGoogleMapRequestAllowed()) {
-            return $this->mapService->showAllowMapForm();
-        }
-
         $poiCollection = $this->widgetConfiguration['poiCollection'];
         if ($poiCollection instanceof PoiCollection) {
             $this->mapService->setInfoWindow($poiCollection);

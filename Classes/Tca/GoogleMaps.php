@@ -13,6 +13,7 @@ namespace JWeiland\Maps2\Tca;
  *
  * The TYPO3 project - inspiring people to share!
  */
+
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
@@ -84,6 +85,7 @@ class GoogleMaps
 
      * @param array $parentArray
      * @param object $pObj
+     *
      * @return string
      */
     public function render(array $parentArray, $pObj)
@@ -105,7 +107,7 @@ class GoogleMaps
                 )
             ]
         ]);
-        // make gmaps available as dependency for all RequireJS modules
+        // make google maps available as dependency for all RequireJS modules
         $this->pageRenderer->addJsInlineCode(
             'definegooglemaps',
             sprintf('// convert Google Maps into an AMD module
@@ -141,6 +143,7 @@ class GoogleMaps
      * get configuration array from PA array
      *
      * @param array $PA
+     *
      * @return array
      */
     public function getConfiguration(array $PA)
@@ -193,6 +196,7 @@ class GoogleMaps
      * get parsed content from template
      *
      * @param array $config
+     *
      * @return string
      */
     protected function getMapHtml(array $config)

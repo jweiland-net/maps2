@@ -25,7 +25,6 @@ namespace JWeiland\Maps2\Tca;
  */
 class SearchAddress
 {
-
     /**
      * create a button to search for the given address
      *

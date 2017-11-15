@@ -17,35 +17,19 @@ namespace JWeiland\Maps2\Mvc;
 use JWeiland\Maps2\Service\MapService;
 use TYPO3\CMS\Extbase\Mvc\RequestHandlerInterface;
 use TYPO3\CMS\Extbase\Mvc\ResponseInterface;
+use TYPO3\CMS\Extbase\Mvc\Web\AbstractRequestHandler;
 use TYPO3\CMS\Extbase\Mvc\Web\Response;
 use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 
 /**
  * Class GoogleMapOverlayRequestHandler
  */
-class GoogleMapOverlayRequestHandler implements RequestHandlerInterface
+class GoogleMapOverlayRequestHandler extends AbstractRequestHandler
 {
-    /**
-     * @var ObjectManagerInterface
-     */
-    protected $objectManager;
-
     /**
      * @var MapService
      */
     protected $mapService;
-
-    /**
-     * inject objectManager
-     *
-     * @param ObjectManagerInterface $objectManager
-     *
-     * @return void
-     */
-    public function injectObjectManager(ObjectManagerInterface $objectManager)
-    {
-        $this->objectManager = $objectManager;
-    }
 
     /**
      * inject mapService
@@ -77,7 +61,9 @@ class GoogleMapOverlayRequestHandler implements RequestHandlerInterface
      * @return bool true if it can handle the request, otherwise false
      */
     public function canHandleRequest() {
-        return !$this->mapService->isGoogleMapRequestAllowed();
+        $request = $this->requestBuilder->build();
+        return $request->getControllerExtensionKey() === 'maps2'
+            && !$this->mapService->isGoogleMapRequestAllowed();
     }
 
     /**

@@ -120,7 +120,10 @@ abstract class AbstractController extends AbstractWidgetController
         $fullTypoScript = $this->configurationManager->getConfiguration(
             ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT
         );
-        $settings = ArrayUtility::getValueByPath($fullTypoScript, 'plugin./tx_maps2.');
-        return is_array($settings) ? $settings : [];
+        if (ArrayUtility::isValidPath($fullTypoScript, 'plugin./tx_maps2.')) {
+            return ArrayUtility::getValueByPath($fullTypoScript, 'plugin./tx_maps2.');
+        } else {
+            return [];
+        }
     }
 }

@@ -25,7 +25,6 @@ namespace JWeiland\Maps2\Tca\Type;
  */
 class FloatType
 {
-
     /**
      * This method returns js code for validating float dataTypes
      *
@@ -44,6 +43,7 @@ class FloatType
      * @param string $value
      * @param string $is_in
      * @param string $set
+     *
      * @return string
      */
     public function evaluateFieldValue($value, $is_in, &$set)
