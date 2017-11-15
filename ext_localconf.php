@@ -3,86 +3,92 @@ if (!defined('TYPO3_MODE')) {
     die('Access denied.');
 }
 
-\TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-    'JWeiland.' . $_EXTKEY,
-    'Maps2',
-    array(
-        'PoiCollection' => 'show, allowMap',
-        'Ajax' => 'callAjaxObject',
-    ),
-    // non-cacheable actions
-    array(
-        'PoiCollection' => '',
-        'Ajax' => 'callAjaxObject',
-    )
-);
-
-\TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-    'JWeiland.' . $_EXTKEY,
-    'SearchWithinRadius',
-    array(
-        'PoiCollection' => 'search, multipleResults, listRadius',
-    ),
-    // non-cacheable actions
-    array(
-        'PoiCollection' => 'multipleResults, listRadius',
-    )
-);
-
-\TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-    'JWeiland.' . $_EXTKEY,
-    'CityMap',
-    array(
-        'CityMap' => 'show, search',
-    ),
-    // non-cacheable actions
-    array(
-        'CityMap' => 'search',
-    )
-);
-
-if (TYPO3_MODE === 'BE') {
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::registerAjaxHandler(
-        'maps2Ajax',
-        'JWeiland\\Maps2\\Dispatch\\AjaxRequest->dispatch'
+$boot = function() {
+    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+        'JWeiland.maps2',
+        'Maps2',
+        [
+            'PoiCollection' => 'show, allowMap',
+            'Ajax' => 'callAjaxObject',
+        ],
+        // non-cacheable actions
+        [
+            'PoiCollection' => '',
+            'Ajax' => 'callAjaxObject',
+        ]
     );
-}
 
-// activate caching for info window content
-if (!is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['maps2_cachedhtml'])) {
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['maps2_cachedhtml'] = array(
-        'groups' => array('pages', 'all')
+    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+        'JWeiland.maps2',
+        'SearchWithinRadius',
+        [
+            'PoiCollection' => 'search, multipleResults, listRadius',
+        ],
+        // non-cacheable actions
+        [
+            'PoiCollection' => 'multipleResults, listRadius',
+        ]
     );
-}
 
-// This is a solution to build GET forms.
-$GLOBALS['TYPO3_CONF_VARS']['FE']['cacheHash']['excludedParameters'][] = 'tx_maps2_searchwithinradius[search][address]';
-$GLOBALS['TYPO3_CONF_VARS']['FE']['cacheHash']['excludedParameters'][] = 'tx_maps2_searchwithinradius[search][radius]';
-$GLOBALS['TYPO3_CONF_VARS']['FE']['cacheHash']['excludedParameters'][] = 'tx_maps2_citymap[street]';
+    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+        'JWeiland.maps2',
+        'CityMap',
+        [
+            'CityMap' => 'show, search',
+        ],
+        // non-cacheable actions
+        [
+            'CityMap' => 'search',
+        ]
+    );
 
-// add address before RTE for InfoWindow
-$classRef = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('maps2') . 'Classes/Tca/InfoWindow.php';
-$GLOBALS['T3_VAR']['getUserObj'][$classRef] = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('JWeiland\\Maps2\\Tca\\InfoWindow');
-$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tceforms.php']['getSingleFieldClass'][] = $classRef;
-unset($classRef);
-
-// We have to save the permission to allow google requests before TS-Template rendering. It's needed by our own TS Condition object
-$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['initFEuser'][] = 'JWeiland\\Maps2\\Hook\\InitFeSessionHook->saveAllowGoogleRequestsInSession';
-
-// this function is needed by a userFunc based TS-Condition
-// replace by a newer solution when not needed for 6.2 anymore
-if (!function_exists('googleRequestsAreAllowed')) {
-    function googleRequestsAreAllowed()
-    {
-        /** @var \JWeiland\Maps2\Condition\AllowGoogleRequestCondition $conditionMatcher */
-        $conditionMatcher = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('JWeiland\\Maps2\\Condition\\AllowGoogleRequestCondition');
-        return $conditionMatcher->match();
+    // activate caching for info window content
+    if (!is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['maps2_cachedhtml'])) {
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['maps2_cachedhtml'] = [
+            'groups' => ['pages', 'all']
+        ];
     }
-}
 
-// add maps2 plugin to new element wizard
-if (version_compare(TYPO3_branch, '6.3.0', '<') ) {
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig('<INCLUDE_TYPOSCRIPT: source="FILE:EXT:maps2/Configuration/TSconfig/ContentElementWizard62.txt">');
-} else {
+    // This is a solution to build GET forms.
+    $GLOBALS['TYPO3_CONF_VARS']['FE']['cacheHash']['excludedParameters'][] = 'tx_maps2_searchwithinradius[search][address]';
+    $GLOBALS['TYPO3_CONF_VARS']['FE']['cacheHash']['excludedParameters'][] = 'tx_maps2_searchwithinradius[search][radius]';
+    $GLOBALS['TYPO3_CONF_VARS']['FE']['cacheHash']['excludedParameters'][] = 'tx_maps2_citymap[street]';
+
+    // add address before RTE for InfoWindow
+    $classRef = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('maps2') . 'Classes/Tca/InfoWindow.php';
+    $GLOBALS['T3_VAR']['getUserObj'][$classRef] = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\JWeiland\Maps2\Tca\InfoWindow::class);
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tceforms.php']['getSingleFieldClass'][] = $classRef;
+
+    // We have to save the permission to allow google requests before TS-Template rendering. It's needed by our own TS Condition object
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['initFEuser'][] = \JWeiland\Maps2\Hook\InitFeSessionHook::class . '->saveAllowGoogleRequestsInSession';
+
+    // this function is needed by a userFunc based TS-Condition
+    // replace by a newer solution when not needed for 6.2 anymore
+    if (!function_exists('googleRequestsAreAllowed')) {
+        function googleRequestsAreAllowed()
+        {
+            /** @var \JWeiland\Maps2\Condition\AllowGoogleRequestCondition $conditionMatcher */
+            $conditionMatcher = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\JWeiland\Maps2\Condition\AllowGoogleRequestCondition::class);
+            return $conditionMatcher->match();
+        }
+    }
+
+    // Register SVG Icon Identifier
+    $svgIcons = [
+        'ext-maps2-wizard-icon' => 'plugin_wizard.svg',
+    ];
+    $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
+    foreach ($svgIcons as $identifier => $fileName) {
+        $iconRegistry->registerIcon(
+            $identifier,
+            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+            ['source' => 'EXT:maps2/Resources/Public/Icons/' . $fileName]
+        );
+    }
+
+    // add maps2 plugin to new element wizard
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig('<INCLUDE_TYPOSCRIPT: source="FILE:EXT:maps2/Configuration/TSconfig/ContentElementWizard.txt">');
-}
+};
+
+$boot();
+unset($boot);
