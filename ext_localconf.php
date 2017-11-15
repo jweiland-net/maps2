@@ -62,17 +62,6 @@ $boot = function() {
     // We have to save the permission to allow google requests before TS-Template rendering. It's needed by our own TS Condition object
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['initFEuser'][] = \JWeiland\Maps2\Hook\InitFeSessionHook::class . '->saveAllowGoogleRequestsInSession';
 
-    // this function is needed by a userFunc based TS-Condition
-    // replace by a newer solution when not needed for 6.2 anymore
-    if (!function_exists('googleRequestsAreAllowed')) {
-        function googleRequestsAreAllowed()
-        {
-            /** @var \JWeiland\Maps2\Condition\AllowGoogleRequestCondition $conditionMatcher */
-            $conditionMatcher = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\JWeiland\Maps2\Condition\AllowGoogleRequestCondition::class);
-            return $conditionMatcher->match();
-        }
-    }
-
     // Register SVG Icon Identifier
     $svgIcons = [
         'ext-maps2-wizard-icon' => 'plugin_wizard.svg',
