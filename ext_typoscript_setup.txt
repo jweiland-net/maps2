@@ -40,10 +40,3 @@ config.tx_extbase {
     }
   }
 }
-
-config.tx_extbase {
-
-
-    throwPageNotFoundExceptionIfActionCantBeResolved = 0
-  }
-}
