@@ -61,9 +61,12 @@ class GoogleMapOverlayRequestHandler extends AbstractRequestHandler
      * @return bool true if it can handle the request, otherwise false
      */
     public function canHandleRequest() {
-        $request = $this->requestBuilder->build();
-        return $request->getControllerExtensionKey() === 'maps2'
-            && !$this->mapService->isGoogleMapRequestAllowed();
+        if (!$this->environmentService->isEnvironmentInCliMode()) {
+            $request = $this->requestBuilder->build();
+            return $request->getControllerExtensionKey() === 'maps2'
+                && !$this->mapService->isGoogleMapRequestAllowed();
+        }
+        return false;
     }
 
     /**
