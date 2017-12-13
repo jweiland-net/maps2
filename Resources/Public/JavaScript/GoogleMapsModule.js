@@ -259,13 +259,18 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
       insertRouteToDb(config, route);
     });
     /* we need a listener to add new route coordinates */
-    gmaps.event.addListener(map, 'click', function(event) {
+    gmaps.event.addListener(this.map, 'click', function(event) {
       route.getPath().push(event.latLng);
       insertRouteToDb(config, route);
     });
-    /* update fields for saving map position */
-    gmaps.event.addListener(map, 'dragend', function() {
-      setLatLngFields(map.getCenter().lat().toFixed(6), map.getCenter().lng().toFixed(6), 0);
+    // update fields for saving map position
+    gmaps.event.addListener(this.map, 'dragend', function() {
+      setLatLngFields(
+        config,
+        map.getCenter().lat().toFixed(6),
+        map.getCenter().lng().toFixed(6),
+        0
+      );
     });
   };
 
