@@ -104,21 +104,6 @@ class MapService implements SingletonInterface
     }
 
     /**
-     * Initialize Session var, if configured
-     *
-     * @return void
-     */
-    public function initializeObject()
-    {
-        if (
-            $this->extConf->getExplicitAllowGoogleMapsBySessionOnly()
-            && (!isset($_SESSION) || !is_array($_SESSION))
-        ) {
-            session_start();
-        }
-    }
-
-    /**
      * Check, if Browser(Cookie) is allowed to request Google Maps Servers
      *
      * @return bool
@@ -137,37 +122,6 @@ class MapService implements SingletonInterface
             }
         } else {
             return true;
-        }
-    }
-
-    /**
-     * Explicit allow google map requests and store to session
-     *
-     * @return void
-     */
-    public function explicitAllowGoogleMapRequests()
-    {
-        $parameters = GeneralUtility::_GPmerged('tx_maps2_maps2');
-        if (
-            isset($parameters['googleRequestsAllowedForMaps2'])
-            && (int)$parameters['googleRequestsAllowedForMaps2'] === 1
-            && $this->extConf->getExplicitAllowGoogleMaps()
-        ) {
-            // $this->cacheService->clearPageCache([$this->getTypoScriptFrontendController()->id]);
-
-            if (
-                $this->extConf->getExplicitAllowGoogleMapsBySessionOnly()
-                && empty($_SESSION['googleRequestsAllowedForMaps2'])
-            ) {
-                $_SESSION['googleRequestsAllowedForMaps2'] = 1;
-            }
-
-            if (
-                !$this->extConf->getExplicitAllowGoogleMapsBySessionOnly()
-                && (bool)$this->getTypoScriptFrontendController()->fe_user->getSessionData('googleRequestsAllowedForMaps2') === false
-            ) {
-                $this->getTypoScriptFrontendController()->fe_user->setAndSaveSessionData('googleRequestsAllowedForMaps2', 1);
-            }
         }
     }
 

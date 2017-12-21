@@ -14,9 +14,11 @@ namespace JWeiland\Maps2\Hook;
  * The TYPO3 project - inspiring people to share!
  */
 
+use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Service\MapService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
  * Class InitFeSessionHook
@@ -30,22 +32,22 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
 class InitFeSessionHook
 {
     /**
-     * @var ObjectManager
+     * @var ExtConf
      */
-    protected $objectManager;
+    protected $extConf;
 
     /**
      * InitFeSessionHook constructor.
-     *
-     * @param ObjectManager $objectManager
      */
-    public function __construct(ObjectManager $objectManager = null)
+    public function __construct()
     {
-        if (!$objectManager) {
-            /** @var ObjectManager $objectManager */
-            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
+        if (
+            $this->extConf->getExplicitAllowGoogleMapsBySessionOnly()
+            && (!isset($_SESSION) || !is_array($_SESSION))
+        ) {
+            session_start();
         }
-        $this->objectManager = $objectManager;
     }
 
     /**
@@ -55,8 +57,33 @@ class InitFeSessionHook
      */
     public function saveAllowGoogleRequestsInSession()
     {
-        /** @var MapService $mapService */
-        $mapService = $this->objectManager->get(MapService::class);
-        $mapService->explicitAllowGoogleMapRequests();
+        $parameters = GeneralUtility::_GPmerged('tx_maps2_maps2');
+        if (
+            isset($parameters['googleRequestsAllowedForMaps2'])
+            && (int)$parameters['googleRequestsAllowedForMaps2'] === 1
+            && $this->extConf->getExplicitAllowGoogleMaps()
+        ) {
+            if (
+                $this->extConf->getExplicitAllowGoogleMapsBySessionOnly()
+                && empty($_SESSION['googleRequestsAllowedForMaps2'])
+            ) {
+                $_SESSION['googleRequestsAllowedForMaps2'] = 1;
+            }
+
+            if (
+                !$this->extConf->getExplicitAllowGoogleMapsBySessionOnly()
+                && (bool)$this->getTypoScriptFrontendController()->fe_user->getSessionData('googleRequestsAllowedForMaps2') === false
+            ) {
+                $this->getTypoScriptFrontendController()->fe_user->setAndSaveSessionData('googleRequestsAllowedForMaps2', 1);
+            }
+        }
+    }
+
+    /**
+     * @return TypoScriptFrontendController|null
+     */
+    protected function getTypoScriptFrontendController()
+    {
+        return $GLOBALS['TSFE'];
     }
 }
