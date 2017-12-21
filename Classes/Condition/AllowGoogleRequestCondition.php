@@ -14,10 +14,12 @@ namespace JWeiland\Maps2\Condition;
  * The TYPO3 project - inspiring people to share!
  */
 
+use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Service\MapService;
 use TYPO3\CMS\Core\Configuration\TypoScript\ConditionMatching\AbstractCondition;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
  * Class AllowGoogleRequestCondition
@@ -39,19 +41,29 @@ class AllowGoogleRequestCondition extends AbstractCondition
      * @return bool
      */
     public function matchCondition(array $conditionParameters) {
-        $result = false;
-
-        /** @var ObjectManager $objectManager */
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-
-        /** @var MapService $mapService */
-        $mapService = $objectManager->get(MapService::class);
-
-        if ($mapService->isGoogleMapRequestAllowed()) {
-            $result = true;
+        /** @var ExtConf $extConf */
+        $extConf = GeneralUtility::makeInstance(ExtConf::class);
+        if ($extConf->getExplicitAllowGoogleMaps()) {
+            if ($extConf->getExplicitAllowGoogleMapsBySessionOnly()) {
+                return (bool)$_SESSION['googleRequestsAllowedForMaps2'];
+            } else {
+                if ($this->getTypoScriptFrontendController() instanceof TypoScriptFrontendController) {
+                    return (bool)$this->getTypoScriptFrontendController()->fe_user->getSessionData('googleRequestsAllowedForMaps2');
+                } else {
+                    return false;
+                }
+            }
+        } else {
+            return true;
         }
+    }
 
-        return $result;
+    /**
+     * @return TypoScriptFrontendController|null
+     */
+    protected function getTypoScriptFrontendController()
+    {
+        return $GLOBALS['TSFE'];
     }
 }
 

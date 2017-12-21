@@ -104,28 +104,6 @@ class MapService implements SingletonInterface
     }
 
     /**
-     * Check, if Browser(Cookie) is allowed to request Google Maps Servers
-     *
-     * @return bool
-     */
-    public function isGoogleMapRequestAllowed()
-    {
-        if ($this->extConf->getExplicitAllowGoogleMaps()) {
-            if ($this->extConf->getExplicitAllowGoogleMapsBySessionOnly()) {
-                return (bool)$_SESSION['googleRequestsAllowedForMaps2'];
-            } else {
-                if ($this->getTypoScriptFrontendController() instanceof TypoScriptFrontendController) {
-                    return (bool)$this->getTypoScriptFrontendController()->fe_user->getSessionData('googleRequestsAllowedForMaps2');
-                } else {
-                    return false;
-                }
-            }
-        } else {
-            return true;
-        }
-    }
-
-    /**
      * Show form to allow requests to google map servers
      *
      * @return string
@@ -234,13 +212,5 @@ class MapService implements SingletonInterface
         }
 
         return $path;
-    }
-
-    /**
-     * @return TypoScriptFrontendController|null
-     */
-    protected function getTypoScriptFrontendController()
-    {
-        return $GLOBALS['TSFE'];
     }
 }
