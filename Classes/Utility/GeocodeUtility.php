@@ -78,6 +78,8 @@ class GeocodeUtility
      * @param string $address
      *
      * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage|array ObjectStorage if status = OK. Returns array if something went false
+     *
+     * @throws \Exception
      */
     public function findPositionByAddress($address)
     {
@@ -112,7 +114,10 @@ class GeocodeUtility
      * Get URI for Geocode
      *
      * @param string $address
+     *
      * @return string
+     *
+     * @throws \Exception
      */
     protected function getUri($address)
     {

@@ -48,7 +48,10 @@ class ModifyMarker extends AbstractAjaxRequest
      *
      * @param array $arguments Arguments to process
      * @param string $hash A generated hash value to verify that there are no modifications in the uri
+     *
      * @return string
+     *
+     * @throws \Exception
      */
     public function processAjaxRequest(array $arguments, $hash)
     {

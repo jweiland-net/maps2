@@ -16,6 +16,7 @@ namespace JWeiland\Maps2\ViewHelpers\Widget;
 
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Service\MapService;
+use JWeiland\Maps2\Service\GoogleRequestService;
 use TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetViewHelper;
 
 /**
@@ -35,6 +36,11 @@ class PoiCollectionViewHelper extends AbstractWidgetViewHelper
     protected $controller;
 
     /**
+     * @var GoogleRequestService
+     */
+    protected $googleRequestService;
+
+    /**
      * @var MapService
      */
     protected $mapService;
@@ -49,6 +55,18 @@ class PoiCollectionViewHelper extends AbstractWidgetViewHelper
     public function injectController(Controller\PoiCollectionController $controller)
     {
         $this->controller = $controller;
+    }
+
+    /**
+     * inject googleRequestService
+     *
+     * @param GoogleRequestService $googleRequestService
+     *
+     * @return void
+     */
+    public function injectGoogleRequestService(GoogleRequestService $googleRequestService)
+    {
+        $this->googleRequestService = $googleRequestService;
     }
 
     /**
@@ -74,7 +92,7 @@ class PoiCollectionViewHelper extends AbstractWidgetViewHelper
      */
     public function render(PoiCollection $poiCollection = null, $poiCollections = null, $override = [])
     {
-        if (!$this->mapService->isGoogleMapRequestAllowed()) {
+        if (!$this->googleRequestService->isGoogleMapRequestAllowed()) {
             return $this->mapService->showAllowMapForm();
         }
 

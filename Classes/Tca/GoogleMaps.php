@@ -87,6 +87,8 @@ class GoogleMaps
      * @param object $pObj
      *
      * @return string
+     *
+     * @throws \Exception
      */
     public function render(array $parentArray, $pObj)
     {
@@ -145,6 +147,8 @@ class GoogleMaps
      * @param array $PA
      *
      * @return array
+     *
+     * @throws \Exception
      */
     public function getConfiguration(array $PA)
     {

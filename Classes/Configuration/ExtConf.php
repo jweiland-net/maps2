@@ -178,6 +178,8 @@ class ExtConf implements SingletonInterface
      * getter for googleMapsLibrary
      *
      * @return string
+     *
+     * @throws \Exception
      */
     public function getGoogleMapsLibrary()
     {

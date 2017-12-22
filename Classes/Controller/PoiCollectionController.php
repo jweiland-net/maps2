@@ -97,6 +97,8 @@ class PoiCollectionController extends AbstractController
      * we have a self-made form. So we have to define allowed properties on our own
      *
      * @return void
+     *
+     * @throws \Exception
      */
     public function initializeMultipleResultsAction()
     {
@@ -114,6 +116,8 @@ class PoiCollectionController extends AbstractController
      * @param Search $search
      *
      * @return void
+     *
+     * @throws \Exception
      */
     public function multipleResultsAction(Search $search)
     {

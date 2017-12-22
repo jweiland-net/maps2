@@ -14,12 +14,9 @@ namespace JWeiland\Maps2\Condition;
  * The TYPO3 project - inspiring people to share!
  */
 
-use JWeiland\Maps2\Configuration\ExtConf;
-use JWeiland\Maps2\Service\MapService;
+use JWeiland\Maps2\Service\GoogleRequestService;
 use TYPO3\CMS\Core\Configuration\TypoScript\ConditionMatching\AbstractCondition;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
-use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
  * Class AllowGoogleRequestCondition
@@ -33,6 +30,24 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 class AllowGoogleRequestCondition extends AbstractCondition
 {
     /**
+     * @var GoogleRequestService
+     */
+    protected $googleRequestService;
+
+    /**
+     * GoogleRequestService constructor.
+     *
+     * @param GoogleRequestService $googleRequestService
+     */
+    public function __construct(GoogleRequestService $googleRequestService = null)
+    {
+        if ($googleRequestService === null) {
+            $googleRequestService = GeneralUtility::makeInstance(GoogleRequestService::class);
+        }
+        $this->googleRequestService = $googleRequestService;
+    }
+
+    /**
      * Check, if extension configuration is set
      * and user has not explicit allowed google requests
      *
@@ -41,29 +56,7 @@ class AllowGoogleRequestCondition extends AbstractCondition
      * @return bool
      */
     public function matchCondition(array $conditionParameters) {
-        /** @var ExtConf $extConf */
-        $extConf = GeneralUtility::makeInstance(ExtConf::class);
-        if ($extConf->getExplicitAllowGoogleMaps()) {
-            if ($extConf->getExplicitAllowGoogleMapsBySessionOnly()) {
-                return (bool)$_SESSION['googleRequestsAllowedForMaps2'];
-            } else {
-                if ($this->getTypoScriptFrontendController() instanceof TypoScriptFrontendController) {
-                    return (bool)$this->getTypoScriptFrontendController()->fe_user->getSessionData('googleRequestsAllowedForMaps2');
-                } else {
-                    return false;
-                }
-            }
-        } else {
-            return true;
-        }
-    }
-
-    /**
-     * @return TypoScriptFrontendController|null
-     */
-    protected function getTypoScriptFrontendController()
-    {
-        return $GLOBALS['TSFE'];
+        return $this->googleRequestService->isGoogleMapRequestAllowed();
     }
 }
 

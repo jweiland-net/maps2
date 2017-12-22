@@ -25,7 +25,6 @@ namespace JWeiland\Maps2\ViewHelpers\Cache;
  */
 class SetCacheViewHelper extends AbstractCacheViewHelper
 {
-
     /**
      * Saves data in a cache file.
      *
@@ -33,9 +32,8 @@ class SetCacheViewHelper extends AbstractCacheViewHelper
      * @param string $data The data to be stored
      * @param array $tags Tags to associate with this cache entry
      * @param int $lifetime Lifetime of this cache entry in seconds. If null is specified, the default lifetime is used. "0" means unlimited liftime.
+     *
      * @return void
-     * @throws \TYPO3\CMS\Core\Cache\Exception if no cache frontend has been set.
-     * @throws \TYPO3\CMS\Core\Cache\Exception\InvalidDataException if the data to be stored is not a string.
      */
     public function render($cacheIdentifier, $data, array $tags = array(), $lifetime = null)
     {

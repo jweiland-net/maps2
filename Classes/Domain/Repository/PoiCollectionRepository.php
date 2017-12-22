@@ -76,7 +76,10 @@ class PoiCollectionRepository extends Repository
      * @param float $latitude the users position
      * @param float $longitude the users position
      * @param int $radius The range to search for poi collections (km)
+     *
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     *
+     * @throws \Exception
      */
     public function searchWithinRadius($latitude, $longitude, $radius)
     {
@@ -109,7 +112,10 @@ class PoiCollectionRepository extends Repository
      * find all pois selected by categories
      *
      * @param string $categories comma separated list of category uids
+     *
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     *
+     * @throws \Exception
      */
     public function findPoisByCategories($categories)
     {
