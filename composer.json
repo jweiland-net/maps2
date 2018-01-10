@@ -1,32 +1,55 @@
 {
-    "name": "jweiland/maps2",
-    "type": "typo3-cms-extension",
-    "description": "Add a Google Map to your website",
-    "version": "3.0.2",
-    "license": "GPL-2.0+",
-    "keywords": ["typo3", "TYPO3 CMS", "google maps", "google", "maps2"],
-    "homepage": "http://www.jweiland.net",
-    "authors": [
-      {
-        "name": "Stefan Froemken",
-        "email": "sfroemken@jweiland.net",
-        "role": "Lead Developer"
-      }
-    ],
-    "support": {
-      "email": "projects@jweiland.net",
-      "issues": "https://github.com/jweiland-net/maps2/issues",
-      "source": "https://github.com/jweiland-net/maps2"
-    },
-    "require": {
-      "typo3/cms-core": ">=7.6.0 <9"
-    },
-    "require-dev": {
-      "phpunit/phpunit": "~4.8.0"
-    },
-    "autoload": {
-        "psr-4": {
-            "JWeiland\\Maps2\\": "Classes"
-        }
+  "name": "jweiland/maps2",
+  "type": "typo3-cms-extension",
+  "description": "Add a Google Map to your website",
+  "version": "3.0.2",
+  "license": "GPL-2.0+",
+  "keywords": ["typo3", "TYPO3 CMS", "google maps", "google", "maps2"],
+  "homepage": "http://www.jweiland.net",
+  "authors": [
+    {
+      "name": "Stefan Froemken",
+      "email": "sfroemken@jweiland.net",
+      "role": "Lead Developer"
     }
+  ],
+  "support": {
+    "email": "projects@jweiland.net",
+    "issues": "https://github.com/jweiland-net/maps2/issues",
+    "source": "https://github.com/jweiland-net/maps2"
+  },
+  "require": {
+    "typo3/cms-core": "^7.6.13 || >=8.5.0 <9"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~4.8.0",
+    "friendsofphp/php-cs-fixer": "^2.0",
+    "nimut/testing-framework": "^1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "JWeiland\\Maps2\\": "Classes"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "JWeiland\\Events2\\Tests\\": "Tests"
+    }
+  },
+  "config": {
+    "vendor-dir": ".Build/vendor",
+    "bin-dir": ".Build/bin"
+  },
+  "scripts": {
+    "post-autoload-dump": [
+      "mkdir -p .Build/Web/typo3conf/ext/",
+      "[ -L .Build/Web/typo3conf/ext/maps2 ] || ln -snvf ../../../../. .Build/Web/typo3conf/ext/maps2"
+    ]
+  },
+  "extra": {
+    "typo3/cms": {
+      "cms-package-dir": "{$vendor-dir}/typo3/cms",
+      "web-dir": ".Build/Web"
+    }
+  }
 }
