@@ -2,8 +2,7 @@
   "name": "jweiland/maps2",
   "type": "typo3-cms-extension",
   "description": "Add a Google Map to your website",
-  "version": "3.0.2",
-  "license": "GPL-2.0+",
+  "license": "GPL-2.0+-or-later",
   "keywords": ["typo3", "TYPO3 CMS", "google maps", "google", "maps2"],
   "homepage": "http://www.jweiland.net",
   "authors": [
@@ -19,10 +18,10 @@
     "source": "https://github.com/jweiland-net/maps2"
   },
   "require": {
-    "typo3/cms-core": "^7.6.13 || >=8.5.0 <9"
+    "typo3/cms-core": "^7.6.13 || ~8.5"
   },
   "require-dev": {
-    "phpunit/phpunit": "~4.8.0",
+    "phpunit/phpunit": "~4.8",
     "friendsofphp/php-cs-fixer": "^2.0",
     "nimut/testing-framework": "^1.0"
   },
