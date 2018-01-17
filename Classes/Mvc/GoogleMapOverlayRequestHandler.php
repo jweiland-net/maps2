@@ -18,7 +18,6 @@ use JWeiland\Maps2\Service\MapService;
 use TYPO3\CMS\Extbase\Mvc\RequestHandlerInterface;
 use TYPO3\CMS\Extbase\Mvc\ResponseInterface;
 use TYPO3\CMS\Extbase\Mvc\Web\AbstractRequestHandler;
-use TYPO3\CMS\Extbase\Mvc\Web\Response;
 use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 
 /**
@@ -61,13 +60,13 @@ class GoogleMapOverlayRequestHandler extends AbstractRequestHandler
     }
 
     /**
-     * Handles a raw request and returns the respsonse.
+     * Handles a raw request and returns the response.
      *
      * @return \TYPO3\CMS\Extbase\Mvc\ResponseInterface
      */
     public function handleRequest() {
         /** @var ResponseInterface $response */
-        $response = $this->objectManager->get(Response::class);
+        $response = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Mvc\\Web\\Response');
         $response->appendContent($this->mapService->showAllowMapForm());
         return $response;
     }
