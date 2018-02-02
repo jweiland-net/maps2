@@ -28,9 +28,52 @@ return [
     'interface' => [
         'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, collection_type, title, address, latitude, longitude, latitude_orig, longitude_orig, configuration_map, pois, stroke_color, stroke_opacity, stroke_weight, fill_color, fill_opacity, info_window_content',
     ],
+    'types' => [
+        'Empty' => [
+            'showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource,
+            hidden, collection_type, title,
+            --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.access, 
+            --palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.access;access'
+        ],
+        'Point' => [
+            'showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource,
+            hidden, collection_type, title, address;;1, configuration_map, pois,
+            --div--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poicollection.info_window,info_window_content;;;richtext[]:rte_transform[mode=ts_css],
+            --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.access, 
+            --palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.access;access'
+        ],
+        'Area' => [
+            'showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource,
+            hidden, collection_type, title, latitude, longitude, configuration_map, pois,
+            --div--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poicollection.style, stroke_color, stroke_opacity, stroke_weight, fill_color, fill_opacity,
+            --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.access, 
+            --palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.access;access'
+        ],
+        'Route' => [
+            'showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource,
+            hidden, collection_type, title, latitude, longitude, configuration_map, pois,
+            --div--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poicollection.style, stroke_color, stroke_opacity, stroke_weight, fill_color, fill_opacity,
+            --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.access, 
+            --palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.access;access'
+        ],
+        'Radius' => [
+            'showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource,
+            hidden, collection_type, title, address;;2, configuration_map, pois,
+            --div--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poicollection.style, stroke_color, stroke_opacity, stroke_weight, fill_color, fill_opacity,
+            --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.access, 
+            --palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.access;access'
+        ],
+    ],
+    'palettes' => [
+        '1' => ['showitem' => 'latitude, longitude, --linebreak--, latitude_orig, longitude_orig'],
+        '2' => ['showitem' => 'latitude, longitude, radius, --linebreak--, latitude_orig, longitude_orig'],
+        'access' => [
+            'showitem' => 'starttime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:starttime_formlabel,endtime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:endtime_formlabel',
+        ]
+    ],
     'columns' => [
         'sys_language_uid' => [
-            'exclude' => 1,
+            'exclude' => true,
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.language',
             'config' => [
                 'type' => 'select',
@@ -47,21 +90,19 @@ return [
             ]
         ],
         'l10n_parent' => [
-            'exclude' => 1,
             'displayCond' => 'FIELD:sys_language_uid:>:0',
+            'exclude' => true,
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.l18n_parent',
             'config' => [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => [
-                    [
-                        '',
-                        0
-                    ]
+                    ['', 0],
                 ],
-                'foreign_table' => 'tt_content',
-                'foreign_table_where' => 'AND tt_content.pid=###CURRENT_PID### AND tt_content.sys_language_uid IN (-1,0)',
-                'default' => 0
+                'foreign_table' => 'tx_maps2_domain_model_poicollection',
+                'foreign_table_where' => 'AND tx_maps2_domain_model_poicollection.pid=###CURRENT_PID### AND tx_maps2_domain_model_poicollection.sys_language_uid IN (-1,0)',
+                'showIconTable' => false,
+                'default' => 0,
             ]
         ],
         'l10n_diffsource' => [
@@ -79,7 +120,7 @@ return [
             ]
         ],
         'hidden' => [
-            'exclude' => 1,
+            'exclude' => true,
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.hidden',
             'config' => [
                 'type' => 'check',
@@ -91,7 +132,7 @@ return [
             ]
         ],
         'starttime' => [
-            'exclude' => 1,
+            'exclude' => true,
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.starttime',
             'config' => [
                 'type' => 'input',
@@ -103,7 +144,7 @@ return [
             'l10n_display' => 'defaultAsReadonly'
         ],
         'endtime' => [
-            'exclude' => 1,
+            'exclude' => true,
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.endtime',
             'config' => [
                 'type' => 'input',
@@ -118,7 +159,7 @@ return [
             'l10n_display' => 'defaultAsReadonly'
         ],
         'collection_type' => [
-            'exclude' => 1,
+            'exclude' => true,
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.collectionType',
             'config' => [
                 'type' => 'select',
@@ -160,7 +201,7 @@ return [
             ],
         ],
         'title' => [
-            'exclude' => 1,
+            'exclude' => true,
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.title',
             'config' => [
                 'type' => 'input',
@@ -169,7 +210,7 @@ return [
             ],
         ],
         'address' => [
-            'exclude' => 1,
+            'exclude' => true,
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poicollection.address',
             'config' => [
                 'type' => 'input',
@@ -184,7 +225,7 @@ return [
             ],
         ],
         'latitude' => [
-            'exclude' => 1,
+            'exclude' => true,
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poicollection.latitude',
             'config' => [
                 'type' => 'input',
@@ -193,7 +234,7 @@ return [
             ],
         ],
         'longitude' => [
-            'exclude' => 1,
+            'exclude' => true,
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poicollection.longitude',
             'config' => [
                 'type' => 'input',
@@ -202,7 +243,7 @@ return [
             ],
         ],
         'latitude_orig' => [
-            'exclude' => 1,
+            'exclude' => true,
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poicollection.latitudeOrig',
             'config' => [
                 'type' => 'input',
@@ -211,7 +252,7 @@ return [
             ],
         ],
         'longitude_orig' => [
-            'exclude' => 1,
+            'exclude' => true,
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poicollection.longitudeOrig',
             'config' => [
                 'type' => 'input',
@@ -220,7 +261,7 @@ return [
             ],
         ],
         'configuration_map' => [
-            'exclude' => 1,
+            'exclude' => true,
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poicollection.configuration_map',
             'config' => [
                 'type' => 'user',
@@ -228,7 +269,7 @@ return [
             ],
         ],
         'radius' => [
-            'exclude' => 1,
+            'exclude' => true,
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poicollection.radius',
             'config' => [
                 'type' => 'input',
@@ -237,7 +278,7 @@ return [
             ],
         ],
         'pois' => [
-            'exclude' => 1,
+            'exclude' => true,
             'config' => [
                 'type' => 'passthrough',
                 'foreign_table' => 'tx_maps2_domain_model_poi',
@@ -245,7 +286,7 @@ return [
             ],
         ],
         'stroke_color' => [
-            'exclude' => 1,
+            'exclude' => true,
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poicollection.stroke_color',
             'config' => [
                 'type' => 'input',
@@ -254,7 +295,7 @@ return [
             ],
         ],
         'stroke_opacity' => [
-            'exclude' => 1,
+            'exclude' => true,
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poicollection.stroke_opacity',
             'config' => [
                 'type' => 'input',
@@ -263,7 +304,7 @@ return [
             ],
         ],
         'stroke_weight' => [
-            'exclude' => 1,
+            'exclude' => true,
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poicollection.stroke_weight',
             'config' => [
                 'type' => 'input',
@@ -272,7 +313,7 @@ return [
             ],
         ],
         'fill_color' => [
-            'exclude' => 1,
+            'exclude' => true,
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poicollection.fill_color',
             'config' => [
                 'type' => 'input',
@@ -281,7 +322,7 @@ return [
             ],
         ],
         'fill_opacity' => [
-            'exclude' => 1,
+            'exclude' => true,
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poicollection.fill_opacity',
             'config' => [
                 'type' => 'input',
@@ -290,7 +331,7 @@ return [
             ],
         ],
         'info_window_content' => [
-            'exclude' => 1,
+            'exclude' => true,
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poicollection.info_window_content',
             'config' => [
                 'type' => 'text',
@@ -300,17 +341,6 @@ return [
                 'default' => '',
             ],
             'defaultExtras' => 'richtext[]',
-        ],
-    ],
-    'types' => [
-        'Empty' => ['showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, hidden, collection_type, title,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.access,starttime, endtime'],
-        'Point' => ['showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, hidden, collection_type, title, address;;1, configuration_map, pois,--div--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poicollection.info_window,info_window_content;;;richtext[]:rte_transform[mode=ts_css],--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.access,starttime, endtime'],
-        'Area' => ['showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, hidden, collection_type, title, latitude, longitude, configuration_map, pois,--div--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poicollection.style, stroke_color, stroke_opacity, stroke_weight, fill_color, fill_opacity,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.access,starttime, endtime'],
-        'Route' => ['showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, hidden, collection_type, title, latitude, longitude, configuration_map, pois,--div--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poicollection.style, stroke_color, stroke_opacity, stroke_weight, fill_color, fill_opacity,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.access,starttime, endtime'],
-        'Radius' => ['showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, hidden, collection_type, title, address;;2, configuration_map, pois,--div--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poicollection.style, stroke_color, stroke_opacity, stroke_weight, fill_color, fill_opacity,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.access,starttime, endtime'],
-    ],
-    'palettes' => [
-        '1' => ['showitem' => 'latitude, longitude, --linebreak--, latitude_orig, longitude_orig'],
-        '2' => ['showitem' => 'latitude, longitude, radius, --linebreak--, latitude_orig, longitude_orig'],
-    ],
+        ]
+    ]
 ];

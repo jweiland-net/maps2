@@ -27,9 +27,15 @@ return [
     'interface' => [
         'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, latitude, longitude, pos_index',
     ],
+    'types' => [
+        '0' => ['showitem' => 'latitude, longitude, pos_index']
+    ],
+    'palettes' => [
+        '1' => ['showitem' => ''],
+    ],
     'columns' => [
         'sys_language_uid' => [
-            'exclude' => 1,
+            'exclude' => true,
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.language',
             'config' => [
                 'type' => 'select',
@@ -46,21 +52,19 @@ return [
             ]
         ],
         'l10n_parent' => [
-            'exclude' => 1,
             'displayCond' => 'FIELD:sys_language_uid:>:0',
+            'exclude' => true,
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.l18n_parent',
             'config' => [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => [
-                    [
-                        '',
-                        0
-                    ]
+                    ['', 0],
                 ],
-                'foreign_table' => 'tt_content',
-                'foreign_table_where' => 'AND tt_content.pid=###CURRENT_PID### AND tt_content.sys_language_uid IN (-1,0)',
-                'default' => 0
+                'foreign_table' => 'tx_maps2_domain_model_poi',
+                'foreign_table_where' => 'AND tx_maps2_domain_model_poi.pid=###CURRENT_PID### AND tx_maps2_domain_model_poi.sys_language_uid IN (-1,0)',
+                'showIconTable' => false,
+                'default' => 0,
             ]
         ],
         'l10n_diffsource' => [
@@ -78,7 +82,7 @@ return [
             ]
         ],
         'hidden' => [
-            'exclude' => 1,
+            'exclude' => true,
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.hidden',
             'config' => [
                 'type' => 'check',
@@ -90,7 +94,7 @@ return [
             ]
         ],
         'starttime' => [
-            'exclude' => 1,
+            'exclude' => true,
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.starttime',
             'config' => [
                 'type' => 'input',
@@ -102,7 +106,7 @@ return [
             'l10n_display' => 'defaultAsReadonly'
         ],
         'endtime' => [
-            'exclude' => 1,
+            'exclude' => true,
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.endtime',
             'config' => [
                 'type' => 'input',
@@ -117,7 +121,7 @@ return [
             'l10n_display' => 'defaultAsReadonly'
         ],
         'latitude' => [
-            'exclude' => 1,
+            'exclude' => true,
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poi.latitude',
             'config' => [
                 'type' => 'input',
@@ -126,7 +130,7 @@ return [
             ],
         ],
         'longitude' => [
-            'exclude' => 1,
+            'exclude' => true,
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poi.longitude',
             'config' => [
                 'type' => 'input',
@@ -135,19 +139,13 @@ return [
             ],
         ],
         'pos_index' => [
-            'exclude' => 1,
+            'exclude' => true,
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poi.posIndex',
             'config' => [
                 'type' => 'input',
                 'size' => 5,
                 'eval' => 'int,trim'
-            ],
-        ],
-    ],
-    'types' => [
-        '0' => ['showitem' => 'latitude, longitude, pos_index']
-    ],
-    'palettes' => [
-        '1' => ['showitem' => ''],
-    ],
+            ]
+        ]
+    ]
 ];
