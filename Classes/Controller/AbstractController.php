@@ -18,6 +18,8 @@ use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Service\MapService;
 use JWeiland\Maps2\Utility\DataMapper;
 use JWeiland\Maps2\Utility\GeocodeUtility;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
@@ -107,7 +109,99 @@ class AbstractController extends ActionController
      */
     public function initializeAction()
     {
+        $this->throwExceptionIfJavaScriptApiKeyIsNotSet();
         $this->settings['infoWindowContentTemplatePath'] = trim($this->settings['infoWindowContentTemplatePath']);
+    }
+
+    /**
+     * Throw exception if ApiKey is not in JS file path
+     *
+     * @return void
+     *
+     * @throws \Exception
+     */
+    protected function throwExceptionIfJavaScriptApiKeyIsNotSet()
+    {
+        $tsWithPageObjects = $this->getTypoScriptWithPageObjects();
+        switch (count($tsWithPageObjects)) {
+            case 0:
+                throw new \Exception(
+                    'There is no PAGE object in TypoScript configured with typeNum = 0. Please create one first, before using maps2',
+                    1524222457
+                );
+                break;
+            case 1:
+                // fine. Now check against included JS
+                $tsWithPageObject = current($tsWithPageObjects);
+                $validTypoScriptPaths = array_intersect_key(
+                    $tsWithPageObject,
+                    [
+                        'includeJS.' => true,
+                        'includeJSFooter.' => true,
+                        'includeJSFooterLibs.' => true,
+                        'includeJSLibs.' => true
+                    ]
+                );
+                $jsLibraryHasApiKey = false;
+                foreach ($validTypoScriptPaths as $path => $jsLibraries) {
+                    foreach ($jsLibraries as $name => $source) {
+                        if (!is_string($source)) {
+                            continue;
+                        }
+                        $query = parse_url($source, PHP_URL_QUERY);
+                        if (!empty($query)) {
+                            parse_str($query, $parameters);
+                            if (isset($parameters['key']) && !empty($parameters['key'])) {
+                                $jsLibraryHasApiKey = true;
+                                break 2;
+                            }
+                        }
+                    }
+                }
+                break;
+            default:
+                throw new \Exception(
+                    'You have configured multiple PAGE objects in TypoScript with typeNum = 0. Please correct that before using maps2.',
+                    1524222485
+                );
+        }
+
+        if (!$jsLibraryHasApiKey) {
+            throw new \Exception(
+                'Included JS lib for Google Maps does not contain ApiKey. Please check it within Constant Editor or in Setup TS directly',
+                1524223595
+            );
+        }
+    }
+
+    /**
+     * We need the TS with PAGE-objects to check, if Google Maps JavaScript ApiKey was integrated successfully
+     *
+     * @return array
+     */
+    protected function getTypoScriptWithPageObjects()
+    {
+        $fullTypoScript = $this->configurationManager->getConfiguration(
+            ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT
+        );
+
+        $tsWithPageObjects = [];
+        foreach ($fullTypoScript as $key => $value) {
+            if (
+                is_string($value) && $value === 'PAGE'
+                && isset($fullTypoScript[$key . '.']) && is_array($fullTypoScript[$key . '.'])
+                && (
+                    !isset($fullTypoScript[$key . '.']['typeNum'])
+                    || (
+                        isset($fullTypoScript[$key . '.']['typeNum'])
+                        && $fullTypoScript[$key . '.']['typeNum'] === '0'
+                    )
+                )
+            ) {
+                $tsWithPageObjects[] = $fullTypoScript[$key . '.'];
+            }
+        }
+        return $tsWithPageObjects;
     }
 
     /**
