@@ -113,7 +113,8 @@ class MapService implements SingletonInterface
         $view->setTemplatePathAndFilename(
             GeneralUtility::getFileAbsFileName(
                 $this->getAllowMapTemplatePath()
-            ));
+            )
+        );
         $view->assign('settings', $this->settings);
         $view->assign('requestUri', $this->getRequestUri());
         return $view->render();
