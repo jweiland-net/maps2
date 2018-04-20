@@ -54,8 +54,8 @@ class AllowGoogleRequestCondition extends AbstractCondition
      *
      * @return bool
      */
-    public function matchCondition(array $conditionParameters) {
+    public function matchCondition(array $conditionParameters)
+    {
         return $this->googleRequestService->isGoogleMapRequestAllowed();
     }
 }
-

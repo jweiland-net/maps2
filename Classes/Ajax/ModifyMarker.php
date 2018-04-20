@@ -38,7 +38,8 @@ class ModifyMarker extends AbstractAjaxRequest
      * @param PoiCollectionRepository $poiCollectionRepository
      * @return void
      */
-    public function injectPoiCollectionRepository(PoiCollectionRepository $poiCollectionRepository) {
+    public function injectPoiCollectionRepository(PoiCollectionRepository $poiCollectionRepository)
+    {
         $this->poiCollectionRepository = $poiCollectionRepository;
     }
 

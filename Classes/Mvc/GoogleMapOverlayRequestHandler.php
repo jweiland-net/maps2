@@ -85,7 +85,8 @@ class GoogleMapOverlayRequestHandler extends AbstractRequestHandler
      *
      * @return int The priority of the request handler
      */
-    public function getPriority() {
+    public function getPriority()
+    {
         // we must be higher than FrontendRequestHandler (100)
         return 120;
     }
@@ -95,7 +96,8 @@ class GoogleMapOverlayRequestHandler extends AbstractRequestHandler
      *
      * @return \TYPO3\CMS\Extbase\Mvc\ResponseInterface
      */
-    public function handleRequest() {
+    public function handleRequest()
+    {
         /** @var ResponseInterface $response */
         $response = $this->objectManager->get(Response::class);
         $response->appendContent($this->mapService->showAllowMapForm());

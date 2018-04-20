@@ -31,7 +31,6 @@ use TYPO3\CMS\Extbase\Security\Cryptography\HashService;
  */
 abstract class AbstractAjaxRequest implements AjaxInterface
 {
-
     /**
      * @var ObjectManager
      */
@@ -69,7 +68,8 @@ abstract class AbstractAjaxRequest implements AjaxInterface
      * @param PersistenceManagerInterface $persistenceManager
      * @return void
      */
-    public function injectPersistenceManager(PersistenceManagerInterface $persistenceManager) {
+    public function injectPersistenceManager(PersistenceManagerInterface $persistenceManager)
+    {
         $this->persistenceManager = $persistenceManager;
     }
 
@@ -90,7 +90,8 @@ abstract class AbstractAjaxRequest implements AjaxInterface
      * @param BackendConfigurationManager $backendConfigurationManager
      * @return void
      */
-    public function injectBackendConfigurationManager(BackendConfigurationManager $backendConfigurationManager) {
+    public function injectBackendConfigurationManager(BackendConfigurationManager $backendConfigurationManager)
+    {
         $this->backendConfigurationManager = $backendConfigurationManager;
     }
 

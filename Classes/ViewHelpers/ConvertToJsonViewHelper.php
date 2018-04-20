@@ -14,9 +14,9 @@ namespace JWeiland\Maps2\ViewHelpers;
  * The TYPO3 project - inspiring people to share!
  */
 
+use JWeiland\Maps2\Domain\Model\Category;
 use JWeiland\Maps2\Domain\Model\Poi;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
-use JWeiland\Maps2\Domain\Model\Category;
 use TYPO3\CMS\Extbase\Persistence\Generic\LazyObjectStorage;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
@@ -34,12 +34,12 @@ use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 class ConvertToJsonViewHelper extends AbstractViewHelper
 {
     /**
-     * @var boolean
+     * @var bool
      */
     protected $escapeChildren = false;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $escapeOutput = false;
 
