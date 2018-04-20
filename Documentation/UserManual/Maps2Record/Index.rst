@@ -65,7 +65,7 @@ The maps2 record is the most important record in this extension.
          Map
    :Description:
          If you are connected with the internet and have configured the Api Keys correctly
-         you should see a Google Map here with a Marker.
+         you should see Google Maps here with a Marker.
          With a click on the map or drag'n drop you can move the marker around the map.
          If you have moved the marker the fields latitude and longitude will be updated.
  - :Field:
@@ -81,7 +81,7 @@ The maps2 record is the most important record in this extension.
  - :Field:
          Stroke opacity
    :Description:
-         If 1 you will not see the Google Map behind the border.
+         If 1 you will not see the Google Maps behind the border.
          If 0 you will not see the Border of the marker.
          We prefer to set that value a little bit higher than **fill opacity**.
          If not set we get that value from Extensionmanager configuration.
@@ -98,7 +98,7 @@ The maps2 record is the most important record in this extension.
  - :Field:
          Fill opacity
    :Description:
-         If 1 you will not see the Google Map behind the overlay.
+         If 1 you will not see the Google Maps behind the overlay.
          If 0 you will not see the overlay of the marker.
          We prefer to set that value a little bit lower than **stroke opacity**.
          If not set we get that value from Extensionmanager configuration.

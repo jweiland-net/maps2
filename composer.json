@@ -1,7 +1,7 @@
 {
   "name": "jweiland/maps2",
   "type": "typo3-cms-extension",
-  "description": "Add a Google Map to your website",
+  "description": "Add Google Maps to your website",
   "license": "GPL-2.0-or-later",
   "keywords": ["typo3", "TYPO3 CMS", "google maps", "google", "maps2"],
   "homepage": "http://www.jweiland.net",

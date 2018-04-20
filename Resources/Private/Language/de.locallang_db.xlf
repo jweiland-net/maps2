@@ -22,8 +22,8 @@
         <target>Google Maps</target>
       </trans-unit>
       <trans-unit id="plugin.maps2.description">
-        <source>Add a Google Map to your website</source>
-        <target>Fügt eine Google Karte Ihrer Webseite hinzu</target>
+        <source>Add Google Maps to your website</source>
+        <target>Fügt Google Maps Ihrer Webseite hinzu</target>
       </trans-unit>
 
       <trans-unit id="tx_maps2_domain_model_poi" xml:space="preserve" approved="yes">
@@ -77,7 +77,7 @@
       </trans-unit>
       <trans-unit id="tx_maps2_domain_model_poicollection.configuration_map" xml:space="preserve" approved="yes">
         <source>Configure position on Google Maps</source>
-        <target>Google Karte zum Konfigurieren</target>
+        <target>Konfiguration einer Position auf Google Maps</target>
       </trans-unit>
       <trans-unit id="tx_maps2_domain_model_poicollection.latitude" xml:space="preserve">
         <source>Latitude for map position</source>
@@ -141,8 +141,8 @@
       </trans-unit>
 
       <trans-unit id="tx_maps2_uid" xml:space="preserve">
-        <source>Connect this record to a google maps record</source>
-        <target>Verbinden Sie diesen Datensatz mit einer Google Maps Karte</target>
+        <source>Connect this record to Google Maps record</source>
+        <target>Verbinden Sie diesen Datensatz mit Google Maps</target>
       </trans-unit>
 
       <trans-unit id="tab.maps2" xml:space="preserve">

@@ -25,7 +25,7 @@
       </trans-unit>
       <trans-unit id="address.description">
         <source>Insert an address to search for. The map below will set the result as center after pressing "Update"</source>
-        <target>Tragen Sie hier eine Adresse ein nach der Sie suchen möchten. Die Google Karte aktualisiert sich sobald Sie auf "Update" gedrückt haben</target>
+        <target>Tragen Sie hier eine Adresse ein nach der Sie suchen möchten. Die Google Maps Karte aktualisiert sich sobald Sie auf "Update" gedrückt haben</target>
       </trans-unit>
       <trans-unit id="address.syntax">
         <source>Type in as much information about the address as you have, to get the best results</source>
@@ -45,15 +45,15 @@
       </trans-unit>
       <trans-unit id="latitude.description">
         <source>Search for an address or drag the map manually to update this field. Of cause you can edit this field manually, too.</source>
-        <target>Suchen Sie nach einer Adresse oder ziehen Sie die Google Karte, um dieses Feld zu aktualisieren. Natürlich können Sie dieses Feld auch manuell bearbeiten</target>
+        <target>Suchen Sie nach einer Adresse oder ziehen Sie die Google Maps Karte, um dieses Feld zu aktualisieren. Natürlich können Sie dieses Feld auch manuell bearbeiten</target>
       </trans-unit>
       <trans-unit id="longitude.description">
         <source>Search for an address or drag the map manually to update this field. Of cause you can edit this field manually, too.</source>
-        <target>Suchen Sie nach einer Adresse oder ziehen Sie die Google Karte, um dieses Feld zu aktualisieren. Natürlich können Sie dieses Feld auch manuell bearbeiten</target>
+        <target>Suchen Sie nach einer Adresse oder ziehen Sie die Google Maps Karte, um dieses Feld zu aktualisieren. Natürlich können Sie dieses Feld auch manuell bearbeiten</target>
       </trans-unit>
       <trans-unit id="radius.description">
         <source>Pull the corner of the circle on the map to change this field automatically. For sure you can change it manually, too.</source>
-        <target>Vergrößern oder verkleinern Sie den Zirkel in der Google Karte, um dieses Feld zu aktualisieren. Natürlich können Sie dieses Feld auch manuell bearbeiten</target>
+        <target>Vergrößern oder verkleinern Sie den Zirkel in der Google Maps Karte, um dieses Feld zu aktualisieren. Natürlich können Sie dieses Feld auch manuell bearbeiten</target>
       </trans-unit>
       <trans-unit id="latitude_orig.description">
         <source>Search for an address and press "Update" to update this field. You can't change it, because it saves the position of your last search "Update"</source>

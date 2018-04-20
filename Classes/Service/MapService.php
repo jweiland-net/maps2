@@ -104,7 +104,7 @@ class MapService implements SingletonInterface
     }
 
     /**
-     * Show form to allow requests to google map servers
+     * Show form to allow requests to Google Maps2 servers
      *
      * @return string
      */

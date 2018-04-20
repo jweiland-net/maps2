@@ -95,7 +95,7 @@ MapOptions.prototype.setMapTypeId = function(mapTypeId) {
 };
 
 /**
- * Initialize a Google Map
+ * Initialize Google Maps
  *
  * @param $element
  * @param environment contains settings, current PageId, extConf and current tt_content record

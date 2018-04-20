@@ -18,7 +18,7 @@
         <source>Google Maps</source>
       </trans-unit>
       <trans-unit id="plugin.maps2.description">
-        <source>Add a Google Map to your website</source>
+        <source>Add Google Maps to your website</source>
       </trans-unit>
 
       <trans-unit id="tx_maps2_domain_model_poi" xml:space="preserve">
@@ -108,7 +108,7 @@
       </trans-unit>
 
       <trans-unit id="tx_maps2_uid" xml:space="preserve">
-        <source>Connect this record to a google maps record</source>
+        <source>Connect this record to Google Maps record</source>
       </trans-unit>
 
       <trans-unit id="tab.maps2" xml:space="preserve">

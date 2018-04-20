@@ -81,7 +81,7 @@ class GoogleMaps
     }
 
     /**
-     * Renders the Google map.
+     * Renders Google Maps.
 
      * @param array $parentArray
      * @param object $pObj
@@ -109,7 +109,7 @@ class GoogleMaps
                 )
             ]
         ]);
-        // make google maps available as dependency for all RequireJS modules
+        // make Google Maps2 available as dependency for all RequireJS modules
         $this->pageRenderer->addJsInlineCode(
             'definegooglemaps',
             sprintf('// convert Google Maps into an AMD module

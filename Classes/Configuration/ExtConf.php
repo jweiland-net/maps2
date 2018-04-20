@@ -30,7 +30,7 @@ class ExtConf implements SingletonInterface
     protected $useHttps = false;
 
     /**
-     * google maps library
+     * Google Maps2 library
      *
      * @var string
      */
@@ -200,7 +200,7 @@ class ExtConf implements SingletonInterface
     }
 
     /**
-     * setter for google maps library
+     * setter for Google Maps library
      *
      * @param string $googleMapsLibrary
      * @return void

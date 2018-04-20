@@ -26,7 +26,7 @@ use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
  * Class GoogleMapOverlayRequestHandler
  *
  * This RequestHandler will be used to show an overlay for maps2 output
- * which will ask users to explicit allow google map requests.
+ * which will ask users to explicit allow Google Maps2 requests.
  * This feature has to be activated in extension manager configuration.
  */
 class GoogleMapOverlayRequestHandler extends AbstractRequestHandler

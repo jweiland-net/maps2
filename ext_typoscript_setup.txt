@@ -27,7 +27,7 @@ maps2AjaxResponse {
 config.tx_extbase {
   mvc {
     requestHandlers {
-      # show overlay if user has to explicit allow google map requests
+      # show overlay if user has to explicit allow Google Maps requests
       JWeiland\Maps2\Mvc\GoogleMapOverlayRequestHandler = JWeiland\Maps2\Mvc\GoogleMapOverlayRequestHandler
     }
   }

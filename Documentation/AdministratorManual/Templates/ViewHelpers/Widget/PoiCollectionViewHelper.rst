@@ -26,7 +26,7 @@ General properties
    :Type:
            integer|PoiCollection
      :Description:
-           Which PoiCollection should be shown on the Google Map?
+           Which PoiCollection should be shown on Google Maps?
      :Default value:
 
 Examples

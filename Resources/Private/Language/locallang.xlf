@@ -4,7 +4,7 @@
     <header/>
     <body>
       <trans-unit id="google.map" xml:space="preserve" approved="yes">
-        <source>Google Map</source>
+        <source>Google Maps</source>
       </trans-unit>
       <trans-unit id="google.protectData" xml:space="preserve" approved="yes">
         <source>The protection of your data is important for us.</source>
