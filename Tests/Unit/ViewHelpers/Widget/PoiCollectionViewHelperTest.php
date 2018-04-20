@@ -31,7 +31,7 @@ class PoiCollectionViewHelperTest extends UnitTestCase
     protected $extConf;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|MapService
+     * @var \Prophecy\Prophecy\ObjectProphecy|MapService
      */
     protected $mapService;
 
@@ -55,12 +55,12 @@ class PoiCollectionViewHelperTest extends UnitTestCase
         $this->extConf->setExplicitAllowGoogleMaps(1);
         $this->extConf->setExplicitAllowGoogleMapsBySessionOnly(1);
 
-        $this->mapService = $this->createMock(MapService::class);
+        $this->mapService = $this->prophesize(MapService::class);
         $this->googleRequestService = new GoogleRequestService($this->extConf);
 
         $this->subject = new PoiCollectionViewHelper();
         $this->subject->injectGoogleRequestService($this->googleRequestService);
-        $this->subject->injectMapService($this->mapService);
+        $this->subject->injectMapService($this->mapService->reveal());
     }
 
     /**
@@ -78,10 +78,7 @@ class PoiCollectionViewHelperTest extends UnitTestCase
      */
     public function renderWillCallShowAllowMapFormWhenGoogleRequestsAreNotAllowed()
     {
-        $this->mapService
-            ->expects($this->once())
-            ->method('showAllowMapForm')
-            ->willReturn('Please activate maps2');
+        $this->mapService->showAllowMapForm()->shouldBeCalled()->willReturn('Please activate maps2');
 
         $this->assertSame(
             'Please activate maps2',
@@ -96,15 +93,17 @@ class PoiCollectionViewHelperTest extends UnitTestCase
     {
         $this->extConf->setExplicitAllowGoogleMaps(0);
         $this->extConf->setExplicitAllowGoogleMapsBySessionOnly(0);
-        /** @var \PHPUnit_Framework_MockObject_MockObject|PoiCollectionViewHelper $subject */
-        $subject = $this
-            ->getMockBuilder(PoiCollectionViewHelper::class)
-            ->setMethods(['initiateSubRequest'])
-            ->getMock();
-        $subject
-            ->expects($this->once())
-            ->method('initiateSubRequest')
-            ->willReturn('maps2 output');
+        $this->mapService->showAllowMapForm()->shouldNotBeCalled();
+
+        /** @var \Prophecy\Prophecy\ObjectProphecy|PoiCollectionViewHelper $object */
+        $object = $this->prophesize(PoiCollectionViewHelper::class);
+        $object->injectGoogleRequestService($this->googleRequestService)->shouldBeCalled();
+        $object->injectMapService($this->mapService->reveal())->shouldBeCalled();
+        $object->render()->shouldBeCalled()->willReturn('maps2 output');
+
+        /** @var PoiCollectionViewHelper $subject */
+        $subject = $object->reveal();
+        $subject->injectMapService($this->mapService->reveal());
         $subject->injectGoogleRequestService($this->googleRequestService);
 
         $this->assertSame(

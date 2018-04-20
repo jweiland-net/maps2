@@ -44,17 +44,17 @@ class GoogleMapOverlayRequestTest extends UnitTestCase
     protected $googleRequestService;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|EnvironmentService
+     * @var \Prophecy\Prophecy\ObjectProphecy|EnvironmentService
      */
     protected $environmentService;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|RequestBuilder
+     * @var \Prophecy\Prophecy\ObjectProphecy|RequestBuilder
      */
     protected $requestBuilder;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Request
+     * @var \Prophecy\Prophecy\ObjectProphecy|Request
      */
     protected $request;
 
@@ -75,14 +75,14 @@ class GoogleMapOverlayRequestTest extends UnitTestCase
 
         $this->mapService = new MapService();
         $this->googleRequestService = new GoogleRequestService($this->extConf);
-        $this->environmentService = $this->createMock(EnvironmentService::class);
-        $this->requestBuilder = $this->createMock(RequestBuilder::class);
-        $this->request = $this->createMock(Request::class);
+        $this->environmentService = $this->prophesize(EnvironmentService::class);
+        $this->requestBuilder = $this->prophesize(RequestBuilder::class);
+        $this->request = $this->prophesize(Request::class);
 
         $this->subject = new GoogleMapOverlayRequestHandler();
-        $this->subject->injectEnvironmentService($this->environmentService);
+        $this->subject->injectEnvironmentService($this->environmentService->reveal());
         $this->subject->injectGoogleRequestService($this->googleRequestService);
-        $this->subject->injectRequestBuilder($this->requestBuilder);
+        $this->subject->injectRequestBuilder($this->requestBuilder->reveal());
     }
 
     /**
@@ -100,10 +100,7 @@ class GoogleMapOverlayRequestTest extends UnitTestCase
      */
     public function canHandleRequestWillReturnFalseInCliContext()
     {
-        $this->environmentService
-            ->expects($this->once())
-            ->method('isEnvironmentInCliMode')
-            ->willReturn(true);
+        $this->environmentService->isEnvironmentInCliMode()->shouldBeCalled()->willReturn(true);
 
         $this->assertFalse(
             $this->subject->canHandleRequest()
@@ -115,18 +112,9 @@ class GoogleMapOverlayRequestTest extends UnitTestCase
      */
     public function canHandleRequestWillReturnFalseWhenExtKeyIsNotMaps2()
     {
-        $this->environmentService
-            ->expects($this->once())
-            ->method('isEnvironmentInCliMode')
-            ->willReturn(false);
-        $this->request
-            ->expects($this->once())
-            ->method('getControllerExtensionKey')
-            ->willReturn('events2');
-        $this->requestBuilder
-            ->expects($this->once())
-            ->method('build')
-            ->willReturn($this->request);
+        $this->environmentService->isEnvironmentInCliMode()->shouldBeCalled()->willReturn(false);
+        $this->request->getControllerExtensionKey()->shouldBeCalled()->willReturn('events2');
+        $this->requestBuilder->build()->shouldBeCalled()->willReturn($this->request);
 
         $this->assertFalse(
             $this->subject->canHandleRequest()
@@ -138,18 +126,9 @@ class GoogleMapOverlayRequestTest extends UnitTestCase
      */
     public function canHandleRequestWillReturnTrueWhenExtKeyIsMaps2()
     {
-        $this->environmentService
-            ->expects($this->once())
-            ->method('isEnvironmentInCliMode')
-            ->willReturn(false);
-        $this->request
-            ->expects($this->once())
-            ->method('getControllerExtensionKey')
-            ->willReturn('maps2');
-        $this->requestBuilder
-            ->expects($this->once())
-            ->method('build')
-            ->willReturn($this->request);
+        $this->environmentService->isEnvironmentInCliMode()->shouldBeCalled()->willReturn(false);
+        $this->request->getControllerExtensionKey()->shouldBeCalled()->willReturn('maps2');
+        $this->requestBuilder->build()->shouldBeCalled()->willReturn($this->request);
 
         $this->assertTrue(
             $this->subject->canHandleRequest()

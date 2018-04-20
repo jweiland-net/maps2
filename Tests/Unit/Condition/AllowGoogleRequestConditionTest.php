@@ -118,15 +118,12 @@ class AllowGoogleRequestConditionTest extends UnitTestCase
     {
         $this->extConf->setExplicitAllowGoogleMaps(1);
         $this->extConf->setExplicitAllowGoogleMapsBySessionOnly(0);
-        $GLOBALS['TSFE'] = $this->createMock(TypoScriptFrontendController::class);
-        /** @var \PHPUnit_Framework_MockObject_MockObject|FrontendUserAuthentication $feUser */
-        $feUser = $this->createMock(FrontendUserAuthentication::class);
-        $feUser
-            ->expects($this->once())
-            ->method('getSessionData')
-            ->with('googleRequestsAllowedForMaps2')
-            ->willReturn(false);
-        $GLOBALS['TSFE']->fe_user = $feUser;
+        $this->prophesize(TypoScriptFrontendController::class);
+        $GLOBALS['TSFE'] = $this->prophesize(TypoScriptFrontendController::class)->reveal();
+        /** @var \Prophecy\Prophecy\ObjectProphecy|FrontendUserAuthentication $feUser */
+        $feUser = $this->prophesize(FrontendUserAuthentication::class);
+        $feUser->getSessionData('googleRequestsAllowedForMaps2')->shouldBeCalled()->willReturn(false);
+        $GLOBALS['TSFE']->fe_user = $feUser->reveal();
 
         $this->assertFalse(
             $this->subject->matchCondition([])
@@ -140,15 +137,11 @@ class AllowGoogleRequestConditionTest extends UnitTestCase
     {
         $this->extConf->setExplicitAllowGoogleMaps(1);
         $this->extConf->setExplicitAllowGoogleMapsBySessionOnly(0);
-        $GLOBALS['TSFE'] = $this->createMock(TypoScriptFrontendController::class);
-        /** @var \PHPUnit_Framework_MockObject_MockObject|FrontendUserAuthentication $feUser */
-        $feUser = $this->createMock(FrontendUserAuthentication::class);
-        $feUser
-            ->expects($this->once())
-            ->method('getSessionData')
-            ->with('googleRequestsAllowedForMaps2')
-            ->willReturn(true);
-        $GLOBALS['TSFE']->fe_user = $feUser;
+        $GLOBALS['TSFE'] = $this->prophesize(TypoScriptFrontendController::class)->reveal();
+        /** @var \Prophecy\Prophecy\ObjectProphecy|FrontendUserAuthentication $feUser */
+        $feUser = $this->prophesize(FrontendUserAuthentication::class);
+        $feUser->getSessionData('googleRequestsAllowedForMaps2')->shouldBeCalled()->willReturn(true);
+        $GLOBALS['TSFE']->fe_user = $feUser->reveal();
 
         $this->assertTrue(
             $this->subject->matchCondition([])
