@@ -16,11 +16,9 @@ namespace JWeiland\Maps2\Mvc;
 
 use JWeiland\Maps2\Service\GoogleRequestService;
 use JWeiland\Maps2\Service\MapService;
-use TYPO3\CMS\Extbase\Mvc\RequestHandlerInterface;
 use TYPO3\CMS\Extbase\Mvc\ResponseInterface;
 use TYPO3\CMS\Extbase\Mvc\Web\AbstractRequestHandler;
 use TYPO3\CMS\Extbase\Mvc\Web\Response;
-use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 
 /**
  * Class GoogleMapOverlayRequestHandler

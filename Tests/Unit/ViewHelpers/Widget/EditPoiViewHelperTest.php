@@ -18,7 +18,7 @@ use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Service\GoogleRequestService;
 use JWeiland\Maps2\Service\MapService;
 use JWeiland\Maps2\ViewHelpers\Widget\EditPoiViewHelper;
-use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
+use Nimut\TestingFramework\TestCase\UnitTestCase;
 
 /**
  * Class EditPoiViewHelperTest

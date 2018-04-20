@@ -15,16 +15,13 @@ namespace JWeiland\Maps2\Hook;
  */
 
 use JWeiland\Maps2\Configuration\ExtConf;
-use JWeiland\Maps2\Service\MapService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
  * Class InitFeSessionHook
  *
  * @category Hook
- * @package  Maps2
  * @author   Stefan Froemken <projects@jweiland.net>
  * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
  * @link     https://github.com/jweiland-net/maps2

@@ -17,9 +17,9 @@ namespace JWeiland\Maps2\Tests\Unit\Condition;
 use JWeiland\Maps2\Condition\AllowGoogleRequestCondition;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Service\GoogleRequestService;
+use Nimut\TestingFramework\TestCase\UnitTestCase;
 use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
-use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 /**
  * Class AllowGoogleRequestConditionTest

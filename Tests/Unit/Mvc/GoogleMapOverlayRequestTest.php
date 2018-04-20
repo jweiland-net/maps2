@@ -18,10 +18,10 @@ use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Mvc\GoogleMapOverlayRequestHandler;
 use JWeiland\Maps2\Service\GoogleRequestService;
 use JWeiland\Maps2\Service\MapService;
+use Nimut\TestingFramework\TestCase\UnitTestCase;
 use TYPO3\CMS\Extbase\Mvc\Web\Request;
 use TYPO3\CMS\Extbase\Mvc\Web\RequestBuilder;
 use TYPO3\CMS\Extbase\Service\EnvironmentService;
-use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 /**
  * Class GoogleMapOverlayRequestTest

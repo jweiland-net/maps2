@@ -17,9 +17,8 @@ namespace JWeiland\Maps2\Tests\Unit\Mvc;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Service\GoogleRequestService;
 use JWeiland\Maps2\Service\MapService;
-use JWeiland\Maps2\ViewHelpers\Widget\EditPoiViewHelper;
 use JWeiland\Maps2\ViewHelpers\Widget\PoiCollectionViewHelper;
-use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
+use Nimut\TestingFramework\TestCase\UnitTestCase;
 
 /**
  * Class PoiCollectionViewHelperTest

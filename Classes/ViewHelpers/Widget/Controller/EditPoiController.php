@@ -15,18 +15,11 @@ namespace JWeiland\Maps2\ViewHelpers\Widget\Controller;
  */
 
 use JWeiland\Maps2\Domain\Model\PoiCollection;
-use TYPO3\CMS\Core\Utility\ArrayUtility;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
-use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
-use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
-use TYPO3\CMS\Fluid\Core\Widget\WidgetRequest;
 
 /**
  * Class EditPoiController
  *
  * @category ViewHelpers/Widget/Controller
- * @package  Maps2
  * @author   Stefan Froemken <projects@jweiland.net>
  * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
  * @link     https://github.com/jweiland-net/maps2

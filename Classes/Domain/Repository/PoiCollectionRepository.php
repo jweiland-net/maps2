@@ -25,7 +25,6 @@ use TYPO3\CMS\Frontend\Page\PageRepository;
  * Class PoiCollectionRepository
  *
  * @category Domain/Repository
- * @package  Maps2
  * @author   Stefan Froemken <projects@jweiland.net>
  * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
  * @link     https://github.com/jweiland-net/maps2
