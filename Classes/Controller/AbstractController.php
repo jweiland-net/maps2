@@ -18,7 +18,6 @@ use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Service\MapService;
 use JWeiland\Maps2\Utility\DataMapper;
 use JWeiland\Maps2\Utility\GeocodeUtility;
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
