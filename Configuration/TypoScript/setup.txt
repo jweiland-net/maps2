@@ -18,9 +18,18 @@
 
 plugin.tx_maps2 {
   view {
-    templateRootPath = {$plugin.tx_maps2.view.templateRootPath}
-    partialRootPath = {$plugin.tx_maps2.view.partialRootPath}
-    layoutRootPath = {$plugin.tx_maps2.view.layoutRootPath}
+    templateRootPaths {
+      0 = {$plugin.tx_maps2.view.templateRootPath}
+      10 =
+    }
+    partialRootPaths {
+      0 = {$plugin.tx_maps2.view.partialRootPath}
+      10 =
+    }
+    layoutRootPaths {
+      0 = {$plugin.tx_maps2.view.layoutRootPath}
+      10 =
+    }
   }
   persistence {
     storagePid = {$plugin.tx_maps2.persistence.storagePid}
