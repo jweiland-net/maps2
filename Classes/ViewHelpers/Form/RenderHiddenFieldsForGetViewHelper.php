@@ -30,12 +30,12 @@ use TYPO3\CMS\Frontend\Page\CacheHashCalculator;
 class RenderHiddenFieldsForGetViewHelper extends AbstractViewHelper
 {
     /**
-     * @var boolean
+     * @var bool
      */
     protected $escapeChildren = false;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $escapeOutput = false;
 
