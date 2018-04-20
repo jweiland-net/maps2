@@ -111,7 +111,8 @@ class GoogleMaps
         // make Google Maps2 available as dependency for all RequireJS modules
         $this->pageRenderer->addJsInlineCode(
             'definegooglemaps',
-            sprintf('// convert Google Maps into an AMD module
+            sprintf(
+                '// convert Google Maps into an AMD module
                 define("gmaps", ["async!%s"],
                 function() {
                     // return the gmaps namespace for brevity
