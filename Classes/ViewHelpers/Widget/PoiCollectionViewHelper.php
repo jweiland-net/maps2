@@ -15,13 +15,14 @@ namespace JWeiland\Maps2\ViewHelpers\Widget;
  */
 
 use JWeiland\Maps2\Domain\Model\PoiCollection;
+use JWeiland\Maps2\Service\GoogleRequestService;
+use JWeiland\Maps2\Service\MapService;
 use TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetViewHelper;
 
 /**
  * Class PoiCollectionViewHelper
  *
  * @category ViewHelpers/Widget
- * @package  Maps2
  * @author   Stefan Froemken <projects@jweiland.net>
  * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
  * @link     https://github.com/jweiland-net/maps2
@@ -34,9 +35,20 @@ class PoiCollectionViewHelper extends AbstractWidgetViewHelper
     protected $controller;
 
     /**
+     * @var GoogleRequestService
+     */
+    protected $googleRequestService;
+
+    /**
+     * @var MapService
+     */
+    protected $mapService;
+
+    /**
      * inject controller
      *
      * @param Controller\PoiCollectionController $controller
+     *
      * @return void
      */
     public function injectController(Controller\PoiCollectionController $controller)
@@ -45,13 +57,44 @@ class PoiCollectionViewHelper extends AbstractWidgetViewHelper
     }
 
     /**
+     * inject googleRequestService
+     *
+     * @param GoogleRequestService $googleRequestService
+     *
+     * @return void
+     */
+    public function injectGoogleRequestService(GoogleRequestService $googleRequestService)
+    {
+        $this->googleRequestService = $googleRequestService;
+    }
+
+    /**
+     * inject mapService
+     *
+     * @param MapService $mapService
+     *
+     * @return void
+     */
+    public function injectMapService(MapService $mapService)
+    {
+        $this->mapService = $mapService;
+    }
+
+    /**
+     * Render the widget
+     *
      * @param PoiCollection $poiCollection
      * @param \Traversable $poiCollections
      * @param array $override Override any configuration option
+     *
      * @return string
      */
     public function render(PoiCollection $poiCollection = null, $poiCollections = null, $override = array())
     {
+        if (!$this->googleRequestService->isGoogleMapRequestAllowed()) {
+            return $this->mapService->showAllowMapForm();
+        }
+
         return $this->initiateSubRequest();
     }
 }

@@ -17,7 +17,6 @@ namespace JWeiland\Maps2\Configuration;
 use TYPO3\CMS\Core\SingletonInterface;
 
 /**
- * @package maps2
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
 class ExtConf implements SingletonInterface
@@ -30,7 +29,7 @@ class ExtConf implements SingletonInterface
     protected $useHttps = false;
 
     /**
-     * google maps library
+     * Google Maps2 library
      *
      * @var string
      */
@@ -178,6 +177,8 @@ class ExtConf implements SingletonInterface
      * getter for googleMapsLibrary
      *
      * @return string
+     *
+     * @throws \Exception
      */
     public function getGoogleMapsLibrary()
     {
@@ -198,7 +199,7 @@ class ExtConf implements SingletonInterface
     }
 
     /**
-     * setter for google maps library
+     * setter for Google Maps library
      *
      * @param string $googleMapsLibrary
      * @return void

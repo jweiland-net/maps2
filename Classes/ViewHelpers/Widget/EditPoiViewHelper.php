@@ -15,13 +15,14 @@ namespace JWeiland\Maps2\ViewHelpers\Widget;
  */
 
 use JWeiland\Maps2\Domain\Model\PoiCollection;
+use JWeiland\Maps2\Service\GoogleRequestService;
+use JWeiland\Maps2\Service\MapService;
 use TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetViewHelper;
 
 /**
  * Class EditPoiViewHelper
  *
  * @category ViewHelpers/Widget
- * @package  Maps2
  * @author   Stefan Froemken <projects@jweiland.net>
  * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
  * @link     https://github.com/jweiland-net/maps2
@@ -34,14 +35,49 @@ class EditPoiViewHelper extends AbstractWidgetViewHelper
     protected $controller;
 
     /**
+     * @var GoogleRequestService
+     */
+    protected $googleRequestService;
+
+    /**
+     * @var MapService
+     */
+    protected $mapService;
+
+    /**
      * inject controller
      *
      * @param Controller\EditPoiController $controller
+     *
      * @return void
      */
     public function injectController(Controller\EditPoiController $controller)
     {
         $this->controller = $controller;
+    }
+
+    /**
+     * inject googleRequestService
+     *
+     * @param GoogleRequestService $googleRequestService
+     *
+     * @return void
+     */
+    public function injectGoogleRequestService(GoogleRequestService $googleRequestService)
+    {
+        $this->googleRequestService = $googleRequestService;
+    }
+
+    /**
+     * inject mapService
+     *
+     * @param MapService $mapService
+     *
+     * @return void
+     */
+    public function injectMapService(MapService $mapService)
+    {
+        $this->mapService = $mapService;
     }
 
     /**
@@ -53,6 +89,10 @@ class EditPoiViewHelper extends AbstractWidgetViewHelper
      */
     public function render(PoiCollection $poiCollection = null, $property = 'txMaps2Uid', $override = array())
     {
+        if (!$this->googleRequestService->isGoogleMapRequestAllowed()) {
+            return $this->mapService->showAllowMapForm();
+        }
+
         return $this->initiateSubRequest();
     }
 }

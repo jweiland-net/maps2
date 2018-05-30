@@ -15,20 +15,11 @@ namespace JWeiland\Maps2\ViewHelpers\Widget\Controller;
  */
 
 use JWeiland\Maps2\Domain\Model\PoiCollection;
-use TYPO3\CMS\Core\Utility\ArrayUtility;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
-use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
-use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
-use TYPO3\CMS\Fluid\Core\Widget\WidgetRequest;
-use TYPO3Fluid\Fluid\Core\Parser\ParsedTemplateInterface;
-use TYPO3Fluid\Fluid\Core\Parser\TemplateParser;
 
 /**
  * Class EditPoiController
  *
  * @category ViewHelpers/Widget/Controller
- * @package  Maps2
  * @author   Stefan Froemken <projects@jweiland.net>
  * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
  * @link     https://github.com/jweiland-net/maps2
@@ -36,36 +27,12 @@ use TYPO3Fluid\Fluid\Core\Parser\TemplateParser;
 class EditPoiController extends AbstractController
 {
     /**
-     * initialize view
-     * add some global vars to view
-     *
-     * @param ViewInterface $view
+     * index action
      *
      * @return void
      */
-    public function initializeView(ViewInterface $view)
-    {
-        ArrayUtility::mergeRecursiveWithOverrule($this->defaultSettings, $this->settings);
-        $view->assign('data', $this->configurationManager->getContentObject()->data);
-        $view->assign('environment', array(
-            'settings' => $this->defaultSettings,
-            'extConf' => ObjectAccess::getGettableProperties($this->extConf),
-            'id' => $GLOBALS['TSFE']->id,
-            'contentRecord' => $this->configurationManager->getContentObject()->data
-        ));
-    }
-
-    /**
-     * index action
-     *
-     * @return string
-     */
     public function indexAction()
     {
-        if (!$this->mapService->isGoogleMapRequestAllowed()) {
-            return $this->mapService->showAllowMapForm();
-        }
-
         $poiCollection = $this->widgetConfiguration['poiCollection'];
         if ($poiCollection instanceof PoiCollection) {
             $this->mapService->setInfoWindow($poiCollection);
@@ -81,7 +48,5 @@ class EditPoiController extends AbstractController
         $this->view->assign('poiCollection', $poiCollection);
         $this->view->assign('override', $this->widgetConfiguration['override']);
         $this->view->assign('property', $this->widgetConfiguration['property']);
-
-        return $this->view->render();
     }
 }

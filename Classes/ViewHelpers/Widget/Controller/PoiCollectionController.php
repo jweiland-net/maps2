@@ -20,7 +20,6 @@ use JWeiland\Maps2\Domain\Model\PoiCollection;
  * Class PoiCollectionController
  *
  * @category ViewHelpers/Widget/Controller
- * @package  Maps2
  * @author   Stefan Froemken <projects@jweiland.net>
  * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
  * @link     https://github.com/jweiland-net/maps2
@@ -30,14 +29,10 @@ class PoiCollectionController extends AbstractController
     /**
      * index action
      *
-     * @return string
+     * @return void
      */
     public function indexAction()
     {
-        if (!$this->mapService->isGoogleMapRequestAllowed()) {
-            return $this->mapService->showAllowMapForm();
-        }
-
         $poiCollection = $this->widgetConfiguration['poiCollection'];
         if ($poiCollection instanceof PoiCollection) {
             $this->mapService->setInfoWindow($poiCollection);

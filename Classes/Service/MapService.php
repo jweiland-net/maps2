@@ -19,12 +19,10 @@ use JWeiland\Maps2\Domain\Model\PoiCollection;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
-use TYPO3\CMS\Extbase\Mvc\Request;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Service\CacheService;
 use TYPO3\CMS\Fluid\View\StandaloneView;
-use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
  * Class MapService
@@ -104,75 +102,7 @@ class MapService implements SingletonInterface
     }
 
     /**
-     * Initialize Session var, if configured
-     *
-     * @return void
-     */
-    public function initializeObject()
-    {
-        if (
-            $this->extConf->getExplicitAllowGoogleMapsBySessionOnly()
-            && (!isset($_SESSION) || !is_array($_SESSION))
-        ) {
-            session_start();
-        }
-    }
-
-    /**
-     * Check, if Browser(Cookie) is allowed to request Google Maps Servers
-     *
-     * @return bool
-     */
-    public function isGoogleMapRequestAllowed()
-    {
-        if ($this->extConf->getExplicitAllowGoogleMaps()) {
-            if ($this->extConf->getExplicitAllowGoogleMapsBySessionOnly()) {
-                return (bool)$_SESSION['googleRequestsAllowedForMaps2'];
-            } else {
-                if ($this->getTypoScriptFrontendController() instanceof TypoScriptFrontendController) {
-                    return (bool)$this->getTypoScriptFrontendController()->fe_user->getSessionData('googleRequestsAllowedForMaps2');
-                } else {
-                    return false;
-                }
-            }
-        } else {
-            return true;
-        }
-    }
-
-    /**
-     * Explicit allow google map requests and store to session
-     *
-     * @return void
-     */
-    public function explicitAllowGoogleMapRequests()
-    {
-        $parameters = GeneralUtility::_GPmerged('tx_maps2_maps2');
-        if (
-            isset($parameters['googleRequestsAllowedForMaps2'])
-            && (int)$parameters['googleRequestsAllowedForMaps2'] === 1
-            && $this->extConf->getExplicitAllowGoogleMaps()
-        ) {
-            // $this->cacheService->clearPageCache([$this->getTypoScriptFrontendController()->id]);
-
-            if (
-                $this->extConf->getExplicitAllowGoogleMapsBySessionOnly()
-                && empty($_SESSION['googleRequestsAllowedForMaps2'])
-            ) {
-                $_SESSION['googleRequestsAllowedForMaps2'] = 1;
-            }
-
-            if (
-                !$this->extConf->getExplicitAllowGoogleMapsBySessionOnly()
-                && (bool)$this->getTypoScriptFrontendController()->fe_user->getSessionData('googleRequestsAllowedForMaps2') === false
-            ) {
-                $this->getTypoScriptFrontendController()->fe_user->setAndSaveSessionData('googleRequestsAllowedForMaps2', 1);
-            }
-        }
-    }
-
-    /**
-     * Show form to allow requests to google map servers
+     * Show form to allow requests to Google Maps2 servers
      *
      * @return string
      */
@@ -183,7 +113,8 @@ class MapService implements SingletonInterface
         $view->setTemplatePathAndFilename(
             GeneralUtility::getFileAbsFileName(
                 $this->getAllowMapTemplatePath()
-            ));
+            )
+        );
         $view->assign('settings', $this->settings);
         $view->assign('requestUri', $this->getRequestUri());
         return $view->render();
@@ -206,14 +137,16 @@ class MapService implements SingletonInterface
                     'googleRequestsAllowedForMaps2' => 1
                 )
             ))
-            ->setArgumentsToBeExcludedFromQueryString(['cHash'])
+            ->setArgumentsToBeExcludedFromQueryString(array('cHash'))
             ->build();
     }
 
     /**
-     * Set info window for poi colleciton
+     * Set info window for Poi Collection
      *
      * @param PoiCollection $poiCollection
+     *
+     * @return void
      */
     public function setInfoWindow(PoiCollection $poiCollection)
     {
@@ -278,13 +211,5 @@ class MapService implements SingletonInterface
         }
 
         return $path;
-    }
-
-    /**
-     * @return TypoScriptFrontendController|null
-     */
-    protected function getTypoScriptFrontendController()
-    {
-        return $GLOBALS['TSFE'];
     }
 }

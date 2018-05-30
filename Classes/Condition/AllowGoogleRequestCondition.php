@@ -14,17 +14,13 @@ namespace JWeiland\Maps2\Condition;
  * The TYPO3 project - inspiring people to share!
  */
 
-use JWeiland\Maps2\Service\MapService;
+use JWeiland\Maps2\Service\GoogleRequestService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
-use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
-use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
  * Class AllowGoogleRequestCondition
  *
  * @category Condition
- * @package  Maps2
  * @author   Stefan Froemken <projects@jweiland.net>
  * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
  * @link     https://github.com/jweiland-net/maps2
@@ -32,25 +28,30 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 class AllowGoogleRequestCondition
 {
     /**
+     * @var GoogleRequestService
+     */
+    protected $googleRequestService;
+
+    /**
+     * GoogleRequestService constructor.
+     *
+     * @param GoogleRequestService $googleRequestService
+     */
+    public function __construct(GoogleRequestService $googleRequestService = null)
+    {
+        if ($googleRequestService === null) {
+            $googleRequestService = GeneralUtility::makeInstance('JWeiland\\Maps2\\Service\\GoogleRequestService');
+        }
+        $this->googleRequestService = $googleRequestService;
+    }
+
+    /**
      * Check, if extension configuration is set
      * and user has not explicit allowed google requests
      *
      * @return bool
      */
     public function match() {
-        $result = false;
-
-        /** @var ObjectManager $objectManager */
-        $objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
-
-        /** @var MapService $mapService */
-        $mapService = $objectManager->get('JWeiland\\Maps2\\Service\\MapService');
-
-        if ($mapService->isGoogleMapRequestAllowed()) {
-            $result = true;
-        }
-
-        return $result;
+        return $this->googleRequestService->isGoogleMapRequestAllowed();
     }
 }
-

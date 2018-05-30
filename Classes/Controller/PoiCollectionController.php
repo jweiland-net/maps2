@@ -22,7 +22,6 @@ use TYPO3\CMS\Core\Messaging\FlashMessage;
 /**
  * Class PoiCollectionController
  *
- * @package  Maps2
  * @author   Stefan Froemken <projects@jweiland.net>
  * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
  * @link     https://github.com/jweiland-net/maps2
@@ -51,14 +50,10 @@ class PoiCollectionController extends AbstractController
      *
      * @param PoiCollection $poiCollection PoiCollection from URI has highest priority
      *
-     * @return string
+     * @return void
      */
     public function showAction(PoiCollection $poiCollection = null)
     {
-        if (!$this->mapService->isGoogleMapRequestAllowed()) {
-            return $this->mapService->showAllowMapForm();
-        }
-
         // if uri is empty and a poiCollection is set in FlexForm
         if ($poiCollection === null && !empty($this->settings['poiCollection'])) {
             $poiCollection = $this->poiCollectionRepository->findByUid((int)$this->settings['poiCollection']);
@@ -81,7 +76,6 @@ class PoiCollectionController extends AbstractController
                 FlashMessage::NOTICE
             );
         }
-        return $this->view->render();
     }
 
     /**
@@ -102,6 +96,8 @@ class PoiCollectionController extends AbstractController
      * we have a self-made form. So we have to define allowed properties on our own
      *
      * @return void
+     *
+     * @throws \Exception
      */
     public function initializeMultipleResultsAction()
     {
@@ -118,14 +114,12 @@ class PoiCollectionController extends AbstractController
      *
      * @param Search $search
      *
-     * @return string
+     * @return void
+     *
+     * @throws \Exception
      */
     public function multipleResultsAction(Search $search)
     {
-        if (!$this->mapService->isGoogleMapRequestAllowed()) {
-            return $this->mapService->showAllowMapForm();
-        }
-
         $radiusResults = $this->geocodeUtility->findPositionByAddress($search->getAddress());
         if ($radiusResults->count() == 1) {
             /* @var $radiusResult \JWeiland\Maps2\Domain\Model\RadiusResult */
@@ -159,14 +153,10 @@ class PoiCollectionController extends AbstractController
      * @param float $longitude
      * @param int $radius
      *
-     * @return string
+     * @return void
      */
     public function listRadiusAction($latitude, $longitude, $radius)
     {
-        if (!$this->mapService->isGoogleMapRequestAllowed()) {
-            return $this->mapService->showAllowMapForm();
-        }
-
         $poiCollections = $this->poiCollectionRepository->searchWithinRadius($latitude, $longitude, $radius);
         foreach ($poiCollections as $poiCollection) {
             $this->mapService->setInfoWindow($poiCollection);

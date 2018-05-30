@@ -14,38 +14,30 @@ namespace JWeiland\Maps2\Mvc;
  * The TYPO3 project - inspiring people to share!
  */
 
+use JWeiland\Maps2\Service\GoogleRequestService;
 use JWeiland\Maps2\Service\MapService;
-use TYPO3\CMS\Extbase\Mvc\RequestHandlerInterface;
 use TYPO3\CMS\Extbase\Mvc\ResponseInterface;
 use TYPO3\CMS\Extbase\Mvc\Web\AbstractRequestHandler;
-use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
+use TYPO3\CMS\Extbase\Mvc\Web\Response;
 
 /**
  * Class GoogleMapOverlayRequestHandler
+ *
+ * This RequestHandler will be used to show an overlay for maps2 output
+ * which will ask users to explicit allow Google Maps2 requests.
+ * This feature has to be activated in extension manager configuration.
  */
 class GoogleMapOverlayRequestHandler extends AbstractRequestHandler
 {
-    /**
-     * @var ObjectManagerInterface
-     */
-    protected $objectManager;
-
     /**
      * @var MapService
      */
     protected $mapService;
 
     /**
-     * inject objectManager
-     *
-     * @param ObjectManagerInterface $objectManager
-     *
-     * @return void
+     * @var GoogleRequestService
      */
-    public function injectObjectManager(ObjectManagerInterface $objectManager)
-    {
-        $this->objectManager = $objectManager;
-    }
+    protected $googleRequestService;
 
     /**
      * inject mapService
@@ -60,15 +52,15 @@ class GoogleMapOverlayRequestHandler extends AbstractRequestHandler
     }
 
     /**
-     * Handles a raw request and returns the response.
+     * inject googleRequestService
      *
-     * @return \TYPO3\CMS\Extbase\Mvc\ResponseInterface
+     * @param GoogleRequestService $googleRequestService
+     *
+     * @return void
      */
-    public function handleRequest() {
-        /** @var ResponseInterface $response */
-        $response = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Mvc\\Web\\Response');
-        $response->appendContent($this->mapService->showAllowMapForm());
-        return $response;
+    public function injectGoogleRequestService(GoogleRequestService $googleRequestService)
+    {
+        $this->googleRequestService = $googleRequestService;
     }
 
     /**
@@ -76,10 +68,14 @@ class GoogleMapOverlayRequestHandler extends AbstractRequestHandler
      *
      * @return bool true if it can handle the request, otherwise false
      */
-    public function canHandleRequest() {
-        $request = $this->requestBuilder->build();
-        return $request->getControllerExtensionKey() === 'maps2'
-            && !$this->mapService->isGoogleMapRequestAllowed();
+    public function canHandleRequest()
+    {
+        if (!$this->environmentService->isEnvironmentInCliMode()) {
+            $request = $this->requestBuilder->build();
+            return $request->getControllerExtensionKey() === 'maps2'
+                && !$this->googleRequestService->isGoogleMapRequestAllowed();
+        }
+        return false;
     }
 
     /**
@@ -89,8 +85,22 @@ class GoogleMapOverlayRequestHandler extends AbstractRequestHandler
      *
      * @return int The priority of the request handler
      */
-    public function getPriority() {
+    public function getPriority()
+    {
         // we must be higher than FrontendRequestHandler (100)
         return 120;
+    }
+
+    /**
+     * Handles a raw request and returns the respsonse.
+     *
+     * @return \TYPO3\CMS\Extbase\Mvc\ResponseInterface
+     */
+    public function handleRequest()
+    {
+        /** @var ResponseInterface $response */
+        $response = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Mvc\\Web\\Response');
+        $response->appendContent($this->mapService->showAllowMapForm());
+        return $response;
     }
 }
