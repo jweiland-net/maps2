@@ -70,7 +70,6 @@ unset($classRef);
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['initFEuser'][] = 'JWeiland\\Maps2\\Hook\\InitFeSessionHook->saveAllowGoogleRequestsInSession';
 
 // this function is needed by a userFunc based TS-Condition
-// replace by a newer solution when not needed for 6.2 anymore
 if (!function_exists('googleRequestsAreAllowed')) {
     function googleRequestsAreAllowed()
     {
@@ -81,8 +80,4 @@ if (!function_exists('googleRequestsAreAllowed')) {
 }
 
 // add maps2 plugin to new element wizard
-if (version_compare(TYPO3_branch, '6.3.0', '<') ) {
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig('<INCLUDE_TYPOSCRIPT: source="FILE:EXT:maps2/Configuration/TSconfig/ContentElementWizard62.txt">');
-} else {
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig('<INCLUDE_TYPOSCRIPT: source="FILE:EXT:maps2/Configuration/TSconfig/ContentElementWizard.txt">');
-}
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig('<INCLUDE_TYPOSCRIPT: source="FILE:EXT:maps2/Configuration/TSconfig/ContentElementWizard.txt">');
