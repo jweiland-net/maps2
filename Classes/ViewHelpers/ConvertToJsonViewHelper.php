@@ -18,10 +18,7 @@ use JWeiland\Maps2\Domain\Model\Category;
 use JWeiland\Maps2\Domain\Model\Poi;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use TYPO3\CMS\Extbase\Persistence\Generic\LazyObjectStorage;
-use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
-use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
@@ -77,28 +74,26 @@ class ConvertToJsonViewHelper extends AbstractViewHelper
         $poiCollectionsAsArray = [];
         /** @var PoiCollection $poiCollection */
         foreach ($poiCollections as $poiCollection) {
-            if ($poiCollection instanceof PoiCollection) {
-                $poiCollectionAsArray = ObjectAccess::getGettableProperties($poiCollection);
+            $poiCollectionAsArray = ObjectAccess::getGettableProperties($poiCollection);
 
-                /** @var LazyObjectStorage $pois */
-                $pois = $poiCollectionAsArray['pois'];
-                $poiCollectionAsArray['pois'] = [];
-                /** @var Poi $poi */
-                foreach ($pois->toArray() as $key => $poi) {
-                    // do not remove toArray() as it converts the long hash keys to 0, 1, 2, ...
-                    $poiCollectionAsArray['pois'][$key] = ObjectAccess::getGettableProperties($poi);
-                }
-
-                $poiCollectionAsArray['categories'] = [];
-                /** @var Category $category */
-                foreach ($poiCollection->getCategories() as $category) {
-                    $categoryProperties = ObjectAccess::getGettableProperties($category);
-                    unset($categoryProperties['maps2MarkerIcons']);
-                    unset($categoryProperties['parent']);
-                    $poiCollectionAsArray['categories'][] = $categoryProperties;
-                }
-                $poiCollectionsAsArray[] = $poiCollectionAsArray;
+            /** @var LazyObjectStorage $pois */
+            $pois = $poiCollectionAsArray['pois'];
+            $poiCollectionAsArray['pois'] = [];
+            /** @var Poi $poi */
+            foreach ($pois->toArray() as $key => $poi) {
+                // do not remove toArray() as it converts the long hash keys to 0, 1, 2, ...
+                $poiCollectionAsArray['pois'][$key] = ObjectAccess::getGettableProperties($poi);
             }
+
+            $poiCollectionAsArray['categories'] = [];
+            /** @var Category $category */
+            foreach ($poiCollection->getCategories() as $category) {
+                $categoryProperties = ObjectAccess::getGettableProperties($category);
+                unset($categoryProperties['maps2MarkerIcons']);
+                unset($categoryProperties['parent']);
+                $poiCollectionAsArray['categories'][] = $categoryProperties;
+            }
+            $poiCollectionsAsArray[] = $poiCollectionAsArray;
         }
         return json_encode($poiCollectionsAsArray);
     }
