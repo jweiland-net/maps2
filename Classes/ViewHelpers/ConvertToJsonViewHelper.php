@@ -54,7 +54,7 @@ class ConvertToJsonViewHelper extends AbstractViewHelper
             $poiCollections = [$poiCollections];
         }
 
-        if ($this->arrayHasPoiCollections($poiCollections)) {
+        if ($this->valueContainsPoiCollections($poiCollections)) {
             $json = $this->getPoiCollectionsAsJson($poiCollections);
         } else {
             $json = json_encode($poiCollections);
@@ -99,15 +99,20 @@ class ConvertToJsonViewHelper extends AbstractViewHelper
     }
 
     /**
-     * Check, if array contains entries of type PoiCollection
+     * Check, if value contains entries of type PoiCollection
      *
-     * @param array $array
+     * @param mixed $value
      * @return bool
      */
-    protected function arrayHasPoiCollections(array $array)
+    protected function valueContainsPoiCollections($value)
     {
-        reset($array);
-        $poiCollection = current($array);
-        return $poiCollection instanceof PoiCollection;
+        $containsPoiCollections = false;
+        if (is_array($value)) {
+            reset($value);
+            $poiCollection = current($value);
+            $containsPoiCollections = $poiCollection instanceof PoiCollection;
+        }
+
+        return $containsPoiCollections;
     }
 }
