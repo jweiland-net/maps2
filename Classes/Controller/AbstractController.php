@@ -120,12 +120,16 @@ class AbstractController extends ActionController
      */
     public function initializeView(ViewInterface $view)
     {
+        // remove unneeded columns from tt_content array
+        $contentRecord = $this->configurationManager->getContentObject()->data;
+        unset($contentRecord['pi_flexform'], $contentRecord['l18n_diffsource']);
+
         $view->assign('data', $this->configurationManager->getContentObject()->data);
         $view->assign('environment', [
             'settings' => $this->settings,
             'extConf' => ObjectAccess::getGettableProperties($this->extConf),
             'id' => $GLOBALS['TSFE']->id,
-            'contentRecord' => $this->configurationManager->getContentObject()->data
+            'contentRecord' => $contentRecord
         ]);
     }
 }
