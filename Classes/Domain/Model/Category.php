@@ -36,6 +36,13 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
     protected $markerIcon = '';
 
     /**
+     * Sorting
+     *
+     * @var int
+     */
+    protected $sorting = 0;
+
+    /**
      * Returns the markerIcon
      *
      * @return string $markerIcon
@@ -60,5 +67,27 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
     public function setMarkerIcon($markerIcon)
     {
         $this->markerIcon = (string)trim($markerIcon);
+    }
+
+    /**
+     * Returns the sorting
+     *
+     * @return int $sorting
+     */
+    public function getSorting()
+    {
+        return $this->sorting;
+    }
+
+    /**
+     * Sets the sorting
+     *
+     * @param int $sorting
+     *
+     * @return void
+     */
+    public function setSorting($sorting)
+    {
+        $this->sorting = (int)$sorting;
     }
 }
