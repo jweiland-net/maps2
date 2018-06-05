@@ -1,5 +1,5 @@
 <?php
-namespace JWeiland\Maps2\Tests\Unit\Mvc;
+namespace JWeiland\Maps2\Tests\Unit\ViewHelpers\Widget;
 
 /*
  * This file is part of the maps2 project.
