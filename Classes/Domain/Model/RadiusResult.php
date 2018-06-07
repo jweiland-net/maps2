@@ -14,6 +14,7 @@ namespace JWeiland\Maps2\Domain\Model;
  * The TYPO3 project - inspiring people to share!
  */
 
+use JWeiland\Maps2\Domain\Model\RadiusResult\AddressComponent;
 use JWeiland\Maps2\Domain\Model\RadiusResult\Geometry;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
@@ -39,7 +40,7 @@ class RadiusResult
      *
      * @var string
      */
-    protected $formattedAddress;
+    protected $formattedAddress = '';
 
     /**
      * geometry
@@ -53,23 +54,31 @@ class RadiusResult
      *
      * @var array
      */
-    protected $types;
+    protected $types = [];
 
     /**
      * poiCollections
      *
      * @var array
      */
-    protected $poiCollections;
+    protected $poiCollections = [];
 
     /**
-     * Setter for addressComponents
-     *
-     * @param ObjectStorage $addressComponents
+     * Constructor of this model class
      */
-    public function setAddressComponents(ObjectStorage $addressComponents)
+    public function __construct()
     {
-        $this->addressComponents = $addressComponents;
+        $this->initStorageObjects();
+    }
+
+    /**
+     * Initializes all Tx_Extbase_Persistence_ObjectStorage properties.
+     *
+     * @return void
+     */
+    protected function initStorageObjects()
+    {
+        $this->addressComponents = new ObjectStorage();
     }
 
     /**
@@ -83,13 +92,33 @@ class RadiusResult
     }
 
     /**
-     * Setter for formattedAddress
+     * Setter for addressComponents
      *
-     * @param string $formattedAddress
+     * @param ObjectStorage $addressComponents
      */
-    public function setFormattedAddress($formattedAddress)
+    public function setAddressComponents(ObjectStorage $addressComponents)
     {
-        $this->formattedAddress = $formattedAddress;
+        $this->addressComponents = $addressComponents;
+    }
+
+    /**
+     * Add address component
+     *
+     * @param AddressComponent $addressComponent
+     */
+    public function addAddressComponent(AddressComponent $addressComponent)
+    {
+        $this->addressComponents->attach($addressComponent);
+    }
+
+    /**
+     * Remove address component
+     *
+     * @param AddressComponent $addressComponent
+     */
+    public function removeAddressComponent(AddressComponent $addressComponent)
+    {
+        $this->addressComponents->detach($addressComponent);
     }
 
     /**
@@ -103,13 +132,13 @@ class RadiusResult
     }
 
     /**
-     * Setter for geometry
+     * Setter for formattedAddress
      *
-     * @param Geometry $geometry
+     * @param string $formattedAddress
      */
-    public function setGeometry(Geometry $geometry)
+    public function setFormattedAddress($formattedAddress)
     {
-        $this->geometry = $geometry;
+        $this->formattedAddress = (string)$formattedAddress;
     }
 
     /**
@@ -123,13 +152,13 @@ class RadiusResult
     }
 
     /**
-     * Setter for Types
+     * Setter for geometry
      *
-     * @param array $types
+     * @param Geometry $geometry
      */
-    public function setTypes(array $types)
+    public function setGeometry(Geometry $geometry)
     {
-        $this->types = $types;
+        $this->geometry = $geometry;
     }
 
     /**
@@ -143,13 +172,13 @@ class RadiusResult
     }
 
     /**
-     * Setter for poiCollections
+     * Setter for Types
      *
-     * @param array $poiCollections
+     * @param array $types
      */
-    public function setPoiCollections(array $poiCollections)
+    public function setTypes(array $types)
     {
-        $this->poiCollections = $poiCollections;
+        $this->types = $types;
     }
 
     /**
@@ -160,5 +189,15 @@ class RadiusResult
     public function getPoiCollections()
     {
         return $this->poiCollections;
+    }
+
+    /**
+     * Setter for poiCollections
+     *
+     * @param array $poiCollections
+     */
+    public function setPoiCollections(array $poiCollections)
+    {
+        $this->poiCollections = $poiCollections;
     }
 }

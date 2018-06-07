@@ -29,14 +29,14 @@ class Location
      *
      * @var float
      */
-    protected $lat;
+    protected $lat = 0.0;
 
     /**
      * longitude
      *
      * @var float
      */
-    protected $lng;
+    protected $lng = 0.0;
 
     /**
      * Setter for lat
@@ -45,7 +45,7 @@ class Location
      */
     public function setLat($lat)
     {
-        $this->lat = (float) $lat;
+        $this->lat = (float)$lat;
     }
 
     /**
@@ -65,7 +65,7 @@ class Location
      */
     public function setLng($lng)
     {
-        $this->lng = (float) $lng;
+        $this->lng = (float)$lng;
     }
 
     /**
