@@ -79,6 +79,14 @@ class PoiCollectionController extends AbstractController
     }
 
     /**
+     * @param PoiCollection $poiCollection
+     */
+    protected function preparePoiCollectionForFluid(PoiCollection $poiCollection)
+    {
+
+    }
+
+    /**
      * action search
      * This action shows a form to start a new radius search
      *

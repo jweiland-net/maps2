@@ -303,12 +303,12 @@ Maps2.prototype.createMarker = function(poiCollection, environment) {
       if (!this.markers.hasOwnProperty(categoryUid)) {
         this.markers[categoryUid] = [];
       }
-      // assign first category icon to marker
-      if (i === 0 && poiCollection.categories[i].markerIcon !== "") {
+      // assign first found marker icon, if available
+      if (poiCollection.markerIcon !== "") {
         var icon = {
-          url: poiCollection.categories[i].markerIcon,
-          scaledSize: new google.maps.Size(25, 40),
-          anchor: new google.maps.Point(13, 40)
+          url: poiCollection.markerIcon,
+          scaledSize: new google.maps.Size(poiCollection.markerIconWidth, poiCollection.markerIconHeight),
+          anchor: new google.maps.Point(poiCollection.markerIconAnchorPosX, poiCollection.markerIconAnchorPosY)
         };
         marker.setIcon(icon);
       }

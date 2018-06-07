@@ -52,6 +52,18 @@
       <trans-unit id="fillOpacity" xml:space="preserve">
         <source>Fill Opacity:  If you set this to 1, you can't see th map behind the overlay. So it's better to find a value between 0.3 and 0.6. But it should be less than the value of strokeOpacity</source>
       </trans-unit>
+      <trans-unit id="markerIconWidth" xml:space="preserve">
+        <source>Marker icon width: Define a default width for Marker Icons in pixel. You can override this value individually in sys_category and PoiCollection records.</source>
+      </trans-unit>
+      <trans-unit id="markerIconHeight" xml:space="preserve">
+        <source>Marker icon height: Define a default height for Marker Icons in pixel. You can override this value individually in sys_category and PoiCollection records.</source>
+      </trans-unit>
+      <trans-unit id="markerIconAnchorPosX" xml:space="preserve">
+        <source>Marker icon position X: Which horizontal pixel on the image points the position on the Google Maps. You can override this value individually in sys_category and PoiCollection records.</source>
+      </trans-unit>
+      <trans-unit id="markerIconAnchorPosY" xml:space="preserve">
+        <source>Marker icon position Y: Which vertical pixel on the image points the position on the Google Maps. You can override this value individually in sys_category and PoiCollection records.</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

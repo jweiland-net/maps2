@@ -75,6 +75,7 @@ class ConvertToJsonViewHelper extends AbstractViewHelper
         /** @var PoiCollection $poiCollection */
         foreach ($poiCollections as $poiCollection) {
             $poiCollectionAsArray = ObjectAccess::getGettableProperties($poiCollection);
+            unset($poiCollectionAsArray['markerIcons']);
 
             /** @var LazyObjectStorage $pois */
             $pois = $poiCollectionAsArray['pois'];

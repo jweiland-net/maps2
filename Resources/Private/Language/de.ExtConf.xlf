@@ -3,7 +3,6 @@
   <file source-language="en" datatype="plaintext" original="messages" date="2013-02-07T11:13:04Z" product-name="maps2">
     <header/>
     <body>
-
       <trans-unit id="useHttps" xml:space="preserve">
         <source>Use https as protocol: You can't call the http protocol when your page is running on https. So here you can decide to use the same protocol.</source>
         <target>https Protokoll verwenden: Das http-Protokoll kann nicht geladen werden, wenn Ihre eigene Seite über das https-Protokoll läuft. Setzen Sie hier das gleiche Protokoll wie das von Ihrer Webseite.</target>
@@ -66,10 +65,25 @@
         <target>Füllfarbe: Geben Sie hier eine Füllfarbe für die Ebene an.</target>
       </trans-unit>
       <trans-unit id="fillOpacity" xml:space="preserve">
-        <source>Transparenz der Füllfarbe:  Wenn Sie diesen Wert auf 1 setzen, dann können Sie die Karte hinter der Füllung nicht mehr sehen. Von daher wäre ein Wert zwischen 0.3 und 0.6 angemessen. Wie empfehlen Ihnen aber einen Wert kleiner als strokeOpacity zu verwenden.</source>
-        <target>Fill Opacity:  If you set this to 1, you can't see th map behind the overlay. So it's better to find a value between 0.3 and 0.6. But it should be less than the value of strokeOpacity</target>
+        <source>Fill Opacity: If you set this to 1, you can't see th map behind the overlay. So it's better to find a value between 0.3 and 0.6. But it should be less than the value of strokeOpacity</source>
+        <target>Transparenz der Füllfarbe:  Wenn Sie diesen Wert auf 1 setzen, dann können Sie die Karte hinter der Füllung nicht mehr sehen. Von daher wäre ein Wert zwischen 0.3 und 0.6 angemessen. Wie empfehlen Ihnen aber einen Wert kleiner als strokeOpacity zu verwenden.</target>
       </trans-unit>
-
+      <trans-unit id="markerIconWidth" xml:space="preserve">
+        <source>Marker icon width: Define a default width for Marker Icons in pixel. You can override this value individually in sys_category and PoiCollection records.</source>
+        <target>Marker Icon Breite: Setzt die Breite der Marker Icons in Pixel. Dieser Wert kann mit Angaben in sys_category und PoiCollection Datensätzen überschrieben werden.</target>
+      </trans-unit>
+      <trans-unit id="markerIconHeight" xml:space="preserve">
+        <source>Marker icon height: Define a default height for Marker Icons in pixel. You can override this value individually in sys_category and PoiCollection records.</source>
+        <target>Marker Icon Höhe: Setzt die Höhe der Marker Icons in Pixel. Dieser Wert kann mit Angaben in sys_category und PoiCollection Datensätzen überschrieben werden.</target>
+      </trans-unit>
+      <trans-unit id="markerIconAnchorPosX" xml:space="preserve">
+        <source>Marker icon position X: Which horizontal pixel on the image points the position on the Google Maps. You can override this value individually in sys_category and PoiCollection records.</source>
+        <target>Marker Icon Position X: Welcher horizontale Pixel auf dem Bild zeigt die exakte Position auf der Google Karte? Dieser Wert kann mit Angaben in sys_category und PoiCollection Datensätzen überschrieben werden.</target>
+      </trans-unit>
+      <trans-unit id="markerIconAnchorPosY" xml:space="preserve">
+        <source>Marker icon position Y: Which vertical pixel on the image points the position on the Google Maps. You can override this value individually in sys_category and PoiCollection records.</source>
+        <target>Marker Icon Position Y: Welcher verticale Pixel auf dem Bild zeigt die exakte Position auf der Google Karte? Dieser Wert kann mit Angaben in sys_category und PoiCollection Datensätzen überschrieben werden.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

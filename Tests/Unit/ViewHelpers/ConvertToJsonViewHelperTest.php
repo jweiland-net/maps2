@@ -170,4 +170,24 @@ class ConvertToJsonViewHelperTest extends UnitTestCase
             $json
         );
     }
+
+    /**
+     * @test
+     */
+    public function renderWithPoiCollectionsWillRemoveMarkerIconsFromPoiCollection()
+    {
+        $poiCollection = new PoiCollection();
+
+        $this->viewHelperNode
+            ->evaluateChildNodes(Argument::cetera())
+            ->shouldBeCalled()
+            ->willReturn([$poiCollection]);
+
+        $json = $this->subject->render();
+
+        $this->assertNotContains(
+            'markerIcons',
+            $json
+        );
+    }
 }

@@ -20,13 +20,21 @@ defaultRadius = 250
 infoWindowContentTemplatePath = EXT:maps2/Resources/Private/Templates/InfoWindowContent.html
 # cat=basic; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:allowMapTemplatePath
 allowMapTemplatePath = EXT:maps2/Resources/Private/Templates/AllowMapForm.html
-# cat=design/color/a; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:strokeColor
+# cat=design/color; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:strokeColor
 strokeColor = #FF0000
-# cat=design/color/b; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:strokeOpacity
+# cat=design/color; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:strokeOpacity
 strokeOpacity = 0.8
-# cat=design/color/c; type=int+; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:strokeWeight
+# cat=design/color; type=int+; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:strokeWeight
 strokeWeight = 2
-# cat=design/color/d; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:fillColor
+# cat=design/color; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:fillColor
 fillColor = #FF0000
-# cat=design/color/e; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:fillOpacity
+# cat=design/color; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:fillOpacity
 fillOpacity = 0.35
+# cat=design; type=int+; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:markerIconWidth
+markerIconWidth = 25
+# cat=design; type=int+; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:markerIconHeight
+markerIconHeight = 40
+# cat=design; type=int+; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:markerIconAnchorPosX
+markerIconAnchorPosX = 13
+# cat=design; type=int+; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:markerIconAnchorPosY
+markerIconAnchorPosY = 40

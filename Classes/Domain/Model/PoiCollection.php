@@ -14,6 +14,9 @@ namespace JWeiland\Maps2\Domain\Model;
  * The TYPO3 project - inspiring people to share!
  */
 
+use JWeiland\Maps2\Configuration\ExtConf;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
@@ -54,28 +57,28 @@ class PoiCollection extends AbstractEntity
      *
      * @var float
      */
-    protected $latitude = 0;
+    protected $latitude = 0.0;
 
     /**
      * Longitude
      *
      * @var float
      */
-    protected $longitude = 0;
+    protected $longitude = 0.0;
 
     /**
      * LatitudeOrig
      *
      * @var float
      */
-    protected $latitudeOrig = 0;
+    protected $latitudeOrig = 0.0;
 
     /**
      * LongitudeOrig
      *
      * @var float
      */
-    protected $longitudeOrig = 0;
+    protected $longitudeOrig = 0.0;
 
     /**
      * Radius
@@ -91,7 +94,7 @@ class PoiCollection extends AbstractEntity
      * @cascade remove
      * @lazy
      */
-    protected $pois = null;
+    protected $pois;
 
     /**
      * StrokeColor
@@ -136,11 +139,46 @@ class PoiCollection extends AbstractEntity
     protected $infoWindowContent = '';
 
     /**
+     * markerIcon
+     *
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
+     */
+    protected $markerIcons;
+
+    /**
+     * markerIconWidth
+     *
+     * @var int
+     */
+    protected $markerIconWidth = 0;
+
+    /**
+     * markerIconHeight
+     *
+     * @var int
+     */
+    protected $markerIconHeight = 0;
+
+    /**
+     * markerIconAnchorPosX
+     *
+     * @var int
+     */
+    protected $markerIconAnchorPosX = 0;
+
+    /**
+     * markerIconAnchorPosY
+     *
+     * @var int
+     */
+    protected $markerIconAnchorPosY = 0;
+
+    /**
      * categories
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\JWeiland\Maps2\Domain\Model\Category>
      */
-    protected $categories = null;
+    protected $categories;
 
     /**
      * distance
@@ -148,7 +186,7 @@ class PoiCollection extends AbstractEntity
      *
      * @var float
      */
-    protected $distance = 0;
+    protected $distance = 0.0;
 
     /**
      * Constructor of this model class
@@ -167,6 +205,7 @@ class PoiCollection extends AbstractEntity
     {
         $this->pois = new ObjectStorage();
         $this->categories = new ObjectStorage();
+        $this->markerIcons = new ObjectStorage();
     }
 
     /**
@@ -187,7 +226,7 @@ class PoiCollection extends AbstractEntity
      */
     public function setCollectionType($collectionType)
     {
-        $this->collectionType = $collectionType;
+        $this->collectionType = (string)$collectionType;
     }
 
     /**
@@ -208,7 +247,7 @@ class PoiCollection extends AbstractEntity
      */
     public function setTitle($title)
     {
-        $this->title = $title;
+        $this->title = (string)$title;
     }
 
     /**
@@ -229,7 +268,7 @@ class PoiCollection extends AbstractEntity
      */
     public function setAddress($address)
     {
-        $this->address = $address;
+        $this->address = (string)$address;
     }
 
     /**
@@ -250,7 +289,7 @@ class PoiCollection extends AbstractEntity
      */
     public function setLatitude($latitude)
     {
-        $this->latitude = $latitude;
+        $this->latitude = (float)$latitude;
     }
 
     /**
@@ -271,7 +310,7 @@ class PoiCollection extends AbstractEntity
      */
     public function setLongitude($longitude)
     {
-        $this->longitude = $longitude;
+        $this->longitude = (float)$longitude;
     }
 
     /**
@@ -292,7 +331,7 @@ class PoiCollection extends AbstractEntity
      */
     public function setLatitudeOrig($latitudeOrig)
     {
-        $this->latitudeOrig = $latitudeOrig;
+        $this->latitudeOrig = (float)$latitudeOrig;
     }
 
     /**
@@ -313,7 +352,7 @@ class PoiCollection extends AbstractEntity
      */
     public function setLongitudeOrig($longitudeOrig)
     {
-        $this->longitudeOrig = $longitudeOrig;
+        $this->longitudeOrig = (float)$longitudeOrig;
     }
 
     /**
@@ -334,7 +373,7 @@ class PoiCollection extends AbstractEntity
      */
     public function setRadius($radius)
     {
-        $this->radius = $radius;
+        $this->radius = (int)$radius;
     }
 
     /**
@@ -503,7 +542,7 @@ class PoiCollection extends AbstractEntity
      */
     public function setInfoWindowContent($infoWindowContent)
     {
-        $this->infoWindowContent = $infoWindowContent;
+        $this->infoWindowContent = (string)$infoWindowContent;
     }
 
     /**
@@ -531,11 +570,27 @@ class PoiCollection extends AbstractEntity
     /**
      * Returns the categories
      *
-     * @return ObjectStorage $categories
+     * @return ObjectStorage|Category[] $categories
      */
     public function getCategories()
     {
         return $this->categories;
+    }
+
+    /**
+     * Returns the first category where a icon is defined
+     *
+     * @return Category|null
+     */
+    public function getFirstFoundCategoryWithIcon()
+    {
+        $category = null;
+        foreach ($this->getCategories() as $category) {
+            if ($category->getMaps2MarkerIcon()) {
+                break;
+            }
+        }
+        return $category;
     }
 
     /**
@@ -547,6 +602,221 @@ class PoiCollection extends AbstractEntity
     public function setCategories(ObjectStorage $categories)
     {
         $this->categories = $categories;
+    }
+
+    /**
+     * Returns the markerIcons
+     *
+     * @return ObjectStorage $markerIcons
+     */
+    public function getMarkerIcons()
+    {
+        return $this->markerIcons;
+    }
+
+    /**
+     * Get marker icon
+     * It also searches for marker icons in categories
+     */
+    public function getMarkerIcon()
+    {
+        $markerIcon = '';
+        $categoryWithIcon = $this->getFirstFoundCategoryWithIcon();
+        if ($categoryWithIcon instanceof Category) {
+            $markerIcon = $categoryWithIcon->getMaps2MarkerIcon();
+        }
+
+        // override markerIcon, if we have a icon defined here in PoiCollection
+        $this->markerIcons->rewind();
+        // only one icon is allowed, so current() will give us the first icon
+        $iconReference = $this->markerIcons->current();
+        if (!$iconReference instanceof FileReference) {
+            return $markerIcon;
+        }
+
+        $falIconReference = $iconReference->getOriginalResource();
+        if (!$falIconReference instanceof \TYPO3\CMS\Core\Resource\FileReference) {
+            return $markerIcon;
+        }
+
+        return $falIconReference->getPublicUrl(false);
+    }
+
+    /**
+     * Sets the markerIcons
+     *
+     * @param ObjectStorage $markerIcons
+     * @return void
+     */
+    public function setMarkerIcons(ObjectStorage $markerIcons)
+    {
+        $this->markerIcons = $markerIcons;
+    }
+
+    /**
+     * Add a new FileReference to Marker Icons
+     *
+     * @param FileReference $fileReference
+     * @return void
+     */
+    public function addMarkerIcon(FileReference $fileReference)
+    {
+        $this->markerIcons->attach($fileReference);
+    }
+
+    /**
+     * Remove a FileReference from Marker Icons
+     *
+     * @param FileReference $fileReference
+     * @return void
+     */
+    public function removeMarkerIcon(FileReference $fileReference)
+    {
+        $this->markerIcons->detach($fileReference);
+    }
+
+    /**
+     * Returns the markerIconWidth
+     *
+     * @return int $markerIconWidth
+     */
+    public function getMarkerIconWidth()
+    {
+        // prevent using local markerIconWidth, if no markerIcon is set.
+        if (
+            empty($this->markerIconWidth)
+            || (!empty($this->markerIconWidth) && $this->getMarkerIcons()->count() === 0)
+        ) {
+            $categoryWithIcon = $this->getFirstFoundCategoryWithIcon();
+            if ($categoryWithIcon instanceof Category) {
+                return $categoryWithIcon->getMaps2MarkerIconWidth();
+            } else {
+                /** @var ExtConf $extConf */
+                $extConf = GeneralUtility::makeInstance(ExtConf::class);
+                return $extConf->getMarkerIconWidth();
+            }
+        }
+        return $this->markerIconWidth;
+    }
+
+    /**
+     * Sets the markerIconWidth
+     *
+     * @param int $markerIconWidth
+     *
+     * @return void
+     */
+    public function setMarkerIconWidth($markerIconWidth)
+    {
+        $this->markerIconWidth = (int)$markerIconWidth;
+    }
+
+    /**
+     * Returns the markerIconHeight
+     *
+     * @return int $markerIconHeight
+     */
+    public function getMarkerIconHeight()
+    {
+        // prevent using local markerIconHeight, if no markerIcon is set.
+        if (
+            empty($this->markerIconHeight)
+            || (!empty($this->markerIconHeight) && $this->getMarkerIcons()->count() === 0)
+        ) {
+            $categoryWithIcon = $this->getFirstFoundCategoryWithIcon();
+            if ($categoryWithIcon instanceof Category) {
+                return $categoryWithIcon->getMaps2MarkerIconHeight();
+            } else {
+                /** @var ExtConf $extConf */
+                $extConf = GeneralUtility::makeInstance(ExtConf::class);
+                return $extConf->getMarkerIconHeight();
+            }
+        }
+        return $this->markerIconHeight;
+    }
+
+    /**
+     * Sets the markerIconHeight
+     *
+     * @param int $markerIconHeight
+     *
+     * @return void
+     */
+    public function setMarkerIconHeight($markerIconHeight)
+    {
+        $this->markerIconHeight = (int)$markerIconHeight;
+    }
+
+    /**
+     * Returns the markerIconAnchorPosX
+     *
+     * @return int $markerIconAnchorPosX
+     */
+    public function getMarkerIconAnchorPosX()
+    {
+        // prevent using local markerIconAnchorPosX, if no markerIcon is set.
+        if (
+            empty($this->markerIconAnchorPosX)
+            || (!empty($this->markerIconAnchorPosX) && $this->getMarkerIcons()->count() === 0)
+        ) {
+            $categoryWithIcon = $this->getFirstFoundCategoryWithIcon();
+            if ($categoryWithIcon instanceof Category) {
+                return $categoryWithIcon->getMaps2MarkerIconAnchorPosX();
+            } else {
+                /** @var ExtConf $extConf */
+                $extConf = GeneralUtility::makeInstance(ExtConf::class);
+                return $extConf->getMarkerIconAnchorPosX();
+            }
+        }
+        return $this->markerIconAnchorPosX;
+    }
+
+    /**
+     * Sets the markerIconAnchorPosX
+     *
+     * @param int $markerIconAnchorPosX
+     *
+     * @return void
+     */
+    public function setMarkerIconAnchorPosX($markerIconAnchorPosX)
+    {
+        $this->markerIconAnchorPosX = (int)$markerIconAnchorPosX;
+    }
+
+    /**
+     * Returns the markerIconAnchorPosY
+     *
+     * @return int $markerIconAnchorPosY
+     */
+    public function getMarkerIconAnchorPosY()
+    {
+        // prevent using local markerIconAnchorPosY, if no markerIcon is set.
+        if (
+            empty($this->markerIconAnchorPosY)
+            || (!empty($this->markerIconAnchorPosY) && $this->getMarkerIcons()->count() === 0)
+        ) {
+            $categoryWithIcon = $this->getFirstFoundCategoryWithIcon();
+            if ($categoryWithIcon instanceof Category) {
+                return $categoryWithIcon->getMaps2MarkerIconAnchorPosY();
+            } else {
+                /** @var ExtConf $extConf */
+                $extConf = GeneralUtility::makeInstance(ExtConf::class);
+                return $extConf->getMarkerIconAnchorPosY();
+            }
+        }
+        return $this->markerIconAnchorPosY;
+    }
+
+    /**
+     * Sets the markerIconAnchorPosY
+     *
+     * @param int $markerIconAnchorPosY
+     *
+     * @return void
+     */
+    public function setMarkerIconAnchorPosY($markerIconAnchorPosY)
+    {
+        $this->markerIconAnchorPosY = (int)$markerIconAnchorPosY;
     }
 
     /**
@@ -567,6 +837,6 @@ class PoiCollection extends AbstractEntity
      */
     public function setDistance($distance)
     {
-        $this->distance = $distance;
+        $this->distance = (float)$distance;
     }
 }

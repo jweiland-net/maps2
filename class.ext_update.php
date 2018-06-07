@@ -14,8 +14,12 @@ namespace JWeiland\Maps2;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageRendererResolver;
+use TYPO3\CMS\Core\Resource\File;
+use TYPO3\CMS\Core\Resource\FileInterface;
+use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Configuration\FlexForm\FlexFormTools;
 
@@ -55,13 +59,32 @@ class ext_update
      */
     public function access()
     {
+        $showAccess = false;
+
+        // check for SCA
         $amountOfRecords = $this->getDatabaseConnection()->exec_SELECTcountRows(
             '*',
             'tt_content',
             'list_type=\'maps2_maps2\'' .
             'AND pi_flexform LIKE \'%switchableControllerActions%\''
         );
-        return (bool)$amountOfRecords;
+        if ((bool)$amountOfRecords) {
+            $showAccess = true;
+        }
+
+        // check for old marker_icon column in sys_category
+        $fields = $this->getDatabaseConnection()->admin_get_fields('sys_category');
+        if (array_key_exists('marker_icon', $fields)) {
+            $amountOfRecords = $this->getDatabaseConnection()->exec_SELECTcountRows(
+                '*',
+                'sys_category',
+                'deleted=0 AND marker_icon <> \'\''
+            );
+        }
+        if ((bool)$amountOfRecords) {
+            $showAccess = true;
+        }
+        return $showAccess;
     }
 
     /**
@@ -72,6 +95,7 @@ class ext_update
     protected function processUpdates()
     {
         $this->removeSCAFromTtContentRecords();
+        $this->migrateMarkerIconToFal();
     }
 
     /**
@@ -85,9 +109,9 @@ class ext_update
             'uid, pi_flexform',
             'tt_content',
             'list_type=\'maps2_maps2\'' .
-            'AND pi_flexform LIKE \'%switchableControllerActions%\''
+            ' AND pi_flexform LIKE \'%switchableControllerActions%\''
         );
-        if (!empty($rows)) {
+        if (is_array($rows)) {
             $affectedRows = 0;
             foreach ($rows as $row) {
                 $flexFormFields = GeneralUtility::xml2array($row['pi_flexform']);
@@ -121,6 +145,68 @@ class ext_update
         }
     }
 
+    /**
+     * Migrate old marker icon of sys_category to FAL
+     */
+    protected function migrateMarkerIconToFal()
+    {
+        // check for old marker_icon column in sys_category first
+        $fields = $this->getDatabaseConnection()->admin_get_fields('sys_category');
+        if (array_key_exists('marker_icon', $fields)) {
+            $sysCategories = $this->getDatabaseConnection()->exec_SELECTgetRows(
+                'uid, pid, marker_icon',
+                'sys_category',
+                'deleted=0 AND marker_icon <> \'\''
+            );
+            if (is_array($sysCategories)) {
+                foreach ($sysCategories as $sysCategory) {
+                    try {
+                        /** @var File $file */
+                        $file = ResourceFactory::getInstance()->retrieveFileOrFolderObject($sysCategory['marker_icon']);
+                        if ($file instanceof FileInterface) {
+                            // Assemble DataHandler data
+                            $newId = 'NEW1234';
+                            $data = [];
+                            $data['sys_file_reference'][$newId] = [
+                                'table_local' => 'sys_file',
+                                'uid_local' => $file->getUid(),
+                                'tablenames' => 'sys_category',
+                                'uid_foreign' => $sysCategory['uid'],
+                                'fieldname' => 'maps2_marker_icons',
+                                'pid' => $sysCategory['pid']
+                            ];
+                            $data['sys_category'][$sysCategory['uid']] = [
+                                'maps2_marker_icons' => $newId
+                            ];
+                            // Get an instance of the DataHandler and process the data
+                            /** @var DataHandler $dataHandler */
+                            $dataHandler = GeneralUtility::makeInstance(DataHandler::class);
+                            $dataHandler->start($data, []);
+                            $dataHandler->process_datamap();
+                        }
+                    } catch (\Exception $e) {
+                        // file does not exists or whatever
+                    }
+                    // remove old icon
+                    $this->getDatabaseConnection()->exec_UPDATEquery(
+                        'sys_category',
+                        'uid=' . (int)$sysCategory['uid'],
+                        [
+                            'marker_icon' => ''
+                        ]
+                    );
+                }
+                $this->messageArray[] = [
+                    FlashMessage::OK,
+                    'Migration successful',
+                    sprintf(
+                        'We have magrated %d sys_category records to FAL',
+                        count($sysCategories)
+                    )
+                ];
+            }
+        }
+    }
 
     /**
      * Generates output by using flash messages
@@ -139,7 +225,9 @@ class ext_update
                 $messageItem[0]);
 
             if (version_compare(TYPO3_branch, '8.6') >= 0) {
-                $output .= GeneralUtility::makeInstance(FlashMessageRendererResolver::class)->resolve()->render();
+                $output .= GeneralUtility::makeInstance(FlashMessageRendererResolver::class)
+                    ->resolve()
+                    ->render([$flashMessage]);
             } elseif (version_compare(TYPO3_branch, '8.0') >= 0) {
                 $output .= $flashMessage->getMessageAsMarkup();
             } else {

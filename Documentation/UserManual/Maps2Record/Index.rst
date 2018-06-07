@@ -74,6 +74,22 @@ The maps2 record is the most important record in this extension.
          This is a not visible field. In case of **Route** and **Area**
          it will save all created markers on the map via Ajax in the background.
  - :Field:
+         MarkerIconWidth
+   :Description:
+         Define a default width for Marker Icons in pixel.
+ - :Field:
+         MarkerIconWidth
+   :Description:
+         Define a default height for Marker Icons in pixel.
+ - :Field:
+         MarkerIconAnchorPosX
+   :Description:
+         Which horizontal pixel on the image points the position on the Google Maps.
+ - :Field:
+         MarkerIconAnchorPosX
+   :Description:
+         Which vertical pixel on the image points the position on the Google Maps.
+ - :Field:
          Stroke color
    :Description:
          In case of Radius, Area and Route it will be the color of the outer border.

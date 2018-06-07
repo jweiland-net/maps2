@@ -42,6 +42,10 @@ Properties
   strokeWeight_                   design   2
   fillColor_                      design   #FF0000
   fillOpacity_                    design   0.3
+  markerIconWidth_                design   25
+  markerIconHeight_               design   40
+  markerIconAnchorPosX_           design   13
+  markerIconAnchorPosY_           design   40
   ============================== ======== ====================================================================
 
 Property details
@@ -176,3 +180,34 @@ fillOpacity
 
 Fill opacity
 
+.. _extensionManager-markerIconWidth:
+
+markerIconWidth
+"""""""""""""""
+
+Define a default width for Marker Icons in pixel. You can override this value
+individually in sys_category and PoiCollection records.
+
+.. _extensionManager-markerIconHeight:
+
+markerIconHeight
+""""""""""""""""
+
+Define a default height for Marker Icons in pixel. You can override this value
+individually in sys_category and PoiCollection records.
+
+.. _extensionManager-markerIconAnchorPosX:
+
+markerIconAnchorPosX
+""""""""""""""""""""
+
+Which horizontal pixel on the image points the position on the Google Maps.
+You can override this value individually in sys_category and PoiCollection records.
+
+.. _extensionManager-markerIconAnchorPosY:
+
+markerIconAnchorPosY
+""""""""""""""""""""
+
+Which vertical pixel on the image points the position on the Google Maps.
+You can override this value individually in sys_category and PoiCollection records.

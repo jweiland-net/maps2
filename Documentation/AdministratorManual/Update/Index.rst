@@ -9,6 +9,19 @@ Updating
 --------
 If you update EXT:maps2 to a newer version, please read this section carefully!
 
+Update to Version 4.0.0
+^^^^^^^^^^^^^^^^^^^^^^^
+
+We have added some new fields to maps2. So please go into Extensionmanager
+and open the configuration. Please check, if everything matches your needs and safe
+the configuration.
+
+You have to clear the system cache, because of new fields in TCA.
+
+We have renamed the field marker_icon from table sys_category into maps2_marker_icons and
+switched to FAL related images. Please execute Update script in Extensionmanager for maps2
+to migrate your old images.
+
 Update to Version 3.0.0
 ^^^^^^^^^^^^^^^^^^^^^^^
 
