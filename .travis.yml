@@ -54,7 +54,6 @@ install:
   - >
     composer config minimum-stability dev;
     composer config prefer-stable true;
-    composer require typo3/cms-core="@dev" --no-update;
   - while true; do echo "..."; sleep 60; done &
   - composer require typo3/cms=$TYPO3_VERSION
   - kill %1
