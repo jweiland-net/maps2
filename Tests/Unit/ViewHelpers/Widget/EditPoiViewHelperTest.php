@@ -51,6 +51,8 @@ class EditPoiViewHelperTest extends UnitTestCase
      */
     protected function setUp()
     {
+        $_SESSION['googleRequestsAllowedForMaps2'] = false;
+
         $this->extConf = new ExtConf();
         $this->extConf->setExplicitAllowGoogleMaps(1);
         $this->extConf->setExplicitAllowGoogleMapsBySessionOnly(1);

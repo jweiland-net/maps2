@@ -69,6 +69,8 @@ class GoogleMapOverlayRequestTest extends UnitTestCase
      */
     protected function setUp()
     {
+        $_SESSION['googleRequestsAllowedForMaps2'] = false;
+
         $this->extConf = new ExtConf();
         $this->extConf->setExplicitAllowGoogleMaps(1);
         $this->extConf->setExplicitAllowGoogleMapsBySessionOnly(1);
@@ -114,7 +116,7 @@ class GoogleMapOverlayRequestTest extends UnitTestCase
     {
         $this->environmentService->isEnvironmentInCliMode()->shouldBeCalled()->willReturn(false);
         $this->request->getControllerExtensionKey()->shouldBeCalled()->willReturn('events2');
-        $this->requestBuilder->build()->shouldBeCalled()->willReturn($this->request);
+        $this->requestBuilder->build()->shouldBeCalled()->willReturn($this->request->reveal());
 
         $this->assertFalse(
             $this->subject->canHandleRequest()
@@ -128,7 +130,7 @@ class GoogleMapOverlayRequestTest extends UnitTestCase
     {
         $this->environmentService->isEnvironmentInCliMode()->shouldBeCalled()->willReturn(false);
         $this->request->getControllerExtensionKey()->shouldBeCalled()->willReturn('maps2');
-        $this->requestBuilder->build()->shouldBeCalled()->willReturn($this->request);
+        $this->requestBuilder->build()->shouldBeCalled()->willReturn($this->request->reveal());
 
         $this->assertTrue(
             $this->subject->canHandleRequest()
