@@ -23,8 +23,8 @@ use JWeiland\Maps2\ViewHelpers\ConvertToJsonViewHelper;
 use JWeiland\Maps2\ViewHelpers\Widget\EditPoiViewHelper;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
 use Prophecy\Argument;
-use TYPO3Fluid\Fluid\Core\Parser\SyntaxTree\ViewHelperNode;
-use TYPO3Fluid\Fluid\Core\Rendering\RenderingContext;
+use TYPO3\CMS\Fluid\Core\Parser\SyntaxTree\ViewHelperNode;
+use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
 
 /**
  * Class ConvertToJsonViewHelperTest

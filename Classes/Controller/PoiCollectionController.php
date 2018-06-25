@@ -83,7 +83,6 @@ class PoiCollectionController extends AbstractController
      */
     protected function preparePoiCollectionForFluid(PoiCollection $poiCollection)
     {
-
     }
 
     /**

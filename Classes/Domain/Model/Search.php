@@ -29,14 +29,14 @@ class Search
      *
      * @var string
      */
-    protected $address;
+    protected $address = '';
 
     /**
      * radius
      *
      * @var int
      */
-    protected $radius;
+    protected $radius = 0;
 
     /**
      * Returns the address

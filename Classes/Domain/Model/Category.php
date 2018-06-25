@@ -16,7 +16,6 @@ namespace JWeiland\Maps2\Domain\Model;
 
 use JWeiland\Maps2\Configuration\ExtConf;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
