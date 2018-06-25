@@ -18,11 +18,11 @@
     "source": "https://github.com/jweiland-net/maps2"
   },
   "require": {
-    "typo3/cms-core": "^7.6.13 || ^8.5"
+    "typo3/cms-core": "^7.6 || ^8.7"
   },
   "require-dev": {
     "friendsofphp/php-cs-fixer": "^2.0",
-    "nimut/testing-framework": "^2.0 || ^3.0"
+    "nimut/testing-framework": "2.x-dev || 4.x-dev"
   },
   "autoload": {
     "psr-4": {
@@ -40,7 +40,9 @@
   },
   "extra": {
     "typo3/cms": {
+      "extension-key": "maps2",
       "cms-package-dir": "{$vendor-dir}/typo3/cms",
+      "app-dir": ".Build",
       "web-dir": ".Build/public"
     }
   }
