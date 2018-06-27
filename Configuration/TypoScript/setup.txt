@@ -1,5 +1,5 @@
 [JWeiland\Maps2\Condition\AllowGoogleRequestCondition]
-  page.includeJSFooter {
+  page.includeJSFooterlibs {
     jQueryForMaps2 = //ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js
     jQueryForMaps2.external = 1
     jQueryForMaps2.disableCompression = 1
