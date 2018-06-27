@@ -130,6 +130,34 @@ class ExtConf implements SingletonInterface
     protected $fillOpacity;
 
     /**
+     * marker icon width
+     *
+     * @var int
+     */
+    protected $markerIconWidth = 0;
+
+    /**
+     * marker icon height
+     *
+     * @var int
+     */
+    protected $markerIconHeight = 0;
+
+    /**
+     * marker icon anchor position X
+     *
+     * @var int
+     */
+    protected $markerIconAnchorPosX = 0;
+
+    /**
+     * marker icon anchor position Y
+     *
+     * @var int
+     */
+    protected $markerIconAnchorPosY = 0;
+
+    /**
      * constructor of this class
      * This method reads the global configuration and calls the setter methods
      */
@@ -555,5 +583,93 @@ class ExtConf implements SingletonInterface
     public function setFillOpacity($fillOpacity)
     {
         $this->fillOpacity = (float)$fillOpacity;
+    }
+
+    /**
+     * Returns the markerIconWidth
+     *
+     * @return int $markerIconWidth
+     */
+    public function getMarkerIconWidth()
+    {
+        return $this->markerIconWidth;
+    }
+
+    /**
+     * Sets the markerIconWidth
+     *
+     * @param int $markerIconWidth
+     *
+     * @return void
+     */
+    public function setMarkerIconWidth($markerIconWidth)
+    {
+        $this->markerIconWidth = (int)$markerIconWidth;
+    }
+
+    /**
+     * Returns the markerIconHeight
+     *
+     * @return int $markerIconHeight
+     */
+    public function getMarkerIconHeight()
+    {
+        return $this->markerIconHeight;
+    }
+
+    /**
+     * Sets the markerIconHeight
+     *
+     * @param int $markerIconHeight
+     *
+     * @return void
+     */
+    public function setMarkerIconHeight($markerIconHeight)
+    {
+        $this->markerIconHeight = (int)$markerIconHeight;
+    }
+
+    /**
+     * Returns the markerIconAnchorPosX
+     *
+     * @return int $markerIconAnchorPosX
+     */
+    public function getMarkerIconAnchorPosX()
+    {
+        return $this->markerIconAnchorPosX;
+    }
+
+    /**
+     * Sets the markerIconAnchorPosX
+     *
+     * @param int $markerIconAnchorPosX
+     *
+     * @return void
+     */
+    public function setMarkerIconAnchorPosX($markerIconAnchorPosX)
+    {
+        $this->markerIconAnchorPosX = (int)$markerIconAnchorPosX;
+    }
+
+    /**
+     * Returns the markerIconAnchorPosY
+     *
+     * @return int $markerIconAnchorPosY
+     */
+    public function getMarkerIconAnchorPosY()
+    {
+        return $this->markerIconAnchorPosY;
+    }
+
+    /**
+     * Sets the markerIconAnchorPosY
+     *
+     * @param int $markerIconAnchorPosY
+     *
+     * @return void
+     */
+    public function setMarkerIconAnchorPosY($markerIconAnchorPosY)
+    {
+        $this->markerIconAnchorPosY = (int)$markerIconAnchorPosY;
     }
 }

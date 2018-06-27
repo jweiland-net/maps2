@@ -30,3 +30,11 @@ strokeWeight = 2
 fillColor = #FF0000
 # cat=design/color/e; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:fillOpacity
 fillOpacity = 0.35
+# cat=design; type=int+; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:markerIconWidth
+markerIconWidth = 25
+# cat=design; type=int+; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:markerIconHeight
+markerIconHeight = 40
+# cat=design; type=int+; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:markerIconAnchorPosX
+markerIconAnchorPosX = 13
+# cat=design; type=int+; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:markerIconAnchorPosY
+markerIconAnchorPosY = 40

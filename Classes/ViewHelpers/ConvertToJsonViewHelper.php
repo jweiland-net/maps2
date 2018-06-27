@@ -111,6 +111,10 @@ class ConvertToJsonViewHelper extends AbstractViewHelper
             reset($value);
             $poiCollection = current($value);
             $containsPoiCollections = $poiCollection instanceof PoiCollection;
+        } elseif ($value instanceof \Iterator) {
+            $value->rewind();
+            $poiCollection = $value->current();
+            $containsPoiCollections = $poiCollection instanceof PoiCollection;
         }
 
         return $containsPoiCollections;
