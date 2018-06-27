@@ -1,3 +1,5 @@
+var $maps2GoogleMaps = [];
+
 /**
  * Create a MapOptions object which can be assigned to the Map object of Google
  *
@@ -457,6 +459,6 @@ function initMap() {
     var environment = $element.data("environment");
     var override = $element.data("override");
     environment = jQuery.extend(true, environment, override);
-    new Maps2($element, environment);
+    $maps2GoogleMaps.push(new Maps2($element, environment));
   });
 }
