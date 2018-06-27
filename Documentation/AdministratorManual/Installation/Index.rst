@@ -27,34 +27,11 @@ The extension needs to be installed like any other extension of TYPO3 CMS:
 
          git clone https://github.com/jweiland-net/maps2.git
 
-   #. **Get it via Composer:** If you run TYPO3 in composer mode you can add a new Repository
-      into you composer.json:
+   #. **Get it via Composer:**
 
       .. code-block:: bash
 
-         {
-           "repositories": [
-             {
-               "type": "composer",
-               "url": "https://composer.typo3.org/"
-             },
-             {
-               "type": "vcs",
-               "url": "https://github.com/jweiland-net/maps2"
-             }
-           ],
-           "name": "my-vendor/my-typo3-cms-distribution",
-           "require": {
-             "typo3/cms": "7.6.*",
-             "jweiland/maps2": "2.*"
-           },
-           "extra": {
-             "typo3/cms": {
-               "cms-package-dir": "{$vendor-dir}/typo3/cms",
-               "web-dir": "web"
-             }
-           }
-         }
+         composer require jweiland/maps2
 
 #. The Extension Manager offers some basic configuration which is
    explained :ref:`here <extensionManager>`.

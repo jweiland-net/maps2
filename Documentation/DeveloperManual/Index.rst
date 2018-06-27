@@ -18,5 +18,6 @@ Developer manual
    :maxdepth: 2
    :titlesonly:
 
-  EditMarker/Index
-  Override/Index
+   EditMarker/Index
+   Override/Index
+   Maps2Registry/Index

@@ -9,6 +9,43 @@ Updating
 --------
 If you update EXT:maps2 to a newer version, please read this section carefully!
 
+Update to Version 4.0.0
+^^^^^^^^^^^^^^^^^^^^^^^
+
+We have added some new fields to maps2. So please go into Extensionmanager
+and open the configuration. Please check, if everything matches your needs and safe
+the configuration.
+
+You have to clear the system cache, because of new fields in TCA.
+
+We have renamed the field marker_icon from table sys_category into maps2_marker_icons and
+switched to FAL related images. Please execute Update script in Extensionmanager for maps2
+to migrate your old images.
+
+Update to Version 3.0.0
+^^^^^^^^^^^^^^^^^^^^^^^
+
+We have removed TYPO3 6.2 compatibility completely.
+
+In f.e. germany it is not allowed to send the users ip address without
+his confirmation. That's why we have added a new extension management configuration
+which can output a little form, where the user can accept sending his information
+to third party servers like Google to display the maps. This new feature
+touches nearly all methods, so, if you have extended maps2, please pre-check the new
+widget templates and actions. Maybe it's good to have a look into the new MapService class.
+
+Update to Version 2.5.0
+^^^^^^^^^^^^^^^^^^^^^^^
+
+With version 2.5.0 we have solved a camelcase problem of the cache table.
+It was renamed from cf_maps2_cachedHtml to cf_maps2_cachedhtml. Please delete
+the old tables cf_maps2_cachedHtml and cf_maps2_cachedHtml_tags, deactivate maps2
+in extension manager and activate it again.
+
+.. important::
+
+   It does not help to rename these tables only.
+
 Update to Version 2.0.0
 ^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -25,16 +62,4 @@ remove that setting of each plugin in tt_content record field pi_flexform on you
 .. important::
 
    It does not help to open and save the record in backend!
-
-Update to Version 2.5.0
-^^^^^^^^^^^^^^^^^^^^^^^
-
-With version 2.5.0 we have solved a camelcase problem of the cache table.
-It was renamed from cf_maps2_cachedHtml to cf_maps2_cachedhtml. Please delete
-the old tables cf_maps2_cachedHtml and cf_maps2_cachedHtml_tags, deactivate maps2
-in extension manager and activate it again.
-
-.. important::
-
-   It does not help to rename these tables only.
 
