@@ -106,6 +106,21 @@
       <trans-unit id="tx_maps2_domain_model_poicollection.info_window_content" xml:space="preserve">
         <source>Additional Info Window Content</source>
       </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.marker_icons" xml:space="preserve">
+        <source>Marker icon</source>
+      </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.marker_icon_width" xml:space="preserve">
+        <source>Define a default width for Marker Icons in pixel.</source>
+      </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.marker_icon_height" xml:space="preserve">
+        <source>Define a default height for Marker Icons in pixel.</source>
+      </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.marker_icon_anchor_pos_x" xml:space="preserve">
+        <source>Which horizontal pixel on the image points the position on the Google Maps.</source>
+      </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.marker_icon_anchor_pos_y" xml:space="preserve">
+        <source>Which vertical pixel on the image points the position on the Google Maps.</source>
+      </trans-unit>
 
       <trans-unit id="tx_maps2_uid" xml:space="preserve">
         <source>Connect this record to a google maps record</source>
@@ -114,8 +129,20 @@
       <trans-unit id="tab.maps2" xml:space="preserve">
         <source>Google Maps (maps2)</source>
       </trans-unit>
-      <trans-unit id="sys_category.marker_icon" xml:space="preserve">
+      <trans-unit id="sys_category.maps2_marker_icons" xml:space="preserve">
         <source>Marker icon for Google Maps (maps2)</source>
+      </trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_width" xml:space="preserve">
+        <source>Define a default width for Marker Icons in pixel. You can override this value individually in PoiCollection records.</source>
+      </trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_height" xml:space="preserve">
+        <source>Define a default height for Marker Icons in pixel. You can override this value individually in PoiCollection records.</source>
+      </trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_anchor_pos_x" xml:space="preserve">
+        <source>Which horizontal pixel on the image points the position on the Google Maps. You can override this value individually in PoiCollection records.</source>
+      </trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_anchor_pos_y" xml:space="preserve">
+        <source>Which vertical pixel on the image points the position on the Google Maps. You can override this value individually and PoiCollection records.</source>
       </trans-unit>
     </body>
   </file>
