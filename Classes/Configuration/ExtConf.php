@@ -243,9 +243,6 @@ class ExtConf implements SingletonInterface
         if (empty($this->googleMapsGeocodeApiKey)) {
             throw new \Exception('You have forgotten to set a Geocode ApiKey in Extensionmanager.', 1464871560);
         }
-        if ($this->googleMapsGeocodeApiKey === $this->googleMapsJavaScriptApiKey) {
-            throw new \Exception('The ApiKeys for JavaScript APi and Geocode API can not be the same.', 1464871571);
-        }
         return $this->googleMapsGeocodeApiKey;
     }
 
