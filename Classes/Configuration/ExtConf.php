@@ -22,13 +22,6 @@ use TYPO3\CMS\Core\SingletonInterface;
 class ExtConf implements SingletonInterface
 {
     /**
-     * use https
-     *
-     * @var bool
-     */
-    protected $useHttps = false;
-
-    /**
      * Google Maps2 library
      *
      * @var string
@@ -177,31 +170,6 @@ class ExtConf implements SingletonInterface
     }
 
     /**
-     * getter for useHttps
-     *
-     * @return bool
-     */
-    public function getUseHttps()
-    {
-        if (empty($this->useHttps)) {
-            return false;
-        } else {
-            return $this->useHttps;
-        }
-    }
-
-    /**
-     * setter for useHttps
-     *
-     * @param bool $useHttps
-     * @return void
-     */
-    public function setUseHttps($useHttps)
-    {
-        $this->useHttps = (bool)$useHttps;
-    }
-
-    /**
      * getter for googleMapsLibrary
      *
      * @return string
@@ -220,11 +188,7 @@ class ExtConf implements SingletonInterface
             $library = str_replace('|', $this->getGoogleMapsJavaScriptApiKey(), $library);
             // $parts: 0 = full string; 1 = s or empty; 2 = needed url
             if (preg_match('|^http(s)?://(.*)$|i', $library, $parts)) {
-                if ($this->getUseHttps()) {
-                    return 'https://' . $parts[2];
-                } else {
-                    return 'http://' . $parts[2];
-                }
+                return 'https://' . $parts[2];
             }
         }
         return '';
