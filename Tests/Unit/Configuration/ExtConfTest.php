@@ -49,43 +49,6 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function getUseHttpsInitiallyReturnsFalse() {
-        $this->assertSame(
-            false,
-            $this->subject->getUseHttps()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function setUseHttpsSetsUseHttps() {
-        $this->subject->setUseHttps(true);
-        $this->assertSame(
-            true,
-            $this->subject->getUseHttps()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function setUseHttpsWithStringReturnsTrue() {
-        $this->subject->setUseHttps('foo bar');
-        $this->assertTrue($this->subject->getUseHttps());
-    }
-
-    /**
-     * @test
-     */
-    public function setUseHttpsWithZeroReturnsFalse() {
-        $this->subject->setUseHttps(0);
-        $this->assertFalse($this->subject->getUseHttps());
-    }
-
-    /**
-     * @test
-     */
     public function getGoogleMapsLibraryInitiallyReturnsEmptyString() {
         $this->assertSame(
             '',
@@ -124,11 +87,10 @@ class ExtConfTest extends UnitTestCase
      */
     public function setGoogleMapsLibraryWithPipeAndHttpWillSetGoogleMapsLibrary() {
         $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');
-        $this->subject->setUseHttps(false);
         $this->subject->setGoogleMapsLibrary('http://www.domain.de/api=|&mobile=1');
 
         $this->assertSame(
-            'http://www.domain.de/api=myApiKey&mobile=1',
+            'https://www.domain.de/api=myApiKey&mobile=1',
             $this->subject->getGoogleMapsLibrary()
         );
     }
@@ -138,7 +100,6 @@ class ExtConfTest extends UnitTestCase
      */
     public function setGoogleMapsLibraryWithPipeAndHttpsWillSetGoogleMapsLibrary() {
         $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');
-        $this->subject->setUseHttps(true);
         $this->subject->setGoogleMapsLibrary('https://www.domain.de/api=|&mobile=1');
 
         $this->assertSame(
@@ -152,7 +113,6 @@ class ExtConfTest extends UnitTestCase
      */
     public function setGoogleMapsLibraryWithHttpUriAndActivatedHttpsWillSetGoogleMapsLibrary() {
         $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');
-        $this->subject->setUseHttps(true);
         $this->subject->setGoogleMapsLibrary('http://www.domain.de/api=|&mobile=1');
 
         $this->assertSame(
