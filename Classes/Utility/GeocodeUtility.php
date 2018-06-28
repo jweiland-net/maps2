@@ -75,8 +75,8 @@ class GeocodeUtility
      * find position by address
      *
      * @param string $address
-     *
      * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage|array ObjectStorage if status = OK. Returns array if something went false
+     * @throws \Exception
      */
     public function findPositionByAddress($address)
     {
@@ -119,6 +119,7 @@ class GeocodeUtility
      *
      * @param string $address
      * @return string
+     * @throws \Exception
      */
     protected function getUri($address)
     {
@@ -130,18 +131,14 @@ class GeocodeUtility
     }
 
     /**
-     * prepare address for an uri
-     * further it will add some additional information like country
+     * Prepare address for an uri
+     * Further it will add some additional information like country
      *
      * @param string $address The address to update
      * @return string A prepared address which is valid for an uri
      */
     protected function updateAddressForUri($address)
     {
-        // check if it can be interpreted as a zip code
-        if (MathUtility::canBeInterpretedAsInteger($address) && strlen($address) === 5) {
-            $address .= ' Deutschland';
-        }
         return rawurlencode($address);
     }
 }
