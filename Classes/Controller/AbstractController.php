@@ -18,6 +18,8 @@ use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Service\MapService;
 use JWeiland\Maps2\Utility\DataMapper;
 use JWeiland\Maps2\Utility\GeocodeUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
@@ -124,6 +126,7 @@ class AbstractController extends ActionController
         $contentRecord = $this->configurationManager->getContentObject()->data;
         unset($contentRecord['pi_flexform'], $contentRecord['l18n_diffsource']);
 
+        $this->prepareSettings();
         $view->assign('data', $this->configurationManager->getContentObject()->data);
         $view->assign('environment', [
             'settings' => $this->settings,
@@ -131,5 +134,28 @@ class AbstractController extends ActionController
             'id' => $GLOBALS['TSFE']->id,
             'contentRecord' => $contentRecord
         ]);
+    }
+
+    /**
+     * Prepare Settings
+     * Update some settings to a useful format
+     *
+     * @return void
+     */
+    protected function prepareSettings()
+    {
+        if (
+            isset($this->settings['markerClusterer']['enable'])
+            && !empty($this->settings['markerClusterer']['enable'])
+            && isset($this->settings['markerClusterer']['imagePath'])
+            && !empty($this->settings['markerClusterer']['imagePath'])
+        ) {
+            $this->settings['markerClusterer']['enable'] = 1;
+            $this->settings['markerClusterer']['imagePath'] = PathUtility::getAbsoluteWebPath(
+                GeneralUtility::getFileAbsFileName(
+                    $this->settings['markerClusterer']['imagePath']
+                )
+            );
+        }
     }
 }

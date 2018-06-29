@@ -22,6 +22,9 @@ We have renamed the field marker_icon from table sys_category into maps2_marker_
 switched to FAL related images. Please execute Update script in Extensionmanager for maps2
 to migrate your old images.
 
+We have moved all JavaScript Code from page.includeJSFooter to page.includeJSFooterlibs, so
+now you have better options to override or append your custom JavaScript in TypoScript.
+
 Update to Version 3.0.0
 ^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -131,6 +131,16 @@ function Maps2($element, environment) {
   } else {
     // normal case
     this.createPointByCollectionType(environment);
+    if (
+      typeof environment.settings.markerClusterer !== 'undefined'
+      && environment.settings.markerClusterer.enable === 1
+    ) {
+      new MarkerClusterer(
+        this.map,
+        this.markers[5],
+        {imagePath: environment.settings.markerClusterer.imagePath}
+      );
+    }
     if (this.countObjectProperties(this.markers) > 1) {
       this.showSwitchableCategories(environment);
     }

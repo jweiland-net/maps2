@@ -6,6 +6,11 @@
     jQueryForMaps2.excludeFromConcatenation = 1
     jQueryForMaps2.if.isTrue = {$plugin.tx_maps2.view.includeJQuery}
     maps2 = EXT:maps2/Resources/Public/JavaScript/Maps2.js
+    markerClustererForMaps2 = EXT:maps2/Resources/Public/JavaScript/MarkerClusterer.js
+    markerClustererForMaps2.external = 1
+    markerClustererForMaps2.disableCompression = 1
+    markerClustererForMaps2.excludeFromConcatenation = 1
+    markerClustererForMaps2.if.isTrue = {$plugin.tx_maps2.view.enableMarkerClusterer}
     googleMapsForMaps2 = //maps.googleapis.com/maps/api/js?key={$plugin.tx_maps2.view.googleMapsJavaScriptApiKey}&callback=initMap
     googleMapsForMaps2.external = 1
     googleMapsForMaps2.disableCompression = 1
@@ -45,6 +50,10 @@ plugin.tx_maps2 {
   }
   settings {
     infoWindowContentTemplatePath = EXT:maps2/Resources/Private/Templates/InfoWindowContent.html
+    markerClusterer {
+      enable = {$plugin.tx_maps2.view.enableMarkerClusterer}
+      imagePath = typo3conf/extEXT:maps2/Resources/Public/Icons/MarkerClusterer/m
+    }
   }
 }
 
