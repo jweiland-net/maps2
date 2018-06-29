@@ -104,7 +104,8 @@ MapOptions.prototype.setMapTypeId = function(mapTypeId) {
  * @constructor
  */
 function Maps2($element, environment) {
-  this.markers = {};
+  this.categorizedMarkers = {};
+  this.pointMarkers = [];
   this.bounds = new google.maps.LatLngBounds();
   this.infoWindow = new google.maps.InfoWindow();
   this.$element = $element.css({
@@ -131,7 +132,17 @@ function Maps2($element, environment) {
   } else {
     // normal case
     this.createPointByCollectionType(environment);
-    if (this.countObjectProperties(this.markers) > 1) {
+    if (
+      typeof environment.settings.markerClusterer !== 'undefined'
+      && environment.settings.markerClusterer.enable === 1
+    ) {
+      new MarkerClusterer(
+        this.map,
+        this.pointMarkers,
+        {imagePath: environment.settings.markerClusterer.imagePath}
+      );
+    }
+    if (this.countObjectProperties(this.categorizedMarkers) > 1) {
       this.showSwitchableCategories(environment);
     }
     if (this.poiCollections.length > 1) {
@@ -194,7 +205,7 @@ Maps2.prototype.showSwitchableCategories = function(environment) {
     }
   }
   // create form
-  var markers = this.markers;
+  var markers = this.categorizedMarkers;
   $form.find("input").on("click", function() {
     var isChecked = jQuery(this).is(":checked");
     var categoryUid = jQuery(this).val();
@@ -301,21 +312,20 @@ Maps2.prototype.createMarker = function(poiCollection, environment) {
   marker.setDraggable(this.editable);
   for (var i = 0; i < poiCollection.categories.length; i++) {
     categoryUid = poiCollection.categories[i].uid;
-    //if (this.inList(environment.settings.categories, categoryUid) > -1) {
-      if (!this.markers.hasOwnProperty(categoryUid)) {
-        this.markers[categoryUid] = [];
-      }
-      // assign first found marker icon, if available
-      if (poiCollection.markerIcon !== "") {
-        var icon = {
-          url: poiCollection.markerIcon,
-          scaledSize: new google.maps.Size(poiCollection.markerIconWidth, poiCollection.markerIconHeight),
-          anchor: new google.maps.Point(poiCollection.markerIconAnchorPosX, poiCollection.markerIconAnchorPosY)
-        };
-        marker.setIcon(icon);
-      }
-      this.markers[categoryUid].push(marker);
-    //}
+    if (!this.categorizedMarkers.hasOwnProperty(categoryUid)) {
+      this.categorizedMarkers[categoryUid] = [];
+    }
+    // assign first found marker icon, if available
+    if (poiCollection.markerIcon !== "") {
+      var icon = {
+        url: poiCollection.markerIcon,
+        scaledSize: new google.maps.Size(poiCollection.markerIconWidth, poiCollection.markerIconHeight),
+        anchor: new google.maps.Point(poiCollection.markerIconAnchorPosX, poiCollection.markerIconAnchorPosY)
+      };
+      marker.setIcon(icon);
+    }
+    this.categorizedMarkers[categoryUid].push(marker);
+    this.pointMarkers.push(marker);
   }
   this.bounds.extend(marker.position);
 
