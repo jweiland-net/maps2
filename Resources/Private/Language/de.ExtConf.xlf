@@ -3,10 +3,6 @@
   <file source-language="en" datatype="plaintext" original="messages" date="2013-02-07T11:13:04Z" product-name="maps2">
     <header/>
     <body>
-      <trans-unit id="useHttps" xml:space="preserve">
-        <source>Use https as protocol: You can't call the http protocol when your page is running on https. So here you can decide to use the same protocol.</source>
-        <target>https Protokoll verwenden: Das http-Protokoll kann nicht geladen werden, wenn Ihre eigene Seite über das https-Protokoll läuft. Setzen Sie hier das gleiche Protokoll wie das von Ihrer Webseite.</target>
-      </trans-unit>
       <trans-unit id="googleMapsLibrary" xml:space="preserve">
         <source>Link to Google Maps API: This setting is for TYPO3 Backend only. Visit your TypoScript-Templates if you want to change the library for Frontend. You only need to fill this field if you want to use an older or beta version.</source>
         <target>Link zur Google Maps API: Diese Einstellung ist nur für das TYPO3 Backend. Wenn Sie diese Einstellung für das Frontend vornehmen wollen, dann müssen Sie dies in Ihren TypoScript-Templates vornehmen. Füllen Sie dieses Feld nur, wenn Sie eine ältere oder eine der Betaversionen verwenden wollen.</target>
