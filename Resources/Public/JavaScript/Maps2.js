@@ -104,7 +104,8 @@ MapOptions.prototype.setMapTypeId = function(mapTypeId) {
  * @constructor
  */
 function Maps2($element, environment) {
-  this.markers = {};
+  this.categorizedMarkers = {};
+  this.pointMarkers = [];
   this.bounds = new google.maps.LatLngBounds();
   this.infoWindow = new google.maps.InfoWindow();
   this.$element = $element.css({
@@ -113,9 +114,9 @@ function Maps2($element, environment) {
   });
   this.poiCollections = this.$element.data("pois");
   this.editable = this.$element.hasClass("editMarker");
-
+  
   this.createMap(environment);
-
+  
   if (typeof this.poiCollections === "undefined" || jQuery.isEmptyObject(this.poiCollections)) {
     // Plugin: CityMap
     var lat = this.$element.data("latitude");
@@ -131,7 +132,17 @@ function Maps2($element, environment) {
   } else {
     // normal case
     this.createPointByCollectionType(environment);
-    if (this.countObjectProperties(this.markers) > 1) {
+    if (
+      typeof environment.settings.markerClusterer !== 'undefined'
+      && environment.settings.markerClusterer.enable === 1
+    ) {
+      new MarkerClusterer(
+        this.map,
+        this.pointMarkers,
+        {imagePath: environment.settings.markerClusterer.imagePath}
+      );
+    }
+    if (this.countObjectProperties(this.categorizedMarkers) > 1) {
       this.showSwitchableCategories(environment);
     }
     if (this.poiCollections.length > 1) {
@@ -183,7 +194,7 @@ Maps2.prototype.showSwitchableCategories = function(environment) {
   var $form = jQuery("<form>")
     .addClass("txMaps2Form")
     .attr("id", "txMaps2Form-" + environment.contentRecord.uid);
-
+  
   // Add checkbox for category
   for (var categoryUid in categories) {
     if (categories.hasOwnProperty(categoryUid)) {
@@ -194,7 +205,7 @@ Maps2.prototype.showSwitchableCategories = function(environment) {
     }
   }
   // create form
-  var markers = this.markers;
+  var markers = this.categorizedMarkers;
   $form.find("input").on("click", function() {
     var isChecked = jQuery(this).is(":checked");
     var categoryUid = jQuery(this).val();
@@ -205,7 +216,7 @@ Maps2.prototype.showSwitchableCategories = function(environment) {
     }
   });
   this.$element.after($form);
-
+  
 };
 
 /**
@@ -301,9 +312,8 @@ Maps2.prototype.createMarker = function(poiCollection, environment) {
   marker.setDraggable(this.editable);
   for (var i = 0; i < poiCollection.categories.length; i++) {
     categoryUid = poiCollection.categories[i].uid;
-    //if (this.inList(environment.settings.categories, categoryUid) > -1) {
-    if (!this.markers.hasOwnProperty(categoryUid)) {
-      this.markers[categoryUid] = [];
+    if (!this.categorizedMarkers.hasOwnProperty(categoryUid)) {
+      this.categorizedMarkers[categoryUid] = [];
     }
     // assign first found marker icon, if available
     if (poiCollection.markerIcon !== "") {
@@ -314,15 +324,15 @@ Maps2.prototype.createMarker = function(poiCollection, environment) {
       };
       marker.setIcon(icon);
     }
-    this.markers[categoryUid].push(marker);
-    //}
+    this.categorizedMarkers[categoryUid].push(marker);
+    this.pointMarkers.push(marker);
   }
   this.bounds.extend(marker.position);
-
+  
   // we need these both vars to be set global. So that we can access them in Listener
   var infoWindow = this.infoWindow;
   var map = this.map;
-
+  
   if (this.editable) {
     this.addEditListeners(this.$element, marker, poiCollection, environment);
   } else {
@@ -374,7 +384,7 @@ Maps2.prototype.createArea = function(poiCollection) {
     this.bounds.extend(latLng);
     paths.push(latLng);
   }
-
+  
   if (paths.length === 0) {
     paths.push(this.mapPosition);
   } else {
@@ -396,7 +406,7 @@ Maps2.prototype.createRoute = function(poiCollection) {
     this.bounds.extend(latLng);
     paths.push(latLng);
   }
-
+  
   if (paths.length === 0) {
     paths.push(this.mapPosition);
   } else {
@@ -438,7 +448,7 @@ Maps2.prototype.addEditListeners = function($mapContainer, marker, poiCollection
     $mapContainer.prevAll("input.latitude-" + environment.contentRecord.uid).val(lat);
     $mapContainer.prevAll("input.longitude-" + environment.contentRecord.uid).val(lng);
   });
-
+  
   // update fields and marker when clicking on the map
   google.maps.event.addListener(this.map, 'click', function(event) {
     marker.setPosition(event.latLng);
