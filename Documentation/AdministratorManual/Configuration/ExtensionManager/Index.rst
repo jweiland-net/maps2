@@ -28,7 +28,6 @@ Properties
   Property                       Tab      Default
   ============================== ======== ====================================================================
   googleMapsLibrary_              basic    ``https://maps.googleapis.com/maps/api/js?key=|&callback=initMap``
-  useHttps_                       basic    0
   googleMapsJavaScriptApiKey_     basic
   googleMapsGeocodeApiKey_        basic
   explicitAllowGoogleMaps_        basic    0
@@ -67,16 +66,6 @@ can decide where the ApiKey has to be inserted.
 
 .. important::
    This configuration is only for Google Maps which are used in list module of TYPO3 Backend.
-
-.. _extensionManager-useHttps:
-
-useHttps
-""""""""
-
-If you activate that checkbox we will replace the scheme (maybe: http) of googleMapsLibrary to https.
-If it is deactivated we will convert it back to http.
-
-As you can change that option on your own in googleMapsLibrary it could be, that we will remove that option in future.
 
 .. _extensionManager-googleMapsJavaScriptApiKey:
 
