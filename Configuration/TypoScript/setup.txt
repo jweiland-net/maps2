@@ -52,7 +52,7 @@ plugin.tx_maps2 {
     infoWindowContentTemplatePath = EXT:maps2/Resources/Private/Templates/InfoWindowContent.html
     markerClusterer {
       enable = {$plugin.tx_maps2.view.enableMarkerClusterer}
-      imagePath = typo3conf/extEXT:maps2/Resources/Public/Icons/MarkerClusterer/m
+      imagePath = EXT:maps2/Resources/Public/Icons/MarkerClusterer/m
     }
   }
 }
