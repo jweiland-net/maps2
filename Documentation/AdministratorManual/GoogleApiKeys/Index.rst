@@ -8,142 +8,83 @@
 Google Api Keys
 ---------------
 
-.. only:: html
+Since version 2.0.0 maps2 will only work with assigned Google Api Keys.
+This documentation will show you step by step how to get the API Keys
+from Google Clout Platform.
 
-	Since version 2.0.0 this extension will only work with Google Api Keys.
-	This documentation will show you step by step how to get the **Google Maps JavaScript API Key**
-	and the **Google Maps GeoCoding API Key** from Google Console.
+Google Cloud Platform
+^^^^^^^^^^^^^^^^^^^^^
 
-Google Console
-^^^^^^^^^^^^^^
-#. If you don't have a Google Account you have to register as new User.
+#.  If you don't have a Google Account you have to register as a new User.
 
-#. Open `Google Console <https://console.developers.google.com/>`_.
+#.  Open `Google Maps at Google Cloud Platform <https://cloud.google.com/maps-platform/>`_.
 
-#. Create a new project at the upper left of the console.
+#.  Click the button ``Get started`` which will open the ``Enable Google Maps Platform`` Guide
 
-.. figure:: /Images/GoogleApiKeys/google-create-project.jpg
-   :width: 500px
-   :align: left
-   :alt: DashBoard of Google Console
+    .. figure:: /Images/GoogleApiKeys/WizardPickProduct.png
+        :width: 400px
+        :alt: Google Maps Platform Wizard - Pick product
 
-#. Choose a project name
+#.  Activate the Checkbox for ``Maps``. Actually we don't have support for ``Routes`` and ``Places``, so keep them deactivated.
 
-#. Click on ``Create``
+#.  Click on ``Continue``
 
-.. figure:: /Images/GoogleApiKeys/google-create-project-form.jpg
-   :width: 500px
-   :align: left
-   :alt: Create new project form
+    .. figure:: /Images/GoogleApiKeys/WizardSelectProject.png
+        :width: 400px
+        :alt: Google Maps Platform Wizard - Select a project
 
-#. Wait a second or two until the notification icon at the upper right will stop turning around.
+#.  Open Selectbox ``Select or create project`` and choose ``+ Create a new project`` (give it a cool name) or choose one of your previously created projects.
 
-#. If your new project was not opened automatically, please choose your project from the project list at the upper
-   left. If it was not listed there, click on ``Show more projects``.
+#.  Click ``Next``
 
-#. Click on ``Activate API``
+#.  If you already have assigned your billing information to your Google Account, you now can assign them to your new project.
+    Else you have to create new billing information first.
 
-.. figure:: /Images/GoogleApiKeys/google-activate-api.jpg
-   :width: 500px
-   :align: left
-   :alt: Activate your first API Key
+    .. important::
+        Google needs these billing information to be sure, that you're not a robot. That's not a joke, that's google.
 
-Get Google Maps JavaScript Api Key
-""""""""""""""""""""""""""""""""""
+#.  After assigning your billing information to your project, you will get the information that some
+    APIs have automatically activated for your project.
 
-#. Choose ``Google Maps JavaScript API``
+    .. figure:: /Images/GoogleApiKeys/WizardActivatedApis.png
+        :width: 400px
+        :alt: Google Maps Platform activate - Activated APIs
 
-.. figure:: /Images/GoogleApiKeys/google-link-javascript-api.jpg
-   :width: 500px
-   :align: left
-   :alt: Link to create API for Google Maps JavaScript API
+#.  Click ``Next``. It will need some seconds until all needed APIs were activated.
 
-#. ``Activate`` the Google Maps JavaScript API
+#.  You will get a Done-Message from where you can copy your new API Key and yes:
+    As mentioned in this dialog-box you should improve your app's security and restrict the key's usage.
+    If you don't do so, everyone else can use your API Key and may generate costs over your billing information.
+    So please: follow the link to `API Console <https://console.cloud.google.com/apis/credentials>`_ to configure API security.
 
-.. figure:: /Images/GoogleApiKeys/google-activate-javascript-api.jpg
-   :width: 500px
-   :align: left
-   :alt: Activate Google Maps JavaScript API
+#.  You will find a new entry from today with the glorious unique name ``API key``. Please edit
+    this entry to assign it a better name and configure security settings.
 
-#. Add authentication to Google Maps JavaScript API
+#.  Give it a better Name like: Secure Map API for my project X
 
-.. figure:: /Images/GoogleApiKeys/google-add-authentication-javascript.jpg
-   :width: 500px
-   :align: left
-   :alt: Add authentication for Google Maps JavaScript API
+#.  Set security settings to: ``IP-Address (Webserver, Cronjobs etc.)``
+    and enter the IP-Address of your server. Do not activate ``HTTP link`` as maps2 can
+    retrieve GEO location which will never match any configured HTTP links.
 
-#. Get API Key and assign reduced access rights
+#.  Copy your API Key and paste it into the both API fields in Extension Configuration of maps2.
 
-.. figure:: /Images/GoogleApiKeys/google-get-key-reduce-rights.jpg
-   :width: 500px
-   :align: left
-   :alt: Get API Key and reduce access rights
+Do you want it more safe?
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
-#. Give it a name like ``JavaScript``, select ``HTTP-Verweis (Website)`` and set a domain name like ``www.example.com``.
-   Of cause you can also use something like ``*.example.com``. Else everybody can use your API Key.
+In the section above we told you to assign your servers IP-Address to your new API Key, right?
+Ok. What happens, if you're on a shared hosting system? Every customer on the same server
+can use your API Key for its own website. Hmm, bad.
+Please visit the `API Console <https://console.cloud.google.com/apis/credentials>`_ again
+and create a second API Key. Give it a cool name, but that time you set security settings
+to ``HTTP-link`` and assign all of your domains to this security setting.
 
-.. figure:: /Images/GoogleApiKeys/google-add-access-rights-javascript.jpg
-   :width: 500px
-   :align: left
-   :alt: Add access rights to your Google Maps JavaScript API Key
+Copy API Key with HTTP-link to field `JavaScript API Key` in Extension Configuration of maps2.
 
-#. Click on ``save`` to finish the wizard
+Copy API Key with IP-Address security to field `Geocoding API Key` in Extension Configuration of maps2.
 
-Get Google Maps Geocoding Api Key
-"""""""""""""""""""""""""""""""""
+Do you want it super safe?
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Nearly the same as above. Start again from Dashboard.
+Visit API Console again and go to your `billing information <https://console.cloud.google.com/billing>`_
 
-#. Click on ``Activate API``
-
-.. figure:: /Images/GoogleApiKeys/google-activate-api.jpg
-   :width: 500px
-   :align: left
-   :alt: Activate your first API Key
-
-#. Choose ``Google Maps Geocoding API``
-
-.. figure:: /Images/GoogleApiKeys/google-link-geocoding-api.jpg
-   :width: 500px
-   :align: left
-   :alt: Link to create API for Google Maps Geocoding API
-
-#. ``Activate`` the Google Maps Geocoding API
-
-#. Click on ``Authentication`` in the left menu and then on ``Create new login data``.
-
-.. figure:: /Images/GoogleApiKeys/google-add-new-authentication-geocode.jpg
-   :width: 500px
-   :align: left
-   :alt: Add new authentication for Geocode API Key
-
-#. Choose authentication wizard
-
-.. figure:: /Images/GoogleApiKeys/google-choose-authentication-wizard.jpg
-   :width: 500px
-   :align: left
-   :alt: Choose Authentication wizard
-
-#. Add Authentication for Geocoding API
-
-.. figure:: /Images/GoogleApiKeys/google-add-authentication-geocode.jpg
-   :width: 500px
-   :align: left
-   :alt: Choose Authentication wizard
-
-#. Get API Key and reduce access rights
-
-.. figure:: /Images/GoogleApiKeys/google-get-key-reduce-rights-geocode.jpg
-   :width: 500px
-   :align: left
-   :alt: Get API Key and create access rights for Geocoding API Key
-
-#. Give it a name like ``Geocode``, select ``IP-Address (Webserver)`` and set the IP-Address of your server.
-   Else everybody can use your API Key.
-
-.. figure:: /Images/GoogleApiKeys/google-add-access-rights-geocode.jpg
-   :width: 500px
-   :align: left
-   :alt: Reduce access rights to your Geocode API Key
-
-#. Click ``Save`` to finish the wizard.
+Configure some Budgets to prevent unwanted credits at your credit card.
