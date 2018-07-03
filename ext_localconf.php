@@ -3,7 +3,7 @@ if (!defined('TYPO3_MODE')) {
     die('Access denied.');
 }
 
-$boot = function() {
+$boot = function($extKey) {
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
         'JWeiland.maps2',
         'Maps2',
@@ -62,6 +62,12 @@ $boot = function() {
     // We have to save the permission to allow google requests before TS-Template rendering. It's needed by our own TS Condition object
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['initFEuser'][] = \JWeiland\Maps2\Hook\InitFeSessionHook::class . '->saveAllowGoogleRequestsInSession';
 
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1530619130] = [
+        'nodeName' => 'maps2GoogleMaps',
+        'priority' => 50,
+        'class' => \JWeiland\Maps2\Form\Element\GoogleMapsElement::class,
+    ];
+
     // Register SVG Icon Identifier
     $svgIcons = [
         'ext-maps2-wizard-icon' => 'plugin_wizard.svg',
@@ -95,5 +101,5 @@ $boot = function() {
     }
 };
 
-$boot();
+$boot($_EXTKEY);
 unset($boot);

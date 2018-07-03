@@ -1,5 +1,5 @@
 <?php
-namespace JWeiland\Maps2\Tca;
+namespace JWeiland\Maps2\Form\Element;
 
 /*
  * This file is part of the maps2 project.
@@ -17,6 +17,7 @@ namespace JWeiland\Maps2\Tca;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
+use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -27,14 +28,9 @@ use TYPO3\CMS\Extbase\Security\Cryptography\HashService;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
- * Class GoogleMaps
- *
- * @category Tca
- * @author   Stefan Froemken <projects@jweiland.net>
- * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
- * @link     https://github.com/jweiland-net/maps2
+ * Special backend FormEngine element to show Google Maps
  */
-class GoogleMaps
+class GoogleMapsElement extends AbstractFormElement
 {
     /**
      * @var \TYPO3\CMS\Extbase\Object\ObjectManager
@@ -80,22 +76,16 @@ class GoogleMaps
     }
 
     /**
-     * Renders Google Maps.
-
-     * @param array $parentArray
-     * @param object $pObj
+     * This will render Google Maps within PoiCollection records with a marker you can drag and drop
      *
-     * @return string
-     *
+     * @return array As defined in initializeResultArray() of AbstractNode
      * @throws \Exception
      */
-    public function render(array $parentArray, $pObj)
+    public function render()
     {
         $this->init();
-        $parentArray = $this->cleanUpParentArray($parentArray);
+        $currentRecord = $this->cleanUpCurrentRecord($this->data['databaseRow']);
 
-        // add our GoogleMaps library as RequireJS module
-        $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/Maps2/GoogleMapsModule');
         // loadRequireJsModule has to be loaded before configuring additional paths, else all ext paths will not be initialized
         $this->pageRenderer->addRequireJsConfiguration([
             'paths' => [
@@ -122,40 +112,41 @@ class GoogleMaps
             ),
             false
         );
+        $resultArray['requireJsModules'][] = 'TYPO3/CMS/Maps2/GoogleMapsModule';
 
-        return $this->getMapHtml($this->getConfiguration($parentArray));
+        $resultArray['html'] = $this->getMapHtml($this->getConfiguration($currentRecord));
+
+        return $resultArray;
     }
 
     /**
-     * since TYPO3 7.5 $PA['row'] consists of arrays where TCA was configured as type "select"
+     * Since TYPO3 7.5 $this->data['databaseRow'] consists of arrays where TCA was configured as type "select"
      * Convert these types back to strings/int
      *
-     * @param array $parentArray
+     * @param array $currentRecord
      * @return array
      */
-    protected function cleanUpParentArray(array $parentArray)
+    protected function cleanUpCurrentRecord(array $currentRecord)
     {
-        foreach ($parentArray['row'] as $field => $value) {
-            $parentArray['row'][$field] = is_array($value) ? $value[0] : $value;
+        foreach ($currentRecord as $field => $value) {
+            $currentRecord[$field] = is_array($value) ? $value[0] : $value;
         }
-        return $parentArray;
+        return $currentRecord;
     }
 
     /**
-     * get configuration array from PA array
+     * Get configuration array from PA array
      *
-     * @param array $PA
-     *
+     * @param array $currentRecord
      * @return array
-     *
      * @throws \Exception
      */
-    public function getConfiguration(array $PA)
+    protected function getConfiguration(array $currentRecord)
     {
         $config = [];
 
         // get poi collection model
-        $uid = (int)$PA['row']['uid'];
+        $uid = (int)$currentRecord['uid'];
         $poiCollection = $this->poiCollectionRepository->findByUid($uid);
         if ($poiCollection instanceof PoiCollection) {
             // set map center
@@ -185,12 +176,12 @@ class GoogleMaps
                     break;
             }
 
-            $config['address'] =  $PA['row']['address'];
-            $config['collectionType'] = is_array($PA['row']['collection_type']) ? $PA['row']['collection_type'][0] : $PA['row']['collection_type'];
+            $config['address'] =  $currentRecord['address'];
+            $config['collectionType'] = is_array($currentRecord['collection_type']) ? $currentRecord['collection_type'][0] : $currentRecord['collection_type'];
             $config['uid'] =  $uid;
 
             $hashArray['uid'] = $uid;
-            $hashArray['collectionType'] = $PA['row']['collection_type'];
+            $hashArray['collectionType'] = $currentRecord['collection_type'];
             $config['hash'] = $this->hashService->generateHmac(serialize($hashArray));
         }
         return $config;
