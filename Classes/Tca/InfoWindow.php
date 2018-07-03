@@ -17,12 +17,7 @@ namespace JWeiland\Maps2\Tca;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
- * Class InfoWindow
- *
- * @category Tca
- * @author   Stefan Froemken <projects@jweiland.net>
- * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
- * @link     https://github.com/jweiland-net/maps2
+ * Show info window content as a read-only field at second tab in backend form
  */
 class InfoWindow
 {

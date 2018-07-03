@@ -22,12 +22,7 @@ use TYPO3\CMS\Extbase\Reflection\PropertyReflection;
 use TYPO3\CMS\Extbase\Security\Cryptography\HashService;
 
 /**
- * Class AbstractAjaxRequest
- *
- * @category Ajax
- * @author   Stefan Froemken <projects@jweiland.net>
- * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
- * @link     https://github.com/jweiland-net/maps2
+ * An abstract class for ajax requests
  */
 abstract class AbstractAjaxRequest implements AjaxInterface
 {

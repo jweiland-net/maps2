@@ -17,12 +17,8 @@ namespace JWeiland\Maps2\ViewHelpers\Widget\Controller;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 
 /**
- * Class EditPoiController
- *
- * @category ViewHelpers/Widget/Controller
- * @author   Stefan Froemken <projects@jweiland.net>
- * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
- * @link     https://github.com/jweiland-net/maps2
+ * An Edit controller for foreign extension authors
+ * to show Google Maps with a drag- and drop-able marker
  */
 class EditPoiController extends AbstractController
 {

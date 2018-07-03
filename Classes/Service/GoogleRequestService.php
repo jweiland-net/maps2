@@ -19,12 +19,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
- * Class GoogleRequestService
- *
- * @category Utility
- * @author   Stefan Froemken <projects@jweiland.net>
- * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
- * @link     https://github.com/jweiland-net/maps2
+ * A non extbase orientated service which you can use from nearly everywhere,
+ * to check, if Google Maps should be shown in FE or not.
  */
 class GoogleRequestService
 {

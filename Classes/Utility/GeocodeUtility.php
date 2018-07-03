@@ -25,12 +25,7 @@ use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
- * Class GoogleMaps
- *
- * @category Utility
- * @author   Stefan Froemken <projects@jweiland.net>
- * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
- * @link     https://github.com/jweiland-net/maps2
+ * Send an address to Google API and request Latitude and Longitude
  */
 class GeocodeUtility
 {

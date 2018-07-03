@@ -20,11 +20,7 @@ use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 
 /**
- * Class PoiCollectionController
- *
- * @author   Stefan Froemken <projects@jweiland.net>
- * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
- * @link     https://github.com/jweiland-net/maps2
+ * The main controller to show various kinds of markers on Google Maps
  */
 class PoiCollectionController extends AbstractController
 {

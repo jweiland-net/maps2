@@ -19,12 +19,8 @@ use JWeiland\Maps2\Domain\Model\RadiusResult\Geometry;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
- * Class RadiusResult
- *
- * @category Domain/Model
- * @author   Stefan Froemken <projects@jweiland.net>
- * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
- * @link     https://github.com/jweiland-net/maps2
+ * Domain Model for RadiusResult
+ * This class is not part of a local DB table. It's part of the result of a Google Request
  */
 class RadiusResult
 {

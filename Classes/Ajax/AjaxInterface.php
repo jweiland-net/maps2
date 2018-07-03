@@ -15,12 +15,7 @@ namespace JWeiland\Maps2\Ajax;
  */
 
 /**
- * Class AjaxInterface
- *
- * @category Ajax
- * @author   Stefan Froemken <projects@jweiland.net>
- * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
- * @link     https://github.com/jweiland-net/maps2
+ * Interface for Ajax Requests
  */
 interface AjaxInterface
 {

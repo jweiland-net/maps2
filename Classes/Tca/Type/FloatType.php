@@ -15,12 +15,7 @@ namespace JWeiland\Maps2\Tca\Type;
  */
 
 /**
- * Class Float
- *
- * @category Tca
- * @author   Stefan Froemken <projects@jweiland.net>
- * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
- * @link     https://github.com/jweiland-net/maps2
+ * Reduce floating values to 6 digits behind point
  */
 class FloatType
 {

@@ -20,12 +20,8 @@ use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3\CMS\Frontend\Page\CacheHashCalculator;
 
 /**
- * Class RenderHiddenFieldsForGetViewHelper
- *
- * @category ViewHelpers/Form
- * @author   Stefan Froemken <projects@jweiland.net>
- * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
- * @link     https://github.com/jweiland-net/maps2
+ * This ViewHelper is useful to render special hidden fields
+ * to save and modify markers in frontend of foreign extensions
  */
 class RenderHiddenFieldsForGetViewHelper extends AbstractViewHelper
 {
