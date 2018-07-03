@@ -18,12 +18,7 @@ use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
 
 /**
- * Class ModifyMarker
- *
- * @category Ajax
- * @author   Stefan Froemken <projects@jweiland.net>
- * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
- * @link     https://github.com/jweiland-net/maps2
+ * Ajax Request to modify an existing marker
  */
 class ModifyMarker extends AbstractAjaxRequest
 {

@@ -15,12 +15,8 @@ namespace JWeiland\Maps2\Domain\Model\RadiusResult;
  */
 
 /**
- * Class AddressComponent
- *
- * @category Domain/Model
- * @author   Stefan Froemken <projects@jweiland.net>
- * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
- * @link     https://github.com/jweiland-net/maps2
+ * Domain Model for AddressComponent
+ * This class is not part of a local DB table. It's part of the result of a Google Request
  */
 class AddressComponent
 {

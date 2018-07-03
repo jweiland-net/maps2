@@ -21,12 +21,8 @@ use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
- * Class PoiCollection
- *
- * @category Domain/Model
- * @author   Stefan Froemken <projects@jweiland.net>
- * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
- * @link     https://github.com/jweiland-net/maps2
+ * Domain Model for PoiCollection
+ * This is the main model for markers and radius records
  */
 class PoiCollection extends AbstractEntity
 {

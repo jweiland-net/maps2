@@ -23,12 +23,7 @@ use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 use TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetController;
 
 /**
- * Class AbstractController
- *
- * @category ViewHelpers/Widget/Controller
- * @author   Stefan Froemken <projects@jweiland.net>
- * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
- * @link     https://github.com/jweiland-net/maps2
+ * An abstract controller to keep the other widget controllers small and simple
  */
 abstract class AbstractController extends AbstractWidgetController
 {

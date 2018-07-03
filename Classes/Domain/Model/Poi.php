@@ -17,12 +17,8 @@ namespace JWeiland\Maps2\Domain\Model;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 /**
- * Class Poi
- *
- * @category Domain/Model
- * @author   Stefan Froemken <projects@jweiland.net>
- * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
- * @link     https://github.com/jweiland-net/maps2
+ * Domain Model for Poi
+ * This model is part of PoiCollection and was needed, if you work with Markers of type: Route or Area
  */
 class Poi extends AbstractEntity
 {

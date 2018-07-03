@@ -22,12 +22,7 @@ use TYPO3\CMS\Extbase\Service\EnvironmentService;
 use TYPO3\CMS\Frontend\Page\PageRepository;
 
 /**
- * Class PoiCollectionRepository
- *
- * @category Domain/Repository
- * @author   Stefan Froemken <projects@jweiland.net>
- * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
- * @link     https://github.com/jweiland-net/maps2
+ * Repository to collect poi collection records
  */
 class PoiCollectionRepository extends Repository
 {

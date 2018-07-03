@@ -18,12 +18,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
- * Class TrimExplodeViewHelper
- *
- * @category ViewHelpers
- * @author   Stefan Froemken <projects@jweiland.net>
- * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
- * @link     https://github.com/jweiland-net/maps2
+ * Define a delimiter and your comma separated value will be exploded into trimmed parts
  */
 class TrimExplodeViewHelper extends AbstractViewHelper
 {

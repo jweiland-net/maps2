@@ -15,12 +15,8 @@ namespace JWeiland\Maps2\Tca;
  */
 
 /**
- * Class SearchAddress
- *
- * @category Tca
- * @author   Stefan Froemken <projects@jweiland.net>
- * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
- * @link     https://github.com/jweiland-net/maps2
+ * Add two new buttons to form engine
+ * to update or reset an inserted address in Google Maps
  */
 class SearchAddress
 {

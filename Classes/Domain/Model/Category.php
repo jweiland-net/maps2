@@ -20,12 +20,7 @@ use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
- * Class Category
- *
- * @category Domain/Model
- * @author   Stefan Froemken <projects@jweiland.net>
- * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
- * @link     https://github.com/jweiland-net/maps2
+ * Domain Model for: sys_category
  */
 class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
 {
