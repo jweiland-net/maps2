@@ -22,12 +22,8 @@ use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
- * Class ConvertToJsonViewHelper
- *
- * @category ViewHelpers
- * @author   Stefan Froemken <projects@jweiland.net>
- * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
- * @link     https://github.com/jweiland-net/maps2
+ * As we need many information in frontend, this ViewHelper is really helpful to
+ * convert all array and object types into a json string which we/you can use for various data attributes.
  */
 class ConvertToJsonViewHelper extends AbstractViewHelper
 {

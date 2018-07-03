@@ -17,12 +17,8 @@ namespace JWeiland\Maps2\ViewHelpers\Widget\Controller;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 
 /**
- * Class PoiCollectionController
- *
- * @category ViewHelpers/Widget/Controller
- * @author   Stefan Froemken <projects@jweiland.net>
- * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
- * @link     https://github.com/jweiland-net/maps2
+ * A show controller for foreign extension authors
+ * to show Google Maps with a fixed poi collection record
  */
 class PoiCollectionController extends AbstractController
 {

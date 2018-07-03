@@ -19,12 +19,7 @@ use TYPO3\CMS\Core\Configuration\TypoScript\ConditionMatching\AbstractCondition;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
- * Class AllowGoogleRequestCondition
- *
- * @category Condition
- * @author   Stefan Froemken <projects@jweiland.net>
- * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
- * @link     https://github.com/jweiland-net/maps2
+ * A condition class which checks, if requests to google servers are allowed
  */
 class AllowGoogleRequestCondition extends AbstractCondition
 {

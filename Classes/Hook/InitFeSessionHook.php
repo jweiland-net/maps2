@@ -19,12 +19,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
- * Class InitFeSessionHook
- *
- * @category Hook
- * @author   Stefan Froemken <projects@jweiland.net>
- * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
- * @link     https://github.com/jweiland-net/maps2
+ * A hook to save the information, if a customer has allowed requests to Google Servers
  */
 class InitFeSessionHook
 {

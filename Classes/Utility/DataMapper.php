@@ -20,12 +20,9 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\CMS\Extbase\Reflection\ReflectionService;
 
 /**
- * Class DataMapper
- *
- * @category Utility
- * @author   Stefan Froemken <projects@jweiland.net>
- * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
- * @link     https://github.com/jweiland-net/maps2
+ * As DataMapper of extbase needs domain models of type AbstractEntity
+ * we have created our own DataMapper which does not check for field existence in TCA
+ * Useful to move the Google Results into Domain Models
  */
 class DataMapper
 {

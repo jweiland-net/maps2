@@ -20,12 +20,8 @@ use JWeiland\Maps2\Service\MapService;
 use TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetViewHelper;
 
 /**
- * Class PoiCollectionViewHelper
- *
- * @category ViewHelpers/Widget
- * @author   Stefan Froemken <projects@jweiland.net>
- * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
- * @link     https://github.com/jweiland-net/maps2
+ * As an extension developer you can use this ViewHelper
+ * to show Google Maps within your extension.
  */
 class PoiCollectionViewHelper extends AbstractWidgetViewHelper
 {

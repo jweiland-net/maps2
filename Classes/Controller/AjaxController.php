@@ -17,12 +17,7 @@ namespace JWeiland\Maps2\Controller;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 
 /**
- * Class AjaxController
- *
- * @category Controller
- * @author   Stefan Froemken <projects@jweiland.net>
- * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
- * @link     https://github.com/jweiland-net/maps2
+ * A controller specialized to handle ajax requests
  */
 class AjaxController extends ActionController
 {

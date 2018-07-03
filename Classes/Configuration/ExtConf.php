@@ -17,7 +17,7 @@ namespace JWeiland\Maps2\Configuration;
 use TYPO3\CMS\Core\SingletonInterface;
 
 /**
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * This class will streamline the values from extension manager configuration
  */
 class ExtConf implements SingletonInterface
 {

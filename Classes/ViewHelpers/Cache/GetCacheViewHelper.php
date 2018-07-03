@@ -15,12 +15,7 @@ namespace JWeiland\Maps2\ViewHelpers\Cache;
  */
 
 /**
- * Class GetCacheViewHelper
- *
- * @category ViewHelpers/Cache
- * @author   Stefan Froemken <projects@jweiland.net>
- * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
- * @link     https://github.com/jweiland-net/maps2
+ * A ViewHelper to get a value from maps2 cache
  */
 class GetCacheViewHelper extends AbstractCacheViewHelper
 {

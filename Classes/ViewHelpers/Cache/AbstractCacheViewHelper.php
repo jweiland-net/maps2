@@ -19,16 +19,10 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
- * Class AbstractCacheViewHelper
- *
- * @category ViewHelpers/Cache
- * @author   Stefan Froemken <projects@jweiland.net>
- * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
- * @link     https://github.com/jweiland-net/maps2
+ * An abstract class to initialize the maps2 caches
  */
 class AbstractCacheViewHelper extends AbstractViewHelper
 {
-
     /**
      * @var \TYPO3\CMS\Core\Cache\Frontend\AbstractFrontend
      */

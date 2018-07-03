@@ -27,12 +27,7 @@ use TYPO3\CMS\Extbase\Security\Cryptography\HashService;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
- * Class GoogleMaps
- *
- * @category Tca
- * @author   Stefan Froemken <projects@jweiland.net>
- * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
- * @link     https://github.com/jweiland-net/maps2
+ * This class makes it possible to show Google Maps in backend forms.
  */
 class GoogleMaps
 {

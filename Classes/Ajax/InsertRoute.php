@@ -19,12 +19,7 @@ use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
 
 /**
- * Class InsertRoute
- *
- * @category Ajax
- * @author   Stefan Froemken <projects@jweiland.net>
- * @license  http://www.gnu.org/licenses/gpl.html GNU General Public License
- * @link     https://github.com/jweiland-net/maps2
+ * Ajax request class to insert a new Route
  */
 class InsertRoute extends AbstractAjaxRequest
 {
