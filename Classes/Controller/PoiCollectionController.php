@@ -13,7 +13,6 @@ namespace JWeiland\Maps2\Controller;
  *
  * The TYPO3 project - inspiring people to share!
  */
-
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Domain\Model\Search;
 use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
@@ -45,8 +44,8 @@ class PoiCollectionController extends AbstractController
      * action show
      *
      * @param PoiCollection $poiCollection PoiCollection from URI has highest priority
-     *
      * @return void
+     * @throws \Exception
      */
     public function showAction(PoiCollection $poiCollection = null)
     {
@@ -55,13 +54,13 @@ class PoiCollectionController extends AbstractController
             $poiCollection = $this->poiCollectionRepository->findByUid((int)$this->settings['poiCollection']);
         }
         if ($poiCollection instanceof PoiCollection) {
-            $this->mapService->setInfoWindow($poiCollection);
+            $this->googleMapsService->setInfoWindow($poiCollection);
             $this->view->assign('poiCollections', $poiCollection);
         } elseif (!empty($this->settings['categories'])) {
             // if no poiCollection could be retrieved, but a category is set
             $poiCollections = $this->poiCollectionRepository->findPoisByCategories($this->settings['categories']);
             foreach ($poiCollections as $poiCollection) {
-                $this->mapService->setInfoWindow($poiCollection);
+                $this->googleMapsService->setInfoWindow($poiCollection);
             }
             $this->view->assign('poiCollections', $poiCollections);
         }
@@ -111,12 +110,11 @@ class PoiCollectionController extends AbstractController
      * @param Search $search
      *
      * @return void
-     *
      * @throws \Exception
      */
     public function multipleResultsAction(Search $search)
     {
-        $radiusResults = $this->geocodeUtility->findPositionByAddress($search->getAddress());
+        $radiusResults = $this->googleMapsService->findPositionsByAddress($search->getAddress());
         if ($radiusResults->count() == 1) {
             /* @var $radiusResult \JWeiland\Maps2\Domain\Model\RadiusResult */
             $radiusResult = $radiusResults->current();
@@ -130,12 +128,6 @@ class PoiCollectionController extends AbstractController
             $this->view->assign('radiusResults', $radiusResults);
             $this->view->assign('newSearch', $search);
         } else {
-            // add error message and return to search form
-            $this->addFlashMessage(
-                'Your position was not found. Please reenter a more detailed address',
-                'No result found',
-                FlashMessage::NOTICE
-            );
             $this->forward('search');
         }
     }
@@ -148,14 +140,14 @@ class PoiCollectionController extends AbstractController
      * @param float $latitude
      * @param float $longitude
      * @param int $radius
-     *
      * @return void
+     * @throws \Exception
      */
     public function listRadiusAction($latitude, $longitude, $radius)
     {
         $poiCollections = $this->poiCollectionRepository->searchWithinRadius($latitude, $longitude, $radius);
         foreach ($poiCollections as $poiCollection) {
-            $this->mapService->setInfoWindow($poiCollection);
+            $this->googleMapsService->setInfoWindow($poiCollection);
         }
 
         $this->view->assign('latitude', $latitude);

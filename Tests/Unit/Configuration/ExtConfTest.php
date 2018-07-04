@@ -291,6 +291,44 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
+    public function getDefaultCountryInitiallyReturnsEmptyString() {
+        $this->assertSame(
+            '',
+            $this->subject->getDefaultCountry()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function setDefaultCountrySetsDefaultCountry() {
+        $this->subject->setDefaultCountry('foo bar');
+
+        $this->assertSame(
+            'foo bar',
+            $this->subject->getDefaultCountry()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function setDefaultCountryWithIntegerResultsInString() {
+        $this->subject->setDefaultCountry(123);
+        $this->assertSame('123', $this->subject->getDefaultCountry());
+    }
+
+    /**
+     * @test
+     */
+    public function setDefaultCountryWithBooleanResultsInString() {
+        $this->subject->setDefaultCountry(TRUE);
+        $this->assertSame('1', $this->subject->getDefaultCountry());
+    }
+
+    /**
+     * @test
+     */
     public function getDefaultLatitudeInitiallyReturnsZero() {
         $this->assertSame(
             0.0,

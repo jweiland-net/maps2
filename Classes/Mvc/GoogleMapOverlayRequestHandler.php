@@ -14,8 +14,8 @@ namespace JWeiland\Maps2\Mvc;
  * The TYPO3 project - inspiring people to share!
  */
 
+use JWeiland\Maps2\Service\GoogleMapsService;
 use JWeiland\Maps2\Service\GoogleRequestService;
-use JWeiland\Maps2\Service\MapService;
 use TYPO3\CMS\Extbase\Mvc\ResponseInterface;
 use TYPO3\CMS\Extbase\Mvc\Web\AbstractRequestHandler;
 use TYPO3\CMS\Extbase\Mvc\Web\Response;
@@ -30,9 +30,9 @@ use TYPO3\CMS\Extbase\Mvc\Web\Response;
 class GoogleMapOverlayRequestHandler extends AbstractRequestHandler
 {
     /**
-     * @var MapService
+     * @var GoogleMapsService
      */
-    protected $mapService;
+    protected $googleMapsService;
 
     /**
      * @var GoogleRequestService
@@ -42,20 +42,18 @@ class GoogleMapOverlayRequestHandler extends AbstractRequestHandler
     /**
      * inject mapService
      *
-     * @param MapService $mapService
-     *
+     * @param GoogleMapsService $googleMapsService
      * @return void
      */
-    public function injectMapService(MapService $mapService)
+    public function injectGoogleMapsService(GoogleMapsService $googleMapsService)
     {
-        $this->mapService = $mapService;
+        $this->googleMapsService = $googleMapsService;
     }
 
     /**
      * inject googleRequestService
      *
      * @param GoogleRequestService $googleRequestService
-     *
      * @return void
      */
     public function injectGoogleRequestService(GoogleRequestService $googleRequestService)
@@ -100,7 +98,7 @@ class GoogleMapOverlayRequestHandler extends AbstractRequestHandler
     {
         /** @var ResponseInterface $response */
         $response = $this->objectManager->get(Response::class);
-        $response->appendContent($this->mapService->showAllowMapForm());
+        $response->appendContent($this->googleMapsService->showAllowMapForm());
         return $response;
     }
 }

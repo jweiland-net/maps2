@@ -53,6 +53,13 @@ class ExtConf implements SingletonInterface
     protected $explicitAllowGoogleMapsBySessionOnly = false;
 
     /**
+     * default country
+     *
+     * @var string
+     */
+    protected $defaultCountry = '';
+
+    /**
      * default latitude
      *
      * @var float
@@ -299,6 +306,27 @@ class ExtConf implements SingletonInterface
     public function setExplicitAllowGoogleMapsBySessionOnly($explicitAllowGoogleMapsBySessionOnly)
     {
         $this->explicitAllowGoogleMapsBySessionOnly = (bool)$explicitAllowGoogleMapsBySessionOnly;
+    }
+
+    /**
+     * Returns the defaultCountry
+     *
+     * @return string $defaultCountry
+     */
+    public function getDefaultCountry()
+    {
+        return $this->defaultCountry;
+    }
+
+    /**
+     * Sets the defaultCountry
+     *
+     * @param string $defaultCountry
+     * @return void
+     */
+    public function setDefaultCountry($defaultCountry)
+    {
+        $this->defaultCountry = (string)trim($defaultCountry);
     }
 
     /**

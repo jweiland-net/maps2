@@ -31,6 +31,7 @@ Properties
   googleMapsJavaScriptApiKey_     basic
   googleMapsGeocodeApiKey_        basic
   explicitAllowGoogleMaps_        basic    0
+  defaultCountry_                 basic
   defaultLongitude_               basic    0.000000
   defaultLatitude_                basic    0.000000
   defaultRadius_                  basic    250
@@ -94,6 +95,17 @@ Since version 2.0.0 this extension needs a Google Maps Geocode ApiKey, if you us
 It was needed to get Latitude and Longitude from a given address.
 
 Please visit `Google Console <http://console.developers.google.com>`_ to get one.
+
+.. _extensionManager-defaultCountry:
+
+defaultCountry
+""""""""""""""
+
+If a Google Maps Geocode Request will be requested with only a postal code,
+Google Maps will try to find that postal code somewhere all over the world.
+If your website is only available for one specified country, you can enter
+a country name to reduce the Google Maps Position to given country. If you have
+POIs all over the world you should keep that field empty.
 
 .. _extensionManager-defaultLatitude:
 

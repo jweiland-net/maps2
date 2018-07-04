@@ -31,7 +31,7 @@ class EditPoiController extends AbstractController
     {
         $poiCollection = $this->widgetConfiguration['poiCollection'];
         if ($poiCollection instanceof PoiCollection) {
-            $this->mapService->setInfoWindow($poiCollection);
+            $this->googleMapsService->setInfoWindow($poiCollection);
         } else {
             // this is more a fallback. It would be better that the foreign extension author generates a PoiCollection on its own
             /** @var PoiCollection $poiCollection */

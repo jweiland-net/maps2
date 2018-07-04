@@ -15,9 +15,8 @@ namespace JWeiland\Maps2\Controller;
  */
 
 use JWeiland\Maps2\Configuration\ExtConf;
-use JWeiland\Maps2\Service\MapService;
+use JWeiland\Maps2\Service\GoogleMapsService;
 use JWeiland\Maps2\Utility\DataMapper;
-use JWeiland\Maps2\Utility\GeocodeUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
@@ -40,14 +39,9 @@ class AbstractController extends ActionController
     protected $dataMapper;
 
     /**
-     * @var GeocodeUtility
+     * @var GoogleMapsService
      */
-    protected $geocodeUtility;
-
-    /**
-     * @var MapService
-     */
-    protected $mapService;
+    protected $googleMapsService;
 
     /**
      * inject extConf
@@ -74,27 +68,14 @@ class AbstractController extends ActionController
     }
 
     /**
-     * inject geocodeUtility
-     *
-     * @param GeocodeUtility $geocodeUtility
-     *
-     * @return void
-     */
-    public function injectGeocodeUtility(GeocodeUtility $geocodeUtility)
-    {
-        $this->geocodeUtility = $geocodeUtility;
-    }
-
-    /**
      * inject mapService
      *
-     * @param MapService $mapService
-     *
+     * @param GoogleMapsService $googleMapsService
      * @return void
      */
-    public function injectMapService(MapService $mapService)
+    public function injectGoogleMapsService(GoogleMapsService $googleMapsService)
     {
-        $this->mapService = $mapService;
+        $this->googleMapsService = $googleMapsService;
     }
 
     /**

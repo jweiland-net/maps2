@@ -14,27 +14,33 @@ namespace JWeiland\Maps2\Service;
  * The TYPO3 project - inspiring people to share!
  */
 
+use JWeiland\Maps2\Client\GoogleMapsClient;
+use JWeiland\Maps2\Client\Request\GeocodeRequest;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
+use JWeiland\Maps2\Domain\Model\Position;
+use JWeiland\Maps2\Domain\Model\RadiusResult;
+use JWeiland\Maps2\Utility\DataMapper;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\CMS\Extbase\Service\CacheService;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
- * Class MapService
+ * Class GoogleMapsService
  */
-class MapService implements SingletonInterface
+class GoogleMapsService implements SingletonInterface
 {
     /**
      * Contains the settings of the current extension
      *
      * @var array
      */
-    protected $settings;
+    protected $settings = [];
 
     /**
      * @var ExtConf
@@ -117,6 +123,7 @@ class MapService implements SingletonInterface
         );
         $view->assign('settings', $this->settings);
         $view->assign('requestUri', $this->getRequestUri());
+
         return $view->render();
     }
 
@@ -211,5 +218,34 @@ class MapService implements SingletonInterface
         }
 
         return $path;
+    }
+
+    /**
+     * Find position by address
+     *
+     * @param string $address
+     * @return ObjectStorage|Position[]
+     * @throws \Exception
+     */
+    public function findPositionsByAddress($address)
+    {
+        /** @var ObjectStorage $positions */
+        $positions = $this->objectManager->get(ObjectStorage::class);
+
+        /** @var GoogleMapsClient $client */
+        $client = $this->objectManager->get(GoogleMapsClient::class);
+
+        /** @var GeocodeRequest $geocodeRequest */
+        $geocodeRequest = $this->objectManager->get(GeocodeRequest::class);
+        $geocodeRequest->setAddress((string)$address);
+
+        $response = $client->processRequest($geocodeRequest);
+        if (!empty($response)) {
+            /** @var DataMapper $dataMapper */
+            $dataMapper = $this->objectManager->get(DataMapper::class);
+            $positions = $dataMapper->mapObjectStorage(RadiusResult::class, $response['results']);
+        }
+
+        return $positions;
     }
 }

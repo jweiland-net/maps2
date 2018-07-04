@@ -15,8 +15,8 @@ namespace JWeiland\Maps2\ViewHelpers\Widget;
  */
 
 use JWeiland\Maps2\Domain\Model\PoiCollection;
+use JWeiland\Maps2\Service\GoogleMapsService;
 use JWeiland\Maps2\Service\GoogleRequestService;
-use JWeiland\Maps2\Service\MapService;
 use TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetViewHelper;
 
 /**
@@ -37,15 +37,14 @@ class EditPoiViewHelper extends AbstractWidgetViewHelper
     protected $googleRequestService;
 
     /**
-     * @var MapService
+     * @var GoogleMapsService
      */
-    protected $mapService;
+    protected $googleMapsService;
 
     /**
      * inject controller
      *
      * @param Controller\EditPoiController $controller
-     *
      * @return void
      */
     public function injectController(Controller\EditPoiController $controller)
@@ -57,7 +56,6 @@ class EditPoiViewHelper extends AbstractWidgetViewHelper
      * inject googleRequestService
      *
      * @param GoogleRequestService $googleRequestService
-     *
      * @return void
      */
     public function injectGoogleRequestService(GoogleRequestService $googleRequestService)
@@ -68,26 +66,24 @@ class EditPoiViewHelper extends AbstractWidgetViewHelper
     /**
      * inject mapService
      *
-     * @param MapService $mapService
-     *
+     * @param GoogleMapsService $googleMapsService
      * @return void
      */
-    public function injectMapService(MapService $mapService)
+    public function injectGoogleMapsService(GoogleMapsService $googleMapsService)
     {
-        $this->mapService = $mapService;
+        $this->googleMapsService = $googleMapsService;
     }
 
     /**
      * @param PoiCollection $poiCollection
      * @param string $property
      * @param array $override Override any configuration option
-     *
      * @return string
      */
     public function render(PoiCollection $poiCollection = null, $property = 'txMaps2Uid', $override = [])
     {
         if (!$this->googleRequestService->isGoogleMapRequestAllowed()) {
-            return $this->mapService->showAllowMapForm();
+            return $this->googleMapsService->showAllowMapForm();
         }
 
         return $this->initiateSubRequest();
