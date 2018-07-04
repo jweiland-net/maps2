@@ -22,6 +22,7 @@ use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\DebugUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
@@ -70,9 +71,7 @@ class GeocodeUtility
      * find position by address
      *
      * @param string $address
-     *
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage|array ObjectStorage if status = OK. Returns array if something went false
-     *
+     * @return ObjectStorage|array ObjectStorage if status = OK. Returns array if something went false
      * @throws \Exception
      */
     public function findPositionByAddress($address)
@@ -108,9 +107,7 @@ class GeocodeUtility
      * Get URI for Geocode
      *
      * @param string $address
-     *
      * @return string
-     *
      * @throws \Exception
      */
     protected function getUri($address)
@@ -131,10 +128,14 @@ class GeocodeUtility
      */
     protected function updateAddressForUri($address)
     {
-        // check if it can be interpreted as a zip code
-        if (MathUtility::canBeInterpretedAsInteger($address) && strlen($address) === 5) {
-            $address .= ' Deutschland';
+        // if address can be interpreted as zip, attach the default country to prevent a worldwide search
+        if (
+            MathUtility::canBeInterpretedAsInteger($address)
+            && !empty($this->extConf->getDefaultCountry())
+        ) {
+            $address .= ' ' . $this->extConf->getDefaultCountry();
         }
+
         return rawurlencode($address);
     }
 }

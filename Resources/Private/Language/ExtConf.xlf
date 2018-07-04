@@ -18,6 +18,9 @@
       <trans-unit id="explicitAllowGoogleMapsBySessionOnly" xml:space="preserve">
         <source>Allow Google Maps by Session: See explicitAllowGoogleMaps for explanation. Normally we save activation in a Cookie (normally 1 day (TYPO3 default)). So there is no need to activate google maps again after browser restart. If you enable this option we save activation in session and you have to activate google maps again after each browser restart.</source>
       </trans-unit>
+      <trans-unit id="defaultCountry" xml:space="preserve">
+        <source>Default Country: If someone searches for a postal code only, Google will search whole world for that postal code. If you want, you can assign a default country here to reduce that search to that country.</source>
+      </trans-unit>
       <trans-unit id="defaultLatitude" xml:space="preserve">
         <source>Default Latitude: If you leave this empty Google Maps points to somewhere over the ocean on startup. So it's better to enter some coordinates: http://universimmedia.pagesperso-orange.fr/geo/loc.htm</source>
       </trans-unit>
