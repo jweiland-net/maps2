@@ -14,8 +14,8 @@ namespace JWeiland\Maps2\Mvc;
  * The TYPO3 project - inspiring people to share!
  */
 
-use JWeiland\Maps2\Service\GoogleRequestService;
 use JWeiland\Maps2\Service\GoogleMapsService;
+use JWeiland\Maps2\Service\GoogleRequestService;
 use TYPO3\CMS\Extbase\Mvc\ResponseInterface;
 use TYPO3\CMS\Extbase\Mvc\Web\AbstractRequestHandler;
 use TYPO3\CMS\Extbase\Mvc\Web\Response;

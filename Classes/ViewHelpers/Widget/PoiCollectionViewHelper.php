@@ -15,8 +15,8 @@ namespace JWeiland\Maps2\ViewHelpers\Widget;
  */
 
 use JWeiland\Maps2\Domain\Model\PoiCollection;
-use JWeiland\Maps2\Service\GoogleRequestService;
 use JWeiland\Maps2\Service\GoogleMapsService;
+use JWeiland\Maps2\Service\GoogleRequestService;
 use TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetViewHelper;
 
 /**
