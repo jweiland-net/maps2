@@ -46,8 +46,11 @@
         <source>Search for street</source>
       </trans-unit>
 
-      <trans-unit id="error.noAddressFound" xml:space="preserve" approved="yes">
-        <source>Google can't find a result for address: "%s". Please check your address data and try again.</source>
+      <trans-unit id="error.noPositionsFound.title" xml:space="preserve" approved="yes">
+        <source>No positions found</source>
+      </trans-unit>
+      <trans-unit id="error.noPositionsFound.body" xml:space="preserve" approved="yes">
+        <source>Google can't find any position. Please check your input and try again or activate $GLOBALS['TYPO3_CONF_VARS']['BE']['debug'] for further debugging</source>
       </trans-unit>
     </body>
   </file>

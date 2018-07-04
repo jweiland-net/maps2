@@ -17,7 +17,7 @@ namespace JWeiland\Maps2\Tests\Unit\Mvc;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Mvc\GoogleMapOverlayRequestHandler;
 use JWeiland\Maps2\Service\GoogleRequestService;
-use JWeiland\Maps2\Service\MapService;
+use JWeiland\Maps2\Service\GoogleMapsService;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
 use TYPO3\CMS\Extbase\Mvc\Web\Request;
 use TYPO3\CMS\Extbase\Mvc\Web\RequestBuilder;
@@ -34,9 +34,9 @@ class GoogleMapOverlayRequestTest extends UnitTestCase
     protected $extConf;
 
     /**
-     * @var MapService
+     * @var GoogleMapsService
      */
-    protected $mapService;
+    protected $googleMapsService;
 
     /**
      * @var GoogleRequestService
@@ -75,7 +75,7 @@ class GoogleMapOverlayRequestTest extends UnitTestCase
         $this->extConf->setExplicitAllowGoogleMaps(1);
         $this->extConf->setExplicitAllowGoogleMapsBySessionOnly(1);
 
-        $this->mapService = new MapService();
+        $this->googleMapsService = new GoogleMapsService();
         $this->googleRequestService = new GoogleRequestService($this->extConf);
         $this->environmentService = $this->prophesize(EnvironmentService::class);
         $this->requestBuilder = $this->prophesize(RequestBuilder::class);
@@ -93,7 +93,7 @@ class GoogleMapOverlayRequestTest extends UnitTestCase
      */
     protected function tearDown()
     {
-        unset($this->mapService, $this->googleRequestService, $this->subject);
+        unset($this->googleMapsService, $this->googleRequestService, $this->subject);
         parent::tearDown();
     }
 

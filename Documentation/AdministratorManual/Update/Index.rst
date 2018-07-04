@@ -18,12 +18,15 @@ the configuration.
 
 You have to clear the system cache, because of new fields in TCA.
 
-We have renamed the field marker_icon from table sys_category into maps2_marker_icons and
-switched to FAL related images. Please execute Update script in Extensionmanager for maps2
+We have renamed the field ``marker_icon`` from table ``sys_category`` into ``maps2_marker_icons``
+and switched to FAL related images. Please execute Update script in Extensionmanager for ``maps2``
 to migrate your old images.
 
-We have moved all JavaScript Code from page.includeJSFooter to page.includeJSFooterlibs, so
-now you have better options to override or append your custom JavaScript in TypoScript.
+We have moved all JavaScript Code from ``page.includeJSFooter`` to ``page.includeJSFooterlibs``, so
+now you have better options to override or append our/your custom JavaScript in TypoScript.
+
+All methods of MapService have been migrated into GoogleMapsService.
+GeocodeUtility have been deleted. Please use findPositionsByAddress of GoogleMapsService.
 
 Update to Version 3.0.0
 ^^^^^^^^^^^^^^^^^^^^^^^
@@ -35,7 +38,7 @@ his confirmation. That's why we have added a new extension management configurat
 which can output a little form, where the user can accept sending his information
 to third party servers like Google to display the maps. This new feature
 touches nearly all methods, so, if you have extended maps2, please pre-check the new
-widget templates and actions. Maybe it's good to have a look into the new MapService class.
+widget templates and actions. Maybe it's good to have a look into the new GoogleMapsService class.
 
 Update to Version 2.5.0
 ^^^^^^^^^^^^^^^^^^^^^^^

@@ -59,9 +59,13 @@
         <target>Suche Straße</target>
       </trans-unit>
 
-      <trans-unit id="error.noAddressFound" xml:space="preserve" approved="yes">
-        <source>Google can't find a result for address: "%s". Please check your address data and try again.</source>
-        <target>Google konnte zu Ihrer Adresse "%s" keine Ergebnisse finden. Bitte überprüfen Sie nochmals Ihre Adressdaten und versuchen Sie es erneut</target>
+      <trans-unit id="error.noPositionsFound.title" xml:space="preserve" approved="yes">
+        <source>No positions found</source>
+        <target>Keine Positionen gefunden</target>
+      </trans-unit>
+      <trans-unit id="error.noPositionsFound.body" xml:space="preserve" approved="yes">
+        <source>Google can't find any position. Please check your input and try again or activate $GLOBALS['TYPO3_CONF_VARS']['BE']['debug'] for further debugging</source>
+        <target>Google konnte zu Ihrer Eingabe keine Positionen finden. Bitte überprüfen Sie Eingaben und versuchen Sie es erneut oder setzen Sie $GLOBALS['TYPO3_CONF_VARS']['BE']['debug'] im Installtool für detailliertere Debuggingausgaben.</target>
       </trans-unit>
     </body>
   </file>

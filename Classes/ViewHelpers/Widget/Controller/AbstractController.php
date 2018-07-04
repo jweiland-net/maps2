@@ -15,7 +15,7 @@ namespace JWeiland\Maps2\ViewHelpers\Widget\Controller;
  */
 
 use JWeiland\Maps2\Configuration\ExtConf;
-use JWeiland\Maps2\Service\MapService;
+use JWeiland\Maps2\Service\GoogleMapsService;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
@@ -46,15 +46,14 @@ abstract class AbstractController extends AbstractWidgetController
     protected $extConf;
 
     /**
-     * @var MapService
+     * @var GoogleMapsService
      */
-    protected $mapService;
+    protected $googleMapsService;
 
     /**
      * inject extConf
      *
      * @param ExtConf $extConf
-     *
      * @return void
      */
     public function injectExtConf(ExtConf $extConf)
@@ -65,13 +64,12 @@ abstract class AbstractController extends AbstractWidgetController
     /**
      * inject mapService
      *
-     * @param MapService $mapService
-     *
+     * @param GoogleMapsService $googleMapsService
      * @return void
      */
-    public function injectMapService(MapService $mapService)
+    public function injectGoogleMapsService(GoogleMapsService $googleMapsService)
     {
-        $this->mapService = $mapService;
+        $this->googleMapsService = $googleMapsService;
     }
 
     /**
@@ -89,7 +87,6 @@ abstract class AbstractController extends AbstractWidgetController
      * add some global vars to view
      *
      * @param ViewInterface $view
-     *
      * @return void
      */
     public function initializeView(ViewInterface $view)
