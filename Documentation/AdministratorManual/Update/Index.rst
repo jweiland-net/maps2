@@ -26,7 +26,8 @@ We have moved all JavaScript Code from ``page.includeJSFooter`` to ``page.includ
 now you have better options to override or append our/your custom JavaScript in TypoScript.
 
 All methods of MapService have been migrated into GoogleMapsService.
-GeocodeUtility have been deleted. Please use findPositionsByAddress of GoogleMapsService.
+GeocodeUtility have been deleted. Please use getPositionsByAddress or getFirstFoundPositionByAddress
+of GoogleMapsService.
 
 Update to Version 3.0.0
 ^^^^^^^^^^^^^^^^^^^^^^^

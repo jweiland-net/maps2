@@ -16,12 +16,18 @@ namespace JWeiland\Maps2\Tests\Unit\Service;
 use JWeiland\Maps2\Client\GoogleMapsClient;
 use JWeiland\Maps2\Client\Request\GeocodeRequest;
 use JWeiland\Maps2\Configuration\ExtConf;
+use JWeiland\Maps2\Domain\Model\Location;
 use JWeiland\Maps2\Domain\Model\RadiusResult;
 use JWeiland\Maps2\Service\GoogleMapsService;
 use JWeiland\Maps2\Utility\DataMapper;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
+use TYPO3\CMS\Core\Database\DatabaseConnection;
+use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Messaging\FlashMessageQueue;
+use TYPO3\CMS\Core\Messaging\FlashMessageService;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
@@ -68,6 +74,16 @@ class GoogleMapsServiceTest extends UnitTestCase
     protected $dataMapper;
 
     /**
+     * @var FlashMessageService|ObjectProphecy
+     */
+    protected $flashMessageService;
+
+    /**
+     * @var DatabaseConnection|ObjectProphecy
+     */
+    protected $databaseConnection;
+
+    /**
      * @var GoogleMapsService
      */
     protected $subject;
@@ -85,10 +101,15 @@ class GoogleMapsServiceTest extends UnitTestCase
         $this->client = $this->prophesize(GoogleMapsClient::class);
         $this->geocodeRequest = $this->prophesize(GeocodeRequest::class);
         $this->dataMapper = $this->prophesize(DataMapper::class);
+        $this->flashMessageService = $this->prophesize(FlashMessageService::class);
+        $this->databaseConnection = $this->prophesize(DatabaseConnection::class);
+
+        $GLOBALS['TYPO3_DB'] = $this->databaseConnection->reveal();
 
         $this->subject = new GoogleMapsService();
         $this->subject->injectExtConf($this->extConf);
         $this->subject->injectObjectManager($this->objectManager->reveal());
+        $this->subject->injectFlashMessageService($this->flashMessageService->reveal());
     }
 
     /**
@@ -162,7 +183,7 @@ class GoogleMapsServiceTest extends UnitTestCase
      * @test
      * @throws \Exception
      */
-    public function findPositionsByAddressWillReturnEmptyObjectStorage()
+    public function getPositionsByAddressWillReturnEmptyObjectStorage()
     {
         $emptyObjectStorage = new ObjectStorage();
 
@@ -190,7 +211,7 @@ class GoogleMapsServiceTest extends UnitTestCase
 
         $this->assertSame(
             $emptyObjectStorage,
-            $this->subject->findPositionsByAddress('My private address')
+            $this->subject->getPositionsByAddress('My private address')
         );
     }
 
@@ -198,7 +219,7 @@ class GoogleMapsServiceTest extends UnitTestCase
      * @test
      * @throws \Exception
      */
-    public function findPositionsByAddressWillReturnFilledObjectStorage()
+    public function getPositionsByAddressWillReturnFilledObjectStorage()
     {
         $position = new RadiusResult();
         $position->setFormattedAddress('My street 123, 12345 somewhere');
@@ -247,7 +268,178 @@ class GoogleMapsServiceTest extends UnitTestCase
 
         $this->assertSame(
             $positions,
-            $this->subject->findPositionsByAddress('My private address')
+            $this->subject->getPositionsByAddress('My private address')
+        );
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function getFirstFoundPositionByAddressWillReturnNull()
+    {
+        $emptyObjectStorage = new ObjectStorage();
+
+        $this->geocodeRequest
+            ->setAddress('My private address')
+            ->shouldBeCalled();
+
+        $this->client
+            ->processRequest($this->geocodeRequest->reveal())
+            ->shouldBeCalled()
+            ->willReturn([]);
+
+        $this->objectManager
+            ->get(ObjectStorage::class)
+            ->shouldBeCalled()
+            ->willReturn($emptyObjectStorage);
+        $this->objectManager
+            ->get(GoogleMapsClient::class)
+            ->shouldBeCalled()
+            ->willReturn($this->client->reveal());
+        $this->objectManager
+            ->get(GeocodeRequest::class)
+            ->shouldBeCalled()
+            ->willReturn($this->geocodeRequest->reveal());
+
+        $this->assertSame(
+            null,
+            $this->subject->getFirstFoundPositionByAddress('My private address')
+        );
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function getFirstFoundPositionByAddressWillReturnRadiusResult()
+    {
+        $position = new RadiusResult();
+        $position->setFormattedAddress('My street 123, 12345 somewhere');
+
+        $positions = new ObjectStorage();
+        $positions->attach($position);
+
+        $response = [
+            'results' => [
+                0 => [
+                    'formatted_address' => 'My street 123, 12345 somewhere'
+                ]
+            ]
+        ];
+
+        $this->geocodeRequest
+            ->setAddress('My private address')
+            ->shouldBeCalled();
+
+        $this->client
+            ->processRequest($this->geocodeRequest->reveal())
+            ->shouldBeCalled()
+            ->willReturn($response);
+
+        $this->dataMapper
+            ->mapObjectStorage(RadiusResult::class, $response['results'])
+            ->shouldBeCalled()
+            ->willReturn($positions);
+
+        $this->objectManager
+            ->get(ObjectStorage::class)
+            ->shouldBeCalled()
+            ->willReturn(new ObjectStorage());
+        $this->objectManager
+            ->get(GoogleMapsClient::class)
+            ->shouldBeCalled()
+            ->willReturn($this->client->reveal());
+        $this->objectManager
+            ->get(GeocodeRequest::class)
+            ->shouldBeCalled()
+            ->willReturn($this->geocodeRequest->reveal());
+        $this->objectManager
+            ->get(DataMapper::class)
+            ->shouldBeCalled()
+            ->willReturn($this->dataMapper->reveal());
+
+        $this->assertSame(
+            $position,
+            $this->subject->getFirstFoundPositionByAddress('My private address')
+        );
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function createNewPoiCollectionWithBrokenRadiusResultReturns0()
+    {
+        /** @var FlashMessage|ObjectProphecy $flashMessage */
+        $flashMessage = $this->prophesize(FlashMessage::class);
+        GeneralUtility::addInstance(FlashMessage::class, $flashMessage->reveal());
+
+        /** @var FlashMessageQueue|ObjectProphecy $flashMessageQueue */
+        $flashMessageQueue = $this->prophesize(FlashMessageQueue::class);
+        $this->flashMessageService
+            ->getMessageQueueByIdentifier()
+            ->shouldBeCalled()
+            ->willReturn($flashMessageQueue->reveal());
+
+        $this->assertSame(
+            0,
+            $this->subject->createNewPoiCollection(
+                123,
+                new RadiusResult()
+            )
+        );
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function createNewPoiCollectionWithRadiusResultReturnsUid()
+    {
+        $fieldValues = [
+            'pid' => 123,
+            'hidden' => 0,
+            'deleted' => 0,
+            'title' => 'My private address',
+        ];
+
+        $location = new Location();
+        $location->setLat(123);
+        $location->setLng(321);
+        $geometry = new RadiusResult\Geometry();
+        $geometry->setLocation($location);
+        $radiusResult = new RadiusResult();
+        $radiusResult->setGeometry($geometry);
+        $radiusResult->setFormattedAddress('My private address');
+
+        $this->databaseConnection
+            ->admin_get_fields('tx_maps2_domain_model_poicollection')
+            ->shouldBeCalled()
+            ->willReturn([
+                'uid' => 1,
+                'pid' => 1,
+                'hidden' => 1,
+                'deleted' => 1,
+                'title' => 1,
+            ]);
+        $this->databaseConnection
+            ->exec_INSERTquery(
+                'tx_maps2_domain_model_poicollection',
+                $fieldValues
+            )
+            ->shouldBeCalled();
+        $this->databaseConnection
+            ->sql_insert_id()
+            ->shouldBeCalled()
+            ->willReturn(100);
+
+        $this->assertSame(
+            100,
+            $this->subject->createNewPoiCollection(
+                123,
+                $radiusResult
+            )
         );
     }
 }

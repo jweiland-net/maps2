@@ -17,11 +17,15 @@ namespace JWeiland\Maps2\Service;
 use JWeiland\Maps2\Client\GoogleMapsClient;
 use JWeiland\Maps2\Client\Request\GeocodeRequest;
 use JWeiland\Maps2\Configuration\ExtConf;
+use JWeiland\Maps2\Domain\Model\Location;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
-use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Domain\Model\RadiusResult;
 use JWeiland\Maps2\Utility\DataMapper;
+use TYPO3\CMS\Core\Database\DatabaseConnection;
+use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\SingletonInterface;
+use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
@@ -51,6 +55,11 @@ class GoogleMapsService implements SingletonInterface
      * @var CacheService
      */
     protected $cacheService;
+
+    /**
+     * @var FlashMessageService
+     */
+    protected $flashMessageService;
 
     /**
      * @var ObjectManager
@@ -84,6 +93,17 @@ class GoogleMapsService implements SingletonInterface
     public function injectCacheService(CacheService $cacheService)
     {
         $this->cacheService = $cacheService;
+    }
+
+    /**
+     * inject flashMessageService
+     *
+     * @param FlashMessageService $flashMessageService
+     * @return void
+     */
+    public function injectFlashMessageService(FlashMessageService $flashMessageService)
+    {
+        $this->flashMessageService = $flashMessageService;
     }
 
     /**
@@ -221,13 +241,14 @@ class GoogleMapsService implements SingletonInterface
     }
 
     /**
-     * Find position by address
+     * Get positions by address
      *
      * @param string $address
-     * @return ObjectStorage|Position[]
+     * @return ObjectStorage|RadiusResult[]
      * @throws \Exception
+     * @api
      */
-    public function findPositionsByAddress($address)
+    public function getPositionsByAddress($address)
     {
         /** @var ObjectStorage $positions */
         $positions = $this->objectManager->get(ObjectStorage::class);
@@ -247,5 +268,210 @@ class GoogleMapsService implements SingletonInterface
         }
 
         return $positions;
+    }
+
+    /**
+     * Get first found position by address
+     *
+     * @param string $address
+     * @return RadiusResult
+     * @throws \Exception
+     * @api
+     */
+    public function getFirstFoundPositionByAddress($address)
+    {
+        $position = null;
+        $positions = $this->getPositionsByAddress((string)$address);
+        if ($positions->count()) {
+            $positions->rewind();
+            $position = $positions->current();
+        }
+
+        return $position;
+    }
+
+    /**
+     * Creates a new poiCollection
+     * Currently only 'Point' types are allowed. If you need type 'Radius' you can realize it with $overrideFieldValues.
+     * If you need 'Area' or 'Route' it's up to you to implement that function within your own extension.
+     *
+     * @param int $pid
+     * @param RadiusResult $position
+     * @param array $overrideFieldValues
+     * @return int UID of the newly inserted record
+     * @throws \Exception
+     * @api
+     */
+    public function createNewPoiCollection($pid, RadiusResult $position, array $overrideFieldValues = [])
+    {
+        $geometry = $position->getGeometry();
+        if (
+            $geometry instanceof RadiusResult\Geometry
+            && $geometry->getLocation() instanceof Location
+        ) {
+            $latitude = $geometry->getLocation()->getLat();
+            $longitude = $geometry->getLocation()->getLng();
+        } else {
+            $this->addMessage(
+                'The domain model RadiusResult seems to be broken after processing in DataMapper. Can not find Latitude and Longitude.',
+                'RadiusResult broken',
+                FlashMessage::ERROR
+            );
+            return 0;
+        }
+
+        $fieldValues = [];
+        $fieldValues['pid'] = (int)$pid;
+        $fieldValues['tstamp'] = time();
+        $fieldValues['crdate'] = time();
+        $fieldValues['cruser_id'] = $GLOBALS['BE_USER']->user['uid'];
+        $fieldValues['hidden'] = 0;
+        $fieldValues['deleted'] = 0;
+        $fieldValues['latitude'] = $latitude;
+        $fieldValues['latitude_orig'] = $latitude;
+        $fieldValues['longitude'] = $longitude;
+        $fieldValues['longitude_orig'] = $longitude;
+        $fieldValues['collection_type'] = 'Point'; // currently only Point is allowed. If you want more: It's your turn
+        $fieldValues['title'] = $position->getFormattedAddress(); // it's up to you to override this value
+        $fieldValues['address'] = $position->getFormattedAddress();
+
+        // you don't like the current fieldValues? Override them with $overrideFieldValues
+        ArrayUtility::mergeRecursiveWithOverrule($fieldValues, $overrideFieldValues);
+
+        // remove all fields, which are not set in DB
+        $tableFieldSchema = $this
+            ->getDatabaseConnection()
+            ->admin_get_fields('tx_maps2_domain_model_poicollection');
+        $fieldValues = array_intersect_key($fieldValues, $tableFieldSchema);
+
+        $this->getDatabaseConnection()->exec_INSERTquery(
+            'tx_maps2_domain_model_poicollection',
+            $fieldValues
+        );
+
+        return $this->getDatabaseConnection()->sql_insert_id();
+    }
+
+    /**
+     * Assign PoiCollection UID to foreign record
+     *
+     * @param int $poiCollectionUid
+     * @param array $foreignRecord This array MUST HAVE an UID assigned
+     * @param string $foreignTableName
+     * @param string $foreignFieldName
+     * @return void
+     * @throws \Exception
+     * @api
+     */
+    public function assignPoiCollectionToForeignRecord($poiCollectionUid, array &$foreignRecord, $foreignTableName, $foreignFieldName = 'tx_maps2_uid')
+    {
+        $hasErrors = false;
+
+        if (empty(trim($poiCollectionUid))) {
+            $hasErrors = true;
+            $this->addMessage(
+                'PoiCollection UID can not be empty. Please check your values near method assignPoiCollectionToForeignRecord',
+                'PoiCollection empty',
+                FlashMessage::ERROR
+            );
+        }
+
+        if (empty($foreignRecord)) {
+            $hasErrors = true;
+            $this->addMessage(
+                'Foreign record can not be empty. Please check your values near method assignPoiCollectionToForeignRecord',
+                'Foreign record empty',
+                FlashMessage::ERROR
+            );
+        }
+
+        if (!array_key_exists('uid', $foreignRecord)) {
+            $hasErrors = true;
+            $this->addMessage(
+                'Foreign record must have the array key "uid" which is currently not present. Please check your values near method assignPoiCollectionToForeignRecord',
+                'UID not filled',
+                FlashMessage::ERROR
+            );
+        }
+
+        if (empty(trim($foreignTableName))) {
+            $hasErrors = true;
+            $this->addMessage(
+                'Foreign table name is a must have value, which is currently not present. Please check your values near method assignPoiCollectionToForeignRecord',
+                'Foreign table name empty',
+                FlashMessage::ERROR
+            );
+        }
+
+        if (empty(trim($foreignFieldName))) {
+            $hasErrors = true;
+            $this->addMessage(
+                'Foreign field name is a must have value, which is currently not present. Please check your values near method assignPoiCollectionToForeignRecord',
+                'Foreign field name empty',
+                FlashMessage::ERROR
+            );
+        }
+
+        if ($hasErrors) {
+            return;
+        }
+
+        if (!array_key_exists($foreignTableName, $GLOBALS['TCA'])) {
+            $this->addMessage(
+                'Table "' . $foreignTableName . '" is not configured in TCA',
+                'Table not found',
+                FlashMessage::ERROR
+            );
+            return;
+        }
+
+        if (!array_key_exists($foreignFieldName, $GLOBALS['TCA'][$foreignTableName]['columns'][$foreignFieldName])) {
+            $this->addMessage(
+                'Field "' . $foreignFieldName . '" is not configured in TCA',
+                'Field not found',
+                FlashMessage::ERROR
+            );
+            return;
+        }
+
+        $this->getDatabaseConnection()->exec_UPDATEquery(
+            $foreignTableName,
+            'uid=' . (int)$foreignRecord['uid'],
+            [
+                $foreignFieldName => (int)$poiCollectionUid
+            ]
+        );
+        $foreignRecord[$foreignFieldName] = (int)$poiCollectionUid;
+    }
+
+    /**
+     * Add a message to FlashMessage queue
+     *
+     * @param string $message
+     * @param string $title
+     * @param int $severity
+     * @throws \TYPO3\CMS\Core\Exception
+     */
+    protected function addMessage($message, $title = '', $severity = FlashMessage::OK)
+    {
+        /** @var $flashMessage FlashMessage */
+        $flashMessage = GeneralUtility::makeInstance(
+            FlashMessage::class,
+            $message,
+            $title,
+            $severity
+        );
+        $defaultFlashMessageQueue = $this->flashMessageService->getMessageQueueByIdentifier();
+        $defaultFlashMessageQueue->enqueue($flashMessage);
+    }
+
+    /**
+     * Get TYPO3s Database Connection
+     *
+     * @return DatabaseConnection
+     */
+    protected function getDatabaseConnection()
+    {
+        return $GLOBALS['TYPO3_DB'];
     }
 }
