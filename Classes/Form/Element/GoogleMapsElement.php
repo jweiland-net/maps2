@@ -112,7 +112,10 @@ class GoogleMapsElement extends AbstractFormElement
             ),
             false
         );
-        $resultArray['requireJsModules'][] = 'TYPO3/CMS/Maps2/GoogleMapsModule';
+        $resultArray['stylesheetFiles'][] = 'EXT:maps2/Resources/Public/Css/GoogleMapsModule.css';
+        $resultArray['requireJsModules'][] = [
+            'TYPO3/CMS/Maps2/GoogleMapsModule' => 'function(GoogleMaps){GoogleMaps();}'
+        ];
 
         $resultArray['html'] = $this->getMapHtml($this->getConfiguration($currentRecord));
 
