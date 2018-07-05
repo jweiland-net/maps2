@@ -22,7 +22,7 @@ return [
             'starttime' => 'starttime',
             'endtime' => 'endtime',
         ],
-        'searchFields' => 'title,pois',
+        'searchFields' => 'title, address',
         'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::siteRelPath('maps2') . 'Resources/Public/Icons/tx_maps2_domain_model_poicollection.gif'
     ],
     'interface' => [
@@ -30,43 +30,64 @@ return [
     ],
     'types' => [
         'Empty' => [
-            'showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource,
-            hidden, collection_type, title,
-            --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.access, 
-            --palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.access;access'
+            'showitem' => '--palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:palette.language_hidden;language_hidden, l10n_parent, l10n_diffsource,
+            collection_type, title'
         ],
         'Point' => [
-            'showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource,
-            hidden, collection_type, title, address;;1, configuration_map, pois,
-            --div--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poicollection.style, marker_icons, marker_icon_width, marker_icon_height, marker_icon_anchor_pos_x, marker_icon_anchor_pos_y, info_window_content;;;richtext[]:rte_transform[mode=ts_css],
-            --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.access, 
-            --palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.access;access'
+            'showitem' => '--palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:palette.language_hidden;language_hidden, l10n_parent, l10n_diffsource,
+                collection_type, title, address;;1, configuration_map, pois,
+                --div--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poicollection.style, info_window_content, marker_icons,
+                --palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:palette.marker_icon_size;marker_icon_size,
+                --palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:palette.marker_icon_pos;marker_icon_pos,
+                --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.access, 
+                --palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.access;access',
+            'columnsOverrides' => [
+                'info_window_content' => [
+                    'config' => [
+                        'enableRichtext' => true,
+                        'richtextConfiguration' => 'default'
+                    ]
+                ]
+            ]
         ],
         'Area' => [
-            'showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource,
-            hidden, collection_type, title, latitude, longitude, configuration_map, pois,
-            --div--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poicollection.style, stroke_color, stroke_opacity, stroke_weight, fill_color, fill_opacity,
-            --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.access, 
-            --palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.access;access'
+            'showitem' => '--palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:palette.language_hidden;language_hidden, l10n_parent, l10n_diffsource,
+                collection_type, title,
+                --palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:palette.latitude_longitude;latitude_longitude, configuration_map, pois,
+                --div--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poicollection.style,
+                --palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:palette.stroke;stroke,
+                --palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:palette.fill;fill,
+                --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.access, 
+                --palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.access;access'
         ],
         'Route' => [
-            'showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource,
-            hidden, collection_type, title, latitude, longitude, configuration_map, pois,
-            --div--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poicollection.style, stroke_color, stroke_opacity, stroke_weight, fill_color, fill_opacity,
-            --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.access, 
-            --palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.access;access'
+            'showitem' => '--palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:palette.language_hidden;language_hidden, l10n_parent, l10n_diffsource,
+                collection_type, title,
+                --palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:palette.latitude_longitude;latitude_longitude, configuration_map, pois,
+                --div--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poicollection.style,
+                --palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:palette.stroke;stroke,
+                --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.access, 
+                --palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.access;access'
         ],
         'Radius' => [
-            'showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource,
-            hidden, collection_type, title, address;;2, configuration_map, pois,
-            --div--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poicollection.style, stroke_color, stroke_opacity, stroke_weight, fill_color, fill_opacity,
-            --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.access, 
-            --palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.access;access'
+            'showitem' => '--palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:palette.language_hidden;language_hidden, l10n_parent, l10n_diffsource,
+                collection_type, title, address;;2, configuration_map, pois,
+                --div--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poicollection.style,
+                --palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:palette.stroke;stroke,
+                --palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:palette.fill;fill,
+                --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.access, 
+                --palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.access;access'
         ],
     ],
     'palettes' => [
         '1' => ['showitem' => 'latitude, longitude, --linebreak--, latitude_orig, longitude_orig'],
         '2' => ['showitem' => 'latitude, longitude, radius, --linebreak--, latitude_orig, longitude_orig'],
+        'language_hidden' => ['showitem' => 'hidden, sys_language_uid'],
+        'latitude_longitude' => ['showitem' => 'latitude, longitude'],
+        'marker_icon_size' => ['showitem' => 'marker_icon_width, marker_icon_height'],
+        'marker_icon_pos' => ['showitem' => 'marker_icon_anchor_pos_x, marker_icon_anchor_pos_y'],
+        'stroke' => ['showitem' => 'stroke_color, stroke_opacity, stroke_weight'],
+        'fill' => ['showitem' => 'fill_color, fill_opacity'],
         'access' => [
             'showitem' => 'starttime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:starttime_formlabel,endtime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:endtime_formlabel',
         ]
@@ -335,12 +356,11 @@ return [
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poicollection.info_window_content',
             'config' => [
                 'type' => 'text',
-                'cols' => 40,
-                'rows' => 15,
-                'eval' => 'trim',
-                'default' => '',
+                'renderType' => 'maps2InfoWindowContent',
+                'cols' => '80',
+                'rows' => '15',
+                'softref' => 'typolink_tag,images,email[subst],url',
             ],
-            'defaultExtras' => 'richtext[]',
         ],
         'marker_icons' => [
             'exclude' => 1,

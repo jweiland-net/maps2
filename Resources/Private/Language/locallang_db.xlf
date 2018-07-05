@@ -83,19 +83,19 @@
         <source>Style</source>
       </trans-unit>
       <trans-unit id="tx_maps2_domain_model_poicollection.stroke_color" xml:space="preserve">
-        <source>Stroke color (f.e. #FF0000)</source>
+        <source>Color (f.e. #FF0000)</source>
       </trans-unit>
       <trans-unit id="tx_maps2_domain_model_poicollection.stroke_opacity" xml:space="preserve">
-        <source>Stroke opacity (f.e. 0.8)</source>
+        <source>Opacity (f.e. 0.8)</source>
       </trans-unit>
       <trans-unit id="tx_maps2_domain_model_poicollection.stroke_weight" xml:space="preserve">
-        <source>Stroke weight (f.e. 2)</source>
+        <source>Weight (f.e. 2)</source>
       </trans-unit>
       <trans-unit id="tx_maps2_domain_model_poicollection.fill_color" xml:space="preserve">
-        <source>Fill color (f.e. #FF0000)</source>
+        <source>Colorolor (f.e. #FF0000)</source>
       </trans-unit>
       <trans-unit id="tx_maps2_domain_model_poicollection.fill_opacity" xml:space="preserve">
-        <source>Fill opacity (f.e. 0.35)</source>
+        <source>Opacity (f.e. 0.35)</source>
       </trans-unit>
       <trans-unit id="tx_maps2_domain_model_poicollection.info_window_address" xml:space="preserve">
         <source>Info Window Content</source>
@@ -107,16 +107,16 @@
         <source>Marker icon</source>
       </trans-unit>
       <trans-unit id="tx_maps2_domain_model_poicollection.marker_icon_width" xml:space="preserve">
-        <source>Define a default width for Marker Icons in pixel.</source>
+        <source>Width</source>
       </trans-unit>
       <trans-unit id="tx_maps2_domain_model_poicollection.marker_icon_height" xml:space="preserve">
-        <source>Define a default height for Marker Icons in pixel.</source>
+        <source>Height</source>
       </trans-unit>
       <trans-unit id="tx_maps2_domain_model_poicollection.marker_icon_anchor_pos_x" xml:space="preserve">
-        <source>Which horizontal pixel on the image points the position on the Google Maps.</source>
+        <source>Horizontal pixel X</source>
       </trans-unit>
       <trans-unit id="tx_maps2_domain_model_poicollection.marker_icon_anchor_pos_y" xml:space="preserve">
-        <source>Which vertical pixel on the image points the position on the Google Maps.</source>
+        <source>Vertical pixel Y</source>
       </trans-unit>
 
       <trans-unit id="tx_maps2_uid" xml:space="preserve">
@@ -125,6 +125,18 @@
 
       <trans-unit id="tab.maps2" xml:space="preserve">
         <source>Google Maps (maps2)</source>
+      </trans-unit>
+      <trans-unit id="palette.language_hidden" xml:space="preserve">
+        <source>Visibility and Language</source>
+      </trans-unit>
+      <trans-unit id="palette.latitude_longitude" xml:space="preserve">
+        <source>Latitude and Longitude</source>
+      </trans-unit>
+      <trans-unit id="palette.marker_icon_size" xml:space="preserve">
+        <source>Set size of marker icon in px</source>
+      </trans-unit>
+      <trans-unit id="palette.marker_icon_pos" xml:space="preserve">
+        <source>XY coordinate of the marker icon whose pixel will show the exact position on the map</source>
       </trans-unit>
       <trans-unit id="sys_category.maps2_marker_icons" xml:space="preserve">
         <source>Marker icon for Google Maps (maps2)</source>

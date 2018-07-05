@@ -54,11 +54,6 @@ $boot = function($extKey) {
     $GLOBALS['TYPO3_CONF_VARS']['FE']['cacheHash']['excludedParameters'][] = 'tx_maps2_searchwithinradius[search][radius]';
     $GLOBALS['TYPO3_CONF_VARS']['FE']['cacheHash']['excludedParameters'][] = 'tx_maps2_citymap[street]';
 
-    // add address before RTE for InfoWindow
-    $classRef = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('maps2') . 'Classes/Tca/InfoWindow.php';
-    $GLOBALS['T3_VAR']['getUserObj'][$classRef] = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\JWeiland\Maps2\Tca\InfoWindow::class);
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tceforms.php']['getSingleFieldClass'][] = $classRef;
-
     // We have to save the permission to allow google requests before TS-Template rendering. It's needed by our own TS Condition object
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['initFEuser'][] = \JWeiland\Maps2\Hook\InitFeSessionHook::class . '->saveAllowGoogleRequestsInSession';
 
@@ -66,6 +61,11 @@ $boot = function($extKey) {
         'nodeName' => 'maps2GoogleMaps',
         'priority' => 50,
         'class' => \JWeiland\Maps2\Form\Element\GoogleMapsElement::class,
+    ];
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1530778687] = [
+        'nodeName' => 'maps2InfoWindowContent',
+        'priority' => 50,
+        'class' => \JWeiland\Maps2\Form\Element\InfoWindowContentElement::class,
     ];
 
     // Register SVG Icon Identifier
