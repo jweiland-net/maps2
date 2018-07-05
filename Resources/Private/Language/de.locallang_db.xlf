@@ -108,24 +108,24 @@
         <target>Design</target>
       </trans-unit>
       <trans-unit id="tx_maps2_domain_model_poicollection.stroke_color" xml:space="preserve">
-        <source>Stroke color (f.e. #FF0000)</source>
-        <target>Linienfarbe (z.B. #FF0000)</target>
+        <source>Color (f.e. #FF0000)</source>
+        <target>Farbe (z.B. #FF0000)</target>
       </trans-unit>
       <trans-unit id="tx_maps2_domain_model_poicollection.stroke_opacity" xml:space="preserve">
-        <source>Stroke opacity (f.e. 0.8)</source>
-        <target>Durchsichtigkeit der Linie (z.B. 0.8)</target>
+        <source>Opacity (f.e. 0.8)</source>
+        <target>Deckkraft (z.B. 0.8)</target>
       </trans-unit>
       <trans-unit id="tx_maps2_domain_model_poicollection.stroke_weight" xml:space="preserve">
-        <source>Stroke weight (f.e. 2)</source>
-        <target>Liniendicke (z.B. 2)</target>
+        <source>Weight (f.e. 2)</source>
+        <target>Dicke (z.B. 2)</target>
       </trans-unit>
       <trans-unit id="tx_maps2_domain_model_poicollection.fill_color" xml:space="preserve">
-        <source>Fill color (f.e. #FF0000)</source>
-        <target>Füllfarbe (z.B. #FF0000)</target>
+        <source>Colorolor (f.e. #FF0000)</source>
+        <target>Farbe (z.B. #FF0000)</target>
       </trans-unit>
       <trans-unit id="tx_maps2_domain_model_poicollection.fill_opacity" xml:space="preserve">
-        <source>Fill opacity (f.e. 0.35)</source>
-        <target>Durchsichtigkeit der Füllfläche (z.B. 0.35)</target>
+        <source>Opacity (f.e. 0.35)</source>
+        <target>Deckkraft (z.B. 0.35)</target>
       </trans-unit>
       <trans-unit id="tx_maps2_domain_model_poicollection.info_window_address" xml:space="preserve">
         <source>Info Window Content</source>
@@ -136,20 +136,20 @@
         <target>Marker Icon</target>
       </trans-unit>
       <trans-unit id="tx_maps2_domain_model_poicollection.marker_icon_width" xml:space="preserve">
-        <source>Define a default width for Marker Icons in pixel.</source>
-        <target>Setzt die Breite der Marker Icons in Pixel.</target>
+        <source>Width</source>
+        <target>Breite</target>
       </trans-unit>
       <trans-unit id="tx_maps2_domain_model_poicollection.marker_icon_height" xml:space="preserve">
-        <source>Define a default height for Marker Icons in pixel.</source>
-        <target>Setzt die Höhe der Marker Icons in Pixel.</target>
+        <source>Height</source>
+        <target>Höhe</target>
       </trans-unit>
       <trans-unit id="tx_maps2_domain_model_poicollection.marker_icon_anchor_pos_x" xml:space="preserve">
-        <source>Which horizontal pixel on the image points the position on the Google Maps.</source>
-        <target>Welcher horizontale Pixel auf dem Bild zeigt die exakte Position auf der Google Karte?</target>
+        <source>Horizontal pixel X</source>
+        <target>Horizontaler Pixel X</target>
       </trans-unit>
       <trans-unit id="tx_maps2_domain_model_poicollection.marker_icon_anchor_pos_y" xml:space="preserve">
-        <source>Which vertical pixel on the image points the position on the Google Maps.</source>
-        <target>Welcher verticale Pixel auf dem Bild zeigt die exakte Position auf der Google Karte?</target>
+        <source>Vertical pixel Y</source>
+        <target>Verticaler Pixel Y</target>
       </trans-unit>
 
       <trans-unit id="tx_maps2_uid" xml:space="preserve">
@@ -160,6 +160,30 @@
       <trans-unit id="tab.maps2" xml:space="preserve">
         <source>Google Maps (maps2)</source>
         <target>Google Maps (maps2)</target>
+      </trans-unit>
+      <trans-unit id="palette.language_hidden" xml:space="preserve">
+        <source>Visibility and Language</source>
+        <target>Sichtbarkeit und Sprache</target>
+      </trans-unit>
+      <trans-unit id="palette.latitude_longitude" xml:space="preserve">
+        <source>Latitude and Longitude</source>
+        <target>Breiten- und Längengrad</target>
+      </trans-unit>
+      <trans-unit id="palette.marker_icon_size" xml:space="preserve">
+        <source>Set size of marker icon in px</source>
+        <target>Setzt die Größe des Marker Icons in Pixel</target>
+      </trans-unit>
+      <trans-unit id="palette.marker_icon_pos" xml:space="preserve">
+        <source>XY coordinate of the marker icon whose pixel will show the exact position on the map</source>
+        <target>XY Koordinate des Marker Icons, das die exakte Position auf der Karte anzeigt</target>
+      </trans-unit>
+      <trans-unit id="palette.stroke" xml:space="preserve">
+        <source>Stroke settings</source>
+        <target>Einstellungen für Linien</target>
+      </trans-unit>
+      <trans-unit id="palette.fill" xml:space="preserve">
+        <source>Fill settings</source>
+        <target>Einstellungen für Füllungen</target>
       </trans-unit>
       <trans-unit id="sys_category.maps2_marker_icons" xml:space="preserve">
         <source>Marker icon for Google Maps (maps2)</source>

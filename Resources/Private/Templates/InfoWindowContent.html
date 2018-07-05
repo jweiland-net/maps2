@@ -13,7 +13,7 @@
 </f:if>
 
 <f:section name="infoWindowContent">
-  <div class="titleWrapper">{poiCollection.title}</div>
+  <div class="titleWrapper"><strong>{poiCollection.title}</strong></div>
   <div class="addressWrapper">
     <f:for each="{poiCollection.address -> maps2:TrimExplode()}" as="address" iteration="iterator">
       <f:if condition="{iterator.isLast}">
@@ -23,5 +23,8 @@
       </f:if>
     </f:for>
   </div>
-  <div class="infoWindowContent">{poiCollection.infoWindowContent->f:format.html()}</div>
+  <f:if condition="{poiCollection}">
+    <br />
+    <div class="infoWindowContent">{poiCollection.infoWindowContent->f:format.html()}</div>
+  </f:if>
 </f:section>
