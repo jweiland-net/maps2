@@ -63,7 +63,7 @@ class InfoWindowContentElement extends AbstractFormElement
      * @return array
      * @throws \InvalidArgumentException
      */
-    public function render(): array
+    public function render()
     {
         $resultArray = $this->initializeResultArray();
         $parameterArray = $this->data['parameterArray'];
@@ -146,7 +146,7 @@ class InfoWindowContentElement extends AbstractFormElement
      *
      * @return string
      */
-    protected function getLanguageIsoCodeOfContent(): string
+    protected function getLanguageIsoCodeOfContent()
     {
         $currentLanguageUid = $this->data['databaseRow']['sys_language_uid'];
         if (is_array($currentLanguageUid)) {
@@ -176,7 +176,7 @@ class InfoWindowContentElement extends AbstractFormElement
      * @param string $fieldId
      * @return string
      */
-    protected function getCkEditorRequireJsModuleCode(string $fieldId): string
+    protected function getCkEditorRequireJsModuleCode(string $fieldId)
     {
         $configuration = $this->prepareConfigurationForEditor();
 
@@ -214,7 +214,7 @@ class InfoWindowContentElement extends AbstractFormElement
      *
      * @return array
      */
-    protected function getExtraPlugins(): array
+    protected function getExtraPlugins()
     {
         $urlParameters = [
             'P' => [
@@ -252,7 +252,7 @@ class InfoWindowContentElement extends AbstractFormElement
      *
      * @return array
      */
-    protected function replaceLanguageFileReferences(array $configuration): array
+    protected function replaceLanguageFileReferences(array $configuration)
     {
         foreach ($configuration as $key => $value) {
             if (is_array($value)) {
@@ -270,7 +270,7 @@ class InfoWindowContentElement extends AbstractFormElement
      *
      * @return array
      */
-    protected function replaceAbsolutePathsToRelativeResourcesPath(array $configuration): array
+    protected function replaceAbsolutePathsToRelativeResourcesPath(array $configuration)
     {
         foreach ($configuration as $key => $value) {
             if (is_array($value)) {
@@ -288,7 +288,7 @@ class InfoWindowContentElement extends AbstractFormElement
      * @param string $value
      * @return string
      */
-    protected function resolveUrlPath(string $value): string
+    protected function resolveUrlPath(string $value)
     {
         $value = GeneralUtility::getFileAbsFileName($value);
         return PathUtility::getAbsoluteWebPath($value);
@@ -300,7 +300,7 @@ class InfoWindowContentElement extends AbstractFormElement
      *
      * @return array the configuration
      */
-    protected function prepareConfigurationForEditor(): array
+    protected function prepareConfigurationForEditor()
     {
         // Ensure custom config is empty so nothing additional is loaded
         // Of course this can be overridden by the editor configuration below
@@ -340,7 +340,7 @@ class InfoWindowContentElement extends AbstractFormElement
      * @param string $itemFormElementName
      * @return string
      */
-    protected function sanitizeFieldId(string $itemFormElementName): string
+    protected function sanitizeFieldId(string $itemFormElementName)
     {
         $fieldId = preg_replace('/[^a-zA-Z0-9_:.-]/', '_', $itemFormElementName);
         return htmlspecialchars(preg_replace('/^[^a-zA-Z]/', 'x', $fieldId));
