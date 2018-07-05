@@ -72,7 +72,7 @@ class InfoWindowContentElement extends AbstractFormElement
         $fieldId = $this->sanitizeFieldId($parameterArray['itemFormElName']);
         $itemFormElementName = $this->data['parameterArray']['itemFormElName'];
 
-        $value = $this->data['parameterArray']['itemFormElValue'] ?? '';
+        $value = isset($this->data['parameterArray']['itemFormElValue']) ? $this->data['parameterArray']['itemFormElValue'] : '';
 
         $legacyWizards = $this->renderWizards();
         $legacyFieldControlHtml = implode(LF, $legacyWizards['fieldControl']);
@@ -156,7 +156,7 @@ class InfoWindowContentElement extends AbstractFormElement
         if ($contentLanguageUid) {
             $contentLanguage = $this->data['systemLanguageRows'][$currentLanguageUid]['iso'];
         } else {
-            $contentLanguage = $this->rteConfiguration['config']['defaultContentLanguage'] ?? 'en_US';
+            $contentLanguage = isset($this->rteConfiguration['config']['defaultContentLanguage']) ? $this->rteConfiguration['config']['defaultContentLanguage'] : 'en_US';
             $languageCodeParts = explode('_', $contentLanguage);
             $contentLanguage = strtolower($languageCodeParts[0]) . ($languageCodeParts[1] ? '_' . strtoupper($languageCodeParts[1]) : '');
             // Find the configured language in the list of localization locales
