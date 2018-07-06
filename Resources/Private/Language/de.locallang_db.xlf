@@ -95,6 +95,10 @@
         <source>address</source>
         <target>Adresse</target>
       </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.address.useSearchField" xml:space="preserve" approved="yes">
+        <source>Please use search field in Google Maps, to fill this field</source>
+        <target>Bitte verwende das Suchfeld in der Google Karte, um dieses Feld zu befüllen.</target>
+      </trans-unit>
       <trans-unit id="tx_maps2_domain_model_poicollection.style" xml:space="preserve">
         <source>Style</source>
         <target>Design</target>

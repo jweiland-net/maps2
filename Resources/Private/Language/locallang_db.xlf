@@ -73,6 +73,9 @@
       <trans-unit id="tx_maps2_domain_model_poicollection.address" xml:space="preserve">
         <source>Address</source>
       </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.address.useSearchField" xml:space="preserve" approved="yes">
+        <source>Please use search field in Google Maps, to fill this field</source>
+      </trans-unit>
       <trans-unit id="tx_maps2_domain_model_poicollection.style" xml:space="preserve">
         <source>Style</source>
       </trans-unit>

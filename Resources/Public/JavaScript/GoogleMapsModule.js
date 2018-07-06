@@ -122,10 +122,8 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
   
     /**
      * Create Area
-     *
-     * @param extConf
      */
-    var createArea = function(extConf) {
+    var createArea = function() {
       var coordinatesArray = [];
     
       if (typeof config.pois !== 'undefined') {
@@ -174,10 +172,8 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
   
     /**
      * Create Route
-     *
-     * @param extConf
      */
-    var createRoute = function(extConf) {
+    var createRoute = function() {
       var coordinatesArray = [];
     
       if (typeof config.pois !== 'undefined') {
@@ -226,10 +222,8 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
   
     /**
      * Create Radius
-     *
-     * @param extConf
      */
-    var createRadius = function(extConf) {
+    var createRadius = function() {
       marker = new gmaps.Circle(
         new CircleOptions(map, config, extConf)
       );
@@ -456,13 +450,13 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
         createMarker();
         break;
       case "Area":
-        createArea(extConf);
+        createArea();
         break;
       case "Route":
-        createRoute(extConf);
+        createRoute();
         break;
       case "Radius":
-        createRadius(extConf);
+        createRadius();
         break;
     }
   

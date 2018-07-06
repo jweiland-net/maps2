@@ -239,7 +239,8 @@ return [
                 'renderType' => 'maps2ReadOnly',
                 'size' => 30,
                 'readOnly' => true,
-                'eval' => 'trim',
+                'placeholder' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poicollection.address.useSearchField',
+                'eval' => 'required,trim',
             ],
         ],
         'latitude' => [
