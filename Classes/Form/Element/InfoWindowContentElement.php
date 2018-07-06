@@ -108,7 +108,8 @@ class InfoWindowContentElement extends AbstractFormElement
         $html[] =           '<div class="media">';
         $html[] =               '<div class="media-body">';
         $html[] =                   '<h4 class="callout-title">' . htmlspecialchars($addressHeader) . '</h4>';
-        $html[] =                   '<div class="callout-body">' . $this->data['databaseRow']['title'] . '<br>' . implode('<br />', $address) . '</div>';
+        $html[] =                   '<div class="callout-body"><strong>' . $this->data['databaseRow']['title'] . '</strong><br>' . implode('<br />', $address) . '<br /><br /></div>';
+        $html[] =                   '<div class="callout-body">' . $this->data['databaseRow']['info_window_content'] . '</div>';
         $html[] =               '</div>';
         $html[] =           '</div>';
         $html[] =       '</div>';

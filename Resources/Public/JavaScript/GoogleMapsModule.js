@@ -70,7 +70,6 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
   
   var initialize = function(element, config, extConf) {
     var marker = {};
-    var markers = {};
     var map = {};
     var infoWindow = new gmaps.InfoWindow();
     var infoWindowContent = document.getElementById("infowindow-content");
@@ -87,9 +86,9 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
      * Create Marker
      */
     var createMarker = function() {
-      var marker = new gmaps.Marker({
+      marker = new gmaps.Marker({
         position: new gmaps.LatLng(config.latitude, config.longitude),
-        map: this.map,
+        map: map,
         draggable: true
       });
     
@@ -451,7 +450,7 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
         // alert("Shit");
       });
     };
-    
+
     switch (config.collectionType) {
       case "Point":
         createMarker();
