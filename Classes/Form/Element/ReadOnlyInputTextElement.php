@@ -71,7 +71,7 @@ class ReadOnlyInputTextElement extends AbstractFormElement
         $itemValue = $parameterArray['itemFormElValue'];
         $config = $parameterArray['fieldConf']['config'];
         $evalList = GeneralUtility::trimExplode(',', $config['eval'], true);
-        $size = MathUtility::forceIntegerInRange($config['size'] ?? $this->defaultInputWidth, $this->minimumInputWidth, $this->maxInputWidth);
+        $size = MathUtility::forceIntegerInRange(isset($config['size']) ? $config['size'] : $this->defaultInputWidth, $this->minimumInputWidth, $this->maxInputWidth);
         $width = (int)$this->formMaxWidth($size);
         $nullControlNameEscaped = htmlspecialchars('control[active][' . $table . '][' . $row['uid'] . '][' . $fieldName . ']');
 
@@ -117,7 +117,7 @@ class ReadOnlyInputTextElement extends AbstractFormElement
             $attributes['readOnly'] = 'readOnly';
         }
 
-        $maxLength = $config['max'] ?? 0;
+        $maxLength = isset($config['max']) ? $config['max'] : 0;
         if ((int)$maxLength > 0) {
             $attributes['maxlength'] = (int)$maxLength;
         }
@@ -130,7 +130,7 @@ class ReadOnlyInputTextElement extends AbstractFormElement
 
         $valuePickerHtml = [];
         if (isset($config['valuePicker']['items']) && is_array($config['valuePicker']['items'])) {
-            $mode = $config['valuePicker']['mode'] ?? '';
+            $mode = isset($config['valuePicker']['mode']) ? $config['valuePicker']['mode'] : '';
             $itemName = $parameterArray['itemFormElName'];
             $fieldChangeFunc = $parameterArray['fieldChangeFunc'];
             if ($mode === 'append') {
@@ -157,10 +157,10 @@ class ReadOnlyInputTextElement extends AbstractFormElement
         $valueSliderHtml = [];
         if (isset($config['slider']) && is_array($config['slider'])) {
             $resultArray['requireJsModules'][] = 'TYPO3/CMS/Backend/ValueSlider';
-            $min = $config['range']['lower'] ?? 0;
-            $max = $config['range']['upper'] ?? 10000;
-            $step = $config['slider']['step'] ?? 1;
-            $width = $config['slider']['width'] ?? 400;
+            $min = isset($config['range']['lower']) ? $config['range']['lower'] : 0;
+            $max = isset($config['range']['upper']) ? $config['range']['upper'] : 10000;
+            $step = isset($config['slider']['step']) ? $config['slider']['step'] : 1;
+            $width = isset($config['slider']['width']) ? $config['slider']['width'] : 400;
             $valueType = 'null';
             if (in_array('int', $evalList, true)) {
                 $valueType = 'int';
@@ -239,7 +239,7 @@ class ReadOnlyInputTextElement extends AbstractFormElement
             $fullElement = implode(LF, $fullElement);
         } elseif ($this->hasNullCheckboxWithPlaceholder()) {
             $checked = $itemValue !== null ? ' checked="checked"' : '';
-            $placeholder = $shortenedPlaceholder = $config['placeholder'] ?? '';
+            $placeholder = $shortenedPlaceholder = isset($config['placeholder']) ? $config['placeholder'] : '';
             $disabled = '';
             $fallbackValue = 0;
             if (strlen($placeholder) > 0) {
