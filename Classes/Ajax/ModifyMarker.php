@@ -86,10 +86,6 @@ class ModifyMarker extends AbstractAjaxRequest
         $poiCollection->setLatitude($lat);
         $poiCollection->setLongitude($lng);
 
-        // save original poi position, when user has pressed "update" button for field address
-        $poiCollection->setLatitudeOrig($lat);
-        $poiCollection->setLongitudeOrig($lng);
-
         return $poiCollection;
     }
 }

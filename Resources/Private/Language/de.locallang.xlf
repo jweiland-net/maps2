@@ -19,6 +19,10 @@
         <source>Activate</source>
         <target>Aktivieren</target>
       </trans-unit>
+      <trans-unit id="backend.form.searchAddress" xml:space="preserve" approved="yes">
+        <source>Enter a location</source>
+        <target>Gebt hier die zu suchende Adresse ein</target>
+      </trans-unit>
 
       <trans-unit id="tx_maps2_domain_model_poi.latitude" xml:space="preserve" approved="yes">
         <source>latitude</source>

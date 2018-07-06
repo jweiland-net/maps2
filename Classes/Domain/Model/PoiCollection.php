@@ -63,20 +63,6 @@ class PoiCollection extends AbstractEntity
     protected $longitude = 0.0;
 
     /**
-     * LatitudeOrig
-     *
-     * @var float
-     */
-    protected $latitudeOrig = 0.0;
-
-    /**
-     * LongitudeOrig
-     *
-     * @var float
-     */
-    protected $longitudeOrig = 0.0;
-
-    /**
      * Radius
      *
      * @var int
@@ -307,48 +293,6 @@ class PoiCollection extends AbstractEntity
     public function setLongitude($longitude)
     {
         $this->longitude = (float)$longitude;
-    }
-
-    /**
-     * Returns the latitudeOrig
-     *
-     * @return float $latitudeOrig
-     */
-    public function getLatitudeOrig()
-    {
-        return $this->latitudeOrig;
-    }
-
-    /**
-     * Sets the latitudeOrig
-     *
-     * @param float $latitudeOrig
-     * @return void
-     */
-    public function setLatitudeOrig($latitudeOrig)
-    {
-        $this->latitudeOrig = (float)$latitudeOrig;
-    }
-
-    /**
-     * Returns the longitudeOrig
-     *
-     * @return float $longitudeOrig
-     */
-    public function getLongitudeOrig()
-    {
-        return $this->longitudeOrig;
-    }
-
-    /**
-     * Sets the longitudeOrig
-     *
-     * @param float $longitudeOrig
-     * @return void
-     */
-    public function setLongitudeOrig($longitudeOrig)
-    {
-        $this->longitudeOrig = (float)$longitudeOrig;
     }
 
     /**

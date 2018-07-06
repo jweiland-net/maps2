@@ -165,8 +165,6 @@ class GoogleMapsElementTest extends UnitTestCase
         $config = [
             'latitude' => 0,
             'longitude' => 0,
-            'latitudeOrig' => 0,
-            'longitudeOrig' => 0,
             'address' => 'Echterdinger Str. 57, 70794 Filderstadt',
             'collectionType' => 'Point', // this value was an array before
             'uid' => 123, // this value was string before
@@ -200,8 +198,6 @@ class GoogleMapsElementTest extends UnitTestCase
         $config = [
             'latitude' => 0,
             'longitude' => 0,
-            'latitudeOrig' => 0,
-            'longitudeOrig' => 0,
             'radius' => 250,
             'address' => 'Echterdinger Str. 57, 70794 Filderstadt',
             'collectionType' => 'Point', // this value was an array before
@@ -231,16 +227,12 @@ class GoogleMapsElementTest extends UnitTestCase
         $poiCollection->setCollectionType('Point');
         $poiCollection->setLatitude(0.123);
         $poiCollection->setLongitude(54.321);
-        $poiCollection->setLatitudeOrig(0.124);
-        $poiCollection->setLongitudeOrig(54.320);
 
         $this->poiCollectionRepository->findByUid(123)->shouldBeCalled()->willReturn($poiCollection);
 
         $config = [
             'latitude' => 0.123,
             'longitude' => 54.321,
-            'latitudeOrig' => 0.124,
-            'longitudeOrig' => 54.320,
             'address' => 'Echterdinger Str. 57, 70794 Filderstadt',
             'collectionType' => 'Point', // this value was an array before
             'uid' => 123, // this value was string before

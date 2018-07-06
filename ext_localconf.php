@@ -67,6 +67,11 @@ $boot = function($extKey) {
         'priority' => 50,
         'class' => \JWeiland\Maps2\Form\Element\InfoWindowContentElement::class,
     ];
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1530869394] = [
+        'nodeName' => 'maps2ReadOnly',
+        'priority' => 50,
+        'class' => \JWeiland\Maps2\Form\Element\ReadOnlyInputTextElement::class,
+    ];
 
     // Register SVG Icon Identifier
     $svgIcons = [

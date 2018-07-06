@@ -221,50 +221,6 @@ class PoiCollectionTest extends UnitTestCase
     /**
      * @test
      */
-    public function getLatitudeOrigInitiallyReturnsZero() {
-        $this->assertSame(
-            0.0,
-            $this->subject->getLatitudeOrig()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function setLatitudeOrigSetsLatitudeOrig() {
-        $this->subject->setLatitudeOrig(1234.56);
-
-        $this->assertSame(
-            1234.56,
-            $this->subject->getLatitudeOrig()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function getLongitudeOrigInitiallyReturnsZero() {
-        $this->assertSame(
-            0.0,
-            $this->subject->getLongitudeOrig()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function setLongitudeOrigSetsLongitudeOrig() {
-        $this->subject->setLongitudeOrig(1234.56);
-
-        $this->assertSame(
-            1234.56,
-            $this->subject->getLongitudeOrig()
-        );
-    }
-
-    /**
-     * @test
-     */
     public function getRadiusInitiallyReturnsZero() {
         $this->assertSame(
             0,

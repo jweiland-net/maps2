@@ -55,14 +55,6 @@
         <source>Pull the corner of the circle on the map to change this field automatically. For sure you can change it manually, too.</source>
         <target>Vergrößern oder verkleinern Sie den Zirkel in der Google Maps Karte, um dieses Feld zu aktualisieren. Natürlich können Sie dieses Feld auch manuell bearbeiten</target>
       </trans-unit>
-      <trans-unit id="latitude_orig.description">
-        <source>Search for an address and press "Update" to update this field. You can't change it, because it saves the position of your last search "Update"</source>
-        <target>Suchen Sie nach einer Adresse und drücken Sie "Update". Dieses Feld kann nicht bearbeitet werden, da es das Ergebnis Ihrer letzten Suche beinhaltet.</target>
-      </trans-unit>
-      <trans-unit id="longitude_orig.description">
-        <source>Search for an address and press "Update" to update this field. You can't change it, because it saves the position of your last search "Update"</source>
-        <target>Suchen Sie nach einer Adresse und drücken Sie "Update". Dieses Feld kann nicht bearbeitet werden, da es das Ergebnis Ihrer letzten Suche beinhaltet.</target>
-      </trans-unit>
     </body>
   </file>
 </xliff>

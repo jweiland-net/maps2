@@ -155,8 +155,6 @@ class GoogleMapsElement extends AbstractFormElement
             // set map center
             $config['latitude'] = $poiCollection->getLatitude();
             $config['longitude'] = $poiCollection->getLongitude();
-            $config['latitudeOrig'] = $poiCollection->getLatitudeOrig();
-            $config['longitudeOrig'] = $poiCollection->getLongitudeOrig();
             switch ($poiCollection->getCollectionType()) {
                 case 'Route':
                 case 'Area':

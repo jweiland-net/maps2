@@ -328,9 +328,7 @@ class GoogleMapsService implements SingletonInterface
         $fieldValues['hidden'] = 0;
         $fieldValues['deleted'] = 0;
         $fieldValues['latitude'] = $latitude;
-        $fieldValues['latitude_orig'] = $latitude;
         $fieldValues['longitude'] = $longitude;
-        $fieldValues['longitude_orig'] = $longitude;
         $fieldValues['collection_type'] = 'Point'; // currently only Point is allowed. If you want more: It's your turn
         $fieldValues['title'] = $position->getFormattedAddress(); // it's up to you to override this value
         $fieldValues['address'] = $position->getFormattedAddress();

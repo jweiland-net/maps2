@@ -67,12 +67,6 @@
       <trans-unit id="tx_maps2_domain_model_poicollection.longitude" xml:space="preserve">
         <source>Longitude for map position</source>
       </trans-unit>
-      <trans-unit id="tx_maps2_domain_model_poicollection.latitudeOrig" xml:space="preserve" approved="yes">
-        <source>Backup Latitude</source>
-      </trans-unit>
-      <trans-unit id="tx_maps2_domain_model_poicollection.longitudeOrig" xml:space="preserve" approved="yes">
-        <source>Backup Latitude</source>
-      </trans-unit>
       <trans-unit id="tx_maps2_domain_model_poicollection.radius" xml:space="preserve">
         <source>Radius</source>
       </trans-unit>

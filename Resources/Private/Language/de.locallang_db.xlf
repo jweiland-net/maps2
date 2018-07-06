@@ -87,14 +87,6 @@
         <source>Longitude for map position</source>
         <target>Längengrad der Karte</target>
       </trans-unit>
-      <trans-unit id="tx_maps2_domain_model_poicollection.latitudeOrig" xml:space="preserve" approved="yes">
-        <source>Backup Latitude</source>
-        <target>Backup Breitengrad</target>
-      </trans-unit>
-      <trans-unit id="tx_maps2_domain_model_poicollection.longitudeOrig" xml:space="preserve" approved="yes">
-        <source>Backup Latitude</source>
-        <target>Backup Längengrad</target>
-      </trans-unit>
       <trans-unit id="tx_maps2_domain_model_poicollection.radius" xml:space="preserve">
         <source>Radius</source>
         <target>Radius</target>
