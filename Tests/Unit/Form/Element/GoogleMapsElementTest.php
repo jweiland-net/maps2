@@ -261,7 +261,11 @@ class GoogleMapsElementTest extends UnitTestCase
 
         $result = $this->subject->render();
         $this->assertSame(
-            [0 => 'TYPO3/CMS/Maps2/GoogleMapsModule'],
+            [
+                0 => [
+                    'TYPO3/CMS/Maps2/GoogleMapsModule' => 'function(GoogleMaps){GoogleMaps();}'
+                ]
+            ],
             $result['requireJsModules']
         );
     }
