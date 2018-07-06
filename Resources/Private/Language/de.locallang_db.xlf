@@ -75,6 +75,14 @@
         <source>Title</source>
         <target>Titel</target>
       </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.map" xml:space="preserve">
+        <source>Map</source>
+        <target>Karte</target>
+      </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.address" xml:space="preserve" approved="yes">
+        <source>address</source>
+        <target>Adresse</target>
+      </trans-unit>
       <trans-unit id="tx_maps2_domain_model_poicollection.configuration_map" xml:space="preserve" approved="yes">
         <source>Configure position on Google Maps</source>
         <target>Konfiguration einer Position auf Google Maps</target>
@@ -90,10 +98,6 @@
       <trans-unit id="tx_maps2_domain_model_poicollection.radius" xml:space="preserve">
         <source>Radius</source>
         <target>Radius</target>
-      </trans-unit>
-      <trans-unit id="tx_maps2_domain_model_poicollection.address" xml:space="preserve" approved="yes">
-        <source>address</source>
-        <target>Adresse</target>
       </trans-unit>
       <trans-unit id="tx_maps2_domain_model_poicollection.address.useSearchField" xml:space="preserve" approved="yes">
         <source>Please use search field in Google Maps, to fill this field</source>
