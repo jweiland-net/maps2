@@ -69,6 +69,7 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
   }
   
   var initialize = function(element, config, extConf) {
+    var marker = {};
     var markers = {};
     var map = {};
     var infoWindow = new gmaps.InfoWindow();
@@ -82,14 +83,16 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
     };
     createMap();
   
-    var marker = new gmaps.Marker({
-      map: map
-    });
-  
     /**
      * Create Marker
      */
     var createMarker = function() {
+      var marker = new gmaps.Marker({
+        position: new gmaps.LatLng(config.latitude, config.longitude),
+        map: this.map,
+        draggable: true
+      });
+    
       infoWindow.setContent(infoWindowContent);
   
       // open InfoWindow, if marker was clicked.
@@ -97,9 +100,6 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
         infoWindow.open(map, marker);
       });
 
-      marker.setPosition(new gmaps.LatLng(config.latitude, config.longitude));
-      marker.setDraggable(true);
-    
       // update fields and marker while dragging
       gmaps.event.addListener(marker, 'dragend', function() {
         setLatLngFields(
@@ -391,17 +391,24 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
           var lat = results[0].geometry.location.lat().toFixed(6);
           var lng = results[0].geometry.location.lng().toFixed(6);
   
-          if (typeof marker.setPosition === "function") {
-            // Type: Point
-            //marker.setPlace(); // setPlace works, but it resets previous marker settings like draggable, ...
-            marker.setPosition(results[0].geometry.location);
-            marker.setVisible(true);
-            setLatLngFields(lat, lng, 0, results[0].formatted_address);
-          } else {
-            // Type: Radius
-            marker.setCenter(results[0].geometry.location);
-            setLatLngFields(lat, lng, marker.getRadius(), results[0].formatted_address);
-            modifyMarkerInDb(lat, lng); // save radius to DB
+          switch (config.collectionType) {
+            case 'Point':
+              //marker.setPlace(); // setPlace works, but it resets previous marker settings like draggable, ...
+              marker.setPosition(results[0].geometry.location);
+              marker.setVisible(true);
+              setLatLngFields(lat, lng, 0, results[0].formatted_address);
+              break;
+            case 'Area':
+              setLatLngFields(lat, lng, 0, results[0].formatted_address);
+              break;
+            case 'Route':
+              setLatLngFields(lat, lng, 0, results[0].formatted_address);
+              break;
+            case 'Radius':
+              marker.setCenter(results[0].geometry.location);
+              setLatLngFields(lat, lng, marker.getRadius(), results[0].formatted_address);
+              modifyMarkerInDb(lat, lng); // save radius to DB
+              break;
           }
 
           map.setCenter(results[0].geometry.location);
@@ -460,9 +467,7 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
         break;
     }
   
-    if (marker !== null) {
-      findAddress(marker);
-    }
+    findAddress();
   
     if (config.latitude && config.longitude) {
       map.setCenter(new gmaps.LatLng(config.latitude, config.longitude));
