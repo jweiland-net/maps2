@@ -15,6 +15,9 @@
       <trans-unit id="google.activate" xml:space="preserve" approved="yes">
         <source>Activate</source>
       </trans-unit>
+      <trans-unit id="backend.form.searchAddress" xml:space="preserve" approved="yes">
+        <source>Enter a location</source>
+      </trans-unit>
 
       <trans-unit id="tx_maps2_domain_model_poi.latitude" xml:space="preserve" approved="yes">
         <source>latitude</source>

@@ -50,18 +50,6 @@ The maps2 record is the most important record in this extension.
          This field is only available for type ``Radius``.
          Type in the radius of your marker or resize the radius on the map to update that field.
  - :Field:
-         LatitudeOrig
-   :Description:
-         This field is not editable and is for internal use only.
-         It will keep the first latitude after address search so you can switch back to
-         this location after pressing the ***reset** button.
- - :Field:
-         LongitudeOrig
-   :Description:
-         This field is not editable and is for internal use only.
-         It will keep the first longitude after address search so you can switch back to
-         this location after pressing the ***reset** button.
- - :Field:
          Map
    :Description:
          If you are connected with the internet and have configured the Api Keys correctly

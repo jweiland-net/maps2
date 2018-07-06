@@ -46,12 +46,6 @@
       <trans-unit id="radius.description">
         <source>Pull the center marker on the map to change this field automatically. For sure you can change it manually, too.</source>
       </trans-unit>
-      <trans-unit id="latitude_orig.description">
-        <source>Search for an address and press "Update" to update this field. You can't change it, because it saves the position of your last search "Update"</source>
-      </trans-unit>
-      <trans-unit id="longitude_orig.description">
-        <source>Search for an address and press "Update" to update this field. You can't change it, because it saves the position of your last search "Update"</source>
-      </trans-unit>
     </body>
   </file>
 </xliff>

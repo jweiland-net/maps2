@@ -87,14 +87,6 @@
         <source>Longitude for map position</source>
         <target>Längengrad der Karte</target>
       </trans-unit>
-      <trans-unit id="tx_maps2_domain_model_poicollection.latitudeOrig" xml:space="preserve" approved="yes">
-        <source>Backup Latitude</source>
-        <target>Backup Breitengrad</target>
-      </trans-unit>
-      <trans-unit id="tx_maps2_domain_model_poicollection.longitudeOrig" xml:space="preserve" approved="yes">
-        <source>Backup Latitude</source>
-        <target>Backup Längengrad</target>
-      </trans-unit>
       <trans-unit id="tx_maps2_domain_model_poicollection.radius" xml:space="preserve">
         <source>Radius</source>
         <target>Radius</target>
@@ -102,6 +94,10 @@
       <trans-unit id="tx_maps2_domain_model_poicollection.address" xml:space="preserve" approved="yes">
         <source>address</source>
         <target>Adresse</target>
+      </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.address.useSearchField" xml:space="preserve" approved="yes">
+        <source>Please use search field in Google Maps, to fill this field</source>
+        <target>Bitte verwende das Suchfeld in der Google Karte, um dieses Feld zu befüllen.</target>
       </trans-unit>
       <trans-unit id="tx_maps2_domain_model_poicollection.style" xml:space="preserve">
         <source>Style</source>

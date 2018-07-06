@@ -10,8 +10,6 @@ CREATE TABLE tx_maps2_domain_model_poicollection (
 	configuration_map varchar(255) DEFAULT '' NOT NULL,
 	latitude double(11,6) DEFAULT '0.000000' NOT NULL,
 	longitude double(11,6) DEFAULT '0.000000' NOT NULL,
-	latitude_orig double(11,6) DEFAULT '0.000000' NOT NULL,
-	longitude_orig double(11,6) DEFAULT '0.000000' NOT NULL,
 	radius int(11) unsigned DEFAULT '0' NOT NULL,
 	pois int(11) unsigned DEFAULT '0' NOT NULL,
 	stroke_color varchar(7) DEFAULT '' NOT NULL,
