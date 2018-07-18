@@ -947,7 +947,8 @@ class InfoWindowRteHtmlareaElement extends AbstractFormElement
         $convertedConf = GeneralUtility::removeDotsFromTS($conf);
         return str_replace(
             [':"0"', ':"\\/^(', ')$\\/i"', ':"\\/^(', ')$\\/"', '[]'],
-            [':false', ':/^(', ')$/i', ':/^(', ')$/', '{}'], json_encode($convertedConf)
+            [':false', ':/^(', ')$/i', ':/^(', ')$/', '{}'],
+            json_encode($convertedConf)
         );
     }
 
