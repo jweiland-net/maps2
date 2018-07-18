@@ -15,10 +15,11 @@ namespace JWeiland\Maps2\Form\Element;
  */
 
 use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
+use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Core\Utility\StringUtility;
-use TYPO3\CMS\Lang\LanguageService;
 
 /**
  * General type=input element.
@@ -31,30 +32,15 @@ use TYPO3\CMS\Lang\LanguageService;
 class ReadOnlyInputTextElement extends AbstractFormElement
 {
     /**
-     * Default field wizards enabled for this element.
+     * The number of chars expected per row when the height of a text area field is
+     * automatically calculated based on the number of characters found in the field content.
      *
-     * @var array
+     * @var int
      */
-    protected $defaultFieldWizard = [
-        'localizationStateSelector' => [
-            'renderType' => 'localizationStateSelector',
-        ],
-        'otherLanguageContent' => [
-            'renderType' => 'otherLanguageContent',
-            'after' => [
-                'localizationStateSelector'
-            ],
-        ],
-        'defaultLanguageDifferences' => [
-            'renderType' => 'defaultLanguageDifferences',
-            'after' => [
-                'otherLanguageContent',
-            ],
-        ],
-    ];
+    protected $charactersPerRow = 40;
 
     /**
-     * This will render a single-line input form field, possibly with various control/validation features
+     * This will render a <textarea>
      *
      * @return array As defined in initializeResultArray() of AbstractNode
      */
@@ -67,227 +53,147 @@ class ReadOnlyInputTextElement extends AbstractFormElement
         $row = $this->data['databaseRow'];
         $parameterArray = $this->data['parameterArray'];
         $resultArray = $this->initializeResultArray();
+        $backendUser = $this->getBackendUserAuthentication();
 
-        $itemValue = $parameterArray['itemFormElValue'];
         $config = $parameterArray['fieldConf']['config'];
+
+        // Setting columns number
+        $cols = MathUtility::forceIntegerInRange($config['cols'] ?: $this->defaultInputWidth, $this->minimumInputWidth, $this->maxInputWidth);
+
+        // Setting number of rows
+        $rows = MathUtility::forceIntegerInRange($config['rows'] ?: 5, 1, 20);
+        $originalRows = $rows;
+
+        $itemFormElementValueLength = strlen($parameterArray['itemFormElValue']);
+        if ($itemFormElementValueLength > $this->charactersPerRow * 2) {
+            $cols = $this->maxInputWidth;
+            $rows = MathUtility::forceIntegerInRange(
+                round($itemFormElementValueLength / $this->charactersPerRow),
+                count(explode(LF, $parameterArray['itemFormElValue'])),
+                20
+            );
+            if ($rows < $originalRows) {
+                $rows = $originalRows;
+            }
+        }
+
         $evalList = GeneralUtility::trimExplode(',', $config['eval'], true);
-        $size = MathUtility::forceIntegerInRange(isset($config['size']) ? $config['size'] : $this->defaultInputWidth, $this->minimumInputWidth, $this->maxInputWidth);
-        $width = (int)$this->formMaxWidth($size);
-        $nullControlNameEscaped = htmlspecialchars('control[active][' . $table . '][' . $row['uid'] . '][' . $fieldName . ']');
+        // "Extra" configuration; Returns configuration for the field based on settings found in the "types" fieldlist. Traditionally, this is where RTE configuration has been found.
+        $specialConfiguration = BackendUtility::getSpecConfParts($parameterArray['fieldConf']['defaultExtras']);
+        $html = '';
 
-        // @todo: The whole eval handling is a mess and needs refactoring
-        foreach ($evalList as $func) {
-            // @todo: This is ugly: The code should find out on it's own whether a eval definition is a
-            // @todo: keyword like "date", or a class reference. The global registration could be dropped then
-            // Pair hook to the one in \TYPO3\CMS\Core\DataHandling\DataHandler::checkValue_input_Eval()
-            if (isset($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tce']['formevals'][$func])) {
-                if (class_exists($func)) {
-                    $evalObj = GeneralUtility::makeInstance($func);
-                    if (method_exists($evalObj, 'deevaluateFieldValue')) {
-                        $_params = [
-                            'value' => $itemValue
-                        ];
-                        $itemValue = $evalObj->deevaluateFieldValue($_params);
-                    }
-                    if (method_exists($evalObj, 'returnFieldJS')) {
-                        $resultArray['additionalJavaScriptPost'][] = 'TBE_EDITOR.customEvalFunctions[' . GeneralUtility::quoteJSvalue($func) . ']'
-                            . ' = function(value) {' . $evalObj->returnFieldJS() . '};';
-                    }
-                }
-            }
-        }
-
-        $attributes = [
-            'value' => '',
-            'id' => StringUtility::getUniqueId('formengine-input-'),
-            'class' => implode(' ', [
-                'form-control',
-                't3js-clearable',
-                'hasDefaultValue',
-            ]),
-            'data-formengine-validation-rules' => $this->getValidationDataAsJsonString($config),
-            'data-formengine-input-params' => json_encode([
-                'field' => $parameterArray['itemFormElName'],
-                'evalList' => implode(',', $evalList),
-                'is_in' => trim($config['is_in'])
-            ]),
-            'data-formengine-input-name' => $parameterArray['itemFormElName'],
-        ];
-        if ($config['readOnly']) {
-            $attributes['readOnly'] = 'readOnly';
-        }
-
-        $maxLength = isset($config['max']) ? $config['max'] : 0;
-        if ((int)$maxLength > 0) {
-            $attributes['maxlength'] = (int)$maxLength;
-        }
-        if (!empty($config['placeholder'])) {
-            $attributes['placeholder'] = trim($config['placeholder']);
-        }
-        if (isset($config['autocomplete'])) {
-            $attributes['autocomplete'] = empty($config['autocomplete']) ? 'new-' . $fieldName : 'on';
-        }
-
-        $valuePickerHtml = [];
-        if (isset($config['valuePicker']['items']) && is_array($config['valuePicker']['items'])) {
-            $mode = isset($config['valuePicker']['mode']) ? $config['valuePicker']['mode'] : '';
-            $itemName = $parameterArray['itemFormElName'];
-            $fieldChangeFunc = $parameterArray['fieldChangeFunc'];
-            if ($mode === 'append') {
-                $assignValue = 'document.querySelectorAll(' . GeneralUtility::quoteJSvalue('[data-formengine-input-name="' . $itemName . '"]') . ')[0]'
-                    . '.value+=\'\'+this.options[this.selectedIndex].value';
-            } elseif ($mode === 'prepend') {
-                $assignValue = 'document.querySelectorAll(' . GeneralUtility::quoteJSvalue('[data-formengine-input-name="' . $itemName . '"]') . ')[0]'
-                    . '.value=\'\'+this.options[this.selectedIndex].value+document.editform[' . GeneralUtility::quoteJSvalue($itemName) . '].value';
-            } else {
-                $assignValue = 'document.querySelectorAll(' . GeneralUtility::quoteJSvalue('[data-formengine-input-name="' . $itemName . '"]') . ')[0]'
-                    . '.value=this.options[this.selectedIndex].value';
-            }
-            $valuePickerHtml[] = '<select';
-            $valuePickerHtml[] =  ' class="form-control tceforms-select tceforms-wizardselect"';
-            $valuePickerHtml[] =  ' onchange="' . htmlspecialchars($assignValue . ';this.blur();this.selectedIndex=0;' . implode('', $fieldChangeFunc)) . '"';
-            $valuePickerHtml[] = '>';
-            $valuePickerHtml[] = '<option></option>';
-            foreach ($config['valuePicker']['items'] as $item) {
-                $valuePickerHtml[] = '<option value="' . htmlspecialchars($item[1]) . '">' . htmlspecialchars($languageService->sL($item[0])) . '</option>';
-            }
-            $valuePickerHtml[] = '</select>';
-        }
-
-        $valueSliderHtml = [];
-        if (isset($config['slider']) && is_array($config['slider'])) {
-            $resultArray['requireJsModules'][] = 'TYPO3/CMS/Backend/ValueSlider';
-            $min = isset($config['range']['lower']) ? $config['range']['lower'] : 0;
-            $max = isset($config['range']['upper']) ? $config['range']['upper'] : 10000;
-            $step = isset($config['slider']['step']) ? $config['slider']['step'] : 1;
-            $width = isset($config['slider']['width']) ? $config['slider']['width'] : 400;
-            $valueType = 'null';
-            if (in_array('int', $evalList, true)) {
-                $valueType = 'int';
-                $itemValue = (int)$itemValue;
-            } elseif (in_array('double2', $evalList, true)) {
-                $valueType = 'double';
-                $itemValue = (double)$itemValue;
-            }
-            $callbackParams = [ $table, $row['uid'], $fieldName, $parameterArray['itemFormElName'] ];
-            $id = 'slider-' . md5($parameterArray['itemFormElName']);
-            $valueSliderHtml[] = '<div';
-            $valueSliderHtml[] =    ' id="' . $id . '"';
-            $valueSliderHtml[] =    ' data-slider-id="' . $id . '"';
-            $valueSliderHtml[] =    ' data-slider-min="' . (int)$min . '"';
-            $valueSliderHtml[] =    ' data-slider-max="' . (int)$max . '"';
-            $valueSliderHtml[] =    ' data-slider-step="' . htmlspecialchars($step) . '"';
-            $valueSliderHtml[] =    ' data-slider-value="' . htmlspecialchars($itemValue) . '"';
-            $valueSliderHtml[] =    ' data-slider-value-type="' . htmlspecialchars($valueType) . '"';
-            $valueSliderHtml[] =    ' data-slider-item-name="' . htmlspecialchars($parameterArray['itemFormElName']) . '"';
-            $valueSliderHtml[] =    ' data-slider-callback-params="' . htmlspecialchars(json_encode($callbackParams)) . '"';
-            $valueSliderHtml[] =    ' style="width: ' . $width . 'px;"';
-            $valueSliderHtml[] = '>';
-            $valueSliderHtml[] = '</div>';
-        }
-
-        $legacyWizards = $this->renderWizards();
-        $legacyFieldControlHtml = implode(LF, $legacyWizards['fieldControl']);
-        $legacyFieldWizardHtml = implode(LF, $legacyWizards['fieldWizard']);
-
-        $fieldInformationResult = $this->renderFieldInformation();
-        $fieldInformationHtml = $fieldInformationResult['html'];
-        $resultArray = $this->mergeChildReturnIntoExistingResult($resultArray, $fieldInformationResult, false);
-
-        $fieldControlResult = $this->renderFieldControl();
-        $fieldControlHtml = $legacyFieldControlHtml . $fieldControlResult['html'];
-        $resultArray = $this->mergeChildReturnIntoExistingResult($resultArray, $fieldControlResult, false);
-
-        $fieldWizardResult = $this->renderFieldWizard();
-        $fieldWizardHtml = $legacyFieldWizardHtml . $fieldWizardResult['html'];
-        $resultArray = $this->mergeChildReturnIntoExistingResult($resultArray, $fieldWizardResult, false);
-
-        $mainFieldHtml = [];
-        $mainFieldHtml[] = '<div class="form-control-wrap" style="max-width: ' . $width . 'px">';
-        $mainFieldHtml[] =  '<div class="form-wizards-wrap">';
-        $mainFieldHtml[] =      '<div class="form-wizards-element">';
-        $mainFieldHtml[] =          '<input type="text"' . GeneralUtility::implodeAttributes($attributes, true) . ' />';
-        $mainFieldHtml[] =          '<input type="hidden" name="' . $parameterArray['itemFormElName'] . '" value="' . htmlspecialchars($itemValue) . '" />';
-        $mainFieldHtml[] =      '</div>';
-        $mainFieldHtml[] =      '<div class="form-wizards-items-aside">';
-        $mainFieldHtml[] =          '<div class="btn-group">';
-        $mainFieldHtml[] =              implode(LF, $valuePickerHtml);
-        $mainFieldHtml[] =              implode(LF, $valueSliderHtml);
-        $mainFieldHtml[] =              $fieldControlHtml;
-        $mainFieldHtml[] =          '</div>';
-        $mainFieldHtml[] =      '</div>';
-        $mainFieldHtml[] =      '<div class="form-wizards-items-bottom">';
-        $mainFieldHtml[] =          $fieldWizardHtml;
-        $mainFieldHtml[] =      '</div>';
-        $mainFieldHtml[] =  '</div>';
-        $mainFieldHtml[] = '</div>';
-        $mainFieldHtml = implode(LF, $mainFieldHtml);
-
-        $fullElement = $mainFieldHtml;
-        if ($this->hasNullCheckboxButNoPlaceholder()) {
-            $checked = $itemValue !== null ? ' checked="checked"' : '';
-            $fullElement = [];
-            $fullElement[] = '<div class="t3-form-field-disable"></div>';
-            $fullElement[] = '<div class="checkbox t3-form-field-eval-null-checkbox">';
-            $fullElement[] =     '<label for="' . $nullControlNameEscaped . '">';
-            $fullElement[] =         '<input type="hidden" name="' . $nullControlNameEscaped . '" value="0" />';
-            $fullElement[] =         '<input type="checkbox" name="' . $nullControlNameEscaped . '" id="' . $nullControlNameEscaped . '" value="1"' . $checked . ' />';
-            $fullElement[] =         $languageService->sL('LLL:EXT:lang/Resources/Private/Language/locallang_core.xlf:labels.nullCheckbox');
-            $fullElement[] =     '</label>';
-            $fullElement[] = '</div>';
-            $fullElement[] = $mainFieldHtml;
-            $fullElement = implode(LF, $fullElement);
-        } elseif ($this->hasNullCheckboxWithPlaceholder()) {
-            $checked = $itemValue !== null ? ' checked="checked"' : '';
-            $placeholder = $shortenedPlaceholder = isset($config['placeholder']) ? $config['placeholder'] : '';
-            $disabled = '';
-            $fallbackValue = 0;
-            if (strlen($placeholder) > 0) {
-                $shortenedPlaceholder = GeneralUtility::fixed_lgd_cs($placeholder, 20);
-                if ($placeholder !== $shortenedPlaceholder) {
-                    $overrideLabel = sprintf(
-                        $languageService->sL('LLL:EXT:lang/Resources/Private/Language/locallang_core.xlf:labels.placeholder.override'),
-                        '<span title="' . htmlspecialchars($placeholder) . '">' . htmlspecialchars($shortenedPlaceholder) . '</span>'
-                    );
+        // Show message, if no RTE (field can only be edited with RTE!)
+        if ($specialConfiguration['rte_only']) {
+            $html = '<p><em>' . htmlspecialchars($this->getLanguageService()->sL('LLL:EXT:lang/locallang_core.xlf:labels.noRTEfound')) . '</em></p>';
+        } else {
+            $attributes = [];
+            // validation
+            foreach ($evalList as $func) {
+                if ($func === 'required') {
+                    $attributes['data-formengine-validation-rules'] = $this->getValidationDataAsJsonString(['required' => true]);
                 } else {
-                    $overrideLabel = sprintf(
-                        $languageService->sL('LLL:EXT:lang/Resources/Private/Language/locallang_core.xlf:labels.placeholder.override'),
-                        htmlspecialchars($placeholder)
-                    );
+                    // @todo: This is ugly: The code should find out on it's own whether a eval definition is a
+                    // @todo: keyword like "date", or a class reference. The global registration could be dropped then
+                    // Pair hook to the one in \TYPO3\CMS\Core\DataHandling\DataHandler::checkValue_input_Eval()
+                    // There is a similar hook for "evaluateFieldValue" in DataHandler and InputTextElement
+                    if (isset($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tce']['formevals'][$func])) {
+                        if (class_exists($func)) {
+                            $evalObj = GeneralUtility::makeInstance($func);
+                            if (method_exists($evalObj, 'deevaluateFieldValue')) {
+                                $_params = [
+                                    'value' => $parameterArray['itemFormElValue']
+                                ];
+                                $parameterArray['itemFormElValue'] = $evalObj->deevaluateFieldValue($_params);
+                            }
+                        }
+                    }
                 }
-            } else {
-                $overrideLabel = $languageService->sL(
-                    'LLL:EXT:lang/Resources/Private/Language/locallang_core.xlf:labels.placeholder.override_not_available'
-                );
             }
-            $fullElement = [];
-            $fullElement[] = '<div class="checkbox t3js-form-field-eval-null-placeholder-checkbox">';
-            $fullElement[] =     '<label for="' . $nullControlNameEscaped . '">';
-            $fullElement[] =         '<input type="hidden" name="' . $nullControlNameEscaped . '" value="' . $fallbackValue . '" />';
-            $fullElement[] =         '<input type="checkbox" name="' . $nullControlNameEscaped . '" id="' . $nullControlNameEscaped . '" value="1"' . $checked . $disabled . ' />';
-            $fullElement[] =         $overrideLabel;
-            $fullElement[] =     '</label>';
-            $fullElement[] = '</div>';
-            $fullElement[] = '<div class="t3js-formengine-placeholder-placeholder">';
-            $fullElement[] =    '<div class="form-control-wrap" style="max-width:' . $width . 'px">';
-            $fullElement[] =        '<input type="text" class="form-control" disabled="disabled" value="' . $shortenedPlaceholder . '" />';
-            $fullElement[] =    '</div>';
-            $fullElement[] = '</div>';
-            $fullElement[] = '<div class="t3js-formengine-placeholder-formfield">';
-            $fullElement[] =    $mainFieldHtml;
-            $fullElement[] = '</div>';
-            $fullElement = implode(LF, $fullElement);
+
+            // calculate classes
+            $classes = [];
+            $classes[] = 'form-control';
+            $classes[] = 't3js-formengine-textarea';
+            $classes[] = 'formengine-textarea';
+            if ($specialConfiguration['fixed-font']) {
+                $classes[] = 'text-monospace';
+            }
+            if ($specialConfiguration['enable-tab']) {
+                $classes[] = 't3js-enable-tab';
+            }
+
+            // calculate styles
+            $styles = [];
+            // add the max-height from the users' preference to it
+            $maximumHeight = (int)$backendUser->uc['resizeTextareas_MaxHeight'];
+            if ($maximumHeight > 0) {
+                $styles[] = 'max-height: ' . $maximumHeight . 'px';
+            }
+
+            // calculate attributes
+            $attributes['id'] = StringUtility::getUniqueId('formengine-textarea-');
+            $attributes['name'] = htmlspecialchars($parameterArray['itemFormElName']);
+            $attributes['data-formengine-input-name'] = htmlspecialchars($parameterArray['itemFormElName']);
+            if (!empty($styles)) {
+                $attributes['style'] = implode(' ', $styles);
+            }
+            if (!empty($classes)) {
+                $attributes['class'] = implode(' ', $classes);
+            }
+            $attributes['rows'] = $rows;
+            $attributes['wrap'] = $specialConfiguration['nowrap'] ? 'off' : ($config['wrap'] ?: 'virtual');
+            $attributes['onChange'] = implode('', $parameterArray['fieldChangeFunc']);
+            if (isset($config['max']) && (int)$config['max'] > 0) {
+                $attributes['maxlength'] = (int)$config['max'];
+            }
+
+            if ($config['readOnly']) {
+                $attributes['readOnly'] = 'readOnly';
+            }
+
+            $attributeString = '';
+            foreach ($attributes as $attributeName => $attributeValue) {
+                $attributeString .= ' ' . $attributeName . '="' . htmlspecialchars($attributeValue) . '"';
+            }
+
+            // Build the textarea
+            $placeholderAttribute = '';
+            if (!empty($config['placeholder'])) {
+                $placeholderAttribute = ' placeholder="' . htmlspecialchars(trim($config['placeholder'])) . '" ';
+            }
+
+            $html .= '<textarea'
+                . $attributeString
+                . $placeholderAttribute
+                . $parameterArray['onFocus']
+                . '>' . htmlspecialchars($parameterArray['itemFormElValue']) . '</textarea>';
+
+            // Wrap a wizard around the item?
+            $html = $this->renderWizards(
+                [$html],
+                $config['wizards'],
+                $table,
+                $row,
+                $fieldName,
+                $parameterArray,
+                $parameterArray['itemFormElName'],
+                $specialConfiguration,
+                false
+            );
+
+            $maximumWidth = (int)$this->formMaxWidth($cols);
+            $html = '<div class="form-control-wrap"' . ($maximumWidth ? ' style="max-width: ' . $maximumWidth . 'px"' : '') . '>' . $html . '</div>';
         }
 
-        $resultArray['html'] = '<div class="formengine-field-item t3js-formengine-field-item">' . $fieldInformationHtml . $fullElement . '</div>';
+        $resultArray['html'] = $html;
         return $resultArray;
     }
 
     /**
-     * @return LanguageService
+     * @return BackendUserAuthentication
      */
-    protected function getLanguageService()
+    protected function getBackendUserAuthentication()
     {
-        return $GLOBALS['LANG'];
+        return $GLOBALS['BE_USER'];
     }
 }
