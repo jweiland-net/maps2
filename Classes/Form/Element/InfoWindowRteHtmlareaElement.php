@@ -336,11 +336,22 @@ class InfoWindowRteHtmlareaElement extends AbstractFormElement
 
         $value = $this->transformDatabaseContentToEditor($this->data['parameterArray']['itemFormElValue']);
 
+        $address = GeneralUtility::trimExplode(',', $this->data['databaseRow']['address']);
+        $addressHeader = $this->getLanguageService()->sL('LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.info_window_address');
+
         $result = [];
         // The hidden field tells the DataHandler that processing should be done on this value.
         $result[] = '<input type="hidden" name="' . htmlspecialchars($triggerFieldName) . '" value="RTE" />';
         $result[] = '<div id="pleasewait' . $this->domIdentifier . '" class="pleasewait" style="display: block;" >';
         $result[] =    $this->getLanguageService()->sL('LLL:EXT:rtehtmlarea/Resources/Private/Language/locallang.xlf:Please wait');
+        $result[] = '</div>';
+        $result[] = '<div class="panel panel-info">';
+        $result[] =   '<div class="panel-heading"><h4 class="panel-header">' . htmlspecialchars($addressHeader) . '</h4></div>';
+        $result[] =   '<div class="panel-body">';
+        $result[] =     '<strong>' . $this->data['databaseRow']['title'] . '</strong><br>';
+        $result[] =     implode('<br />', $address) . '<br /><br />';
+        $result[] =     $this->data['databaseRow']['info_window_content'];
+        $result[] =   '</div>';
         $result[] = '</div>';
         $result[] = '<div id="editorWrap' . $this->domIdentifier . '" class="editorWrap" style="visibility: hidden; width:' . $editorWrapWidth . '; height:100%;">';
         $result[] =    '<textarea ' . $this->getValidationDataAsDataAttribute($this->data['parameterArray']['fieldConf']['config']) . ' id="RTEarea' . $this->domIdentifier . '" name="' . htmlspecialchars($itemFormElementName) . '" rows="0" cols="0" style="' . htmlspecialchars($rteDivStyle) . '">';
