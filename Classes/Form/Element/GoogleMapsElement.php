@@ -84,6 +84,7 @@ class GoogleMapsElement extends AbstractFormElement
     public function render()
     {
         $this->init();
+        $resultArray = $this->initializeResultArray();
         $currentRecord = $this->cleanUpCurrentRecord($this->data['databaseRow']);
 
         // loadRequireJsModule has to be loaded before configuring additional paths, else all ext paths will not be initialized
