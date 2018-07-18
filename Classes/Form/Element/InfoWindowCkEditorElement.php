@@ -24,7 +24,7 @@ use TYPO3\CMS\Core\Utility\PathUtility;
 /**
  * Show info window content as a read-only field at second tab in backend form
  */
-class InfoWindowContentElement extends AbstractFormElement
+class InfoWindowCkEditorElement extends AbstractFormElement
 {
     /**
      * Default field wizards enabled for this element.

@@ -345,6 +345,7 @@ return [
                 'rows' => '15',
                 'softref' => 'typolink_tag,images,email[subst],url',
             ],
+            'defaultExtras' => 'richtext:rte_transform[flag=rte_enabled|mode=ts]',
         ],
         'marker_icons' => [
             'exclude' => 1,
