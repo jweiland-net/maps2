@@ -23,7 +23,7 @@ return [
             'endtime' => 'endtime',
         ],
         'searchFields' => 'title, address',
-        'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::siteRelPath('maps2') . 'Resources/Public/Icons/tx_maps2_domain_model_poicollection.gif'
+        'iconfile' => 'EXT:maps2/Resources/Public/Icons/tx_maps2_domain_model_poicollection.gif'
     ],
     'interface' => [
         'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, collection_type, title, address, latitude, longitude, configuration_map, pois, stroke_color, stroke_opacity, stroke_weight, fill_color, fill_opacity, info_window_content, marker_icons, marker_icon_width, marker_icon_height, marker_icon_anchor_pos_x, marker_icon_anchor_pos_y',
@@ -345,6 +345,7 @@ return [
                 'rows' => '15',
                 'softref' => 'typolink_tag,images,email[subst],url',
             ],
+            'defaultExtras' => 'richtext:rte_transform[flag=rte_enabled|mode=ts]',
         ],
         'marker_icons' => [
             'exclude' => 1,

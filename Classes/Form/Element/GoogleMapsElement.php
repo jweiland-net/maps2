@@ -84,7 +84,13 @@ class GoogleMapsElement extends AbstractFormElement
     public function render()
     {
         $this->init();
+        $resultArray = $this->initializeResultArray();
         $currentRecord = $this->cleanUpCurrentRecord($this->data['databaseRow']);
+        if (version_compare(TYPO3_branch, '7.6') <= 0) {
+            $backendRelPath = ExtensionManagementUtility::extRelPath('maps2');
+        } else {
+            $backendRelPath = 'EXT:maps2/';
+        }
 
         // loadRequireJsModule has to be loaded before configuring additional paths, else all ext paths will not be initialized
         $this->pageRenderer->addRequireJsConfiguration([
@@ -112,7 +118,7 @@ class GoogleMapsElement extends AbstractFormElement
             ),
             false
         );
-        $resultArray['stylesheetFiles'][] = 'EXT:maps2/Resources/Public/Css/GoogleMapsModule.css';
+        $resultArray['stylesheetFiles'][] = $backendRelPath . 'Resources/Public/Css/GoogleMapsModule.css';
         $resultArray['requireJsModules'][] = [
             'TYPO3/CMS/Maps2/GoogleMapsModule' => 'function(GoogleMaps){GoogleMaps();}'
         ];
