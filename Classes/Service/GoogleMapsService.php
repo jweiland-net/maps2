@@ -423,7 +423,7 @@ class GoogleMapsService implements SingletonInterface
             return;
         }
 
-        if (!array_key_exists($foreignFieldName, $GLOBALS['TCA'][$foreignTableName]['columns'][$foreignFieldName])) {
+        if (!array_key_exists($foreignFieldName, $GLOBALS['TCA'][$foreignTableName]['columns'])) {
             $this->addMessage(
                 'Field "' . $foreignFieldName . '" is not configured in TCA',
                 'Field not found',
