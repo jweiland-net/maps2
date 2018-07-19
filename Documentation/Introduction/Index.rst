@@ -3,7 +3,7 @@
 .. --------------------------------------------------
 .. -*- coding: utf-8 -*- with BOM.
 
-.. include:: ../_IncludedDirectives.rst
+.. include:: ../Includes.rst.txt
 
 .. _introduction:
 
@@ -42,7 +42,6 @@ Point
 
 .. figure:: ../Images/Introduction/maps2-type-Point.jpg
    :width: 500px
-   :align: left
    :alt: Type: Point
 
          Introduction Package just after installation (caption of the image)
@@ -54,7 +53,6 @@ Radius
 
 .. figure:: ../Images/Introduction/maps2-type-Radius.jpg
    :width: 500px
-   :align: left
    :alt: Type: Radius
 
          Introduction Package just after installation (caption of the image)
@@ -66,7 +64,6 @@ Area
 
 .. figure:: ../Images/Introduction/maps2-type-Area.jpg
    :width: 500px
-   :align: left
    :alt: Type: Area
 
          Introduction Package just after installation (caption of the image)
@@ -78,7 +75,6 @@ Route
 
 .. figure:: ../Images/Introduction/maps2-type-Route.jpg
    :width: 500px
-   :align: left
    :alt: Type: Route
 
          Introduction Package just after installation (caption of the image)
@@ -90,7 +86,6 @@ Multiple
 
 .. figure:: ../Images/Introduction/maps2-type-Multiple.jpg
    :width: 500px
-   :align: left
    :alt: Type: Multiple
 
          Introduction Package just after installation (caption of the image)
