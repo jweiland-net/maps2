@@ -3,7 +3,7 @@
 .. --------------------------------------------------
 .. -*- coding: utf-8 -*- with BOM.
 
-.. include:: ../../_IncludedDirectives.rst
+.. include:: ../../Includes.rst.txt
 
 Google Api Keys
 ---------------

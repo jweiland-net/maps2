@@ -1,13 +1,5 @@
-..  Editor configuration
-	...................................................
-	* utf-8 with BOM as encoding
-	* tab indent with 4 characters for code snippet.
-	* optional: soft carriage return preferred.
+.. include:: Includes.rst.txt
 
-.. Includes roles, substitutions, ...
-.. include:: _IncludedDirectives.rst
-
-=====
 Maps2
 =====
 
@@ -27,10 +19,10 @@ The content of this document is related to TYPO3, a GNU/GPL CMS/Framework availa
 **Table of Contents**
 
 .. toctree::
-  :maxdepth: 2
+   :maxdepth: 2
 
-  Introduction/Index
-  UserManual/Index
-  AdministratorManual/Index
-  DeveloperManual/Index
-
+   Introduction/Index
+   UserManual/Index
+   AdministratorManual/Index
+   DeveloperManual/Index
+   Targets
