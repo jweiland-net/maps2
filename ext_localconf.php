@@ -22,11 +22,11 @@ $boot = function($extKey) {
         'JWeiland.maps2',
         'SearchWithinRadius',
         [
-            'PoiCollection' => 'search, multipleResults, listRadius',
+            'PoiCollection' => 'search, listRadius',
         ],
         // non-cacheable actions
         [
-            'PoiCollection' => 'multipleResults, listRadius',
+            'PoiCollection' => 'listRadius',
         ]
     );
 
@@ -50,8 +50,6 @@ $boot = function($extKey) {
     }
 
     // This is a solution to build GET forms.
-    $GLOBALS['TYPO3_CONF_VARS']['FE']['cacheHash']['excludedParameters'][] = 'tx_maps2_searchwithinradius[search][address]';
-    $GLOBALS['TYPO3_CONF_VARS']['FE']['cacheHash']['excludedParameters'][] = 'tx_maps2_searchwithinradius[search][radius]';
     $GLOBALS['TYPO3_CONF_VARS']['FE']['cacheHash']['excludedParameters'][] = 'tx_maps2_citymap[street]';
 
     // We have to save the permission to allow google requests before TS-Template rendering. It's needed by our own TS Condition object
