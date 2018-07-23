@@ -5,7 +5,7 @@ Maps2
 
 :Extension name: |extension_name|
 :Extension key: |extension_key|
-:Version: 4.0.1
+:Version: 4.0.2
 :Description: This extension gives you the possibility to add Google Maps in your Frontend
 :Language: en
 :Author: |author|
