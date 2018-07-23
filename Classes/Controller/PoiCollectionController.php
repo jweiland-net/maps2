@@ -1,4 +1,5 @@
 <?php
+
 namespace JWeiland\Maps2\Controller;
 
 /*
@@ -86,10 +87,10 @@ class PoiCollectionController extends AbstractController
         if ($search === null) {
             $search = $this->objectManager->get(Search::class);
         }
-    	$this->view->assign('search', $search);
+        $this->view->assign('search', $search);
     }
 
-     /**
+    /**
      * action listRadius
      * Search for POIs within a radius and show them in a list
      *
