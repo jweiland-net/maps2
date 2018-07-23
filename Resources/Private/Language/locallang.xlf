@@ -41,9 +41,6 @@
       <trans-unit id="rangeSearch.send" xml:space="preserve" approved="yes">
         <source>Search</source>
       </trans-unit>
-      <trans-unit id="rangeSearch.multipleResults" xml:space="preserve" approved="yes">
-        <source>For your given address we have found multiple addresses. Please choose one.</source>
-      </trans-unit>
 
       <trans-unit id="searchStreet" xml:space="preserve" approved="yes">
         <source>Search for street</source>

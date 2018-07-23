@@ -36,7 +36,7 @@ class Search
      *
      * @var int
      */
-    protected $radius = 0;
+    protected $radius = 50;
 
     /**
      * Returns the address

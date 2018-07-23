@@ -89,7 +89,7 @@ class SearchTest extends UnitTestCase
      */
     public function getRadiusInitiallyReturnsZero() {
         $this->assertSame(
-            0,
+            50,
             $this->subject->getRadius()
         );
     }

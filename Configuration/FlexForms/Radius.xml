@@ -10,16 +10,6 @@
         </TCEforms>
         <type>array</type>
         <el>
-          <settings.autoAppend>
-            <TCEforms>
-              <label>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:autoAppend</label>
-              <config>
-                <type>input</type>
-                <size>30</size>
-                <eval>trim</eval>
-              </config>
-            </TCEforms>
-          </settings.autoAppend>
           <settings.mapWidth>
             <TCEforms>
               <label>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:mapWidth</label>

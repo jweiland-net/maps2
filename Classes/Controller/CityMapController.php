@@ -39,14 +39,14 @@ class CityMapController extends AbstractController
      */
     public function searchAction($street)
     {
-        $response = $this->googleMapsService->findPositionsByAddress(
+        $location = $this->googleMapsService->getFirstFoundPositionByAddress(
             strip_tags($street) . ' ' . $this->settings['autoAppend']
         );
 
-        /* @var RadiusResult $location */
-        $location = $response->current();
-        $this->view->assign('latitude', $location->getGeometry()->getLocation()->getLatitude());
-        $this->view->assign('longitude', $location->getGeometry()->getLocation()->getLongitude());
-        $this->view->assign('address', rawurldecode($street));
+        if ($location instanceof RadiusResult) {
+            $this->view->assign('latitude', $location->getGeometry()->getLocation()->getLatitude());
+            $this->view->assign('longitude', $location->getGeometry()->getLocation()->getLongitude());
+            $this->view->assign('address', rawurldecode($street));
+        }
     }
 }
