@@ -193,6 +193,7 @@ class GoogleMapsService implements SingletonInterface
     {
         /** @var \TYPO3\CMS\Fluid\View\StandaloneView $view */
         $view = $this->objectManager->get(StandaloneView::class);
+        $view->assign('settings', $this->settings);
         $view->assign('poiCollection', $poiCollection);
         $view->setTemplatePathAndFilename(
             GeneralUtility::getFileAbsFileName(

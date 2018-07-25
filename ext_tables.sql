@@ -19,6 +19,7 @@ CREATE TABLE tx_maps2_domain_model_poicollection (
 	fill_opacity varchar(5) DEFAULT '' NOT NULL,
 	address varchar(255) DEFAULT '' NOT NULL,
 	info_window_content text,
+	info_window_images int(11) unsigned DEFAULT '0' NOT NULL,
 	marker_icons int(11) unsigned DEFAULT '0' NOT NULL,
 	marker_icon_width int(11) unsigned DEFAULT '0' NOT NULL,
 	marker_icon_height int(11) unsigned DEFAULT '0' NOT NULL,

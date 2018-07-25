@@ -131,6 +131,14 @@
         <source>Info Window Content</source>
         <target>Inhalt des Infofensters</target>
       </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.info_window_content" xml:space="preserve">
+        <source>Text within info window</source>
+        <target>Text im Infofenster</target>
+      </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.info_window_images" xml:space="preserve">
+        <source>Images within info window</source>
+        <target>Bilder im Infofenster</target>
+      </trans-unit>
       <trans-unit id="tx_maps2_domain_model_poicollection.marker_icons" xml:space="preserve">
         <source>Marker icon</source>
         <target>Marker Icon</target>

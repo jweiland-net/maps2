@@ -1,6 +1,6 @@
 [JWeiland\Maps2\Condition\AllowGoogleRequestCondition]
   page.includeJSFooterlibs {
-    jQueryForMaps2 = https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js
+    jQueryForMaps2 = https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js
     jQueryForMaps2.external = 1
     jQueryForMaps2.disableCompression = 1
     jQueryForMaps2.excludeFromConcatenation = 1
@@ -47,6 +47,12 @@ plugin.tx_maps2 {
   }
   settings {
     infoWindowContentTemplatePath = EXT:maps2/Resources/Private/Templates/InfoWindowContent.html
+    infoWindow {
+      image {
+        width = 150c
+        height = 150c
+      }
+    }
     markerClusterer {
       enable = {$plugin.tx_maps2.view.enableMarkerClusterer}
       imagePath = EXT:maps2/Resources/Public/Icons/MarkerClusterer/m

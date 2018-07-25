@@ -26,7 +26,7 @@ return [
         'iconfile' => 'EXT:maps2/Resources/Public/Icons/tx_maps2_domain_model_poicollection.gif'
     ],
     'interface' => [
-        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, collection_type, title, address, latitude, longitude, configuration_map, pois, stroke_color, stroke_opacity, stroke_weight, fill_color, fill_opacity, info_window_content, marker_icons, marker_icon_width, marker_icon_height, marker_icon_anchor_pos_x, marker_icon_anchor_pos_y',
+        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, collection_type, title, address, latitude, longitude, configuration_map, pois, stroke_color, stroke_opacity, stroke_weight, fill_color, fill_opacity, info_window_content, info_window_images, marker_icons, marker_icon_width, marker_icon_height, marker_icon_anchor_pos_x, marker_icon_anchor_pos_y',
     ],
     'types' => [
         'Empty' => [
@@ -38,7 +38,7 @@ return [
                 collection_type, title,
                 --div--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poicollection.map, address, configuration_map,
                 --palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:palette.latitude_longitude;latitude_longitude,
-                --div--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poicollection.style, info_window_content, marker_icons,
+                --div--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poicollection.style, info_window_content, info_window_images, marker_icons,
                 --palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:palette.marker_icon_size;marker_icon_size,
                 --palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:palette.marker_icon_pos;marker_icon_pos,
                 --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.access, 
@@ -141,8 +141,8 @@ return [
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.versionLabel',
             'config' => [
                 'type' => 'input',
-                'size' => '30',
-                'max' => '255'
+                'size' => 30,
+                'max' => 255
             ]
         ],
         'hidden' => [
@@ -162,7 +162,7 @@ return [
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.starttime',
             'config' => [
                 'type' => 'input',
-                'size' => '13',
+                'size' => 13,
                 'eval' => 'datetime',
                 'default' => 0
             ],
@@ -174,7 +174,7 @@ return [
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.endtime',
             'config' => [
                 'type' => 'input',
-                'size' => '13',
+                'size' => 13,
                 'eval' => 'datetime',
                 'default' => 0,
                 'range' => [
@@ -341,11 +341,50 @@ return [
             'config' => [
                 'type' => 'text',
                 'renderType' => 'maps2InfoWindowContent',
-                'cols' => '80',
-                'rows' => '15',
+                'cols' => 80,
+                'rows' => 15,
                 'softref' => 'typolink_tag,images,email[subst],url',
             ],
             'defaultExtras' => 'richtext:rte_transform[flag=rte_enabled|mode=ts]',
+        ],
+        'info_window_images' => [
+            'exclude' => 1,
+            'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poicollection.info_window_images',
+            'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
+                'info_window_images',
+                [
+                    'minitems' => 0,
+                    'maxitems' => 1,
+                    'foreign_match_fields' => [
+                        'fieldname' => 'info_window_images',
+                        'tablenames' => 'tx_maps2_domain_model_poicollection',
+                        'table_local' => 'sys_file',
+                    ],
+                    'behaviour' => [
+                        'allowLanguageSynchronization' => true,
+                    ],
+                    'appearance' => [
+                        'showPossibleLocalizationRecords' => true,
+                        'showRemovedLocalizationRecords' => true,
+                        'showAllLocalizationLink' => true,
+                        'showSynchronizationLink' => true
+                    ],
+                    // custom configuration for displaying fields in the overlay/reference table
+                    // to use the imageoverlayPalette instead of the basicoverlayPalette
+                    'foreign_types' => [
+                        '0' => [
+                            'showitem' => '
+                            --palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
+                            --palette--;;filePalette'
+                        ],
+                        \TYPO3\CMS\Core\Resource\File::FILETYPE_IMAGE => [
+                            'showitem' => '
+                            --palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
+                            --palette--;;filePalette'
+                        ]
+                    ]
+                ]
+            )
         ],
         'marker_icons' => [
             'exclude' => 1,

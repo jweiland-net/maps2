@@ -13,7 +13,26 @@
 </f:if>
 
 <f:section name="infoWindowContent">
+	<f:if condition="{poiCollection.infoWindowImages}">
+		<div class="imagesWrapper">
+			<f:for each="{poiCollection.infoWindowImages}" as="image">
+				<f:if condition="{image.originalResource}">
+					<f:if condition="{image.originalResource.originalFile}">
+						<f:image
+							image="{image.originalResource}"
+							width="{settings.infoWindow.image.width}"
+							height="{settings.infoWindow.image.height}"
+							alt="{image.originalResource.properties.alternative}"
+							title="{image.originalResource.properties.title}"
+						/>
+					</f:if>
+				</f:if>
+			</f:for>
+		</div>
+	</f:if>
+
   <div class="titleWrapper"><strong>{poiCollection.title}</strong></div>
+
   <div class="addressWrapper">
     <f:for each="{poiCollection.address -> maps2:TrimExplode()}" as="address" iteration="iterator">
       <f:if condition="{iterator.isLast}">
@@ -23,6 +42,7 @@
       </f:if>
     </f:for>
   </div>
+
   <f:if condition="{poiCollection}">
     <br />
     <div class="infoWindowContent">{poiCollection.infoWindowContent->f:format.html()}</div>
