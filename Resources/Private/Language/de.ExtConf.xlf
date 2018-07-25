@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <xliff version="1.0">
-  <file source-language="en" datatype="plaintext" original="messages" date="2013-02-07T11:13:04Z" product-name="maps2">
-    <header/>
-    <body>
-      <trans-unit id="googleMapsLibrary" xml:space="preserve">
+	<file source-language="en" datatype="plaintext" original="messages" date="2013-02-07T11:13:04Z" product-name="maps2">
+		<header/>
+		<body>
+			<trans-unit id="googleMapsLibrary" xml:space="preserve">
         <source>Link to Google Maps API: This setting is for TYPO3 Backend only. Visit your TypoScript-Templates if you want to change the library for Frontend. You only need to fill this field if you want to use an older or beta version.</source>
         <target>Link zur Google Maps API: Diese Einstellung ist nur für das TYPO3 Backend. Wenn Sie diese Einstellung für das Frontend vornehmen wollen, dann müssen Sie dies in Ihren TypoScript-Templates vornehmen. Füllen Sie dieses Feld nur, wenn Sie eine ältere oder eine der Betaversionen verwenden wollen.</target>
       </trans-unit>
@@ -28,12 +28,12 @@
         <target>Standard Land: Wenn jemand nur nach einer PLZ sucht, dann startet Google eine weltweite Suche. Da sich viele Webseiten auf nur ein Land beziehen, ist es evtl. sinnvoll diesen Wert auf Euer Land zu setzen, um eine ZIP-Suche auf eben dieses zu beschränken</target>
       </trans-unit>
       <trans-unit id="defaultLatitude" xml:space="preserve">
-        <source>Default Latitude: If you leave this empty Google Maps points to somewhere over the ocean on startup. So it's better to enter some coordinates: http://universimmedia.pagesperso-orange.fr/geo/loc.htm</source>
-        <target>Standard Breitengrad: Wenn dieses Feld leer gelassen wird, dann kann es sein, dass Sie beim Starten der Karte irgendwo über dem Ozean landen. Geben Sie hier zum Beispiel den Breitengrad von Ihrer Firma an: http://universimmedia.pagesperso-orange.fr/geo/loc.htm</target>
+        <source>Default Latitude: If you leave this empty Google Maps points to somewhere over the ocean on startup. So it's better to enter some coordinates: https://www.maps.ie/coordinates.html</source>
+        <target>Standard Breitengrad: Wenn dieses Feld leer gelassen wird, dann kann es sein, dass Sie beim Starten der Karte irgendwo über dem Ozean landen. Geben Sie hier zum Beispiel den Breitengrad von Ihrer Firma an: https://www.maps.ie/coordinates.html</target>
       </trans-unit>
       <trans-unit id="defaultLongitude" xml:space="preserve">
-        <source>Default Longitude: If you leave this empty Google Maps points to somewhere over the ocean on startup. So it's better to enter some coordinates: http://universimmedia.pagesperso-orange.fr/geo/loc.htm</source>
-        <target>Standard Längengrad: Wenn dieses Feld leer gelassen wird, dann kann es sein, dass Sie beim Starten der Karte irgendwo über dem Ozean landen. Geben Sie hier zum Beispiel den Längengrad von Ihrer Firma an: http://universimmedia.pagesperso-orange.fr/geo/loc.htm</target>
+        <source>Default Longitude: If you leave this empty Google Maps points to somewhere over the ocean on startup. So it's better to enter some coordinates: https://www.maps.ie/coordinates.html</source>
+        <target>Standard Längengrad: Wenn dieses Feld leer gelassen wird, dann kann es sein, dass Sie beim Starten der Karte irgendwo über dem Ozean landen. Geben Sie hier zum Beispiel den Längengrad von Ihrer Firma an: https://www.maps.ie/coordinates.html</target>
       </trans-unit>
       <trans-unit id="defaultRadius" xml:space="preserve">
         <source>Default Radius (in meters): When using collection type "Radius" you should set a default radius. Else you just see one single point</source>
@@ -84,6 +84,6 @@
         <source>Marker icon position Y: Which vertical pixel on the image points the position on the Google Maps. You can override this value individually in sys_category and PoiCollection records.</source>
         <target>Marker Icon Position Y: Welcher verticale Pixel auf dem Bild zeigt die exakte Position auf der Google Karte? Dieser Wert kann mit Angaben in sys_category und PoiCollection Datensätzen überschrieben werden.</target>
       </trans-unit>
-    </body>
-  </file>
+		</body>
+	</file>
 </xliff>
