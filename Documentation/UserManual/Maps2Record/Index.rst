@@ -110,7 +110,7 @@ The maps2 record is the most important record in this extension.
 Point
 -----
 
-Click somewhere on the map or drag'n drop the marker to your prefered location.
+Click somewhere on the map or drag'n drop the marker to your preferred location.
 
 Radius
 ------

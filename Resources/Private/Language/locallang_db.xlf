@@ -101,7 +101,10 @@
         <source>Info Window Content</source>
       </trans-unit>
       <trans-unit id="tx_maps2_domain_model_poicollection.info_window_content" xml:space="preserve">
-        <source>Additional Info Window Content</source>
+        <source>Text within info window</source>
+      </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.info_window_images" xml:space="preserve">
+        <source>Images within info window</source>
       </trans-unit>
       <trans-unit id="tx_maps2_domain_model_poicollection.marker_icons" xml:space="preserve">
         <source>Marker icon</source>

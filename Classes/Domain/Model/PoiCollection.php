@@ -121,6 +121,13 @@ class PoiCollection extends AbstractEntity
     protected $infoWindowContent = '';
 
     /**
+     * infoWindowImages
+     *
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
+     */
+    protected $infoWindowImages;
+
+    /**
      * markerIcon
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
@@ -187,6 +194,7 @@ class PoiCollection extends AbstractEntity
     {
         $this->pois = new ObjectStorage();
         $this->categories = new ObjectStorage();
+        $this->infoWindowImages = new ObjectStorage();
         $this->markerIcons = new ObjectStorage();
     }
 
@@ -545,9 +553,52 @@ class PoiCollection extends AbstractEntity
     }
 
     /**
-     * Returns the markerIcons
+     * Returns the infoWindowImages
      *
-     * @return ObjectStorage $markerIcons
+     * @return ObjectStorage
+     */
+    public function getInfoWindowImages()
+    {
+        return $this->infoWindowImages;
+    }
+
+    /**
+     * Sets the infoWindowImages
+     *
+     * @param ObjectStorage $infoWindowImages
+     * @return void
+     */
+    public function setInfoWindowImages(ObjectStorage $infoWindowImages)
+    {
+        $this->infoWindowImages = $infoWindowImages;
+    }
+
+    /**
+     * Add a new FileReference to InfoWindowImages
+     *
+     * @param FileReference $fileReference
+     * @return void
+     */
+    public function addInfoWindowImage(FileReference $fileReference)
+    {
+        $this->infoWindowImages->attach($fileReference);
+    }
+
+    /**
+     * Remove a FileReference from InfoWindowImages
+     *
+     * @param FileReference $fileReference
+     * @return void
+     */
+    public function removeInfoWindowImage(FileReference $fileReference)
+    {
+        $this->infoWindowImages->detach($fileReference);
+    }
+
+    /**
+     * Returns the marker icons
+     *
+     * @return ObjectStorage
      */
     public function getMarkerIcons()
     {

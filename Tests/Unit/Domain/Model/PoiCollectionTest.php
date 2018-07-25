@@ -556,6 +556,67 @@ class PoiCollectionTest extends UnitTestCase
     /**
      * @test
      */
+    public function getInfoWindowImagesInitiallyReturnsObjectStorage() {
+        $this->assertEquals(
+            new ObjectStorage(),
+            $this->subject->getInfoWindowImages()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function setInfoWindowImagesSetsInfoWindowImages() {
+        $object = new FileReference();
+        $objectStorage = new ObjectStorage();
+        $objectStorage->attach($object);
+        $this->subject->setInfoWindowImages($objectStorage);
+
+        $this->assertSame(
+            $objectStorage,
+            $this->subject->getInfoWindowImages()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function addInfoWindowImageAddsOneInfoWindowImage() {
+        $objectStorage = new ObjectStorage();
+        $this->subject->setInfoWindowImages($objectStorage);
+
+        $object = new FileReference();
+        $this->subject->addInfoWindowImage($object);
+
+        $objectStorage->attach($object);
+
+        $this->assertSame(
+            $objectStorage,
+            $this->subject->getInfoWindowImages()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function removeInfoWindowImageRemovesOneInfoWindowImage() {
+        $object = new FileReference();
+        $objectStorage = new ObjectStorage();
+        $objectStorage->attach($object);
+        $this->subject->setInfoWindowImages($objectStorage);
+
+        $this->subject->removeInfoWindowImage($object);
+        $objectStorage->detach($object);
+
+        $this->assertSame(
+            $objectStorage,
+            $this->subject->getInfoWindowImages()
+        );
+    }
+
+    /**
+     * @test
+     */
     public function getMarkerIconsInitiallyReturnsObjectStorage() {
         $this->assertEquals(
             new ObjectStorage(),
