@@ -9,8 +9,7 @@ return [
         'dividers2tabs' => true,
         'hideTable' => true,
         'sortby' => 'sorting',
-        'versioningWS' => 2,
-        'versioning_followPages' => true,
+        'versioningWS' => true,
         'origUid' => 't3_origuid',
         'languageField' => 'sys_language_uid',
         'transOrigPointerField' => 'l10n_parent',
@@ -62,7 +61,6 @@ return [
                 ],
                 'foreign_table' => 'tx_maps2_domain_model_poi',
                 'foreign_table_where' => 'AND tx_maps2_domain_model_poi.pid=###CURRENT_PID### AND tx_maps2_domain_model_poi.sys_language_uid IN (-1,0)',
-                'showIconTable' => false,
                 'default' => 0,
             ]
         ],
@@ -76,8 +74,8 @@ return [
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.versionLabel',
             'config' => [
                 'type' => 'input',
-                'size' => '30',
-                'max' => '255'
+                'size' => 30,
+                'max' => 255
             ]
         ],
         'hidden' => [
@@ -97,7 +95,8 @@ return [
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.starttime',
             'config' => [
                 'type' => 'input',
-                'size' => '13',
+                'renderType' => 'inputDateTime',
+                'size' => 13,
                 'eval' => 'datetime',
                 'default' => 0
             ],
@@ -109,7 +108,8 @@ return [
             'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.endtime',
             'config' => [
                 'type' => 'input',
-                'size' => '13',
+                'renderType' => 'inputDateTime',
+                'size' => 13,
                 'eval' => 'datetime',
                 'default' => 0,
                 'range' => [
@@ -121,7 +121,7 @@ return [
         ],
         'latitude' => [
             'exclude' => true,
-            'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poi.latitude',
+            'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poi.latitude',
             'config' => [
                 'type' => 'input',
                 'size' => 30,
@@ -130,7 +130,7 @@ return [
         ],
         'longitude' => [
             'exclude' => true,
-            'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poi.longitude',
+            'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poi.longitude',
             'config' => [
                 'type' => 'input',
                 'size' => 30,
@@ -139,7 +139,7 @@ return [
         ],
         'pos_index' => [
             'exclude' => true,
-            'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xml:tx_maps2_domain_model_poi.posIndex',
+            'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poi.posIndex',
             'config' => [
                 'type' => 'input',
                 'size' => 5,

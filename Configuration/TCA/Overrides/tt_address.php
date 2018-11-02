@@ -14,15 +14,11 @@ call_user_func(function() {
                     'internal_type' => 'db',
                     'allowed' => 'tx_maps2_domain_model_poicollection',
                     'prepend_tname' => false,
-                    'show_thumbs' => false,
                     'size' => 1,
                     'maxitems' => 1,
-                    'wizards' => [
-                        'suggest' => [
-                            'type' => 'suggest',
-                            'default' => [
-                                'searchWholePhrase' => true
-                            ]
+                    'suggestOptions' => [
+                        'default' => [
+                            'searchWholePhrase' => true
                         ]
                     ]
                 ]

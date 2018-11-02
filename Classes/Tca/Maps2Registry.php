@@ -330,12 +330,9 @@ class Maps2Registry implements SingletonInterface
             'size' => 1,
             'minitems' => 0,
             'maxitems' => 1,
-            'wizards' => [
-                'suggest' => [
-                    'type' => 'suggest',
-                    'default' => [
-                        'searchWholePhrase' => 1,
-                    ],
+            'suggestOptions' => [
+                'default' => [
+                    'searchWholePhrase' => 1,
                 ],
             ],
         ];
