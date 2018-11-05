@@ -92,7 +92,7 @@
         <source>Weight (f.e. 2)</source>
       </trans-unit>
       <trans-unit id="tx_maps2_domain_model_poicollection.fill_color" xml:space="preserve">
-        <source>Colorolor (f.e. #FF0000)</source>
+        <source>Color (f.e. #FF0000)</source>
       </trans-unit>
       <trans-unit id="tx_maps2_domain_model_poicollection.fill_opacity" xml:space="preserve">
         <source>Opacity (f.e. 0.35)</source>

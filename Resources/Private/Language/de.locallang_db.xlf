@@ -120,7 +120,7 @@
         <target>Dicke (z.B. 2)</target>
       </trans-unit>
       <trans-unit id="tx_maps2_domain_model_poicollection.fill_color" xml:space="preserve">
-        <source>Colorolor (f.e. #FF0000)</source>
+        <source>Color (f.e. #FF0000)</source>
         <target>Farbe (z.B. #FF0000)</target>
       </trans-unit>
       <trans-unit id="tx_maps2_domain_model_poicollection.fill_opacity" xml:space="preserve">
