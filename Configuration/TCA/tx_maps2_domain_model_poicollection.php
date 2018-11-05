@@ -16,13 +16,19 @@ return [
         'transOrigPointerField' => 'l10n_parent',
         'transOrigDiffSourceField' => 'l10n_diffsource',
         'delete' => 'deleted',
+        'typeicon_column' => 'collection_type',
+        'typeicon_classes' => [
+            'Point' => 'ext-maps2-record-type-point',
+            'Area' => 'ext-maps2-record-type-area',
+            'Route' => 'ext-maps2-record-type-route',
+            'Radius' => 'ext-maps2-record-type-radius',
+        ],
         'enablecolumns' => [
             'disabled' => 'hidden',
             'starttime' => 'starttime',
             'endtime' => 'endtime',
         ],
         'searchFields' => 'title, address',
-        'iconfile' => 'EXT:maps2/Resources/Public/Icons/tx_maps2_domain_model_poicollection.gif'
     ],
     'interface' => [
         'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, collection_type, title, address, latitude, longitude, configuration_map, pois, stroke_color, stroke_opacity, stroke_weight, fill_color, fill_opacity, info_window_content, info_window_images, marker_icons, marker_icon_width, marker_icon_height, marker_icon_anchor_pos_x, marker_icon_anchor_pos_y',

@@ -3,7 +3,7 @@ if (!defined('TYPO3_MODE')) {
     die('Access denied.');
 }
 
-$boot = function($extKey) {
+call_user_func(function($extKey) {
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
         'JWeiland.maps2',
         'Maps2',
@@ -87,6 +87,22 @@ $boot = function($extKey) {
     // add maps2 plugin to new element wizard
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig('<INCLUDE_TYPOSCRIPT: source="FILE:EXT:maps2/Configuration/TSconfig/ContentElementWizard.txt">');
 
+    // Register Bitmap Icon Identifier
+    $bmpIcons = [
+        'ext-maps2-record-type-point' => 'RecordTypePoint.png',
+        'ext-maps2-record-type-area' => 'RecordTypeArea.png',
+        'ext-maps2-record-type-route' => 'RecordTypeRoute.png',
+        'ext-maps2-record-type-radius' => 'RecordTypeRadius.png',
+    ];
+    $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
+    foreach ($bmpIcons as $identifier => $fileName) {
+        $iconRegistry->registerIcon(
+            $identifier,
+            \TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider::class,
+            ['source' => 'EXT:maps2/Resources/Public/Icons/' . $fileName]
+        );
+    }
+
     $signalSlotDispatcher = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\SignalSlot\Dispatcher::class);
     $signalSlotDispatcher->connect(
         \TYPO3\CMS\Install\Service\SqlExpectedSchemaService::class,
@@ -102,7 +118,4 @@ $boot = function($extKey) {
             'addMaps2DatabaseSchemaToTablesDefinition'
         );
     }
-};
-
-$boot($_EXTKEY);
-unset($boot);
+}, $_EXTKEY);
