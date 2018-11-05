@@ -28,19 +28,8 @@ use TYPO3\CMS\Lang\LanguageService;
  * This one kicks in if no specific renderType like "inputDateTime"
  * or "inputColorPicker" is set.
  */
-class ReadOnlyInputTextElement extends AbstractFormElement
+class ReadOnlyInputTextElement87 extends AbstractFormElement
 {
-    /**
-     * Default field information enabled for this element.
-     *
-     * @var array
-     */
-    protected $defaultFieldInformation = [
-        'tcaDescription' => [
-            'renderType' => 'tcaDescription',
-        ],
-    ];
-
     /**
      * Default field wizards enabled for this element.
      *
@@ -82,17 +71,9 @@ class ReadOnlyInputTextElement extends AbstractFormElement
         $itemValue = $parameterArray['itemFormElValue'];
         $config = $parameterArray['fieldConf']['config'];
         $evalList = GeneralUtility::trimExplode(',', $config['eval'], true);
-        $size = MathUtility::forceIntegerInRange($config['size'] ?? $this->defaultInputWidth, $this->minimumInputWidth, $this->maxInputWidth);
+        $size = MathUtility::forceIntegerInRange(isset($config['size']) ? $config['size'] : $this->defaultInputWidth, $this->minimumInputWidth, $this->maxInputWidth);
         $width = (int)$this->formMaxWidth($size);
         $nullControlNameEscaped = htmlspecialchars('control[active][' . $table . '][' . $row['uid'] . '][' . $fieldName . ']');
-
-        $fieldInformationResult = $this->renderFieldInformation();
-        $fieldInformationHtml = $fieldInformationResult['html'];
-        $resultArray = $this->mergeChildReturnIntoExistingResult($resultArray, $fieldInformationResult, false);
-
-        if ($config['readOnly']) {
-            $attributes['readOnly'] = 'readOnly';
-        }
 
         // @todo: The whole eval handling is a mess and needs refactoring
         foreach ($evalList as $func) {
@@ -132,8 +113,11 @@ class ReadOnlyInputTextElement extends AbstractFormElement
             ]),
             'data-formengine-input-name' => $parameterArray['itemFormElName'],
         ];
+        if ($config['readOnly']) {
+            $attributes['readOnly'] = 'readOnly';
+        }
 
-        $maxLength = $config['max'] ?? 0;
+        $maxLength = isset($config['max']) ? $config['max'] : 0;
         if ((int)$maxLength > 0) {
             $attributes['maxlength'] = (int)$maxLength;
         }
@@ -146,7 +130,7 @@ class ReadOnlyInputTextElement extends AbstractFormElement
 
         $valuePickerHtml = [];
         if (isset($config['valuePicker']['items']) && is_array($config['valuePicker']['items'])) {
-            $mode = $config['valuePicker']['mode'] ?? '';
+            $mode = isset($config['valuePicker']['mode']) ? $config['valuePicker']['mode'] : '';
             $itemName = $parameterArray['itemFormElName'];
             $fieldChangeFunc = $parameterArray['fieldChangeFunc'];
             if ($mode === 'append') {
@@ -173,10 +157,10 @@ class ReadOnlyInputTextElement extends AbstractFormElement
         $valueSliderHtml = [];
         if (isset($config['slider']) && is_array($config['slider'])) {
             $resultArray['requireJsModules'][] = 'TYPO3/CMS/Backend/ValueSlider';
-            $min = $config['range']['lower'] ?? 0;
-            $max = $config['range']['upper'] ?? 10000;
-            $step = $config['slider']['step'] ?? 1;
-            $width = $config['slider']['width'] ?? 400;
+            $min = isset($config['range']['lower']) ? $config['range']['lower'] : 0;
+            $max = isset($config['range']['upper']) ? $config['range']['upper'] : 10000;
+            $step = isset($config['slider']['step']) ? $config['slider']['step'] : 1;
+            $width = isset($config['slider']['width']) ? $config['slider']['width'] : 400;
             $valueType = 'null';
             if (in_array('int', $evalList, true)) {
                 $valueType = 'int';
@@ -202,49 +186,39 @@ class ReadOnlyInputTextElement extends AbstractFormElement
             $valueSliderHtml[] = '</div>';
         }
 
+        $legacyWizards = $this->renderWizards();
+        $legacyFieldControlHtml = implode(LF, $legacyWizards['fieldControl']);
+        $legacyFieldWizardHtml = implode(LF, $legacyWizards['fieldWizard']);
+
+        $fieldInformationResult = $this->renderFieldInformation();
+        $fieldInformationHtml = $fieldInformationResult['html'];
+        $resultArray = $this->mergeChildReturnIntoExistingResult($resultArray, $fieldInformationResult, false);
+
         $fieldControlResult = $this->renderFieldControl();
-        $fieldControlHtml = $fieldControlResult['html'];
+        $fieldControlHtml = $legacyFieldControlHtml . $fieldControlResult['html'];
         $resultArray = $this->mergeChildReturnIntoExistingResult($resultArray, $fieldControlResult, false);
 
         $fieldWizardResult = $this->renderFieldWizard();
-        $fieldWizardHtml = $fieldWizardResult['html'];
+        $fieldWizardHtml = $legacyFieldWizardHtml . $fieldWizardResult['html'];
         $resultArray = $this->mergeChildReturnIntoExistingResult($resultArray, $fieldWizardResult, false);
-        $inputType = 'text';
-
-        if (in_array('email', $evalList, true)) {
-            $inputType = 'email';
-        } elseif (!empty(array_intersect($evalList, ['int', 'num']))) {
-            $inputType = 'number';
-
-            if (isset($config['range']['lower'])) {
-                $attributes['min'] = (int)$config['range']['lower'];
-            }
-            if (isset($config['range']['upper'])) {
-                $attributes['max'] = (int)$config['range']['upper'];
-            }
-        }
 
         $mainFieldHtml = [];
         $mainFieldHtml[] = '<div class="form-control-wrap" style="max-width: ' . $width . 'px">';
         $mainFieldHtml[] =  '<div class="form-wizards-wrap">';
         $mainFieldHtml[] =      '<div class="form-wizards-element">';
-        $mainFieldHtml[] =          '<input type="' . $inputType . '"' . GeneralUtility::implodeAttributes($attributes, true) . ' />';
+        $mainFieldHtml[] =          '<input type="text"' . GeneralUtility::implodeAttributes($attributes, true) . ' />';
         $mainFieldHtml[] =          '<input type="hidden" name="' . $parameterArray['itemFormElName'] . '" value="' . htmlspecialchars($itemValue) . '" />';
         $mainFieldHtml[] =      '</div>';
-        if (!empty($valuePickerHtml) || !empty($valueSliderHtml) || !empty($fieldControlHtml)) {
-            $mainFieldHtml[] =      '<div class="form-wizards-items-aside">';
-            $mainFieldHtml[] =          '<div class="btn-group">';
-            $mainFieldHtml[] =              implode(LF, $valuePickerHtml);
-            $mainFieldHtml[] =              implode(LF, $valueSliderHtml);
-            $mainFieldHtml[] =              $fieldControlHtml;
-            $mainFieldHtml[] =          '</div>';
-            $mainFieldHtml[] =      '</div>';
-        }
-        if (!empty($fieldWizardHtml)) {
-            $mainFieldHtml[] = '<div class="form-wizards-items-bottom">';
-            $mainFieldHtml[] = $fieldWizardHtml;
-            $mainFieldHtml[] = '</div>';
-        }
+        $mainFieldHtml[] =      '<div class="form-wizards-items-aside">';
+        $mainFieldHtml[] =          '<div class="btn-group">';
+        $mainFieldHtml[] =              implode(LF, $valuePickerHtml);
+        $mainFieldHtml[] =              implode(LF, $valueSliderHtml);
+        $mainFieldHtml[] =              $fieldControlHtml;
+        $mainFieldHtml[] =          '</div>';
+        $mainFieldHtml[] =      '</div>';
+        $mainFieldHtml[] =      '<div class="form-wizards-items-bottom">';
+        $mainFieldHtml[] =          $fieldWizardHtml;
+        $mainFieldHtml[] =      '</div>';
         $mainFieldHtml[] =  '</div>';
         $mainFieldHtml[] = '</div>';
         $mainFieldHtml = implode(LF, $mainFieldHtml);
@@ -258,32 +232,32 @@ class ReadOnlyInputTextElement extends AbstractFormElement
             $fullElement[] =     '<label for="' . $nullControlNameEscaped . '">';
             $fullElement[] =         '<input type="hidden" name="' . $nullControlNameEscaped . '" value="0" />';
             $fullElement[] =         '<input type="checkbox" name="' . $nullControlNameEscaped . '" id="' . $nullControlNameEscaped . '" value="1"' . $checked . ' />';
-            $fullElement[] =         $languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.nullCheckbox');
+            $fullElement[] =         $languageService->sL('LLL:EXT:lang/Resources/Private/Language/locallang_core.xlf:labels.nullCheckbox');
             $fullElement[] =     '</label>';
             $fullElement[] = '</div>';
             $fullElement[] = $mainFieldHtml;
             $fullElement = implode(LF, $fullElement);
         } elseif ($this->hasNullCheckboxWithPlaceholder()) {
             $checked = $itemValue !== null ? ' checked="checked"' : '';
-            $placeholder = $shortenedPlaceholder = $config['placeholder'] ?? '';
+            $placeholder = $shortenedPlaceholder = isset($config['placeholder']) ? $config['placeholder'] : '';
             $disabled = '';
             $fallbackValue = 0;
             if (strlen($placeholder) > 0) {
                 $shortenedPlaceholder = GeneralUtility::fixed_lgd_cs($placeholder, 20);
                 if ($placeholder !== $shortenedPlaceholder) {
                     $overrideLabel = sprintf(
-                        $languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.placeholder.override'),
+                        $languageService->sL('LLL:EXT:lang/Resources/Private/Language/locallang_core.xlf:labels.placeholder.override'),
                         '<span title="' . htmlspecialchars($placeholder) . '">' . htmlspecialchars($shortenedPlaceholder) . '</span>'
                     );
                 } else {
                     $overrideLabel = sprintf(
-                        $languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.placeholder.override'),
+                        $languageService->sL('LLL:EXT:lang/Resources/Private/Language/locallang_core.xlf:labels.placeholder.override'),
                         htmlspecialchars($placeholder)
                     );
                 }
             } else {
                 $overrideLabel = $languageService->sL(
-                    'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.placeholder.override_not_available'
+                    'LLL:EXT:lang/Resources/Private/Language/locallang_core.xlf:labels.placeholder.override_not_available'
                 );
             }
             $fullElement = [];

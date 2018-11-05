@@ -20,7 +20,9 @@ use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\Location;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Domain\Model\RadiusResult;
+use JWeiland\Maps2\Utility\DatabaseUtility;
 use JWeiland\Maps2\Utility\DataMapper;
+use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\DatabaseConnection;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
@@ -338,17 +340,18 @@ class GoogleMapsService implements SingletonInterface
         ArrayUtility::mergeRecursiveWithOverrule($fieldValues, $overrideFieldValues);
 
         // remove all fields, which are not set in DB
-        $tableFieldSchema = $this
-            ->getDatabaseConnection()
-            ->admin_get_fields('tx_maps2_domain_model_poicollection');
-        $fieldValues = array_intersect_key($fieldValues, $tableFieldSchema);
+        $fieldValues = array_intersect_key(
+            $fieldValues,
+            DatabaseUtility::getColumnsFromTable('tx_maps2_domain_model_poicollection')
+        );
 
-        $this->getDatabaseConnection()->exec_INSERTquery(
+        $connection = $this->getConnectionPool()->getConnectionForTable('tx_maps2_domain_model_poicollection');
+        $connection->insert(
             'tx_maps2_domain_model_poicollection',
             $fieldValues
         );
 
-        return $this->getDatabaseConnection()->sql_insert_id();
+        return (int)$connection->lastInsertId('tx_maps2_domain_model_poicollection');
     }
 
     /**
@@ -433,11 +436,14 @@ class GoogleMapsService implements SingletonInterface
             return;
         }
 
-        $this->getDatabaseConnection()->exec_UPDATEquery(
+        $connection = $this->getConnectionPool()->getConnectionForTable($foreignTableName);
+        $connection->update(
             $foreignTableName,
-            'uid=' . (int)$foreignRecord['uid'],
             [
                 $foreignFieldName => (int)$poiCollectionUid
+            ],
+            [
+                'uid' => (int)$foreignRecord['uid']
             ]
         );
         $foreignRecord[$foreignFieldName] = (int)$poiCollectionUid;
@@ -465,12 +471,12 @@ class GoogleMapsService implements SingletonInterface
     }
 
     /**
-     * Get TYPO3s Database Connection
+     * Get TYPO3s Connection Pool
      *
-     * @return DatabaseConnection
+     * @return ConnectionPool
      */
-    protected function getDatabaseConnection()
+    protected function getConnectionPool()
     {
-        return $GLOBALS['TYPO3_DB'];
+        return GeneralUtility::makeInstance(ConnectionPool::class);
     }
 }

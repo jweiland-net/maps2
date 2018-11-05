@@ -13,17 +13,20 @@ namespace JWeiland\Maps2\Tests\Unit\Service;
  *
  * The TYPO3 project - inspiring people to share!
  */
+
+use Doctrine\DBAL\Driver\Statement;
 use JWeiland\Maps2\Client\GoogleMapsClient;
 use JWeiland\Maps2\Client\Request\GeocodeRequest;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\Location;
 use JWeiland\Maps2\Domain\Model\RadiusResult;
 use JWeiland\Maps2\Service\GoogleMapsService;
+use JWeiland\Maps2\Tests\Unit\AbstractUnitTestCase;
 use JWeiland\Maps2\Utility\DataMapper;
-use Nimut\TestingFramework\TestCase\UnitTestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
-use TYPO3\CMS\Core\Database\DatabaseConnection;
+use TYPO3\CMS\Core\Database\Connection;
+use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageQueue;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
@@ -36,7 +39,7 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
 /**
  * Test Google Maps Service class
  */
-class GoogleMapsServiceTest extends UnitTestCase
+class GoogleMapsServiceTest extends AbstractUnitTestCase
 {
     /**
      * @var ExtConf
@@ -79,11 +82,6 @@ class GoogleMapsServiceTest extends UnitTestCase
     protected $flashMessageService;
 
     /**
-     * @var DatabaseConnection|ObjectProphecy
-     */
-    protected $databaseConnection;
-
-    /**
      * @var GoogleMapsService
      */
     protected $subject;
@@ -102,9 +100,6 @@ class GoogleMapsServiceTest extends UnitTestCase
         $this->geocodeRequest = $this->prophesize(GeocodeRequest::class);
         $this->dataMapper = $this->prophesize(DataMapper::class);
         $this->flashMessageService = $this->prophesize(FlashMessageService::class);
-        $this->databaseConnection = $this->prophesize(DatabaseConnection::class);
-
-        $GLOBALS['TYPO3_DB'] = $this->databaseConnection->reveal();
 
         $this->subject = new GoogleMapsService();
         $this->subject->injectExtConf($this->extConf);
@@ -413,26 +408,54 @@ class GoogleMapsServiceTest extends UnitTestCase
         $radiusResult->setGeometry($geometry);
         $radiusResult->setFormattedAddress('My private address');
 
-        $this->databaseConnection
-            ->admin_get_fields('tx_maps2_domain_model_poicollection')
+        /** @var Statement|ObjectProphecy $statement */
+        $statement = $this->prophesize(Statement::class);
+        $statement->fetch()->shouldBeCalled()->willReturn(
+            ['Field' => 'uid'],
+            ['Field' => 'pid'],
+            ['Field' => 'hidden'],
+            ['Field' => 'deleted'],
+            ['Field' => 'title'],
+            null
+        );
+
+        /** @var Connection|ObjectProphecy $connection */
+        $connection = $this->prophesize(Connection::class);
+        $connection
+            ->query('SHOW FULL COLUMNS FROM `tx_maps2_domain_model_poicollection`')
             ->shouldBeCalled()
-            ->willReturn([
-                'uid' => 1,
-                'pid' => 1,
-                'hidden' => 1,
-                'deleted' => 1,
-                'title' => 1,
-            ]);
-        $this->databaseConnection
-            ->exec_INSERTquery(
+            ->willReturn($statement->reveal());
+
+        /** @var ConnectionPool|ObjectProphecy $selectConnectionPool */
+        $selectConnectionPool = $this->prophesize(ConnectionPool::class);
+        $selectConnectionPool
+            ->getConnectionForTable('tx_maps2_domain_model_poicollection')
+            ->shouldBeCalled()
+            ->willReturn($connection->reveal());
+
+        GeneralUtility::addInstance(ConnectionPool::class, $selectConnectionPool->reveal());
+
+        /** @var Connection|ObjectProphecy $insertConnection */
+        $insertConnection = $this->prophesize(Connection::class);
+        $insertConnection
+            ->insert(
                 'tx_maps2_domain_model_poicollection',
                 $fieldValues
             )
             ->shouldBeCalled();
-        $this->databaseConnection
-            ->sql_insert_id()
+        $insertConnection
+            ->lastInsertId('tx_maps2_domain_model_poicollection')
             ->shouldBeCalled()
             ->willReturn(100);
+
+        /** @var ConnectionPool|ObjectProphecy $insertConnectionPool */
+        $insertConnectionPool = $this->prophesize(ConnectionPool::class);
+        $insertConnectionPool
+            ->getConnectionForTable('tx_maps2_domain_model_poicollection')
+            ->shouldBeCalled()
+            ->willReturn($insertConnection->reveal());
+
+        GeneralUtility::addInstance(ConnectionPool::class, $insertConnectionPool->reveal());
 
         $this->assertSame(
             100,

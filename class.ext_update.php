@@ -14,6 +14,9 @@ namespace JWeiland\Maps2;
  * The TYPO3 project - inspiring people to share!
  */
 
+use JWeiland\Maps2\Utility\DatabaseUtility;
+use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageRendererResolver;
@@ -62,24 +65,45 @@ class ext_update
         $showAccess = false;
 
         // check for SCA
-        $amountOfRecords = $this->getDatabaseConnection()->exec_SELECTcountRows(
-            '*',
-            'tt_content',
-            'list_type=\'maps2_maps2\'' .
-            'AND pi_flexform LIKE \'%switchableControllerActions%\''
-        );
+        $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable('tt_content');
+        $amountOfRecords = $queryBuilder
+            ->count('*')
+            ->from('tt_content')
+            ->where(
+                $queryBuilder->expr()->eq(
+                    'list_type',
+                    $queryBuilder->createNamedParameter('maps2_maps2', \PDO::PARAM_STR)
+                ),
+                $queryBuilder->expr()->like(
+                    'pi_flexform',
+                    $queryBuilder->createNamedParameter('%switchableControllerActions%', \PDO::PARAM_STR)
+                )
+            )
+            ->execute()
+            ->fetchColumn(0);
+
         if ((bool)$amountOfRecords) {
             $showAccess = true;
         }
 
         // check for old marker_icon column in sys_category
-        $fields = $this->getDatabaseConnection()->admin_get_fields('sys_category');
+        $fields = DatabaseUtility::getColumnsFromTable('sys_category');
         if (array_key_exists('marker_icon', $fields)) {
-            $amountOfRecords = $this->getDatabaseConnection()->exec_SELECTcountRows(
-                '*',
-                'sys_category',
-                'deleted=0 AND marker_icon <> \'\''
+            $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable('sys_category');
+            $queryBuilder->getRestrictions()->removeAll()->add(
+                GeneralUtility::makeInstance(DeletedRestriction::class)
             );
+            $amountOfRecords = $queryBuilder
+                ->count('*')
+                ->from('sys_category')
+                ->where(
+                    $queryBuilder->expr()->neq(
+                        'marker_icon',
+                        $queryBuilder->createNamedParameter('', \PDO::PARAM_STR)
+                    )
+                )
+                ->execute()
+                ->fetchColumn(0);
         }
         if ((bool)$amountOfRecords) {
             $showAccess = true;
@@ -105,12 +129,23 @@ class ext_update
      */
     protected function removeSCAFromTtContentRecords()
     {
-        $rows = $this->getDatabaseConnection()->exec_SELECTgetRows(
-            'uid, pi_flexform',
-            'tt_content',
-            'list_type=\'maps2_maps2\'' .
-            ' AND pi_flexform LIKE \'%switchableControllerActions%\''
-        );
+        $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable('tt_content');
+        $rows = $amountOfRecords = $queryBuilder
+            ->select('uid', 'pi_flexform')
+            ->from('tt_content')
+            ->where(
+                $queryBuilder->expr()->eq(
+                    'list_type',
+                    $queryBuilder->createNamedParameter('maps2_maps2', \PDO::PARAM_STR)
+                ),
+                $queryBuilder->expr()->like(
+                    'pi_flexform',
+                    $queryBuilder->createNamedParameter('%switchableControllerActions%', \PDO::PARAM_STR)
+                )
+            )
+            ->execute()
+            ->fetchAll();
+
         if (is_array($rows)) {
             $affectedRows = 0;
             foreach ($rows as $row) {
@@ -118,14 +153,16 @@ class ext_update
                 if (isset($flexFormFields['data']['sDEFAULT']['lDEF']['switchableControllerActions'])) {
                     unset($flexFormFields['data']['sDEFAULT']['lDEF']['switchableControllerActions']);
                 }
-                $this->getDatabaseConnection()->exec_UPDATEquery(
+                $connection = $this->getConnectionPool()->getConnectionForTable('tt_content');
+                $affectedRows += $connection->update(
                     'tt_content',
-                    'uid=' . (int)$row['uid'],
                     [
                         'pi_flexform' => $this->getFlexFormTools()->flexArray2Xml($flexFormFields)
+                    ],
+                    [
+                        'uid' => (int)$row['uid']
                     ]
                 );
-                $affectedRows += $this->getDatabaseConnection()->sql_affected_rows();
             }
             $this->messageArray[] = [
                 FlashMessage::OK,
@@ -140,7 +177,7 @@ class ext_update
             $this->messageArray[] = [
                 FlashMessage::ERROR,
                 'Error while selecting tt_content records',
-                'SQL-Error: ' . $this->getDatabaseConnection()->sql_error()
+                'SQL-Error'
             ];
         }
     }
@@ -151,13 +188,23 @@ class ext_update
     protected function migrateMarkerIconToFal()
     {
         // check for old marker_icon column in sys_category first
-        $fields = $this->getDatabaseConnection()->admin_get_fields('sys_category');
+        $fields = DatabaseUtility::getColumnsFromTable('sys_category');
         if (array_key_exists('marker_icon', $fields)) {
-            $sysCategories = $this->getDatabaseConnection()->exec_SELECTgetRows(
-                'uid, pid, marker_icon',
-                'sys_category',
-                'deleted=0 AND marker_icon <> \'\''
+            $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable('sys_category');
+            $queryBuilder->getRestrictions()->removeAll()->add(
+                GeneralUtility::makeInstance(DeletedRestriction::class)
             );
+            $sysCategories = $queryBuilder
+                ->select('uid', 'pid', 'marker_icon')
+                ->from('sys_category')
+                ->where(
+                    $queryBuilder->expr()->neq(
+                        'marker_icon',
+                        $queryBuilder->createNamedParameter('', \PDO::PARAM_STR)
+                    )
+                )
+                ->execute()
+                ->fetchAll();
             if (is_array($sysCategories)) {
                 foreach ($sysCategories as $sysCategory) {
                     try {
@@ -188,11 +235,14 @@ class ext_update
                         // file does not exists or whatever
                     }
                     // remove old icon
-                    $this->getDatabaseConnection()->exec_UPDATEquery(
+                    $connection = $this->getConnectionPool()->getConnectionForTable('sys_category');
+                    $connection->update(
                         'sys_category',
-                        'uid=' . (int)$sysCategory['uid'],
                         [
                             'marker_icon' => ''
+                        ],
+                        [
+                            'uid' => (int)$sysCategory['uid']
                         ]
                     );
                 }
@@ -238,13 +288,13 @@ class ext_update
     }
 
     /**
-     * Get TYPO3s Database Connection
+     * Get TYPO3s Connection Pool
      *
-     * @return \TYPO3\CMS\Core\Database\DatabaseConnection
+     * @return ConnectionPool
      */
-    protected function getDatabaseConnection()
+    protected function getConnectionPool()
     {
-        return $GLOBALS['TYPO3_DB'];
+        return GeneralUtility::makeInstance(ConnectionPool::class);
     }
 
     /**

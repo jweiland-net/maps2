@@ -24,19 +24,8 @@ use TYPO3\CMS\Core\Utility\PathUtility;
 /**
  * Show info window content as a read-only field at second tab in backend form
  */
-class InfoWindowCkEditorElement extends AbstractFormElement
+class InfoWindowCkEditorElement87 extends AbstractFormElement
 {
-    /**
-     * Default field information enabled for this element.
-     *
-     * @var array
-     */
-    protected $defaultFieldInformation = [
-        'tcaDescription' => [
-            'renderType' => 'tcaDescription',
-        ],
-    ];
-
     /**
      * Default field wizards enabled for this element.
      *
@@ -74,7 +63,7 @@ class InfoWindowCkEditorElement extends AbstractFormElement
      * @return array
      * @throws \InvalidArgumentException
      */
-    public function render(): array
+    public function render()
     {
         $resultArray = $this->initializeResultArray();
         $parameterArray = $this->data['parameterArray'];
@@ -83,18 +72,22 @@ class InfoWindowCkEditorElement extends AbstractFormElement
         $fieldId = $this->sanitizeFieldId($parameterArray['itemFormElName']);
         $itemFormElementName = $this->data['parameterArray']['itemFormElName'];
 
-        $value = $this->data['parameterArray']['itemFormElValue'] ?? '';
+        $value = isset($this->data['parameterArray']['itemFormElValue']) ? $this->data['parameterArray']['itemFormElValue'] : '';
+
+        $legacyWizards = $this->renderWizards();
+        $legacyFieldControlHtml = implode(LF, $legacyWizards['fieldControl']);
+        $legacyFieldWizardHtml = implode(LF, $legacyWizards['fieldWizard']);
 
         $fieldInformationResult = $this->renderFieldInformation();
         $fieldInformationHtml = $fieldInformationResult['html'];
         $resultArray = $this->mergeChildReturnIntoExistingResult($resultArray, $fieldInformationResult, false);
 
         $fieldControlResult = $this->renderFieldControl();
-        $fieldControlHtml = $fieldControlResult['html'];
+        $fieldControlHtml = $legacyFieldControlHtml . $fieldControlResult['html'];
         $resultArray = $this->mergeChildReturnIntoExistingResult($resultArray, $fieldControlResult, false);
 
         $fieldWizardResult = $this->renderFieldWizard();
-        $fieldWizardHtml = $fieldWizardResult['html'];
+        $fieldWizardHtml = $legacyFieldWizardHtml . $fieldWizardResult['html'];
         $resultArray = $this->mergeChildReturnIntoExistingResult($resultArray, $fieldWizardResult, false);
 
         $attributes = [
@@ -126,18 +119,14 @@ class InfoWindowCkEditorElement extends AbstractFormElement
         $html[] =                   htmlspecialchars($value);
         $html[] =               '</textarea>';
         $html[] =           '</div>';
-        if (!empty($fieldControlHtml)) {
-            $html[] =           '<div class="form-wizards-items-aside">';
-            $html[] =               '<div class="btn-group">';
-            $html[] =                   $fieldControlHtml;
-            $html[] =               '</div>';
-            $html[] =           '</div>';
-        }
-        if (!empty($fieldWizardHtml)) {
-            $html[] = '<div class="form-wizards-items-bottom">';
-            $html[] = $fieldWizardHtml;
-            $html[] = '</div>';
-        }
+        $html[] =           '<div class="form-wizards-items-aside">';
+        $html[] =               '<div class="btn-group">';
+        $html[] =                   $fieldControlHtml;
+        $html[] =               '</div>';
+        $html[] =           '</div>';
+        $html[] =           '<div class="form-wizards-items-bottom">';
+        $html[] =               $fieldWizardHtml;
+        $html[] =           '</div>';
         $html[] =       '</div>';
         $html[] =   '</div>';
         $html[] = '</div>';
@@ -145,6 +134,7 @@ class InfoWindowCkEditorElement extends AbstractFormElement
         $resultArray['html'] = implode(LF, $html);
 
         $this->rteConfiguration = $config['richtextConfiguration']['editor'];
+        $resultArray['requireJsModules'] = [];
         $resultArray['requireJsModules'][] = [
             'ckeditor' => $this->getCkEditorRequireJsModuleCode($fieldId)
         ];
@@ -157,7 +147,7 @@ class InfoWindowCkEditorElement extends AbstractFormElement
      *
      * @return string
      */
-    protected function getLanguageIsoCodeOfContent(): string
+    protected function getLanguageIsoCodeOfContent()
     {
         $currentLanguageUid = $this->data['databaseRow']['sys_language_uid'];
         if (is_array($currentLanguageUid)) {
@@ -167,7 +157,7 @@ class InfoWindowCkEditorElement extends AbstractFormElement
         if ($contentLanguageUid) {
             $contentLanguage = $this->data['systemLanguageRows'][$currentLanguageUid]['iso'];
         } else {
-            $contentLanguage = $this->rteConfiguration['config']['defaultContentLanguage'] ?? 'en_US';
+            $contentLanguage = isset($this->rteConfiguration['config']['defaultContentLanguage']) ? $this->rteConfiguration['config']['defaultContentLanguage'] : 'en_US';
             $languageCodeParts = explode('_', $contentLanguage);
             $contentLanguage = strtolower($languageCodeParts[0]) . ($languageCodeParts[1] ? '_' . strtoupper($languageCodeParts[1]) : '');
             // Find the configured language in the list of localization locales
@@ -187,7 +177,7 @@ class InfoWindowCkEditorElement extends AbstractFormElement
      * @param string $fieldId
      * @return string
      */
-    protected function getCkEditorRequireJsModuleCode(string $fieldId): string
+    protected function getCkEditorRequireJsModuleCode(string $fieldId)
     {
         $configuration = $this->prepareConfigurationForEditor();
 
@@ -215,14 +205,6 @@ class InfoWindowCkEditorElement extends AbstractFormElement
                             FormEngine.Validation.validate();
                             FormEngine.Validation.markFieldAsChanged($(\'#' . $fieldId . '\'));
                         });
-                        $(document).on(\'inline:sorting-changed\', function() {
-                            CKEDITOR.instances["' . $fieldId . '"].destroy();
-                            CKEDITOR.replace("' . $fieldId . '", ' . json_encode($configuration) . ');
-                        });
-                        $(document).on(\'flexform:sorting-changed\', function() {
-                            CKEDITOR.instances["' . $fieldId . '"].destroy();
-                            CKEDITOR.replace("' . $fieldId . '", ' . json_encode($configuration) . ');
-                        });
                     });
                 });
         }';
@@ -233,7 +215,7 @@ class InfoWindowCkEditorElement extends AbstractFormElement
      *
      * @return array
      */
-    protected function getExtraPlugins(): array
+    protected function getExtraPlugins()
     {
         $urlParameters = [
             'P' => [
@@ -271,7 +253,7 @@ class InfoWindowCkEditorElement extends AbstractFormElement
      *
      * @return array
      */
-    protected function replaceLanguageFileReferences(array $configuration): array
+    protected function replaceLanguageFileReferences(array $configuration)
     {
         foreach ($configuration as $key => $value) {
             if (is_array($value)) {
@@ -289,7 +271,7 @@ class InfoWindowCkEditorElement extends AbstractFormElement
      *
      * @return array
      */
-    protected function replaceAbsolutePathsToRelativeResourcesPath(array $configuration): array
+    protected function replaceAbsolutePathsToRelativeResourcesPath(array $configuration)
     {
         foreach ($configuration as $key => $value) {
             if (is_array($value)) {
@@ -307,7 +289,7 @@ class InfoWindowCkEditorElement extends AbstractFormElement
      * @param string $value
      * @return string
      */
-    protected function resolveUrlPath(string $value): string
+    protected function resolveUrlPath(string $value)
     {
         $value = GeneralUtility::getFileAbsFileName($value);
         return PathUtility::getAbsoluteWebPath($value);
@@ -319,7 +301,7 @@ class InfoWindowCkEditorElement extends AbstractFormElement
      *
      * @return array the configuration
      */
-    protected function prepareConfigurationForEditor(): array
+    protected function prepareConfigurationForEditor()
     {
         // Ensure custom config is empty so nothing additional is loaded
         // Of course this can be overridden by the editor configuration below
@@ -359,7 +341,7 @@ class InfoWindowCkEditorElement extends AbstractFormElement
      * @param string $itemFormElementName
      * @return string
      */
-    protected function sanitizeFieldId(string $itemFormElementName): string
+    protected function sanitizeFieldId(string $itemFormElementName)
     {
         $fieldId = preg_replace('/[^a-zA-Z0-9_:.-]/', '_', $itemFormElementName);
         return htmlspecialchars(preg_replace('/^[^a-zA-Z]/', 'x', $fieldId));

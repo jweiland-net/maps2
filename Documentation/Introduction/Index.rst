@@ -24,6 +24,9 @@ Bugs and Known Issues
 If you found a bug, it would be cool if you notify us
 about that over the `Bug Tracker <https://github.com/jweiland-net/maps2/issues>`_ of Github.
 
+Plugin "Search within Radius" can only be used on MySQL/MariaDB database storages, because we are
+using function ACOS, SIN and RADIANS which are not available on other database storages.
+
 What does it do?
 ----------------
 

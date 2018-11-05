@@ -13,8 +13,9 @@ namespace JWeiland\Maps2\Form\Resolver;
  *
  * The TYPO3 project - inspiring people to share!
  */
+
 use JWeiland\Maps2\Form\Element\ReadOnlyInputTextElement;
-use JWeiland\Maps2\Form\Element\ReadOnlyInputTextElement76;
+use JWeiland\Maps2\Form\Element\ReadOnlyInputTextElement87;
 use TYPO3\CMS\Backend\Form\NodeFactory;
 use TYPO3\CMS\Backend\Form\NodeResolverInterface;
 
@@ -48,8 +49,8 @@ class ReadOnlyInputTextResolver implements NodeResolverInterface
      */
     public function resolve()
     {
-        if (version_compare(TYPO3_branch, '7.6') <= 0) {
-            return ReadOnlyInputTextElement76::class;
+        if (version_compare(TYPO3_branch, '8.7') <= 0) {
+            return ReadOnlyInputTextElement87::class;
         } else {
             return ReadOnlyInputTextElement::class;
         }

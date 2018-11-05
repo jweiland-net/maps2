@@ -14,6 +14,7 @@ namespace JWeiland\Maps2\Domain\Repository;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\PreparedStatement;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Query;
@@ -70,14 +71,13 @@ class PoiCollectionRepository extends Repository
      * @param float $latitude the users position
      * @param float $longitude the users position
      * @param int $radius The range to search for poi collections (km)
-     *
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
-     *
      * @throws \Exception
      */
     public function searchWithinRadius($latitude, $longitude, $radius)
     {
         $radiusOfEarth = 6380;
+
         /** @var Query $query */
         $query = $this->createQuery();
         $sql = '
@@ -89,15 +89,8 @@ class PoiCollectionRepository extends Repository
             HAVING distance < ?
             ORDER BY distance;';
 
-        /** @var PreparedStatement $preparedStatement */
-        $preparedStatement = $this->objectManager->get(
-            PreparedStatement::class,
-            $sql,
-            'tx_maps2_domain_model_poicollection'
-        );
-
         return $query->statement(
-            $preparedStatement,
+            $sql,
             [$latitude, $latitude, $longitude, $radiusOfEarth, $radius]
         )->execute();
     }
@@ -106,9 +99,7 @@ class PoiCollectionRepository extends Repository
      * find all pois selected by categories
      *
      * @param string $categories comma separated list of category uids
-     *
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
-     *
      * @throws \Exception
      */
     public function findPoisByCategories($categories)
