@@ -15,24 +15,37 @@ namespace JWeiland\Maps2\ViewHelpers;
  */
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
 /**
  * Define a delimiter and your comma separated value will be exploded into trimmed parts
  */
 class TrimExplodeViewHelper extends AbstractViewHelper
 {
+    use CompileWithRenderStatic;
 
     /**
-     * implements a vievHelper to trim explode comma separated strings
+     * Initialize all arguments. You need to override this method and call
+     * $this->registerArgument(...) inside this method, to register all your arguments.
+     */
+    public function initializeArguments()
+    {
+        $this->registerArgument('delimiter', 'string', 'The delimiter where the string should be exploded', false, ',');
+    }
+
+    /**
+     * Implements a vievHelper to trim explode comma separated strings
      *
-     * @param string $delimiter The delimiter where the string should be exploded
+     * @param array $arguments
+     * @param \Closure $renderChildrenClosure
+     * @param RenderingContextInterface $renderingContext
      * @return array
      */
-    public function render($delimiter = ',')
+    public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
     {
-        $value = $this->renderChildren();
-
-        return GeneralUtility::trimExplode($delimiter, $value);
+        $value = $renderChildrenClosure();
+        return GeneralUtility::trimExplode($arguments['delimiter'], $value);
     }
 }
