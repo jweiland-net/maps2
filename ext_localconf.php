@@ -3,7 +3,7 @@ if (!defined('TYPO3_MODE')) {
     die('Access denied.');
 }
 
-call_user_func(function($extKey) {
+call_user_func(function() {
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
         'JWeiland.maps2',
         'Maps2',
@@ -118,4 +118,4 @@ call_user_func(function($extKey) {
             'addMaps2DatabaseSchemaToTablesDefinition'
         );
     }
-}, $_EXTKEY);
+});
