@@ -472,8 +472,8 @@ function initMap() {
     });
 
     // initialize radius search
-    $address = jQuery("#maps2Address");
-    $radius = jQuery("#maps2Radius");
+    var $address = jQuery("#maps2Address");
+    var $radius = jQuery("#maps2Radius");
     if ($address.length && $radius.length) {
         var input = document.getElementById("maps2Address");
         var autocomplete = new google.maps.places.Autocomplete(input, {placeIdOnly: true});
