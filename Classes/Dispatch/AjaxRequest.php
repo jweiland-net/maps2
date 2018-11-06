@@ -43,6 +43,8 @@ class AjaxRequest
     /**
      * Dispatcher for ajax requests
      *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
      * @return ResponseInterface
      */
     public function dispatch(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
