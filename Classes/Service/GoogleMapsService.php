@@ -23,7 +23,6 @@ use JWeiland\Maps2\Domain\Model\RadiusResult;
 use JWeiland\Maps2\Utility\DatabaseUtility;
 use JWeiland\Maps2\Utility\DataMapper;
 use TYPO3\CMS\Core\Database\ConnectionPool;
-use TYPO3\CMS\Core\Database\DatabaseConnection;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\SingletonInterface;
@@ -455,7 +454,7 @@ class GoogleMapsService implements SingletonInterface
      * @param string $message
      * @param string $title
      * @param int $severity
-     * @throws \TYPO3\CMS\Core\Exception
+     * @return void
      */
     protected function addMessage($message, $title = '', $severity = FlashMessage::OK)
     {

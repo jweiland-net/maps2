@@ -14,13 +14,9 @@ namespace JWeiland\Maps2\Tests\Unit\ViewHelpers;
  * The TYPO3 project - inspiring people to share!
  */
 
-use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\Category;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
-use JWeiland\Maps2\Service\GoogleRequestService;
-use JWeiland\Maps2\Service\GoogleMapsService;
 use JWeiland\Maps2\ViewHelpers\ConvertToJsonViewHelper;
-use JWeiland\Maps2\ViewHelpers\Widget\EditPoiViewHelper;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
 use Prophecy\Argument;
 use TYPO3\CMS\Fluid\Core\Parser\SyntaxTree\ViewHelperNode;

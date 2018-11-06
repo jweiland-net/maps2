@@ -111,7 +111,6 @@ class GoogleMapsClient
      * @param string $message
      * @param string $title
      * @param int $severity
-     * @throws \TYPO3\CMS\Core\Exception
      */
     protected function addMessage($message, $title = '', $severity = FlashMessage::OK)
     {
