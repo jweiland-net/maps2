@@ -53,7 +53,7 @@ class SetCacheViewHelper extends AbstractViewHelper
      * @param array $arguments
      * @param \Closure $renderChildrenClosure
      * @param RenderingContextInterface $renderingContext
-     * @return string The formatted value
+     * @return void
      */
     public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
     {
@@ -64,6 +64,5 @@ class SetCacheViewHelper extends AbstractViewHelper
             $arguments['tags'],
             ($arguments['lifetime'] === null ? null : (int)$arguments['lifetime'])
         );
-        return '';
     }
 }

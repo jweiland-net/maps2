@@ -43,11 +43,11 @@ class HasCacheViewHelper extends AbstractViewHelper
      * @param array $arguments
      * @param \Closure $renderChildrenClosure
      * @param RenderingContextInterface $renderingContext
-     * @return string The formatted value
+     * @return bool
      */
     public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
     {
         $cache = GeneralUtility::makeInstance(CacheManager::class)->getCache('maps2_cachedhtml');
-        return (string)$cache->has($arguments['cacheIdentifier']);
+        return $cache->has($arguments['cacheIdentifier']);
     }
 }

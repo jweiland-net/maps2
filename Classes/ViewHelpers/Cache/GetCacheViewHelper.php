@@ -56,6 +56,6 @@ class GetCacheViewHelper extends AbstractViewHelper
     public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
     {
         $cache = GeneralUtility::makeInstance(CacheManager::class)->getCache('maps2_cachedhtml');
-        return (string)$cache->get($arguments['cacheIdentifier']);
+        return $cache->get($arguments['cacheIdentifier']);
     }
 }
