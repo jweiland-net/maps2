@@ -139,24 +139,23 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
       var path = area.getPath();
     
       area.setMap(map);
-    
-      // we need a listener for moving a position
+
+      // Listener which will be called, if a vertex was moved to a new location
       gmaps.event.addListener(path, 'set_at', function() {
         insertRouteToDb(area);
       });
-      // we need a listener to add new coordinates between existing positions
+      // Listener to add new vertex in between a route
       gmaps.event.addListener(path, 'insert_at', function() {
         insertRouteToDb(area);
       });
-      // we need a listener to remove route coordinates
+      // Listener to remove a vertex
       gmaps.event.addListener(area, 'rightclick', function(event) {
         area.getPath().removeAt(event.vertex);
         insertRouteToDb(area);
       });
-      // we need a listener to add new route coordinates
+      // Listener to add a new vertex. Will not be called, while inserting a vertex in between
       gmaps.event.addListener(map, 'click', function(event) {
         area.getPath().push(event.latLng);
-        insertRouteToDb(area);
       });
       // update fields for saving map position
       gmaps.event.addListener(map, 'dragend', function() {
@@ -191,23 +190,22 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
     
       route.setMap(map);
     
-      /* we need a listener for moving a position */
+      // Listener which will be called, if a vertex was moved to a new location
       gmaps.event.addListener(path, 'set_at', function() {
         insertRouteToDb(route);
       });
-      /* we need a listener to add new coordinates between existing positions */
+      // Listener to add new vertex in between a route
       gmaps.event.addListener(path, 'insert_at', function() {
         insertRouteToDb(route);
       });
-      /* we need a listener to remove route coordinates */
+      // Listener to remove a vertex
       gmaps.event.addListener(route, 'rightclick', function(event) {
         route.getPath().removeAt(event.vertex);
         insertRouteToDb(route);
       });
-      /* we need a listener to add new route coordinates */
+      // Listener to add a new vertex. Will not be called, while inserting a vertex in between
       gmaps.event.addListener(map, 'click', function(event) {
         route.getPath().push(event.latLng);
-        insertRouteToDb(route);
       });
       // update fields for saving map position
       gmaps.event.addListener(map, 'dragend', function() {
