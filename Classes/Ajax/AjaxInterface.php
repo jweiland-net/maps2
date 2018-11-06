@@ -19,7 +19,6 @@ namespace JWeiland\Maps2\Ajax;
  */
 interface AjaxInterface
 {
-
     /**
      * process ajax request
      *
@@ -27,5 +26,5 @@ interface AjaxInterface
      * @param string $hash A generated hash value to verify that there are no modifications in the uri
      * @return string
      */
-    public function processAjaxRequest(array $arguments, $hash);
+    public function processAjaxRequest(array $arguments, string $hash): string;
 }

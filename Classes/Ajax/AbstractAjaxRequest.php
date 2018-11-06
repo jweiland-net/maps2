@@ -18,7 +18,6 @@ use JWeiland\Maps2\Domain\Model\PoiCollection;
 use TYPO3\CMS\Extbase\Configuration\BackendConfigurationManager;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
-use TYPO3\CMS\Extbase\Reflection\PropertyReflection;
 use TYPO3\CMS\Extbase\Security\Cryptography\HashService;
 
 /**
@@ -104,7 +103,7 @@ abstract class AbstractAjaxRequest implements AjaxInterface
 
         // transport our minimal configuration into backendConfigurationManagers 1st-level Cache
         if (property_exists(get_class($this->backendConfigurationManager), 'configurationCache')) {
-            $propertyReflection = new PropertyReflection(
+            $propertyReflection = new \ReflectionProperty(
                 get_class($this->backendConfigurationManager),
                 'configurationCache'
             );

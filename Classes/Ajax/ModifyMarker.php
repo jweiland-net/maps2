@@ -43,12 +43,10 @@ class ModifyMarker extends AbstractAjaxRequest
      *
      * @param array $arguments Arguments to process
      * @param string $hash A generated hash value to verify that there are no modifications in the uri
-     *
      * @return string
-     *
      * @throws \Exception
      */
-    public function processAjaxRequest(array $arguments, $hash)
+    public function processAjaxRequest(array $arguments, string $hash): string
     {
         // cast arguments
         $uid = (int)$arguments['uid'];
@@ -60,7 +58,7 @@ class ModifyMarker extends AbstractAjaxRequest
         if ($poiCollection instanceof PoiCollection) {
             // validate uri arguments
             if (!$this->validateArguments($poiCollection, $hash)) {
-                return 'arguments are not valid';
+                return 'Arguments are not valid';
             }
 
             $poiCollection = $this->updateMarker($poiCollection, $lat, $lng);

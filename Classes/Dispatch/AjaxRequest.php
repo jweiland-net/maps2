@@ -14,6 +14,9 @@ namespace JWeiland\Maps2\Dispatch;
  * The TYPO3 project - inspiring people to share!
  */
 
+use JWeiland\Maps2\Ajax\AjaxInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 
@@ -23,14 +26,14 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
 class AjaxRequest
 {
     /**
-     * objectManager
+     * ObjectManager
      *
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
     /**
-     * contructor of this class
+     * Constructor of this class
      */
     public function __construct()
     {
@@ -38,23 +41,29 @@ class AjaxRequest
     }
 
     /**
-     * dispatcher for ajax requests
+     * Dispatcher for ajax requests
      *
-     * @return string html content
+     * @return ResponseInterface
      */
-    public function dispatch()
+    public function dispatch(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        // @ToDo generate Pluginnamespace by API-Call
-        $parameters = GeneralUtility::_GPmerged('tx_maps2_maps2');
+        $queryParams = $request->getQueryParams();
+        if (!array_key_exists('tx_maps2_maps2', $queryParams)) {
+            return $response;
+        }
+
+        $parameters = $queryParams['tx_maps2_maps2'];
 
         $className = 'JWeiland\\Maps2\\Ajax\\' . $parameters['objectName'];
         if (class_exists($className)) {
             $object = $this->objectManager->get($className);
-            if (method_exists($object, 'processAjaxRequest')) {
-                $result = $object->processAjaxRequest($parameters['arguments'], $parameters['hash']);
-                return $result;
+            if ($object instanceof AjaxInterface) {
+                $response->getBody()->write(
+                    $object->processAjaxRequest($parameters['arguments'], $parameters['hash'])
+                );
+                return $response;
             }
         }
-        return '';
+        return $response;
     }
 }
