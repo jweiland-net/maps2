@@ -68,7 +68,7 @@ class RenderHiddenFieldsForGetViewHelper extends AbstractViewHelper
     }
 
     /**
-     * implements a vievHelper to trim explode comma separated strings
+     * Implements a ViewHelper to trim explode comma separated strings
      *
      * @param int $pageUid UID of target page
      * @param string $action Target action
@@ -78,11 +78,11 @@ class RenderHiddenFieldsForGetViewHelper extends AbstractViewHelper
     public function render($pageUid = 0, $action = null, $controller = null)
     {
         $pluginNamespace = $this->extensionService->getPluginNamespace(
-            $this->controllerContext->getRequest()->getControllerExtensionName(),
-            $this->controllerContext->getRequest()->getPluginName()
+            $this->renderingContext->getControllerContext()->getRequest()->getControllerExtensionName(),
+            $this->renderingContext->getControllerContext()->getRequest()->getPluginName()
         );
         // get pageUid
-        $pageUid = $pageUid ? $pageUid : $GLOBALS['TSFE']->id;
+        $pageUid = $pageUid ?: $GLOBALS['TSFE']->id;
 
         // create array for cHash calculation
         $parameters = [];
