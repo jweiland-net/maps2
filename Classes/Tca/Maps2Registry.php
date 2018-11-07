@@ -14,6 +14,7 @@ namespace JWeiland\Maps2\Tca;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Core\Registry;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
@@ -29,6 +30,11 @@ class Maps2Registry implements SingletonInterface
      * @var array
      */
     protected $registry = [];
+
+    /**
+     * @var Registry
+     */
+    protected $sysRegistry;
 
     /**
      * @var array
@@ -60,6 +66,11 @@ class Maps2Registry implements SingletonInterface
      */
     public function __construct()
     {
+        // As this constructor will only be called once after clearing SystemCache
+        // we can securely remove all registered fields
+        $this->sysRegistry = GeneralUtility::makeInstance(Registry::class);
+        $this->sysRegistry->removeAllByNamespace('maps2_registry');
+
         $this->template = str_repeat(PHP_EOL, 3) . 'CREATE TABLE %s (' . PHP_EOL
             . '  %s int(11) unsigned DEFAULT \'0\' NOT NULL' . PHP_EOL . ');' . str_repeat(PHP_EOL, 3);
     }
@@ -77,12 +88,17 @@ class Maps2Registry implements SingletonInterface
      *              + position: insert position of the tx_maps2_uid field
      *              + label: backend label of the tx_maps2_uid field
      *              + fieldConfiguration: TCA field config array to override defaults
+     *              + addressColumns: Define some columns which should be used to build a full address for google requests
+     *              + countryColumn: If you're using static_info_tables in your TCE forms, define the column, which stores the UID of the static country. Else, leave empty
+     *              + synchronizeColumns: If you want to sync some columns from foreign record with poi record you can define them here. Multi array. Each array entry needs these keys:
+     *                                    -> foreignColumnName: column name of the foreign table. That's your table...of your extension
+     *                                    -> poiColumnName: column name of local POI tables. That's ours...from maps2
      * @param bool $override If TRUE, any maps2 configuration for the same table / field is removed before the new configuration is added
      * @return bool
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
      */
-    public function add($extensionKey, $tableName, $fieldName = 'tx_maps2_uid', array $options = [], $override = false)
+    public function add($extensionKey, $tableName, array $options = [], $fieldName = 'tx_maps2_uid', $override = false)
     {
         $didRegister = false;
         if (empty($tableName) || !is_string($tableName)) {
@@ -102,6 +118,8 @@ class Maps2Registry implements SingletonInterface
 
             if (isset($GLOBALS['TCA'][$tableName]['columns'])) {
                 $this->applyTcaForTableAndField($tableName, $fieldName);
+                $this->sysRegistry->remove('maps2_registry', 'fields');
+                $this->sysRegistry->set('maps2_registry', 'fields', $this->registry);
                 $didRegister = true;
             }
         }

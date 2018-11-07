@@ -250,21 +250,21 @@ class GoogleMapsService implements SingletonInterface
      * @throws \Exception
      * @api
      */
-    public function getPositionsByAddress($address)
+    public function getPositionsByAddress(string $address): ObjectStorage
     {
-        /** @var ObjectStorage $positions */
         $positions = $this->objectManager->get(ObjectStorage::class);
 
-        /** @var GoogleMapsClient $client */
-        $client = $this->objectManager->get(GoogleMapsClient::class);
+        // Prevent calls to Google GeoCode API, if address is empty
+        if (empty(trim($address))) {
+            return $positions;
+        }
 
-        /** @var GeocodeRequest $geocodeRequest */
         $geocodeRequest = $this->objectManager->get(GeocodeRequest::class);
         $geocodeRequest->setAddress((string)$address);
 
+        $client = $this->objectManager->get(GoogleMapsClient::class);
         $response = $client->processRequest($geocodeRequest);
         if (!empty($response)) {
-            /** @var DataMapper $dataMapper */
             $dataMapper = $this->objectManager->get(DataMapper::class);
             $positions = $dataMapper->mapObjectStorage(RadiusResult::class, $response['results']);
         }
@@ -280,10 +280,10 @@ class GoogleMapsService implements SingletonInterface
      * @throws \Exception
      * @api
      */
-    public function getFirstFoundPositionByAddress($address)
+    public function getFirstFoundPositionByAddress(string $address)
     {
         $position = null;
-        $positions = $this->getPositionsByAddress((string)$address);
+        $positions = $this->getPositionsByAddress($address);
         if ($positions->count()) {
             $positions->rewind();
             $position = $positions->current();
@@ -356,15 +356,15 @@ class GoogleMapsService implements SingletonInterface
     /**
      * Assign PoiCollection UID to foreign record
      *
-     * @param int $poiCollectionUid
-     * @param array $foreignRecord This array MUST HAVE an UID assigned
-     * @param string $foreignTableName
-     * @param string $foreignFieldName
+     * @param int $poiCollectionUid This must be the UID of the newly created POI collection record
+     * @param array $foreignRecord This is the record of the foreign extensions. It must be an already saved record and it MUST HAVE an UID assigned
+     * @param string $foreignTableName This is your (foreign) location table name, from where you get the $foreignRecord
+     * @param string $foreignFieldName This is our column name (mostly tx_maps2_uid) in your/foreign location table.
      * @return void
      * @throws \Exception
      * @api
      */
-    public function assignPoiCollectionToForeignRecord($poiCollectionUid, array &$foreignRecord, $foreignTableName, $foreignFieldName = 'tx_maps2_uid')
+    public function assignPoiCollectionToForeignRecord(int $poiCollectionUid, array &$foreignRecord, string $foreignTableName, string $foreignFieldName = 'tx_maps2_uid')
     {
         $hasErrors = false;
 
@@ -438,12 +438,8 @@ class GoogleMapsService implements SingletonInterface
         $connection = $this->getConnectionPool()->getConnectionForTable($foreignTableName);
         $connection->update(
             $foreignTableName,
-            [
-                $foreignFieldName => (int)$poiCollectionUid
-            ],
-            [
-                'uid' => (int)$foreignRecord['uid']
-            ]
+            [$foreignFieldName => (int)$poiCollectionUid],
+            ['uid' => (int)$foreignRecord['uid']]
         );
         $foreignRecord[$foreignFieldName] = (int)$poiCollectionUid;
     }

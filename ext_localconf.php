@@ -54,6 +54,8 @@ call_user_func(function() {
 
     // We have to save the permission to allow google requests before TS-Template rendering. It's needed by our own TS Condition object
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['initFEuser'][] = \JWeiland\Maps2\Hook\InitFeSessionHook::class . '->saveAllowGoogleRequestsInSession';
+    // Create maps2 records while saving foreign records
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][] = \JWeiland\Maps2\Hook\CreateMaps2RecordHook::class;
 
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeResolver'][1530869394] = [
         'nodeName' => 'maps2ReadOnly',
@@ -72,10 +74,10 @@ call_user_func(function() {
     ];
 
     // Register SVG Icon Identifier
+    $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
     $svgIcons = [
         'ext-maps2-wizard-icon' => 'plugin_wizard.svg',
     ];
-    $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
     foreach ($svgIcons as $identifier => $fileName) {
         $iconRegistry->registerIcon(
             $identifier,
@@ -83,18 +85,12 @@ call_user_func(function() {
             ['source' => 'EXT:maps2/Resources/Public/Icons/' . $fileName]
         );
     }
-
-    // add maps2 plugin to new element wizard
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig('<INCLUDE_TYPOSCRIPT: source="FILE:EXT:maps2/Configuration/TSconfig/ContentElementWizard.txt">');
-
-    // Register Bitmap Icon Identifier
     $bmpIcons = [
         'ext-maps2-record-type-point' => 'RecordTypePoint.png',
         'ext-maps2-record-type-area' => 'RecordTypeArea.png',
         'ext-maps2-record-type-route' => 'RecordTypeRoute.png',
         'ext-maps2-record-type-radius' => 'RecordTypeRadius.png',
     ];
-    $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
     foreach ($bmpIcons as $identifier => $fileName) {
         $iconRegistry->registerIcon(
             $identifier,
@@ -102,6 +98,9 @@ call_user_func(function() {
             ['source' => 'EXT:maps2/Resources/Public/Icons/' . $fileName]
         );
     }
+
+    // add maps2 plugin to new element wizard
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig('<INCLUDE_TYPOSCRIPT: source="FILE:EXT:maps2/Configuration/TSconfig/ContentElementWizard.txt">');
 
     $signalSlotDispatcher = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\SignalSlot\Dispatcher::class);
     $signalSlotDispatcher->connect(
