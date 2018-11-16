@@ -13,7 +13,6 @@ namespace JWeiland\Maps2\Domain\Model;
  *
  * The TYPO3 project - inspiring people to share!
  */
-
 use JWeiland\Maps2\Configuration\ExtConf;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
@@ -187,8 +186,6 @@ class PoiCollection extends AbstractEntity
 
     /**
      * Initializes all Tx_Extbase_Persistence_ObjectStorage properties.
-     *
-     * @return void
      */
     protected function initStorageObjects()
     {
@@ -200,10 +197,8 @@ class PoiCollection extends AbstractEntity
 
     /**
      * Returns the collectionType
-     *
-     * @return string $collectionType
      */
-    public function getCollectionType()
+    public function getCollectionType(): string
     {
         return $this->collectionType;
     }
@@ -212,19 +207,16 @@ class PoiCollection extends AbstractEntity
      * Sets the collectionType
      *
      * @param string $collectionType
-     * @return void
      */
-    public function setCollectionType($collectionType)
+    public function setCollectionType(string $collectionType)
     {
-        $this->collectionType = (string)$collectionType;
+        $this->collectionType = $collectionType;
     }
 
     /**
      * Returns the title
-     *
-     * @return string $title
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -233,19 +225,16 @@ class PoiCollection extends AbstractEntity
      * Sets the title
      *
      * @param string $title
-     * @return void
      */
-    public function setTitle($title)
+    public function setTitle(string $title)
     {
-        $this->title = (string)$title;
+        $this->title = $title;
     }
 
     /**
      * Returns the address
-     *
-     * @return string $address
      */
-    public function getAddress()
+    public function getAddress(): string
     {
         return $this->address;
     }
@@ -254,19 +243,16 @@ class PoiCollection extends AbstractEntity
      * Sets the address
      *
      * @param string $address
-     * @return void
      */
-    public function setAddress($address)
+    public function setAddress(string $address)
     {
-        $this->address = (string)$address;
+        $this->address = $address;
     }
 
     /**
      * Returns the latitude
-     *
-     * @return float $latitude
      */
-    public function getLatitude()
+    public function getLatitude(): float
     {
         return $this->latitude;
     }
@@ -275,7 +261,6 @@ class PoiCollection extends AbstractEntity
      * Sets the latitude
      *
      * @param float $latitude
-     * @return void
      */
     public function setLatitude($latitude)
     {
@@ -284,10 +269,8 @@ class PoiCollection extends AbstractEntity
 
     /**
      * Returns the longitude
-     *
-     * @return float $longitude
      */
-    public function getLongitude()
+    public function getLongitude(): float
     {
         return $this->longitude;
     }
@@ -296,7 +279,6 @@ class PoiCollection extends AbstractEntity
      * Sets the longitude
      *
      * @param float $longitude
-     * @return void
      */
     public function setLongitude($longitude)
     {
@@ -305,10 +287,8 @@ class PoiCollection extends AbstractEntity
 
     /**
      * Returns the radius
-     *
-     * @return int $radius
      */
-    public function getRadius()
+    public function getRadius(): int
     {
         return $this->radius;
     }
@@ -317,18 +297,16 @@ class PoiCollection extends AbstractEntity
      * Sets the radius
      *
      * @param int $radius
-     * @return void
      */
-    public function setRadius($radius)
+    public function setRadius(int $radius)
     {
-        $this->radius = (int)$radius;
+        $this->radius = $radius;
     }
 
     /**
      * Adds a Poi
      *
      * @param Poi $poi
-     * @return void
      */
     public function addPoi(Poi $poi)
     {
@@ -338,8 +316,7 @@ class PoiCollection extends AbstractEntity
     /**
      * Removes a Poi
      *
-     * @param Poi $poiToRemove The Poi to be removed
-     * @return void
+     * @param Poi $poiToRemove
      */
     public function removePoi(Poi $poiToRemove)
     {
@@ -348,10 +325,8 @@ class PoiCollection extends AbstractEntity
 
     /**
      * Returns the pois
-     *
-     * @return ObjectStorage $pois
      */
-    public function getPois()
+    public function getPois(): ObjectStorage
     {
         return $this->pois;
     }
@@ -360,7 +335,6 @@ class PoiCollection extends AbstractEntity
      * Sets the pois
      *
      * @param ObjectStorage $pois
-     * @return void
      */
     public function setPois(ObjectStorage $pois)
     {
@@ -369,10 +343,8 @@ class PoiCollection extends AbstractEntity
 
     /**
      * Returns the strokeColor
-     *
-     * @return string $strokeColor
      */
-    public function getStrokeColor()
+    public function getStrokeColor(): string
     {
         return $this->strokeColor;
     }
@@ -381,19 +353,16 @@ class PoiCollection extends AbstractEntity
      * Sets the strokeColor
      *
      * @param string $strokeColor
-     * @return void
      */
-    public function setStrokeColor($strokeColor)
+    public function setStrokeColor(string $strokeColor)
     {
         $this->strokeColor = (string)$strokeColor;
     }
 
     /**
      * Returns the strokeOpacity
-     *
-     * @return string $strokeOpacity
      */
-    public function getStrokeOpacity()
+    public function getStrokeOpacity(): string
     {
         return $this->strokeOpacity;
     }
@@ -402,19 +371,16 @@ class PoiCollection extends AbstractEntity
      * Sets the strokeOpacity
      *
      * @param string $strokeOpacity
-     * @return void
      */
-    public function setStrokeOpacity($strokeOpacity)
+    public function setStrokeOpacity(string $strokeOpacity)
     {
-        $this->strokeOpacity = (string)$strokeOpacity;
+        $this->strokeOpacity = $strokeOpacity;
     }
 
     /**
      * Returns the strokeWeight
-     *
-     * @return string $strokeWeight
      */
-    public function getStrokeWeight()
+    public function getStrokeWeight(): string
     {
         return $this->strokeWeight;
     }
@@ -423,19 +389,16 @@ class PoiCollection extends AbstractEntity
      * Sets the strokeWeight
      *
      * @param string $strokeWeight
-     * @return void
      */
-    public function setStrokeWeight($strokeWeight)
+    public function setStrokeWeight(string $strokeWeight)
     {
-        $this->strokeWeight = (string)$strokeWeight;
+        $this->strokeWeight = $strokeWeight;
     }
 
     /**
      * Returns the fillColor
-     *
-     * @return string $fillColor
      */
-    public function getFillColor()
+    public function getFillColor(): string
     {
         return $this->fillColor;
     }
@@ -444,19 +407,16 @@ class PoiCollection extends AbstractEntity
      * Sets the fillColor
      *
      * @param string $fillColor
-     * @return void
      */
-    public function setFillColor($fillColor)
+    public function setFillColor(string $fillColor)
     {
-        $this->fillColor = (string)$fillColor;
+        $this->fillColor = $fillColor;
     }
 
     /**
      * Returns the fillOpacity
-     *
-     * @return string $fillOpacity
      */
-    public function getFillOpacity()
+    public function getFillOpacity(): string
     {
         return $this->fillOpacity;
     }
@@ -465,19 +425,16 @@ class PoiCollection extends AbstractEntity
      * Sets the fillOpacity
      *
      * @param string $fillOpacity
-     * @return void
      */
-    public function setFillOpacity($fillOpacity)
+    public function setFillOpacity(string $fillOpacity)
     {
-        $this->fillOpacity = (string)$fillOpacity;
+        $this->fillOpacity = $fillOpacity;
     }
 
     /**
      * Returns the infoWindowContent
-     *
-     * @return string $infoWindowContent
      */
-    public function getInfoWindowContent()
+    public function getInfoWindowContent(): string
     {
         return $this->infoWindowContent;
     }
@@ -486,18 +443,16 @@ class PoiCollection extends AbstractEntity
      * Sets the infoWindowContent
      *
      * @param string $infoWindowContent
-     * @return void
      */
-    public function setInfoWindowContent($infoWindowContent)
+    public function setInfoWindowContent(string $infoWindowContent)
     {
-        $this->infoWindowContent = (string)$infoWindowContent;
+        $this->infoWindowContent = $infoWindowContent;
     }
 
     /**
      * Adds a Category
      *
      * @param Category $category
-     * @return void
      */
     public function addCategory(Category $category)
     {
@@ -507,8 +462,7 @@ class PoiCollection extends AbstractEntity
     /**
      * Removes a Category
      *
-     * @param Category $category The Category to be removed
-     * @return void
+     * @param Category $category
      */
     public function removeCategory(Category $category)
     {
@@ -518,9 +472,9 @@ class PoiCollection extends AbstractEntity
     /**
      * Returns the categories
      *
-     * @return ObjectStorage|Category[] $categories
+     * @return ObjectStorage|Category[]
      */
-    public function getCategories()
+    public function getCategories(): ObjectStorage
     {
         return $this->categories;
     }
@@ -545,7 +499,6 @@ class PoiCollection extends AbstractEntity
      * Sets the categories
      *
      * @param ObjectStorage $categories
-     * @return void
      */
     public function setCategories(ObjectStorage $categories)
     {
@@ -554,10 +507,8 @@ class PoiCollection extends AbstractEntity
 
     /**
      * Returns the infoWindowImages
-     *
-     * @return ObjectStorage
      */
-    public function getInfoWindowImages()
+    public function getInfoWindowImages(): ObjectStorage
     {
         return $this->infoWindowImages;
     }
@@ -566,7 +517,6 @@ class PoiCollection extends AbstractEntity
      * Sets the infoWindowImages
      *
      * @param ObjectStorage $infoWindowImages
-     * @return void
      */
     public function setInfoWindowImages(ObjectStorage $infoWindowImages)
     {
@@ -577,7 +527,6 @@ class PoiCollection extends AbstractEntity
      * Add a new FileReference to InfoWindowImages
      *
      * @param FileReference $fileReference
-     * @return void
      */
     public function addInfoWindowImage(FileReference $fileReference)
     {
@@ -588,7 +537,6 @@ class PoiCollection extends AbstractEntity
      * Remove a FileReference from InfoWindowImages
      *
      * @param FileReference $fileReference
-     * @return void
      */
     public function removeInfoWindowImage(FileReference $fileReference)
     {
@@ -597,10 +545,8 @@ class PoiCollection extends AbstractEntity
 
     /**
      * Returns the marker icons
-     *
-     * @return ObjectStorage
      */
-    public function getMarkerIcons()
+    public function getMarkerIcons(): ObjectStorage
     {
         return $this->markerIcons;
     }
@@ -608,6 +554,8 @@ class PoiCollection extends AbstractEntity
     /**
      * Get marker icon
      * It also searches for marker icons in categories
+     *
+     * @return string|null
      */
     public function getMarkerIcon()
     {
@@ -637,7 +585,6 @@ class PoiCollection extends AbstractEntity
      * Sets the markerIcons
      *
      * @param ObjectStorage $markerIcons
-     * @return void
      */
     public function setMarkerIcons(ObjectStorage $markerIcons)
     {
@@ -648,7 +595,6 @@ class PoiCollection extends AbstractEntity
      * Add a new FileReference to Marker Icons
      *
      * @param FileReference $fileReference
-     * @return void
      */
     public function addMarkerIcon(FileReference $fileReference)
     {
@@ -659,7 +605,6 @@ class PoiCollection extends AbstractEntity
      * Remove a FileReference from Marker Icons
      *
      * @param FileReference $fileReference
-     * @return void
      */
     public function removeMarkerIcon(FileReference $fileReference)
     {
@@ -669,9 +614,9 @@ class PoiCollection extends AbstractEntity
     /**
      * Returns the markerIconWidth
      *
-     * @return int $markerIconWidth
+     * @return int
      */
-    public function getMarkerIconWidth()
+    public function getMarkerIconWidth(): int
     {
         // prevent using local markerIconWidth, if no markerIcon is set.
         if (
@@ -694,8 +639,6 @@ class PoiCollection extends AbstractEntity
      * Sets the markerIconWidth
      *
      * @param int $markerIconWidth
-     *
-     * @return void
      */
     public function setMarkerIconWidth($markerIconWidth)
     {
@@ -704,10 +647,8 @@ class PoiCollection extends AbstractEntity
 
     /**
      * Returns the markerIconHeight
-     *
-     * @return int $markerIconHeight
      */
-    public function getMarkerIconHeight()
+    public function getMarkerIconHeight(): int
     {
         // prevent using local markerIconHeight, if no markerIcon is set.
         if (
@@ -730,8 +671,6 @@ class PoiCollection extends AbstractEntity
      * Sets the markerIconHeight
      *
      * @param int $markerIconHeight
-     *
-     * @return void
      */
     public function setMarkerIconHeight($markerIconHeight)
     {
@@ -740,10 +679,8 @@ class PoiCollection extends AbstractEntity
 
     /**
      * Returns the markerIconAnchorPosX
-     *
-     * @return int $markerIconAnchorPosX
      */
-    public function getMarkerIconAnchorPosX()
+    public function getMarkerIconAnchorPosX(): int
     {
         // prevent using local markerIconAnchorPosX, if no markerIcon is set.
         if (
@@ -754,7 +691,6 @@ class PoiCollection extends AbstractEntity
             if ($categoryWithIcon instanceof Category) {
                 return $categoryWithIcon->getMaps2MarkerIconAnchorPosX();
             } else {
-                /** @var ExtConf $extConf */
                 $extConf = GeneralUtility::makeInstance(ExtConf::class);
                 return $extConf->getMarkerIconAnchorPosX();
             }
@@ -766,8 +702,6 @@ class PoiCollection extends AbstractEntity
      * Sets the markerIconAnchorPosX
      *
      * @param int $markerIconAnchorPosX
-     *
-     * @return void
      */
     public function setMarkerIconAnchorPosX($markerIconAnchorPosX)
     {
@@ -776,10 +710,8 @@ class PoiCollection extends AbstractEntity
 
     /**
      * Returns the markerIconAnchorPosY
-     *
-     * @return int $markerIconAnchorPosY
      */
-    public function getMarkerIconAnchorPosY()
+    public function getMarkerIconAnchorPosY(): int
     {
         // prevent using local markerIconAnchorPosY, if no markerIcon is set.
         if (
@@ -802,8 +734,6 @@ class PoiCollection extends AbstractEntity
      * Sets the markerIconAnchorPosY
      *
      * @param int $markerIconAnchorPosY
-     *
-     * @return void
      */
     public function setMarkerIconAnchorPosY($markerIconAnchorPosY)
     {
@@ -812,10 +742,8 @@ class PoiCollection extends AbstractEntity
 
     /**
      * Returns the distance
-     *
-     * @return float $distance
      */
-    public function getDistance()
+    public function getDistance(): float
     {
         return $this->distance;
     }
@@ -824,7 +752,6 @@ class PoiCollection extends AbstractEntity
      * Sets the distance
      *
      * @param float $distance
-     * @return void
      */
     public function setDistance($distance)
     {

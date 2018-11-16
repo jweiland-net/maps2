@@ -20,6 +20,7 @@ use JWeiland\Maps2\Client\Request\GeocodeRequest;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\Location;
 use JWeiland\Maps2\Domain\Model\RadiusResult;
+use JWeiland\Maps2\Helper\MessageHelper;
 use JWeiland\Maps2\Service\GoogleMapsService;
 use JWeiland\Maps2\Tests\Unit\AbstractUnitTestCase;
 use JWeiland\Maps2\Utility\DataMapper;
@@ -49,37 +50,37 @@ class GoogleMapsServiceTest extends AbstractUnitTestCase
     /**
      * @var ObjectManager|ObjectProphecy
      */
-    protected $objectManager;
+    protected $objectManagerProphecy;
 
     /**
      * @var StandaloneView|ObjectProphecy
      */
-    protected $view;
+    protected $viewProphecy;
 
     /**
      * @var UriBuilder|ObjectProphecy
      */
-    protected $uriBuilder;
+    protected $uriBuilderProphecy;
 
     /**
      * @var GoogleMapsClient|ObjectProphecy
      */
-    protected $client;
+    protected $clientProphecy;
 
     /**
      * @var GeocodeRequest|ObjectProphecy
      */
-    protected $geocodeRequest;
+    protected $geocodeRequestProphecy;
 
     /**
      * @var DataMapper|ObjectProphecy
      */
-    protected $dataMapper;
+    protected $dataMapperProphecy;
 
     /**
-     * @var FlashMessageService|ObjectProphecy
+     * @var MessageHelper|ObjectProphecy
      */
-    protected $flashMessageService;
+    protected $messageHelperProphecy;
 
     /**
      * @var GoogleMapsService
@@ -93,18 +94,19 @@ class GoogleMapsServiceTest extends AbstractUnitTestCase
     protected function setUp()
     {
         $this->extConf = new ExtConf();
-        $this->objectManager = $this->prophesize(ObjectManager::class);
-        $this->view = $this->prophesize(StandaloneView::class);
-        $this->uriBuilder = $this->prophesize(UriBuilder::class);
-        $this->client = $this->prophesize(GoogleMapsClient::class);
-        $this->geocodeRequest = $this->prophesize(GeocodeRequest::class);
-        $this->dataMapper = $this->prophesize(DataMapper::class);
-        $this->flashMessageService = $this->prophesize(FlashMessageService::class);
+        $this->extConf->setAllowMapTemplatePath('typo3conf/ext/maps2/Resources/Private/Templates/AllowMapForm.html');
+        $this->objectManagerProphecy = $this->prophesize(ObjectManager::class);
+        $this->viewProphecy = $this->prophesize(StandaloneView::class);
+        $this->uriBuilderProphecy = $this->prophesize(UriBuilder::class);
+        $this->clientProphecy = $this->prophesize(GoogleMapsClient::class);
+        $this->geocodeRequestProphecy = $this->prophesize(GeocodeRequest::class);
+        $this->dataMapperProphecy = $this->prophesize(DataMapper::class);
+        $this->messageHelperProphecy = $this->prophesize(MessageHelper::class);
 
         $this->subject = new GoogleMapsService();
         $this->subject->injectExtConf($this->extConf);
-        $this->subject->injectObjectManager($this->objectManager->reveal());
-        $this->subject->injectFlashMessageService($this->flashMessageService->reveal());
+        $this->subject->injectObjectManager($this->objectManagerProphecy->reveal());
+        $this->subject->injectMessageHelper($this->messageHelperProphecy->reveal());
     }
 
     /**
@@ -128,48 +130,40 @@ class GoogleMapsServiceTest extends AbstractUnitTestCase
             ]
         ];
 
-        $this->view
-            ->setTemplatePathAndFilename(Argument::any())
-            ->shouldBeCalled();
-        $this->view
-            ->assign('settings', [])
-            ->shouldBeCalled();
-        $this->view
-            ->assign('requestUri', 'MyCoolRequestUri')
-            ->shouldBeCalled();
-        $this->view
-            ->render()
-            ->shouldBeCalled();
+        $this->viewProphecy->setTemplatePathAndFilename(Argument::any())->shouldBeCalled();
+        $this->viewProphecy->assign('settings', [])->shouldBeCalled();
+        $this->viewProphecy->assign('requestUri', 'MyCoolRequestUri')->shouldBeCalled();
+        $this->viewProphecy->render()->shouldBeCalled()->willReturn('');
 
-        $this->uriBuilder
+        $this->uriBuilderProphecy
             ->reset()
             ->shouldBeCalled()
-            ->willReturn($this->uriBuilder->reveal());
-        $this->uriBuilder
+            ->willReturn($this->uriBuilderProphecy->reveal());
+        $this->uriBuilderProphecy
             ->setAddQueryString(true)
             ->shouldBeCalled()
-            ->willReturn($this->uriBuilder->reveal());
-        $this->uriBuilder
+            ->willReturn($this->uriBuilderProphecy->reveal());
+        $this->uriBuilderProphecy
             ->setArguments($arguments)
             ->shouldBeCalled()
-            ->willReturn($this->uriBuilder->reveal());
-        $this->uriBuilder
+            ->willReturn($this->uriBuilderProphecy->reveal());
+        $this->uriBuilderProphecy
             ->setArgumentsToBeExcludedFromQueryString(['cHash'])
             ->shouldBeCalled()
-            ->willReturn($this->uriBuilder->reveal());
-        $this->uriBuilder
+            ->willReturn($this->uriBuilderProphecy->reveal());
+        $this->uriBuilderProphecy
             ->build()
             ->shouldBeCalled()
             ->willReturn('MyCoolRequestUri');
 
-        $this->objectManager
+        $this->objectManagerProphecy
             ->get(StandaloneView::class)
             ->shouldBeCalled()
-            ->willReturn($this->view->reveal());
-        $this->objectManager
+            ->willReturn($this->viewProphecy->reveal());
+        $this->objectManagerProphecy
             ->get(UriBuilder::class)
             ->shouldBeCalled()
-            ->willReturn($this->uriBuilder->reveal());
+            ->willReturn($this->uriBuilderProphecy->reveal());
 
         $this->subject->showAllowMapForm();
     }
@@ -182,27 +176,27 @@ class GoogleMapsServiceTest extends AbstractUnitTestCase
     {
         $emptyObjectStorage = new ObjectStorage();
 
-        $this->geocodeRequest
+        $this->geocodeRequestProphecy
             ->setAddress('My private address')
             ->shouldBeCalled();
 
-        $this->client
-            ->processRequest($this->geocodeRequest->reveal())
+        $this->clientProphecy
+            ->processRequest($this->geocodeRequestProphecy->reveal())
             ->shouldBeCalled()
             ->willReturn([]);
 
-        $this->objectManager
+        $this->objectManagerProphecy
             ->get(ObjectStorage::class)
             ->shouldBeCalled()
             ->willReturn($emptyObjectStorage);
-        $this->objectManager
+        $this->objectManagerProphecy
             ->get(GoogleMapsClient::class)
             ->shouldBeCalled()
-            ->willReturn($this->client->reveal());
-        $this->objectManager
+            ->willReturn($this->clientProphecy->reveal());
+        $this->objectManagerProphecy
             ->get(GeocodeRequest::class)
             ->shouldBeCalled()
-            ->willReturn($this->geocodeRequest->reveal());
+            ->willReturn($this->geocodeRequestProphecy->reveal());
 
         $this->assertSame(
             $emptyObjectStorage,
@@ -230,36 +224,36 @@ class GoogleMapsServiceTest extends AbstractUnitTestCase
             ]
         ];
 
-        $this->geocodeRequest
+        $this->geocodeRequestProphecy
             ->setAddress('My private address')
             ->shouldBeCalled();
 
-        $this->client
-            ->processRequest($this->geocodeRequest->reveal())
+        $this->clientProphecy
+            ->processRequest($this->geocodeRequestProphecy->reveal())
             ->shouldBeCalled()
             ->willReturn($response);
 
-        $this->dataMapper
+        $this->dataMapperProphecy
             ->mapObjectStorage(RadiusResult::class, $response['results'])
             ->shouldBeCalled()
             ->willReturn($positions);
 
-        $this->objectManager
+        $this->objectManagerProphecy
             ->get(ObjectStorage::class)
             ->shouldBeCalled()
             ->willReturn(new ObjectStorage());
-        $this->objectManager
+        $this->objectManagerProphecy
             ->get(GoogleMapsClient::class)
             ->shouldBeCalled()
-            ->willReturn($this->client->reveal());
-        $this->objectManager
+            ->willReturn($this->clientProphecy->reveal());
+        $this->objectManagerProphecy
             ->get(GeocodeRequest::class)
             ->shouldBeCalled()
-            ->willReturn($this->geocodeRequest->reveal());
-        $this->objectManager
+            ->willReturn($this->geocodeRequestProphecy->reveal());
+        $this->objectManagerProphecy
             ->get(DataMapper::class)
             ->shouldBeCalled()
-            ->willReturn($this->dataMapper->reveal());
+            ->willReturn($this->dataMapperProphecy->reveal());
 
         $this->assertSame(
             $positions,
@@ -275,27 +269,27 @@ class GoogleMapsServiceTest extends AbstractUnitTestCase
     {
         $emptyObjectStorage = new ObjectStorage();
 
-        $this->geocodeRequest
+        $this->geocodeRequestProphecy
             ->setAddress('My private address')
             ->shouldBeCalled();
 
-        $this->client
-            ->processRequest($this->geocodeRequest->reveal())
+        $this->clientProphecy
+            ->processRequest($this->geocodeRequestProphecy->reveal())
             ->shouldBeCalled()
             ->willReturn([]);
 
-        $this->objectManager
+        $this->objectManagerProphecy
             ->get(ObjectStorage::class)
             ->shouldBeCalled()
             ->willReturn($emptyObjectStorage);
-        $this->objectManager
+        $this->objectManagerProphecy
             ->get(GoogleMapsClient::class)
             ->shouldBeCalled()
-            ->willReturn($this->client->reveal());
-        $this->objectManager
+            ->willReturn($this->clientProphecy->reveal());
+        $this->objectManagerProphecy
             ->get(GeocodeRequest::class)
             ->shouldBeCalled()
-            ->willReturn($this->geocodeRequest->reveal());
+            ->willReturn($this->geocodeRequestProphecy->reveal());
 
         $this->assertSame(
             null,
@@ -323,36 +317,36 @@ class GoogleMapsServiceTest extends AbstractUnitTestCase
             ]
         ];
 
-        $this->geocodeRequest
+        $this->geocodeRequestProphecy
             ->setAddress('My private address')
             ->shouldBeCalled();
 
-        $this->client
-            ->processRequest($this->geocodeRequest->reveal())
+        $this->clientProphecy
+            ->processRequest($this->geocodeRequestProphecy->reveal())
             ->shouldBeCalled()
             ->willReturn($response);
 
-        $this->dataMapper
+        $this->dataMapperProphecy
             ->mapObjectStorage(RadiusResult::class, $response['results'])
             ->shouldBeCalled()
             ->willReturn($positions);
 
-        $this->objectManager
+        $this->objectManagerProphecy
             ->get(ObjectStorage::class)
             ->shouldBeCalled()
             ->willReturn(new ObjectStorage());
-        $this->objectManager
+        $this->objectManagerProphecy
             ->get(GoogleMapsClient::class)
             ->shouldBeCalled()
-            ->willReturn($this->client->reveal());
-        $this->objectManager
+            ->willReturn($this->clientProphecy->reveal());
+        $this->objectManagerProphecy
             ->get(GeocodeRequest::class)
             ->shouldBeCalled()
-            ->willReturn($this->geocodeRequest->reveal());
-        $this->objectManager
+            ->willReturn($this->geocodeRequestProphecy->reveal());
+        $this->objectManagerProphecy
             ->get(DataMapper::class)
             ->shouldBeCalled()
-            ->willReturn($this->dataMapper->reveal());
+            ->willReturn($this->dataMapperProphecy->reveal());
 
         $this->assertSame(
             $position,
@@ -372,10 +366,10 @@ class GoogleMapsServiceTest extends AbstractUnitTestCase
 
         /** @var FlashMessageQueue|ObjectProphecy $flashMessageQueue */
         $flashMessageQueue = $this->prophesize(FlashMessageQueue::class);
-        $this->flashMessageService
+        /*$this->flashMessageService
             ->getMessageQueueByIdentifier()
             ->shouldBeCalled()
-            ->willReturn($flashMessageQueue->reveal());
+            ->willReturn($flashMessageQueue->reveal());*/
 
         $this->assertSame(
             0,

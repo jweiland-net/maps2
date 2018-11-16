@@ -14,11 +14,13 @@ namespace JWeiland\Maps2\Tests\Unit\ViewHelpers;
  * The TYPO3 project - inspiring people to share!
  */
 
+use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\Category;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\ViewHelpers\ConvertToJsonViewHelper;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
 use Prophecy\Argument;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\Core\Parser\SyntaxTree\ViewHelperNode;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
 
@@ -107,6 +109,8 @@ class ConvertToJsonViewHelperTest extends UnitTestCase
             ->evaluateChildNodes(Argument::cetera())
             ->shouldBeCalled()
             ->willReturn(new PoiCollection());
+
+        GeneralUtility::setSingletonInstance(ExtConf::class, new ExtConf());
 
         $json = $this->subject->render();
 
