@@ -15,8 +15,8 @@ namespace JWeiland\Maps2\Hook;
  * The TYPO3 project - inspiring people to share!
  */
 
-use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\RadiusResult;
+use JWeiland\Maps2\Helper\AddressHelper;
 use JWeiland\Maps2\Service\GoogleMapsService;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Database\ConnectionPool;
@@ -25,7 +25,9 @@ use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Registry;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
@@ -133,13 +135,18 @@ class CreateMaps2RecordHook
      */
     protected function createNewMapsRecord(array &$foreignLocationRecord, string $foreignTableName, string $foreignColumnName, array $options): bool
     {
+        $defaultStoragePid = $this->getDefaultStoragePidForNewPoiCollections($foreignLocationRecord, $options);
+        if (empty($defaultStoragePid)) {
+            return false;
+        }
+
         $addressHelper = GeneralUtility::makeInstance(AddressHelper::class);
         $address = $addressHelper->getAddress($foreignLocationRecord, $options);
+
         $radiusResult = $this->googleMapsService->getFirstFoundPositionByAddress($address);
         if ($radiusResult instanceof RadiusResult) {
-            $tsConfig = $this->getTsConfig($foreignLocationRecord);
             $this->googleMapsService->assignPoiCollectionToForeignRecord(
-                $this->googleMapsService->createNewPoiCollection((int)$tsConfig['pid'], $radiusResult),
+                $this->googleMapsService->createNewPoiCollection($defaultStoragePid, $radiusResult),
                 $foreignLocationRecord,
                 $foreignTableName,
                 $foreignColumnName
@@ -152,6 +159,90 @@ class CreateMaps2RecordHook
             FlashMessage::ERROR
         );
         return false;
+    }
+
+    /**
+     * Check various sources to get a default storage PID for new POI Collection records
+     *
+     * @param array $foreignLocationRecord
+     * @param array $options
+     * @return int
+     */
+    protected function getDefaultStoragePidForNewPoiCollections(array $foreignLocationRecord, array $options)
+    {
+        $defaultStoragePid = 0;
+
+        // Low Priority: Get PID from foreignLocationRecord
+        if (
+            array_key_exists('pid', $foreignLocationRecord)
+            && MathUtility::canBeInterpretedAsInteger($foreignLocationRecord['pid'])
+        ) {
+            $defaultStoragePid = (int)$foreignLocationRecord['pid'];
+        }
+
+        // Mid Priority: Get PID from Maps2 Registration
+        if (array_key_exists('defaultStoragePid', $options)) {
+            $storagePid = 0;
+            // Very bad idea, as PID will be hardcoded in foreign extension source code
+            if (
+                !is_array($options['defaultStoragePid'])
+                && MathUtility::canBeInterpretedAsInteger($options['defaultStoragePid'])
+                && (int)$options['defaultStoragePid'] > 0
+            ) {
+                $storagePid = (int)$options['defaultStoragePid'];
+            }
+
+            // A way better idea: Use a configuration to access ExtensionManager configuration of foreign extension
+            if (
+                is_array($options['defaultStoragePid'])
+                && array_key_exists('extKey', $options['defaultStoragePid'])
+                && !empty($options['defaultStoragePid']['extKey'])
+                && array_key_exists('property', $options['defaultStoragePid'])
+                && !empty($options['defaultStoragePid']['property'])
+                && ExtensionManagementUtility::isLoaded($options['defaultStoragePid']['extKey'])
+                && array_key_exists($options['defaultStoragePid']['extKey'], $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'])
+            ) {
+                $extKey = $options['defaultStoragePid']['extKey'];
+                $property = $options['defaultStoragePid']['property'];
+                $extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$extKey]);
+                if (
+                    MathUtility::canBeInterpretedAsInteger($extConf[$property])
+                    && (int)$extConf[$property] > 0
+                ) {
+                    $storagePid = (int)$extConf[$property];
+                }
+            }
+
+            if (empty($storagePid)) {
+                $this->addMessage(
+                    'You have configured a defaultStoragePid in maps2 registration, but returned value is still 0. Please check your configuration',
+                    'Invalid defaultStoragePid configuration found',
+                    FlashMessage::WARNING
+                );
+            } else {
+                $defaultStoragePid = $storagePid;
+            }
+        }
+
+        // High Priority: Get PID from pageTSconfig
+        $tsConfig = $this->getTsConfig($foreignLocationRecord);
+        if (
+            array_key_exists('defaultStoragePid', $tsConfig)
+            && MathUtility::canBeInterpretedAsInteger($tsConfig['defaultStoragePid'])
+            && (int)$tsConfig['defaultStoragePid'] > 0
+        ) {
+            $defaultStoragePid = (int)$tsConfig['defaultStoragePid'];
+        }
+
+
+        if (empty($defaultStoragePid)) {
+            $this->addMessage(
+                'No PID found in pageTSconfig "ext.maps2.defaultStoragePid" and PID of current record seems to be empty, too. No POI record will be saved',
+                'Can not find any valid PID to store EXT:maps2 records'
+            );
+        }
+
+        return $defaultStoragePid;
     }
 
     /**
@@ -206,20 +297,28 @@ class CreateMaps2RecordHook
     }
 
     /**
-     * Get pageTSconfig
+     * Get pageTSconfig for EXT:maps2
      *
-     * @param array $eventLocation
+     * @param array $locationRecord
      * @return array
      * @throws \Exception
      */
-    public function getTsConfig(array $eventLocation): array
+    public function getTsConfig(array $locationRecord): array
     {
-        $tsConfig = BackendUtility::getModTSconfig($eventLocation['pid'], 'ext.events2');
-        if (is_array($tsConfig) && !empty($tsConfig['properties']['pid'])) {
-            return $tsConfig['properties'];
-        } else {
-            throw new \Exception('no PID for maps2 given. Please add this PID in extension configuration of events2 or set it in pageTSconfig', 1364889195);
+        if (
+            array_key_exists('pid', $locationRecord)
+            && MathUtility::canBeInterpretedAsInteger($locationRecord['pid'])
+        ) {
+            $tsConfig = BackendUtility::getModTSconfig($locationRecord['pid'], 'ext.maps2');
+            if (
+                array_key_exists('properties', $tsConfig)
+                && is_array($tsConfig['properties'])
+                && !empty($tsConfig['properties'])
+            ) {
+                return $tsConfig['properties'];
+            }
         }
+        return [];
     }
 
     /**
@@ -305,7 +404,7 @@ class CreateMaps2RecordHook
             || !is_array($GLOBALS['TCA'][$foreignTableName]['columns'][$foreignColumnName]['config'])
         ) {
             $this->addMessage(
-                'Please check your TCA. It seems that "' . $foreignTableName . '"" is not registered as table or "' . $foreignColumnName . '" is not registered as column in TCA',
+                'Error while trying to synchroniz columns of your record with maps2 record. It seems that "' . $foreignTableName . '" is not registered as table or "' . $foreignColumnName . '" is not a valid column in ' . $foreignTableName,
                 'Missing table/column in TCA',
                 FlashMessage::ERROR
             );
