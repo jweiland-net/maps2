@@ -14,6 +14,8 @@ namespace JWeiland\Maps2\Hook;
  *
  * The TYPO3 project - inspiring people to share!
  */
+
+use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\RadiusResult;
 use JWeiland\Maps2\Service\GoogleMapsService;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
@@ -23,7 +25,6 @@ use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Registry;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 
@@ -132,7 +133,8 @@ class CreateMaps2RecordHook
      */
     protected function createNewMapsRecord(array &$foreignLocationRecord, string $foreignTableName, string $foreignColumnName, array $options): bool
     {
-        $address = $this->getAddress($foreignLocationRecord, $options);
+        $addressHelper = GeneralUtility::makeInstance(AddressHelper::class);
+        $address = $addressHelper->getAddress($foreignLocationRecord, $options);
         $radiusResult = $this->googleMapsService->getFirstFoundPositionByAddress($address);
         if ($radiusResult instanceof RadiusResult) {
             $tsConfig = $this->getTsConfig($foreignLocationRecord);
@@ -201,54 +203,6 @@ class CreateMaps2RecordHook
             $uid = $dataHandler->substNEWwithIDs[$uid];
         }
         return (int)$uid;
-    }
-
-    /**
-     * Get address for google search.
-     *
-     * @param array $locationRecordToSave
-     * @param array $options
-     * @return string Prepared address for Google requests
-     */
-    protected function getAddress(array $locationRecordToSave, array $options)
-    {
-        if (!array_key_exists('addressColumns', $options)) {
-            $this->addMessage(
-                'Array key "addressColumns" does not exist in your maps2 registration. This field must be filled to prevent creating empty GeoCode requests to google.',
-                'Key addressColumns is missing',
-                FlashMessage::ERROR
-            );
-            return '';
-        }
-        $sanitizedAddressParts = [];
-        foreach ($options['addressColumns'] as $addressColumn) {
-            $value = trim($locationRecordToSave[$addressColumn]);
-            if (
-                array_key_exists('countryColumn', $options)
-                && $addressColumn === $options['countryColumn']
-                && ExtensionManagementUtility::isLoaded('static_info_tables')
-            ) {
-                $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable('static_countries');
-                $countryRecord = $queryBuilder
-                    ->select('cn_short_en')
-                    ->from('static_countries')
-                    ->where(
-                        $queryBuilder->expr()->eq(
-                            'uid',
-                            $queryBuilder->createNamedParameter($locationRecordToSave[$addressColumn], \PDO::PARAM_INT)
-                        )
-                    )
-                    ->execute()
-                    ->fetch();
-                if (!empty($countryRecord)) {
-                    $sanitizedAddressParts[] = $countryRecord['cn_short_en'];
-                }
-            } elseif (!empty($value)) {
-                $sanitizedAddressParts[] = $value;
-            }
-        }
-
-        return implode(' ', $sanitizedAddressParts);
     }
 
     /**

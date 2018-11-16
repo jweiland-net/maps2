@@ -20,11 +20,11 @@ use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\Location;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Domain\Model\RadiusResult;
+use JWeiland\Maps2\Helper\MessageHelper;
 use JWeiland\Maps2\Utility\DatabaseUtility;
 use JWeiland\Maps2\Utility\DataMapper;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
-use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -36,7 +36,8 @@ use TYPO3\CMS\Extbase\Service\CacheService;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
- * Class GoogleMapsService
+ * With this class you can start requests to Google Maps GeoCode API. Search for addresses, assign a POI
+ * to a foreign record, save the foreign record and many more. It is designed as an API.
  */
 class GoogleMapsService implements SingletonInterface
 {
@@ -58,9 +59,9 @@ class GoogleMapsService implements SingletonInterface
     protected $cacheService;
 
     /**
-     * @var FlashMessageService
+     * @var MessageHelper
      */
-    protected $flashMessageService;
+    protected $messageHelper;
 
     /**
      * @var ObjectManager
@@ -73,11 +74,9 @@ class GoogleMapsService implements SingletonInterface
     protected $configurationManager;
 
     /**
-     * inject extConf
+     * Inject extConf
      *
      * @param ExtConf $extConf
-     *
-     * @return void
      */
     public function injectExtConf(ExtConf $extConf)
     {
@@ -85,11 +84,9 @@ class GoogleMapsService implements SingletonInterface
     }
 
     /**
-     * inject cacheService
+     * Inject cacheService
      *
      * @param CacheService $cacheService
-     *
-     * @return void
      */
     public function injectCacheService(CacheService $cacheService)
     {
@@ -97,14 +94,13 @@ class GoogleMapsService implements SingletonInterface
     }
 
     /**
-     * inject flashMessageService
+     * Inject MessageHelper
      *
-     * @param FlashMessageService $flashMessageService
-     * @return void
+     * @param MessageHelper $messageHelper
      */
-    public function injectFlashMessageService(FlashMessageService $flashMessageService)
+    public function injectMessageHelper(MessageHelper $messageHelper)
     {
-        $this->flashMessageService = $flashMessageService;
+        $this->messageHelper = $messageHelper;
     }
 
     /**
@@ -117,11 +113,9 @@ class GoogleMapsService implements SingletonInterface
     }
 
     /**
-     * inject objectManager
+     * Inject objectManager
      *
      * @param ObjectManager $objectManager
-     *
-     * @return void
      */
     public function injectObjectManager(ObjectManager $objectManager)
     {
@@ -130,10 +124,8 @@ class GoogleMapsService implements SingletonInterface
 
     /**
      * Show form to allow requests to Google Maps2 servers
-     *
-     * @return string
      */
-    public function showAllowMapForm()
+    public function showAllowMapForm(): string
     {
         /** @var StandaloneView $view */
         $view = $this->objectManager->get(StandaloneView::class);
@@ -150,10 +142,8 @@ class GoogleMapsService implements SingletonInterface
 
     /**
      * Get request URI
-     *
-     * @return string
      */
-    protected function getRequestUri()
+    protected function getRequestUri(): string
     {
         /** @var UriBuilder $uriBuilder */
         $uriBuilder = $this->objectManager->get(UriBuilder::class);
@@ -173,8 +163,6 @@ class GoogleMapsService implements SingletonInterface
      * Set info window for Poi Collection
      *
      * @param PoiCollection $poiCollection
-     *
-     * @return void
      */
     public function setInfoWindow(PoiCollection $poiCollection)
     {
@@ -187,10 +175,9 @@ class GoogleMapsService implements SingletonInterface
      * Render InfoWindow for marker
      *
      * @param PoiCollection $poiCollection
-     *
      * @return string
      */
-    protected function renderInfoWindow(PoiCollection $poiCollection)
+    protected function renderInfoWindow(PoiCollection $poiCollection): string
     {
         /** @var \TYPO3\CMS\Fluid\View\StandaloneView $view */
         $view = $this->objectManager->get(StandaloneView::class);
@@ -206,10 +193,8 @@ class GoogleMapsService implements SingletonInterface
 
     /**
      * Get template path for info window content
-     *
-     * @return string
      */
-    protected function getInfoWindowContentTemplatePath()
+    protected function getInfoWindowContentTemplatePath(): string
     {
         // get default template path
         $path = $this->extConf->getInfoWindowContentTemplatePath();
@@ -225,16 +210,14 @@ class GoogleMapsService implements SingletonInterface
 
     /**
      * Get template path for info window content
-     *
-     * @return string
      */
-    protected function getAllowMapTemplatePath()
+    protected function getAllowMapTemplatePath(): string
     {
         // get default template path
         $path = $this->extConf->getAllowMapTemplatePath();
         if (
-            isset($this->settings['allowMapTemplatePath']) &&
-            !empty($this->settings['allowMapTemplatePath'])
+            isset($this->settings['allowMapTemplatePath'])
+            && !empty($this->settings['allowMapTemplatePath'])
         ) {
             $path = $this->settings['allowMapTemplatePath'];
         }
@@ -276,7 +259,7 @@ class GoogleMapsService implements SingletonInterface
      * Get first found position by address
      *
      * @param string $address
-     * @return RadiusResult
+     * @return RadiusResult|null
      * @throws \Exception
      * @api
      */
@@ -304,7 +287,7 @@ class GoogleMapsService implements SingletonInterface
      * @throws \Exception
      * @api
      */
-    public function createNewPoiCollection($pid, RadiusResult $position, array $overrideFieldValues = [])
+    public function createNewPoiCollection($pid, RadiusResult $position, array $overrideFieldValues = []): int
     {
         $geometry = $position->getGeometry();
         if (
@@ -314,7 +297,7 @@ class GoogleMapsService implements SingletonInterface
             $latitude = $geometry->getLocation()->getLat();
             $longitude = $geometry->getLocation()->getLng();
         } else {
-            $this->addMessage(
+            $this->messageHelper->addFlashMessage(
                 'The domain model RadiusResult seems to be broken after processing in DataMapper. Can not find Latitude and Longitude.',
                 'RadiusResult broken',
                 FlashMessage::ERROR
@@ -360,7 +343,6 @@ class GoogleMapsService implements SingletonInterface
      * @param array $foreignRecord This is the record of the foreign extensions. It must be an already saved record and it MUST HAVE an UID assigned
      * @param string $foreignTableName This is your (foreign) location table name, from where you get the $foreignRecord
      * @param string $foreignFieldName This is our column name (mostly tx_maps2_uid) in your/foreign location table.
-     * @return void
      * @throws \Exception
      * @api
      */
@@ -370,7 +352,7 @@ class GoogleMapsService implements SingletonInterface
 
         if (empty(trim($poiCollectionUid))) {
             $hasErrors = true;
-            $this->addMessage(
+            $this->messageHelper->addFlashMessage(
                 'PoiCollection UID can not be empty. Please check your values near method assignPoiCollectionToForeignRecord',
                 'PoiCollection empty',
                 FlashMessage::ERROR
@@ -379,7 +361,7 @@ class GoogleMapsService implements SingletonInterface
 
         if (empty($foreignRecord)) {
             $hasErrors = true;
-            $this->addMessage(
+            $this->messageHelper->addFlashMessage(
                 'Foreign record can not be empty. Please check your values near method assignPoiCollectionToForeignRecord',
                 'Foreign record empty',
                 FlashMessage::ERROR
@@ -388,7 +370,7 @@ class GoogleMapsService implements SingletonInterface
 
         if (!array_key_exists('uid', $foreignRecord)) {
             $hasErrors = true;
-            $this->addMessage(
+            $this->messageHelper->addFlashMessage(
                 'Foreign record must have the array key "uid" which is currently not present. Please check your values near method assignPoiCollectionToForeignRecord',
                 'UID not filled',
                 FlashMessage::ERROR
@@ -397,7 +379,7 @@ class GoogleMapsService implements SingletonInterface
 
         if (empty(trim($foreignTableName))) {
             $hasErrors = true;
-            $this->addMessage(
+            $this->messageHelper->addFlashMessage(
                 'Foreign table name is a must have value, which is currently not present. Please check your values near method assignPoiCollectionToForeignRecord',
                 'Foreign table name empty',
                 FlashMessage::ERROR
@@ -406,7 +388,7 @@ class GoogleMapsService implements SingletonInterface
 
         if (empty(trim($foreignFieldName))) {
             $hasErrors = true;
-            $this->addMessage(
+            $this->messageHelper->addFlashMessage(
                 'Foreign field name is a must have value, which is currently not present. Please check your values near method assignPoiCollectionToForeignRecord',
                 'Foreign field name empty',
                 FlashMessage::ERROR
@@ -418,7 +400,7 @@ class GoogleMapsService implements SingletonInterface
         }
 
         if (!array_key_exists($foreignTableName, $GLOBALS['TCA'])) {
-            $this->addMessage(
+            $this->messageHelper->addFlashMessage(
                 'Table "' . $foreignTableName . '" is not configured in TCA',
                 'Table not found',
                 FlashMessage::ERROR
@@ -427,7 +409,7 @@ class GoogleMapsService implements SingletonInterface
         }
 
         if (!array_key_exists($foreignFieldName, $GLOBALS['TCA'][$foreignTableName]['columns'])) {
-            $this->addMessage(
+            $this->messageHelper->addFlashMessage(
                 'Field "' . $foreignFieldName . '" is not configured in TCA',
                 'Field not found',
                 FlashMessage::ERROR
@@ -442,27 +424,6 @@ class GoogleMapsService implements SingletonInterface
             ['uid' => (int)$foreignRecord['uid']]
         );
         $foreignRecord[$foreignFieldName] = (int)$poiCollectionUid;
-    }
-
-    /**
-     * Add a message to FlashMessage queue
-     *
-     * @param string $message
-     * @param string $title
-     * @param int $severity
-     * @return void
-     */
-    protected function addMessage($message, $title = '', $severity = FlashMessage::OK)
-    {
-        /** @var $flashMessage FlashMessage */
-        $flashMessage = GeneralUtility::makeInstance(
-            FlashMessage::class,
-            $message,
-            $title,
-            $severity
-        );
-        $defaultFlashMessageQueue = $this->flashMessageService->getMessageQueueByIdentifier();
-        $defaultFlashMessageQueue->enqueue($flashMessage);
     }
 
     /**

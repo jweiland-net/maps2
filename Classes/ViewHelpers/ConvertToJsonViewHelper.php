@@ -13,7 +13,6 @@ namespace JWeiland\Maps2\ViewHelpers;
  *
  * The TYPO3 project - inspiring people to share!
  */
-
 use JWeiland\Maps2\Domain\Model\Category;
 use JWeiland\Maps2\Domain\Model\Poi;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
@@ -38,11 +37,9 @@ class ConvertToJsonViewHelper extends AbstractViewHelper
     protected $escapeOutput = false;
 
     /**
-     * implements a ViewHelper to convert an array into JSON format
-     *
-     * @return array
+     * Implements a ViewHelper to convert an array into JSON format
      */
-    public function render()
+    public function render(): string
     {
         $poiCollections = $this->renderChildren();
 
@@ -65,7 +62,7 @@ class ConvertToJsonViewHelper extends AbstractViewHelper
      * @param array $poiCollections
      * @return string
      */
-    protected function getPoiCollectionsAsJson($poiCollections)
+    protected function getPoiCollectionsAsJson($poiCollections): string
     {
         $poiCollectionsAsArray = [];
         /** @var PoiCollection $poiCollection */
@@ -101,7 +98,7 @@ class ConvertToJsonViewHelper extends AbstractViewHelper
      * @param mixed $value
      * @return bool
      */
-    protected function valueContainsPoiCollections($value)
+    protected function valueContainsPoiCollections($value): bool
     {
         $containsPoiCollections = false;
         if (is_array($value)) {
