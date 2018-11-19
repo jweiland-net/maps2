@@ -1,5 +1,5 @@
 <?php
-namespace JWeiland\Maps2\Tests\Unit\Condition;
+namespace JWeiland\Maps2\Tests\Unit\Helper;
 
 /*
  * This file is part of the maps2 project.

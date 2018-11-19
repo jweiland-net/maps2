@@ -351,7 +351,7 @@ class GoogleMapsService implements SingletonInterface
     {
         $hasErrors = false;
 
-        if (empty(trim($poiCollectionUid))) {
+        if ($poiCollectionUid === 0) {
             $hasErrors = true;
             $this->messageHelper->addFlashMessage(
                 'PoiCollection UID can not be empty. Please check your values near method assignPoiCollectionToForeignRecord',
@@ -421,10 +421,10 @@ class GoogleMapsService implements SingletonInterface
         $connection = $this->getConnectionPool()->getConnectionForTable($foreignTableName);
         $connection->update(
             $foreignTableName,
-            [$foreignFieldName => (int)$poiCollectionUid],
+            [$foreignFieldName => $poiCollectionUid],
             ['uid' => (int)$foreignRecord['uid']]
         );
-        $foreignRecord[$foreignFieldName] = (int)$poiCollectionUid;
+        $foreignRecord[$foreignFieldName] = $poiCollectionUid;
     }
 
     /**

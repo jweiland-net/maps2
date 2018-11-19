@@ -1,5 +1,4 @@
 <?php
-
 namespace JWeiland\Maps2\Tests\Unit;
 
 /*

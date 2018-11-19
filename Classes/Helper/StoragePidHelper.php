@@ -196,13 +196,14 @@ class StoragePidHelper
             array_key_exists('pid', $locationRecord)
             && MathUtility::canBeInterpretedAsInteger($locationRecord['pid'])
         ) {
-            $tsConfig = BackendUtility::getModTSconfig($locationRecord['pid'], 'ext.maps2');
+            $pageTsConfig = BackendUtility::getPagesTSconfig($locationRecord['pid']);
             if (
-                array_key_exists('properties', $tsConfig)
-                && is_array($tsConfig['properties'])
-                && !empty($tsConfig['properties'])
+                array_key_exists('ext.', $pageTsConfig)
+                && is_array($pageTsConfig['ext.'])
+                && array_key_exists('maps2.', $pageTsConfig['ext.'])
+                && is_array($pageTsConfig['ext.']['maps2.'])
             ) {
-                return $tsConfig['properties'];
+                return $pageTsConfig['ext.']['maps2.'];
             }
         }
         return [];
