@@ -22,6 +22,7 @@ use Nimut\TestingFramework\TestCase\UnitTestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\CMS\Backend\Form\NodeFactory;
+use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
@@ -128,6 +129,10 @@ class GoogleMapsElementTest extends UnitTestCase
             ObjectManager::class,
             $this->objectManager->reveal()
         );
+
+        /** @var IconFactory|ObjectProphecy $iconFactoryProphecy */
+        $iconFactoryProphecy = $this->prophesize(IconFactory::class);
+        GeneralUtility::addInstance(IconFactory::class, $iconFactoryProphecy->reveal());
 
         /** @var NodeFactory|ObjectProphecy $nodeFactory */
         $nodeFactory = $this->prophesize(NodeFactory::class);

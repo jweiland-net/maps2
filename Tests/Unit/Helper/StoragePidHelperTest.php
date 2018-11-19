@@ -1,5 +1,5 @@
 <?php
-namespace JWeiland\Maps2\Tests\Unit\Condition;
+namespace JWeiland\Maps2\Tests\Unit\Helper;
 
 /*
  * This file is part of the maps2 project.
@@ -119,18 +119,6 @@ class StoragePidHelperTest extends AbstractUnitTestCase
             ->willReturn($variableFrontend->reveal());
         GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerProphecy->reveal());
 
-        /** @var BackendUserAuthentication|ObjectProphecy $backendUserAuthenticationProphecy */
-        $backendUserAuthenticationProphecy = $this->prophesize(BackendUserAuthentication::class);
-        $backendUserAuthenticationProphecy
-            ->getTSConfig('ext.maps2', [])
-            ->shouldBeCalled()
-            ->willReturn([]);
-        $backendUserAuthenticationProphecy
-            ->getTSConfig('ext.maps2')
-            ->shouldBeCalled()
-            ->willReturn([]);
-        $GLOBALS['BE_USER'] = $backendUserAuthenticationProphecy->reveal();
-
         $record = [
             'uid' => 100,
             'pid' => 200,
@@ -171,18 +159,6 @@ class StoragePidHelperTest extends AbstractUnitTestCase
             ->shouldBeCalled()
             ->willReturn($variableFrontend->reveal());
         GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerProphecy->reveal());
-
-        /** @var BackendUserAuthentication|ObjectProphecy $backendUserAuthenticationProphecy */
-        $backendUserAuthenticationProphecy = $this->prophesize(BackendUserAuthentication::class);
-        $backendUserAuthenticationProphecy
-            ->getTSConfig('ext.maps2', [])
-            ->shouldBeCalled()
-            ->willReturn([]);
-        $backendUserAuthenticationProphecy
-            ->getTSConfig('ext.maps2')
-            ->shouldBeCalled()
-            ->willReturn([]);
-        $GLOBALS['BE_USER'] = $backendUserAuthenticationProphecy->reveal();
 
         $record = [
             'uid' => 100,
@@ -227,18 +203,6 @@ class StoragePidHelperTest extends AbstractUnitTestCase
             ->willReturn($variableFrontend->reveal());
         GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerProphecy->reveal());
 
-        /** @var BackendUserAuthentication|ObjectProphecy $backendUserAuthenticationProphecy */
-        $backendUserAuthenticationProphecy = $this->prophesize(BackendUserAuthentication::class);
-        $backendUserAuthenticationProphecy
-            ->getTSConfig('ext.maps2', [])
-            ->shouldBeCalled()
-            ->willReturn([]);
-        $backendUserAuthenticationProphecy
-            ->getTSConfig('ext.maps2')
-            ->shouldBeCalled()
-            ->willReturn([]);
-        $GLOBALS['BE_USER'] = $backendUserAuthenticationProphecy->reveal();
-
         $record = [
             'uid' => 100,
             'pid' => 200,
@@ -281,18 +245,6 @@ class StoragePidHelperTest extends AbstractUnitTestCase
             ->shouldBeCalled()
             ->willReturn($variableFrontend->reveal());
         GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerProphecy->reveal());
-
-        /** @var BackendUserAuthentication|ObjectProphecy $backendUserAuthenticationProphecy */
-        $backendUserAuthenticationProphecy = $this->prophesize(BackendUserAuthentication::class);
-        $backendUserAuthenticationProphecy
-            ->getTSConfig('ext.maps2', [])
-            ->shouldBeCalled()
-            ->willReturn([]);
-        $backendUserAuthenticationProphecy
-            ->getTSConfig('ext.maps2')
-            ->shouldBeCalled()
-            ->willReturn([]);
-        $GLOBALS['BE_USER'] = $backendUserAuthenticationProphecy->reveal();
 
         $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['foreign_ext'] = serialize([
             'maps2Storage' => 548
@@ -342,7 +294,13 @@ class StoragePidHelperTest extends AbstractUnitTestCase
         $variableFrontend
             ->get('pagesTsConfigHashToContentBlub')
             ->shouldBeCalled()
-            ->willReturn([]);
+            ->willReturn([
+                'ext.' => [
+                    'maps2.' => [
+                        'defaultStoragePid' => 582
+                    ]
+                ]
+            ]);
 
         /** @var CacheManager|ObjectProphecy $cacheManagerProphecy */
         $cacheManagerProphecy = $this->prophesize(CacheManager::class);
@@ -351,22 +309,6 @@ class StoragePidHelperTest extends AbstractUnitTestCase
             ->shouldBeCalled()
             ->willReturn($variableFrontend->reveal());
         GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerProphecy->reveal());
-
-        /** @var BackendUserAuthentication|ObjectProphecy $backendUserAuthenticationProphecy */
-        $backendUserAuthenticationProphecy = $this->prophesize(BackendUserAuthentication::class);
-        $backendUserAuthenticationProphecy
-            ->getTSConfig('ext.maps2', [])
-            ->shouldBeCalled()
-            ->willReturn([
-                'properties' => [
-                    'defaultStoragePid' => 582
-                ]
-            ]);
-        $backendUserAuthenticationProphecy
-            ->getTSConfig('ext.maps2')
-            ->shouldBeCalled()
-            ->willReturn([]);
-        $GLOBALS['BE_USER'] = $backendUserAuthenticationProphecy->reveal();
 
         $record = [
             'uid' => 100,
