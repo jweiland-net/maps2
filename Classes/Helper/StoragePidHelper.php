@@ -58,7 +58,6 @@ class StoragePidHelper
         $this->updateStoragePidFromMaps2Registry($defaultStoragePid, $options);
         $this->updateDefaultStoragePidFromPageTsConfig($defaultStoragePid, $foreignLocationRecord);
 
-
         if (empty($defaultStoragePid)) {
             $this->messageHelper->addFlashMessage(
                 'No PID found to store POI collection. Please check various places like pageTSconfig, Maps2 Registry and PID of this currently saved record.',
