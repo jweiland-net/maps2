@@ -118,19 +118,12 @@ class AddressHelperTest extends AbstractUnitTestCase
     /**
      * @test
      */
-    public function getAddressWithoutCountryAndNoFallbackGeneratesThreeFlashMessages()
+    public function getAddressWithoutCountryAndNoFallbackGeneratesTwoFlashMessages()
     {
         $this->messageHelperProphecy
             ->addFlashMessage(
-                Argument::containingString('country information'),
+                Argument::containingString('We can not find any country information within your extension'),
                 'No country information found',
-                FlashMessage::INFO
-            )
-            ->shouldBeCalled();
-        $this->messageHelperProphecy
-            ->addFlashMessage(
-                Argument::containingString('defaultCountry'),
-                'Still no country information found',
                 FlashMessage::WARNING
             )
             ->shouldBeCalled();
@@ -171,19 +164,12 @@ class AddressHelperTest extends AbstractUnitTestCase
     /**
      * @test
      */
-    public function getAddressWithoutCountryButWithMaps2FallbackGeneratesTwoFlashMessages()
+    public function getAddressWithoutCountryButWithMaps2FallbackGeneratesOneFlashMessages()
     {
         $this->messageHelperProphecy
             ->addFlashMessage(
-                Argument::containingString('country information'),
+                Argument::containingString('We can not find any country information within your extension'),
                 'No country information found',
-                FlashMessage::INFO
-            )
-            ->shouldBeCalled();
-        $this->messageHelperProphecy
-            ->addFlashMessage(
-                Argument::containingString('defaultCountry'),
-                'Still no country information found',
                 FlashMessage::WARNING
             )
             ->shouldBeCalled();
@@ -217,16 +203,8 @@ class AddressHelperTest extends AbstractUnitTestCase
     /**
      * @test
      */
-    public function getAddressWithoutCountryButWithMaps2RegistryFallbackGeneratesOneFlashMessage()
+    public function getAddressWithoutCountryButWithMaps2RegistryFallbackGeneratesNoFlashMessage()
     {
-        $this->messageHelperProphecy
-            ->addFlashMessage(
-                Argument::containingString('country information'),
-                'No country information found',
-                FlashMessage::INFO
-            )
-            ->shouldBeCalled();
-
         /** @var ExtConf|ObjectProphecy $extConfProphecy */
         $extConfProphecy = $this->prophesize(ExtConf::class);
         $extConfProphecy

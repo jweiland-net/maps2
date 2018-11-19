@@ -88,11 +88,6 @@ class AddressHelper
         } elseif (array_key_exists($options['countryColumn'], $record)) {
             $countryName = $record[$options['countryColumn']];
         } else {
-            $this->messageHelper->addFlashMessage(
-                'Your record does not have any country information. Please inform your sys admin to implement such a field. We will try to find some fallback values now...',
-                'No country information found',
-                FlashMessage::INFO
-            );
             $countryName = $this->getFallbackCountryName($options);
         }
 
@@ -113,8 +108,8 @@ class AddressHelper
             return trim($options['defaultCountry']);
         } else {
             $this->messageHelper->addFlashMessage(
-                'Your extension does not have a configured defaultCountry in maps2 registration.',
-                'Still no country information found',
+                'We can not find any country information within your extension. Either in Maps2 Registry nor in this record. Please check your configuration or update your extension.',
+                'No country information found',
                 FlashMessage::WARNING
             );
         }

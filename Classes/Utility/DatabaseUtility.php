@@ -28,7 +28,7 @@ class DatabaseUtility
      * @param string $tableName
      * @return array
      */
-    static public function getColumnsFromTable($tableName)
+    public static function getColumnsFromTable($tableName)
     {
         $output = [];
         $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable($tableName);
