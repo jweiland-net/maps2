@@ -101,6 +101,12 @@ class CreateMaps2RecordHook
                 continue;
             }
 
+            // Do not update foreign record automatically
+            // There are still extensions out there, where you want to define POI collection record on your own.
+            if (empty($options)) {
+                continue;
+            }
+
             if (!$foreignLocationRecord[$foreignColumnName]) {
                 if ($this->createNewMapsRecord($foreignLocationRecord, $foreignTableName, $foreignColumnName, $options)) {
                     $this->synchronizeColumnsFromForeignRecordWithPoiCollection($foreignLocationRecord, $foreignTableName, $foreignColumnName, $options);
