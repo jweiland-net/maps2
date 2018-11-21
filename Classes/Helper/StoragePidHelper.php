@@ -100,7 +100,7 @@ class StoragePidHelper
             }
 
             if (empty($storagePid)) {
-                $this->messageHelper->addMessage(
+                $this->messageHelper->addFlashMessage(
                     'You have configured a defaultStoragePid in maps2 registration, but returned value is still 0. Please check Maps2 Registry',
                     'Invalid defaultStoragePid configuration found',
                     FlashMessage::WARNING
