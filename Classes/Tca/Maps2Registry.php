@@ -14,6 +14,8 @@ namespace JWeiland\Maps2\Tca;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Core\Cache\CacheManager;
+use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Registry;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
@@ -32,9 +34,9 @@ class Maps2Registry implements SingletonInterface
     protected $registry = [];
 
     /**
-     * @var Registry
+     * @var FrontendInterface
      */
-    protected $sysRegistry;
+    protected $maps2RegistryCache;
 
     /**
      * @var array
@@ -68,8 +70,9 @@ class Maps2Registry implements SingletonInterface
     {
         // As this constructor will only be called once after clearing SystemCache
         // we can securely remove all registered fields
-        $this->sysRegistry = GeneralUtility::makeInstance(Registry::class);
-        $this->sysRegistry->removeAllByNamespace('maps2_registry');
+        $this->maps2RegistryCache = GeneralUtility::makeInstance(CacheManager::class)
+            ->getCache('maps2_registry');
+        $this->maps2RegistryCache->flush();
 
         $this->template = str_repeat(PHP_EOL, 3) . 'CREATE TABLE %s (' . PHP_EOL
             . '  %s int(11) unsigned DEFAULT \'0\' NOT NULL' . PHP_EOL . ');' . str_repeat(PHP_EOL, 3);
@@ -118,8 +121,11 @@ class Maps2Registry implements SingletonInterface
 
             if (isset($GLOBALS['TCA'][$tableName]['columns'])) {
                 $this->applyTcaForTableAndField($tableName, $fieldName);
-                $this->sysRegistry->remove('maps2_registry', 'fields');
-                $this->sysRegistry->set('maps2_registry', 'fields', $this->registry);
+                $this->maps2RegistryCache->flush();
+                $this->maps2RegistryCache->set(
+                    'fields',
+                    $this->registry
+                );
                 $didRegister = true;
             }
         }
