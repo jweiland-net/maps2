@@ -18,12 +18,13 @@ use JWeiland\Maps2\Domain\Model\RadiusResult;
 use JWeiland\Maps2\Helper\AddressHelper;
 use JWeiland\Maps2\Helper\StoragePidHelper;
 use JWeiland\Maps2\Service\GoogleMapsService;
+use TYPO3\CMS\Core\Cache\CacheManager;
+use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
-use TYPO3\CMS\Core\Registry;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
@@ -49,9 +50,9 @@ class CreateMaps2RecordHook
     protected $flashMessageService;
 
     /**
-     * @var Registry
+     * @var FrontendInterface
      */
-    protected $sysRegistry;
+    protected $maps2RegistryCache;
 
     /**
      * @var array
@@ -66,8 +67,9 @@ class CreateMaps2RecordHook
         $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $this->googleMapsService = $this->objectManager->get(GoogleMapsService::class);
         $this->flashMessageService = $this->objectManager->get(FlashMessageService::class);
-        $this->sysRegistry = $this->objectManager->get(Registry::class);
-        $this->columnRegistry = $this->sysRegistry->get('maps2_registry', 'fields') ?: [];
+        $this->maps2RegistryCache = $this->objectManager->get(CacheManager::class)
+            ->getCache('maps2_registry');
+        $this->columnRegistry = $this->maps2RegistryCache->get('fields') ?: [];
     }
 
     /**
