@@ -53,10 +53,7 @@ call_user_func(function() {
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['maps2_registry'] = [
         'frontend' => \TYPO3\CMS\Core\Cache\Frontend\VariableFrontend::class,
         'backend' => \TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend::class,
-        'groups' => [
-            'all',
-            'system',
-        ]
+        'groups' => ['all', 'system']
     ];
 
     // This is a solution to build GET forms.

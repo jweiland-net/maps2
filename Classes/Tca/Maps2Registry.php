@@ -71,7 +71,6 @@ class Maps2Registry implements SingletonInterface
         // we can securely remove all registered fields
         $this->maps2RegistryCache = GeneralUtility::makeInstance(CacheManager::class)
             ->getCache('maps2_registry');
-        $this->maps2RegistryCache->flush();
 
         $this->template = str_repeat(PHP_EOL, 3) . 'CREATE TABLE %s (' . PHP_EOL
             . '  %s int(11) unsigned DEFAULT \'0\' NOT NULL' . PHP_EOL . ');' . str_repeat(PHP_EOL, 3);
@@ -120,7 +119,6 @@ class Maps2Registry implements SingletonInterface
 
             if (isset($GLOBALS['TCA'][$tableName]['columns'])) {
                 $this->applyTcaForTableAndField($tableName, $fieldName);
-                $this->maps2RegistryCache->flush();
                 $this->maps2RegistryCache->set(
                     'fields',
                     $this->registry
