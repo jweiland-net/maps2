@@ -33,6 +33,11 @@ class Maps2Registry implements SingletonInterface
     protected $registry = [];
 
     /**
+     * @var CacheManager
+     */
+    protected $cacheManager;
+
+    /**
      * @var FrontendInterface
      */
     protected $maps2RegistryCache;
@@ -69,8 +74,13 @@ class Maps2Registry implements SingletonInterface
     {
         // As this constructor will only be called once after clearing SystemCache
         // we can securely remove all registered fields
-        $this->maps2RegistryCache = GeneralUtility::makeInstance(CacheManager::class)
-            ->getCache('maps2_registry');
+        $this->cacheManager = GeneralUtility::makeInstance(CacheManager::class);
+        if ($this->cacheManager->hasCache('maps2_registry') === false) {
+            // seems we are in ExtensionManager or Installtool, where
+            // Caches are loaded a bit differently. Do nothing
+        } else {
+            $this->maps2RegistryCache = $this->cacheManager->getCache('maps2_registry');
+        }
 
         $this->template = str_repeat(PHP_EOL, 3) . 'CREATE TABLE %s (' . PHP_EOL
             . '  %s int(11) unsigned DEFAULT \'0\' NOT NULL' . PHP_EOL . ');' . str_repeat(PHP_EOL, 3);
@@ -101,6 +111,11 @@ class Maps2Registry implements SingletonInterface
      */
     public function add($extensionKey, $tableName, array $options = [], $fieldName = 'tx_maps2_uid', $override = false)
     {
+        // Do nothing in case of ExtensionManager or Installtool
+        if ($this->cacheManager->hasCache('maps2_registry') === false) {
+            return false;
+        }
+
         $didRegister = false;
         if (empty($tableName) || !is_string($tableName)) {
             throw new \InvalidArgumentException('No or invalid table name "' . $tableName . '" given.', 1369122038);
