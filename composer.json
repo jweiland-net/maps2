@@ -1,49 +1,52 @@
 {
-  "name": "jweiland/maps2",
-  "type": "typo3-cms-extension",
-  "description": "Add Google Maps to your website",
-  "license": "GPL-2.0-or-later",
-  "keywords": ["typo3", "TYPO3 CMS", "google maps", "google", "maps2"],
-  "homepage": "http://www.jweiland.net",
-  "authors": [
-    {
-      "name": "Stefan Froemken",
-      "email": "sfroemken@jweiland.net",
-      "role": "Lead Developer"
-    }
-  ],
-  "support": {
-    "email": "projects@jweiland.net",
-    "issues": "https://github.com/jweiland-net/maps2/issues",
-    "source": "https://github.com/jweiland-net/maps2"
-  },
-  "require": {
-    "typo3/cms-core": "^8.7 || ^9.5"
-  },
-  "require-dev": {
+	"name": "jweiland/maps2",
+	"type": "typo3-cms-extension",
+	"description": "Add Google Maps to your website",
+	"license": "GPL-2.0-or-later",
+	"keywords": ["typo3", "TYPO3 CMS", "google maps", "google", "maps2"],
+	"homepage": "http://www.jweiland.net",
+	"authors": [
+		{
+			"name": "Stefan Froemken",
+			"email": "sfroemken@jweiland.net",
+			"role": "Lead Developer"
+		}
+	],
+	"support": {
+		"email": "projects@jweiland.net",
+		"issues": "https://github.com/jweiland-net/maps2/issues",
+		"source": "https://github.com/jweiland-net/maps2"
+	},
+	"require": {
+		"typo3/cms-core": "^8.7 || ^9.5"
+	},
+	"require-dev": {
 		"friendsofphp/php-cs-fixer": "^2.0",
 		"nimut/testing-framework": "^4.1"
-  },
-  "autoload": {
-    "psr-4": {
-      "JWeiland\\Maps2\\": "Classes"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "JWeiland\\Maps2\\Tests\\": "Tests"
-    }
-  },
-  "config": {
-    "vendor-dir": ".Build/vendor",
-    "bin-dir": ".Build/bin"
-  },
-  "extra": {
-    "typo3/cms": {
-      "extension-key": "maps2",
-      "cms-package-dir": "{$vendor-dir}/typo3/cms",
-      "app-dir": ".Build",
-      "web-dir": ".Build/public"
-    }
-  }
+	},
+	"suggest": {
+		"friendsoftypo3/tt-address": "Maps2 adds column tx_maps2_uid to tt_address table"
+	},
+	"autoload": {
+		"psr-4": {
+			"JWeiland\\Maps2\\": "Classes"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"JWeiland\\Maps2\\Tests\\": "Tests"
+		}
+	},
+	"config": {
+		"vendor-dir": ".Build/vendor",
+		"bin-dir": ".Build/bin"
+	},
+	"extra": {
+		"typo3/cms": {
+			"extension-key": "maps2",
+			"cms-package-dir": "{$vendor-dir}/typo3/cms",
+			"app-dir": ".Build",
+			"web-dir": ".Build/public"
+		}
+	}
 }
