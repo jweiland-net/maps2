@@ -76,11 +76,13 @@ class Maps2Registry implements SingletonInterface
         // we can securely remove all registered fields
         $this->cacheManager = GeneralUtility::makeInstance(CacheManager::class);
         if ($this->cacheManager->hasCache('maps2_registry') === false) {
-            // seems we are in ExtensionManager or Installtool, where
-            // Caches are loaded a bit differently. Do nothing
-        } else {
-            $this->maps2RegistryCache = $this->cacheManager->getCache('maps2_registry');
+            // @link: https://forge.typo3.org/issues/87546
+            // Seems we are in ExtensionManager or Installtool.
+            // TYPO3 missed to reload CacheConfigurations right after loading ext_localconf.php and before loading TCA.
+            $this->cacheManager->setCacheConfigurations($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']);
+            $this->cacheManager->flushCachesInGroup('system');
         }
+        $this->maps2RegistryCache = $this->cacheManager->getCache('maps2_registry');
 
         $this->template = str_repeat(PHP_EOL, 3) . 'CREATE TABLE %s (' . PHP_EOL
             . '  %s int(11) unsigned DEFAULT \'0\' NOT NULL' . PHP_EOL . ');' . str_repeat(PHP_EOL, 3);
