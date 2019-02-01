@@ -40,15 +40,60 @@ and add following lines:
             // If country could not be fetched, it will fallback to defaultCountry from above
             'countryColumn' => 'country',
 
-            // Remove defaultStoragePid, if you want to save maps2 PoiCollection in same Storage as your record
-            // Define fixed storage PID where to save our maps2 PoiCollection record
+            // Define a fixed storage PID where to save our maps2 PoiCollection record.
+            // Useful for small websites. Single domain instances.
+            // This value will be overridden if pageTSconfig path ext.maps2.pid is set.
             'defaultStoragePid' => 414,
 
-            // Read an extension manager configuration from ext_conf_template.txt of an given extension
+            // Do not configure "defaultStoragePid" if you want to save maps2 PoiCollection records
+            // in same storage as your location record. But, be careful: As a fallback we are using
+            // pageTSconfig path "ext.maps2.pid" which has a higher priority than PID of your location record.
+            // So, keep that in mind, remove "ext.maps2.pid" from pageTSconfig to save maps2 record in same storage
+            // of your records.
+
+            // Read storage PID from pageTSconfig
+            // You can configure that path to your needs. In example below we try to get storage PID
+            // from pageTSconfig: ext.events2.poiCollectionPid = 4324
+            'defaultStoragePid' => [
+                'extKey' => 'events2', // Extension key to read storage PID from
+                'property' => 'poiCollectionPid', // Property key to read storage PID from
+                'type' => 'pagetsconfig'
+            ],
+
+            // Read an extension manager configuration from ext_conf_template.txt of a given extension
             'defaultStoragePid' => [
                 'extKey' => 'events2', // extension to read $EXTCONF from
-                'property' => 'poiCollectionPid' // Property with storage UID
+                'property' => 'poiCollectionPid', // Property with storage UID
+                'type' => 'extensionmanager' // If type is not given, we will use "extensionmanager" as default.
             ],
+
+            // Priority ordered version
+            // We will read all these entries from array key 0 until array key 3. If a PID was found in f.e.
+            // array key 2 (after entry 0 and 1 have not returned a valid PID) we will use it and will not
+            // process further entries (entry 3)
+            'defaultStoragePid' => [
+                0 => [
+                    'extKey' => 'news',
+                    'property' => 'pid_of_maps2',
+                    'type' => 'pagetsconfig'
+                ],
+                1 => [
+                    'extKey' => 'my_ext',
+                    'property' => 'specialConfiguredPidForMaps2',
+                    'type' => 'pagetsconfig'
+                ],
+                2 => [
+                    'extKey' => 'my_ext',
+                    'property' => 'mapsPid',
+                    'type' => 'extensionmanager'
+                ],
+                3 => [
+                    'extKey' => 'events2',
+                    'property' => 'poiCollectionPid',
+                    'type' => 'extensionmanager'
+                ],
+            ],
+
             // You can synchronize additional fields of your record with maps2 PoiCollection
             // Please only use fields of type String or int.
             // 1:N, N:1 and N:M relations are not supported. Please use SignalSlot postUpdatePoiCollection
