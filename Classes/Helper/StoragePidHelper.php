@@ -172,7 +172,6 @@ class StoragePidHelper
         return 0;
     }
 
-
     /**
      * Get dynamic storage PID from a single Maps2 Registry configuration.
      *
