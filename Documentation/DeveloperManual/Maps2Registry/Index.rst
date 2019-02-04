@@ -42,7 +42,7 @@ and add following lines of code:
 
             // With defaultStoragePid you can define where our maps2 record should be saved.
             // defaultStoragePid has following priority from low to high:
-            // PID of your location record, Configuration of Maps2Registry, pageTSconfig (ext.maps2.pid)
+            // PID of your location record, Configuration of Maps2Registry, pageTSconfig (ext.maps2.defaultStoragePid)
             // This order is hardcoded and can not be changed.
             // So, if a PID with help of Maps2Registry was found, it will be overwritten with value of pageTSconfig.
 
@@ -56,8 +56,8 @@ and add following lines of code:
 
             // Do not configure "defaultStoragePid" if you want to save maps2 PoiCollection records
             // in same storage as your location record. But, be careful: As a fallback we are using
-            // pageTSconfig path "ext.maps2.pid" which has a higher priority than PID of your location record.
-            // So, keep that in mind, remove "ext.maps2.pid" from pageTSconfig to save maps2 record in same storage
+            // pageTSconfig path "ext.maps2.defaultStoragePid" which has a higher priority than PID of your location record.
+            // So, keep that in mind, remove "ext.maps2.defaultStoragePid" from pageTSconfig to save maps2 record in same storage
             // of your records.
 
             // Read an extension manager configuration from ext_conf_template.txt of a given extension
@@ -70,7 +70,7 @@ and add following lines of code:
             // Read storage PID from pageTSconfig
             // You can configure that path to your needs. In example below we try to get storage PID
             // from pageTSconfig: ext.events2.poiCollectionPid = 4324
-            // Do not forget: If pageTSconfig (ext.maps2.pid) is set, it will overwrite this configuration.
+            // Do not forget: If pageTSconfig (ext.maps2.defaultStoragePid) is set, it will overwrite this configuration.
             'defaultStoragePid' => [
                 'extKey' => 'events2', // Extension key to read storage PID from
                 'property' => 'poiCollectionPid', // Property key to read storage PID from
