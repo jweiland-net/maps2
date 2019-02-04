@@ -204,6 +204,7 @@ class StoragePidHelper
                 case 'extensionmanager':
                     if (
                         ExtensionManagementUtility::isLoaded($configuration['extKey'])
+                        && is_array($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'])
                         && array_key_exists($configuration['extKey'], $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'])
                     ) {
                         $extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$extKey]);
