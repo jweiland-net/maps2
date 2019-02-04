@@ -55,7 +55,7 @@ class StoragePidHelper
     {
         $defaultStoragePid = 0;
         $this->updateStoragePidFromForeignLocationRecord($defaultStoragePid, $foreignLocationRecord);
-        $this->updateStoragePidFromMaps2Registry($defaultStoragePid, $options);
+        $this->updateStoragePidFromMaps2Registry($defaultStoragePid, $options, $foreignLocationRecord);
         $this->updateDefaultStoragePidFromPageTsConfig($defaultStoragePid, $foreignLocationRecord);
 
         if (empty($defaultStoragePid)) {
@@ -90,13 +90,14 @@ class StoragePidHelper
      *
      * @param int $defaultStoragePid
      * @param array $options
+     * @param array $foreignLocationRecord The foreign record with tx_maps2_uid column
      */
-    protected function updateStoragePidFromMaps2Registry(int &$defaultStoragePid, array $options)
+    protected function updateStoragePidFromMaps2Registry(int &$defaultStoragePid, array $options, $foreignLocationRecord)
     {
         if (array_key_exists('defaultStoragePid', $options)) {
             $storagePid = $this->getHardCodedStoragePidFromMaps2Registry($options);
             if (empty($storagePid)) {
-                $storagePid = $this->getDynamicStoragePidFromMaps2Registry($options);
+                $storagePid = $this->getDynamicStoragePidFromMaps2Registry($options, $foreignLocationRecord);
             }
 
             if (empty($storagePid)) {
@@ -138,59 +139,126 @@ class StoragePidHelper
      * foreign extension configuration ext_conf_template.txt.
      *
      * @param array $options
+     * @param array $foreignLocationRecord The foreign record with tx_maps2_uid column
      * @return int
      */
-    protected function getDynamicStoragePidFromMaps2Registry(array $options)
+    protected function getDynamicStoragePidFromMaps2Registry(array $options, $foreignLocationRecord): int
     {
-        if (
-            is_array($options['defaultStoragePid'])
-            && array_key_exists('extKey', $options['defaultStoragePid'])
-            && !empty($options['defaultStoragePid']['extKey'])
-            && array_key_exists('property', $options['defaultStoragePid'])
-            && !empty($options['defaultStoragePid']['property'])
-            && ExtensionManagementUtility::isLoaded($options['defaultStoragePid']['extKey'])
-            && array_key_exists($options['defaultStoragePid']['extKey'], $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'])
-        ) {
-            $extKey = $options['defaultStoragePid']['extKey'];
-            $property = $options['defaultStoragePid']['property'];
-            $extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$extKey]);
-            if (
-                MathUtility::canBeInterpretedAsInteger($extConf[$property])
-                && (int)$extConf[$property] > 0
-            ) {
-                return (int)$extConf[$property];
+        if (is_array($options['defaultStoragePid'])) {
+            $hasSubConfiguration = true;
+            foreach ($options['defaultStoragePid'] as $configuration) {
+                if (!is_array($configuration)) {
+                    $hasSubConfiguration = false;
+                    break;
+                }
+            }
+
+            if ($hasSubConfiguration) {
+                $defaultStoragePid = 0;
+                foreach ($options['defaultStoragePid'] as $configuration) {
+                    if (empty($defaultStoragePid)) {
+                        $defaultStoragePid = $this->getDynamicStoragePidBySingleArray(
+                            $configuration,
+                            $foreignLocationRecord
+                        );
+                    }
+                }
+                return $defaultStoragePid;
+            } else {
+                return $this->getDynamicStoragePidBySingleArray($options['defaultStoragePid'], $foreignLocationRecord);
             }
         }
+
         return 0;
+    }
+
+
+    /**
+     * Get dynamic storage PID from a single Maps2 Registry configuration.
+     *
+     * @param array $configuration
+     * @param array $foreignLocationRecord The foreign record with tx_maps2_uid column
+     * @return int
+     */
+    protected function getDynamicStoragePidBySingleArray(array $configuration, $foreignLocationRecord): int
+    {
+        $defaultStoragePid = 0;
+        if (
+            array_key_exists('extKey', $configuration)
+            && !empty($configuration['extKey'])
+            && array_key_exists('property', $configuration)
+            && !empty($configuration['property'])
+        ) {
+            $type = 'extensionmanager';
+            if (
+                array_key_exists('type', $configuration)
+                && !empty($configuration['type'])
+                && in_array(strtolower($configuration['type']), ['extensionmanager', 'pagetsconfig'])
+            ) {
+                $type = strtolower($configuration['type']);
+            }
+
+            $extKey = $configuration['extKey'];
+            $property = $configuration['property'];
+
+            switch ($type) {
+                case 'extensionmanager':
+                    if (
+                        ExtensionManagementUtility::isLoaded($configuration['extKey'])
+                        && array_key_exists($configuration['extKey'], $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'])
+                    ) {
+                        $extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$extKey]);
+                        if (
+                            MathUtility::canBeInterpretedAsInteger($extConf[$property])
+                            && (int)$extConf[$property] > 0
+                        ) {
+                            return (int)$extConf[$property];
+                        }
+                    }
+                    break;
+                default:
+                case 'pagetsconfig':
+                    $this->updateDefaultStoragePidFromPageTsConfig(
+                        $defaultStoragePid,
+                        $foreignLocationRecord,
+                        $extKey,
+                        $property
+                    );
+            }
+        }
+
+        return $defaultStoragePid;
     }
 
     /**
      * Update default storage PID with value from pageTSconfig
-     * This has the highest priority
      *
      * @param int $defaultStoragePid
      * @param array $foreignLocationRecord
+     * @param string $extKey
+     * @param string $property
      */
-    protected function updateDefaultStoragePidFromPageTsConfig(int &$defaultStoragePid, array $foreignLocationRecord)
+    protected function updateDefaultStoragePidFromPageTsConfig(int &$defaultStoragePid, array $foreignLocationRecord, string $extKey = 'maps2', string $property = 'defaultStoragePid')
     {
-        $tsConfig = $this->getTsConfig($foreignLocationRecord);
+        $tsConfig = $this->getTsConfig($foreignLocationRecord, $extKey);
         if (
-            array_key_exists('defaultStoragePid', $tsConfig)
-            && MathUtility::canBeInterpretedAsInteger($tsConfig['defaultStoragePid'])
-            && (int)$tsConfig['defaultStoragePid'] > 0
+            array_key_exists($property, $tsConfig)
+            && MathUtility::canBeInterpretedAsInteger($tsConfig[$property])
+            && (int)$tsConfig[$property] > 0
         ) {
-            $defaultStoragePid = (int)$tsConfig['defaultStoragePid'];
+            $defaultStoragePid = (int)$tsConfig[$property];
         }
     }
 
     /**
-     * Get pageTSconfig for EXT:maps2
+     * Get pageTSconfig for given extension key (ext.ext_key.*)
      *
      * @param array $locationRecord
+     * @param string $extKey
      * @return array
      * @throws \Exception
      */
-    public function getTsConfig(array $locationRecord): array
+    public function getTsConfig(array $locationRecord, $extKey = 'maps2'): array
     {
         if (
             array_key_exists('pid', $locationRecord)
@@ -200,10 +268,10 @@ class StoragePidHelper
             if (
                 array_key_exists('ext.', $pageTsConfig)
                 && is_array($pageTsConfig['ext.'])
-                && array_key_exists('maps2.', $pageTsConfig['ext.'])
-                && is_array($pageTsConfig['ext.']['maps2.'])
+                && array_key_exists($extKey . '.', $pageTsConfig['ext.'])
+                && is_array($pageTsConfig['ext.'][$extKey . '.'])
             ) {
-                return $pageTsConfig['ext.']['maps2.'];
+                return $pageTsConfig['ext.'][$extKey . '.'];
             }
         }
         return [];
