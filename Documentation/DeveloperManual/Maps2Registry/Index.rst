@@ -20,7 +20,7 @@ name of the column will be ``tx_maps2_uid``, but you can change that, if you wan
 Our Maps2 registry is adapted from :ref:`TYPO3s Category Registry <t3coreapi:system-categories-api>`
 
 Create a new file in [yourExt]/Configuration/TCA/Overrides/[yourTableName].php
-and add following lines:
+and add following lines of code:
 
 .. code-block:: php
 
@@ -36,13 +36,22 @@ and add following lines:
             'defaultCountry' => 'France',
 
             // Best option for country. If it is an INT and static_info_tables is loaded, it will
-            // get country name from static_country
-            // If country could not be fetched, it will fallback to defaultCountry from above
+            // get country name from static_country.
+            // If country could not be fetched, it will fallback to defaultCountry from above.
             'countryColumn' => 'country',
+
+            // With defaultStoragePid you can define where our maps2 record should be saved.
+            // defaultStoragePid has following priority from low to high:
+            // PID of your location record, Configuration of Maps2Registry, pageTSconfig (ext.maps2.pid)
+            // This order is hardcoded and can not be changed.
+            // So, if a PID with help of Maps2Registry was found, it will be overwritten with value of pageTSconfig.
+
+            // Within the Maps2Registry we have following ordering from low to high:
+            // A fixed value, an extension configuration value, a pageTSconfig value.
 
             // Define a fixed storage PID where to save our maps2 PoiCollection record.
             // Useful for small websites. Single domain instances.
-            // This value will be overridden if pageTSconfig path ext.maps2.pid is set.
+            // Keep in mind that this value will be overwritten with pageTSconfig (ext.maps2.pid)
             'defaultStoragePid' => 414,
 
             // Do not configure "defaultStoragePid" if you want to save maps2 PoiCollection records
@@ -51,20 +60,21 @@ and add following lines:
             // So, keep that in mind, remove "ext.maps2.pid" from pageTSconfig to save maps2 record in same storage
             // of your records.
 
-            // Read storage PID from pageTSconfig
-            // You can configure that path to your needs. In example below we try to get storage PID
-            // from pageTSconfig: ext.events2.poiCollectionPid = 4324
-            'defaultStoragePid' => [
-                'extKey' => 'events2', // Extension key to read storage PID from
-                'property' => 'poiCollectionPid', // Property key to read storage PID from
-                'type' => 'pagetsconfig'
-            ],
-
             // Read an extension manager configuration from ext_conf_template.txt of a given extension
             'defaultStoragePid' => [
                 'extKey' => 'events2', // extension to read $EXTCONF from
                 'property' => 'poiCollectionPid', // Property with storage UID
                 'type' => 'extensionmanager' // If type is not given, we will use "extensionmanager" as default.
+            ],
+
+            // Read storage PID from pageTSconfig
+            // You can configure that path to your needs. In example below we try to get storage PID
+            // from pageTSconfig: ext.events2.poiCollectionPid = 4324
+            // Do not forget: If pageTSconfig (ext.maps2.pid) is set, it will overwrite this configuration.
+            'defaultStoragePid' => [
+                'extKey' => 'events2', // Extension key to read storage PID from
+                'property' => 'poiCollectionPid', // Property key to read storage PID from
+                'type' => 'pagetsconfig'
             ],
 
             // Priority ordered version
