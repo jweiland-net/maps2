@@ -130,18 +130,16 @@ class Maps2Registry implements SingletonInterface
             $this->remove($tableName, $fieldName);
         }
 
-        if (!$this->isRegistered($tableName, $fieldName)) {
-            $this->registry[$tableName][$fieldName] = $options;
-            $this->extensions[$extensionKey][$tableName][$fieldName] = $fieldName;
+        $this->registry[$tableName][$fieldName] = $options;
+        $this->extensions[$extensionKey][$tableName][$fieldName] = $fieldName;
 
-            if (isset($GLOBALS['TCA'][$tableName]['columns'])) {
-                $this->applyTcaForTableAndField($tableName, $fieldName);
-                $this->maps2RegistryCache->set(
-                    'fields',
-                    $this->registry
-                );
-                $didRegister = true;
-            }
+        if (isset($GLOBALS['TCA'][$tableName]['columns'])) {
+            $this->applyTcaForTableAndField($tableName, $fieldName);
+            $this->maps2RegistryCache->set(
+                'fields',
+                $this->registry
+            );
+            $didRegister = true;
         }
 
         return $didRegister;
