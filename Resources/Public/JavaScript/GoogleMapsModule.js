@@ -11,7 +11,7 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
     this.zoom = 12;
     this.mapTypeId = gmaps.MapTypeId.ROADMAP;
   }
-  
+
   /**
    * Create CircleOptions which can be assigned to the Circle object of Google
    *
@@ -35,7 +35,7 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
       this.radius = config.radius;
     }
   }
-  
+
   /**
    * Create PolygonOptions which can be assigned to the Polygon object of Google
    *
@@ -52,7 +52,7 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
     this.fillOpacity = extConf.fillOpacity;
     this.editable = true;
   }
-  
+
   /**
    * Create PolylineOptions which can be assigned to the Polyline object of Google
    *
@@ -67,7 +67,7 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
     this.strokeWeight = extConf.strokeWeight;
     this.editable = true;
   }
-  
+
   var initialize = function(element, config, extConf) {
     var marker = {};
     var map = {};
@@ -81,7 +81,7 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
       );
     };
     createMap();
-  
+
     /**
      * Create Marker
      */
@@ -91,9 +91,9 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
         map: map,
         draggable: true
       });
-    
+
       infoWindow.setContent(infoWindowContent);
-  
+
       // open InfoWindow, if marker was clicked.
       marker.addListener("click", function() {
         infoWindow.open(map, marker);
@@ -107,7 +107,7 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
           0
         );
       });
-    
+
       // update fields and marker when clicking on the map
       gmaps.event.addListener(map, 'click', function(event) {
         marker.setPosition(event.latLng);
@@ -118,26 +118,26 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
         );
       });
     };
-  
+
     /**
      * Create Area
      */
     var createArea = function() {
       var coordinatesArray = [];
-    
+
       if (typeof config.pois !== 'undefined') {
         for (var i = 0; i < config.pois.length; i++) {
           coordinatesArray.push(new gmaps.LatLng(config.pois[i].latitude, config.pois[i].longitude));
         }
       }
-    
+
       if (coordinatesArray.length === 0) {
         coordinatesArray.push(new gmaps.LatLng(config.latitude, config.longitude));
       }
-    
+
       var area = new gmaps.Polygon(new PolygonOptions(coordinatesArray, extConf));
       var path = area.getPath();
-    
+
       area.setMap(map);
 
       // Listener which will be called, if a vertex was moved to a new location
@@ -167,29 +167,29 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
         );
       });
     };
-  
+
     /**
      * Create Route
      */
     var createRoute = function() {
       var coordinatesArray = [];
-    
+
       if (typeof config.pois !== 'undefined') {
         for (var i = 0; i < config.pois.length; i++) {
           coordinatesArray.push(new gmaps.LatLng(config.pois[i].latitude, config.pois[i].longitude));
         }
       }
-    
+
       if (coordinatesArray.length === 0) {
         coordinatesArray.push(new gmaps.LatLng(config.latitude, config.longitude));
       }
-    
+
       /* create route overlay */
       var route = new gmaps.Polyline(new PolylineOptions(coordinatesArray, extConf));
       var path = route.getPath();
-    
+
       route.setMap(map);
-    
+
       // Listener which will be called, if a vertex was moved to a new location
       gmaps.event.addListener(path, 'set_at', function() {
         insertRouteToDb(route);
@@ -216,7 +216,7 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
         );
       });
     };
-  
+
     /**
      * Create Radius
      */
@@ -224,7 +224,7 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
       marker = new gmaps.Circle(
         new CircleOptions(map, config, extConf)
       );
-    
+
       // update fields and marker while dragging
       gmaps.event.addListener(marker, 'center_changed', function() {
         setLatLngFields(
@@ -233,7 +233,7 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
           marker.getRadius()
         );
       });
-    
+
       // update fields and marker while resizing the radius
       gmaps.event.addListener(marker, 'radius_changed', function() {
         setLatLngFields(
@@ -242,7 +242,7 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
           marker.getRadius()
         );
       });
-    
+
       // update fields and marker when clicking on the map
       gmaps.event.addListener(map, 'click', function(event) {
         marker.setCenter(event.latLng);
@@ -252,14 +252,14 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
           marker.getRadius()
         );
       });
-    
+
       setLatLngFields(
         config.latitude,
         config.longitude,
         config.radius
       );
     };
-  
+
     /**
      * Fill TCA fields for Lat and Lng with value of marker position
      *
@@ -273,18 +273,18 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
       setFieldValue("longitude", lng);
       TBE_EDITOR.fieldChanged("tx_maps2_domain_model_poicollection", config.uid, "latitude", createFieldName("latitude", false));
       TBE_EDITOR.fieldChanged("tx_maps2_domain_model_poicollection", config.uid, "longitude", createFieldName("longitude", false));
-    
+
       if (typeof rad !== "undefined" && rad > 0) {
         setFieldValue("radius", parseInt(rad));
         TBE_EDITOR.fieldChanged("tx_maps2_domain_model_poicollection", config.uid, "radius", createFieldName("radius", false));
       }
-    
+
       if (typeof address !== "undefined") {
         setFieldValue("address", address);
         TBE_EDITOR.fieldChanged("tx_maps2_domain_model_poicollection", config.uid, "address", createFieldName("address", false));
       }
     };
-  
+
     /**
      * Generate an uri to save all coordinates
      *
@@ -297,7 +297,7 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
       });
       return routeObject;
     };
-  
+
     /**
      * Create field value
      *
@@ -311,7 +311,7 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
       }
       return 'data[tx_maps2_domain_model_poicollection][' + config.uid + '][' + field + ']';
     };
-  
+
     /**
      * Set field value
      *
@@ -333,7 +333,7 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
       // set the normal field which contains the data, which will be send by POST
       document[TBE_EDITOR.formname][fieldName].value = value;
     };
-  
+
     /**
      * Save coordinated to DB
      *
@@ -355,15 +355,15 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
         }
       });
     };
-  
+
     /**
      * read address, send it to Google and move map/marker to new location
      */
     var findAddress = function() {
       var input = document.getElementById("pac-input");
-      var autocomplete = new gmaps.places.Autocomplete(input, {placeIdOnly: true});
+      var autocomplete = new gmaps.places.Autocomplete(input, {fields: ['place_id']});
       var geocoder = new gmaps.Geocoder;
-      
+
       autocomplete.bindTo("bounds", map);
       map.controls[gmaps.ControlPosition.TOP_LEFT].push(input);
 
@@ -371,15 +371,15 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
       $(input).keydown(function (e) {
         if (e.which === 13 && $(".pac-container:visible").length) return false;
       });
-      
+
       autocomplete.addListener("place_changed", function() {
         infoWindow.close();
         var place = autocomplete.getPlace();
-    
+
         if (!place.place_id) {
           return;
         }
-    
+
         geocoder.geocode({"placeId": place.place_id}, function(results, status) {
           if (status !== "OK") {
             window.alert("Geocoder failed due to: " + status);
@@ -387,7 +387,7 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
           }
           var lat = results[0].geometry.location.lat().toFixed(6);
           var lng = results[0].geometry.location.lng().toFixed(6);
-  
+
           switch (config.collectionType) {
             case 'Point':
               //marker.setPlace(); // setPlace works, but it resets previous marker settings like draggable, ...
@@ -416,7 +416,7 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
         });
       });
     };
-  
+
     /**
      * Modify Marker in DB
      *
@@ -463,16 +463,16 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
         createRadius();
         break;
     }
-  
+
     findAddress();
-  
+
     if (config.latitude && config.longitude) {
       map.setCenter(new gmaps.LatLng(config.latitude, config.longitude));
     } else {
       // Fallback
       map.setCenter(new gmaps.LatLng(extConf.defaultLatitude, extConf.defaultLongitude));
     }
-  
+
     // if maps2 was inserted in (bootstrap) tabs, we have to re-render the map
     $("ul.t3js-tabs a[data-toggle='tab']:first").on("shown.bs.tab", function() {
       google.maps.event.trigger(map, "resize");

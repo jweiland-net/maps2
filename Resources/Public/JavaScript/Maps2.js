@@ -476,7 +476,7 @@ function initMap() {
     var $radius = jQuery("#maps2Radius");
     if ($address.length && $radius.length) {
         var input = document.getElementById("maps2Address");
-        var autocomplete = new google.maps.places.Autocomplete(input, {placeIdOnly: true});
+        var autocomplete = new google.maps.places.Autocomplete(input, {fields: ['place_id']});
         $(input).keydown(function (e) {
             if (e.which === 13) return false;
         });
