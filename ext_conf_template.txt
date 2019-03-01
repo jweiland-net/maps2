@@ -1,7 +1,7 @@
-# cat=basic; type=options[LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:useMapService.both=both,Google=google,Open Street Map=osm]; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:useMapService
-useMapService = both
-# cat=basic; type=options[Google=google,OpenStreetMap=osm]; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:defaultMapService
-defaultMapService = google
+# cat=basic; type=options[LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:mapProvider.both=both,Google=google,Open Street Map=osm]; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:mapProvider
+mapProvider = both
+# cat=basic; type=options[Google=google,OpenStreetMap=osm]; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:defaultMapProvider
+defaultMapProvider = google
 # cat=basic; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:defaultCountry
 defaultCountry =
 # cat=basic; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:defaultLatitude
