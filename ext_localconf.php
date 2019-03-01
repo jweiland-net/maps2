@@ -74,10 +74,10 @@ call_user_func(function() {
         'priority' => 40,
         'class' => \JWeiland\Maps2\Form\Resolver\InfoWindowContentResolver::class,
     ];
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1530619130] = [
-        'nodeName' => 'maps2GoogleMaps',
-        'priority' => 50,
-        'class' => \JWeiland\Maps2\Form\Element\GoogleMapsElement::class,
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeResolver'][1551448205] = [
+        'nodeName' => 'maps2MapProvider',
+        'priority' => 40,
+        'class' => \JWeiland\Maps2\Form\Resolver\MapProviderResolver::class,
     ];
 
     // Register SVG Icon Identifier

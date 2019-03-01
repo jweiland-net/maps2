@@ -297,7 +297,7 @@ return [
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.configuration_map',
             'config' => [
                 'type' => 'user',
-                'renderType' => 'maps2GoogleMaps'
+                'renderType' => 'maps2MapProvider'
             ],
         ],
         'radius' => [
