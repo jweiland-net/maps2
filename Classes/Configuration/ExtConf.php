@@ -152,6 +152,10 @@ class ExtConf implements SingletonInterface
      */
     public function getMapProvider(): string
     {
+        if (empty($this->mapProvider)) {
+            $this->mapProvider = 'both';
+        }
+
         return $this->mapProvider;
     }
 
@@ -168,6 +172,10 @@ class ExtConf implements SingletonInterface
      */
     public function getDefaultMapProvider(): string
     {
+        if (empty($this->defaultMapProvider)) {
+            $this->defaultMapProvider = 'google';
+        }
+
         return $this->defaultMapProvider;
     }
 
