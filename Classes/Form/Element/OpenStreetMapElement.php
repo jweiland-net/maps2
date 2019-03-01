@@ -108,7 +108,16 @@ class OpenStreetMapElement extends AbstractFormElement
 
         $resultArray['stylesheetFiles'][] = $backendRelPath . 'Resources/Public/Css/OpenStreetMapModule.css';
         $resultArray['requireJsModules'][] = [
-            'leaflet' => 'function (L) {var map = L.map(\'maps2ConfigurationMap\').setView([51.505, -0.09], 13);}'
+            'leaflet' => 'function (L) {
+                var osm = L.map(\'maps2ConfigurationMap\').setView([51.505, -0.09], 13);
+                L.tileLayer(\'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw\', {
+                    maxZoom: 18,
+                    attribution: \'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, \' +
+                        \'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, \' +
+                        \'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>\',
+                    id: \'mapbox.streets\'
+                }).addTo(osm);
+            }'
         ];
 
         $resultArray['html'] = $this->getMapHtml($this->getConfiguration($currentRecord));
