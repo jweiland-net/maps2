@@ -103,7 +103,7 @@ MapOptions.prototype.setMapTypeId = function (mapTypeId) {
  * @param environment contains settings, current PageId, extConf and current tt_content record
  * @constructor
  */
-function Maps2($element, environment) {
+function GoogleMaps2($element, environment) {
     this.categorizedMarkers = {};
     this.pointMarkers = [];
     this.bounds = new google.maps.LatLngBounds();
@@ -158,7 +158,7 @@ function Maps2($element, environment) {
  *
  * @param environment
  */
-Maps2.prototype.createMap = function (environment) {
+GoogleMaps2.prototype.createMap = function (environment) {
     this.map = new google.maps.Map(
         this.$element.get(0),
         new MapOptions(environment.settings)
@@ -170,7 +170,7 @@ Maps2.prototype.createMap = function (environment) {
  *
  * @param environment
  */
-Maps2.prototype.groupCategories = function (environment) {
+GoogleMaps2.prototype.groupCategories = function (environment) {
     var groupedCategories = {};
     var categoryUid = "0";
     for (var x = 0; x < this.poiCollections.length; x++) {
@@ -189,7 +189,7 @@ Maps2.prototype.groupCategories = function (environment) {
  *
  * @param environment
  */
-Maps2.prototype.showSwitchableCategories = function (environment) {
+GoogleMaps2.prototype.showSwitchableCategories = function (environment) {
     var categories = this.groupCategories(environment);
     var $form = jQuery("<form>")
         .addClass("txMaps2Form")
@@ -223,7 +223,7 @@ Maps2.prototype.showSwitchableCategories = function (environment) {
  *
  * @param category
  */
-Maps2.prototype.getCheckbox = function (category) {
+GoogleMaps2.prototype.getCheckbox = function (category) {
     return jQuery("<div />")
         .addClass("form-group").append(
             jQuery("<div />")
@@ -247,7 +247,7 @@ Maps2.prototype.getCheckbox = function (category) {
  *
  * @param obj
  */
-Maps2.prototype.countObjectProperties = function (obj) {
+GoogleMaps2.prototype.countObjectProperties = function (obj) {
     var count = 0;
     for (var key in obj) {
         if (obj.hasOwnProperty(key)) {
@@ -262,7 +262,7 @@ Maps2.prototype.countObjectProperties = function (obj) {
  *
  * @param environment
  */
-Maps2.prototype.createPointByCollectionType = function (environment) {
+GoogleMaps2.prototype.createPointByCollectionType = function (environment) {
     for (var i = 0; i < this.poiCollections.length; i++) {
         if (this.poiCollections[i].strokeColor === "") {
             this.poiCollections[i].strokeColor = environment.extConf.strokeColor;
@@ -302,7 +302,7 @@ Maps2.prototype.createPointByCollectionType = function (environment) {
  * @param poiCollection
  * @param environment
  */
-Maps2.prototype.createMarker = function (poiCollection, environment) {
+GoogleMaps2.prototype.createMarker = function (poiCollection, environment) {
     var categoryUid = "0";
     var marker = new google.maps.Marker({
         position: new google.maps.LatLng(poiCollection.latitude, poiCollection.longitude),
@@ -350,7 +350,7 @@ Maps2.prototype.createMarker = function (poiCollection, environment) {
  * @param list
  * @param item
  */
-Maps2.prototype.inList = function (list, item) {
+GoogleMaps2.prototype.inList = function (list, item) {
     var catSearch = ',' + list + ',';
     item = ',' + item + ',';
     return catSearch.search(item);
@@ -362,7 +362,7 @@ Maps2.prototype.inList = function (list, item) {
  * @param latitude
  * @param longitude
  */
-Maps2.prototype.createMarkerByLatLng = function (latitude, longitude) {
+GoogleMaps2.prototype.createMarkerByLatLng = function (latitude, longitude) {
     var marker = new google.maps.Marker({
         position: new google.maps.LatLng(latitude, longitude),
         map: this.map
@@ -375,7 +375,7 @@ Maps2.prototype.createMarkerByLatLng = function (latitude, longitude) {
  *
  * @param poiCollection
  */
-Maps2.prototype.createArea = function (poiCollection) {
+GoogleMaps2.prototype.createArea = function (poiCollection) {
     var latLng;
     var paths = [];
     for (var i = 0; i < poiCollection.pois.length; i++) {
@@ -397,7 +397,7 @@ Maps2.prototype.createArea = function (poiCollection) {
  *
  * @param poiCollection
  */
-Maps2.prototype.createRoute = function (poiCollection) {
+GoogleMaps2.prototype.createRoute = function (poiCollection) {
     var latLng;
     var paths = [];
     for (var i = 0; i < poiCollection.pois.length; i++) {
@@ -419,7 +419,7 @@ Maps2.prototype.createRoute = function (poiCollection) {
  *
  * @param poiCollection
  */
-Maps2.prototype.createRadius = function (poiCollection) {
+GoogleMaps2.prototype.createRadius = function (poiCollection) {
     var circle = new google.maps.Circle(
         new CircleOptions(
             this.map,
@@ -439,7 +439,7 @@ Maps2.prototype.createRadius = function (poiCollection) {
  * @param poiCollection
  * @param environment
  */
-Maps2.prototype.addEditListeners = function ($mapContainer, marker, poiCollection, environment) {
+GoogleMaps2.prototype.addEditListeners = function ($mapContainer, marker, poiCollection, environment) {
     // update fields and marker while dragging
     google.maps.event.addListener(marker, 'dragend', function () {
         var lat = marker.getPosition().lat().toFixed(6);
@@ -468,7 +468,7 @@ function initMap() {
         var environment = $element.data("environment");
         var override = $element.data("override");
         environment = jQuery.extend(true, environment, override);
-        $maps2GoogleMaps.push(new Maps2($element, environment));
+        $maps2GoogleMaps.push(new GoogleMaps2($element, environment));
     });
 
     // initialize radius search

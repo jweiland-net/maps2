@@ -18,5 +18,7 @@ plugin.tx_maps2 {
     storagePid =
   }
   settings {
+    # cat=plugin.tx_maps2/enable; type=options[Google Maps=google,Open Street Map=osm]; label=Map Provider
+    mapProvider = google
   }
 }
