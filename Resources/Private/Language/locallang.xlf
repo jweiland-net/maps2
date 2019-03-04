@@ -1,57 +1,69 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <xliff version="1.0">
-  <file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2013-02-07T11:13:04Z" product-name="maps2">
-    <header/>
-    <body>
-      <trans-unit id="google.map" xml:space="preserve" approved="yes">
-        <source>Google Maps</source>
-      </trans-unit>
-      <trans-unit id="google.protectData" xml:space="preserve" approved="yes">
-        <source>The protection of your data is important for us.</source>
-      </trans-unit>
-      <trans-unit id="google.explainActivation" xml:space="preserve" approved="yes">
-        <source>Click on "Activate" to allow us requesting google servers to show Google Maps.</source>
-      </trans-unit>
-      <trans-unit id="google.activate" xml:space="preserve" approved="yes">
-        <source>Activate</source>
-      </trans-unit>
-      <trans-unit id="backend.form.searchAddress" xml:space="preserve" approved="yes">
-        <source>Enter a location</source>
-      </trans-unit>
+	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2013-02-07T11:13:04Z" product-name="maps2">
+		<header/>
+		<body>
+			<trans-unit id="google.map" xml:space="preserve" approved="yes">
+				<source>Google Maps</source>
+			</trans-unit>
+			<trans-unit id="google.protectData" xml:space="preserve" approved="yes">
+				<source>The protection of your data is important for us.</source>
+			</trans-unit>
+			<trans-unit id="google.explainActivation" xml:space="preserve" approved="yes">
+				<source>Click on "Activate" to allow us requesting google servers to show Google Maps.</source>
+			</trans-unit>
+			<trans-unit id="google.activate" xml:space="preserve" approved="yes">
+				<source>Activate</source>
+			</trans-unit>
+			<trans-unit id="osm.map" xml:space="preserve" approved="yes">
+				<source>Open Street Map</source>
+			</trans-unit>
+			<trans-unit id="osm.protectData" xml:space="preserve" approved="yes">
+				<source>The protection of your data is important for us.</source>
+			</trans-unit>
+			<trans-unit id="osm.explainActivation" xml:space="preserve" approved="yes">
+				<source>Click on "Activate" to allow us requesting Open Street Map servers to show map.</source>
+			</trans-unit>
+			<trans-unit id="osm.activate" xml:space="preserve" approved="yes">
+				<source>Activate</source>
+			</trans-unit>
+			<trans-unit id="backend.form.searchAddress" xml:space="preserve" approved="yes">
+				<source>Enter a location</source>
+			</trans-unit>
 
-      <trans-unit id="tx_maps2_domain_model_poi.latitude" xml:space="preserve" approved="yes">
-        <source>latitude</source>
-      </trans-unit>
-      <trans-unit id="tx_maps2_domain_model_poi.longitude" xml:space="preserve" approved="yes">
-        <source>longitude</source>
-      </trans-unit>
-      <trans-unit id="tx_maps2_domain_model_poicollection" xml:space="preserve">
-        <source>Marking</source>
-      </trans-unit>
-      <trans-unit id="tx_maps2_domain_model_poicollection.title" xml:space="preserve">
-        <source>Title</source>
-      </trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poi.latitude" xml:space="preserve" approved="yes">
+				<source>latitude</source>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poi.longitude" xml:space="preserve" approved="yes">
+				<source>longitude</source>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poicollection" xml:space="preserve">
+				<source>Marking</source>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poicollection.title" xml:space="preserve">
+				<source>Title</source>
+			</trans-unit>
 
-      <trans-unit id="rangeSearch.address" xml:space="preserve" approved="yes">
-        <source>Address</source>
-      </trans-unit>
-      <trans-unit id="rangeSearch.radius" xml:space="preserve" approved="yes">
-        <source>Radius</source>
-      </trans-unit>
-      <trans-unit id="rangeSearch.send" xml:space="preserve" approved="yes">
-        <source>Search</source>
-      </trans-unit>
+			<trans-unit id="rangeSearch.address" xml:space="preserve" approved="yes">
+				<source>Address</source>
+			</trans-unit>
+			<trans-unit id="rangeSearch.radius" xml:space="preserve" approved="yes">
+				<source>Radius</source>
+			</trans-unit>
+			<trans-unit id="rangeSearch.send" xml:space="preserve" approved="yes">
+				<source>Search</source>
+			</trans-unit>
 
-      <trans-unit id="searchStreet" xml:space="preserve" approved="yes">
-        <source>Search for street</source>
-      </trans-unit>
+			<trans-unit id="searchStreet" xml:space="preserve" approved="yes">
+				<source>Search for street</source>
+			</trans-unit>
 
-      <trans-unit id="error.noPositionsFound.title" xml:space="preserve" approved="yes">
-        <source>No positions found</source>
-      </trans-unit>
-      <trans-unit id="error.noPositionsFound.body" xml:space="preserve" approved="yes">
-        <source>Google can't find any position. Please check your input and try again or activate $GLOBALS['TYPO3_CONF_VARS']['BE']['debug'] for further debugging</source>
-      </trans-unit>
-    </body>
-  </file>
+			<trans-unit id="error.noPositionsFound.title" xml:space="preserve" approved="yes">
+				<source>No positions found</source>
+			</trans-unit>
+			<trans-unit id="error.noPositionsFound.body" xml:space="preserve" approved="yes">
+				<source>Google can't find any position. Please check your input and try again or activate $GLOBALS['TYPO3_CONF_VARS']['BE']['debug'] for further debugging</source>
+			</trans-unit>
+		</body>
+	</file>
 </xliff>

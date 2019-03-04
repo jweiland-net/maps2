@@ -10,6 +10,26 @@
 				</TCEforms>
 				<type>array</type>
 				<el>
+					<settings.mapProvider>
+						<TCEforms>
+							<label>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:mapProvider</label>
+							<config>
+								<type>select</type>
+								<items type="array">
+									<numIndex index="0" type="array">
+										<numIndex index="0">Google Maps</numIndex>
+										<numIndex index="1">google</numIndex>
+									</numIndex>
+									<numIndex index="1" type="array">
+										<numIndex index="0">Open Street Maps</numIndex>
+										<numIndex index="1">osm</numIndex>
+									</numIndex>
+								</items>
+								<size>1</size>
+								<default>google</default>
+							</config>
+						</TCEforms>
+					</settings.mapProvider>
 					<settings.poiCollection>
 						<TCEforms>
 							<label>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:poiCollection</label>
