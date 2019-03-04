@@ -192,7 +192,7 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet"], function($,
         }
 
         // if maps2 was inserted in (bootstrap) tabs, we have to re-render the map
-        $("ul.t3js-tabs a[data-toggle='tab']:first").on("shown.bs.tab", function() {
+        $("ul.t3js-tabs a[data-toggle='tab']:eq(1)").on("shown.bs.tab", function() {
             map.invalidateSize();
             if (config.latitude && config.longitude) {
                 map.panTo([config.latitude, config.longitude]);
