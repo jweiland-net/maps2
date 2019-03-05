@@ -135,7 +135,7 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet"], function($,
                                 var lat = parseFloat(data[0].lat).toFixed(6);
                                 var lng = parseFloat(data[0].lon).toFixed(6);
                                 var address = data[0].address;
-                                var formattedAddress = address.road + ' ' + address.house_number + ', ' + address.postcode + ' ' + address.town + ', ' + address.country;
+                                var formattedAddress = getFormattedAddress(address);
 
                                 switch (config.collectionType) {
                                     case 'Point':
@@ -165,6 +165,40 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet"], function($,
                     return false;
                 }
             });
+        };
+
+        /**
+         * format address from ajax result
+         *
+         * @param address
+         * @returns {string}
+         */
+        var getFormattedAddress = function (address) {
+            var formattedAddress = '';
+            var city = '';
+
+            if (address.hasOwnProperty('road')) {
+                formattedAddress += address.road;
+            }
+            if (address.hasOwnProperty('house_number')) {
+                formattedAddress += ' ' + address.house_number;
+            }
+            if (address.hasOwnProperty('postcode')) {
+                formattedAddress += ', ' + address.postcode;
+            }
+
+            if (address.hasOwnProperty('village')) {
+                city = address.village;
+            }
+            if (address.hasOwnProperty('town')) {
+                city = address.town;
+            }
+            if (address.hasOwnProperty('city')) {
+                city = address.city;
+            }
+            formattedAddress += ' ' + city;
+
+            return formattedAddress;
         };
 
         switch (config.collectionType) {
