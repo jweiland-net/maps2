@@ -192,7 +192,6 @@ class ExtConf implements SingletonInterface
 
     /**
      * @return string
-     * @throws \Exception
      */
     public function getGoogleMapsLibrary(): string
     {
@@ -223,13 +222,9 @@ class ExtConf implements SingletonInterface
 
     /**
      * @return string
-     * @throws \Exception
      */
     public function getGoogleMapsJavaScriptApiKey(): string
     {
-        if (empty($this->googleMapsJavaScriptApiKey)) {
-            throw new \Exception('You have forgotten to set a JavaScript ApiKey in Extensionmanager.', 1464871544);
-        }
         return $this->googleMapsJavaScriptApiKey;
     }
 
@@ -243,13 +238,9 @@ class ExtConf implements SingletonInterface
 
     /**
      * @return string
-     * @throws \Exception
      */
     public function getGoogleMapsGeocodeApiKey(): string
     {
-        if (empty($this->googleMapsGeocodeApiKey)) {
-            throw new \Exception('You have forgotten to set a Geocode ApiKey in Extensionmanager.', 1464871560);
-        }
         return $this->googleMapsGeocodeApiKey;
     }
 
