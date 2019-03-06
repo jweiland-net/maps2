@@ -5,25 +5,25 @@
 		<body>
 
 			<trans-unit id="plugin.maps.title">
-				<source>Google Maps</source>
-				<target>Google Maps</target>
+				<source>Maps2: Show map</source>
+				<target>Maps2: Kartenansicht</target>
 			</trans-unit>
 			<trans-unit id="plugin.radius.title">
-				<source>Google Maps: Search Radius</source>
-				<target>Google Maps: Radiussuche</target>
+				<source>Maps2: Search Radius</source>
+				<target>Maps2: Radiussuche</target>
 			</trans-unit>
 			<trans-unit id="plugin.cityMap.title">
-				<source>Google Maps: City Map</source>
-				<target>Google Maps: Stadtplan</target>
+				<source>Maps2: City Map</source>
+				<target>Maps2: Stadtplan</target>
 			</trans-unit>
 
 			<trans-unit id="plugin.maps2.title">
-				<source>Google Maps</source>
-				<target>Google Maps</target>
+				<source>Maps2: Show map</source>
+				<target>Maps2: Kartenansicht</target>
 			</trans-unit>
 			<trans-unit id="plugin.maps2.description">
-				<source>Add Google Maps to your website</source>
-				<target>Fügt Google Maps Ihrer Webseite hinzu</target>
+				<source>Add a world map to your website</source>
+				<target>Fügt eine Weltkarte Ihrer Webseite hinzu</target>
 			</trans-unit>
 
 			<trans-unit id="tx_maps2_domain_model_poi" xml:space="preserve" approved="yes">

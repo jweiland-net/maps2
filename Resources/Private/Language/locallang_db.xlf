@@ -5,20 +5,20 @@
 		<body>
 
 			<trans-unit id="plugin.maps.title">
-				<source>Google Maps</source>
+				<source>Maps2: Show map</source>
 			</trans-unit>
 			<trans-unit id="plugin.radius.title">
-				<source>Google Maps: Search Radius</source>
+				<source>Maps2: Search Radius</source>
 			</trans-unit>
 			<trans-unit id="plugin.cityMap.title">
-				<source>Google Maps: City Map</source>
+				<source>Maps2: City Map</source>
 			</trans-unit>
 
 			<trans-unit id="plugin.maps2.title">
-				<source>Google Maps</source>
+				<source>Maps2: Show map</source>
 			</trans-unit>
 			<trans-unit id="plugin.maps2.description">
-				<source>Add Google Maps to your website</source>
+				<source>Add a world map to your website</source>
 			</trans-unit>
 
 			<trans-unit id="tx_maps2_domain_model_poi" xml:space="preserve">
