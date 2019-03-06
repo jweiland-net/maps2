@@ -21,6 +21,12 @@ call_user_func(function() {
     // Set default of map_provider to pre configured map provider of Extension Manager Configuration
     if ($extConf->getMapProvider() === 'both') {
         $mapProvider = $extConf->getDefaultMapProvider();
+        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
+            'tx_maps2_domain_model_poicollection',
+            'map_provider',
+            '',
+            'before:configuration_map'
+        );
     } else {
         $mapProvider = $extConf->getMapProvider();
     }

@@ -86,17 +86,19 @@ class MapProviderResolver implements NodeResolverInterface
      */
     protected function getMapProvider(array $databaseRow): string
     {
-        if (is_array($databaseRow['map_provider'])) {
-            $mapProvider = current($databaseRow['map_provider']);
-        } else {
-            $extConf = GeneralUtility::makeInstance(ExtConf::class);
-            if ($extConf->getMapProvider() === 'both') {
-                $mapProvider = $extConf->getDefaultMapProvider();
+        $extConf = GeneralUtility::makeInstance(ExtConf::class);
+
+        // Only of both map providers are allowed, we can read map provider from Database
+        if ($extConf->getMapProvider() === 'both') {
+            if (is_array($databaseRow['map_provider'])) {
+                $mapProvider = current($databaseRow['map_provider']);
             } else {
-                $mapProvider = $extConf->getMapProvider();
+                $mapProvider = $extConf->getDefaultMapProvider();
             }
+        } else {
+            // We have a strict map provider. Do not render map with map provider from Database
+            $mapProvider = $extConf->getMapProvider();
         }
         return $mapProvider;
-
     }
 }
