@@ -48,8 +48,8 @@
 				<target>Markierung</target>
 			</trans-unit>
 			<trans-unit id="tx_maps2_domain_model_poicollection.mapProvider" xml:space="preserve">
-				<source>Map Provider</source>
-				<target>Kartenanbieter</target>
+				<source>Choose a preferred Map Provider to render the map for this record. Only TYPO3 Backend</source>
+				<target>Wähle einen bevorzugten Kartenanbieter, um die Karte für diesen Datensatz darzustellen. Nur TYPO3 Backend.</target>
 			</trans-unit>
 			<trans-unit id="tx_maps2_domain_model_poicollection.mapProvider.google" xml:space="preserve">
 				<source>Google Maps</source>
