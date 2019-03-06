@@ -38,7 +38,7 @@
 				<source>Marking</source>
 			</trans-unit>
 			<trans-unit id="tx_maps2_domain_model_poicollection.mapProvider" xml:space="preserve">
-				<source>Choose a preferred Map Provider to render the map for this record. Only TYPO3 Backend</source>
+				<source>Choose a preferred Map Provider to render the map for this record. This option is only valid for TYPO3 backend and will reload the form if you switch to another value.</source>
 			</trans-unit>
 			<trans-unit id="tx_maps2_domain_model_poicollection.mapProvider.google" xml:space="preserve">
 				<source>Google Maps</source>
