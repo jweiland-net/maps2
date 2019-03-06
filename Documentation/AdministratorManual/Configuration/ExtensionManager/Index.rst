@@ -24,29 +24,29 @@ Properties
 
 .. container:: ts-properties
 
-  ============================== ======== ====================================================================
-  Property                       Tab      Default
-  ============================== ======== ====================================================================
-  googleMapsLibrary_              basic    ``https://maps.googleapis.com/maps/api/js?key=|&callback=initMap``
-  googleMapsJavaScriptApiKey_     basic
-  googleMapsGeocodeApiKey_        basic
-  explicitAllowGoogleMaps_        basic    0
-  defaultCountry_                 basic
-  defaultLongitude_               basic    0.000000
-  defaultLatitude_                basic    0.000000
-  defaultRadius_                  basic    250
-  infoWindowContentTemplatePath_  basic    EXT:maps2/Resources/Private/Templates/InfoWindowContent.html
-  allowMapTemplatePath_           basic    EXT:maps2/Resources/Private/Templates/AllowMapForm.html
-  strokeColor_                    design   #FF0000
-  strokeOpacity_                  design   0.8
-  strokeWeight_                   design   2
-  fillColor_                      design   #FF0000
-  fillOpacity_                    design   0.3
-  markerIconWidth_                design   25
-  markerIconHeight_               design   40
-  markerIconAnchorPosX_           design   13
-  markerIconAnchorPosY_           design   40
-  ============================== ======== ====================================================================
+  ================================ ======== ====================================================================
+  Property                         Tab      Default
+  ================================ ======== ====================================================================
+  googleMapsLibrary_                basic    ``https://maps.googleapis.com/maps/api/js?key=|&callback=initMap``
+  googleMapsJavaScriptApiKey_       basic
+  googleMapsGeocodeApiKey_          basic
+  explicitAllowMapProviderRequests_ basic    0
+  defaultCountry_                   basic
+  defaultLongitude_                 basic    0.000000
+  defaultLatitude_                  basic    0.000000
+  defaultRadius_                    basic    250
+  infoWindowContentTemplatePath_    basic    EXT:maps2/Resources/Private/Templates/InfoWindowContent.html
+  allowMapTemplatePath_             basic    EXT:maps2/Resources/Private/Templates/AllowMapForm.html
+  strokeColor_                      design   #FF0000
+  strokeOpacity_                    design   0.8
+  strokeWeight_                     design   2
+  fillColor_                        design   #FF0000
+  fillOpacity_                      design   0.3
+  markerIconWidth_                  design   25
+  markerIconHeight_                 design   40
+  markerIconAnchorPosX_             design   13
+  markerIconAnchorPosY_             design   40
+  ================================ ======== ====================================================================
 
 Property details
 ^^^^^^^^^^^^^^^^
@@ -76,10 +76,10 @@ googleMapsJavaScriptApiKey
 Since version 2.0.0 this extension needs a Google Maps JavaScript ApiKey which you have to get
 over `Google Console<http://console.developers.google.com>`_
 
-.. _extensionManager-explicitAllowGoogleMaps:
+.. _extensionManager-explicitAllowMapProviderRequests:
 
-explicitAllowGoogleMaps
-"""""""""""""""""""""""
+explicitAllowMapProviderRequests
+""""""""""""""""""""""""""""""""
 
 If you use our maps2 extension your browser will send requests to Google Servers to retrieve the map images.
 These requests contains the IP address of the website visitors which is a user defined information in some countries.
@@ -141,7 +141,7 @@ Further you can override this template path again with TypoScript at settings.in
 allowMapTemplatePath
 """"""""""""""""""""
 
-This option is only valid if explicitAllowGoogleMaps is activ.
+This option is only valid if explicitAllowMapProviderRequests is activ.
 Define your own template which will be shown, as long as the visitor has not explicit allowed requests
 to Google Servers
 You can override this template path again with TypoScript at settings.allowMapTemplatePath = [path]

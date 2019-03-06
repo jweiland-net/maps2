@@ -15,8 +15,8 @@ namespace JWeiland\Maps2\Tests\Unit\ViewHelpers\Widget;
  */
 
 use JWeiland\Maps2\Configuration\ExtConf;
-use JWeiland\Maps2\Service\GoogleRequestService;
 use JWeiland\Maps2\Service\GoogleMapsService;
+use JWeiland\Maps2\Service\MapProviderRequestService;
 use JWeiland\Maps2\ViewHelpers\Widget\EditPoiViewHelper;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
 
@@ -36,9 +36,9 @@ class EditPoiViewHelperTest extends UnitTestCase
     protected $googleMapsService;
 
     /**
-     * @var GoogleRequestService
+     * @var MapProviderRequestService
      */
-    protected $googleRequestService;
+    protected $mapProviderRequestService;
 
     /**
      * @var EditPoiViewHelper
@@ -51,17 +51,17 @@ class EditPoiViewHelperTest extends UnitTestCase
      */
     protected function setUp()
     {
-        $_SESSION['googleRequestsAllowedForMaps2'] = false;
+        $_SESSION['mapProviderRequestsAllowedForMaps2'] = false;
 
         $this->extConf = new ExtConf();
-        $this->extConf->setExplicitAllowGoogleMaps(1);
-        $this->extConf->setExplicitAllowGoogleMapsBySessionOnly(1);
+        $this->extConf->setExplicitAllowMapProviderRequests(1);
+        $this->extConf->setExplicitAllowMapProviderRequestsBySessionOnly(1);
 
         $this->googleMapsService = $this->prophesize(GoogleMapsService::class);
-        $this->googleRequestService = new GoogleRequestService($this->extConf);
+        $this->mapProviderRequestService = new MapProviderRequestService($this->extConf);
 
         $this->subject = new EditPoiViewHelper();
-        $this->subject->injectGoogleRequestService($this->googleRequestService);
+        // $this->subject->injectGoogleRequestService($this->mapProviderRequestService);
         $this->subject->injectGoogleMapsService($this->googleMapsService->reveal());
     }
 
@@ -71,7 +71,7 @@ class EditPoiViewHelperTest extends UnitTestCase
      */
     protected function tearDown()
     {
-        unset($this->extConf, $this->googleMapsService, $this->googleRequestService, $this->subject);
+        unset($this->extConf, $this->googleMapsService, $this->mapProviderRequestService, $this->subject);
         parent::tearDown();
     }
 
@@ -93,19 +93,19 @@ class EditPoiViewHelperTest extends UnitTestCase
      */
     public function renderWillReturnAWidgetSubRequestObjectWhenGoogleRequestsAreAllowed()
     {
-        $this->extConf->setExplicitAllowGoogleMaps(0);
-        $this->extConf->setExplicitAllowGoogleMapsBySessionOnly(0);
+        $this->extConf->setExplicitAllowMapProviderRequests(0);
+        $this->extConf->setExplicitAllowMapProviderRequestsBySessionOnly(0);
         $this->googleMapsService->showAllowMapForm()->shouldNotBeCalled();
 
         /** @var \Prophecy\Prophecy\ObjectProphecy|EditPoiViewHelper $object */
         $object = $this->prophesize(EditPoiViewHelper::class);
-        $object->injectGoogleRequestService($this->googleRequestService)->shouldBeCalled();
+        $object->injectGoogleRequestService($this->mapProviderRequestService)->shouldBeCalled();
         $object->injectGoogleMapsService($this->googleMapsService->reveal())->shouldBeCalled();
         $object->render()->shouldBeCalled()->willReturn('maps2 output');
 
         /** @var EditPoiViewHelper $subject */
         $subject = $object->reveal();
-        $subject->injectGoogleRequestService($this->googleRequestService);
+        $subject->injectGoogleRequestService($this->mapProviderRequestService);
         $subject->injectGoogleMapsService($this->googleMapsService->reveal());
 
         $this->assertSame(

@@ -16,8 +16,8 @@ namespace JWeiland\Maps2\Tests\Unit\Mvc;
 
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Mvc\GoogleMapOverlayRequestHandler;
-use JWeiland\Maps2\Service\GoogleRequestService;
 use JWeiland\Maps2\Service\GoogleMapsService;
+use JWeiland\Maps2\Service\MapProviderRequestService;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
 use TYPO3\CMS\Extbase\Mvc\Web\Request;
 use TYPO3\CMS\Extbase\Mvc\Web\RequestBuilder;
@@ -39,9 +39,9 @@ class GoogleMapOverlayRequestTest extends UnitTestCase
     protected $googleMapsService;
 
     /**
-     * @var GoogleRequestService
+     * @var MapProviderRequestService
      */
-    protected $googleRequestService;
+    protected $mapProviderRequestService;
 
     /**
      * @var \Prophecy\Prophecy\ObjectProphecy|EnvironmentService
@@ -69,21 +69,21 @@ class GoogleMapOverlayRequestTest extends UnitTestCase
      */
     protected function setUp()
     {
-        $_SESSION['googleRequestsAllowedForMaps2'] = false;
+        $_SESSION['mapProviderRequestsAllowedForMaps2'] = false;
 
         $this->extConf = new ExtConf();
-        $this->extConf->setExplicitAllowGoogleMaps(1);
-        $this->extConf->setExplicitAllowGoogleMapsBySessionOnly(1);
+        $this->extConf->setExplicitAllowMapProviderRequests(1);
+        $this->extConf->setExplicitAllowMapProviderRequestsBySessionOnly(1);
 
         $this->googleMapsService = new GoogleMapsService();
-        $this->googleRequestService = new GoogleRequestService($this->extConf);
+        $this->mapProviderRequestService = new MapProviderRequestService($this->extConf);
         $this->environmentService = $this->prophesize(EnvironmentService::class);
         $this->requestBuilder = $this->prophesize(RequestBuilder::class);
         $this->request = $this->prophesize(Request::class);
 
         $this->subject = new GoogleMapOverlayRequestHandler();
         $this->subject->injectEnvironmentService($this->environmentService->reveal());
-        $this->subject->injectGoogleRequestService($this->googleRequestService);
+        // $this->subject->injectGoogleRequestService($this->mapProviderRequestService);
         $this->subject->injectRequestBuilder($this->requestBuilder->reveal());
     }
 
@@ -93,7 +93,7 @@ class GoogleMapOverlayRequestTest extends UnitTestCase
      */
     protected function tearDown()
     {
-        unset($this->googleMapsService, $this->googleRequestService, $this->subject);
+        unset($this->googleMapsService, $this->mapProviderRequestService, $this->subject);
         parent::tearDown();
     }
 

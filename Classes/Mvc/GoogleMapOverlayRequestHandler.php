@@ -15,7 +15,8 @@ namespace JWeiland\Maps2\Mvc;
  */
 
 use JWeiland\Maps2\Service\GoogleMapsService;
-use JWeiland\Maps2\Service\GoogleRequestService;
+use JWeiland\Maps2\Service\MapProviderRequestService;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\ResponseInterface;
 use TYPO3\CMS\Extbase\Mvc\Web\AbstractRequestHandler;
 use TYPO3\CMS\Extbase\Mvc\Web\Response;
@@ -35,11 +36,6 @@ class GoogleMapOverlayRequestHandler extends AbstractRequestHandler
     protected $googleMapsService;
 
     /**
-     * @var GoogleRequestService
-     */
-    protected $googleRequestService;
-
-    /**
      * inject mapService
      *
      * @param GoogleMapsService $googleMapsService
@@ -51,17 +47,6 @@ class GoogleMapOverlayRequestHandler extends AbstractRequestHandler
     }
 
     /**
-     * inject googleRequestService
-     *
-     * @param GoogleRequestService $googleRequestService
-     * @return void
-     */
-    public function injectGoogleRequestService(GoogleRequestService $googleRequestService)
-    {
-        $this->googleRequestService = $googleRequestService;
-    }
-
-    /**
      * Checks if the request handler can handle the current request.
      *
      * @return bool true if it can handle the request, otherwise false
@@ -70,8 +55,9 @@ class GoogleMapOverlayRequestHandler extends AbstractRequestHandler
     {
         if (!$this->environmentService->isEnvironmentInCliMode()) {
             $request = $this->requestBuilder->build();
+            $mapProviderRequestService = GeneralUtility::makeInstance(MapProviderRequestService::class);
             return $request->getControllerExtensionKey() === 'maps2'
-                && !$this->googleRequestService->isGoogleMapRequestAllowed();
+                && !$mapProviderRequestService->isRequestToMapProviderAllowed();
         }
         return false;
     }

@@ -50,12 +50,12 @@ class ExtConf implements SingletonInterface
     /**
      * @var bool
      */
-    protected $explicitAllowGoogleMaps = false;
+    protected $explicitAllowMapProviderRequests = false;
 
     /**
      * @var bool
      */
-    protected $explicitAllowGoogleMapsBySessionOnly = false;
+    protected $explicitAllowMapProviderRequestsBySessionOnly = false;
 
     /**
      * @var string
@@ -255,33 +255,33 @@ class ExtConf implements SingletonInterface
     /**
      * @return bool
      */
-    public function getExplicitAllowGoogleMaps(): bool
+    public function getExplicitAllowMapProviderRequests(): bool
     {
-        return $this->explicitAllowGoogleMaps;
+        return $this->explicitAllowMapProviderRequests;
     }
 
     /**
-     * @param bool $explicitAllowGoogleMaps
+     * @param bool $explicitAllowMapProviderRequests
      */
-    public function setExplicitAllowGoogleMaps($explicitAllowGoogleMaps)
+    public function setExplicitAllowMapProviderRequests($explicitAllowMapProviderRequests)
     {
-        $this->explicitAllowGoogleMaps = (bool)$explicitAllowGoogleMaps;
+        $this->explicitAllowMapProviderRequests = (bool)$explicitAllowMapProviderRequests;
     }
 
     /**
      * @return bool
      */
-    public function getExplicitAllowGoogleMapsBySessionOnly(): bool
+    public function getExplicitAllowMapProviderRequestsBySessionOnly(): bool
     {
-        return $this->explicitAllowGoogleMapsBySessionOnly;
+        return $this->explicitAllowMapProviderRequestsBySessionOnly;
     }
 
     /**
-     * @param bool $explicitAllowGoogleMapsBySessionOnly
+     * @param bool $explicitAllowMapProviderRequestsBySessionOnly
      */
-    public function setExplicitAllowGoogleMapsBySessionOnly($explicitAllowGoogleMapsBySessionOnly)
+    public function setExplicitAllowMapProviderRequestsBySessionOnly($explicitAllowMapProviderRequestsBySessionOnly)
     {
-        $this->explicitAllowGoogleMapsBySessionOnly = (bool)$explicitAllowGoogleMapsBySessionOnly;
+        $this->explicitAllowMapProviderRequestsBySessionOnly = (bool)$explicitAllowMapProviderRequestsBySessionOnly;
     }
 
     /**

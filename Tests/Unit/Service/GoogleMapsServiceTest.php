@@ -126,7 +126,7 @@ class GoogleMapsServiceTest extends AbstractUnitTestCase
     {
         $arguments = [
             'tx_maps2_maps2' => [
-                'googleRequestsAllowedForMaps2' => 1
+                'mapProviderRequestsAllowedForMaps2' => 1
             ]
         ];
 

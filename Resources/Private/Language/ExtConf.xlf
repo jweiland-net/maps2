@@ -21,11 +21,11 @@
 			<trans-unit id="googleGeocodeApiKey" xml:space="preserve">
 				<source>Google Maps Geocode ApiKey: Visit https://console.developers.google.com Create a new project for Google Maps Geocode API and insert here the retrieved Server ApiKey.</source>
 			</trans-unit>
-			<trans-unit id="explicitAllowGoogleMaps" xml:space="preserve">
+			<trans-unit id="explicitAllowMapProviderRequests" xml:space="preserve">
 				<source>Explicit allow Map: While showing Google Maps in frontend the browser sends multiple requests to Google Servers. These requests contains the IP address of the website visitor which is a user internal information. In some countries the user has to explicit allow sending theses information to third party servers.</source>
 			</trans-unit>
-			<trans-unit id="explicitAllowGoogleMapsBySessionOnly" xml:space="preserve">
-				<source>Allow Google Maps by Session: See explicitAllowGoogleMaps for explanation. Normally we save activation in a Cookie (normally 1 day (TYPO3 default)). So there is no need to activate google maps again after browser restart. If you enable this option we save activation in session and you have to activate google maps again after each browser restart.</source>
+			<trans-unit id="explicitAllowMapProviderRequestsBySessionOnly" xml:space="preserve">
+				<source>Allow Google Maps by Session: See explicitAllowMapProviderRequests for explanation. Normally we save activation in a Cookie (normally 1 day (TYPO3 default)). So there is no need to activate google maps again after browser restart. If you enable this option we save activation in session and you have to activate google maps again after each browser restart.</source>
 			</trans-unit>
 			<trans-unit id="defaultCountry" xml:space="preserve">
 				<source>Default Country: If someone searches for a postal code only, Google will search whole world for that postal code. If you want, you can assign a default country here to reduce that search to that country.</source>

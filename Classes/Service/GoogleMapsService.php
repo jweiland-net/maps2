@@ -153,7 +153,7 @@ class GoogleMapsService implements SingletonInterface
             ->setAddQueryString(true)
             ->setArguments([
                 'tx_maps2_maps2' => [
-                    'googleRequestsAllowedForMaps2' => 1
+                    'mapProviderRequestsAllowedForMaps2' => 1
                 ]
             ])
             ->setArgumentsToBeExcludedFromQueryString(['cHash'])

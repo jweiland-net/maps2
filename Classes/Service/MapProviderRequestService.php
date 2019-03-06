@@ -20,9 +20,9 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
  * A non extbase orientated service which you can use from nearly everywhere,
- * to check, if Google Maps should be shown in FE or not.
+ * to check, if a Map should be shown in FE or not.
  */
-class GoogleRequestService
+class MapProviderRequestService
 {
     /**
      * @var ExtConf
@@ -43,18 +43,18 @@ class GoogleRequestService
     }
 
     /**
-     * Check, if Browser(Cookie) or $_SESSION allows request to Google Maps Servers
+     * Check, if Browser(Cookie) or $_SESSION allows request to server of Map Provider
      *
      * @return bool
      */
-    public function isGoogleMapRequestAllowed()
+    public function isRequestToMapProviderAllowed()
     {
-        if ($this->extConf->getExplicitAllowGoogleMaps()) {
-            if ($this->extConf->getExplicitAllowGoogleMapsBySessionOnly()) {
-                return (bool)$_SESSION['googleRequestsAllowedForMaps2'];
+        if ($this->extConf->getExplicitAllowMapProviderRequests()) {
+            if ($this->extConf->getExplicitAllowMapProviderRequestsBySessionOnly()) {
+                return (bool)$_SESSION['mapProviderRequestsAllowedForMaps2'];
             } else {
                 if ($GLOBALS['TSFE'] instanceof TypoScriptFrontendController) {
-                    return (bool)$GLOBALS['TSFE']->fe_user->getSessionData('googleRequestsAllowedForMaps2');
+                    return (bool)$GLOBALS['TSFE']->fe_user->getSessionData('mapProviderRequestsAllowedForMaps2');
                 } else {
                     return false;
                 }

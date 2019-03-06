@@ -14,9 +14,9 @@ namespace JWeiland\Maps2\Tests\Unit\Condition;
  * The TYPO3 project - inspiring people to share!
  */
 
-use JWeiland\Maps2\Condition\AllowGoogleRequestCondition;
+use JWeiland\Maps2\Condition\AllowMapProviderRequestCondition;
 use JWeiland\Maps2\Configuration\ExtConf;
-use JWeiland\Maps2\Service\GoogleRequestService;
+use JWeiland\Maps2\Service\MapProviderRequestService;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
 use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
@@ -32,12 +32,12 @@ class AllowGoogleRequestConditionTest extends UnitTestCase
     protected $extConf;
 
     /**
-     * @var GoogleRequestService
+     * @var MapProviderRequestService
      */
-    protected $googleRequestService;
+    protected $mapProviderRequestService;
 
     /**
-     * @var AllowGoogleRequestCondition
+     * @var AllowMapProviderRequestCondition
      */
     protected $subject;
 
@@ -48,8 +48,8 @@ class AllowGoogleRequestConditionTest extends UnitTestCase
     protected function setUp()
     {
         $this->extConf = new ExtConf();
-        $this->googleRequestService = new GoogleRequestService($this->extConf);
-        $this->subject = new AllowGoogleRequestCondition($this->googleRequestService);
+        $this->mapProviderRequestService = new MapProviderRequestService($this->extConf);
+        $this->subject = new AllowMapProviderRequestCondition();
     }
 
     /**
@@ -58,7 +58,7 @@ class AllowGoogleRequestConditionTest extends UnitTestCase
      */
     protected function tearDown()
     {
-        unset($this->extConf, $this->googleRequestService, $this->subject);
+        unset($this->extConf, $this->mapProviderRequestService, $this->subject);
         parent::tearDown();
     }
 
@@ -67,8 +67,8 @@ class AllowGoogleRequestConditionTest extends UnitTestCase
      */
     public function matchConditionWithDeactivatedSettingsWillReturnTrue()
     {
-        $this->extConf->setExplicitAllowGoogleMaps(0);
-        $this->extConf->setExplicitAllowGoogleMapsBySessionOnly(0);
+        $this->extConf->setExplicitAllowMapProviderRequests(0);
+        $this->extConf->setExplicitAllowMapProviderRequestsBySessionOnly(0);
         $this->assertTrue(
             $this->subject->matchCondition([])
         );
@@ -79,8 +79,8 @@ class AllowGoogleRequestConditionTest extends UnitTestCase
      */
     public function matchConditionOnSessionUsageWillReturnFalse()
     {
-        $this->extConf->setExplicitAllowGoogleMaps(1);
-        $this->extConf->setExplicitAllowGoogleMapsBySessionOnly(1);
+        $this->extConf->setExplicitAllowMapProviderRequests(1);
+        $this->extConf->setExplicitAllowMapProviderRequestsBySessionOnly(1);
         $this->assertFalse(
             $this->subject->matchCondition([])
         );
@@ -91,9 +91,9 @@ class AllowGoogleRequestConditionTest extends UnitTestCase
      */
     public function matchConditionOnSessionUsageWillReturnTrue()
     {
-        $this->extConf->setExplicitAllowGoogleMaps(1);
-        $this->extConf->setExplicitAllowGoogleMapsBySessionOnly(1);
-        $_SESSION['googleRequestsAllowedForMaps2'] = 1;
+        $this->extConf->setExplicitAllowMapProviderRequests(1);
+        $this->extConf->setExplicitAllowMapProviderRequestsBySessionOnly(1);
+        $_SESSION['mapProviderRequestsAllowedForMaps2'] = 1;
         $this->assertTrue(
             $this->subject->matchCondition([])
         );
@@ -104,8 +104,8 @@ class AllowGoogleRequestConditionTest extends UnitTestCase
      */
     public function matchConditionOnCookieUsageWillReturnFalseIfTsfeIsNotSet()
     {
-        $this->extConf->setExplicitAllowGoogleMaps(1);
-        $this->extConf->setExplicitAllowGoogleMapsBySessionOnly(0);
+        $this->extConf->setExplicitAllowMapProviderRequests(1);
+        $this->extConf->setExplicitAllowMapProviderRequestsBySessionOnly(0);
         $this->assertFalse(
             $this->subject->matchCondition([])
         );
@@ -116,13 +116,13 @@ class AllowGoogleRequestConditionTest extends UnitTestCase
      */
     public function matchConditionOnCookieUsageWillReturnFalse()
     {
-        $this->extConf->setExplicitAllowGoogleMaps(1);
-        $this->extConf->setExplicitAllowGoogleMapsBySessionOnly(0);
+        $this->extConf->setExplicitAllowMapProviderRequests(1);
+        $this->extConf->setExplicitAllowMapProviderRequestsBySessionOnly(0);
         $this->prophesize(TypoScriptFrontendController::class);
         $GLOBALS['TSFE'] = $this->prophesize(TypoScriptFrontendController::class)->reveal();
         /** @var \Prophecy\Prophecy\ObjectProphecy|FrontendUserAuthentication $feUser */
         $feUser = $this->prophesize(FrontendUserAuthentication::class);
-        $feUser->getSessionData('googleRequestsAllowedForMaps2')->shouldBeCalled()->willReturn(false);
+        $feUser->getSessionData('mapProviderRequestsAllowedForMaps2')->shouldBeCalled()->willReturn(false);
         $GLOBALS['TSFE']->fe_user = $feUser->reveal();
 
         $this->assertFalse(
@@ -135,12 +135,12 @@ class AllowGoogleRequestConditionTest extends UnitTestCase
      */
     public function matchConditionOnCookieUsageWillReturnTrue()
     {
-        $this->extConf->setExplicitAllowGoogleMaps(1);
-        $this->extConf->setExplicitAllowGoogleMapsBySessionOnly(0);
+        $this->extConf->setExplicitAllowMapProviderRequests(1);
+        $this->extConf->setExplicitAllowMapProviderRequestsBySessionOnly(0);
         $GLOBALS['TSFE'] = $this->prophesize(TypoScriptFrontendController::class)->reveal();
         /** @var \Prophecy\Prophecy\ObjectProphecy|FrontendUserAuthentication $feUser */
         $feUser = $this->prophesize(FrontendUserAuthentication::class);
-        $feUser->getSessionData('googleRequestsAllowedForMaps2')->shouldBeCalled()->willReturn(true);
+        $feUser->getSessionData('mapProviderRequestsAllowedForMaps2')->shouldBeCalled()->willReturn(true);
         $GLOBALS['TSFE']->fe_user = $feUser->reveal();
 
         $this->assertTrue(
