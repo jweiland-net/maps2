@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace JWeiland\Maps2\Form\Resolver;
 
 /*
@@ -51,8 +52,42 @@ class MapProviderResolver implements NodeResolverInterface
      */
     public function resolve()
     {
-        if (is_array($this->data['databaseRow']['map_provider'])) {
-            $mapProvider = current($this->data['databaseRow']['map_provider']);
+        $collectionType = $this->getCollectionType($this->data['databaseRow']);
+
+        // Currently Open Street Map is only valid for collection_type Point
+        if ($collectionType === 'Point') {
+            $mapProvider = $this->getMapProvider($this->data['databaseRow']);
+            if ($mapProvider === 'osm') {
+                return OpenStreetMapElement::class;
+            }
+        }
+
+        // In all other cases render map with Google Maps
+        return GoogleMapsElement::class;
+    }
+
+    /**
+     * @param array $databaseRow
+     * @return string
+     */
+    protected function getCollectionType(array $databaseRow): string
+    {
+        if (is_array($databaseRow['collection_type'])) {
+            $collectionType = current($databaseRow['collection_type']);
+        } else {
+            $collectionType = 'Point';
+        }
+        return $collectionType;
+    }
+
+    /**
+     * @param array $databaseRow
+     * @return string
+     */
+    protected function getMapProvider(array $databaseRow): string
+    {
+        if (is_array($databaseRow['map_provider'])) {
+            $mapProvider = current($databaseRow['map_provider']);
         } else {
             $extConf = GeneralUtility::makeInstance(ExtConf::class);
             if ($extConf->getMapProvider() === 'both') {
@@ -61,11 +96,7 @@ class MapProviderResolver implements NodeResolverInterface
                 $mapProvider = $extConf->getMapProvider();
             }
         }
+        return $mapProvider;
 
-        if ($mapProvider === 'osm') {
-            return OpenStreetMapElement::class;
-        } else {
-            return GoogleMapsElement::class;
-        }
     }
 }
