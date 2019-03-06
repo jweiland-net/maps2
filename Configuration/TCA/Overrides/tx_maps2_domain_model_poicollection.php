@@ -18,10 +18,19 @@ call_user_func(function() {
         6
     );
 
+    // Set default of map_provider to pre configured map provider of Extension Manager Configuration
     if ($extConf->getMapProvider() === 'both') {
-        $GLOBALS['TCA']['tx_maps2_domain_model_poicollection']['columns']['map_provider']['config']['default'] = $extConf->getDefaultMapProvider();
+        $mapProvider = $extConf->getDefaultMapProvider();
     } else {
-        $GLOBALS['TCA']['tx_maps2_domain_model_poicollection']['columns']['map_provider']['config']['default'] = $extConf->getMapProvider();
+        $mapProvider = $extConf->getMapProvider();
+    }
+    $GLOBALS['TCA']['tx_maps2_domain_model_poicollection']['columns']['map_provider']['config']['default'] = $mapProvider;
+
+    // Remove unsupported collection_types if map provider is OSM
+    if ($mapProvider === 'osm') {
+        unset($GLOBALS['TCA']['tx_maps2_domain_model_poicollection']['columns']['collection_type']['config']['items'][2]);
+        unset($GLOBALS['TCA']['tx_maps2_domain_model_poicollection']['columns']['collection_type']['config']['items'][3]);
+        unset($GLOBALS['TCA']['tx_maps2_domain_model_poicollection']['columns']['collection_type']['config']['items'][4]);
     }
 
     // Add column "categories" to tx_maps2_domain_model_poicollection table
