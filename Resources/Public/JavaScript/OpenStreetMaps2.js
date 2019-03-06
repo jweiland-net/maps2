@@ -1,7 +1,7 @@
 var $maps2OpenStreetMaps = [];
 
 /**
- * Initialize Open Street Maps
+ * Initialize Open Street Map
  *
  * @param $element
  * @param environment contains settings, current PageId, extConf and current tt_content record

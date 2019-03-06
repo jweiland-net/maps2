@@ -5,7 +5,7 @@
 		<body>
 			<trans-unit id="mapProvider" xml:space="preserve">
 				<source>Choose Map Provider: Maps2 comes with currently two Map Providers. Choose your favorite.</source>
-				<target>Wähle einen Kartenanbieter: Maps2 wird aktuell mit 2 Kartenanbietern ausgeliefert. Wähle Deinen Liebling.</target>
+				<target>Wähle einen Kartenanbieter: Maps2 wird aktuell mit 2 Kartenanbietern ausgeliefert. Wähle Deinen Favoriten.</target>
 			</trans-unit>
 			<trans-unit id="mapProvider.both" xml:space="preserve">
 				<source>Both</source>

@@ -41,10 +41,10 @@
 				<source>Map Provider</source>
 			</trans-unit>
 			<trans-unit id="tx_maps2_domain_model_poicollection.mapProvider.google" xml:space="preserve">
-				<source>Google Maps Provider</source>
+				<source>Google Maps</source>
 			</trans-unit>
 			<trans-unit id="tx_maps2_domain_model_poicollection.mapProvider.osm" xml:space="preserve">
-				<source>Open Street Map Provider</source>
+				<source>Open Street Map</source>
 			</trans-unit>
 			<trans-unit id="tx_maps2_domain_model_poicollection.collectionType" xml:space="preserve">
 				<source>Type</source>

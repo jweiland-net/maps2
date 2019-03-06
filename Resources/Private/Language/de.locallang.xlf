@@ -29,7 +29,7 @@
 			</trans-unit>
 			<trans-unit id="osm.explainActivation" xml:space="preserve" approved="yes">
 				<source>Click on "Activate" to allow us requesting Open Street Map servers to show map.</source>
-				<target>Erst wenn Sie hier auf "Aktivieren" klicken, erlauben Sie uns Daten von Dritt-Anbieter-Servern (Open Street Maps) zu laden.</target>
+				<target>Erst wenn Sie hier auf "Aktivieren" klicken, erlauben Sie uns Daten von Dritt-Anbieter-Servern (Open Street Map) zu laden.</target>
 			</trans-unit>
 			<trans-unit id="osm.activate" xml:space="preserve" approved="yes">
 				<source>Activate</source>
