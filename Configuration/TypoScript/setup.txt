@@ -2,8 +2,6 @@
   page.includeJSFooterlibs {
     jQueryForMaps2 = https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js
     jQueryForMaps2.external = 1
-    jQueryForMaps2.disableCompression = 1
-    jQueryForMaps2.excludeFromConcatenation = 1
     jQueryForMaps2.if.isTrue = {$plugin.tx_maps2.view.includeJQuery}
   }
 [ELSE]
@@ -18,8 +16,6 @@
     markerClustererForMaps2.if.isTrue = {$plugin.tx_maps2.view.enableMarkerClusterer}
     googleMapsForMaps2 = https://maps.googleapis.com/maps/api/js?key={$plugin.tx_maps2.view.googleMapsJavaScriptApiKey}&libraries=places&callback=initMap
     googleMapsForMaps2.external = 1
-    googleMapsForMaps2.disableCompression = 1
-    googleMapsForMaps2.excludeFromConcatenation = 1
   }
 [END]
 
@@ -27,8 +23,6 @@
   page.includeCSS.leaflet = EXT:maps2/Resources/Public/Css/Leaflet/Leaflet.css
   page.includeJSFooterlibs {
     maps2Leaflet = EXT:maps2/Resources/Public/JavaScript/Leaflet.js
-    maps2Leaflet.disableCompression = 1
-    maps2Leaflet.excludeFromConcatenation = 1
     maps2 = EXT:maps2/Resources/Public/JavaScript/OpenStreetMaps2.js
   }
 [END]
