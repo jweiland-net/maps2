@@ -366,6 +366,7 @@ class Maps2Registry implements SingletonInterface
             'size' => 1,
             'minitems' => 0,
             'maxitems' => 1,
+            'default' => 0,
             'suggestOptions' => [
                 'default' => [
                     'searchWholePhrase' => 1,
