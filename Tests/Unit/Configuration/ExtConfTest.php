@@ -142,14 +142,6 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function getGoogleMapsJavaScriptApiKeyWillThrowExceptionIfEmpty() {
-        $this->expectException(\Exception::class);
-        $this->subject->getGoogleMapsJavaScriptApiKey();
-    }
-
-    /**
-     * @test
-     */
     public function setGoogleMapsJavaScriptApiKeySetsGoogleMapsJavaScriptApiKey() {
         $this->subject->setGoogleMapsJavaScriptApiKey('foo bar');
 
@@ -173,14 +165,6 @@ class ExtConfTest extends UnitTestCase
     public function setGoogleMapsJavaScriptApiKeyWithBooleanResultsInString() {
         $this->subject->setGoogleMapsJavaScriptApiKey(true);
         $this->assertSame('1', $this->subject->getGoogleMapsJavaScriptApiKey());
-    }
-
-    /**
-     * @test
-     */
-    public function getGoogleMapsGeocodeApiKeyThrowsExceptionIfNotSet() {
-        $this->expectException(\Exception::class);
-        $this->subject->getGoogleMapsGeocodeApiKey();
     }
 
     /**
