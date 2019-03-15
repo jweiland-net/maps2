@@ -216,6 +216,7 @@ OpenStreetMaps2.prototype.createMarker = function (poiCollection, environment) {
         this.pointMarkers.push(marker);
     }
     this.bounds.extend(marker.getLatLng());
+    marker.bindPopup(poiCollection.infoWindowContent);
 };
 
 /**
