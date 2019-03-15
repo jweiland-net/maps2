@@ -2,30 +2,30 @@
 
 <f:section name="main">
 
-  <f:flashMessages />
+	<f:flashMessages />
 
-  <f:form action="listRadius" object="{search}" objectName="search">
-    <div class="form-group">
-      <label for="maps2Address"><f:translate key="rangeSearch.address" /></label>
-      <f:form.textfield
-        property="address"
-        class="form-control"
-        id="maps2Address"
-        placeholder="{f:translate(key: 'rangeSearch.address')}"
-      />
-    </div>
-    <div class="form-group">
-      <label for="maps2Radius"><f:translate key="rangeSearch.radius" /></label>
-      <f:form.textfield
-        property="radius"
-        class="form-control"
-        id="maps2Radius"
-        placeholder="{f:translate(key: 'rangeSearch.radius')}"
-      />
-    </div>
-    <f:form.submit
-      value="{f:translate(key: 'rangeSearch.send')}"
-      class="btn btn-default"
-    />
-  </f:form>
+	<f:form action="listRadius" object="{search}" objectName="search">
+		<div class="form-group">
+			<label for="maps2Address"><f:translate key="rangeSearch.address" /></label>
+			<f:form.textfield
+				property="address"
+				class="form-control"
+				id="maps2Address"
+				placeholder="{f:translate(key: 'rangeSearch.address')}"
+			/>
+		</div>
+		<div class="form-group">
+			<label for="maps2Radius"><f:translate key="rangeSearch.radius" /></label>
+			<f:form.textfield
+				property="radius"
+				class="form-control"
+				id="maps2Radius"
+				placeholder="{f:translate(key: 'rangeSearch.radius')}"
+			/>
+		</div>
+		<f:form.submit
+			value="{f:translate(key: 'rangeSearch.send')}"
+			class="btn btn-default"
+		/>
+	</f:form>
 </f:section>
