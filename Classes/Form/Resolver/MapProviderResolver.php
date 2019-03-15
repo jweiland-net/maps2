@@ -55,7 +55,7 @@ class MapProviderResolver implements NodeResolverInterface
         $collectionType = $this->getCollectionType($this->data['databaseRow']);
 
         // Currently Open Street Map is only valid for collection_type Point
-        if ($collectionType === 'Point') {
+        if (in_array($collectionType, ['Point', 'Radius'], true)) {
             $mapProvider = $this->getMapProvider($this->data['databaseRow']);
             if ($mapProvider === 'osm') {
                 return OpenStreetMapElement::class;

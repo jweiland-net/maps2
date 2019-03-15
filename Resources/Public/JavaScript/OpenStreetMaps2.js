@@ -178,10 +178,10 @@ OpenStreetMaps2.prototype.createPointByCollectionType = function (environment) {
              break;
              case "Route":
              this.createRoute(this.poiCollections[i], environment.extConf);
-             break;
-             case "Radius":
-             this.createRadius(this.poiCollections[i], environment.extConf);
              break;*/
+            case "Radius":
+                this.createRadius(this.poiCollections[i], environment.extConf);
+                break;
         }
     }
 };
@@ -217,6 +217,27 @@ OpenStreetMaps2.prototype.createMarker = function (poiCollection, environment) {
     }
     this.bounds.extend(marker.getLatLng());
     marker.bindPopup(poiCollection.infoWindowContent);
+};
+
+/**
+ * Create Radius
+ *
+ * @param poiCollection
+ */
+OpenStreetMaps2.prototype.createRadius = function (poiCollection) {
+    var circle = L.circle(
+        [poiCollection.latitude, poiCollection.longitude],
+        {
+            color: poiCollection.strokeColor,
+            opacity: poiCollection.strokeOpacity,
+            width: poiCollection.strokeWeight,
+            fillColor: poiCollection.fillColor,
+            fillOpacity: poiCollection.fillOpacity,
+            radius: poiCollection.radius
+        }
+    ).addTo(this.map);
+
+    this.bounds.extend(circle.getBounds());
 };
 
 /**

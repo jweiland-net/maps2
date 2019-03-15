@@ -36,7 +36,7 @@ call_user_func(function() {
     if ($mapProvider === 'osm') {
         unset($GLOBALS['TCA']['tx_maps2_domain_model_poicollection']['columns']['collection_type']['config']['items'][2]);
         unset($GLOBALS['TCA']['tx_maps2_domain_model_poicollection']['columns']['collection_type']['config']['items'][3]);
-        unset($GLOBALS['TCA']['tx_maps2_domain_model_poicollection']['columns']['collection_type']['config']['items'][4]);
+        //unset($GLOBALS['TCA']['tx_maps2_domain_model_poicollection']['columns']['collection_type']['config']['items'][4]);
     }
 
     // Add column "categories" to tx_maps2_domain_model_poicollection table

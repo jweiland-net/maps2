@@ -97,6 +97,13 @@ class OpenStreetMapElement extends AbstractFormElement
                         GeneralUtility::getFileAbsFileName('EXT:maps2/Resources/Public/JavaScript/Leaflet')
                     ),
                     '/'
+                ),
+                'leafletEditable' => rtrim(
+                    PathUtility::getRelativePath(
+                        PATH_typo3,
+                        GeneralUtility::getFileAbsFileName('EXT:maps2/Resources/Public/JavaScript/Leaflet.Editable')
+                    ),
+                    '/'
                 )
             ],
             'shim' => [

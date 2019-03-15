@@ -1,7 +1,7 @@
 /**
  * Module: TYPO3/CMS/Maps2/GoogleMapsModule
  */
-define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet"], function($, L) {
+define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletEditable"], function($, L) {
     var initialize = function(element, config, extConf) {
         var marker = {};
         var map = {};
@@ -9,7 +9,11 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet"], function($,
         //var infoWindowContent = document.getElementById("infowindow-content");
 
         var createMap = function () {
-            map = L.map(element).setView([51.505, -0.09], 13);
+            map = L.map(
+                element,
+                {
+                    editable: true
+                }).setView([51.505, -0.09], 13);
 
             L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 18,
@@ -42,12 +46,38 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet"], function($,
 
             // update fields and marker when clicking on the map
             map.on('click', function(event) {
-                console.log(event);
                 marker.setLatLng(event.latlng);
                 setLatLngFields(
                     event.latlng.lat.toFixed(6),
                     event.latlng.lng.toFixed(6),
                     0
+                );
+            });
+        };
+
+        /**
+         * Create Radius
+         */
+        var createRadius = function() {
+            marker = L.circle(
+                [config.latitude, config.longitude],
+                {
+                    color: extConf.strokeColor,
+                    opacity: extConf.strokeOpacity,
+                    width: extConf.strokeWeight,
+                    fillColor: extConf.fillColor,
+                    fillOpacity: extConf.fillOpacity,
+                    radius: config.radius ? config.radius : extConf.defaultRadius
+                }
+            ).addTo(map);
+            marker.enableEdit();
+
+            // update fields and marker while dragging
+            marker.on('editable:vertex:dragend', function(event) {
+                setLatLngFields(
+                    marker.getLatLng().lat.toFixed(6),
+                    marker.getLatLng().lng.toFixed(6),
+                    marker.getRadius()
                 );
             });
         };
@@ -131,7 +161,6 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet"], function($,
                             if (data.length === 0) {
                                 alert('Address not found');
                             } else {
-                                console.log(data[0]);
                                 var lat = parseFloat(data[0].lat).toFixed(6);
                                 var lng = parseFloat(data[0].lon).toFixed(6);
                                 var address = data[0].address;
@@ -210,10 +239,10 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet"], function($,
                 break;
             case "Route":
                 createRoute();
-                break;
+                break;*/
             case "Radius":
                 createRadius();
-                break;*/
+                break;
         }
 
         findAddress();
