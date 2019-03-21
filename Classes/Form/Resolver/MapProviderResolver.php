@@ -52,18 +52,12 @@ class MapProviderResolver implements NodeResolverInterface
      */
     public function resolve()
     {
-        $collectionType = $this->getCollectionType($this->data['databaseRow']);
-
-        // Currently Open Street Map is only valid for collection_type Point
-        if (in_array($collectionType, ['Point', 'Radius'], true)) {
-            $mapProvider = $this->getMapProvider($this->data['databaseRow']);
-            if ($mapProvider === 'osm') {
-                return OpenStreetMapElement::class;
-            }
+        $mapProvider = $this->getMapProvider($this->data['databaseRow']);
+        if ($mapProvider === 'osm') {
+            return OpenStreetMapElement::class;
+        } else {
+            return GoogleMapsElement::class;
         }
-
-        // In all other cases render map with Google Maps
-        return GoogleMapsElement::class;
     }
 
     /**

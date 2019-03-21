@@ -56,6 +56,84 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletEdit
         };
 
         /**
+         * Create Area
+         */
+        var createArea = function() {
+            var coordinatesArray = [];
+
+            if (typeof config.pois !== 'undefined') {
+                for (var i = 0; i < config.pois.length; i++) {
+                    coordinatesArray.push([config.pois[i].latitude, config.pois[i].longitude]);
+                }
+            }
+
+            if (coordinatesArray.length === 0) {
+                coordinatesArray.push([config.latitude + 0.003, config.longitude]);
+                coordinatesArray.push([config.latitude - 0.003, config.longitude - 0.006]);
+                coordinatesArray.push([config.latitude - 0.003, config.longitude + 0.006]);
+            }
+
+            var area = L.polygon(
+                coordinatesArray,
+                {
+                    color: extConf.strokeColor,
+                    width: extConf.strokeWidth,
+                    opacity: extConf.strokeOpacity,
+                    fillColor: extConf.fillColor,
+                    fillOpacity: extConf.fillOpacity
+                }
+            ).addTo(map);
+            area.enableEdit();
+
+            map.on("editable:vertex:deleted", function(event) {
+                console.log('editable:vertex:deleted');
+                insertRouteToDb(area.getLatLngs()[0]);
+            });
+            map.on("editable:vertex:dragend", function(event) {
+                console.log('editable:vertex:dragend');
+                insertRouteToDb(area.getLatLngs()[0]);
+            });
+        };
+
+        /**
+         * Create Route
+         */
+        var createRoute = function() {
+            var coordinatesArray = [];
+
+            if (typeof config.pois !== 'undefined') {
+                for (var i = 0; i < config.pois.length; i++) {
+                    coordinatesArray.push([config.pois[i].latitude, config.pois[i].longitude]);
+                }
+            }
+
+            if (coordinatesArray.length === 0) {
+                coordinatesArray.push([config.latitude + 0.003, config.longitude]);
+                coordinatesArray.push([config.latitude - 0.003, config.longitude - 0.006]);
+                coordinatesArray.push([config.latitude - 0.003, config.longitude + 0.006]);
+            }
+
+            var route = L.polyline(
+                coordinatesArray,
+                {
+                    color: extConf.strokeColor,
+                    width: extConf.strokeWidth,
+                    opacity: extConf.strokeOpacity,
+                    fillColor: extConf.fillColor,
+                    fillOpacity: extConf.fillOpacity
+                }
+            ).addTo(map);
+            route.enableEdit();
+
+            map.on("editable:vertex:deleted", function(event) {
+                insertRouteToDb(route.getLatLngs());
+            });
+            map.on("editable:vertex:dragend", function(event) {
+                insertRouteToDb(route.getLatLngs());
+            });
+        };
+
+        /**
          * Create Radius
          */
         var createRadius = function() {
@@ -108,6 +186,19 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletEdit
         };
 
         /**
+         * Generate an uri to save all coordinates
+         *
+         * @param coordinates
+         */
+        var getUriForCoordinates = function(coordinates) {
+            var routeObject = {};
+            for (var index = 0; index < coordinates.length; index++) {
+                routeObject[index] = coordinates[index]['lat'] + ',' + coordinates[index]['lng'];
+            }
+            return routeObject;
+        };
+
+        /**
          * Create field value
          *
          * @param field
@@ -141,6 +232,28 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletEdit
             }
             // set the normal field which contains the data, which will be send by POST
             document[TBE_EDITOR.formname][fieldName].value = value;
+        };
+
+        /**
+         * Save coordinated to DB
+         *
+         * @param coordinates
+         */
+        var insertRouteToDb = function(coordinates) {
+            $.ajax({
+                type: "GET",
+                url: TYPO3.settings.ajaxUrls['maps2Ajax'],
+                data: {
+                    tx_maps2_maps2: {
+                        objectName: "InsertRoute",
+                        hash: config.hash,
+                        arguments: {
+                            uid: config.uid,
+                            route: getUriForCoordinates(coordinates)
+                        }
+                    }
+                }
+            });
         };
 
         /**
@@ -234,12 +347,12 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletEdit
             case "Point":
                 createMarker();
                 break;
-            /*case "Area":
+            case "Area":
                 createArea();
                 break;
             case "Route":
                 createRoute();
-                break;*/
+                break;
             case "Radius":
                 createRadius();
                 break;

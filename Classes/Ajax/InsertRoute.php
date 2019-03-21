@@ -32,8 +32,6 @@ class InsertRoute extends AbstractAjaxRequest
      * inject poiCollectionRepository
      *
      * @param PoiCollectionRepository $poiCollectionRepository
-     *
-     * @return void
      */
     public function injectPoiCollectionRepository(
         PoiCollectionRepository $poiCollectionRepository

@@ -173,12 +173,12 @@ OpenStreetMaps2.prototype.createPointByCollectionType = function (environment) {
             case "Point":
                 this.createMarker(this.poiCollections[i], environment);
                 break;
-            /*case "Area":
+            case "Area":
              this.createArea(this.poiCollections[i], environment.extConf);
              break;
-             case "Route":
+           case "Route":
              this.createRoute(this.poiCollections[i], environment.extConf);
-             break;*/
+             break;
             case "Radius":
                 this.createRadius(this.poiCollections[i], environment.extConf);
                 break;
@@ -220,22 +220,65 @@ OpenStreetMaps2.prototype.createMarker = function (poiCollection, environment) {
 };
 
 /**
+ * Create Area
+ *
+ * @param poiCollection
+ */
+OpenStreetMaps2.prototype.createArea = function (poiCollection) {
+    var latlngs = [];
+    for (var i = 0; i < poiCollection.pois.length; i++) {
+        var latLng = [poiCollection.pois[i].latitude, poiCollection.pois[i].longitude];
+        this.bounds.extend(latLng);
+        latlngs.push(latLng);
+    }
+
+    L.polygon(latlngs, {
+        color: poiCollection.strokeColor,
+        opacity: poiCollection.strokeOpacity,
+        width: poiCollection.strokeWeight,
+        fillColor: poiCollection.fillColor,
+        fillOpacity: poiCollection.fillOpacity,
+        radius: poiCollection.radius
+    }).addTo(this.map);
+};
+
+/**
+ * Create Route
+ *
+ * @param poiCollection
+ */
+OpenStreetMaps2.prototype.createRoute = function (poiCollection) {
+    var latlngs = [];
+    for (var i = 0; i < poiCollection.pois.length; i++) {
+        var latLng = [poiCollection.pois[i].latitude, poiCollection.pois[i].longitude];
+        this.bounds.extend(latLng);
+        latlngs.push(latLng);
+    }
+
+    L.polyline(latlngs, {
+        color: poiCollection.strokeColor,
+        opacity: poiCollection.strokeOpacity,
+        width: poiCollection.strokeWeight,
+        fillColor: poiCollection.fillColor,
+        fillOpacity: poiCollection.fillOpacity,
+        radius: poiCollection.radius
+    }).addTo(this.map);
+};
+
+/**
  * Create Radius
  *
  * @param poiCollection
  */
 OpenStreetMaps2.prototype.createRadius = function (poiCollection) {
-    var circle = L.circle(
-        [poiCollection.latitude, poiCollection.longitude],
-        {
-            color: poiCollection.strokeColor,
-            opacity: poiCollection.strokeOpacity,
-            width: poiCollection.strokeWeight,
-            fillColor: poiCollection.fillColor,
-            fillOpacity: poiCollection.fillOpacity,
-            radius: poiCollection.radius
-        }
-    ).addTo(this.map);
+    var circle = L.circle([poiCollection.latitude, poiCollection.longitude], {
+        color: poiCollection.strokeColor,
+        opacity: poiCollection.strokeOpacity,
+        width: poiCollection.strokeWeight,
+        fillColor: poiCollection.fillColor,
+        fillOpacity: poiCollection.fillOpacity,
+        radius: poiCollection.radius
+    }).addTo(this.map);
 
     this.bounds.extend(circle.getBounds());
 };

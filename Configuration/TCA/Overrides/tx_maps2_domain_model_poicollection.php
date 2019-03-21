@@ -32,13 +32,6 @@ call_user_func(function() {
     }
     $GLOBALS['TCA']['tx_maps2_domain_model_poicollection']['columns']['map_provider']['config']['default'] = $mapProvider;
 
-    // Remove unsupported collection_types if map provider is OSM
-    if ($mapProvider === 'osm') {
-        unset($GLOBALS['TCA']['tx_maps2_domain_model_poicollection']['columns']['collection_type']['config']['items'][2]);
-        unset($GLOBALS['TCA']['tx_maps2_domain_model_poicollection']['columns']['collection_type']['config']['items'][3]);
-        //unset($GLOBALS['TCA']['tx_maps2_domain_model_poicollection']['columns']['collection_type']['config']['items'][4]);
-    }
-
     // Add column "categories" to tx_maps2_domain_model_poicollection table
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::makeCategorizable(
         'maps2',
