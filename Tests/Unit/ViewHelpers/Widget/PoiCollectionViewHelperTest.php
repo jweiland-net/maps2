@@ -18,8 +18,11 @@ use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Service\GoogleRequestService;
 use JWeiland\Maps2\Service\GoogleMapsService;
 use JWeiland\Maps2\Service\MapProviderRequestService;
+use JWeiland\Maps2\Service\MapService;
 use JWeiland\Maps2\ViewHelpers\Widget\PoiCollectionViewHelper;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
+use Prophecy\Prophecy\ObjectProphecy;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class PoiCollectionViewHelperTest
@@ -57,13 +60,12 @@ class PoiCollectionViewHelperTest extends UnitTestCase
         $this->extConf = new ExtConf();
         $this->extConf->setExplicitAllowMapProviderRequests(1);
         $this->extConf->setExplicitAllowMapProviderRequestsBySessionOnly(1);
+        GeneralUtility::setSingletonInstance(ExtConf::class, $this->extConf);
 
-        $this->googleMapsService = $this->prophesize(GoogleMapsService::class);
-        $this->mapProviderRequestService = new MapProviderRequestService($this->extConf);
+        $mapProviderRequestService = new MapProviderRequestService();
+        GeneralUtility::addInstance(MapProviderRequestService::class, $mapProviderRequestService);
 
         $this->subject = new PoiCollectionViewHelper();
-        $this->subject->injectGoogleRequestService($this->mapProviderRequestService);
-        $this->subject->injectGoogleMapsService($this->googleMapsService->reveal());
     }
 
     /**
@@ -81,37 +83,14 @@ class PoiCollectionViewHelperTest extends UnitTestCase
      */
     public function renderWillCallShowAllowMapFormWhenGoogleRequestsAreNotAllowed()
     {
-        $this->googleMapsService->showAllowMapForm()->shouldBeCalled()->willReturn('Please activate maps2');
+        /** @var MapService|ObjectProphecy $mapServiceProphecy */
+        $mapServiceProphecy = $this->prophesize(MapService::class);
+        $mapServiceProphecy->showAllowMapForm()->shouldBeCalled()->willReturn('Please activate maps2');
+        GeneralUtility::addInstance(MapService::class, $mapServiceProphecy->reveal());
 
         $this->assertSame(
             'Please activate maps2',
             $this->subject->render()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function renderWillReturnAWidgetSubRequestObjectWhenGoogleRequestsAreAllowed()
-    {
-        $this->extConf->setExplicitAllowMapProviderRequests(0);
-        $this->extConf->setExplicitAllowMapProviderRequestsBySessionOnly(0);
-        $this->googleMapsService->showAllowMapForm()->shouldNotBeCalled();
-
-        /** @var \Prophecy\Prophecy\ObjectProphecy|PoiCollectionViewHelper $object */
-        $object = $this->prophesize(PoiCollectionViewHelper::class);
-        $object->injectGoogleRequestService($this->mapProviderRequestService)->shouldBeCalled();
-        $object->injectGoogleMapsService($this->googleMapsService->reveal())->shouldBeCalled();
-        $object->render()->shouldBeCalled()->willReturn('maps2 output');
-
-        /** @var PoiCollectionViewHelper $subject */
-        $subject = $object->reveal();
-        $subject->injectGoogleMapsService($this->googleMapsService->reveal());
-        $subject->injectGoogleRequestService($this->mapProviderRequestService);
-
-        $this->assertSame(
-            'maps2 output',
-            $subject->render()
         );
     }
 }

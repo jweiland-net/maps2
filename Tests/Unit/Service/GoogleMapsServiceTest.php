@@ -24,13 +24,11 @@ use JWeiland\Maps2\Helper\MessageHelper;
 use JWeiland\Maps2\Service\GoogleMapsService;
 use JWeiland\Maps2\Tests\Unit\AbstractUnitTestCase;
 use JWeiland\Maps2\Utility\DataMapper;
-use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageQueue;
-use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
@@ -94,7 +92,6 @@ class GoogleMapsServiceTest extends AbstractUnitTestCase
     protected function setUp()
     {
         $this->extConf = new ExtConf();
-        $this->extConf->setAllowMapTemplatePath('typo3conf/ext/maps2/Resources/Private/Templates/AllowMapForm.html');
         $this->objectManagerProphecy = $this->prophesize(ObjectManager::class);
         $this->viewProphecy = $this->prophesize(StandaloneView::class);
         $this->uriBuilderProphecy = $this->prophesize(UriBuilder::class);
@@ -117,55 +114,6 @@ class GoogleMapsServiceTest extends AbstractUnitTestCase
     {
         unset($this->subject);
         parent::tearDown();
-    }
-
-    /**
-     * @test
-     */
-    public function showAllowMapFormAssignsSettingsAndRequestUriToView()
-    {
-        $arguments = [
-            'tx_maps2_maps2' => [
-                'mapProviderRequestsAllowedForMaps2' => 1
-            ]
-        ];
-
-        $this->viewProphecy->setTemplatePathAndFilename(Argument::any())->shouldBeCalled();
-        $this->viewProphecy->assign('settings', [])->shouldBeCalled();
-        $this->viewProphecy->assign('requestUri', 'MyCoolRequestUri')->shouldBeCalled();
-        $this->viewProphecy->render()->shouldBeCalled()->willReturn('');
-
-        $this->uriBuilderProphecy
-            ->reset()
-            ->shouldBeCalled()
-            ->willReturn($this->uriBuilderProphecy->reveal());
-        $this->uriBuilderProphecy
-            ->setAddQueryString(true)
-            ->shouldBeCalled()
-            ->willReturn($this->uriBuilderProphecy->reveal());
-        $this->uriBuilderProphecy
-            ->setArguments($arguments)
-            ->shouldBeCalled()
-            ->willReturn($this->uriBuilderProphecy->reveal());
-        $this->uriBuilderProphecy
-            ->setArgumentsToBeExcludedFromQueryString(['cHash'])
-            ->shouldBeCalled()
-            ->willReturn($this->uriBuilderProphecy->reveal());
-        $this->uriBuilderProphecy
-            ->build()
-            ->shouldBeCalled()
-            ->willReturn('MyCoolRequestUri');
-
-        $this->objectManagerProphecy
-            ->get(StandaloneView::class)
-            ->shouldBeCalled()
-            ->willReturn($this->viewProphecy->reveal());
-        $this->objectManagerProphecy
-            ->get(UriBuilder::class)
-            ->shouldBeCalled()
-            ->willReturn($this->uriBuilderProphecy->reveal());
-
-        $this->subject->showAllowMapForm();
     }
 
     /**
@@ -351,32 +299,6 @@ class GoogleMapsServiceTest extends AbstractUnitTestCase
         $this->assertSame(
             $position,
             $this->subject->getFirstFoundPositionByAddress('My private address')
-        );
-    }
-
-    /**
-     * @test
-     * @throws \Exception
-     */
-    public function createNewPoiCollectionWithBrokenRadiusResultReturns0()
-    {
-        /** @var FlashMessage|ObjectProphecy $flashMessage */
-        $flashMessage = $this->prophesize(FlashMessage::class);
-        GeneralUtility::addInstance(FlashMessage::class, $flashMessage->reveal());
-
-        /** @var FlashMessageQueue|ObjectProphecy $flashMessageQueue */
-        $flashMessageQueue = $this->prophesize(FlashMessageQueue::class);
-        /*$this->flashMessageService
-            ->getMessageQueueByIdentifier()
-            ->shouldBeCalled()
-            ->willReturn($flashMessageQueue->reveal());*/
-
-        $this->assertSame(
-            0,
-            $this->subject->createNewPoiCollection(
-                123,
-                new RadiusResult()
-            )
         );
     }
 

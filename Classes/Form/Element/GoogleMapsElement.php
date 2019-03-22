@@ -77,7 +77,7 @@ class GoogleMapsElement extends AbstractFormElement
         $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
         $this->hashService = GeneralUtility::makeInstance(HashService::class);
-        $this->view = $this->objectManager->get(StandaloneView::class);
+        $this->view = GeneralUtility::makeInstance(StandaloneView::class);
         $this->pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
         $this->poiCollectionRepository = $this->objectManager->get(PoiCollectionRepository::class);
         $this->messageHelper = GeneralUtility::makeInstance(MessageHelper::class);

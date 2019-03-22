@@ -16,25 +16,21 @@ namespace JWeiland\Maps2\Tests\Unit\Condition;
 
 use JWeiland\Maps2\Condition\AllowMapProviderRequestCondition;
 use JWeiland\Maps2\Configuration\ExtConf;
-use JWeiland\Maps2\Service\MapProviderRequestService;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
+use Prophecy\Prophecy\ObjectProphecy;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
- * Class AllowGoogleRequestConditionTest
+ * Test AllowMapProviderRequestCondition
  */
-class AllowGoogleRequestConditionTest extends UnitTestCase
+class AllowMapProviderRequestConditionTest extends UnitTestCase
 {
     /**
      * @var ExtConf
      */
     protected $extConf;
-
-    /**
-     * @var MapProviderRequestService
-     */
-    protected $mapProviderRequestService;
 
     /**
      * @var AllowMapProviderRequestCondition
@@ -48,7 +44,8 @@ class AllowGoogleRequestConditionTest extends UnitTestCase
     protected function setUp()
     {
         $this->extConf = new ExtConf();
-        $this->mapProviderRequestService = new MapProviderRequestService($this->extConf);
+        GeneralUtility::setSingletonInstance(ExtConf::class, $this->extConf);
+
         $this->subject = new AllowMapProviderRequestCondition();
     }
 
@@ -58,7 +55,7 @@ class AllowGoogleRequestConditionTest extends UnitTestCase
      */
     protected function tearDown()
     {
-        unset($this->extConf, $this->mapProviderRequestService, $this->subject);
+        unset($this->extConf, $this->subject);
         parent::tearDown();
     }
 
@@ -118,9 +115,11 @@ class AllowGoogleRequestConditionTest extends UnitTestCase
     {
         $this->extConf->setExplicitAllowMapProviderRequests(1);
         $this->extConf->setExplicitAllowMapProviderRequestsBySessionOnly(0);
+
         $this->prophesize(TypoScriptFrontendController::class);
         $GLOBALS['TSFE'] = $this->prophesize(TypoScriptFrontendController::class)->reveal();
-        /** @var \Prophecy\Prophecy\ObjectProphecy|FrontendUserAuthentication $feUser */
+
+        /** @var FrontendUserAuthentication|ObjectProphecy $feUser */
         $feUser = $this->prophesize(FrontendUserAuthentication::class);
         $feUser->getSessionData('mapProviderRequestsAllowedForMaps2')->shouldBeCalled()->willReturn(false);
         $GLOBALS['TSFE']->fe_user = $feUser->reveal();
@@ -137,8 +136,10 @@ class AllowGoogleRequestConditionTest extends UnitTestCase
     {
         $this->extConf->setExplicitAllowMapProviderRequests(1);
         $this->extConf->setExplicitAllowMapProviderRequestsBySessionOnly(0);
+
         $GLOBALS['TSFE'] = $this->prophesize(TypoScriptFrontendController::class)->reveal();
-        /** @var \Prophecy\Prophecy\ObjectProphecy|FrontendUserAuthentication $feUser */
+
+        /** @var FrontendUserAuthentication|ObjectProphecy $feUser */
         $feUser = $this->prophesize(FrontendUserAuthentication::class);
         $feUser->getSessionData('mapProviderRequestsAllowedForMaps2')->shouldBeCalled()->willReturn(true);
         $GLOBALS['TSFE']->fe_user = $feUser->reveal();

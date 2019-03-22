@@ -25,32 +25,16 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 class MapProviderRequestService
 {
     /**
-     * @var ExtConf
-     */
-    protected $extConf;
-
-    /**
-     * GoogleRequestService constructor.
-     *
-     * @param ExtConf $extConf
-     */
-    public function __construct(ExtConf $extConf = null)
-    {
-        if ($extConf === null) {
-            $extConf = GeneralUtility::makeInstance(ExtConf::class);
-        }
-        $this->extConf = $extConf;
-    }
-
-    /**
      * Check, if Browser(Cookie) or $_SESSION allows request to server of Map Provider
      *
      * @return bool
      */
     public function isRequestToMapProviderAllowed()
     {
-        if ($this->extConf->getExplicitAllowMapProviderRequests()) {
-            if ($this->extConf->getExplicitAllowMapProviderRequestsBySessionOnly()) {
+        $extConf = GeneralUtility::makeInstance(ExtConf::class);
+
+        if ($extConf->getExplicitAllowMapProviderRequests()) {
+            if ($extConf->getExplicitAllowMapProviderRequestsBySessionOnly()) {
                 return (bool)$_SESSION['mapProviderRequestsAllowedForMaps2'];
             } else {
                 if ($GLOBALS['TSFE'] instanceof TypoScriptFrontendController) {

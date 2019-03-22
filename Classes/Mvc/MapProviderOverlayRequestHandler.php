@@ -39,17 +39,10 @@ class MapProviderOverlayRequestHandler implements RequestHandlerInterface
     protected $objectManager;
 
     /**
-     * @var MapService
-     */
-    protected $mapService;
-
-    /**
      * @param ObjectManager $objectManager
-     * @param MapService $mapService
      */
-    public function __construct(ObjectManager $objectManager, MapService $mapService) {
+    public function __construct(ObjectManager $objectManager) {
         $this->objectManager = $objectManager;
-        $this->mapService = $mapService;
     }
 
     /**
@@ -100,7 +93,9 @@ class MapProviderOverlayRequestHandler implements RequestHandlerInterface
     public function handleRequest(): ResponseInterface
     {
         $response = $this->objectManager->get(Response::class);
-        $response->appendContent($this->mapService->showAllowMapForm());
+        $mapService = GeneralUtility::makeInstance(MapService::class);
+
+        $response->appendContent($mapService->showAllowMapForm());
         return $response;
     }
 }

@@ -53,15 +53,9 @@ class MapService
      */
     protected $settings = [];
 
-    /**
-     * @param ObjectManager|null $objectManager
-     */
-    public function __construct(ObjectManager $objectManager = null)
+    public function __construct()
     {
-        if ($objectManager === null) {
-            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        }
-
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $configurationManager = $objectManager->get(ConfigurationManagerInterface::class);
 
         $this->objectManager = $objectManager;
@@ -75,7 +69,13 @@ class MapService
      */
     public function showAllowMapForm(): string
     {
-        if (empty($this->settings['mapProvider'])) {
+        if (
+            is_array($this->settings)
+            && (
+                !array_key_exists('mapProvider', $this->settings)
+                || empty($this->settings['mapProvider'])
+            )
+        ) {
             $flashMessage = $this->getFlashMessageForMissingStaticTemplate();
             $flashMessageService = GeneralUtility::makeInstance(FlashMessageService::class);
             $flashMessageQueue = $flashMessageService->getMessageQueueByIdentifier('maps2.allowMap');
