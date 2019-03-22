@@ -74,7 +74,7 @@
 				<source>address</source>
 			</trans-unit>
 			<trans-unit id="tx_maps2_domain_model_poicollection.configuration_map" xml:space="preserve" approved="yes">
-				<source>Configure position on Google Maps</source>
+				<source>Configure position on Map</source>
 			</trans-unit>
 			<trans-unit id="tx_maps2_domain_model_poicollection.latitude" xml:space="preserve">
 				<source>Latitude for map position</source>
