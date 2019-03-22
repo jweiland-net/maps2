@@ -1,7 +1,7 @@
 /**
  * Module: TYPO3/CMS/Maps2/GoogleMapsModule
  */
-define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletEditable"], function($, L) {
+define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDragPath", "leafletEditable"], function($, L) {
     var initialize = function(element, config, extConf) {
         var marker = {};
         var map = {};
@@ -59,7 +59,15 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletEdit
          * Create Area
          */
         var createArea = function() {
+            var area = {};
             var coordinatesArray = [];
+            var options = {
+                color: extConf.strokeColor,
+                width: extConf.strokeWidth,
+                opacity: extConf.strokeOpacity,
+                fillColor: extConf.fillColor,
+                fillOpacity: extConf.fillOpacity
+            };
 
             if (typeof config.pois !== 'undefined') {
                 for (var i = 0; i < config.pois.length; i++) {
@@ -68,29 +76,16 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletEdit
             }
 
             if (coordinatesArray.length === 0) {
-                coordinatesArray.push([config.latitude + 0.003, config.longitude]);
-                coordinatesArray.push([config.latitude - 0.003, config.longitude - 0.006]);
-                coordinatesArray.push([config.latitude - 0.003, config.longitude + 0.006]);
+                area = map.editTools.startPolygon(null, options);
+            } else {
+                area = L.polygon(coordinatesArray, options).addTo(map);
+                area.enableEdit();
             }
 
-            var area = L.polygon(
-                coordinatesArray,
-                {
-                    color: extConf.strokeColor,
-                    width: extConf.strokeWidth,
-                    opacity: extConf.strokeOpacity,
-                    fillColor: extConf.fillColor,
-                    fillOpacity: extConf.fillOpacity
-                }
-            ).addTo(map);
-            area.enableEdit();
-
             map.on("editable:vertex:deleted", function(event) {
-                console.log('editable:vertex:deleted');
                 insertRouteToDb(area.getLatLngs()[0]);
             });
             map.on("editable:vertex:dragend", function(event) {
-                console.log('editable:vertex:dragend');
                 insertRouteToDb(area.getLatLngs()[0]);
             });
         };
@@ -99,7 +94,15 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletEdit
          * Create Route
          */
         var createRoute = function() {
+            var route = {};
             var coordinatesArray = [];
+            var options = {
+                color: extConf.strokeColor,
+                width: extConf.strokeWidth,
+                opacity: extConf.strokeOpacity,
+                fillColor: extConf.fillColor,
+                fillOpacity: extConf.fillOpacity
+            };
 
             if (typeof config.pois !== 'undefined') {
                 for (var i = 0; i < config.pois.length; i++) {
@@ -108,22 +111,11 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletEdit
             }
 
             if (coordinatesArray.length === 0) {
-                coordinatesArray.push([config.latitude + 0.003, config.longitude]);
-                coordinatesArray.push([config.latitude - 0.003, config.longitude - 0.006]);
-                coordinatesArray.push([config.latitude - 0.003, config.longitude + 0.006]);
+                route = map.editTools.startPolyline(null, options);
+            } else {
+                route = L.polyline(coordinatesArray, options).addTo(map);
+                route.enableEdit();
             }
-
-            var route = L.polyline(
-                coordinatesArray,
-                {
-                    color: extConf.strokeColor,
-                    width: extConf.strokeWidth,
-                    opacity: extConf.strokeOpacity,
-                    fillColor: extConf.fillColor,
-                    fillOpacity: extConf.fillOpacity
-                }
-            ).addTo(map);
-            route.enableEdit();
 
             map.on("editable:vertex:deleted", function(event) {
                 insertRouteToDb(route.getLatLngs());

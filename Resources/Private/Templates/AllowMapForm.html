@@ -1,6 +1,8 @@
 <f:render section="renderMap" arguments="{data: data, requestUri: requestUri, mapProvider: settings.mapProvider}" />
 
 <f:section name="renderMap">
+	<f:flashMessages queueIdentifier="maps2.allowMap" />
+
 	<div id="maps2-{data.uid}" style="width: {settings.mapWidth}; height: {settings.mapHeigt};">
 		<h3>{f:translate(key: '{mapProvider}.map', extensionName: 'maps2')}</h3>
 		<p>

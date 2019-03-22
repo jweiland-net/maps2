@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types = 1);
 namespace JWeiland\Maps2\Controller;
 
 /*
@@ -35,7 +35,6 @@ class PoiCollectionController extends AbstractController
      * inject poiCollectionRepository
      *
      * @param PoiCollectionRepository $poiCollectionRepository
-     * @return void
      */
     public function injectPoiCollectionRepository(PoiCollectionRepository $poiCollectionRepository)
     {
@@ -46,7 +45,6 @@ class PoiCollectionController extends AbstractController
      * action show
      *
      * @param PoiCollection $poiCollection PoiCollection from URI has highest priority
-     * @return void
      * @throws \Exception
      */
     public function showAction(PoiCollection $poiCollection = null)
@@ -80,7 +78,6 @@ class PoiCollectionController extends AbstractController
      * This action shows a form to start a new radius search
      *
      * @param Search $search
-     * @return void
      */
     public function searchAction(Search $search = null)
     {
@@ -95,7 +92,6 @@ class PoiCollectionController extends AbstractController
      * Search for POIs within a radius and show them in a list
      *
      * @param Search $search
-     * @return void
      * @throws \Exception
      */
     public function listRadiusAction(Search $search)

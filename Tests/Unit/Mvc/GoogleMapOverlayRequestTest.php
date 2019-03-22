@@ -15,7 +15,7 @@ namespace JWeiland\Maps2\Tests\Unit\Mvc;
  */
 
 use JWeiland\Maps2\Configuration\ExtConf;
-use JWeiland\Maps2\Mvc\GoogleMapOverlayRequestHandler;
+use JWeiland\Maps2\Mvc\MapProviderOverlayRequestHandler;
 use JWeiland\Maps2\Service\GoogleMapsService;
 use JWeiland\Maps2\Service\MapProviderRequestService;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
@@ -59,7 +59,7 @@ class GoogleMapOverlayRequestTest extends UnitTestCase
     protected $request;
 
     /**
-     * @var GoogleMapOverlayRequestHandler
+     * @var MapProviderOverlayRequestHandler
      */
     protected $subject;
 
@@ -81,7 +81,7 @@ class GoogleMapOverlayRequestTest extends UnitTestCase
         $this->requestBuilder = $this->prophesize(RequestBuilder::class);
         $this->request = $this->prophesize(Request::class);
 
-        $this->subject = new GoogleMapOverlayRequestHandler();
+        $this->subject = new MapProviderOverlayRequestHandler();
         $this->subject->injectEnvironmentService($this->environmentService->reveal());
         // $this->subject->injectGoogleRequestService($this->mapProviderRequestService);
         $this->subject->injectRequestBuilder($this->requestBuilder->reveal());

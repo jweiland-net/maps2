@@ -1,7 +1,7 @@
-# cat=basic; type=options[LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:mapProvider.both=both,Google=google,Open Street Map=osm]; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:mapProvider
+# cat=basic; type=options[LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:mapProvider.both=both,Google=gm,Open Street Map=osm]; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:mapProvider
 mapProvider = both
-# cat=basic; type=options[Google=google,OpenStreetMap=osm]; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:defaultMapProvider
-defaultMapProvider = google
+# cat=basic; type=options[Google=gm,OpenStreetMap=osm]; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:defaultMapProvider
+defaultMapProvider = gm
 # cat=basic; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:defaultCountry
 defaultCountry =
 # cat=basic; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:defaultLatitude
@@ -19,11 +19,11 @@ infoWindowContentTemplatePath = EXT:maps2/Resources/Private/Templates/InfoWindow
 # cat=basic; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:allowMapTemplatePath
 allowMapTemplatePath = EXT:maps2/Resources/Private/Templates/AllowMapForm.html
 
-# cat=google; type=wrap; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:googleMapsLibrary
+# cat=gm; type=wrap; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:googleMapsLibrary
 googleMapsLibrary = https://maps.googleapis.com/maps/api/js?key=|&libraries=places
-# cat=google; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:googleMapsApiKey
+# cat=gm; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:googleMapsApiKey
 googleMapsJavaScriptApiKey =
-# cat=google; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:googleGeocodeApiKey
+# cat=gm; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:googleGeocodeApiKey
 googleMapsGeocodeApiKey =
 
 # cat=design/color; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:strokeColor

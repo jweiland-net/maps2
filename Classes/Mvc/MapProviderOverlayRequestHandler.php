@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace JWeiland\Maps2\Mvc;
 
 /*
@@ -14,36 +15,41 @@ namespace JWeiland\Maps2\Mvc;
  * The TYPO3 project - inspiring people to share!
  */
 
-use JWeiland\Maps2\Service\GoogleMapsService;
 use JWeiland\Maps2\Service\MapProviderRequestService;
+use JWeiland\Maps2\Service\MapService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Mvc\RequestHandlerInterface;
 use TYPO3\CMS\Extbase\Mvc\ResponseInterface;
-use TYPO3\CMS\Extbase\Mvc\Web\AbstractRequestHandler;
+use TYPO3\CMS\Extbase\Mvc\Web\Request;
+use TYPO3\CMS\Extbase\Mvc\Web\RequestBuilder;
 use TYPO3\CMS\Extbase\Mvc\Web\Response;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Service\EnvironmentService;
 
 /**
- * Class GoogleMapOverlayRequestHandler
- *
  * This RequestHandler will be used to show an overlay for maps2 output
  * which will ask users to explicit allow Google Maps2 requests.
  * This feature has to be activated in extension manager configuration.
  */
-class GoogleMapOverlayRequestHandler extends AbstractRequestHandler
+class MapProviderOverlayRequestHandler implements RequestHandlerInterface
 {
     /**
-     * @var GoogleMapsService
+     * @var ObjectManager
      */
-    protected $googleMapsService;
+    protected $objectManager;
 
     /**
-     * inject mapService
-     *
-     * @param GoogleMapsService $googleMapsService
-     * @return void
+     * @var MapService
      */
-    public function injectGoogleMapsService(GoogleMapsService $googleMapsService)
-    {
-        $this->googleMapsService = $googleMapsService;
+    protected $mapService;
+
+    /**
+     * @param ObjectManager $objectManager
+     * @param MapService $mapService
+     */
+    public function __construct(ObjectManager $objectManager, MapService $mapService) {
+        $this->objectManager = $objectManager;
+        $this->mapService = $mapService;
     }
 
     /**
@@ -51,15 +57,26 @@ class GoogleMapOverlayRequestHandler extends AbstractRequestHandler
      *
      * @return bool true if it can handle the request, otherwise false
      */
-    public function canHandleRequest()
+    public function canHandleRequest(): bool
     {
-        if (!$this->environmentService->isEnvironmentInCliMode()) {
-            $request = $this->requestBuilder->build();
+        $environmentService = GeneralUtility::makeInstance(EnvironmentService::class);
+        if (!$environmentService->isEnvironmentInCliMode()) {
             $mapProviderRequestService = GeneralUtility::makeInstance(MapProviderRequestService::class);
-            return $request->getControllerExtensionKey() === 'maps2'
+            return $this->buildRequest()->getControllerExtensionKey() === 'maps2'
                 && !$mapProviderRequestService->isRequestToMapProviderAllowed();
         }
         return false;
+    }
+
+    /**
+     * Build a Web Request
+     *
+     * @return Request
+     */
+    protected function buildRequest(): Request
+    {
+        $requestBuilder = $this->objectManager->get(RequestBuilder::class);
+        return $requestBuilder->build();
     }
 
     /**
@@ -69,22 +86,21 @@ class GoogleMapOverlayRequestHandler extends AbstractRequestHandler
      *
      * @return int The priority of the request handler
      */
-    public function getPriority()
+    public function getPriority(): int
     {
         // we must be higher than FrontendRequestHandler (100)
         return 120;
     }
 
     /**
-     * Handles a raw request and returns the respsonse.
+     * Handles a raw request and returns the response.
      *
-     * @return \TYPO3\CMS\Extbase\Mvc\ResponseInterface
+     * @return ResponseInterface
      */
-    public function handleRequest()
+    public function handleRequest(): ResponseInterface
     {
-        /** @var ResponseInterface $response */
         $response = $this->objectManager->get(Response::class);
-        $response->appendContent($this->googleMapsService->showAllowMapForm());
+        $response->appendContent($this->mapService->showAllowMapForm());
         return $response;
     }
 }

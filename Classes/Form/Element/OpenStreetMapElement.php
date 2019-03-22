@@ -98,6 +98,13 @@ class OpenStreetMapElement extends AbstractFormElement
                     ),
                     '/'
                 ),
+                'leafletDragPath' => rtrim(
+                    PathUtility::getRelativePath(
+                        PATH_typo3,
+                        GeneralUtility::getFileAbsFileName('EXT:maps2/Resources/Public/JavaScript/Leaflet.Drag.Path')
+                    ),
+                    '/'
+                ),
                 'leafletEditable' => rtrim(
                     PathUtility::getRelativePath(
                         PATH_typo3,
@@ -108,8 +115,15 @@ class OpenStreetMapElement extends AbstractFormElement
             ],
             'shim' => [
                 'leaflet' => [
+                    'deps' => ['jquery'],
                     'exports' => 'L'
-                ]
+                ],
+                'leafletDragPath' => [
+                    'deps' => ['leaflet'],
+                ],
+                'leafletEditable' => [
+                    'deps' => ['leafletDragPath'],
+                ],
             ]
         ]);
 

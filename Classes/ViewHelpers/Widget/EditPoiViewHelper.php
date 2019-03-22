@@ -15,8 +15,8 @@ namespace JWeiland\Maps2\ViewHelpers\Widget;
  */
 
 use JWeiland\Maps2\Domain\Model\PoiCollection;
-use JWeiland\Maps2\Service\GoogleMapsService;
 use JWeiland\Maps2\Service\MapProviderRequestService;
+use JWeiland\Maps2\Service\MapService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetViewHelper;
 
@@ -33,11 +33,6 @@ class EditPoiViewHelper extends AbstractWidgetViewHelper
     protected $controller;
 
     /**
-     * @var GoogleMapsService
-     */
-    protected $googleMapsService;
-
-    /**
      * inject controller
      *
      * @param Controller\EditPoiController $controller
@@ -45,17 +40,6 @@ class EditPoiViewHelper extends AbstractWidgetViewHelper
     public function injectController(Controller\EditPoiController $controller)
     {
         $this->controller = $controller;
-    }
-
-    /**
-     * inject mapService
-     *
-     * @param GoogleMapsService $googleMapsService
-     * @return void
-     */
-    public function injectGoogleMapsService(GoogleMapsService $googleMapsService)
-    {
-        $this->googleMapsService = $googleMapsService;
     }
 
     /**
@@ -68,7 +52,8 @@ class EditPoiViewHelper extends AbstractWidgetViewHelper
     {
         $mapProviderRequestService = GeneralUtility::makeInstance(MapProviderRequestService::class);
         if (!$mapProviderRequestService->isRequestToMapProviderAllowed()) {
-            return $this->googleMapsService->showAllowMapForm();
+            $mapService = GeneralUtility::makeInstance(MapService::class);
+            return $mapService->showAllowMapForm();
         }
 
         return $this->initiateSubRequest();

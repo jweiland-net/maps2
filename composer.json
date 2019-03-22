@@ -3,7 +3,7 @@
 	"type": "typo3-cms-extension",
 	"description": "Add Google Maps to your website",
 	"license": "GPL-2.0-or-later",
-	"keywords": ["typo3", "TYPO3 CMS", "google maps", "google", "maps2"],
+	"keywords": ["typo3", "TYPO3 CMS", "google maps", "osm", "open street map", "openstreetmap", "maps2"],
 	"homepage": "http://www.jweiland.net",
 	"authors": [
 		{

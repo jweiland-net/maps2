@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace JWeiland\Maps2\Controller;
 
 /*
@@ -23,8 +24,6 @@ class CityMapController extends AbstractController
 {
     /**
      * Action show
-     *
-     * @return void
      */
     public function showAction()
     {
@@ -34,10 +33,9 @@ class CityMapController extends AbstractController
      * action search
      *
      * @param string $street
-     * @return void
      * @throws \Exception
      */
-    public function searchAction($street)
+    public function searchAction(string $street)
     {
         $location = $this->googleMapsService->getFirstFoundPositionByAddress(
             strip_tags($street) . ' ' . $this->settings['autoAppend']

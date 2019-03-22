@@ -124,43 +124,6 @@ class GoogleMapsService implements SingletonInterface
     }
 
     /**
-     * Show form to allow requests to Google Maps2 servers
-     */
-    public function showAllowMapForm(): string
-    {
-        /** @var StandaloneView $view */
-        $view = $this->objectManager->get(StandaloneView::class);
-        $view->setTemplatePathAndFilename(
-            GeneralUtility::getFileAbsFileName(
-                $this->getAllowMapTemplatePath()
-            )
-        );
-        $view->assign('settings', $this->settings);
-        $view->assign('requestUri', $this->getRequestUri());
-
-        return $view->render();
-    }
-
-    /**
-     * Get request URI
-     */
-    protected function getRequestUri(): string
-    {
-        /** @var UriBuilder $uriBuilder */
-        $uriBuilder = $this->objectManager->get(UriBuilder::class);
-
-        return $uriBuilder->reset()
-            ->setAddQueryString(true)
-            ->setArguments([
-                'tx_maps2_maps2' => [
-                    'mapProviderRequestsAllowedForMaps2' => 1
-                ]
-            ])
-            ->setArgumentsToBeExcludedFromQueryString(['cHash'])
-            ->build();
-    }
-
-    /**
      * Set info window for Poi Collection
      *
      * @param PoiCollection $poiCollection
@@ -180,7 +143,6 @@ class GoogleMapsService implements SingletonInterface
      */
     protected function renderInfoWindow(PoiCollection $poiCollection): string
     {
-        /** @var \TYPO3\CMS\Fluid\View\StandaloneView $view */
         $view = $this->objectManager->get(StandaloneView::class);
         $view->assign('settings', $this->settings);
         $view->assign('poiCollection', $poiCollection);
@@ -204,23 +166,6 @@ class GoogleMapsService implements SingletonInterface
             !empty($this->settings['infoWindowContentTemplatePath'])
         ) {
             $path = $this->settings['infoWindowContentTemplatePath'];
-        }
-
-        return $path;
-    }
-
-    /**
-     * Get template path for info window content
-     */
-    protected function getAllowMapTemplatePath(): string
-    {
-        // get default template path
-        $path = $this->extConf->getAllowMapTemplatePath();
-        if (
-            isset($this->settings['allowMapTemplatePath'])
-            && !empty($this->settings['allowMapTemplatePath'])
-        ) {
-            $path = $this->settings['allowMapTemplatePath'];
         }
 
         return $path;

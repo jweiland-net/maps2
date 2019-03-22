@@ -1,0 +1,6 @@
+plugin.tx_maps2 {
+  view {
+    # cat=plugin.tx_maps2/enable; type=boolean; label=Include jQuery
+    includeJQuery = 1
+  }
+}

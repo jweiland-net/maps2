@@ -176,7 +176,7 @@ class ExtConf implements SingletonInterface
     public function getDefaultMapProvider(): string
     {
         if (empty($this->defaultMapProvider)) {
-            $this->defaultMapProvider = 'google';
+            $this->defaultMapProvider = 'gm';
         }
 
         return $this->defaultMapProvider;

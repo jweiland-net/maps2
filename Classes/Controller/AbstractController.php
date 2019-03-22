@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace JWeiland\Maps2\Controller;
 
 /*
@@ -16,6 +17,7 @@ namespace JWeiland\Maps2\Controller;
 
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Service\GoogleMapsService;
+use JWeiland\Maps2\Service\MapService;
 use JWeiland\Maps2\Utility\DataMapper;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
@@ -47,8 +49,6 @@ class AbstractController extends ActionController
      * inject extConf
      *
      * @param ExtConf $extConf
-     *
-     * @return void
      */
     public function injectExtConf(ExtConf $extConf)
     {
@@ -59,8 +59,6 @@ class AbstractController extends ActionController
      * inject dataMapper
      *
      * @param DataMapper $dataMapper
-     *
-     * @return void
      */
     public function injectDataMapper(DataMapper $dataMapper)
     {
@@ -71,7 +69,6 @@ class AbstractController extends ActionController
      * inject mapService
      *
      * @param GoogleMapsService $googleMapsService
-     * @return void
      */
     public function injectGoogleMapsService(GoogleMapsService $googleMapsService)
     {
@@ -80,8 +77,6 @@ class AbstractController extends ActionController
 
     /**
      * Initializes the controller before invoking an action method.
-     *
-     * @return void
      */
     public function initializeAction()
     {
@@ -93,8 +88,6 @@ class AbstractController extends ActionController
      * add some global vars to view
      *
      * @param ViewInterface $view The view to be initialized
-     *
-     * @return void
      */
     public function initializeView(ViewInterface $view)
     {
@@ -113,13 +106,17 @@ class AbstractController extends ActionController
     }
 
     /**
-     * Prepare Settings
-     * Update some settings to a useful format
-     *
-     * @return void
+     * Prepare and check settings
      */
     protected function prepareSettings()
     {
+        if (empty($this->settings['mapProvider'])) {
+            $mapService = GeneralUtility::makeInstance(MapService::class);
+            $this->controllerContext
+                ->getFlashMessageQueue()
+                ->enqueue($mapService->getFlashMessageForMissingStaticTemplate());
+        }
+
         if (
             isset($this->settings['markerClusterer']['enable'])
             && !empty($this->settings['markerClusterer']['enable'])

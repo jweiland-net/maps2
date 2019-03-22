@@ -1,32 +1,3 @@
-[JWeiland\Maps2\Condition\AllowMapProviderRequestCondition]
-  page.includeJSFooterlibs {
-    jQueryForMaps2 = https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js
-    jQueryForMaps2.external = 1
-    jQueryForMaps2.if.isTrue = {$plugin.tx_maps2.view.includeJQuery}
-  }
-[ELSE]
-  # Do not cache maps2 output as long as user has not activated requests to google servers
-  tt_content.list.20.maps2_maps2 = USER_INT
-[END]
-
-[JWeiland\Maps2\Condition\AllowMapProviderRequestCondition] && [globalVar = LIT:google = {$plugin.tx_maps2.settings.mapProvider}]
-  page.includeJSFooterlibs {
-    maps2 = EXT:maps2/Resources/Public/JavaScript/GoogleMaps2.js
-    markerClustererForMaps2 = EXT:maps2/Resources/Public/JavaScript/MarkerClusterer.js
-    markerClustererForMaps2.if.isTrue = {$plugin.tx_maps2.view.enableMarkerClusterer}
-    googleMapsForMaps2 = https://maps.googleapis.com/maps/api/js?key={$plugin.tx_maps2.view.googleMapsJavaScriptApiKey}&libraries=places&callback=initMap
-    googleMapsForMaps2.external = 1
-  }
-[END]
-
-[JWeiland\Maps2\Condition\AllowMapProviderRequestCondition] && [globalVar = LIT:osm = {$plugin.tx_maps2.settings.mapProvider}]
-  page.includeCSS.leaflet = EXT:maps2/Resources/Public/Css/Leaflet/Leaflet.css
-  page.includeJSFooterlibs {
-    maps2Leaflet = EXT:maps2/Resources/Public/JavaScript/Leaflet.js
-    maps2 = EXT:maps2/Resources/Public/JavaScript/OpenStreetMaps2.js
-  }
-[END]
-
 plugin.tx_maps2 {
   view {
     templateRootPaths {
@@ -55,7 +26,6 @@ plugin.tx_maps2 {
     }
   }
   settings {
-    mapProvider = {$plugin.tx_maps2.settings.mapProvider}
     infoWindowContentTemplatePath = EXT:maps2/Resources/Private/Templates/InfoWindowContent.html
     infoWindow {
       image {
@@ -63,21 +33,5 @@ plugin.tx_maps2 {
         height = 150c
       }
     }
-    markerClusterer {
-      enable = {$plugin.tx_maps2.view.enableMarkerClusterer}
-      imagePath = EXT:maps2/Resources/Public/Icons/MarkerClusterer/m
-    }
   }
 }
-
-plugin.tx_maps2._CSS_DEFAULT_STYLE (
-  textarea.f3-form-error {
-    background-color:#FF9F9F;
-    border: 1px #FF0000 solid;
-  }
-
-  input.f3-form-error {
-    background-color:#FF9F9F;
-    border: 1px #FF0000 solid;
-  }
-)

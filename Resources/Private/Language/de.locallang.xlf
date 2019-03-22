@@ -3,19 +3,19 @@
 	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2013-02-07T11:13:04Z" product-name="maps2">
 		<header/>
 		<body>
-			<trans-unit id="google.map" xml:space="preserve" approved="yes">
+			<trans-unit id="gm.map" xml:space="preserve" approved="yes">
 				<source>Google Maps</source>
 				<target>Google Maps</target>
 			</trans-unit>
-			<trans-unit id="google.protectData" xml:space="preserve" approved="yes">
+			<trans-unit id="gm.protectData" xml:space="preserve" approved="yes">
 				<source>The protection of your data is important for us.</source>
 				<target>Der Schutz Ihrer Daten ist uns wichtig.</target>
 			</trans-unit>
-			<trans-unit id="google.explainActivation" xml:space="preserve" approved="yes">
+			<trans-unit id="gm.explainActivation" xml:space="preserve" approved="yes">
 				<source>Click on "Activate" to allow us requesting google servers to show Google Maps.</source>
 				<target>Erst wenn Sie hier auf "Aktivieren" klicken, erlauben Sie uns Daten von Dritt-Anbieter-Servern (Google) zu laden.</target>
 			</trans-unit>
-			<trans-unit id="google.activate" xml:space="preserve" approved="yes">
+			<trans-unit id="gm.activate" xml:space="preserve" approved="yes">
 				<source>Activate</source>
 				<target>Aktivieren</target>
 			</trans-unit>

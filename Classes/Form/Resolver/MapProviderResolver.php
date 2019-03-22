@@ -18,6 +18,7 @@ namespace JWeiland\Maps2\Form\Resolver;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Form\Element\GoogleMapsElement;
 use JWeiland\Maps2\Form\Element\OpenStreetMapElement;
+use JWeiland\Maps2\Service\MapService;
 use TYPO3\CMS\Backend\Form\NodeFactory;
 use TYPO3\CMS\Backend\Form\NodeResolverInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -52,8 +53,8 @@ class MapProviderResolver implements NodeResolverInterface
      */
     public function resolve()
     {
-        $mapProvider = $this->getMapProvider($this->data['databaseRow']);
-        if ($mapProvider === 'osm') {
+        $mapService = GeneralUtility::makeInstance(MapService::class);
+        if ($mapService->getMapProvider($this->data['databaseRow']) === 'osm') {
             return OpenStreetMapElement::class;
         } else {
             return GoogleMapsElement::class;
@@ -72,27 +73,5 @@ class MapProviderResolver implements NodeResolverInterface
             $collectionType = 'Point';
         }
         return $collectionType;
-    }
-
-    /**
-     * @param array $databaseRow
-     * @return string
-     */
-    protected function getMapProvider(array $databaseRow): string
-    {
-        $extConf = GeneralUtility::makeInstance(ExtConf::class);
-
-        // Only of both map providers are allowed, we can read map provider from Database
-        if ($extConf->getMapProvider() === 'both') {
-            if (is_array($databaseRow['map_provider'])) {
-                $mapProvider = current($databaseRow['map_provider']);
-            } else {
-                $mapProvider = $extConf->getDefaultMapProvider();
-            }
-        } else {
-            // We have a strict map provider. Do not render map with map provider from Database
-            $mapProvider = $extConf->getMapProvider();
-        }
-        return $mapProvider;
     }
 }

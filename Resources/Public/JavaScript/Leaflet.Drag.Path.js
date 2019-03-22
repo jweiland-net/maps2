@@ -3,7 +3,6 @@
 /* A Draggable that does not update the element position
  and takes care of only bubbling to targetted path in Canvas mode. */
 L.PathDraggable = L.Draggable.extend({
-
     initialize: function (path) {
         this._path = path;
         this._canvas = (path._map.getRenderer(path) instanceof L.Canvas);
@@ -22,7 +21,6 @@ L.PathDraggable = L.Draggable.extend({
         if (this._canvas && !this._path._containsPoint(this._path._map.mouseEventToLayerPoint(first))) { return; }
         L.Draggable.prototype._onDown.call(this, e);
     }
-
 });
 
 
@@ -108,7 +106,6 @@ L.Handler.PathDrag = L.Handler.extend({
             this._bounds.extend(latlng);
         });
     }
-
 });
 
 L.Path.include({
@@ -123,7 +120,6 @@ L.Path.include({
         };
         loop(this.getLatLngs ? this.getLatLngs() : [this.getLatLng()]);
     }
-
 });
 
 L.Path.addInitHook(function () {
@@ -134,5 +130,4 @@ L.Path.addInitHook(function () {
             this.dragging.enable();
         });
     }
-
 });
