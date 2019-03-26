@@ -79,7 +79,11 @@ abstract class AbstractController extends AbstractWidgetController
      */
     public function initializeAction()
     {
-        $this->settings['infoWindowContentTemplatePath'] = trim($this->settings['infoWindowContentTemplatePath']);
+        if (array_key_exists('infoWindowContentTemplatePath', $this->settings)) {
+            $this->settings['infoWindowContentTemplatePath'] = trim($this->settings['infoWindowContentTemplatePath']);
+        } else {
+            $this->addFlashMessage('Dear Admin: Please add default static template of maps2 into your TS-Template.');
+        }
     }
 
     /**
@@ -92,6 +96,8 @@ abstract class AbstractController extends AbstractWidgetController
     public function initializeView(ViewInterface $view)
     {
         ArrayUtility::mergeRecursiveWithOverrule($this->defaultSettings, $this->getMaps2TypoScriptSettings());
+
+        $this->prepareSettings();
         $view->assign('data', $this->configurationManager->getContentObject()->data);
         $view->assign('environment', [
             'settings' => $this->defaultSettings,
@@ -99,6 +105,18 @@ abstract class AbstractController extends AbstractWidgetController
             'id' => $GLOBALS['TSFE']->id,
             'contentRecord' => $this->configurationManager->getContentObject()->data
         ]);
+    }
+
+    /**
+     * Prepare and check settings
+     */
+    protected function prepareSettings()
+    {
+        if (array_key_exists('infoWindowContentTemplatePath', $this->settings)) {
+            $this->settings['infoWindowContentTemplatePath'] = trim($this->settings['infoWindowContentTemplatePath']);
+        } else {
+            $this->addFlashMessage('Dear Admin: Please add default static template of maps2 into your TS-Template.');
+        }
     }
 
     /**

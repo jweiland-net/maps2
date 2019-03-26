@@ -76,14 +76,6 @@ class AbstractController extends ActionController
     }
 
     /**
-     * Initializes the controller before invoking an action method.
-     */
-    public function initializeAction()
-    {
-        $this->settings['infoWindowContentTemplatePath'] = trim($this->settings['infoWindowContentTemplatePath']);
-    }
-
-    /**
      * initialize view
      * add some global vars to view
      *
@@ -110,6 +102,12 @@ class AbstractController extends ActionController
      */
     protected function prepareSettings()
     {
+        if (array_key_exists('infoWindowContentTemplatePath', $this->settings)) {
+            $this->settings['infoWindowContentTemplatePath'] = trim($this->settings['infoWindowContentTemplatePath']);
+        } else {
+            $this->addFlashMessage('Dear Admin: Please add default static template of maps2 into your TS-Template.');
+        }
+
         if (empty($this->settings['mapProvider'])) {
             $mapService = GeneralUtility::makeInstance(MapService::class);
             $this->controllerContext

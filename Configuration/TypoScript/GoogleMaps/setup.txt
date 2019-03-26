@@ -3,7 +3,6 @@ page.includeJSFooterlibs.jQueryForMaps2 >
 page.includeJSFooterlibs.maps2 >
 page.includeJSFooterlibs.markerClustererForMaps2 >
 page.includeJSFooterlibs.googleMapsForMaps2 >
-plugin.tx_maps2.settings >
 
 [JWeiland\Maps2\Condition\AllowMapProviderRequestCondition]
   page.includeJSFooterlibs {

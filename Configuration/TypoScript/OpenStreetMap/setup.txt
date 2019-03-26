@@ -3,7 +3,7 @@ page.includeCSS.leaflet >
 page.includeJSFooterlibs.jQueryForMaps2 >
 page.includeJSFooterlibs.maps2Leaflet >
 page.includeJSFooterlibs.maps2 >
-plugin.tx_maps2.settings >
+plugin.tx_maps2.settings.markerClusterer >
 
 [JWeiland\Maps2\Condition\AllowMapProviderRequestCondition]
   page.includeCSS.leaflet = EXT:maps2/Resources/Public/Css/Leaflet/Leaflet.css
