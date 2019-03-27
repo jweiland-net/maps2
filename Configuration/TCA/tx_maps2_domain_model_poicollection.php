@@ -257,6 +257,8 @@ return [
         'map_provider' => [
             'exclude' => true,
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.mapProvider',
+            'displayCond' => 'FIELD:collection_type:=:Point',
+            'onChange' => 'reload',
             'config' => [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
