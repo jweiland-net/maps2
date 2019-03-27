@@ -1,9 +1,4 @@
-﻿.. ==================================================
-.. FOR YOUR INFORMATION
-.. --------------------------------------------------
-.. -*- coding: utf-8 -*- with BOM.
-
-.. include:: ../../Includes.rst.txt
+﻿.. include:: ../../Includes.rst.txt
 
 .. _developer-api:
 
@@ -17,17 +12,17 @@ Some of these methods work with Google Geocode API. So please check, if you have
 correctly in extension manager configuration of maps2.
 
 Methods
-"""""""
+-------
 
 getFirstFoundPositionByAddress
-------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Give it an address (string) as first argument and you will get first found address as RadiusResult object.
 If Google Geocode has nothing found or an error occurs this method will return ``null``.
 There is no need to PHP:rawurlencode the address as we will do it for you.
 
 getPositionsByAddress
----------------------
+~~~~~~~~~~~~~~~~~~~~~
 
 Give it an address (string) as first argument and you will get all found results from Google Geocode as
 RadiusResult in an ObjectStorage.
@@ -38,7 +33,7 @@ RadiusResult in an ObjectStorage.
     :ref:`getFirstFoundPositionByAddress <getFirstFoundPositionByAddress>` above.
 
 createNewPoiCollection
-----------------------
+~~~~~~~~~~~~~~~~~~~~~~
 
 Use it, if you have some location records in your extension and want to create a new PoiCollection relation
 automatically while saving your location record.
@@ -68,7 +63,7 @@ Return value (int)
 The UID of the just created PoiCollection record
 
 assignPoiCollectionToForeignRecord
-----------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We have over 5 extensions working together with maps2 and we always have to implement a part to save the
 PoiCollection UID to our other extensions. Wouldn't it be better to have a centralized method doing that? Yes! So
@@ -98,7 +93,7 @@ Default: tx_maps2_uid
 As we save the foreign extension record for you, we need the fieldname where to save the UID of PoiCollection.
 
 Example
-"""""""
+-------
 
 Here we have an working example out of our extension events2:
 

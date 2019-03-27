@@ -1,8 +1,3 @@
-.. ==================================================
-.. FOR YOUR INFORMATION
-.. --------------------------------------------------
-.. -*- coding: utf-8 -*- with BOM.
-
 .. include:: ../../../Includes.rst.txt
 
 ViewHelpers of EXT:maps2
@@ -15,7 +10,7 @@ To be able to use a ViewHelper in your template, you need to follow always the s
 
 .. code-block:: html
 
-	<f:fo>bar</f:fo>
+   <f:fo>bar</f:fo>
 
 This would call the ViewHelper fo of the namespace **f** which stands for fluid.
 If you want to use ViewHelpers from other extensions you need to add the namespace
@@ -23,14 +18,14 @@ declaration at the beginning of the template. The namespace declaration for the 
 
 .. code-block:: html
 
-	{namespace maps2=JWeiland\Maps2\ViewHelpers}
+   {namespace maps2=JWeiland\Maps2\ViewHelpers}
 
 
 Now you can use a ViewHelper of maps2 with a code like:
 
 .. code-block:: html
 
-	<maps2:trimExplode><!-- some comment --></maps2:trimExplode>
+   <maps2:trimExplode><!-- some comment --></maps2:trimExplode>
 
 If you want to know what a ViewHelper does, it is very easy to find the related PHP class by looking at the namespace and the name of the ViewHelper.
 Having e.g. ``JWeiland\Maps2\ViewHelpers`` and ``convertToJson`` you will find the class at ``maps2\\Classes\ViewHelpers\\ConvertToJsonViewHelper.php``.
@@ -39,13 +34,13 @@ The most of awesome thing is that you can use ViewHelpers of any extension in an
 
 .. code-block:: html
 
-    {namespace something=OtherNamespace\OtherExtension\ViewHelpers}
+   {namespace something=OtherNamespace\OtherExtension\ViewHelpers}
 
 and call the ViewHelper like
 
 .. code-block:: html
 
-    <something:NameOfTheViewHelper />
+   <something:NameOfTheViewHelper />
 
 All ViewHelpers
 ---------------

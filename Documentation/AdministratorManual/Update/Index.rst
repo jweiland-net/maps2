@@ -1,16 +1,22 @@
-.. ==================================================
-.. FOR YOUR INFORMATION
-.. --------------------------------------------------
-.. -*- coding: utf-8 -*- with BOM.
-
 .. include:: ../../Includes.rst.txt
 
 Updating
---------
+========
+
 If you update EXT:maps2 to a newer version, please read this section carefully!
 
+Update to Version 5.0.0
+-----------------------
+
+We have added an Open Street Map Implementation.
+To differ between them we have added two new static templates. One for Google Maps and one for Open Street Map. You
+have to keep the Default static template, but you have to add one of the other static templates.
+
+The is a new Option called `mapProvider` in ExtensionManager. Please set the mapProvider and default mapProvider to
+your needs.
+
 Update to Version 4.0.0
-^^^^^^^^^^^^^^^^^^^^^^^
+-----------------------
 
 We have added some new fields to maps2. So please go into Extensionmanager
 and open the configuration. Please check, if everything matches your needs and safe
@@ -30,7 +36,7 @@ GeocodeUtility have been deleted. Please use getPositionsByAddress or getFirstFo
 of GoogleMapsService.
 
 Update to Version 3.0.0
-^^^^^^^^^^^^^^^^^^^^^^^
+-----------------------
 
 We have removed TYPO3 6.2 compatibility completely.
 
@@ -42,7 +48,7 @@ touches nearly all methods, so, if you have extended maps2, please pre-check the
 widget templates and actions. Maybe it's good to have a look into the new GoogleMapsService class.
 
 Update to Version 2.5.0
-^^^^^^^^^^^^^^^^^^^^^^^
+-----------------------
 
 With version 2.5.0 we have solved a camelcase problem of the cache table.
 It was renamed from cf_maps2_cachedHtml to cf_maps2_cachedhtml. Please delete
@@ -54,7 +60,7 @@ in extension manager and activate it again.
    It does not help to rename these tables only.
 
 Update to Version 2.0.0
-^^^^^^^^^^^^^^^^^^^^^^^
+-----------------------
 
 Version 2.0.0 needs a Google Maps JavaScript ApiKey which has to be inserted in
 maps2 configuration of Extensionmanager (for BE usage) and in constants section

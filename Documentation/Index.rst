@@ -1,28 +1,63 @@
-.. include:: Includes.rst.txt
+.. include:: Includes.txt
 
-Maps2
-=====
 
-:Extension name: |extension_name|
-:Extension key: |extension_key|
-:Version: 4.2.8
-:Description: This extension gives you the possibility to add Google Maps in your Frontend
-:Language: en
-:Author: |author|
-:Creation: 09.05.2016
-:Generation: 15:04
-:Licence: Open Content License available from `www.opencontent.org/opl.shtml <http://www.opencontent.org/opl.shtml>`_
+.. Every manual should have a start label for cross-referencing to
+.. start page. Do not remove this!
 
-The content of this document is related to TYPO3, a GNU/GPL CMS/Framework available from `www.typo3.org
-<http://www.typo3.org/>`_
+.. _start:
 
-**Table of Contents**
+=============================================================
+Extension Name
+=============================================================
+
+.. only:: html
+
+   :Classification:
+      maps2
+
+   :Version:
+      |release|
+
+   :Language:
+      en
+
+   :Description:
+      Manual covering TYPO3 extension maps2
+
+   :Keywords:
+      typo3,TYPO3 CMS,google maps,osm,open street map,openstreetmap,maps2
+
+   :Copyright:
+      2013-2019
+
+   :Author:
+      Stefan Froemken
+
+   :Email:
+      projects@jweiland.net
+
+   :License:
+      This document is published under the Open Publication License
+      available from http://www.opencontent.org/openpub/
+
+   :Rendered:
+      |today|
+
+   The content of this document is related to TYPO3,
+   a GNU/GPL CMS/Framework available from `www.typo3.org <https://typo3.org/>`__.
+
+
+   **Table of Contents**
 
 .. toctree::
    :maxdepth: 2
 
    Introduction/Index
-   UserManual/Index
+   Installation/Index
+   Configuration/Index
+   User/Index
    AdministratorManual/Index
    DeveloperManual/Index
-   Targets
+   KnownProblems/Index
+   ToDoList/Index
+   ChangeLog/Index

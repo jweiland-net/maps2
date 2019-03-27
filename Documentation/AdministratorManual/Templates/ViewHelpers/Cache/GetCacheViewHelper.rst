@@ -1,12 +1,14 @@
+.. include:: ../../../../Includes.rst.txt
+
 Cache / GetCacheViewHelper
---------------------------
+==========================
 
 This is a ViewHelper to retrieve a cache entry.
 
 **Type:** Basic
 
 General properties
-^^^^^^^^^^^^^^^^^^
+------------------
 
 .. t3-field-list-table::
  :header-rows: 1
@@ -25,10 +27,10 @@ General properties
    :Default value:
 
 Examples
-^^^^^^^^
+--------
 
 Basic example
-"""""""""""""
+~~~~~~~~~~~~~
 
 Code: ::
 

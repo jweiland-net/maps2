@@ -1,5 +1,7 @@
+.. include:: ../../../Includes.rst.txt
+
 TrimExplodeViewHelper
----------------------
+=====================
 
 This is a ViewHelper to convert a comma separated value into an array.
 All values will be trimmed.
@@ -7,7 +9,7 @@ All values will be trimmed.
 **Type:** Basic
 
 General properties
-^^^^^^^^^^^^^^^^^^
+------------------
 
 .. t3-field-list-table::
  :header-rows: 1
@@ -27,10 +29,10 @@ General properties
            ,
 
 Examples
-^^^^^^^^
+--------
 
 Basic example
-"""""""""""""
+~~~~~~~~~~~~~
 
 Code: ::
 
