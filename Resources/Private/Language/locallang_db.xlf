@@ -40,7 +40,7 @@
 			<trans-unit id="tx_maps2_domain_model_poicollection.mapProvider" xml:space="preserve">
 				<source>Choose a preferred Map Provider to render the map for this record. This option is only valid for the TYPO3 backend and will reload the form if you switch to another value.</source>
 			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poicollection.mapProvider.google" xml:space="preserve">
+			<trans-unit id="tx_maps2_domain_model_poicollection.mapProvider.gm" xml:space="preserve">
 				<source>Google Maps</source>
 			</trans-unit>
 			<trans-unit id="tx_maps2_domain_model_poicollection.mapProvider.osm" xml:space="preserve">
@@ -92,19 +92,19 @@
 				<source>Style</source>
 			</trans-unit>
 			<trans-unit id="tx_maps2_domain_model_poicollection.stroke_color" xml:space="preserve">
-				<source>Color (f.e. #FF0000)</source>
+				<source>Color</source>
 			</trans-unit>
 			<trans-unit id="tx_maps2_domain_model_poicollection.stroke_opacity" xml:space="preserve">
-				<source>Opacity (f.e. 0.8)</source>
+				<source>Opacity</source>
 			</trans-unit>
 			<trans-unit id="tx_maps2_domain_model_poicollection.stroke_weight" xml:space="preserve">
-				<source>Weight (f.e. 2)</source>
+				<source>Weight</source>
 			</trans-unit>
 			<trans-unit id="tx_maps2_domain_model_poicollection.fill_color" xml:space="preserve">
-				<source>Color (f.e. #FF0000)</source>
+				<source>Color</source>
 			</trans-unit>
 			<trans-unit id="tx_maps2_domain_model_poicollection.fill_opacity" xml:space="preserve">
-				<source>Opacity (f.e. 0.35)</source>
+				<source>Opacity</source>
 			</trans-unit>
 			<trans-unit id="tx_maps2_domain_model_poicollection.info_window_address" xml:space="preserve">
 				<source>Info Window Content</source>
@@ -149,6 +149,12 @@
 			</trans-unit>
 			<trans-unit id="palette.marker_icon_pos" xml:space="preserve">
 				<source>XY coordinate of the marker icon whose pixel will show the exact position on the map</source>
+			</trans-unit>
+			<trans-unit id="palette.stroke" xml:space="preserve">
+				<source>Stroke settings</source>
+			</trans-unit>
+			<trans-unit id="palette.fill" xml:space="preserve">
+				<source>Fill settings</source>
 			</trans-unit>
 			<trans-unit id="sys_category.maps2_marker_icons" xml:space="preserve">
 				<source>Marker icon for Google Maps (maps2)</source>
