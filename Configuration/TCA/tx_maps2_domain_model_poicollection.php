@@ -322,6 +322,7 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 7,
+                'placeholder' => '#FF0000',
                 'eval' => 'trim',
             ],
         ],
@@ -331,6 +332,7 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 5,
+                'placeholder' => '0.8',
                 'eval' => 'trim',
             ],
         ],
@@ -340,6 +342,7 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 5,
+                'placeholder' => '2',
                 'eval' => 'trim',
             ],
         ],
@@ -349,6 +352,7 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 7,
+                'placeholder' => '#FF0000',
                 'eval' => 'trim',
             ],
         ],
@@ -358,6 +362,7 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 5,
+                'placeholder' => '0.35',
                 'eval' => 'trim',
             ],
         ],
