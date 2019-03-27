@@ -314,18 +314,20 @@ GoogleMaps2.prototype.createMarker = function (poiCollection, environment) {
         if (!this.categorizedMarkers.hasOwnProperty(categoryUid)) {
             this.categorizedMarkers[categoryUid] = [];
         }
-        // assign first found marker icon, if available
-        if (poiCollection.markerIcon !== "") {
-            var icon = {
-                url: poiCollection.markerIcon,
-                scaledSize: new google.maps.Size(poiCollection.markerIconWidth, poiCollection.markerIconHeight),
-                anchor: new google.maps.Point(poiCollection.markerIconAnchorPosX, poiCollection.markerIconAnchorPosY)
-            };
-            marker.setIcon(icon);
-        }
         this.categorizedMarkers[categoryUid].push(marker);
         this.pointMarkers.push(marker);
     }
+
+    // assign first found marker icon, if available
+    if (poiCollection.markerIcon !== "") {
+        var icon = {
+            url: poiCollection.markerIcon,
+            scaledSize: new google.maps.Size(poiCollection.markerIconWidth, poiCollection.markerIconHeight),
+            anchor: new google.maps.Point(poiCollection.markerIconAnchorPosX, poiCollection.markerIconAnchorPosY)
+        };
+        marker.setIcon(icon);
+    }
+
     this.bounds.extend(marker.position);
 
     // we need these both vars to be set global. So that we can access them in Listener

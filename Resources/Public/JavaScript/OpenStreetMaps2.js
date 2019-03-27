@@ -203,19 +203,22 @@ OpenStreetMaps2.prototype.createMarker = function (poiCollection, environment) {
         if (!this.categorizedMarkers.hasOwnProperty(categoryUid)) {
             this.categorizedMarkers[categoryUid] = [];
         }
-        // assign first found marker icon, if available
-        if (poiCollection.markerIcon !== "") {
-            var icon = L.icon({
-                iconUrl: poiCollection.markerIcon,
-                iconSize: [poiCollection.markerIconWidth, poiCollection.markerIconHeight],
-                iconAnchor: [poiCollection.markerIconAnchorPosX, poiCollection.markerIconAnchorPosY]
-            });
-            marker.setIcon(icon);
-        }
         this.categorizedMarkers[categoryUid].push(marker);
         this.pointMarkers.push(marker);
     }
+
+    // assign first found marker icon, if available
+    if (poiCollection.markerIcon !== "") {
+        var icon = L.icon({
+            iconUrl: poiCollection.markerIcon,
+            iconSize: [poiCollection.markerIconWidth, poiCollection.markerIconHeight],
+            iconAnchor: [poiCollection.markerIconAnchorPosX, poiCollection.markerIconAnchorPosY]
+        });
+        marker.setIcon(icon);
+    }
+
     this.bounds.extend(marker.getLatLng());
+
     marker.bindPopup(poiCollection.infoWindowContent);
 };
 
