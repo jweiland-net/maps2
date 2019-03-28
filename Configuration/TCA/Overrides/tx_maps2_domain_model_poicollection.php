@@ -18,7 +18,7 @@ call_user_func(function() {
         6
     );
 
-    // Set default of map_provider to pre configured map provider of Extension Manager Configuration
+    // If both map providers are allowed in ExtensionManager we have to add a selectbox for map provider to TCA
     if ($extConf->getMapProvider() === 'both') {
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
             'tx_maps2_domain_model_poicollection',
@@ -28,6 +28,7 @@ call_user_func(function() {
         );
     }
 
+    // Set a default for column map_provider on save
     $mapService = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\JWeiland\Maps2\Service\MapService::class);
     $GLOBALS['TCA']['tx_maps2_domain_model_poicollection']['columns']['map_provider']['config']['default'] = $mapService->getMapProvider();
 

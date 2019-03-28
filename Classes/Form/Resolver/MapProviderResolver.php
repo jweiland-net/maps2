@@ -24,7 +24,7 @@ use TYPO3\CMS\Backend\Form\NodeResolverInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
- * This resolver will decide to show either map rendered with Google Maps or Open Street Map
+ * This resolver decides with which map provider the map should be rendered. Either Google Maps or Open Street Map.
  */
 class MapProviderResolver implements NodeResolverInterface
 {
