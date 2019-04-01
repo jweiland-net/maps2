@@ -40,6 +40,19 @@
 				<source>Default zoom</source>
 				<target>Vorgegebener Zoomfaktor</target>
 			</trans-unit>
+			<trans-unit id="zoomControl" xml:space="preserve">
+				<source>Show Zoom Control</source>
+				<target>Zeige Steuerelement: Zoom</target>
+			</trans-unit>
+			<trans-unit id="fullScreenControl" xml:space="preserve">
+				<source>Show full screen Control</source>
+				<target>Zeige Steuerelement für Vollbild</target>
+			</trans-unit>
+
+			<trans-unit id="sheetGoogleMapsOptions" xml:space="preserve">
+				<source>Google Maps</source>
+				<target>Google Maps</target>
+			</trans-unit>
 			<trans-unit id="mapTypeId" xml:space="preserve">
 				<source>Default map view</source>
 				<target>Vorgegebene Kartenansicht</target>
@@ -60,10 +73,6 @@
 				<source>Terrain</source>
 				<target>Terrain</target>
 			</trans-unit>
-			<trans-unit id="zoomControl" xml:space="preserve">
-				<source>Show Zoom Control</source>
-				<target>Zeige Steuerelement: Zoom</target>
-			</trans-unit>
 			<trans-unit id="mapTypeControl" xml:space="preserve">
 				<source>Show Map Type Control</source>
 				<target>Zeige Steuerelement zum Wechseln der Kartenansichten</target>
@@ -76,10 +85,6 @@
 				<source>Show StreetView Control</source>
 				<target>Zeige Steuerelement für StreetView</target>
 			</trans-unit>
-			<trans-unit id="fullScreenControl" xml:space="preserve">
-				<source>Show full screen Control</source>
-				<target>Zeige Steuerelement für Vollbild</target>
-			</trans-unit>
 			<trans-unit id="activateScrollWheel" xml:space="preserve">
 				<source>Activate zoom with mouse scroll wheel</source>
 				<target>Zoom mit Hilfe des Mausrades aktivieren</target>
@@ -87,6 +92,19 @@
 			<trans-unit id="styles" xml:space="preserve">
 				<source>Map Style. Have a look at https://snazzymaps.com to copy some cool styles for you map</source>
 				<target>Karten Stil: Schau mal bei https://snazzymaps.com vorbei und kopier den Quellcode eines Designs hier rein</target>
+			</trans-unit>
+
+			<trans-unit id="sheetOpenStreetMapOptions" xml:space="preserve">
+				<source>Open Street Map</source>
+				<target>Open Street Map</target>
+			</trans-unit>
+			<trans-unit id="mapTile" xml:space="preserve">
+				<source>Map Tile URI: Define another external provider to show map with another layout</source>
+				<target>Map Tile URI: Trage hier den externen Anbieter ein, um die Karte mit einem anderen Layout auszuliefern</target>
+			</trans-unit>
+			<trans-unit id="mapTileAttribution" xml:space="preserve">
+				<source>Map Tile Attribution: Each map needs to show the author attribution. Please check which Attribution has to be used for defined map tile above</source>
+				<target>Map Tile Urheber: Jede Karte muss einen Urheber nennen. Prüft deshalb welcher Urheber bei welchem Tile Anbieter auszuwählen ist</target>
 			</trans-unit>
 		</body>
 	</file>

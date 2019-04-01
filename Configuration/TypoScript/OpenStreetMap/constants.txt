@@ -3,4 +3,10 @@ plugin.tx_maps2 {
     # cat=plugin.tx_maps2/enable; type=boolean; label=Include jQuery
     includeJQuery = 1
   }
+  settings {
+    # cat=plugin.tx_maps2/tile; type=string; label=Define map tile: Please visit https://wiki.openstreetmap.org/wiki/Tile_servers to see all available map tiles. Be careful: If you switch a tile you may have to update the tile attribution, too
+    mapTile = https://{s}.tile.openstreetmap.org/${z}/${x}/${y}.png
+    # cat=plugin.tx_maps2/tile; type=string; label=Map tile attribution: OpenStreetMap license requires a correct map tile attribution. If you update map tile you may need to update this value, too
+    mapTileAttribution = &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors
+  }
 }

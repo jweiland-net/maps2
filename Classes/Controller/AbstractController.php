@@ -21,6 +21,7 @@ use JWeiland\Maps2\Service\MapService;
 use JWeiland\Maps2\Utility\DataMapper;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
@@ -76,6 +77,30 @@ class AbstractController extends ActionController
     }
 
     /**
+     * @param ConfigurationManagerInterface $configurationManager
+     */
+    public function injectConfigurationManager(ConfigurationManagerInterface $configurationManager)
+    {
+        $this->configurationManager = $configurationManager;
+
+        $tsSettings = $this->configurationManager->getConfiguration(
+            \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,
+            'maps2',
+            'maps2_maps2'
+        );
+        $originalSettings = $this->configurationManager->getConfiguration(
+            \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS
+        );
+
+        foreach ($originalSettings as $setting => $value) {
+            if (is_string($value) && $value === '') {
+                $originalSettings[$setting] = $tsSettings['settings'][$setting];
+            }
+        }
+
+        $this->settings = $originalSettings;
+    }
+    /**
      * initialize view
      * add some global vars to view
      *
@@ -113,6 +138,15 @@ class AbstractController extends ActionController
             $this->controllerContext
                 ->getFlashMessageQueue()
                 ->enqueue($mapService->getFlashMessageForMissingStaticTemplate());
+        }
+
+        // https://wiki.openstreetmap.org/wiki/Tile_servers tolds to use ${x} placeholders, but they don't work.
+        if (!empty($this->settings['mapTile'])) {
+            $this->settings['mapTile'] = str_replace(
+                ['${s}', '${x}', '${y}', '${z}'],
+                ['{s}', '{x}', '{y}', '{z}'],
+                $this->settings['mapTile']
+            );
         }
 
         if (
