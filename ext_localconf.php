@@ -58,12 +58,12 @@ call_user_func(function() {
 
     // This is a solution to build GET forms.
     $GLOBALS['TYPO3_CONF_VARS']['FE']['cacheHash']['excludedParameters'][] = 'tx_maps2_citymap[street]';
-
     // We have to save the permission to allow map provider requests before TS-Template rendering. It's needed by our own TS Condition object
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['initFEuser'][] = \JWeiland\Maps2\Hook\InitFeSessionHook::class . '->saveAllowGoogleRequestsInSession';
     // Create maps2 records while saving foreign records
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][] = \JWeiland\Maps2\Hook\CreateMaps2RecordHook::class;
-
+    // Remove old invalid flex form settings before saving to DB
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['checkFlexFormValue'][] = \JWeiland\Maps2\Hook\MoveOldFlexFormSettingsHook::class;
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeResolver'][1530869394] = [
         'nodeName' => 'maps2ReadOnly',
         'priority' => 40,
