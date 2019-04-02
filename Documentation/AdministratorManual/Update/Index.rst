@@ -18,8 +18,14 @@ to your needs.
 We have moved some Google Maps fields in FlexForm to another sheet. To prevent duplicates in DB please execute
 Update Wizard in Installtool.
 
-We have removed automatic registering maps2_uid column for tt_address. Please take a look into the example of
+We have removed automatic registering tx_maps2_uid column for tt_address. Please take a look into the example of
 Maps2 Registry to see how it works.
+
+As we have removed our API class GoogleMapsService completely you now have to use the API methods
+in MapService and GeoCodeService instead.
+
+`getPositionsByAddress` returns an ObjectStorage containing Position objects instead of RadiusResult objects now.
+`getFirstFoundPositionByAddress` return an object of type Position now.
 
 Update to Version 4.0.0
 -----------------------
