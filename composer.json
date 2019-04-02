@@ -1,7 +1,7 @@
 {
 	"name": "jweiland/maps2",
 	"type": "typo3-cms-extension",
-	"description": "Add Google Maps to your website",
+	"description": "Create maps with Marker, Area, Routes or Radius based on Google Maps or OpenStreetMap",
 	"license": "GPL-2.0-or-later",
 	"keywords": ["typo3", "TYPO3 CMS", "google maps", "osm", "open street map", "openstreetmap", "maps2"],
 	"homepage": "http://www.jweiland.net",
@@ -23,9 +23,6 @@
 	"require-dev": {
 		"friendsofphp/php-cs-fixer": "^2.0",
 		"nimut/testing-framework": "^4.1"
-	},
-	"suggest": {
-		"friendsoftypo3/tt-address": "Maps2 adds column tx_maps2_uid to tt_address table"
 	},
 	"autoload": {
 		"psr-4": {

@@ -12,7 +12,7 @@
 
 $EM_CONF[$_EXTKEY] = [
     'title' => 'Maps2',
-    'description' => 'This extension gives you the possibility to make use of the Google Maps API',
+    'description' => 'Create maps with Marker, Area, Routes or Radius based on Google Maps or OpenStreetMap',
     'category' => 'plugin',
     'author' => 'Stefan Froemken',
     'author_email' => 'projects@jweiland.net',
