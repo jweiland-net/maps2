@@ -332,6 +332,10 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDrag
             }
             formattedAddress += ' ' + city;
 
+            if (address.hasOwnProperty('country')) {
+                formattedAddress += ', ' + address.country;
+            }
+
             return formattedAddress;
         };
 
