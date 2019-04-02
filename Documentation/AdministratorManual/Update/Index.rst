@@ -12,8 +12,14 @@ We have added an Open Street Map Implementation.
 To differ between them we have added two new static templates. One for Google Maps and one for Open Street Map. You
 have to keep the Default static template, but you have to add one of the other static templates.
 
-The is a new Option called `mapProvider` in ExtensionManager. Please set the mapProvider and default mapProvider to
-your needs.
+There is a new Option called `mapProvider` in ExtensionManager. Please set the `mapProvider` and `default mapProvider`
+to your needs.
+
+We have moved some Google Maps fields in FlexForm to another sheet. To prevent duplicates in DB please execute
+Update Wizard in Installtool.
+
+We have removed automatic registering maps2_uid column for tt_address. Please take a look into the example of
+Maps2 Registry to see how it works.
 
 Update to Version 4.0.0
 -----------------------

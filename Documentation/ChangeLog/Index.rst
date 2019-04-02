@@ -15,6 +15,7 @@ ChangeLog
 - Add placeholders to style settings in TCA
 - Add mapProvider to switch between GM and OSM in Backend
 - Add static templates for GM and OSM
+- Remove automatic maps2 registry for tt_address
 
 **Version 4.3.5**
 
