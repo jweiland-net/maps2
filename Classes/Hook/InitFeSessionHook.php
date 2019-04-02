@@ -35,7 +35,7 @@ class InitFeSessionHook
     {
         $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
         if (
-            $this->extConf->getExplicitAllowGoogleMapsBySessionOnly()
+            $this->extConf->getExplicitAllowMapProviderRequestsBySessionOnly()
             && (!isset($_SESSION) || !is_array($_SESSION))
         ) {
             session_start();
@@ -51,22 +51,22 @@ class InitFeSessionHook
     {
         $parameters = GeneralUtility::_GPmerged('tx_maps2_maps2');
         if (
-            isset($parameters['googleRequestsAllowedForMaps2'])
-            && (int)$parameters['googleRequestsAllowedForMaps2'] === 1
-            && $this->extConf->getExplicitAllowGoogleMaps()
+            isset($parameters['mapProviderRequestsAllowedForMaps2'])
+            && (int)$parameters['mapProviderRequestsAllowedForMaps2'] === 1
+            && $this->extConf->getExplicitAllowMapProviderRequests()
         ) {
             if (
-                $this->extConf->getExplicitAllowGoogleMapsBySessionOnly()
-                && empty($_SESSION['googleRequestsAllowedForMaps2'])
+                $this->extConf->getExplicitAllowMapProviderRequestsBySessionOnly()
+                && empty($_SESSION['mapProviderRequestsAllowedForMaps2'])
             ) {
-                $_SESSION['googleRequestsAllowedForMaps2'] = 1;
+                $_SESSION['mapProviderRequestsAllowedForMaps2'] = 1;
             }
 
             if (
-                !$this->extConf->getExplicitAllowGoogleMapsBySessionOnly()
-                && (bool)$this->getTypoScriptFrontendController()->fe_user->getSessionData('googleRequestsAllowedForMaps2') === false
+                !$this->extConf->getExplicitAllowMapProviderRequestsBySessionOnly()
+                && (bool)$this->getTypoScriptFrontendController()->fe_user->getSessionData('mapProviderRequestsAllowedForMaps2') === false
             ) {
-                $this->getTypoScriptFrontendController()->fe_user->setAndSaveSessionData('googleRequestsAllowedForMaps2', 1);
+                $this->getTypoScriptFrontendController()->fe_user->setAndSaveSessionData('mapProviderRequestsAllowedForMaps2', 1);
             }
         }
     }

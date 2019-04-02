@@ -5,6 +5,7 @@ CREATE TABLE tx_maps2_domain_model_poicollection (
 	uid int(11) NOT NULL auto_increment,
 	pid int(11) DEFAULT '0' NOT NULL,
 
+	map_provider varchar(25) DEFAULT '' NOT NULL,
 	collection_type varchar(255) DEFAULT '' NOT NULL,
 	title varchar(255) DEFAULT '' NOT NULL,
 	configuration_map varchar(255) DEFAULT '' NOT NULL,

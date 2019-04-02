@@ -1,0 +1,151 @@
+<?php
+namespace JWeiland\Maps2\Tests\Unit\Condition;
+
+/*
+ * This file is part of the maps2 project.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ *
+ * The TYPO3 project - inspiring people to share!
+ */
+
+use JWeiland\Maps2\Condition\AllowMapProviderRequestCondition;
+use JWeiland\Maps2\Configuration\ExtConf;
+use Nimut\TestingFramework\TestCase\UnitTestCase;
+use Prophecy\Prophecy\ObjectProphecy;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
+
+/**
+ * Test AllowMapProviderRequestCondition
+ */
+class AllowMapProviderRequestConditionTest extends UnitTestCase
+{
+    /**
+     * @var ExtConf
+     */
+    protected $extConf;
+
+    /**
+     * @var AllowMapProviderRequestCondition
+     */
+    protected $subject;
+
+    /**
+     * Sets up the fixture, for example, open a network connection.
+     * This method is called before a test is executed.
+     */
+    protected function setUp()
+    {
+        $this->extConf = new ExtConf();
+        GeneralUtility::setSingletonInstance(ExtConf::class, $this->extConf);
+
+        $this->subject = new AllowMapProviderRequestCondition();
+    }
+
+    /**
+     * Tears down the fixture, for example, close a network connection.
+     * This method is called after a test is executed.
+     */
+    protected function tearDown()
+    {
+        unset($this->extConf, $this->subject);
+        parent::tearDown();
+    }
+
+    /**
+     * @test
+     */
+    public function matchConditionWithDeactivatedSettingsWillReturnTrue()
+    {
+        $this->extConf->setExplicitAllowMapProviderRequests(0);
+        $this->extConf->setExplicitAllowMapProviderRequestsBySessionOnly(0);
+        $this->assertTrue(
+            $this->subject->matchCondition([])
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function matchConditionOnSessionUsageWillReturnFalse()
+    {
+        $this->extConf->setExplicitAllowMapProviderRequests(1);
+        $this->extConf->setExplicitAllowMapProviderRequestsBySessionOnly(1);
+        $this->assertFalse(
+            $this->subject->matchCondition([])
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function matchConditionOnSessionUsageWillReturnTrue()
+    {
+        $this->extConf->setExplicitAllowMapProviderRequests(1);
+        $this->extConf->setExplicitAllowMapProviderRequestsBySessionOnly(1);
+        $_SESSION['mapProviderRequestsAllowedForMaps2'] = 1;
+        $this->assertTrue(
+            $this->subject->matchCondition([])
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function matchConditionOnCookieUsageWillReturnFalseIfTsfeIsNotSet()
+    {
+        $this->extConf->setExplicitAllowMapProviderRequests(1);
+        $this->extConf->setExplicitAllowMapProviderRequestsBySessionOnly(0);
+        $this->assertFalse(
+            $this->subject->matchCondition([])
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function matchConditionOnCookieUsageWillReturnFalse()
+    {
+        $this->extConf->setExplicitAllowMapProviderRequests(1);
+        $this->extConf->setExplicitAllowMapProviderRequestsBySessionOnly(0);
+
+        $this->prophesize(TypoScriptFrontendController::class);
+        $GLOBALS['TSFE'] = $this->prophesize(TypoScriptFrontendController::class)->reveal();
+
+        /** @var FrontendUserAuthentication|ObjectProphecy $feUser */
+        $feUser = $this->prophesize(FrontendUserAuthentication::class);
+        $feUser->getSessionData('mapProviderRequestsAllowedForMaps2')->shouldBeCalled()->willReturn(false);
+        $GLOBALS['TSFE']->fe_user = $feUser->reveal();
+
+        $this->assertFalse(
+            $this->subject->matchCondition([])
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function matchConditionOnCookieUsageWillReturnTrue()
+    {
+        $this->extConf->setExplicitAllowMapProviderRequests(1);
+        $this->extConf->setExplicitAllowMapProviderRequestsBySessionOnly(0);
+
+        $GLOBALS['TSFE'] = $this->prophesize(TypoScriptFrontendController::class)->reveal();
+
+        /** @var FrontendUserAuthentication|ObjectProphecy $feUser */
+        $feUser = $this->prophesize(FrontendUserAuthentication::class);
+        $feUser->getSessionData('mapProviderRequestsAllowedForMaps2')->shouldBeCalled()->willReturn(true);
+        $GLOBALS['TSFE']->fe_user = $feUser->reveal();
+
+        $this->assertTrue(
+            $this->subject->matchCondition([])
+        );
+    }
+}

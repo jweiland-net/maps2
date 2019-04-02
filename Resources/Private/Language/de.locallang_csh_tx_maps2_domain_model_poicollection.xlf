@@ -1,60 +1,60 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <xliff version="1.0">
-  <file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2013-02-07T11:04:49Z" product-name="maps2">
-    <header/>
-    <body>
-      <trans-unit id="hidden.description">
-        <source>Enable the checkbox to hide this record in Frontend and mark it as hidden in the Backend</source>
-        <target>Aktivieren Sie die Checkbox, um diesen Datensatz im Frontend zu verstecken</target>
-      </trans-unit>
-      <trans-unit id="collection_type.description">
-        <source>We deliver different kinds of marker. Choose one and confirm the following message to switch into another type.</source>
-        <target>Die Extension kennt 4 Arten von Markertypen. Wählen Sie eine und bestätigen Sie daraufhin die folgende Message, um in den anderen Markertypen zu wechseln</target>
-      </trans-unit>
-      <trans-unit id="collection_type.details">
-        <source>For now we deliver 4 different kinds of Markers. Please select between Point, Range, Route and Area. Maybe you must confirm the message, that the fields will be changed while switching to another type.</source>
-        <target>Die Extension kennt 4 Arten von Markertypen. Bitte wählen Sie aus Pukt, Radius, Bereich und Route.</target>
-      </trans-unit>
-      <trans-unit id="title.description">
-        <source>A title for better identifying this record in TYPO3 Backend</source>
-        <target>Ein Titel, um diesen Datensatz besser zu identifizieren</target>
-      </trans-unit>
-      <trans-unit id="title.syntax">
-        <source>The title is mandatory</source>
-        <target>Der Titel ist ein Pflichfeld</target>
-      </trans-unit>
-      <trans-unit id="address.description">
-        <source>Insert an address to search for. The map below will set the result as center after pressing "Update"</source>
-        <target>Tragen Sie hier eine Adresse ein nach der Sie suchen möchten. Die Google Maps Karte aktualisiert sich sobald Sie auf "Update" gedrückt haben</target>
-      </trans-unit>
-      <trans-unit id="address.syntax">
-        <source>Type in as much information about the address as you have, to get the best results</source>
-        <target>Tragen Sie soviele Informationen wie möglich ein, um das bestmögliche Ergebnis zu erhalten</target>
-      </trans-unit>
-      <trans-unit id="address.details">
-        <source>
-          &lt;b&gt;Update&lt;/b&gt;
-          Press "Update" and the map below will move its center to the best result. All latitude and longitude including the backup fields will be set to this position. After that you can justify the center of the map a little bit by dragging the map with the mouse, if the position have not matched perfectly. Now only the values of latitude and longitude will update. The backup fields will be kept untouched.
+	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2013-02-07T11:04:49Z" product-name="maps2">
+		<header/>
+		<body>
+			<trans-unit id="hidden.description">
+				<source>Enable the checkbox to hide this record in Frontend and mark it as hidden in the Backend</source>
+				<target>Aktivieren Sie die Checkbox, um diesen Datensatz im Frontend zu verstecken</target>
+			</trans-unit>
+			<trans-unit id="collection_type.description">
+				<source>We deliver different kinds of marker. Choose one and confirm the following message to switch into another type.</source>
+				<target>Die Extension kennt 4 Arten von Markertypen. Wählen Sie eine und bestätigen Sie daraufhin die folgende Message, um in den anderen Markertypen zu wechseln</target>
+			</trans-unit>
+			<trans-unit id="collection_type.details">
+				<source>For now we deliver 4 different kinds of Markers. Please select between Point, Range, Route and Area. Maybe you must confirm the message, that the fields will be changed while switching to another type.</source>
+				<target>Die Extension kennt 4 Arten von Markertypen. Bitte wählen Sie aus Pukt, Radius, Bereich und Route.</target>
+			</trans-unit>
+			<trans-unit id="title.description">
+				<source>A title for better identifying this record in TYPO3 Backend</source>
+				<target>Ein Titel, um diesen Datensatz besser zu identifizieren</target>
+			</trans-unit>
+			<trans-unit id="title.syntax">
+				<source>The title is mandatory</source>
+				<target>Der Titel ist ein Pflichfeld</target>
+			</trans-unit>
+			<trans-unit id="address.description">
+				<source>Insert an address to search for. The map below will set the result as center after pressing "Update"</source>
+				<target>Tragen Sie hier eine Adresse ein nach der Sie suchen möchten. Die Google Maps Karte aktualisiert sich sobald Sie auf "Update" gedrückt haben</target>
+			</trans-unit>
+			<trans-unit id="address.syntax">
+				<source>Type in as much information about the address as you have, to get the best results</source>
+				<target>Tragen Sie soviele Informationen wie möglich ein, um das bestmögliche Ergebnis zu erhalten</target>
+			</trans-unit>
+			<trans-unit id="address.details">
+				<source>
+					&lt;b&gt;Update&lt;/b&gt;
+					Press "Update" and the map below will move its center to the best result. All latitude and longitude including the backup fields will be set to this position. After that you can justify the center of the map a little bit by dragging the map with the mouse, if the position have not matched perfectly. Now only the values of latitude and longitude will update. The backup fields will be kept untouched.
 
-          &lt;b&gt;Reset&lt;/b&gt;
-          Press "Reset" to center back the map to the last stored position after pressing "Update".
+					&lt;b&gt;Reset&lt;/b&gt;
+					Press "Reset" to center back the map to the last stored position after pressing "Update".
 
-          &lt;b&gt;Setting the Default center&lt;/b&gt;
-          Maps2 delivers an extension configuration where you can change the default center of the map. Please open the Extensionmanager, choose maps2 and open the configuration.
-        </source>
-      </trans-unit>
-      <trans-unit id="latitude.description">
-        <source>Search for an address or drag the map manually to update this field. Of cause you can edit this field manually, too.</source>
-        <target>Suchen Sie nach einer Adresse oder ziehen Sie die Google Maps Karte, um dieses Feld zu aktualisieren. Natürlich können Sie dieses Feld auch manuell bearbeiten</target>
-      </trans-unit>
-      <trans-unit id="longitude.description">
-        <source>Search for an address or drag the map manually to update this field. Of cause you can edit this field manually, too.</source>
-        <target>Suchen Sie nach einer Adresse oder ziehen Sie die Google Maps Karte, um dieses Feld zu aktualisieren. Natürlich können Sie dieses Feld auch manuell bearbeiten</target>
-      </trans-unit>
-      <trans-unit id="radius.description">
-        <source>Pull the corner of the circle on the map to change this field automatically. For sure you can change it manually, too.</source>
-        <target>Vergrößern oder verkleinern Sie den Zirkel in der Google Maps Karte, um dieses Feld zu aktualisieren. Natürlich können Sie dieses Feld auch manuell bearbeiten</target>
-      </trans-unit>
-    </body>
-  </file>
+					&lt;b&gt;Setting the Default center&lt;/b&gt;
+					Maps2 delivers an extension configuration where you can change the default center of the map. Please open the Extensionmanager, choose maps2 and open the configuration.
+				</source>
+			</trans-unit>
+			<trans-unit id="latitude.description">
+				<source>Search for an address or drag the map manually to update this field. Of cause you can edit this field manually, too.</source>
+				<target>Suchen Sie nach einer Adresse oder ziehen Sie die Google Maps Karte, um dieses Feld zu aktualisieren. Natürlich können Sie dieses Feld auch manuell bearbeiten</target>
+			</trans-unit>
+			<trans-unit id="longitude.description">
+				<source>Search for an address or drag the map manually to update this field. Of cause you can edit this field manually, too.</source>
+				<target>Suchen Sie nach einer Adresse oder ziehen Sie die Google Maps Karte, um dieses Feld zu aktualisieren. Natürlich können Sie dieses Feld auch manuell bearbeiten</target>
+			</trans-unit>
+			<trans-unit id="radius.description">
+				<source>Pull the corner of the circle on the map to change this field automatically. For sure you can change it manually, too.</source>
+				<target>Vergrößern oder verkleinern Sie den Zirkel in der Google Maps Karte, um dieses Feld zu aktualisieren. Natürlich können Sie dieses Feld auch manuell bearbeiten</target>
+			</trans-unit>
+		</body>
+	</file>
 </xliff>

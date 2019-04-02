@@ -1,19 +1,14 @@
-.. ==================================================
-.. FOR YOUR INFORMATION
-.. --------------------------------------------------
-.. -*- coding: utf-8 -*- with BOM.
-
 .. include:: ../../Includes.rst.txt
 
 Google Api Keys
----------------
+===============
 
 Since version 2.0.0 maps2 will only work with assigned Google Api Keys.
 This documentation will show you step by step how to get the API Keys
 from Google Clout Platform.
 
 Google Cloud Platform
-^^^^^^^^^^^^^^^^^^^^^
+---------------------
 
 #. If you don't have a Google Account you have to register as a new User.
 
@@ -70,7 +65,7 @@ Google Cloud Platform
 #. Copy your API Key and paste it into the both API fields in Extension Configuration of maps2.
 
 Do you want it more safe?
-^^^^^^^^^^^^^^^^^^^^^^^^^
+-------------------------
 
 In the section above we told you to assign your servers IP-Address to your new API Key, right?
 Ok. What happens, if you're on a shared hosting system? Every customer on the same server
@@ -84,7 +79,7 @@ Copy API Key with HTTP-link to field `JavaScript API Key` in Extension Configura
 Copy API Key with IP-Address security to field `Geocoding API Key` in Extension Configuration of maps2.
 
 Do you want it super safe?
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------
 
 Visit API Console again and go to your `billing information <https://console.cloud.google.com/billing>`_
 

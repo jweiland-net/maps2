@@ -201,75 +201,75 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function getExplicitAllowGoogleMapsInitiallyReturnsFalse() {
+    public function getExplicitAllowMapProviderRequestsInitiallyReturnsFalse() {
         $this->assertSame(
             false,
-            $this->subject->getExplicitAllowGoogleMaps()
+            $this->subject->getExplicitAllowMapProviderRequests()
         );
     }
 
     /**
      * @test
      */
-    public function setExplicitAllowGoogleMapsSetsExplicitAllowGoogleMaps() {
-        $this->subject->setExplicitAllowGoogleMaps(true);
+    public function setExplicitAllowMapProviderRequestsSetsExplicitAllowGoogleMaps() {
+        $this->subject->setExplicitAllowMapProviderRequests(true);
         $this->assertSame(
             true,
-            $this->subject->getExplicitAllowGoogleMaps()
+            $this->subject->getExplicitAllowMapProviderRequests()
         );
     }
 
     /**
      * @test
      */
-    public function setExplicitAllowGoogleMapsWithStringReturnsTrue() {
-        $this->subject->setExplicitAllowGoogleMaps('foo bar');
-        $this->assertTrue($this->subject->getExplicitAllowGoogleMaps());
+    public function setExplicitAllowMapProviderRequestsWithStringReturnsTrue() {
+        $this->subject->setExplicitAllowMapProviderRequests('foo bar');
+        $this->assertTrue($this->subject->getExplicitAllowMapProviderRequests());
     }
 
     /**
      * @test
      */
-    public function setExplicitAllowGoogleMapsWithZeroReturnsFalse() {
-        $this->subject->setExplicitAllowGoogleMaps(0);
-        $this->assertFalse($this->subject->getExplicitAllowGoogleMaps());
+    public function setExplicitAllowMapProviderRequestsWithZeroReturnsFalse() {
+        $this->subject->setExplicitAllowMapProviderRequests(0);
+        $this->assertFalse($this->subject->getExplicitAllowMapProviderRequests());
     }
 
     /**
      * @test
      */
-    public function getExplicitAllowGoogleMapsBySessionOnlyInitiallyReturnsFalse() {
+    public function getExplicitAllowMapProviderRequestsBySessionOnlyInitiallyReturnsFalse() {
         $this->assertSame(
             false,
-            $this->subject->getExplicitAllowGoogleMapsBySessionOnly()
+            $this->subject->getExplicitAllowMapProviderRequestsBySessionOnly()
         );
     }
 
     /**
      * @test
      */
-    public function setExplicitAllowGoogleMapsBySessionOnlySetsExplicitAllowGoogleMapsBySessionOnly() {
-        $this->subject->setExplicitAllowGoogleMapsBySessionOnly(true);
+    public function setExplicitAllowMapProviderRequestsBySessionOnlySetsExplicitAllowGoogleMapsBySessionOnly() {
+        $this->subject->setExplicitAllowMapProviderRequestsBySessionOnly(true);
         $this->assertSame(
             true,
-            $this->subject->getExplicitAllowGoogleMapsBySessionOnly()
+            $this->subject->getExplicitAllowMapProviderRequestsBySessionOnly()
         );
     }
 
     /**
      * @test
      */
-    public function setExplicitAllowGoogleMapsBySessionOnlyWithStringReturnsTrue() {
-        $this->subject->setExplicitAllowGoogleMapsBySessionOnly('foo bar');
-        $this->assertTrue($this->subject->getExplicitAllowGoogleMapsBySessionOnly());
+    public function setExplicitAllowMapProviderRequestsBySessionOnlyWithStringReturnsTrue() {
+        $this->subject->setExplicitAllowMapProviderRequestsBySessionOnly('foo bar');
+        $this->assertTrue($this->subject->getExplicitAllowMapProviderRequestsBySessionOnly());
     }
 
     /**
      * @test
      */
-    public function setExplicitAllowGoogleMapsBySessionOnlyWithZeroReturnsFalse() {
-        $this->subject->setExplicitAllowGoogleMapsBySessionOnly(0);
-        $this->assertFalse($this->subject->getExplicitAllowGoogleMapsBySessionOnly());
+    public function setExplicitAllowMapProviderRequestsBySessionOnlyWithZeroReturnsFalse() {
+        $this->subject->setExplicitAllowMapProviderRequestsBySessionOnly(0);
+        $this->assertFalse($this->subject->getExplicitAllowMapProviderRequestsBySessionOnly());
     }
 
     /**

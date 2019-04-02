@@ -1,5 +1,7 @@
+.. include:: ../../../../Includes.rst.txt
+
 Widget / PoiCollectionViewHelper
---------------------------------
+================================
 
 If you have your own extension you can use this widget to show PoiCollections
 in your own extension.
@@ -11,7 +13,7 @@ in your own extension.
 **Type:** Basic
 
 General properties
-^^^^^^^^^^^^^^^^^^
+------------------
 
 .. t3-field-list-table::
  :header-rows: 1
@@ -30,10 +32,10 @@ General properties
      :Default value:
 
 Examples
-^^^^^^^^
+--------
 
 Basic example
-"""""""""""""
+~~~~~~~~~~~~~
 
 Code: ::
 

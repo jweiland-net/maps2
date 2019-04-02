@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace JWeiland\Maps2\Controller;
 
 /*
@@ -26,10 +27,9 @@ class AjaxController extends ActionController
      *
      * @param string $objectName Which Ajax Object has to be called
      * @param array $arguments Arguments which have to be send to the Ajax Object
-     *
      * @return string
      */
-    public function callAjaxObjectAction($objectName, $arguments = [])
+    public function callAjaxObjectAction(string $objectName, array $arguments = []): string
     {
         $className = 'JWeiland\\Maps2\\Ajax\\' . $objectName;
         if (class_exists($className)) {

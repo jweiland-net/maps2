@@ -14,78 +14,31 @@ namespace JWeiland\Maps2\Client;
  * The TYPO3 project - inspiring people to share!
  */
 
-use JWeiland\Maps2\Client\Request\RequestInterface;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
-use TYPO3\CMS\Core\Messaging\FlashMessageService;
-use TYPO3\CMS\Core\Utility\DebugUtility;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
- * Simple Client for sending requests to Google
+ * Simple Client to send requests to Google Maps Servers
  */
-class GoogleMapsClient
+class GoogleMapsClient extends AbstractClient
 {
     /**
-     * @var FlashMessageService
+     * @var string
      */
-    protected $flashMessageService;
-
-    /**
-     * inject flashMessageService
-     *
-     * @param FlashMessageService $flashMessageService
-     * @return void
-     */
-    public function injectFlashMessageService(FlashMessageService $flashMessageService)
-    {
-        $this->flashMessageService = $flashMessageService;
-    }
-
-    /**
-     * Process Google Maps Requests
-     *
-     * @param RequestInterface $request
-     * @return array
-     * @throws \Exception
-     */
-    public function processRequest(RequestInterface $request)
-    {
-        if (!$request->isValidRequest()) {
-            $this->addMessage('Invalid request: ' . $request->getUri());
-            return [];
-        }
-
-        try {
-            $response = GeneralUtility::getUrl($request->getUri());
-            $result = json_decode($response, true);
-            if (
-                $this->requestHasErrors($result)
-                && $GLOBALS['TYPO3_CONF_VARS']['BE']['debug']
-            ) {
-                DebugUtility::debug($response, 'Response of Google Maps GeoCode API');
-                $result = [];
-            }
-        } catch (\Exception $e) {
-            throw new \Exception($e->getMessage(), 1530698645);
-        }
-
-        return $result;
-    }
+    protected $title = 'Google Maps';
 
     /**
      * Check result from Google Maps Server for errors
      *
      * @param array|null $result
      * @return bool
-     * @throws \Exception
      */
     protected function requestHasErrors($result)
     {
         $hasErrors = false;
 
         if ($result === null) {
-            $this->addMessage(
+            $this->messageHelper->addFlashMessage(
                 'The response of Google Maps was not a valid JSON response.',
                 'Invalid JSON response',
                 FlashMessage::ERROR
@@ -94,8 +47,14 @@ class GoogleMapsClient
         }
 
         if ($result['status'] !== 'OK') {
-            $this->addMessage(
-                LocalizationUtility::translate('error.noPositionsFound.body', 'maps2'),
+            $this->messageHelper->addFlashMessage(
+                LocalizationUtility::translate(
+                    'error.noPositionsFound.body',
+                    'maps2',
+                    [
+                        0 => $this->title
+                    ]
+                ),
                 LocalizationUtility::translate('error.noPositionsFound.title', 'maps2'),
                 FlashMessage::INFO
             );
@@ -103,25 +62,5 @@ class GoogleMapsClient
         }
 
         return $hasErrors;
-    }
-
-    /**
-     * Add a message to FlashMessage queue
-     *
-     * @param string $message
-     * @param string $title
-     * @param int $severity
-     */
-    protected function addMessage($message, $title = '', $severity = FlashMessage::OK)
-    {
-        /** @var $flashMessage FlashMessage */
-        $flashMessage = GeneralUtility::makeInstance(
-            FlashMessage::class,
-            $message,
-            $title,
-            $severity
-        );
-        $defaultFlashMessageQueue = $this->flashMessageService->getMessageQueueByIdentifier();
-        $defaultFlashMessageQueue->enqueue($flashMessage);
     }
 }

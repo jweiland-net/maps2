@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace JWeiland\Maps2\Client\Request;
 
 /*
@@ -15,6 +16,7 @@ namespace JWeiland\Maps2\Client\Request;
  */
 
 use JWeiland\Maps2\Configuration\ExtConf;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
 
 /**
@@ -37,14 +39,11 @@ abstract class AbstractRequest implements RequestInterface
      */
     protected $parameters = [];
 
-    /**
-     * inject extConf
-     *
-     * @param ExtConf $extConf
-     * @return void
-     */
-    public function injectExtConf(ExtConf $extConf)
+    public function __construct(ExtConf $extConf = null)
     {
+        if ($extConf === null) {
+            $extConf = GeneralUtility::makeInstance(ExtConf::class);
+        }
         $this->extConf = $extConf;
     }
 
@@ -53,7 +52,7 @@ abstract class AbstractRequest implements RequestInterface
      *
      * @return string $uri
      */
-    public function getUri()
+    public function getUri(): string
     {
         return $this->uri;
     }
@@ -62,11 +61,10 @@ abstract class AbstractRequest implements RequestInterface
      * Sets the uri
      *
      * @param string $uri
-     * @return void
      */
-    public function setUri($uri)
+    public function setUri(string $uri)
     {
-        $this->uri = (string)trim($uri);
+        $this->uri = trim($uri);
     }
 
     /**
@@ -74,7 +72,7 @@ abstract class AbstractRequest implements RequestInterface
      *
      * @return array $parameters
      */
-    public function getParameters()
+    public function getParameters(): array
     {
         return $this->parameters;
     }
@@ -83,11 +81,10 @@ abstract class AbstractRequest implements RequestInterface
      * Sets the parameters
      *
      * @param array $parameters
-     * @return void
      */
     public function setParameters(array $parameters)
     {
-        $this->parameters = (array)$parameters;
+        $this->parameters = $parameters;
     }
 
     /**
@@ -95,9 +92,8 @@ abstract class AbstractRequest implements RequestInterface
      *
      * @param string $parameter
      * @param mixed $value
-     * @return void
      */
-    public function addParameter($parameter, $value)
+    public function addParameter(string $parameter, $value)
     {
         $this->parameters[$parameter] = $value;
     }
@@ -108,7 +104,7 @@ abstract class AbstractRequest implements RequestInterface
      * @param string $parameter
      * @return mixed
      */
-    public function getParameter($parameter)
+    public function getParameter(string $parameter)
     {
         return $this->parameters[$parameter];
     }
@@ -119,7 +115,7 @@ abstract class AbstractRequest implements RequestInterface
      * @param string $parameter
      * @return bool
      */
-    public function hasParameter($parameter)
+    public function hasParameter($parameter): bool
     {
         return array_key_exists($parameter, $this->parameters);
     }
@@ -131,7 +127,7 @@ abstract class AbstractRequest implements RequestInterface
      * @param string $address The address to update
      * @return string A prepared address which is valid for an uri
      */
-    protected function updateAddressForUri($address)
+    protected function updateAddressForUri(string $address): string
     {
         // if address can be interpreted as zip, attach the default country to prevent a worldwide search
         if (
@@ -149,7 +145,7 @@ abstract class AbstractRequest implements RequestInterface
      *
      * @return bool
      */
-    public function isValidRequest()
+    public function isValidRequest(): bool
     {
         $isValid = true;
 

@@ -33,7 +33,7 @@ return [
         'searchFields' => 'title, address',
     ],
     'interface' => [
-        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, collection_type, title, address, latitude, longitude, configuration_map, pois, stroke_color, stroke_opacity, stroke_weight, fill_color, fill_opacity, info_window_content, info_window_images, marker_icons, marker_icon_width, marker_icon_height, marker_icon_anchor_pos_x, marker_icon_anchor_pos_y',
+        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, map_provider, collection_type, title, address, latitude, longitude, configuration_map, pois, stroke_color, stroke_opacity, stroke_weight, fill_color, fill_opacity, info_window_content, info_window_images, marker_icons, marker_icon_width, marker_icon_height, marker_icon_anchor_pos_x, marker_icon_anchor_pos_y',
     ],
     'types' => [
         'Empty' => [
@@ -208,22 +208,22 @@ return [
                     [
                         'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.collectionType.point',
                         'Point',
-                        'EXT:maps2/Resources/Public/Icons/TypeSelectPointSmall.png'
+                        'EXT:maps2/Resources/Public/Icons/TypeSelectPoint.png'
                     ],
                     [
                         'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.collectionType.area',
                         'Area',
-                        'EXT:maps2/Resources/Public/Icons/TypeSelectAreaSmall.png'
+                        'EXT:maps2/Resources/Public/Icons/TypeSelectArea.png'
                     ],
                     [
                         'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.collectionType.route',
                         'Route',
-                        'EXT:maps2/Resources/Public/Icons/TypeSelectRouteSmall.png'
+                        'EXT:maps2/Resources/Public/Icons/TypeSelectRoute.png'
                     ],
                     [
                         'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.collectionType.radius',
                         'Radius',
-                        'EXT:maps2/Resources/Public/Icons/TypeSelectRadiusSmall.png'
+                        'EXT:maps2/Resources/Public/Icons/TypeSelectRadius.png'
                     ],
                 ],
                 'fieldWizard' => [
@@ -254,6 +254,35 @@ return [
                 'eval' => 'required,trim',
             ],
         ],
+        'map_provider' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.mapProvider',
+            'displayCond' => 'FIELD:collection_type:=:Point',
+            'onChange' => 'reload',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'size' => 1,
+                'items' => [
+                    [
+                        'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.mapProvider.gm',
+                        'gm'
+                    ],
+                    [
+                        'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.mapProvider.osm',
+                        'osm'
+                    ]
+                ],
+            ],
+        ],
+        'configuration_map' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.configuration_map',
+            'config' => [
+                'type' => 'user',
+                'renderType' => 'maps2MapProvider'
+            ],
+        ],
         'latitude' => [
             'exclude' => true,
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.latitude',
@@ -270,14 +299,6 @@ return [
                 'type' => 'input',
                 'size' => 12,
                 'eval' => \JWeiland\Maps2\Tca\Type\FloatType::class,
-            ],
-        ],
-        'configuration_map' => [
-            'exclude' => true,
-            'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.configuration_map',
-            'config' => [
-                'type' => 'user',
-                'renderType' => 'maps2GoogleMaps'
             ],
         ],
         'radius' => [
@@ -303,6 +324,7 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 7,
+                'placeholder' => '#FF0000',
                 'eval' => 'trim',
             ],
         ],
@@ -312,6 +334,7 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 5,
+                'placeholder' => '0.8',
                 'eval' => 'trim',
             ],
         ],
@@ -321,6 +344,7 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 5,
+                'placeholder' => '2',
                 'eval' => 'trim',
             ],
         ],
@@ -330,6 +354,7 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 7,
+                'placeholder' => '#FF0000',
                 'eval' => 'trim',
             ],
         ],
@@ -339,6 +364,7 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 5,
+                'placeholder' => '0.35',
                 'eval' => 'trim',
             ],
         ],

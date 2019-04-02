@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace JWeiland\Maps2\Controller;
 
 /*
@@ -14,7 +15,9 @@ namespace JWeiland\Maps2\Controller;
  * The TYPO3 project - inspiring people to share!
  */
 
-use JWeiland\Maps2\Domain\Model\RadiusResult;
+use JWeiland\Maps2\Domain\Model\Position;
+use JWeiland\Maps2\Service\GeoCodeService;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * A controller class to show Google Maps for a pre-configured city
@@ -23,8 +26,6 @@ class CityMapController extends AbstractController
 {
     /**
      * Action show
-     *
-     * @return void
      */
     public function showAction()
     {
@@ -34,18 +35,18 @@ class CityMapController extends AbstractController
      * action search
      *
      * @param string $street
-     * @return void
      * @throws \Exception
      */
-    public function searchAction($street)
+    public function searchAction(string $street)
     {
-        $location = $this->googleMapsService->getFirstFoundPositionByAddress(
+        $geoCodeService = GeneralUtility::makeInstance(GeoCodeService::class);
+        $position = $geoCodeService->getFirstFoundPositionByAddress(
             strip_tags($street) . ' ' . $this->settings['autoAppend']
         );
 
-        if ($location instanceof RadiusResult) {
-            $this->view->assign('latitude', $location->getGeometry()->getLocation()->getLatitude());
-            $this->view->assign('longitude', $location->getGeometry()->getLocation()->getLongitude());
+        if ($position instanceof Position) {
+            $this->view->assign('latitude', $position->getLatitude());
+            $this->view->assign('longitude', $position->getLongitude());
             $this->view->assign('address', rawurldecode($street));
         }
     }

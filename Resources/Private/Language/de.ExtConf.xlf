@@ -3,6 +3,18 @@
 	<file source-language="en" datatype="plaintext" original="messages" date="2013-02-07T11:13:04Z" product-name="maps2">
 		<header/>
 		<body>
+			<trans-unit id="mapProvider" xml:space="preserve">
+				<source>Choose Map Provider: Maps2 comes with currently two Map Providers. Choose your favorite.</source>
+				<target>Wähle einen Kartenanbieter: Maps2 wird aktuell mit 2 Kartenanbietern ausgeliefert. Wähle Deinen Favoriten.</target>
+			</trans-unit>
+			<trans-unit id="mapProvider.both" xml:space="preserve">
+				<source>Both</source>
+				<target>Beide</target>
+			</trans-unit>
+			<trans-unit id="defaultMapProvider" xml:space="preserve">
+				<source>Set default Map Provider: If you have chosen "Both" above you can define a default here. New map records will be created with this selected type of map provider.</source>
+				<target>Standard Kartenanbieter: Wenn Ihr oben "Beide" gewählt habt, dann entscheidet Euch für einen Standard Kartenanbieter. Beim Neuanlegen von Karten-Datensätzen wird dann dieser Anbieter als Standard vorausgewählt.</target>
+			</trans-unit>
 			<trans-unit id="googleMapsLibrary" xml:space="preserve">
 				<source>Link to Google Maps API: This setting is for TYPO3 Backend only. Visit your TypoScript-Templates if you want to change the library for Frontend. You only need to fill this field if you want to use an older or beta version.</source>
 				<target>Link zur Google Maps API: Diese Einstellung ist nur für das TYPO3 Backend. Wenn Sie diese Einstellung für das Frontend vornehmen wollen, dann müssen Sie dies in Ihren TypoScript-Templates vornehmen. Füllen Sie dieses Feld nur, wenn Sie eine ältere oder eine der Betaversionen verwenden wollen.</target>
@@ -15,13 +27,13 @@
 				<source>Google Maps Geocode ApiKey: Visit https://console.developers.google.com Create a new project for Google Maps Geocode API and insert here the retrieved Server ApiKey.</source>
 				<target>Google Maps Geocode ApiKey: Besuchen Sie https://console.developers.google.com Erstellen Sie ein neues Projekt vom Typ Google Maps Geocode API und fügen Sie den erhaltenen Server ApiKey hier ein.</target>
 			</trans-unit>
-			<trans-unit id="explicitAllowGoogleMaps" xml:space="preserve">
+			<trans-unit id="explicitAllowMapProviderRequests" xml:space="preserve">
 				<source>Explicit allow Map: While showing Google Maps in frontend the browser sends multiple requests to Google Servers. These requests contains the IP address of the website visitor which is a user internal information. In some countries the user has to explicit allow sending theses information to third party servers.</source>
 				<target>Karte explizit erlauben: Durch das Anzeigen von Google Maps im Frontend werden vom Client per JavaScript Anfragen an Google Server gemacht, um das Kartenmaterial nachzuladen. Durch diese Anfragen erfährt Google die IP-Adresse, die eine benutzerbezogene Information ist. Anfragen mit benutzerbezogenen Daten an Dritte müssen zumindest in Deutschland vom Benutzer explizit genehmigt werden.</target>
 			</trans-unit>
-			<trans-unit id="explicitAllowGoogleMapsBySessionOnly" xml:space="preserve">
-				<source>Allow Google Maps by Session: See explicitAllowGoogleMaps for explanation. Normally we save activation in a Cookie (normally 1 day (TYPO3 default)). So there is no need to activate google maps again after browser restart. If you enable this option we save activation in session and you have to activate google maps again after each browser restart.</source>
-				<target>Aktivierung von Google Maps in Session speichern: Schaut Euch die Erklärung für explicitAllowGoogleMaps an. Normalerweise speichern wird die Information, dass die Google Karten erlaubt wurden in einem Cookie (1 Tag (TYPO3 Standard)). Auf diese Weise müssen Eure Webseitenbesucher die Google Karten nach einem Browser Neustart nicht erneut aktivieren. Mit Aktivierung dieser Option wird die Aktivierung in einer Session gespeichert, die bei Beendigung des Browsers verloren geht. Der Webseitenbenutzer muss die Google Karten erneut aktivieren.</target>
+			<trans-unit id="explicitAllowMapProviderRequestsBySessionOnly" xml:space="preserve">
+				<source>Allow Google Maps by Session: See explicitAllowMapProviderRequests for explanation. Normally we save activation in a Cookie (normally 1 day (TYPO3 default)). So there is no need to activate google maps again after browser restart. If you enable this option we save activation in session and you have to activate google maps again after each browser restart.</source>
+				<target>Aktivierung von Google Maps in Session speichern: Schaut Euch die Erklärung für explicitAllowMapProviderRequests an. Normalerweise speichern wird die Information, dass die Google Karten erlaubt wurden in einem Cookie (1 Tag (TYPO3 Standard)). Auf diese Weise müssen Eure Webseitenbesucher die Google Karten nach einem Browser Neustart nicht erneut aktivieren. Mit Aktivierung dieser Option wird die Aktivierung in einer Session gespeichert, die bei Beendigung des Browsers verloren geht. Der Webseitenbenutzer muss die Google Karten erneut aktivieren.</target>
 			</trans-unit>
 			<trans-unit id="defaultCountry" xml:space="preserve">
 				<source>Default Country: If someone searches for a postal code only, Google will search whole world for that postal code. If you want, you can assign a default country here to reduce that search to that country.</source>

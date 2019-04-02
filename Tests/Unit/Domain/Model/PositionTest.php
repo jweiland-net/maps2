@@ -14,7 +14,6 @@ namespace JWeiland\Maps2\Tests\Unit\Domain\Model;
  * The TYPO3 project - inspiring people to share!
  */
 
-use JWeiland\Maps2\Domain\Model\Location;
 use JWeiland\Maps2\Domain\Model\Position;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
 
@@ -50,40 +49,82 @@ class PositionTest extends UnitTestCase
     /**
      * @test
      */
-    public function getNortheastInitiallyReturnsNull() {
-        $this->assertNull($this->subject->getNortheast());
-    }
-
-    /**
-     * @test
-     */
-    public function setNortheastSetsNortheast() {
-        $instance = new Location();
-        $this->subject->setNortheast($instance);
-
+    public function getLatitudeInitiallyReturnsZero() {
         $this->assertSame(
-            $instance,
-            $this->subject->getNortheast()
+            0.0,
+            $this->subject->getLatitude()
         );
     }
 
     /**
      * @test
      */
-    public function getSouthwestInitiallyReturnsNull() {
-        $this->assertNull($this->subject->getSouthwest());
+    public function setLatitudeSetsLatitude() {
+        $this->subject->setLatitude(1234.56);
+
+        $this->assertSame(
+            1234.56,
+            $this->subject->getLatitude()
+        );
     }
 
     /**
      * @test
      */
-    public function setSouthwestSetsSouthwest() {
-        $instance = new Location();
-        $this->subject->setSouthwest($instance);
+    public function getLongitudeInitiallyReturnsZero() {
+        $this->assertSame(
+            0.0,
+            $this->subject->getLongitude()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function setLongitudeSetsLongitude() {
+        $this->subject->setLongitude(1234.56);
 
         $this->assertSame(
-            $instance,
-            $this->subject->getSouthwest()
+            1234.56,
+            $this->subject->getLongitude()
         );
+    }
+
+    /**
+     * @test
+     */
+    public function getFormattedAddressInitiallyReturnsEmptyString() {
+        $this->assertSame(
+            '',
+            $this->subject->getFormattedAddress()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function setFormattedAddressSetsFormattedAddress() {
+        $this->subject->setFormattedAddress('foo bar');
+
+        $this->assertSame(
+            'foo bar',
+            $this->subject->getFormattedAddress()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function setFormattedAddressWithIntegerResultsInString() {
+        $this->subject->setFormattedAddress(123);
+        $this->assertSame('123', $this->subject->getFormattedAddress());
+    }
+
+    /**
+     * @test
+     */
+    public function setFormattedAddressWithBooleanResultsInString() {
+        $this->subject->setFormattedAddress(TRUE);
+        $this->assertSame('1', $this->subject->getFormattedAddress());
     }
 }

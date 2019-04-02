@@ -257,7 +257,7 @@ class Maps2Registry implements SingletonInterface
                 $position = $options['position'];
             }
 
-            // Makes the new "tx_maps2_uid" field to be visible in TSFE.
+            // Makes the new "tx_maps2_uid" field visible in TSFE.
             ExtensionManagementUtility::addToAllTCAtypes($tableName, $fieldList, $typesList, $position);
         }
     }

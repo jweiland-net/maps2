@@ -50,14 +50,9 @@ class GoogleMapsElementTest extends UnitTestCase
     protected $objectManager;
 
     /**
-     * @var ExtConf|ObjectProphecy
+     * @var ExtConf
      */
     protected $extConf;
-
-    /**
-     * @var HashService|ObjectProphecy
-     */
-    protected $hashService;
 
     /**
      * @var StandaloneView|ObjectProphecy
@@ -92,26 +87,16 @@ class GoogleMapsElementTest extends UnitTestCase
         ];
         $this->objectManager = $this->prophesize(ObjectManager::class);
 
-        $this->extConf = $this->prophesize(ExtConf::class);
-        GeneralUtility::setSingletonInstance(
-            ExtConf::class,
-            $this->extConf->reveal()
-        );
+        $this->extConf = new ExtConf();
+        GeneralUtility::setSingletonInstance(ExtConf::class, $this->extConf);
 
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey'] = 'test@123';
-        $this->hashService = new HashService();
 
         $this->view = $this->prophesize(StandaloneView::class);
-        GeneralUtility::addInstance(
-            StandaloneView::class,
-            $this->view->reveal()
-        );
+        GeneralUtility::addInstance(StandaloneView::class, $this->view->reveal());
 
         $this->pageRenderer = $this->prophesize(PageRenderer::class);
-        GeneralUtility::setSingletonInstance(
-            PageRenderer::class,
-            $this->pageRenderer->reveal()
-        );
+        GeneralUtility::setSingletonInstance(PageRenderer::class, $this->pageRenderer->reveal());
 
         $this->poiCollectionRepository = $this->prophesize(PoiCollectionRepository::class);
         GeneralUtility::setSingletonInstance(
@@ -119,16 +104,9 @@ class GoogleMapsElementTest extends UnitTestCase
             $this->poiCollectionRepository->reveal()
         );
 
-        $this->objectManager->get(ExtConf::class)->shouldBeCalled()->willReturn($this->extConf->reveal());
-        $this->objectManager->get(HashService::class)->shouldBeCalled()->willReturn($this->hashService);
-        $this->objectManager->get(StandaloneView::class)->shouldBeCalled()->willReturn($this->view->reveal());
-        $this->objectManager->get(PageRenderer::class)->shouldBeCalled()->willReturn($this->pageRenderer->reveal());
         $this->objectManager->get(PoiCollectionRepository::class)->shouldBeCalled()->willReturn($this->poiCollectionRepository->reveal());
 
-        GeneralUtility::setSingletonInstance(
-            ObjectManager::class,
-            $this->objectManager->reveal()
-        );
+        GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManager->reveal());
 
         /** @var IconFactory|ObjectProphecy $iconFactoryProphecy */
         $iconFactoryProphecy = $this->prophesize(IconFactory::class);
@@ -136,10 +114,7 @@ class GoogleMapsElementTest extends UnitTestCase
 
         /** @var NodeFactory|ObjectProphecy $nodeFactory */
         $nodeFactory = $this->prophesize(NodeFactory::class);
-        $this->subject = new GoogleMapsElement(
-            $nodeFactory->reveal(),
-            $this->data
-        );
+        $this->subject = new GoogleMapsElement($nodeFactory->reveal(), $this->data);
     }
 
     /**
@@ -152,7 +127,6 @@ class GoogleMapsElementTest extends UnitTestCase
             $this->subject,
             $this->objectManager,
             $this->extConf,
-            $this->hashService,
             $this->view,
             $this->pageRenderer,
             $this->poiCollectionRepository
@@ -176,7 +150,9 @@ class GoogleMapsElementTest extends UnitTestCase
             'hash' => '03134cbb9d4b445f6e0a99d7ed7bf267356efc47',
         ];
         $this->view
-            ->setTemplatePathAndFilename(Argument::containingString('Resources/Private/Templates/Tca/GoogleMaps.html'))
+            ->setTemplatePathAndFilename(
+                Argument::containingString('Resources/Private/Templates/Tca/GoogleMaps.html')
+            )
             ->shouldBeCalled();
         $this->view
             ->assign('config', json_encode($config))
@@ -210,7 +186,9 @@ class GoogleMapsElementTest extends UnitTestCase
             'hash' => '03134cbb9d4b445f6e0a99d7ed7bf267356efc47',
         ];
         $this->view
-            ->setTemplatePathAndFilename(Argument::containingString('Resources/Private/Templates/Tca/GoogleMaps.html'))
+            ->setTemplatePathAndFilename(
+                Argument::containingString('Resources/Private/Templates/Tca/GoogleMaps.html')
+            )
             ->shouldBeCalled();
         $this->view
             ->assign('config', json_encode($config))
@@ -244,7 +222,9 @@ class GoogleMapsElementTest extends UnitTestCase
             'hash' => '03134cbb9d4b445f6e0a99d7ed7bf267356efc47',
         ];
         $this->view
-            ->setTemplatePathAndFilename(Argument::containingString('Resources/Private/Templates/Tca/GoogleMaps.html'))
+            ->setTemplatePathAndFilename(
+                Argument::containingString('Resources/Private/Templates/Tca/GoogleMaps.html')
+            )
             ->shouldBeCalled();
         $this->view
             ->assign('config', json_encode($config))

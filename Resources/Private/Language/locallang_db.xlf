@@ -1,161 +1,176 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <xliff version="1.0">
-  <file source-language="en" datatype="plaintext" original="messages" date="2013-02-07T11:13:04Z" product-name="maps2">
-    <header/>
-    <body>
+	<file source-language="en" datatype="plaintext" original="messages" date="2013-02-07T11:13:04Z" product-name="maps2">
+		<header/>
+		<body>
 
-      <trans-unit id="plugin.maps.title">
-        <source>Google Maps</source>
-      </trans-unit>
-      <trans-unit id="plugin.radius.title">
-        <source>Google Maps: Search Radius</source>
-      </trans-unit>
-      <trans-unit id="plugin.cityMap.title">
-        <source>Google Maps: City Map</source>
-      </trans-unit>
+			<trans-unit id="plugin.maps.title">
+				<source>Maps2: Show map</source>
+			</trans-unit>
+			<trans-unit id="plugin.radius.title">
+				<source>Maps2: Search Radius</source>
+			</trans-unit>
+			<trans-unit id="plugin.cityMap.title">
+				<source>Maps2: City Map</source>
+			</trans-unit>
 
-      <trans-unit id="plugin.maps2.title">
-        <source>Google Maps</source>
-      </trans-unit>
-      <trans-unit id="plugin.maps2.description">
-        <source>Add Google Maps to your website</source>
-      </trans-unit>
+			<trans-unit id="plugin.maps2.title">
+				<source>Maps2: Show map</source>
+			</trans-unit>
+			<trans-unit id="plugin.maps2.description">
+				<source>Add a world map to your website</source>
+			</trans-unit>
 
-      <trans-unit id="tx_maps2_domain_model_poi" xml:space="preserve">
-        <source>Map Position</source>
-      </trans-unit>
-      <trans-unit id="tx_maps2_domain_model_poi.latitude" xml:space="preserve">
-        <source>Latitude</source>
-      </trans-unit>
-      <trans-unit id="tx_maps2_domain_model_poi.longitude" xml:space="preserve">
-        <source>Longitude</source>
-      </trans-unit>
-      <trans-unit id="tx_maps2_domain_model_poi.posIndex" xml:space="preserve">
-        <source>Position Index</source>
-      </trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poi" xml:space="preserve">
+				<source>Map Position</source>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poi.latitude" xml:space="preserve">
+				<source>Latitude</source>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poi.longitude" xml:space="preserve">
+				<source>Longitude</source>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poi.posIndex" xml:space="preserve">
+				<source>Position Index</source>
+			</trans-unit>
 
-      <trans-unit id="tx_maps2_domain_model_poicollection" xml:space="preserve">
-        <source>Marking</source>
-      </trans-unit>
-      <trans-unit id="tx_maps2_domain_model_poicollection.collectionType" xml:space="preserve">
-        <source>Type</source>
-      </trans-unit>
-      <trans-unit id="tx_maps2_domain_model_poicollection.collectionType.empty" xml:space="preserve">
-        <source>Please choose a type</source>
-      </trans-unit>
-      <trans-unit id="tx_maps2_domain_model_poicollection.collectionType.point" xml:space="preserve">
-        <source>Point of Interest</source>
-      </trans-unit>
-      <trans-unit id="tx_maps2_domain_model_poicollection.collectionType.area" xml:space="preserve">
-        <source>Area</source>
-      </trans-unit>
-      <trans-unit id="tx_maps2_domain_model_poicollection.collectionType.route" xml:space="preserve">
-        <source>Route</source>
-      </trans-unit>
-      <trans-unit id="tx_maps2_domain_model_poicollection.collectionType.radius" xml:space="preserve">
-        <source>Radius</source>
-      </trans-unit>
-      <trans-unit id="tx_maps2_domain_model_poicollection.title" xml:space="preserve">
-        <source>Title</source>
-      </trans-unit>
-      <trans-unit id="tx_maps2_domain_model_poicollection.map" xml:space="preserve">
-        <source>Map</source>
-      </trans-unit>
-      <trans-unit id="tx_maps2_domain_model_poicollection.address" xml:space="preserve" approved="yes">
-        <source>address</source>
-      </trans-unit>
-      <trans-unit id="tx_maps2_domain_model_poicollection.configuration_map" xml:space="preserve" approved="yes">
-        <source>Configure position on Google Maps</source>
-      </trans-unit>
-      <trans-unit id="tx_maps2_domain_model_poicollection.latitude" xml:space="preserve">
-        <source>Latitude for map position</source>
-      </trans-unit>
-      <trans-unit id="tx_maps2_domain_model_poicollection.longitude" xml:space="preserve">
-        <source>Longitude for map position</source>
-      </trans-unit>
-      <trans-unit id="tx_maps2_domain_model_poicollection.radius" xml:space="preserve">
-        <source>Radius</source>
-      </trans-unit>
-      <trans-unit id="tx_maps2_domain_model_poicollection.address.useSearchField" xml:space="preserve" approved="yes">
-        <source>Please use search field in Google Maps, to fill this field</source>
-      </trans-unit>
-      <trans-unit id="tx_maps2_domain_model_poicollection.style" xml:space="preserve">
-        <source>Style</source>
-      </trans-unit>
-      <trans-unit id="tx_maps2_domain_model_poicollection.stroke_color" xml:space="preserve">
-        <source>Color (f.e. #FF0000)</source>
-      </trans-unit>
-      <trans-unit id="tx_maps2_domain_model_poicollection.stroke_opacity" xml:space="preserve">
-        <source>Opacity (f.e. 0.8)</source>
-      </trans-unit>
-      <trans-unit id="tx_maps2_domain_model_poicollection.stroke_weight" xml:space="preserve">
-        <source>Weight (f.e. 2)</source>
-      </trans-unit>
-      <trans-unit id="tx_maps2_domain_model_poicollection.fill_color" xml:space="preserve">
-        <source>Color (f.e. #FF0000)</source>
-      </trans-unit>
-      <trans-unit id="tx_maps2_domain_model_poicollection.fill_opacity" xml:space="preserve">
-        <source>Opacity (f.e. 0.35)</source>
-      </trans-unit>
-      <trans-unit id="tx_maps2_domain_model_poicollection.info_window_address" xml:space="preserve">
-        <source>Info Window Content</source>
-      </trans-unit>
-      <trans-unit id="tx_maps2_domain_model_poicollection.info_window_content" xml:space="preserve">
-        <source>Text within info window</source>
-      </trans-unit>
-      <trans-unit id="tx_maps2_domain_model_poicollection.info_window_images" xml:space="preserve">
-        <source>Images within info window</source>
-      </trans-unit>
-      <trans-unit id="tx_maps2_domain_model_poicollection.marker_icons" xml:space="preserve">
-        <source>Marker icon</source>
-      </trans-unit>
-      <trans-unit id="tx_maps2_domain_model_poicollection.marker_icon_width" xml:space="preserve">
-        <source>Width</source>
-      </trans-unit>
-      <trans-unit id="tx_maps2_domain_model_poicollection.marker_icon_height" xml:space="preserve">
-        <source>Height</source>
-      </trans-unit>
-      <trans-unit id="tx_maps2_domain_model_poicollection.marker_icon_anchor_pos_x" xml:space="preserve">
-        <source>Horizontal pixel X</source>
-      </trans-unit>
-      <trans-unit id="tx_maps2_domain_model_poicollection.marker_icon_anchor_pos_y" xml:space="preserve">
-        <source>Vertical pixel Y</source>
-      </trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poicollection" xml:space="preserve">
+				<source>Marking</source>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poicollection.mapProvider" xml:space="preserve">
+				<source>Choose a preferred Map Provider to render the map for this record. This option is only valid for the TYPO3 backend and will reload the form if you switch to another value.</source>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poicollection.mapProvider.gm" xml:space="preserve">
+				<source>Google Maps</source>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poicollection.mapProvider.osm" xml:space="preserve">
+				<source>Open Street Map</source>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poicollection.collectionType" xml:space="preserve">
+				<source>Type</source>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poicollection.collectionType.empty" xml:space="preserve">
+				<source>Please choose a type</source>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poicollection.collectionType.point" xml:space="preserve">
+				<source>Point of Interest</source>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poicollection.collectionType.area" xml:space="preserve">
+				<source>Area</source>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poicollection.collectionType.route" xml:space="preserve">
+				<source>Route</source>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poicollection.collectionType.radius" xml:space="preserve">
+				<source>Radius</source>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poicollection.title" xml:space="preserve">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poicollection.map" xml:space="preserve">
+				<source>Map</source>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poicollection.address" xml:space="preserve" approved="yes">
+				<source>address</source>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poicollection.configuration_map" xml:space="preserve" approved="yes">
+				<source>Configure position on Map</source>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poicollection.latitude" xml:space="preserve">
+				<source>Latitude for map position</source>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poicollection.longitude" xml:space="preserve">
+				<source>Longitude for map position</source>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poicollection.radius" xml:space="preserve">
+				<source>Radius</source>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poicollection.address.useSearchField" xml:space="preserve" approved="yes">
+				<source>Please use search field in Google Maps, to fill this field</source>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poicollection.style" xml:space="preserve">
+				<source>Style</source>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poicollection.stroke_color" xml:space="preserve">
+				<source>Color</source>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poicollection.stroke_opacity" xml:space="preserve">
+				<source>Opacity</source>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poicollection.stroke_weight" xml:space="preserve">
+				<source>Weight</source>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poicollection.fill_color" xml:space="preserve">
+				<source>Color</source>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poicollection.fill_opacity" xml:space="preserve">
+				<source>Opacity</source>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poicollection.info_window_address" xml:space="preserve">
+				<source>Info Window Content</source>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poicollection.info_window_content" xml:space="preserve">
+				<source>Text within info window</source>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poicollection.info_window_images" xml:space="preserve">
+				<source>Images within info window</source>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poicollection.marker_icons" xml:space="preserve">
+				<source>Marker icon</source>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poicollection.marker_icon_width" xml:space="preserve">
+				<source>Width</source>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poicollection.marker_icon_height" xml:space="preserve">
+				<source>Height</source>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poicollection.marker_icon_anchor_pos_x" xml:space="preserve">
+				<source>Horizontal pixel X</source>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poicollection.marker_icon_anchor_pos_y" xml:space="preserve">
+				<source>Vertical pixel Y</source>
+			</trans-unit>
 
-      <trans-unit id="tx_maps2_uid" xml:space="preserve">
-        <source>Connect this record to Google Maps record</source>
-      </trans-unit>
+			<trans-unit id="tx_maps2_uid" xml:space="preserve">
+				<source>Connect this record to Google Maps record</source>
+			</trans-unit>
 
-      <trans-unit id="tab.maps2" xml:space="preserve">
-        <source>Google Maps (maps2)</source>
-      </trans-unit>
-      <trans-unit id="palette.language_hidden" xml:space="preserve">
-        <source>Visibility and Language</source>
-      </trans-unit>
-      <trans-unit id="palette.latitude_longitude" xml:space="preserve">
-        <source>Latitude and Longitude</source>
-      </trans-unit>
-      <trans-unit id="palette.marker_icon_size" xml:space="preserve">
-        <source>Set size of marker icon in px</source>
-      </trans-unit>
-      <trans-unit id="palette.marker_icon_pos" xml:space="preserve">
-        <source>XY coordinate of the marker icon whose pixel will show the exact position on the map</source>
-      </trans-unit>
-      <trans-unit id="sys_category.maps2_marker_icons" xml:space="preserve">
-        <source>Marker icon for Google Maps (maps2)</source>
-      </trans-unit>
-      <trans-unit id="sys_category.maps2_marker_icon_width" xml:space="preserve">
-        <source>Define a default width for Marker Icons in pixel. You can override this value individually in PoiCollection records.</source>
-      </trans-unit>
-      <trans-unit id="sys_category.maps2_marker_icon_height" xml:space="preserve">
-        <source>Define a default height for Marker Icons in pixel. You can override this value individually in PoiCollection records.</source>
-      </trans-unit>
-      <trans-unit id="sys_category.maps2_marker_icon_anchor_pos_x" xml:space="preserve">
-        <source>Which horizontal pixel on the image points the position on the Google Maps. You can override this value individually in PoiCollection records.</source>
-      </trans-unit>
-      <trans-unit id="sys_category.maps2_marker_icon_anchor_pos_y" xml:space="preserve">
-        <source>Which vertical pixel on the image points the position on the Google Maps. You can override this value individually and PoiCollection records.</source>
-      </trans-unit>
-    </body>
-  </file>
+			<trans-unit id="tab.maps2" xml:space="preserve">
+				<source>Google Maps (maps2)</source>
+			</trans-unit>
+			<trans-unit id="palette.language_hidden" xml:space="preserve">
+				<source>Visibility and Language</source>
+			</trans-unit>
+			<trans-unit id="palette.latitude_longitude" xml:space="preserve">
+				<source>Latitude and Longitude</source>
+			</trans-unit>
+			<trans-unit id="palette.marker_icon_size" xml:space="preserve">
+				<source>Set size of marker icon in px</source>
+			</trans-unit>
+			<trans-unit id="palette.marker_icon_pos" xml:space="preserve">
+				<source>XY coordinate of the marker icon whose pixel will show the exact position on the map</source>
+			</trans-unit>
+			<trans-unit id="palette.stroke" xml:space="preserve">
+				<source>Stroke settings</source>
+			</trans-unit>
+			<trans-unit id="palette.fill" xml:space="preserve">
+				<source>Fill settings</source>
+			</trans-unit>
+			<trans-unit id="sys_category.maps2_marker_icons" xml:space="preserve">
+				<source>Marker icon for Google Maps (maps2)</source>
+			</trans-unit>
+			<trans-unit id="sys_category.maps2_marker_icon_width" xml:space="preserve">
+				<source>Define a default width for Marker Icons in pixel. You can override this value individually in PoiCollection records.</source>
+			</trans-unit>
+			<trans-unit id="sys_category.maps2_marker_icon_height" xml:space="preserve">
+				<source>Define a default height for Marker Icons in pixel. You can override this value individually in PoiCollection records.</source>
+			</trans-unit>
+			<trans-unit id="sys_category.maps2_marker_icon_anchor_pos_x" xml:space="preserve">
+				<source>Which horizontal pixel on the image points the position on the Google Maps. You can override this value individually in PoiCollection records.</source>
+			</trans-unit>
+			<trans-unit id="sys_category.maps2_marker_icon_anchor_pos_y" xml:space="preserve">
+				<source>Which vertical pixel on the image points the position on the Google Maps. You can override this value individually and PoiCollection records.</source>
+			</trans-unit>
+		</body>
+	</file>
 </xliff>

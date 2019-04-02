@@ -17,7 +17,9 @@ namespace JWeiland\Maps2\Form\Element;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
+use JWeiland\Maps2\Helper\MessageHelper;
 use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
+use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -33,34 +35,39 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
 class GoogleMapsElement extends AbstractFormElement
 {
     /**
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
     /**
-     * @var \JWeiland\Maps2\Configuration\ExtConf
+     * @var ExtConf
      */
     protected $extConf;
 
     /**
-     * @var \TYPO3\CMS\Extbase\Security\Cryptography\HashService
+     * @var HashService
      */
     protected $hashService;
 
     /**
-     * @var \TYPO3\CMS\Fluid\View\StandaloneView
+     * @var StandaloneView
      */
     protected $view;
 
     /**
-     * @var \TYPO3\CMS\Core\Page\PageRenderer
+     * @var PageRenderer
      */
     protected $pageRenderer;
 
     /**
-     * @var \JWeiland\Maps2\Domain\Repository\PoiCollectionRepository
+     * @var PoiCollectionRepository
      */
     protected $poiCollectionRepository;
+
+    /**
+     * @var MessageHelper
+     */
+    protected $messageHelper;
 
     /**
      * initializes this class
@@ -68,11 +75,36 @@ class GoogleMapsElement extends AbstractFormElement
     public function init()
     {
         $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $this->extConf = $this->objectManager->get(ExtConf::class);
-        $this->hashService = $this->objectManager->get(HashService::class);
-        $this->view = $this->objectManager->get(StandaloneView::class);
-        $this->pageRenderer = $this->objectManager->get(PageRenderer::class);
+        $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
+        $this->hashService = GeneralUtility::makeInstance(HashService::class);
+        $this->view = GeneralUtility::makeInstance(StandaloneView::class);
+        $this->pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
         $this->poiCollectionRepository = $this->objectManager->get(PoiCollectionRepository::class);
+        $this->messageHelper = GeneralUtility::makeInstance(MessageHelper::class);
+
+        $this->checkApiKeys();
+    }
+
+    /**
+     * Check configured API Keys
+     */
+    protected function checkApiKeys()
+    {
+        if (empty($this->extConf->getGoogleMapsJavaScriptApiKey())) {
+            $this->messageHelper->addFlashMessage(
+                'You have forgotten to set Google Maps JavaScript ApiKey in Extensionmanager.',
+                'Missing JS API Key',
+                FlashMessage::ERROR
+            );
+        }
+
+        if (empty($this->extConf->getGoogleMapsGeocodeApiKey())) {
+            $this->messageHelper->addFlashMessage(
+                'You have forgotten to set Google Maps Geocode ApiKey in Extensionmanager.',
+                'Missing GeoCode API Key',
+                FlashMessage::ERROR
+            );
+        }
     }
 
     /**

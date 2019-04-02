@@ -1,5 +1,7 @@
+.. include:: ../../../../Includes.rst.txt
+
 Widget / EditPoiViewHelper
---------------------------
+==========================
 
 If you have your own extension you can use this widget to create a map
 with one Marker which a user can move via drag 'n drop or click on the map.
@@ -13,7 +15,7 @@ can catch in your extension with GeneralUtility::_POST
 **Type:** Basic
 
 General properties
-^^^^^^^^^^^^^^^^^^
+------------------
 
 .. t3-field-list-table::
  :header-rows: 1
@@ -32,10 +34,10 @@ General properties
      :Default value:
 
 Examples
-^^^^^^^^
+--------
 
 Basic example
-"""""""""""""
+~~~~~~~~~~~~~
 
 Code: ::
 

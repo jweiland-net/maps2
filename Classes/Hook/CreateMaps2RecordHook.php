@@ -14,10 +14,12 @@ namespace JWeiland\Maps2\Hook;
  *
  * The TYPO3 project - inspiring people to share!
  */
-use JWeiland\Maps2\Domain\Model\RadiusResult;
+
+use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Helper\AddressHelper;
 use JWeiland\Maps2\Helper\StoragePidHelper;
-use JWeiland\Maps2\Service\GoogleMapsService;
+use JWeiland\Maps2\Service\GeoCodeService;
+use JWeiland\Maps2\Service\MapService;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Database\ConnectionPool;
@@ -40,9 +42,9 @@ class CreateMaps2RecordHook
     protected $objectManager;
 
     /**
-     * @var GoogleMapsService
+     * @var GeoCodeService
      */
-    protected $googleMapsService;
+    protected $geoCodeService;
 
     /**
      * @var FlashMessageService
@@ -65,9 +67,10 @@ class CreateMaps2RecordHook
     public function __construct()
     {
         $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $this->googleMapsService = $this->objectManager->get(GoogleMapsService::class);
+        $this->geoCodeService = $this->objectManager->get(GeoCodeService::class);
         $this->flashMessageService = $this->objectManager->get(FlashMessageService::class);
-        $this->maps2RegistryCache = $this->objectManager->get(CacheManager::class)
+        $this->maps2RegistryCache = $this->objectManager
+            ->get(CacheManager::class)
             ->getCache('maps2_registry');
         $this->columnRegistry = $this->maps2RegistryCache->get('fields') ?: [];
     }
@@ -113,7 +116,7 @@ class CreateMaps2RecordHook
                         if ($this->createNewMapsRecord($foreignLocationRecord, $foreignTableName, $foreignColumnName, $options)) {
                             $this->synchronizeColumnsFromForeignRecordWithPoiCollection($foreignLocationRecord, $foreignTableName, $foreignColumnName, $options);
                             $this->addMessage(
-                                'While saving this record, we have automatically inserted a new maps2 record, too',
+                                'While creating this record, we have automatically inserted a new maps2 record, too',
                                 'Maps2 record creation successful',
                                 FlashMessage::OK
                             );
@@ -121,7 +124,7 @@ class CreateMaps2RecordHook
                     } else {
                         $this->synchronizeColumnsFromForeignRecordWithPoiCollection($foreignLocationRecord, $foreignTableName, $foreignColumnName, $options);
                         $this->addMessage(
-                            'While saving this record, we have automatically updated the related maps2 record, too',
+                            'While updating this record, we have automatically updated the related maps2 record, too',
                             'Maps2 record update successful',
                             FlashMessage::OK
                         );
@@ -190,10 +193,11 @@ class CreateMaps2RecordHook
         $addressHelper = GeneralUtility::makeInstance(AddressHelper::class);
         $address = $addressHelper->getAddress($foreignLocationRecord, $options);
 
-        $radiusResult = $this->googleMapsService->getFirstFoundPositionByAddress($address);
-        if ($radiusResult instanceof RadiusResult) {
-            $this->googleMapsService->assignPoiCollectionToForeignRecord(
-                $this->googleMapsService->createNewPoiCollection($defaultStoragePid, $radiusResult),
+        $position = $this->geoCodeService->getFirstFoundPositionByAddress($address);
+        if ($position instanceof Position) {
+            $mapService = GeneralUtility::makeInstance(MapService::class);
+            $mapService->assignPoiCollectionToForeignRecord(
+                $mapService->createNewPoiCollection($defaultStoragePid, $position),
                 $foreignLocationRecord,
                 $foreignTableName,
                 $foreignColumnName
@@ -201,8 +205,8 @@ class CreateMaps2RecordHook
             return true;
         }
         $this->addMessage(
-            'While saving this record, we tried to automatically create a new maps2 record, but Google GeoCode API can not find your address: ' . $address,
-            'Google has not found your address',
+            'While saving this record, we tried to automatically create a new maps2 record, but Map Providers GeoCode API can not find your address: ' . $address,
+            'Map Provider has not found your address',
             FlashMessage::ERROR
         );
         return false;

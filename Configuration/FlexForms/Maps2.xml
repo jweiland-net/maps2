@@ -3,7 +3,7 @@
 		<langDisable>1</langDisable>
 	</meta>
 	<sheets>
-		<sDEFAULT>
+		<sDEF>
 			<ROOT>
 				<TCEforms>
 					<sheetTitle>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:sheetGeneral</sheetTitle>
@@ -74,7 +74,7 @@
 					</settings.mapHeight>
 				</el>
 			</ROOT>
-		</sDEFAULT>
+		</sDEF>
 		<sMapOptions>
 			<ROOT>
 				<TCEforms>
@@ -104,6 +104,34 @@
 							</config>
 						</TCEforms>
 					</settings.zoom>
+					<settings.zoomControl>
+						<TCEforms>
+							<label>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:zoomControl</label>
+							<config>
+								<type>check</type>
+								<default>1</default>
+							</config>
+						</TCEforms>
+					</settings.zoomControl>
+					<settings.fullScreenControl>
+						<TCEforms>
+							<label>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:fullScreenControl</label>
+							<config>
+								<type>check</type>
+								<default>1</default>
+							</config>
+						</TCEforms>
+					</settings.fullScreenControl>
+				</el>
+			</ROOT>
+		</sMapOptions>
+		<sGoogleMapsOptions>
+			<ROOT>
+				<TCEforms>
+					<sheetTitle>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:sheetGoogleMapsOptions</sheetTitle>
+				</TCEforms>
+				<type>array</type>
+				<el>
 					<settings.mapTypeId>
 						<TCEforms>
 							<label>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:mapTypeId</label>
@@ -131,15 +159,6 @@
 							</config>
 						</TCEforms>
 					</settings.mapTypeId>
-					<settings.zoomControl>
-						<TCEforms>
-							<label>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:zoomControl</label>
-							<config>
-								<type>check</type>
-								<default>1</default>
-							</config>
-						</TCEforms>
-					</settings.zoomControl>
 					<settings.mapTypeControl>
 						<TCEforms>
 							<label>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:mapTypeControl</label>
@@ -167,15 +186,6 @@
 							</config>
 						</TCEforms>
 					</settings.streetViewControl>
-					<settings.fullScreenControl>
-						<TCEforms>
-							<label>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:fullScreenControl</label>
-							<config>
-								<type>check</type>
-								<default>1</default>
-							</config>
-						</TCEforms>
-					</settings.fullScreenControl>
 					<settings.activateScrollWheel>
 						<TCEforms>
 							<label>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:activateScrollWheel</label>
@@ -198,6 +208,36 @@
 					</settings.styles>
 				</el>
 			</ROOT>
-		</sMapOptions>
+		</sGoogleMapsOptions>
+		<sOpenStreetMapOptions>
+			<ROOT>
+				<TCEforms>
+					<sheetTitle>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:sheetOpenStreetMapOptions</sheetTitle>
+				</TCEforms>
+				<type>array</type>
+				<el>
+					<settings.mapTile>
+						<TCEforms>
+							<label>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:mapTile</label>
+							<config>
+								<type>input</type>
+								<size>30</size>
+								<eval>trim</eval>
+							</config>
+						</TCEforms>
+					</settings.mapTile>
+					<settings.mapTileAttribution>
+						<TCEforms>
+							<label>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:mapTileAttribution</label>
+							<config>
+								<type>input</type>
+								<size>30</size>
+								<eval>trim</eval>
+							</config>
+						</TCEforms>
+					</settings.mapTileAttribution>
+				</el>
+			</ROOT>
+		</sOpenStreetMapOptions>
 	</sheets>
 </T3DataStructure>

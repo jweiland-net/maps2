@@ -1,13 +1,7 @@
-# cat=basic; type=wrap; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:googleMapsLibrary
-googleMapsLibrary = https://maps.googleapis.com/maps/api/js?key=|&libraries=places
-# cat=basic; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:googleMapsApiKey
-googleMapsJavaScriptApiKey =
-# cat=basic; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:googleGeocodeApiKey
-googleMapsGeocodeApiKey =
-# cat=basic; type=boolean; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:explicitAllowGoogleMaps
-explicitAllowGoogleMaps = 0
-# cat=basic; type=boolean; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:explicitAllowGoogleMapsBySessionOnly
-explicitAllowGoogleMapsBySessionOnly = 0
+# cat=basic; type=options[LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:mapProvider.both=both,Google=gm,Open Street Map=osm]; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:mapProvider
+mapProvider = both
+# cat=basic; type=options[Google=gm,OpenStreetMap=osm]; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:defaultMapProvider
+defaultMapProvider = gm
 # cat=basic; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:defaultCountry
 defaultCountry =
 # cat=basic; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:defaultLatitude
@@ -16,10 +10,22 @@ defaultLatitude =
 defaultLongitude =
 # cat=basic; type=int+; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:defaultRadius
 defaultRadius = 250
+# cat=basic; type=boolean; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:explicitAllowMapProviderRequests
+explicitAllowMapProviderRequests = 0
+# cat=basic; type=boolean; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:explicitAllowMapProviderRequestsBySessionOnly
+explicitAllowMapProviderRequestsBySessionOnly = 0
 # cat=basic; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:infoWindowContentTemplatePath
 infoWindowContentTemplatePath = EXT:maps2/Resources/Private/Templates/InfoWindowContent.html
 # cat=basic; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:allowMapTemplatePath
 allowMapTemplatePath = EXT:maps2/Resources/Private/Templates/AllowMapForm.html
+
+# cat=gm; type=wrap; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:googleMapsLibrary
+googleMapsLibrary = https://maps.googleapis.com/maps/api/js?key=|&libraries=places
+# cat=gm; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:googleMapsApiKey
+googleMapsJavaScriptApiKey =
+# cat=gm; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:googleGeocodeApiKey
+googleMapsGeocodeApiKey =
+
 # cat=design/color; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:strokeColor
 strokeColor = #FF0000
 # cat=design/color; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:strokeOpacity

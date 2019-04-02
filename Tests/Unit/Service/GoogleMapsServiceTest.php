@@ -15,22 +15,20 @@ namespace JWeiland\Maps2\Tests\Unit\Service;
  */
 
 use Doctrine\DBAL\Driver\Statement;
+use JWeiland\Maps2\Client\ClientInterface;
 use JWeiland\Maps2\Client\GoogleMapsClient;
-use JWeiland\Maps2\Client\Request\GeocodeRequest;
+use JWeiland\Maps2\Client\Request\GoogleMaps\GeocodeRequest;
+use JWeiland\Maps2\Client\Request\RequestFactory;
 use JWeiland\Maps2\Configuration\ExtConf;
-use JWeiland\Maps2\Domain\Model\Location;
-use JWeiland\Maps2\Domain\Model\RadiusResult;
+use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Helper\MessageHelper;
-use JWeiland\Maps2\Service\GoogleMapsService;
+use JWeiland\Maps2\Mapper\GoogleMapsMapper;
+use JWeiland\Maps2\Mapper\MapperFactory;
+use JWeiland\Maps2\Service\GeoCodeService;
 use JWeiland\Maps2\Tests\Unit\AbstractUnitTestCase;
-use JWeiland\Maps2\Utility\DataMapper;
-use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
-use TYPO3\CMS\Core\Messaging\FlashMessage;
-use TYPO3\CMS\Core\Messaging\FlashMessageQueue;
-use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
@@ -43,47 +41,12 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
 class GoogleMapsServiceTest extends AbstractUnitTestCase
 {
     /**
-     * @var ExtConf
-     */
-    protected $extConf;
-
-    /**
-     * @var ObjectManager|ObjectProphecy
-     */
-    protected $objectManagerProphecy;
-
-    /**
-     * @var StandaloneView|ObjectProphecy
-     */
-    protected $viewProphecy;
-
-    /**
-     * @var UriBuilder|ObjectProphecy
-     */
-    protected $uriBuilderProphecy;
-
-    /**
-     * @var GoogleMapsClient|ObjectProphecy
+     * @var ClientInterface|ObjectProphecy
      */
     protected $clientProphecy;
 
     /**
-     * @var GeocodeRequest|ObjectProphecy
-     */
-    protected $geocodeRequestProphecy;
-
-    /**
-     * @var DataMapper|ObjectProphecy
-     */
-    protected $dataMapperProphecy;
-
-    /**
-     * @var MessageHelper|ObjectProphecy
-     */
-    protected $messageHelperProphecy;
-
-    /**
-     * @var GoogleMapsService
+     * @var GeoCodeService
      */
     protected $subject;
 
@@ -93,20 +56,9 @@ class GoogleMapsServiceTest extends AbstractUnitTestCase
      */
     protected function setUp()
     {
-        $this->extConf = new ExtConf();
-        $this->extConf->setAllowMapTemplatePath('typo3conf/ext/maps2/Resources/Private/Templates/AllowMapForm.html');
-        $this->objectManagerProphecy = $this->prophesize(ObjectManager::class);
-        $this->viewProphecy = $this->prophesize(StandaloneView::class);
-        $this->uriBuilderProphecy = $this->prophesize(UriBuilder::class);
         $this->clientProphecy = $this->prophesize(GoogleMapsClient::class);
-        $this->geocodeRequestProphecy = $this->prophesize(GeocodeRequest::class);
-        $this->dataMapperProphecy = $this->prophesize(DataMapper::class);
-        $this->messageHelperProphecy = $this->prophesize(MessageHelper::class);
 
-        $this->subject = new GoogleMapsService();
-        $this->subject->injectExtConf($this->extConf);
-        $this->subject->injectObjectManager($this->objectManagerProphecy->reveal());
-        $this->subject->injectMessageHelper($this->messageHelperProphecy->reveal());
+        $this->subject = new GeoCodeService($this->clientProphecy->reveal());
     }
 
     /**
@@ -115,57 +67,41 @@ class GoogleMapsServiceTest extends AbstractUnitTestCase
      */
     protected function tearDown()
     {
-        unset($this->subject);
+        unset(
+            $this->subject,
+            $this->client
+        );
         parent::tearDown();
     }
 
     /**
      * @test
+     * @throws \Exception
      */
-    public function showAllowMapFormAssignsSettingsAndRequestUriToView()
+    public function getPositionsByAddressWithEmptyAddressWillReturnEmptyObjectStorage()
     {
-        $arguments = [
-            'tx_maps2_maps2' => [
-                'googleRequestsAllowedForMaps2' => 1
-            ]
-        ];
+        $objectStorage = new ObjectStorage();
+        GeneralUtility::addInstance(ObjectStorage::class, $objectStorage);
 
-        $this->viewProphecy->setTemplatePathAndFilename(Argument::any())->shouldBeCalled();
-        $this->viewProphecy->assign('settings', [])->shouldBeCalled();
-        $this->viewProphecy->assign('requestUri', 'MyCoolRequestUri')->shouldBeCalled();
-        $this->viewProphecy->render()->shouldBeCalled()->willReturn('');
+        $this->assertSame(
+            $objectStorage,
+            $this->subject->getPositionsByAddress('')
+        );
+    }
 
-        $this->uriBuilderProphecy
-            ->reset()
-            ->shouldBeCalled()
-            ->willReturn($this->uriBuilderProphecy->reveal());
-        $this->uriBuilderProphecy
-            ->setAddQueryString(true)
-            ->shouldBeCalled()
-            ->willReturn($this->uriBuilderProphecy->reveal());
-        $this->uriBuilderProphecy
-            ->setArguments($arguments)
-            ->shouldBeCalled()
-            ->willReturn($this->uriBuilderProphecy->reveal());
-        $this->uriBuilderProphecy
-            ->setArgumentsToBeExcludedFromQueryString(['cHash'])
-            ->shouldBeCalled()
-            ->willReturn($this->uriBuilderProphecy->reveal());
-        $this->uriBuilderProphecy
-            ->build()
-            ->shouldBeCalled()
-            ->willReturn('MyCoolRequestUri');
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function getPositionsByAddressWithAddressFilledWithSpacesWillReturnEmptyObjectStorage()
+    {
+        $objectStorage = new ObjectStorage();
+        GeneralUtility::addInstance(ObjectStorage::class, $objectStorage);
 
-        $this->objectManagerProphecy
-            ->get(StandaloneView::class)
-            ->shouldBeCalled()
-            ->willReturn($this->viewProphecy->reveal());
-        $this->objectManagerProphecy
-            ->get(UriBuilder::class)
-            ->shouldBeCalled()
-            ->willReturn($this->uriBuilderProphecy->reveal());
-
-        $this->subject->showAllowMapForm();
+        $this->assertSame(
+            $objectStorage,
+            $this->subject->getPositionsByAddress('    ')
+        );
     }
 
     /**
@@ -174,32 +110,30 @@ class GoogleMapsServiceTest extends AbstractUnitTestCase
      */
     public function getPositionsByAddressWillReturnEmptyObjectStorage()
     {
-        $emptyObjectStorage = new ObjectStorage();
+        $objectStorage = new ObjectStorage();
+        GeneralUtility::addInstance(ObjectStorage::class, $objectStorage);
 
-        $this->geocodeRequestProphecy
-            ->setAddress('My private address')
+        /** @var GeocodeRequest|ObjectProphecy $geocodeRequestProphecy */
+        $geocodeRequestProphecy = $this->prophesize(GeocodeRequest::class);
+        $geocodeRequestProphecy
+            ->addParameter('address', 'My private address')
             ->shouldBeCalled();
 
+        /** @var RequestFactory|ObjectProphecy $requestFactoryProphecy */
+        $requestFactoryProphecy = $this->prophesize(RequestFactory::class);
+        $requestFactoryProphecy
+            ->create('GeocodeRequest')
+            ->shouldBeCalled()
+            ->willReturn($geocodeRequestProphecy->reveal());
+        GeneralUtility::addInstance(RequestFactory::class, $requestFactoryProphecy->reveal());
+
         $this->clientProphecy
-            ->processRequest($this->geocodeRequestProphecy->reveal())
+            ->processRequest($geocodeRequestProphecy->reveal())
             ->shouldBeCalled()
             ->willReturn([]);
 
-        $this->objectManagerProphecy
-            ->get(ObjectStorage::class)
-            ->shouldBeCalled()
-            ->willReturn($emptyObjectStorage);
-        $this->objectManagerProphecy
-            ->get(GoogleMapsClient::class)
-            ->shouldBeCalled()
-            ->willReturn($this->clientProphecy->reveal());
-        $this->objectManagerProphecy
-            ->get(GeocodeRequest::class)
-            ->shouldBeCalled()
-            ->willReturn($this->geocodeRequestProphecy->reveal());
-
         $this->assertSame(
-            $emptyObjectStorage,
+            $objectStorage,
             $this->subject->getPositionsByAddress('My private address')
         );
     }
@@ -210,11 +144,8 @@ class GoogleMapsServiceTest extends AbstractUnitTestCase
      */
     public function getPositionsByAddressWillReturnFilledObjectStorage()
     {
-        $position = new RadiusResult();
-        $position->setFormattedAddress('My street 123, 12345 somewhere');
-
         $positions = new ObjectStorage();
-        $positions->attach($position);
+        GeneralUtility::addInstance(ObjectStorage::class, $positions);
 
         $response = [
             'results' => [
@@ -224,39 +155,37 @@ class GoogleMapsServiceTest extends AbstractUnitTestCase
             ]
         ];
 
-        $this->geocodeRequestProphecy
-            ->setAddress('My private address')
+        /** @var GeocodeRequest|ObjectProphecy $geocodeRequestProphecy */
+        $geocodeRequestProphecy = $this->prophesize(GeocodeRequest::class);
+        $geocodeRequestProphecy
+            ->addParameter('address', 'My private address')
             ->shouldBeCalled();
 
+        /** @var RequestFactory|ObjectProphecy $requestFactoryProphecy */
+        $requestFactoryProphecy = $this->prophesize(RequestFactory::class);
+        $requestFactoryProphecy
+            ->create('GeocodeRequest')
+            ->shouldBeCalled()
+            ->willReturn($geocodeRequestProphecy->reveal());
+        GeneralUtility::addInstance(RequestFactory::class, $requestFactoryProphecy->reveal());
+
         $this->clientProphecy
-            ->processRequest($this->geocodeRequestProphecy->reveal())
+            ->processRequest($geocodeRequestProphecy->reveal())
             ->shouldBeCalled()
             ->willReturn($response);
 
-        $this->dataMapperProphecy
-            ->mapObjectStorage(RadiusResult::class, $response['results'])
-            ->shouldBeCalled()
-            ->willReturn($positions);
+        $googleMapsMapper = new GoogleMapsMapper();
 
-        $this->objectManagerProphecy
-            ->get(ObjectStorage::class)
+        /** @var MapperFactory|ObjectProphecy $mapperFactoryProphecy */
+        $mapperFactoryProphecy = $this->prophesize(MapperFactory::class);
+        $mapperFactoryProphecy
+            ->create()
             ->shouldBeCalled()
-            ->willReturn(new ObjectStorage());
-        $this->objectManagerProphecy
-            ->get(GoogleMapsClient::class)
-            ->shouldBeCalled()
-            ->willReturn($this->clientProphecy->reveal());
-        $this->objectManagerProphecy
-            ->get(GeocodeRequest::class)
-            ->shouldBeCalled()
-            ->willReturn($this->geocodeRequestProphecy->reveal());
-        $this->objectManagerProphecy
-            ->get(DataMapper::class)
-            ->shouldBeCalled()
-            ->willReturn($this->dataMapperProphecy->reveal());
+            ->willReturn($googleMapsMapper);
+        GeneralUtility::addInstance(MapperFactory::class, $mapperFactoryProphecy->reveal());
 
-        $this->assertSame(
-            $positions,
+        $this->assertCount(
+            1,
             $this->subject->getPositionsByAddress('My private address')
         );
     }
@@ -265,31 +194,59 @@ class GoogleMapsServiceTest extends AbstractUnitTestCase
      * @test
      * @throws \Exception
      */
-    public function getFirstFoundPositionByAddressWillReturnNull()
+    public function getFirstFoundPositionByAddressWithEmptyAddressWillReturnNull()
     {
-        $emptyObjectStorage = new ObjectStorage();
+        $objectStorage = new ObjectStorage();
+        GeneralUtility::addInstance(ObjectStorage::class, $objectStorage);
 
-        $this->geocodeRequestProphecy
-            ->setAddress('My private address')
+        $this->assertSame(
+            null,
+            $this->subject->getFirstFoundPositionByAddress('')
+        );
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function getFirstFoundPositionByAddressWithAddressFilledWithSpacesWillReturnNull()
+    {
+        $objectStorage = new ObjectStorage();
+        GeneralUtility::addInstance(ObjectStorage::class, $objectStorage);
+
+        $this->assertSame(
+            null,
+            $this->subject->getFirstFoundPositionByAddress('     ')
+        );
+    }
+
+    /**
+     * @test
+     * @throws \Exception
+     */
+    public function getFirstFoundPositionByAddressWithAddressWillReturnNull()
+    {
+        $objectStorage = new ObjectStorage();
+        GeneralUtility::addInstance(ObjectStorage::class, $objectStorage);
+
+        /** @var GeocodeRequest|ObjectProphecy $geocodeRequestProphecy */
+        $geocodeRequestProphecy = $this->prophesize(GeocodeRequest::class);
+        $geocodeRequestProphecy
+            ->addParameter('address', 'My private address')
             ->shouldBeCalled();
 
+        /** @var RequestFactory|ObjectProphecy $requestFactoryProphecy */
+        $requestFactoryProphecy = $this->prophesize(RequestFactory::class);
+        $requestFactoryProphecy
+            ->create('GeocodeRequest')
+            ->shouldBeCalled()
+            ->willReturn($geocodeRequestProphecy->reveal());
+        GeneralUtility::addInstance(RequestFactory::class, $requestFactoryProphecy->reveal());
+
         $this->clientProphecy
-            ->processRequest($this->geocodeRequestProphecy->reveal())
+            ->processRequest($geocodeRequestProphecy->reveal())
             ->shouldBeCalled()
             ->willReturn([]);
-
-        $this->objectManagerProphecy
-            ->get(ObjectStorage::class)
-            ->shouldBeCalled()
-            ->willReturn($emptyObjectStorage);
-        $this->objectManagerProphecy
-            ->get(GoogleMapsClient::class)
-            ->shouldBeCalled()
-            ->willReturn($this->clientProphecy->reveal());
-        $this->objectManagerProphecy
-            ->get(GeocodeRequest::class)
-            ->shouldBeCalled()
-            ->willReturn($this->geocodeRequestProphecy->reveal());
 
         $this->assertSame(
             null,
@@ -303,11 +260,11 @@ class GoogleMapsServiceTest extends AbstractUnitTestCase
      */
     public function getFirstFoundPositionByAddressWillReturnRadiusResult()
     {
-        $position = new RadiusResult();
-        $position->setFormattedAddress('My street 123, 12345 somewhere');
+        $expectedPosition = new Position();
+        $expectedPosition->setFormattedAddress('My street 123, 12345 somewhere');
 
-        $positions = new ObjectStorage();
-        $positions->attach($position);
+        $objectStorage = new ObjectStorage();
+        GeneralUtility::addInstance(ObjectStorage::class, $objectStorage);
 
         $response = [
             'results' => [
@@ -317,146 +274,38 @@ class GoogleMapsServiceTest extends AbstractUnitTestCase
             ]
         ];
 
-        $this->geocodeRequestProphecy
-            ->setAddress('My private address')
+        /** @var GeocodeRequest|ObjectProphecy $geocodeRequestProphecy */
+        $geocodeRequestProphecy = $this->prophesize(GeocodeRequest::class);
+        $geocodeRequestProphecy
+            ->addParameter('address', 'My private address')
             ->shouldBeCalled();
 
+        /** @var RequestFactory|ObjectProphecy $requestFactoryProphecy */
+        $requestFactoryProphecy = $this->prophesize(RequestFactory::class);
+        $requestFactoryProphecy
+            ->create('GeocodeRequest')
+            ->shouldBeCalled()
+            ->willReturn($geocodeRequestProphecy->reveal());
+        GeneralUtility::addInstance(RequestFactory::class, $requestFactoryProphecy->reveal());
+
         $this->clientProphecy
-            ->processRequest($this->geocodeRequestProphecy->reveal())
+            ->processRequest($geocodeRequestProphecy->reveal())
             ->shouldBeCalled()
             ->willReturn($response);
 
-        $this->dataMapperProphecy
-            ->mapObjectStorage(RadiusResult::class, $response['results'])
-            ->shouldBeCalled()
-            ->willReturn($positions);
+        $googleMapsMapper = new GoogleMapsMapper();
 
-        $this->objectManagerProphecy
-            ->get(ObjectStorage::class)
+        /** @var MapperFactory|ObjectProphecy $mapperFactoryProphecy */
+        $mapperFactoryProphecy = $this->prophesize(MapperFactory::class);
+        $mapperFactoryProphecy
+            ->create()
             ->shouldBeCalled()
-            ->willReturn(new ObjectStorage());
-        $this->objectManagerProphecy
-            ->get(GoogleMapsClient::class)
-            ->shouldBeCalled()
-            ->willReturn($this->clientProphecy->reveal());
-        $this->objectManagerProphecy
-            ->get(GeocodeRequest::class)
-            ->shouldBeCalled()
-            ->willReturn($this->geocodeRequestProphecy->reveal());
-        $this->objectManagerProphecy
-            ->get(DataMapper::class)
-            ->shouldBeCalled()
-            ->willReturn($this->dataMapperProphecy->reveal());
+            ->willReturn($googleMapsMapper);
+        GeneralUtility::addInstance(MapperFactory::class, $mapperFactoryProphecy->reveal());
 
-        $this->assertSame(
-            $position,
+        $this->assertEquals(
+            $expectedPosition,
             $this->subject->getFirstFoundPositionByAddress('My private address')
-        );
-    }
-
-    /**
-     * @test
-     * @throws \Exception
-     */
-    public function createNewPoiCollectionWithBrokenRadiusResultReturns0()
-    {
-        /** @var FlashMessage|ObjectProphecy $flashMessage */
-        $flashMessage = $this->prophesize(FlashMessage::class);
-        GeneralUtility::addInstance(FlashMessage::class, $flashMessage->reveal());
-
-        /** @var FlashMessageQueue|ObjectProphecy $flashMessageQueue */
-        $flashMessageQueue = $this->prophesize(FlashMessageQueue::class);
-        /*$this->flashMessageService
-            ->getMessageQueueByIdentifier()
-            ->shouldBeCalled()
-            ->willReturn($flashMessageQueue->reveal());*/
-
-        $this->assertSame(
-            0,
-            $this->subject->createNewPoiCollection(
-                123,
-                new RadiusResult()
-            )
-        );
-    }
-
-    /**
-     * @test
-     * @throws \Exception
-     */
-    public function createNewPoiCollectionWithRadiusResultReturnsUid()
-    {
-        $fieldValues = [
-            'pid' => 123,
-            'hidden' => 0,
-            'deleted' => 0,
-            'title' => 'My private address',
-        ];
-
-        $location = new Location();
-        $location->setLat(123);
-        $location->setLng(321);
-        $geometry = new RadiusResult\Geometry();
-        $geometry->setLocation($location);
-        $radiusResult = new RadiusResult();
-        $radiusResult->setGeometry($geometry);
-        $radiusResult->setFormattedAddress('My private address');
-
-        /** @var Statement|ObjectProphecy $statement */
-        $statement = $this->prophesize(Statement::class);
-        $statement->fetch()->shouldBeCalled()->willReturn(
-            ['Field' => 'uid'],
-            ['Field' => 'pid'],
-            ['Field' => 'hidden'],
-            ['Field' => 'deleted'],
-            ['Field' => 'title'],
-            null
-        );
-
-        /** @var Connection|ObjectProphecy $connection */
-        $connection = $this->prophesize(Connection::class);
-        $connection
-            ->query('SHOW FULL COLUMNS FROM `tx_maps2_domain_model_poicollection`')
-            ->shouldBeCalled()
-            ->willReturn($statement->reveal());
-
-        /** @var ConnectionPool|ObjectProphecy $selectConnectionPool */
-        $selectConnectionPool = $this->prophesize(ConnectionPool::class);
-        $selectConnectionPool
-            ->getConnectionForTable('tx_maps2_domain_model_poicollection')
-            ->shouldBeCalled()
-            ->willReturn($connection->reveal());
-
-        GeneralUtility::addInstance(ConnectionPool::class, $selectConnectionPool->reveal());
-
-        /** @var Connection|ObjectProphecy $insertConnection */
-        $insertConnection = $this->prophesize(Connection::class);
-        $insertConnection
-            ->insert(
-                'tx_maps2_domain_model_poicollection',
-                $fieldValues
-            )
-            ->shouldBeCalled();
-        $insertConnection
-            ->lastInsertId('tx_maps2_domain_model_poicollection')
-            ->shouldBeCalled()
-            ->willReturn(100);
-
-        /** @var ConnectionPool|ObjectProphecy $insertConnectionPool */
-        $insertConnectionPool = $this->prophesize(ConnectionPool::class);
-        $insertConnectionPool
-            ->getConnectionForTable('tx_maps2_domain_model_poicollection')
-            ->shouldBeCalled()
-            ->willReturn($insertConnection->reveal());
-
-        GeneralUtility::addInstance(ConnectionPool::class, $insertConnectionPool->reveal());
-
-        $this->assertSame(
-            100,
-            $this->subject->createNewPoiCollection(
-                123,
-                $radiusResult
-            )
         );
     }
 }

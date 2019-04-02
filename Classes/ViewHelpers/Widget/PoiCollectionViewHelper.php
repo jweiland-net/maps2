@@ -15,8 +15,9 @@ namespace JWeiland\Maps2\ViewHelpers\Widget;
  */
 
 use JWeiland\Maps2\Domain\Model\PoiCollection;
-use JWeiland\Maps2\Service\GoogleMapsService;
-use JWeiland\Maps2\Service\GoogleRequestService;
+use JWeiland\Maps2\Service\MapProviderRequestService;
+use JWeiland\Maps2\Service\MapService;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetViewHelper;
 
 /**
@@ -31,16 +32,6 @@ class PoiCollectionViewHelper extends AbstractWidgetViewHelper
     protected $controller;
 
     /**
-     * @var GoogleRequestService
-     */
-    protected $googleRequestService;
-
-    /**
-     * @var GoogleMapsService
-     */
-    protected $googleMapsService;
-
-    /**
      * inject controller
      *
      * @param Controller\PoiCollectionController $controller
@@ -49,28 +40,6 @@ class PoiCollectionViewHelper extends AbstractWidgetViewHelper
     public function injectController(Controller\PoiCollectionController $controller)
     {
         $this->controller = $controller;
-    }
-
-    /**
-     * inject googleRequestService
-     *
-     * @param GoogleRequestService $googleRequestService
-     * @return void
-     */
-    public function injectGoogleRequestService(GoogleRequestService $googleRequestService)
-    {
-        $this->googleRequestService = $googleRequestService;
-    }
-
-    /**
-     * inject mapService
-     *
-     * @param GoogleMapsService $googleMapsService
-     * @return void
-     */
-    public function injectGoogleMapsService(GoogleMapsService $googleMapsService)
-    {
-        $this->googleMapsService = $googleMapsService;
     }
 
     /**
@@ -83,8 +52,10 @@ class PoiCollectionViewHelper extends AbstractWidgetViewHelper
      */
     public function render(PoiCollection $poiCollection = null, $poiCollections = null, $override = [])
     {
-        if (!$this->googleRequestService->isGoogleMapRequestAllowed()) {
-            return $this->googleMapsService->showAllowMapForm();
+        $mapProviderRequestService = GeneralUtility::makeInstance(MapProviderRequestService::class);
+        if (!$mapProviderRequestService->isRequestToMapProviderAllowed()) {
+            $mapService = GeneralUtility::makeInstance(MapService::class);
+            return $mapService->showAllowMapForm();
         }
 
         return $this->initiateSubRequest();

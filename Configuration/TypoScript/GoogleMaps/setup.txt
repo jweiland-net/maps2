@@ -1,0 +1,34 @@
+# Prevent including both static maps of map providers on one page
+page.includeJSFooterlibs.jQueryForMaps2 >
+page.includeJSFooterlibs.maps2 >
+page.includeJSFooterlibs.markerClustererForMaps2 >
+page.includeJSFooterlibs.googleMapsForMaps2 >
+
+[JWeiland\Maps2\Condition\AllowMapProviderRequestCondition]
+  page.includeJSFooterlibs {
+    jQueryForMaps2 = https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js
+    jQueryForMaps2.external = 1
+    jQueryForMaps2.if.isTrue = {$plugin.tx_maps2.view.includeJQuery}
+
+    maps2 = EXT:maps2/Resources/Public/JavaScript/GoogleMaps2.js
+
+    markerClustererForMaps2 = EXT:maps2/Resources/Public/JavaScript/MarkerClusterer.js
+    markerClustererForMaps2.if.isTrue = {$plugin.tx_maps2.view.enableMarkerClusterer}
+
+    googleMapsForMaps2 = https://maps.googleapis.com/maps/api/js?key={$plugin.tx_maps2.view.googleMapsJavaScriptApiKey}&libraries=places&callback=initMap
+    googleMapsForMaps2.external = 1
+  }
+[ELSE]
+  # Do not cache maps2 output as long as user has not activated requests to Google Maps servers
+  tt_content.list.20.maps2_maps2 = USER_INT
+[END]
+
+plugin.tx_maps2 {
+  settings {
+    mapProvider = gm
+    markerClusterer {
+      enable = {$plugin.tx_maps2.view.enableMarkerClusterer}
+      imagePath = EXT:maps2/Resources/Public/Icons/MarkerClusterer/m
+    }
+  }
+}

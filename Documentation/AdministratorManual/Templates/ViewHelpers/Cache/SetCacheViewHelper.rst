@@ -1,12 +1,14 @@
+.. include:: ../../../../Includes.rst.txt
+
 Cache / SetCacheViewHelper
---------------------------
+==========================
 
 This is a ViewHelper to set a new cache entry.
 
 **Type:** Basic
 
 General properties
-^^^^^^^^^^^^^^^^^^
+------------------
 
 .. t3-field-list-table::
  :header-rows: 1
@@ -49,10 +51,10 @@ General properties
      :Default value:
 
 Examples
-^^^^^^^^
+--------
 
 Basic example
-"""""""""""""
+~~~~~~~~~~~~~
 
 Code: ::
 

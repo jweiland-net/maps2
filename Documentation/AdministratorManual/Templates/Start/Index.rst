@@ -1,12 +1,8 @@
-.. ==================================================
-.. FOR YOUR INFORMATION
-.. --------------------------------------------------
-.. -*- coding: utf-8 -*- with BOM.
-
 .. include:: ../../../Includes.rst.txt
 
 Changing & editing templates
 ============================
+
 EXT:maps2 is using fluid as template engine. If you are used to fluid
 already, you might skip this section.
 
@@ -49,7 +45,8 @@ This can be a directory in ``fileadmin`` or a custom extension. Multiple fallbac
   }
 
 Change the templates using TypoScript constants
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 You can use the following TypoScript in the  **constants** to change
 the paths
 
@@ -64,7 +61,8 @@ the paths
   }
 
 Change path of the poiCollection widget
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 The path of the poiCollection widget can be changed by using a configuration like below.
 
 .. code-block:: typoscript
@@ -76,13 +74,14 @@ The path of the poiCollection widget can be changed by using a configuration lik
   }
 
 Change path of the editPoi widget
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 The path of the editPoi widget can be changed by using a configuration like below.
 
 .. code-block:: typoscript
 
-  plugin.tx_maps2 {
-    view {
-      widget.JWeiland\Maps2\ViewHelpers\Widget\EditPoiViewHelper.templateRootPath = {$plugin.tx_maps2.view.templateRootPath}
-    }
-  }
+   plugin.tx_maps2 {
+     view {
+       widget.JWeiland\Maps2\ViewHelpers\Widget\EditPoiViewHelper.templateRootPath = [PATH]
+     }
+   }
