@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace JWeiland\Maps2\Client\Request;
 
 /*
@@ -32,4 +33,42 @@ interface RequestInterface
      * @return bool
      */
     public function isValidRequest();
+
+    /**
+     * Returns the parameters
+     *
+     * @return array $parameters
+     */
+    public function getParameters(): array;
+
+    /**
+     * Sets the parameters
+     *
+     * @param array $parameters
+     */
+    public function setParameters(array $parameters);
+
+    /**
+     * Adds a parameter
+     *
+     * @param string $parameter
+     * @param mixed $value
+     */
+    public function addParameter(string $parameter, $value);
+
+    /**
+     * Gets a parameter
+     *
+     * @param string $parameter
+     * @return mixed
+     */
+    public function getParameter(string $parameter);
+
+    /**
+     * Check, if parameter exists
+     *
+     * @param string $parameter
+     * @return bool
+     */
+    public function hasParameter($parameter): bool;
 }

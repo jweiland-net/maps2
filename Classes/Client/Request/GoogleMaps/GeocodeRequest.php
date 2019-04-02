@@ -1,5 +1,6 @@
 <?php
-namespace JWeiland\Maps2\Client\Request;
+declare(strict_types = 1);
+namespace JWeiland\Maps2\Client\Request\GoogleMaps;
 
 /*
  * This file is part of the maps2 project.
@@ -13,6 +14,8 @@ namespace JWeiland\Maps2\Client\Request;
  *
  * The TYPO3 project - inspiring people to share!
  */
+
+use JWeiland\Maps2\Client\Request\AbstractRequest;
 
 /**
  * A Request class for Google Maps Geocode API
@@ -35,23 +38,14 @@ class GeocodeRequest extends AbstractRequest
      * @return string
      * @throws \Exception
      */
-    public function getUri()
+    public function getUri(): string
     {
         return sprintf(
             $this->uri,
-            $this->updateAddressForUri((string)$this->getParameter('address')),
+            $this->updateAddressForUri(
+                (string)$this->getParameter('address')
+            ),
             $this->extConf->getGoogleMapsGeocodeApiKey()
         );
-    }
-
-    /**
-     * Set the address to get Lat/Lng for
-     *
-     * @param string $address
-     * @return void
-     */
-    public function setAddress($address)
-    {
-        $this->addParameter('address', (string)$address);
     }
 }

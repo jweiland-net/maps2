@@ -16,9 +16,7 @@ namespace JWeiland\Maps2\Controller;
  */
 
 use JWeiland\Maps2\Configuration\ExtConf;
-use JWeiland\Maps2\Service\GoogleMapsService;
 use JWeiland\Maps2\Service\MapService;
-use JWeiland\Maps2\Utility\DataMapper;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
@@ -37,16 +35,6 @@ class AbstractController extends ActionController
     protected $extConf;
 
     /**
-     * @var DataMapper
-     */
-    protected $dataMapper;
-
-    /**
-     * @var GoogleMapsService
-     */
-    protected $googleMapsService;
-
-    /**
      * inject extConf
      *
      * @param ExtConf $extConf
@@ -54,26 +42,6 @@ class AbstractController extends ActionController
     public function injectExtConf(ExtConf $extConf)
     {
         $this->extConf = $extConf;
-    }
-
-    /**
-     * inject dataMapper
-     *
-     * @param DataMapper $dataMapper
-     */
-    public function injectDataMapper(DataMapper $dataMapper)
-    {
-        $this->dataMapper = $dataMapper;
-    }
-
-    /**
-     * inject mapService
-     *
-     * @param GoogleMapsService $googleMapsService
-     */
-    public function injectGoogleMapsService(GoogleMapsService $googleMapsService)
-    {
-        $this->googleMapsService = $googleMapsService;
     }
 
     /**

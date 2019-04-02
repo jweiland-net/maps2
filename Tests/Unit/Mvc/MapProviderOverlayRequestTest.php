@@ -16,7 +16,7 @@ namespace JWeiland\Maps2\Tests\Unit\Mvc;
 
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Mvc\MapProviderOverlayRequestHandler;
-use JWeiland\Maps2\Service\GoogleMapsService;
+use JWeiland\Maps2\Service\GeoCodeService;
 use JWeiland\Maps2\Service\MapProviderRequestService;
 use JWeiland\Maps2\Service\MapService;
 use Nimut\TestingFramework\TestCase\UnitTestCase;

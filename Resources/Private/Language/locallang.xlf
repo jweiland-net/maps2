@@ -62,7 +62,7 @@
 				<source>No positions found</source>
 			</trans-unit>
 			<trans-unit id="error.noPositionsFound.body" xml:space="preserve" approved="yes">
-				<source>Google can't find any position. Please check your input and try again or activate $GLOBALS['TYPO3_CONF_VARS']['BE']['debug'] for further debugging</source>
+				<source>%1$s can't find any position. Please check your input and try again or activate $GLOBALS['TYPO3_CONF_VARS']['BE']['debug'] for further debugging</source>
 			</trans-unit>
 		</body>
 	</file>

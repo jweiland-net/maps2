@@ -1,5 +1,5 @@
 <?php
-namespace JWeiland\Maps2\Tests\Unit\Client\Request;
+namespace JWeiland\Maps2\Tests\Unit\Client\Request\GoogleMaps;
 
 /*
  * This file is part of the maps2 project.
@@ -13,7 +13,8 @@ namespace JWeiland\Maps2\Tests\Unit\Client\Request;
  *
  * The TYPO3 project - inspiring people to share!
  */
-use JWeiland\Maps2\Client\Request\GeocodeRequest;
+
+use JWeiland\Maps2\Client\Request\GoogleMaps\GeocodeRequest;
 use JWeiland\Maps2\Configuration\ExtConf;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
 
@@ -39,8 +40,7 @@ class GeocodeRequestTest extends UnitTestCase
     protected function setUp()
     {
         $this->extConf = new ExtConf();
-        $this->subject = new GeocodeRequest();
-        $this->subject->injectExtConf($this->extConf);
+        $this->subject = new GeocodeRequest($this->extConf);
     }
 
     /**
@@ -58,7 +58,7 @@ class GeocodeRequestTest extends UnitTestCase
      */
     public function setAddressWillAddAddressToParameters()
     {
-        $this->subject->setAddress('My Address');
+        $this->subject->addParameter('address', 'My Address');
         $this->assertSame(
             [
                 'address' => 'My Address'
@@ -75,7 +75,7 @@ class GeocodeRequestTest extends UnitTestCase
     {
         $this->extConf->setGoogleMapsGeocodeApiKey('MyApiKey');
         $this->subject->setUri('%s:%s');
-        $this->subject->setAddress('My Address');
+        $this->subject->addParameter('address', 'My Address');
         $this->assertSame(
             'My%20Address:MyApiKey',
             $this->subject->getUri()

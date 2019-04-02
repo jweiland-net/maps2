@@ -15,11 +15,14 @@ namespace JWeiland\Maps2\Controller;
  * The TYPO3 project - inspiring people to share!
  */
 use JWeiland\Maps2\Domain\Model\PoiCollection;
-use JWeiland\Maps2\Domain\Model\RadiusResult;
+use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Domain\Model\Search;
 use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
+use JWeiland\Maps2\Service\GeoCodeService;
+use JWeiland\Maps2\Service\MapService;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * The main controller to show various kinds of markers on Google Maps
@@ -27,40 +30,28 @@ use TYPO3\CMS\Core\Messaging\FlashMessage;
 class PoiCollectionController extends AbstractController
 {
     /**
-     * @var \JWeiland\Maps2\Domain\Repository\PoiCollectionRepository
-     */
-    protected $poiCollectionRepository;
-
-    /**
-     * inject poiCollectionRepository
-     *
-     * @param PoiCollectionRepository $poiCollectionRepository
-     */
-    public function injectPoiCollectionRepository(PoiCollectionRepository $poiCollectionRepository)
-    {
-        $this->poiCollectionRepository = $poiCollectionRepository;
-    }
-
-    /**
-     * action show
+     * Action show
      *
      * @param PoiCollection $poiCollection PoiCollection from URI has highest priority
      * @throws \Exception
      */
     public function showAction(PoiCollection $poiCollection = null)
     {
+        $mapService = GeneralUtility::makeInstance(MapService::class);
+        $poiCollectionRepository = $this->objectManager->get(PoiCollectionRepository::class);
+
         // if uri is empty and a poiCollection is set in FlexForm
         if ($poiCollection === null && !empty($this->settings['poiCollection'])) {
-            $poiCollection = $this->poiCollectionRepository->findByUid((int)$this->settings['poiCollection']);
+            $poiCollection = $poiCollectionRepository->findByUid((int)$this->settings['poiCollection']);
         }
         if ($poiCollection instanceof PoiCollection) {
-            $this->googleMapsService->setInfoWindow($poiCollection);
+            $mapService->setInfoWindow($poiCollection);
             $this->view->assign('poiCollections', $poiCollection);
         } elseif (!empty($this->settings['categories'])) {
             // if no poiCollection could be retrieved, but a category is set
-            $poiCollections = $this->poiCollectionRepository->findPoisByCategories($this->settings['categories']);
+            $poiCollections = $poiCollectionRepository->findPoisByCategories($this->settings['categories']);
             foreach ($poiCollections as $poiCollection) {
-                $this->googleMapsService->setInfoWindow($poiCollection);
+                $mapService->setInfoWindow($poiCollection);
             }
             $this->view->assign('poiCollections', $poiCollections);
         }
@@ -74,7 +65,6 @@ class PoiCollectionController extends AbstractController
     }
 
     /**
-     * action search
      * This action shows a form to start a new radius search
      *
      * @param Search $search
@@ -96,22 +86,26 @@ class PoiCollectionController extends AbstractController
      */
     public function listRadiusAction(Search $search)
     {
+        $mapService = GeneralUtility::makeInstance(MapService::class);
+        $geoCodeService = GeneralUtility::makeInstance(GeoCodeService::class);
+
         $this->view->assign('search', $search);
-        $location = $this->googleMapsService->getFirstFoundPositionByAddress($search->getAddress());
-        if ($location instanceof RadiusResult) {
-            $poiCollections = $this->poiCollectionRepository->searchWithinRadius(
-                $location->getGeometry()->getLocation()->getLatitude(),
-                $location->getGeometry()->getLocation()->getLongitude(),
+        $position = $geoCodeService->getFirstFoundPositionByAddress($search->getAddress());
+        if ($position instanceof Position) {
+            $poiCollectionRepository = $this->objectManager->get(PoiCollectionRepository::class);
+            $poiCollections = $poiCollectionRepository->searchWithinRadius(
+                $position->getLatitude(),
+                $position->getLongitude(),
                 $search->getRadius()
             );
             foreach ($poiCollections as $poiCollection) {
-                $this->googleMapsService->setInfoWindow($poiCollection);
+                $mapService->setInfoWindow($poiCollection);
             }
 
             $this->view->assign('poiCollections', $poiCollections);
         } else {
             $this->addFlashMessage(
-                'No location with this address found',
+                'No position with this address found',
                 'Address not found',
                 AbstractMessage::ERROR
             );

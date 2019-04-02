@@ -18,17 +18,17 @@ use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
- * Simple Client to send requests to Google Maps Servers
+ * Simple Client to send requests to OpenStreetMap Servers
  */
-class GoogleMapsClient extends AbstractClient
+class OpenStreetMapClient extends AbstractClient
 {
     /**
      * @var string
      */
-    protected $title = 'Google Maps';
+    protected $title = 'Open Street Map';
 
     /**
-     * Check result from Google Maps Server for errors
+     * Check result from Open Street Map Server for errors
      *
      * @param array|null $result
      * @return bool
@@ -39,14 +39,14 @@ class GoogleMapsClient extends AbstractClient
 
         if ($result === null) {
             $this->messageHelper->addFlashMessage(
-                'The response of Google Maps was not a valid JSON response.',
+                'The response of Open Street Map was not a valid JSON response.',
                 'Invalid JSON response',
                 FlashMessage::ERROR
             );
             $hasErrors = true;
         }
 
-        if ($result['status'] !== 'OK') {
+        if (is_array($result) && empty($result)) {
             $this->messageHelper->addFlashMessage(
                 LocalizationUtility::translate(
                     'error.noPositionsFound.body',

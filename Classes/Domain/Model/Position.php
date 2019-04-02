@@ -16,61 +16,52 @@ namespace JWeiland\Maps2\Domain\Model;
 
 /**
  * Domain Model for Position
- * This class is not part of a local DB table. It's part of the result of a Google Request
+ * This class is not part of a local DB table
  */
 class Position
 {
     /**
-     * northeast
-     *
-     * @var \JWeiland\Maps2\Domain\Model\Location
+     * @var string
      */
-    protected $northeast;
+    protected $formattedAddress = '';
 
     /**
-     * southwest
-     *
-     * @var \JWeiland\Maps2\Domain\Model\Location
+     * @var float
      */
-    protected $southwest;
+    protected $latitude = 0.0;
 
     /**
-     * Setter for northeast
-     *
-     * @param Location $northeast
+     * @var float
      */
-    public function setNortheast(Location $northeast)
+    protected $longitude = 0.0;
+
+    public function getFormattedAddress(): string
     {
-        $this->northeast = $northeast;
+        return $this->formattedAddress;
     }
 
-    /**
-     * Getter for northeast
-     *
-     * @return Location
-     */
-    public function getNortheast()
+    public function setFormattedAddress(string $formattedAddress)
     {
-        return $this->northeast;
+        $this->formattedAddress = $formattedAddress;
     }
 
-    /**
-     * Setter for southwest
-     *
-     * @param Location $southwest
-     */
-    public function setSouthwest(Location $southwest)
+    public function getLatitude(): float
     {
-        $this->southwest = $southwest;
+        return $this->latitude;
     }
 
-    /**
-     * Getter for southwest
-     *
-     * @return Location
-     */
-    public function getSouthwest()
+    public function setLatitude(float $latitude)
     {
-        return $this->southwest;
+        $this->latitude = $latitude;
+    }
+
+    public function getLongitude(): float
+    {
+        return $this->longitude;
+    }
+
+    public function setLongitude(float $longitude)
+    {
+        $this->longitude = $longitude;
     }
 }

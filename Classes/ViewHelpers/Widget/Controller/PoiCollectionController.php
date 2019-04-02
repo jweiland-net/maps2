@@ -24,19 +24,17 @@ class PoiCollectionController extends AbstractController
 {
     /**
      * index action
-     *
-     * @return void
      */
     public function indexAction()
     {
         $poiCollection = $this->widgetConfiguration['poiCollection'];
         if ($poiCollection instanceof PoiCollection) {
-            $this->googleMapsService->setInfoWindow($poiCollection);
+            $this->mapService->setInfoWindow($poiCollection);
             $this->view->assign('poiCollections', [$poiCollection]);
         } elseif ($this->widgetConfiguration['poiCollections'] instanceof \Traversable) {
             /** @var PoiCollection $poiCollection */
             foreach ($this->widgetConfiguration['poiCollections'] as $poiCollection) {
-                $this->googleMapsService->setInfoWindow($poiCollection);
+                $this->mapService->setInfoWindow($poiCollection);
             }
             $this->view->assign('poiCollections', $this->widgetConfiguration['poiCollections']);
         }

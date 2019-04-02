@@ -151,7 +151,7 @@ class ExtConf implements SingletonInterface
     }
 
     /**
-     * @return string
+     * @return string Returns "both", "gm" or "osm"
      */
     public function getMapProvider(): string
     {
@@ -171,7 +171,7 @@ class ExtConf implements SingletonInterface
     }
 
     /**
-     * @return string
+     * @return string Returns "gm" or "osm"
      */
     public function getDefaultMapProvider(): string
     {

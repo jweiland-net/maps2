@@ -46,11 +46,11 @@ class AddressHelper
     }
 
     /**
-     * Get address for Google Maps GeoCode requests
+     * Get address for Map Providers GeoCode requests
      *
      * @param array $locationRecordToSave
      * @param array $options
-     * @return string Prepared address for Google requests
+     * @return string Prepared address for Map Provider requests
      */
     public function getAddress(array $locationRecordToSave, array $options): string
     {

@@ -28,6 +28,7 @@ use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Service\EnvironmentService;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
@@ -39,6 +40,11 @@ class MapServiceTest extends UnitTestCase
      * @var ObjectManager|ObjectProphecy
      */
     protected $objectManagerProphecy;
+
+    /**
+     * @var EnvironmentService|ObjectProphecy
+     */
+    protected $environmentServiceProphecy;
 
     /**
      * @var ConfigurationManagerInterface|ObjectProphecy
@@ -62,6 +68,11 @@ class MapServiceTest extends UnitTestCase
     protected function setUp()
     {
         $this->objectManagerProphecy = $this->prophesize(ObjectManager::class);
+        $this->environmentServiceProphecy = $this->prophesize(EnvironmentService::class);
+        $this->environmentServiceProphecy
+            ->isEnvironmentInFrontendMode()
+            ->shouldBeCalled()
+            ->willReturn(true);
 
         $this->configurationManagerProphecy = $this->prophesize(ConfigurationManager::class);
         $this->objectManagerProphecy
@@ -151,6 +162,7 @@ class MapServiceTest extends UnitTestCase
             ->willReturn($uriBuilderProphecy->reveal());
 
         GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManagerProphecy->reveal());
+        GeneralUtility::setSingletonInstance(EnvironmentService::class, $this->environmentServiceProphecy->reveal());
         $this->subject = new MapService();
 
         $this->assertSame(
@@ -231,6 +243,7 @@ class MapServiceTest extends UnitTestCase
             ->willReturn($uriBuilderProphecy->reveal());
 
         GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManagerProphecy->reveal());
+        GeneralUtility::setSingletonInstance(EnvironmentService::class, $this->environmentServiceProphecy->reveal());
         $this->subject = new MapService();
 
         $this->assertSame(
@@ -290,6 +303,7 @@ class MapServiceTest extends UnitTestCase
             ->willReturn($uriBuilderProphecy->reveal());
 
         GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManagerProphecy->reveal());
+        GeneralUtility::setSingletonInstance(EnvironmentService::class, $this->environmentServiceProphecy->reveal());
         $this->subject = new MapService();
 
         $this->assertSame(
@@ -313,6 +327,7 @@ class MapServiceTest extends UnitTestCase
         GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
 
         GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManagerProphecy->reveal());
+        GeneralUtility::setSingletonInstance(EnvironmentService::class, $this->environmentServiceProphecy->reveal());
         $this->subject = new MapService();
 
         $this->assertSame(
@@ -336,6 +351,7 @@ class MapServiceTest extends UnitTestCase
         GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
 
         GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManagerProphecy->reveal());
+        GeneralUtility::setSingletonInstance(EnvironmentService::class, $this->environmentServiceProphecy->reveal());
         $this->subject = new MapService();
 
         $this->assertSame(
@@ -360,6 +376,7 @@ class MapServiceTest extends UnitTestCase
         GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
 
         GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManagerProphecy->reveal());
+        GeneralUtility::setSingletonInstance(EnvironmentService::class, $this->environmentServiceProphecy->reveal());
         $this->subject = new MapService();
 
         $this->assertSame(
@@ -384,6 +401,7 @@ class MapServiceTest extends UnitTestCase
         GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
 
         GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManagerProphecy->reveal());
+        GeneralUtility::setSingletonInstance(EnvironmentService::class, $this->environmentServiceProphecy->reveal());
         $this->subject = new MapService();
 
         $this->assertSame(
@@ -410,6 +428,7 @@ class MapServiceTest extends UnitTestCase
         GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
 
         GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManagerProphecy->reveal());
+        GeneralUtility::setSingletonInstance(EnvironmentService::class, $this->environmentServiceProphecy->reveal());
         $this->subject = new MapService();
 
         $this->assertSame(
@@ -438,6 +457,7 @@ class MapServiceTest extends UnitTestCase
         GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
 
         GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManagerProphecy->reveal());
+        GeneralUtility::setSingletonInstance(EnvironmentService::class, $this->environmentServiceProphecy->reveal());
         $this->subject = new MapService();
 
         $this->assertSame(
@@ -464,77 +484,13 @@ class MapServiceTest extends UnitTestCase
         GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
 
         GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManagerProphecy->reveal());
+        GeneralUtility::setSingletonInstance(EnvironmentService::class, $this->environmentServiceProphecy->reveal());
         $this->subject = new MapService();
 
         $this->assertSame(
             'gm',
             $this->subject->getMapProvider([
                 'uid' => 123
-            ])
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function getMapProviderFromDatabaseWillReturnMapProviderAsString()
-    {
-        $this->configurationManagerProphecy
-            ->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS)
-            ->shouldBeCalled()
-            ->willReturn($this->settings);
-
-        GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManagerProphecy->reveal());
-        $this->subject = new MapService();
-
-        $this->assertSame(
-            'gm',
-            $this->subject->getMapProviderFromDatabase([
-                'map_provider' => 'gm'
-            ])
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function getMapProviderFromDatabaseWillReturnMapProviderAsArray()
-    {
-        $this->configurationManagerProphecy
-            ->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS)
-            ->shouldBeCalled()
-            ->willReturn($this->settings);
-
-        GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManagerProphecy->reveal());
-        $this->subject = new MapService();
-
-        $this->assertSame(
-            'osm',
-            $this->subject->getMapProviderFromDatabase([
-                'map_provider' => [
-                    0 => 'osm'
-                ]
-            ])
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function getMapProviderFromDatabaseWillReturnEmptyMapProvider()
-    {
-        $this->configurationManagerProphecy
-            ->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS)
-            ->shouldBeCalled()
-            ->willReturn($this->settings);
-
-        GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManagerProphecy->reveal());
-        $this->subject = new MapService();
-
-        $this->assertSame(
-            '',
-            $this->subject->getMapProviderFromDatabase([
-                'uid' => 234
             ])
         );
     }
