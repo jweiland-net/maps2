@@ -8,7 +8,7 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
    * @constructor
    */
   function MapOptions() {
-    this.zoom = 12;
+    this.zoom = 14;
     this.mapTypeId = gmaps.MapTypeId.ROADMAP;
   }
 

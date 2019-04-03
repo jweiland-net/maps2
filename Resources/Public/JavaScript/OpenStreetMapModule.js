@@ -5,15 +5,13 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDrag
     var initialize = function(element, config, extConf) {
         var marker = {};
         var map = {};
-        //var infoWindow = new gmaps.InfoWindow();
-        //var infoWindowContent = document.getElementById("infowindow-content");
 
         var createMap = function () {
             map = L.map(
                 element,
                 {
                     editable: true
-                }).setView([51.505, -0.09], 13);
+                }).setView([51.505, -0.09], 15);
 
             L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 18,
@@ -63,7 +61,7 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDrag
             var coordinatesArray = [];
             var options = {
                 color: extConf.strokeColor,
-                width: extConf.strokeWidth,
+                weight: extConf.strokeWeight,
                 opacity: extConf.strokeOpacity,
                 fillColor: extConf.fillColor,
                 fillOpacity: extConf.fillOpacity
@@ -82,6 +80,16 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDrag
                 area.enableEdit();
             }
 
+            map.on('moveend', function(event) {
+                setLatLngFields(
+                    event.target.getCenter().lat.toFixed(6),
+                    event.target.getCenter().lng.toFixed(6),
+                    0
+                );
+            });
+            map.on("editable:vertex:new", function(event) {
+                insertRouteToDb(area.getLatLngs()[0]);
+            });
             map.on("editable:vertex:deleted", function(event) {
                 insertRouteToDb(area.getLatLngs()[0]);
             });
@@ -98,10 +106,8 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDrag
             var coordinatesArray = [];
             var options = {
                 color: extConf.strokeColor,
-                width: extConf.strokeWidth,
-                opacity: extConf.strokeOpacity,
-                fillColor: extConf.fillColor,
-                fillOpacity: extConf.fillOpacity
+                weight: extConf.strokeWeight,
+                opacity: extConf.strokeOpacity
             };
 
             if (typeof config.pois !== 'undefined') {
@@ -117,6 +123,16 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDrag
                 route.enableEdit();
             }
 
+            map.on('moveend', function(event) {
+                setLatLngFields(
+                    event.target.getCenter().lat.toFixed(6),
+                    event.target.getCenter().lng.toFixed(6),
+                    0
+                );
+            });
+            map.on("editable:vertex:new", function(event) {
+                insertRouteToDb(route.getLatLngs());
+            });
             map.on("editable:vertex:deleted", function(event) {
                 insertRouteToDb(route.getLatLngs());
             });
@@ -134,7 +150,7 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDrag
                 {
                     color: extConf.strokeColor,
                     opacity: extConf.strokeOpacity,
-                    width: extConf.strokeWeight,
+                    weight: extConf.strokeWeight,
                     fillColor: extConf.fillColor,
                     fillOpacity: extConf.fillOpacity,
                     radius: config.radius ? config.radius : extConf.defaultRadius
