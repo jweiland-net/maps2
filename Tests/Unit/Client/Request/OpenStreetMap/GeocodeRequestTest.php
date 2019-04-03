@@ -1,5 +1,5 @@
 <?php
-namespace JWeiland\Maps2\Tests\Unit\Client\Request\GoogleMaps;
+namespace JWeiland\Maps2\Tests\Unit\Client\Request\OpenStreetMap;
 
 /*
  * This file is part of the maps2 project.
@@ -14,7 +14,7 @@ namespace JWeiland\Maps2\Tests\Unit\Client\Request\GoogleMaps;
  * The TYPO3 project - inspiring people to share!
  */
 
-use JWeiland\Maps2\Client\Request\GoogleMaps\GeocodeRequest;
+use JWeiland\Maps2\Client\Request\OpenStreetMap\GeocodeRequest;
 use JWeiland\Maps2\Configuration\ExtConf;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
 
@@ -163,7 +163,7 @@ class GeocodeRequestTest extends UnitTestCase
      */
     public function isValidRequestWithValidUriReturnsTrue()
     {
-        $this->subject->setUri('https://www.jweiland.net/%s/what/ever/%s.html');
+        $this->subject->setUri('https://www.jweiland.net/what/ever/%s.html');
         $this->assertTrue(
             $this->subject->isValidRequest()
         );
@@ -175,11 +175,10 @@ class GeocodeRequestTest extends UnitTestCase
      */
     public function getUriWillAddAddressAndApiKeyToUri()
     {
-        $this->extConf->setGoogleMapsGeocodeApiKey('MyApiKey');
-        $this->subject->setUri('%s:%s');
+        $this->subject->setUri('https://www.jweiland.net/what/ever/%s.html');
         $this->subject->addParameter('address', 'My Address');
         $this->assertSame(
-            'My%20Address:MyApiKey',
+            'https://www.jweiland.net/what/ever/My%20Address.html',
             $this->subject->getUri()
         );
     }
@@ -190,8 +189,7 @@ class GeocodeRequestTest extends UnitTestCase
      */
     public function getUriAddsAddressAndApiKeyToUriButUriIsInvalid()
     {
-        $this->extConf->setGoogleMapsGeocodeApiKey('MyApiKey');
-        $this->subject->setUri('%s:%s');
+        $this->subject->setUri('nice try');
         $this->subject->addParameter('address', 'My Address');
         $this->assertFalse(
             $this->subject->isValidRequest()

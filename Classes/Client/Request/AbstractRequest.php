@@ -149,7 +149,11 @@ abstract class AbstractRequest implements RequestInterface
     {
         $isValid = true;
 
-        if (empty(trim($this->getUri()))) {
+        if (empty($this->getUri())) {
+            $isValid = false;
+        }
+
+        if (!filter_var($this->getUri(), FILTER_VALIDATE_URL)) {
             $isValid = false;
         }
 

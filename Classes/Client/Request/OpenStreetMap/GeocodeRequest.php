@@ -28,11 +28,6 @@ class GeocodeRequest extends AbstractRequest
     protected $uri = 'https://nominatim.openstreetmap.org/search/%s?format=json&addressdetails=1';
 
     /**
-     * @var string
-     */
-    protected $address = '';
-
-    /**
      * Get URI for Geocode
      *
      * @return string
