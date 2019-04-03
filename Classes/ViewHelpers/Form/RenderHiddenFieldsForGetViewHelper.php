@@ -49,7 +49,6 @@ class RenderHiddenFieldsForGetViewHelper extends AbstractViewHelper
      * inject extensionService
      *
      * @param ExtensionService $extensionService
-     * @return void
      */
     public function injectExtensionService(ExtensionService $extensionService)
     {
@@ -60,7 +59,6 @@ class RenderHiddenFieldsForGetViewHelper extends AbstractViewHelper
      * inject cacheHashCalculator
      *
      * @param CacheHashCalculator $cacheHashCalculator
-     * @return void
      */
     public function injectCacheHashCalculator(CacheHashCalculator $cacheHashCalculator)
     {
@@ -68,41 +66,62 @@ class RenderHiddenFieldsForGetViewHelper extends AbstractViewHelper
     }
 
     /**
+     * Initialize ViewHelper arguments
+     */
+    public function initializeArguments()
+    {
+        $this->registerArgument('pageUid', 'int', 'The target page UID', false, null);
+        $this->registerArgument('action', 'string', 'Target action', false, null);
+        $this->registerArgument('controller', 'string', 'Target controller. If null current controllerName is used', false, null);
+    }
+
+    /**
      * Implements a ViewHelper to trim explode comma separated strings
      *
-     * @param int $pageUid UID of target page
-     * @param string $action Target action
-     * @param string $controller Target controller. If null current controllerName is used
      * @return array
      */
-    public function render($pageUid = 0, $action = null, $controller = null)
+    public function render()
     {
         $pluginNamespace = $this->extensionService->getPluginNamespace(
             $this->renderingContext->getControllerContext()->getRequest()->getControllerExtensionName(),
             $this->renderingContext->getControllerContext()->getRequest()->getPluginName()
         );
         // get pageUid
-        $pageUid = $pageUid ?: $GLOBALS['TSFE']->id;
+        $pageUid = $this->arguments['pageUid'] ?: $GLOBALS['TSFE']->id;
 
         // create array for cHash calculation
         $parameters = [];
         $parameters['id'] = $pageUid;
-        $parameters[$pluginNamespace]['controller'] = $controller;
-        $parameters[$pluginNamespace]['action'] = $action;
-        $cachHashArray = $this->cacheHashCalculator->getRelevantParameters(
+        $parameters[$pluginNamespace]['controller'] = $this->arguments['controller'];
+        $parameters[$pluginNamespace]['action'] = $this->arguments['action'];
+        $cacheHashArray = $this->cacheHashCalculator->getRelevantParameters(
             GeneralUtility::implodeArrayForUrl('', $parameters)
         );
 
         // create array of hidden fields for GET forms
         $fields = [];
-        $fields[] = '<input type="hidden" name="id" value="' . $pageUid . '" />';
-        $fields[] = '<input type="hidden" name="' . $pluginNamespace . '[controller]" value="' . $controller . '" />';
-        $fields[] = '<input type="hidden" name="' . $pluginNamespace . '[action]" value="' . $action . '" />';
+        $fields[] = sprintf(
+            '<input type="hidden" name="id" value="%d" />',
+            $pageUid
+        );
+        $fields[] = sprintf(
+            '<input type="hidden" name="%s[controller]" value="%s" />',
+            $pluginNamespace,
+            $this->arguments['controller']
+        );
+        $fields[] = sprintf(
+            '<input type="hidden" name="%s[action]" value="%s" />',
+            $pluginNamespace,
+            $this->arguments['action']
+        );
 
         // add cHash
-        $fields[] = '<input type="hidden" name="cHash" value="' . $this->cacheHashCalculator->calculateCacheHash(
-            $cachHashArray
-        ) . '" />';
+        $fields[] = sprintf(
+            '<input type="hidden" name="cHash" value="%s" />',
+            $this->cacheHashCalculator->calculateCacheHash(
+                $cacheHashArray
+            )
+        );
 
         return implode(chr(10), $fields);
     }
