@@ -23,7 +23,7 @@ use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
- * Test case
+ * Test MessageHelper
  */
 class MessageHelperTest extends AbstractUnitTestCase
 {

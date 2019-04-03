@@ -20,7 +20,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
 
 /**
- * An abstract class for all Google Maps Requests
+ * An abstract class for all Requests to Map Providers
  */
 abstract class AbstractRequest implements RequestInterface
 {

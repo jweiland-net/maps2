@@ -19,7 +19,7 @@ use JWeiland\Maps2\Configuration\ExtConf;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
 
 /**
- * Test Geocode Request class
+ * Test Open Street Map Geocode Request class
  */
 class GeocodeRequestTest extends UnitTestCase
 {

@@ -20,7 +20,7 @@ use JWeiland\Maps2\Service\GeoCodeService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
- * A controller class to show Google Maps for a pre-configured city
+ * A controller class to show Maps for a pre-configured city
  */
 class CityMapController extends AbstractController
 {

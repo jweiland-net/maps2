@@ -15,9 +15,7 @@ namespace JWeiland\Maps2\Domain\Model;
  */
 
 /**
- * Domain Model for Position
- * This class is not part of a local DB table
- */
+c */
 class Position
 {
     /**

@@ -28,7 +28,7 @@ use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
- * Class EditPoiViewHelperTest
+ * Class EditPoiViewHelper
  */
 class EditPoiViewHelperTest extends UnitTestCase
 {

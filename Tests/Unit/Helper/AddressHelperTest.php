@@ -26,7 +26,7 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
- * Test case
+ * Test AddressHelper
  */
 class AddressHelperTest extends AbstractUnitTestCase
 {

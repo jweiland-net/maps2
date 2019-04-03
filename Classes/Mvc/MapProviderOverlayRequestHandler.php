@@ -28,7 +28,7 @@ use TYPO3\CMS\Extbase\Service\EnvironmentService;
 
 /**
  * This RequestHandler will be used to show an overlay for maps2 output
- * which will ask users to explicit allow Google Maps2 requests.
+ * which will ask users to explicit allow requests to Map Providers.
  * This feature has to be activated in extension manager configuration.
  */
 class MapProviderOverlayRequestHandler implements RequestHandlerInterface

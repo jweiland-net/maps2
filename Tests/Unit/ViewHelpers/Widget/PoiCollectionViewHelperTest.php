@@ -25,7 +25,7 @@ use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
- * Class PoiCollectionViewHelperTest
+ * Class PoiCollectionViewHelper
  */
 class PoiCollectionViewHelperTest extends UnitTestCase
 {

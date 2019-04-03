@@ -20,7 +20,7 @@ use JWeiland\Maps2\Helper\MessageHelper;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
 
 /**
- * Test Geocode Request class
+ * Test Open Street Map class
  */
 class OpenStreetMapClientTest extends UnitTestCase
 {

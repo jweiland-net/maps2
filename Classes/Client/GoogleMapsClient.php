@@ -18,7 +18,7 @@ use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
- * Simple Client to send requests to Google Maps Servers
+ * Google Maps Client which will send Requests to Google Maps Servers
  */
 class GoogleMapsClient extends AbstractClient
 {

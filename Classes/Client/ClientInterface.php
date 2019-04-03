@@ -17,7 +17,7 @@ namespace JWeiland\Maps2\Client;
 use JWeiland\Maps2\Client\Request\RequestInterface;
 
 /**
- * Simple Client for sending requests to Google
+ * Interface for Maps2 Clients
  */
 interface ClientInterface
 {

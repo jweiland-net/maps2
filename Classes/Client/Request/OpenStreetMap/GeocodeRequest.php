@@ -18,7 +18,7 @@ namespace JWeiland\Maps2\Client\Request\OpenStreetMap;
 use JWeiland\Maps2\Client\Request\AbstractRequest;
 
 /**
- * A Request class for Google Maps Geocode API
+ * A Request class for Open Street Map Geocode API
  */
 class GeocodeRequest extends AbstractRequest
 {
