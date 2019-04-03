@@ -15,9 +15,6 @@ namespace JWeiland\Maps2\Mapper;
  * The TYPO3 project - inspiring people to share!
  */
 
-use JWeiland\Maps2\Client\ClientInterface;
-use JWeiland\Maps2\Service\MapService;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**

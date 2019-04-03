@@ -212,6 +212,4 @@ class MoveOldFlexFormSettingsUpdate extends AbstractUpdate
     {
         return GeneralUtility::makeInstance(ConnectionPool::class);
     }
-
-
 }
