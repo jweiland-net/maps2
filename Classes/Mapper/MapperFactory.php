@@ -45,5 +45,4 @@ class MapperFactory
 
         return $client;
     }
-
 }
