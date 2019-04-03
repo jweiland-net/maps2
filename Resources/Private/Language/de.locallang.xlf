@@ -80,8 +80,8 @@
 				<target>Keine Positionen gefunden</target>
 			</trans-unit>
 			<trans-unit id="error.noPositionsFound.body" xml:space="preserve" approved="yes">
-				<source>%1$s can't find any position. Please check your input and try again or activate $GLOBALS['TYPO3_CONF_VARS']['BE']['debug'] for further debugging]]></source>
-				<target>%1$s konnte zu Ihrer Eingabe keine Positionen finden. Bitte überprüfen Sie Eingaben und versuchen Sie es erneut oder setzen Sie $GLOBALS['TYPO3_CONF_VARS']['BE']['debug'] im Installtool für detailliertere Debuggingausgaben.]]></target>
+				<source>%1$s can't find any position. Please check your input and try again or activate $GLOBALS['TYPO3_CONF_VARS']['BE']['debug'] for further debugging</source>
+				<target>%1$s konnte zu Ihrer Eingabe keine Positionen finden. Bitte überprüfen Sie Eingaben und versuchen Sie es erneut oder setzen Sie $GLOBALS['TYPO3_CONF_VARS']['BE']['debug'] im Installtool für detailliertere Debuggingausgaben.</target>
 			</trans-unit>
 		</body>
 	</file>
