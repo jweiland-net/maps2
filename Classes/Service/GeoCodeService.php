@@ -25,7 +25,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
- * With this class you can start requests to Google Maps GeoCode API. Search for addresses, assign a POI
+ * With this class you can start requests to GeoCode API of Map Providers. Search for addresses, assign a POI
  * to a foreign record, save the foreign record and many more. It is designed as an API.
  */
 class GeoCodeService implements SingletonInterface

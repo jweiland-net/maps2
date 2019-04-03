@@ -29,7 +29,7 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Service\EnvironmentService;
 
 /**
- * Class GoogleMapOverlayRequestTest
+ * Class MapProviderOverlayRequest
  */
 class MapProviderOverlayRequestTest extends UnitTestCase
 {

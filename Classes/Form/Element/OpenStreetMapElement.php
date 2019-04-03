@@ -34,32 +34,32 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
 class OpenStreetMapElement extends AbstractFormElement
 {
     /**
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
     /**
-     * @var \JWeiland\Maps2\Configuration\ExtConf
+     * @var ExtConf
      */
     protected $extConf;
 
     /**
-     * @var \TYPO3\CMS\Extbase\Security\Cryptography\HashService
+     * @var HashService
      */
     protected $hashService;
 
     /**
-     * @var \TYPO3\CMS\Fluid\View\StandaloneView
+     * @var StandaloneView
      */
     protected $view;
 
     /**
-     * @var \TYPO3\CMS\Core\Page\PageRenderer
+     * @var PageRenderer
      */
     protected $pageRenderer;
 
     /**
-     * @var \JWeiland\Maps2\Domain\Repository\PoiCollectionRepository
+     * @var PoiCollectionRepository
      */
     protected $poiCollectionRepository;
 

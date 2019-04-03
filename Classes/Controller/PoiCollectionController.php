@@ -25,7 +25,7 @@ use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
- * The main controller to show various kinds of markers on Google Maps
+ * The main controller to show various kinds of markers on Maps
  */
 class PoiCollectionController extends AbstractController
 {

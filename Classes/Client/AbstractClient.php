@@ -20,7 +20,7 @@ use TYPO3\CMS\Core\Utility\DebugUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
- * Simple Client for sending requests to Google
+ * Abstract client to send Requests to Map Providers
  */
 abstract class AbstractClient implements ClientInterface
 {
@@ -46,7 +46,6 @@ abstract class AbstractClient implements ClientInterface
      */
     public function processRequest(RequestInterface $request)
     {
-        var_dump($request->isValidRequest());
         if (!$request->isValidRequest()) {
             $this->messageHelper->addFlashMessage('Invalid request: ' . $request->getUri());
             return [];

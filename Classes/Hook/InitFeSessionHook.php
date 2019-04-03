@@ -19,7 +19,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
- * A hook to save the information, if a customer has allowed requests to Google Servers
+ * A hook to save the information, if a customer has allowed requests to Servers of Map Providers
  */
 class InitFeSessionHook
 {

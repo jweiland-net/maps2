@@ -16,7 +16,7 @@ namespace JWeiland\Maps2\Client\Request;
  */
 
 /**
- * Interface for all Google Maps Requests
+ * Interface for Requests to Map Providers
  */
 interface RequestInterface
 {

@@ -22,7 +22,7 @@ use Nimut\TestingFramework\TestCase\UnitTestCase;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
- * Test Geocode Request class
+ * Test Client Factory class
  */
 class ClientFactoryTest extends UnitTestCase
 {

@@ -36,9 +36,9 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
- * Test Google Maps Service class
+ * Test GeoCode Service class
  */
-class GoogleMapsServiceTest extends AbstractUnitTestCase
+class GeoCodeServiceTest extends AbstractUnitTestCase
 {
     /**
      * @var ClientInterface|ObjectProphecy

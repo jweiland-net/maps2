@@ -25,7 +25,7 @@ use TYPO3\CMS\Fluid\Core\Parser\SyntaxTree\ViewHelperNode;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
 
 /**
- * Class ConvertToJsonViewHelperTest
+ * Class ConvertToJsonViewHelper
  */
 class ConvertToJsonViewHelperTest extends UnitTestCase
 {
