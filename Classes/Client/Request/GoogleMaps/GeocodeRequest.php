@@ -28,11 +28,6 @@ class GeocodeRequest extends AbstractRequest
     protected $uri = 'https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=%s';
 
     /**
-     * @var string
-     */
-    protected $address = '';
-
-    /**
      * Get URI for Geocode
      *
      * @return string

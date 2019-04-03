@@ -46,6 +46,7 @@ abstract class AbstractClient implements ClientInterface
      */
     public function processRequest(RequestInterface $request)
     {
+        var_dump($request->isValidRequest());
         if (!$request->isValidRequest()) {
             $this->messageHelper->addFlashMessage('Invalid request: ' . $request->getUri());
             return [];
