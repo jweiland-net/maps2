@@ -34,6 +34,8 @@ function OpenStreetMaps2($element, environment) {
         }
         if (this.poiCollections.length > 1) {
             this.map.fitBounds(this.bounds);
+        } else {
+            this.map.panTo([this.poiCollections[0].latitude, this.poiCollections[0].longitude]);
         }
     }
 }
