@@ -18,13 +18,23 @@ function OpenStreetMaps2($element, environment) {
     this.poiCollections = this.$element.data("pois");
 
     this.createMap(environment);
-    this.createPointByCollectionType(environment);
 
-    if (this.countObjectProperties(this.categorizedMarkers) > 1) {
-        this.showSwitchableCategories(environment);
-    }
-    if (this.poiCollections.length > 1) {
-        this.map.fitBounds(this.bounds);
+    if (typeof this.poiCollections === "undefined" || jQuery.isEmptyObject(this.poiCollections)) {
+        // Plugin: CityMap
+        var lat = this.$element.data("latitude");
+        var lng = this.$element.data("longitude");
+        if (lat && lng) {
+            this.createMarkerByLatLng(lat, lng);
+            this.map.fitBounds(this.bounds);
+        }
+    } else {
+        this.createPointByCollectionType(environment);
+        if (this.countObjectProperties(this.categorizedMarkers) > 1) {
+            this.showSwitchableCategories(environment);
+        }
+        if (this.poiCollections.length > 1) {
+            this.map.fitBounds(this.bounds);
+        }
     }
 }
 
@@ -35,19 +45,19 @@ function OpenStreetMaps2($element, environment) {
  */
 OpenStreetMaps2.prototype.createMap = function (environment) {
     this.map = map = L.map(
-        this.$element.get(0)
-    ).setView(
-        [
-            this.poiCollections[0].latitude,
-            this.poiCollections[0].longitude
-        ],
-        parseInt(environment.settings.zoom)
+        this.$element.get(0), {
+            center: [environment.extConf.defaultLatitude, environment.extConf.defaultLongitude],
+            zoom: 12
+        }
     );
 
+    if (environment.settings.zoom) {
+        this.map.setZoom(parseInt(environment.settings.zoom));
+    }
+
     L.tileLayer(environment.settings.mapTile, {
-        maxZoom: parseInt(environment.settings.zoom),
         attribution: environment.settings.mapTileAttribution,
-        id: 'mapbox.streets'
+        maxZoom: 18
     }).addTo(this.map);
 };
 
@@ -284,6 +294,20 @@ OpenStreetMaps2.prototype.createRadius = function (poiCollection) {
     }).addTo(this.map);
 
     this.bounds.extend(circle.getBounds());
+};
+
+/**
+ * Create Marker with InfoWindow
+ *
+ * @param latitude
+ * @param longitude
+ */
+OpenStreetMaps2.prototype.createMarkerByLatLng = function (latitude, longitude) {
+    var marker = L.marker(
+        [latitude, longitude]
+    ).addTo(this.map);
+
+    this.bounds.extend(marker.getLatLng());
 };
 
 /**
