@@ -160,7 +160,6 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
       // update fields for saving map position
       gmaps.event.addListener(map, 'dragend', function() {
         setLatLngFields(
-          config,
           map.getCenter().lat().toFixed(6),
           map.getCenter().lng().toFixed(6),
           0
