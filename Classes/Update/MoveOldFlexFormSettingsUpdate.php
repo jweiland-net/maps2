@@ -18,30 +18,57 @@ namespace JWeiland\Maps2\Update;
 use TYPO3\CMS\Core\Configuration\FlexForm\FlexFormTools;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Install\Updates\AbstractUpdate;
+use TYPO3\CMS\Install\Updates\DatabaseUpdatedPrerequisite;
+use TYPO3\CMS\Install\Updates\UpgradeWizardInterface;
 
 /**
  * With maps2 5.0.0 we have moved some FlexForm Settings to another sheet.
  * To prevent duplicates in DB, this update wizard removes old settings from FlexForm.
  */
-class MoveOldFlexFormSettingsUpdate extends AbstractUpdate
+class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
 {
     /**
-     * @var string Title of this updater
+     * Return the identifier for this wizard
+     * This should be the same string as used in the ext_localconf class registration
+     *
+     * @return string
      */
-    protected $title = '[maps2] Move old FlexForm fields to new FlexForm sheet';
+    public function getIdentifier(): string
+    {
+        return 'maps2MoveFlexFormFields';
+    }
 
     /**
-     * Checks whether updates are required.
+     * Return the speaking name of this wizard
      *
-     * @param string &$description The description for the update
-     * @return bool Whether an update is required (TRUE) or not (FALSE)
+     * @return string
      */
-    public function checkForUpdate(&$description): bool
+    public function getTitle(): string
     {
-        $description = 'With maps2 5.0.0 we have moved some FlexForm fields to another sheet.'
-            . 'To prevent duplicates in DB, this update wizard removes old fields from FlexForm';
+        return '[maps2] Move old FlexForm fields to new FlexForm sheet';
+    }
 
+    /**
+     * Return the description for this wizard
+     *
+     * @return string
+     */
+    public function getDescription(): string
+    {
+        return 'With maps2 5.0.0 we have moved some FlexForm fields to another sheet.'
+            . 'To prevent duplicates in DB, this update wizard removes old fields from FlexForm';
+    }
+
+    /**
+     * Is an update necessary?
+     *
+     * Is used to determine whether a wizard needs to be run.
+     * Check if data for migration exists.
+     *
+     * @return bool
+     */
+    public function updateNecessary(): bool
+    {
         $records = $this->getTtContentRecordsWithMaps2Plugin();
         foreach ($records as $record) {
             $valueFromDatabase = (string)$record['pi_flexform'] !== '' ? GeneralUtility::xml2array($record['pi_flexform']) : [];
@@ -72,13 +99,13 @@ class MoveOldFlexFormSettingsUpdate extends AbstractUpdate
     }
 
     /**
-     * Performs the accordant updates.
+     * Execute the update
      *
-     * @param array &$dbQueries Queries done in this update
-     * @param string &$customMessage Custom message
-     * @return bool Whether everything went smoothly or not
+     * Called when a wizard reports that an update is necessary
+     *
+     * @return bool
      */
-    public function performUpdate(array &$dbQueries, &$customMessage): bool
+    public function executeUpdate(): bool
     {
         $records = $this->getTtContentRecordsWithMaps2Plugin();
         foreach ($records as $record) {
@@ -130,9 +157,19 @@ class MoveOldFlexFormSettingsUpdate extends AbstractUpdate
                     'CType',
                     $queryBuilder->createNamedParameter('list', \PDO::PARAM_STR)
                 ),
-                $queryBuilder->expr()->eq(
-                    'list_type',
-                    $queryBuilder->createNamedParameter('maps2_maps2', \PDO::PARAM_STR)
+                $queryBuilder->expr()->orX(
+                    $queryBuilder->expr()->eq(
+                        'list_type',
+                        $queryBuilder->createNamedParameter('maps2_citymap', \PDO::PARAM_STR)
+                    ),
+                    $queryBuilder->expr()->eq(
+                        'list_type',
+                        $queryBuilder->createNamedParameter('maps2_maps2', \PDO::PARAM_STR)
+                    ),
+                    $queryBuilder->expr()->eq(
+                        'list_type',
+                        $queryBuilder->createNamedParameter('maps2_searchwithinradius', \PDO::PARAM_STR)
+                    )
                 )
             )
             ->execute()
@@ -211,5 +248,20 @@ class MoveOldFlexFormSettingsUpdate extends AbstractUpdate
     protected function getConnectionPool(): ConnectionPool
     {
         return GeneralUtility::makeInstance(ConnectionPool::class);
+    }
+
+    /**
+     * Returns an array of class names of Prerequisite classes
+     *
+     * This way a wizard can define dependencies like "database up-to-date" or
+     * "reference index updated"
+     *
+     * @return string[]
+     */
+    public function getPrerequisites(): array
+    {
+        return [
+            DatabaseUpdatedPrerequisite::class
+        ];
     }
 }
