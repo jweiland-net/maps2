@@ -16,8 +16,8 @@ namespace JWeiland\Maps2\ViewHelpers\Form;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Service\ExtensionService;
-use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3\CMS\Frontend\Page\CacheHashCalculator;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * This ViewHelper is useful to render special hidden fields
