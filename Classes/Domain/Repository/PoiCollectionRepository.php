@@ -81,8 +81,7 @@ class PoiCollectionRepository extends Repository
         $sql = '
             SELECT *, ACOS(SIN(RADIANS(?)) * SIN(RADIANS(latitude)) + COS(RADIANS(?)) * COS(RADIANS(latitude)) * COS(RADIANS(?) - RADIANS(longitude))) * ? AS distance
             FROM tx_maps2_domain_model_poicollection
-            WHERE collection_type = "Point"
-            AND tx_maps2_domain_model_poicollection.pid IN (' . implode(',', $query->getQuerySettings()->getStoragePageIds()) . ')' .
+            WHERE tx_maps2_domain_model_poicollection.pid IN (' . implode(',', $query->getQuerySettings()->getStoragePageIds()) . ')' .
             $this->getPageRepository()->enableFields('tx_maps2_domain_model_poicollection') . '
             HAVING distance < ?
             ORDER BY distance;';
