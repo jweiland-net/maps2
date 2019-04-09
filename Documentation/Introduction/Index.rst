@@ -27,7 +27,7 @@ See maps2 in action.
 Point
 ~~~~~
 
-.. figure:: ../Images/Introduction/maps2-type-Point.jpg
+.. figure:: ../Images/Introduction/maps2-type-Point.png
    :width: 500px
    :alt: Type: Point
 
@@ -38,7 +38,7 @@ Point
 Radius
 ~~~~~~
 
-.. figure:: ../Images/Introduction/maps2-type-Radius.jpg
+.. figure:: ../Images/Introduction/maps2-type-Radius.png
    :width: 500px
    :alt: Type: Radius
 
@@ -49,7 +49,7 @@ Radius
 Area
 ~~~~
 
-.. figure:: ../Images/Introduction/maps2-type-Area.jpg
+.. figure:: ../Images/Introduction/maps2-type-Area.png
    :width: 500px
    :alt: Type: Area
 
@@ -60,20 +60,9 @@ Area
 Route
 ~~~~~
 
-.. figure:: ../Images/Introduction/maps2-type-Route.jpg
+.. figure:: ../Images/Introduction/maps2-type-Route.png
    :width: 500px
    :alt: Type: Route
-
-         Introduction Package just after installation (caption of the image)
-
-         How the Frontend of the Introduction Package looks like just after installation (legend of the image)
-
-Multiple
-~~~~~~~~
-
-.. figure:: ../Images/Introduction/maps2-type-Multiple.jpg
-   :width: 500px
-   :alt: Type: Multiple
 
          Introduction Package just after installation (caption of the image)
 
