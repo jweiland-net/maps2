@@ -362,6 +362,7 @@ class Maps2Registry implements SingletonInterface
             'type' => 'group',
             'internal_type' => 'db',
             'allowed' => 'tx_maps2_domain_model_poicollection',
+            'foreign_table' => 'tx_maps2_domain_model_poicollection',
             'prepend_tname' => 0,
             'size' => 1,
             'minitems' => 0,
