@@ -113,7 +113,8 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
             return '';
         }
 
-        return $falIconReference->getPublicUrl(false);
+        $siteUrl = GeneralUtility::getIndpEnv('TYPO3_SITE_URL');
+        return $siteUrl . $falIconReference->getPublicUrl(false);
     }
 
     /**

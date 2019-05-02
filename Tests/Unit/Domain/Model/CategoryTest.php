@@ -133,7 +133,7 @@ class CategoryTest extends UnitTestCase
         $fileReference = new FileReference();
         $fileReference->setOriginalResource($coreFileReference->reveal());
         $this->subject->getMaps2MarkerIcons()->attach($fileReference);
-        $this->assertSame(
+        $this->assertStringEndsWith(
             'ImagePath',
             $this->subject->getMaps2MarkerIcon()
         );

@@ -579,7 +579,8 @@ class PoiCollection extends AbstractEntity
             return $markerIcon;
         }
 
-        return $falIconReference->getPublicUrl(false);
+        $siteUrl = GeneralUtility::getIndpEnv('TYPO3_SITE_URL');
+        return $siteUrl . $falIconReference->getPublicUrl(false);
     }
 
     /**
