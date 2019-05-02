@@ -6,6 +6,16 @@
 ChangeLog
 =========
 
+**Version 5.1.0**
+
+- Make use of initializeArguments in VH Widgets
+- Add plugin defaults to TS-Templates
+- Correct merging of settings in VH Widgets
+
+**Version 5.0.3**
+
+- Repair zoom level settings for OSM
+
 **Version 5.0.0**
 
 - Rewritten documentation

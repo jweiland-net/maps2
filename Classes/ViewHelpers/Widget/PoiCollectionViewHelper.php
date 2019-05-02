@@ -43,14 +43,23 @@ class PoiCollectionViewHelper extends AbstractWidgetViewHelper
     }
 
     /**
+     * Initialize all arguments. You need to override this method and call
+     * $this->registerArgument(...) inside this method, to register all your arguments.
+     */
+    public function initializeArguments()
+    {
+        parent::initializeArguments();
+        $this->registerArgument('poiCollection', PoiCollection::class, 'The poiCollection object to render', false, null);
+        $this->registerArgument('poiCollections', \Traversable::class, 'The poiCollection objects as array to render', false, null);
+        $this->registerArgument('override', 'array', 'Here you can override default settings individually', false, []);
+    }
+
+    /**
      * Render the widget
      *
-     * @param PoiCollection $poiCollection
-     * @param \Traversable $poiCollections
-     * @param array $override Override any configuration option
      * @return string
      */
-    public function render(PoiCollection $poiCollection = null, $poiCollections = null, $override = [])
+    public function render()
     {
         $mapProviderRequestService = GeneralUtility::makeInstance(MapProviderRequestService::class);
         if (!$mapProviderRequestService->isRequestToMapProviderAllowed()) {

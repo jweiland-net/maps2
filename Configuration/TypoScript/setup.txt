@@ -26,6 +26,8 @@ plugin.tx_maps2 {
     }
   }
   settings {
+    zoom = 10
+    zoomControl = 1
     infoWindowContentTemplatePath = EXT:maps2/Resources/Private/Templates/InfoWindowContent.html
     infoWindow {
       image {

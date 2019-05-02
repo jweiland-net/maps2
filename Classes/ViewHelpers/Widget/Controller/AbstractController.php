@@ -16,7 +16,9 @@ namespace JWeiland\Maps2\ViewHelpers\Widget\Controller;
 
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Service\MapService;
+use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
@@ -28,19 +30,6 @@ use TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetController;
 abstract class AbstractController extends AbstractWidgetController
 {
     /**
-     * @var array
-     */
-    protected $defaultSettings = [
-        'zoom' => 10,
-        'zoomControl' => true,
-        'mapTypeControl' => true,
-        'scaleControl' => true,
-        'streetViewControl' => true,
-        'fullscreenMapControl' => true,
-        'mapTypeId' => 'google.maps.MapTypeId.ROADMAP'
-    ];
-
-    /**
      * @var ExtConf
      */
     protected $extConf;
@@ -51,35 +40,18 @@ abstract class AbstractController extends AbstractWidgetController
     protected $mapService;
 
     /**
-     * inject extConf
-     *
-     * @param ExtConf $extConf
+     * @var array
      */
+    protected $defaultSettings = [];
+
     public function injectExtConf(ExtConf $extConf)
     {
         $this->extConf = $extConf;
     }
 
-    /**
-     * inject mapService
-     *
-     * @param MapService $mapService
-     */
     public function injectMapService(MapService $mapService)
     {
         $this->mapService = $mapService;
-    }
-
-    /**
-     * Initializes the controller before invoking an action method.
-     */
-    public function initializeAction()
-    {
-        if (array_key_exists('infoWindowContentTemplatePath', $this->settings)) {
-            $this->settings['infoWindowContentTemplatePath'] = trim($this->settings['infoWindowContentTemplatePath']);
-        } else {
-            $this->addFlashMessage('Dear Admin: Please add default static template of maps2 into your TS-Template.');
-        }
     }
 
     /**
@@ -90,6 +62,12 @@ abstract class AbstractController extends AbstractWidgetController
      */
     public function initializeView(ViewInterface $view)
     {
+        if (array_key_exists('infoWindowContentTemplatePath', $this->settings)) {
+            $this->settings['infoWindowContentTemplatePath'] = trim($this->settings['infoWindowContentTemplatePath']);
+        } else {
+            $this->addFlashMessage('Dear Admin: Please add default static template of maps2 into your TS-Template.');
+        }
+
         ArrayUtility::mergeRecursiveWithOverrule($this->defaultSettings, $this->getMaps2TypoScriptSettings());
 
         $this->prepareSettings();
@@ -112,6 +90,15 @@ abstract class AbstractController extends AbstractWidgetController
         } else {
             $this->addFlashMessage('Dear Admin: Please add default static template of maps2 into your TS-Template.');
         }
+
+        // https://wiki.openstreetmap.org/wiki/Tile_servers tolds to use ${x} placeholders, but they don't work.
+        if (!empty($this->settings['mapTile'])) {
+            $this->settings['mapTile'] = str_replace(
+                ['${s}', '${x}', '${y}', '${z}'],
+                ['{s}', '{x}', '{y}', '{z}'],
+                $this->settings['mapTile']
+            );
+        }
     }
 
     /**
@@ -124,8 +111,10 @@ abstract class AbstractController extends AbstractWidgetController
         $fullTypoScript = $this->configurationManager->getConfiguration(
             ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT
         );
-        if (ArrayUtility::isValidPath($fullTypoScript, 'plugin./tx_maps2.')) {
-            return ArrayUtility::getValueByPath($fullTypoScript, 'plugin./tx_maps2.');
+        if (ArrayUtility::isValidPath($fullTypoScript, 'plugin./tx_maps2./settings.')) {
+            $typoScriptService = GeneralUtility::makeInstance(TypoScriptService::class);
+            $settings = ArrayUtility::getValueByPath($fullTypoScript, 'plugin./tx_maps2./settings.');
+            return $typoScriptService->convertTypoScriptArrayToPlainArray($settings);
         } else {
             return [];
         }
