@@ -49,17 +49,13 @@ OpenStreetMaps2.prototype.createMap = function (environment) {
     this.map = map = L.map(
         this.$element.get(0), {
             center: [environment.extConf.defaultLatitude, environment.extConf.defaultLongitude],
-            zoom: 12
+            zoom: environment.settings.zoom ? environment.settings.zoom : 12
         }
     );
 
-    if (environment.settings.zoom) {
-        this.map.setZoom(parseInt(environment.settings.zoom));
-    }
-
     L.tileLayer(environment.settings.mapTile, {
         attribution: environment.settings.mapTileAttribution,
-        maxZoom: 18
+        maxZoom: 20
     }).addTo(this.map);
 };
 
