@@ -85,18 +85,18 @@ abstract class AbstractController extends AbstractWidgetController
      */
     protected function prepareSettings()
     {
-        if (array_key_exists('infoWindowContentTemplatePath', $this->settings)) {
-            $this->settings['infoWindowContentTemplatePath'] = trim($this->settings['infoWindowContentTemplatePath']);
+        if (array_key_exists('infoWindowContentTemplatePath', $this->defaultSettings)) {
+            $this->defaultSettings['infoWindowContentTemplatePath'] = trim($this->defaultSettings['infoWindowContentTemplatePath']);
         } else {
             $this->addFlashMessage('Dear Admin: Please add default static template of maps2 into your TS-Template.');
         }
 
         // https://wiki.openstreetmap.org/wiki/Tile_servers tolds to use ${x} placeholders, but they don't work.
-        if (!empty($this->settings['mapTile'])) {
-            $this->settings['mapTile'] = str_replace(
+        if (!empty($this->defaultSettings['mapTile'])) {
+            $this->defaultSettings['mapTile'] = str_replace(
                 ['${s}', '${x}', '${y}', '${z}'],
                 ['{s}', '{x}', '{y}', '{z}'],
-                $this->settings['mapTile']
+                $this->defaultSettings['mapTile']
             );
         }
     }
