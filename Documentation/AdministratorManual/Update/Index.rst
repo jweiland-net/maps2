@@ -5,6 +5,14 @@ Updating
 
 If you update EXT:maps2 to a newer version, please read this section carefully!
 
+Update to Version 5.1.0
+-----------------------
+
+We have removed the hard-coded map provider settings from VH Widgets and added these to TS-Template. So please
+check your maps2 output and/or individual JS, if our Widget VHs are still working for you.
+
+If you don't make use of our Widget ViewHelpers there should be no problem with this update.
+
 Update to Version 5.0.0
 -----------------------
 
