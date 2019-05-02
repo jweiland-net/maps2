@@ -26,6 +26,11 @@ page.includeJSFooterlibs.googleMapsForMaps2 >
 plugin.tx_maps2 {
   settings {
     mapProvider = gm
+    mapTypeControl = 1
+    scaleControl = 1
+    streetViewControl = 1
+    fullscreenMapControl = 1
+    mapTypeId => google.maps.MapTypeId.ROADMAP
     markerClusterer {
       enable = {$plugin.tx_maps2.view.enableMarkerClusterer}
       imagePath = EXT:maps2/Resources/Public/Icons/MarkerClusterer/m
