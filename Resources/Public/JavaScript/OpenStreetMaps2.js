@@ -16,6 +16,7 @@ function OpenStreetMaps2($element, environment) {
         width: environment.settings.mapWidth
     });
     this.poiCollections = this.$element.data("pois");
+    this.editable = this.$element.hasClass("editMarker");
 
     this.createMap(environment);
 
@@ -49,7 +50,8 @@ OpenStreetMaps2.prototype.createMap = function (environment) {
     this.map = map = L.map(
         this.$element.get(0), {
             center: [environment.extConf.defaultLatitude, environment.extConf.defaultLongitude],
-            zoom: environment.settings.zoom ? environment.settings.zoom : 12
+            zoom: environment.settings.zoom ? environment.settings.zoom : 12,
+            editable: this.editable
         }
     );
 
@@ -203,7 +205,10 @@ OpenStreetMaps2.prototype.createPointByCollectionType = function (environment) {
 OpenStreetMaps2.prototype.createMarker = function (poiCollection, environment) {
     var categoryUid = "0";
     var marker = L.marker(
-        [poiCollection.latitude, poiCollection.longitude]
+        [poiCollection.latitude, poiCollection.longitude],
+        {
+            'draggable': this.editable
+        }
     ).addTo(this.map);
 
     for (var i = 0; i < poiCollection.categories.length; i++) {
@@ -227,7 +232,11 @@ OpenStreetMaps2.prototype.createMarker = function (poiCollection, environment) {
 
     this.bounds.extend(marker.getLatLng());
 
-    marker.bindPopup(poiCollection.infoWindowContent);
+    if (this.editable) {
+        this.addEditListeners(this.$element, marker, poiCollection, environment);
+    } else {
+        marker.bindPopup(poiCollection.infoWindowContent);
+    }
 };
 
 /**
@@ -319,6 +328,32 @@ OpenStreetMaps2.prototype.inList = function (list, item) {
     var catSearch = ',' + list + ',';
     item = ',' + item + ',';
     return catSearch.search(item);
+};
+
+/**
+ * Add Edit Listeners
+ * This will only work for Markers (Point)
+ *
+ * @param $mapContainer
+ * @param marker
+ * @param poiCollection
+ * @param environment
+ */
+OpenStreetMaps2.prototype.addEditListeners = function ($mapContainer, marker, poiCollection, environment) {
+    // update fields and marker while dragging
+    marker.on('dragend', function() {
+        var lat = marker.getLatLng().lat.toFixed(6);
+        var lng = marker.getLatLng().lng.toFixed(6);
+        $mapContainer.prevAll("input.latitude-" + environment.contentRecord.uid).val(lat);
+        $mapContainer.prevAll("input.longitude-" + environment.contentRecord.uid).val(lng);
+    });
+
+    // update fields and marker when clicking on the map
+    map.on('click', function(event) {
+        marker.setLatLng(event.latlng);
+        $mapContainer.prevAll("input.latitude-" + environment.contentRecord.uid).val(event.latlng.lat.toFixed(6));
+        $mapContainer.prevAll("input.longitude-" + environment.contentRecord.uid).val(event.latlng.lng.toFixed(6));
+    });
 };
 
 jQuery(".maps2").each(function () {
