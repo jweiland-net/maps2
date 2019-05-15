@@ -22,114 +22,36 @@ use TYPO3\CMS\Core\SingletonInterface;
  */
 class ExtConf implements SingletonInterface
 {
-    /**
-     * @var string
-     */
+    // general
     protected $mapProvider = '';
-
-    /**
-     * @var string
-     */
     protected $defaultMapProvider = '';
-
-    /**
-     * @var string
-     */
-    protected $googleMapsLibrary = '';
-
-    /**
-     * @var string
-     */
-    protected $googleMapsJavaScriptApiKey = '';
-
-    /**
-     * @var string
-     */
-    protected $googleMapsGeocodeApiKey = '';
-
-    /**
-     * @var bool
-     */
-    protected $explicitAllowMapProviderRequests = false;
-
-    /**
-     * @var bool
-     */
-    protected $explicitAllowMapProviderRequestsBySessionOnly = false;
-
-    /**
-     * @var string
-     */
     protected $defaultCountry = '';
-
-    /**
-     * @var float
-     */
     protected $defaultLatitude;
-
-    /**
-     * @var float
-     */
     protected $defaultLongitude;
-
-    /**
-     * @var int
-     */
     protected $defaultRadius = 0;
-
-    /**
-     * @var string
-     */
+    protected $explicitAllowMapProviderRequests = false;
+    protected $explicitAllowMapProviderRequestsBySessionOnly = false;
     protected $infoWindowContentTemplatePath = '';
-
-    /**
-     * @var string
-     */
     protected $allowMapTemplatePath = '';
 
-    /**
-     * @var string
-     */
+    // Google Maps
+    protected $googleMapsLibrary = '';
+    protected $googleMapsGeocodeUri = '';
+    protected $googleMapsJavaScriptApiKey = '';
+    protected $googleMapsGeocodeApiKey = '';
+
+    // Open Street Map
+    protected $openStreetMapGeocodeUri = '';
+
+    // Design/Color
     protected $strokeColor = '';
-
-    /**
-     * @var float
-     */
     protected $strokeOpacity;
-
-    /**
-     * @var int
-     */
     protected $strokeWeight = 0;
-
-    /**
-     * @var string
-     */
     protected $fillColor = '';
-
-    /**
-     * @var float
-     */
     protected $fillOpacity;
-
-    /**
-     * @var int
-     */
     protected $markerIconWidth = 0;
-
-    /**
-     * @var int
-     */
     protected $markerIconHeight = 0;
-
-    /**
-     * @var int
-     */
     protected $markerIconAnchorPosX = 0;
-
-    /**
-     * @var int
-     */
     protected $markerIconAnchorPosY = 0;
 
     public function __construct()
@@ -150,9 +72,6 @@ class ExtConf implements SingletonInterface
         }
     }
 
-    /**
-     * @return string Returns "both", "gm" or "osm"
-     */
     public function getMapProvider(): string
     {
         if (empty($this->mapProvider)) {
@@ -162,17 +81,11 @@ class ExtConf implements SingletonInterface
         return $this->mapProvider;
     }
 
-    /**
-     * @param string $mapProvider
-     */
     public function setMapProvider(string $mapProvider)
     {
         $this->mapProvider = $mapProvider;
     }
 
-    /**
-     * @return string Returns "gm" or "osm"
-     */
     public function getDefaultMapProvider(): string
     {
         if (empty($this->defaultMapProvider)) {
@@ -182,17 +95,109 @@ class ExtConf implements SingletonInterface
         return $this->defaultMapProvider;
     }
 
-    /**
-     * @param string $defaultMapProvider
-     */
     public function setDefaultMapProvider(string $defaultMapProvider)
     {
         $this->defaultMapProvider = $defaultMapProvider;
     }
 
-    /**
-     * @return string
-     */
+    public function getDefaultCountry(): string
+    {
+        return $this->defaultCountry;
+    }
+
+    public function setDefaultCountry(string $defaultCountry)
+    {
+        $this->defaultCountry = trim($defaultCountry);
+    }
+
+    public function getDefaultLatitude(): float
+    {
+        if (empty($this->defaultLatitude)) {
+            return 0.00;
+        } else {
+            return $this->defaultLatitude;
+        }
+    }
+
+    public function setDefaultLatitude($defaultLatitude)
+    {
+        $this->defaultLatitude = (float)$defaultLatitude;
+    }
+
+    public function getDefaultLongitude(): float
+    {
+        if (empty($this->defaultLongitude)) {
+            return 0.00;
+        } else {
+            return $this->defaultLongitude;
+        }
+    }
+
+    public function setDefaultLongitude($defaultLongitude)
+    {
+        $this->defaultLongitude = (float)$defaultLongitude;
+    }
+
+    public function getDefaultRadius(): int
+    {
+        if (empty($this->defaultRadius)) {
+            return 250;
+        } else {
+            return $this->defaultRadius;
+        }
+    }
+
+    public function setDefaultRadius($defaultRadius)
+    {
+        $this->defaultRadius = (int)$defaultRadius;
+    }
+
+    public function getExplicitAllowMapProviderRequests(): bool
+    {
+        return $this->explicitAllowMapProviderRequests;
+    }
+
+    public function setExplicitAllowMapProviderRequests($explicitAllowMapProviderRequests)
+    {
+        $this->explicitAllowMapProviderRequests = (bool)$explicitAllowMapProviderRequests;
+    }
+
+    public function getExplicitAllowMapProviderRequestsBySessionOnly(): bool
+    {
+        return $this->explicitAllowMapProviderRequestsBySessionOnly;
+    }
+
+    public function setExplicitAllowMapProviderRequestsBySessionOnly($explicitAllowMapProviderRequestsBySessionOnly)
+    {
+        $this->explicitAllowMapProviderRequestsBySessionOnly = (bool)$explicitAllowMapProviderRequestsBySessionOnly;
+    }
+
+    public function getInfoWindowContentTemplatePath(): string
+    {
+        if (empty($this->infoWindowContentTemplatePath)) {
+            $this->infoWindowContentTemplatePath = 'EXT:maps2/Resources/Private/Templates/InfoWindowContent.html';
+        }
+        return $this->infoWindowContentTemplatePath;
+    }
+
+    public function setInfoWindowContentTemplatePath(string $infoWindowContentTemplatePath)
+    {
+        $this->infoWindowContentTemplatePath = $infoWindowContentTemplatePath;
+    }
+
+    public function getAllowMapTemplatePath(): string
+    {
+        if (empty($this->allowMapTemplatePath)) {
+            $this->allowMapTemplatePath = 'EXT:maps2/Resources/Private/Templates/AllowMapForm.html';
+        }
+        return $this->allowMapTemplatePath;
+    }
+
+    public function setAllowMapTemplatePath(string $allowMapTemplatePath)
+    {
+        $this->allowMapTemplatePath = $allowMapTemplatePath;
+    }
+
     public function getGoogleMapsLibrary(): string
     {
         if (trim($this->googleMapsLibrary) === '|') {
@@ -212,195 +217,57 @@ class ExtConf implements SingletonInterface
         return '';
     }
 
-    /**
-     * @param string $googleMapsLibrary
-     */
     public function setGoogleMapsLibrary(string $googleMapsLibrary)
     {
         $this->googleMapsLibrary = trim($googleMapsLibrary);
     }
 
-    /**
-     * @return string
-     */
+    public function getGoogleMapsGeocodeUri(): string
+    {
+        if (empty($this->googleMapsGeocodeUri)) {
+            $this->googleMapsGeocodeUri = 'https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=%s';
+        }
+        return $this->googleMapsGeocodeUri;
+    }
+
+    public function setGoogleMapsGeocodeUri(string $googleMapsGeocodeUri)
+    {
+        $this->googleMapsGeocodeUri = trim($googleMapsGeocodeUri);
+    }
+
     public function getGoogleMapsJavaScriptApiKey(): string
     {
         return $this->googleMapsJavaScriptApiKey;
     }
 
-    /**
-     * @param string $googleMapsJavaScriptApiKey
-     */
     public function setGoogleMapsJavaScriptApiKey(string $googleMapsJavaScriptApiKey)
     {
         $this->googleMapsJavaScriptApiKey = trim($googleMapsJavaScriptApiKey);
     }
 
-    /**
-     * @return string
-     */
     public function getGoogleMapsGeocodeApiKey(): string
     {
         return $this->googleMapsGeocodeApiKey;
     }
 
-    /**
-     * @param string $googleMapsGeocodeApiKey
-     */
     public function setGoogleMapsGeocodeApiKey(string $googleMapsGeocodeApiKey)
     {
         $this->googleMapsGeocodeApiKey = trim($googleMapsGeocodeApiKey);
     }
 
-    /**
-     * @return bool
-     */
-    public function getExplicitAllowMapProviderRequests(): bool
+    public function getOpenStreetMapGeocodeUri(): string
     {
-        return $this->explicitAllowMapProviderRequests;
-    }
-
-    /**
-     * @param bool $explicitAllowMapProviderRequests
-     */
-    public function setExplicitAllowMapProviderRequests($explicitAllowMapProviderRequests)
-    {
-        $this->explicitAllowMapProviderRequests = (bool)$explicitAllowMapProviderRequests;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getExplicitAllowMapProviderRequestsBySessionOnly(): bool
-    {
-        return $this->explicitAllowMapProviderRequestsBySessionOnly;
-    }
-
-    /**
-     * @param bool $explicitAllowMapProviderRequestsBySessionOnly
-     */
-    public function setExplicitAllowMapProviderRequestsBySessionOnly($explicitAllowMapProviderRequestsBySessionOnly)
-    {
-        $this->explicitAllowMapProviderRequestsBySessionOnly = (bool)$explicitAllowMapProviderRequestsBySessionOnly;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDefaultCountry(): string
-    {
-        return $this->defaultCountry;
-    }
-
-    /**
-     * @param string $defaultCountry
-     */
-    public function setDefaultCountry(string $defaultCountry)
-    {
-        $this->defaultCountry = trim($defaultCountry);
-    }
-
-    /**
-     * @return float
-     */
-    public function getDefaultLatitude(): float
-    {
-        if (empty($this->defaultLatitude)) {
-            return 0.00;
-        } else {
-            return $this->defaultLatitude;
+        if (empty($this->openStreetMapGeocodeUri)) {
+            $this->openStreetMapGeocodeUri = 'https://nominatim.openstreetmap.org/search/%s?format=json&addressdetails=1';
         }
+        return $this->openStreetMapGeocodeUri;
     }
 
-    /**
-     * @param float $defaultLatitude
-     */
-    public function setDefaultLatitude($defaultLatitude)
+    public function setOpenStreetMapGeocodeUri(string $openStreetMapGeocodeUri)
     {
-        $this->defaultLatitude = (float)$defaultLatitude;
+        $this->openStreetMapGeocodeUri = trim($openStreetMapGeocodeUri);
     }
 
-    /**
-     * @return float
-     */
-    public function getDefaultLongitude(): float
-    {
-        if (empty($this->defaultLongitude)) {
-            return 0.00;
-        } else {
-            return $this->defaultLongitude;
-        }
-    }
-
-    /**
-     * @param float $defaultLongitude
-     */
-    public function setDefaultLongitude($defaultLongitude)
-    {
-        $this->defaultLongitude = (float)$defaultLongitude;
-    }
-
-    /**
-     * @return int
-     */
-    public function getDefaultRadius(): int
-    {
-        if (empty($this->defaultRadius)) {
-            return 250;
-        } else {
-            return $this->defaultRadius;
-        }
-    }
-
-    /**
-     * @param int $defaultRadius
-     */
-    public function setDefaultRadius($defaultRadius)
-    {
-        $this->defaultRadius = (int)$defaultRadius;
-    }
-
-    /**
-     * @return string
-     */
-    public function getInfoWindowContentTemplatePath(): string
-    {
-        if (empty($this->infoWindowContentTemplatePath)) {
-            $this->infoWindowContentTemplatePath = 'EXT:maps2/Resources/Private/Templates/InfoWindowContent.html';
-        }
-        return $this->infoWindowContentTemplatePath;
-    }
-
-    /**
-     * @param string $infoWindowContentTemplatePath
-     */
-    public function setInfoWindowContentTemplatePath(string $infoWindowContentTemplatePath)
-    {
-        $this->infoWindowContentTemplatePath = (string)$infoWindowContentTemplatePath;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAllowMapTemplatePath(): string
-    {
-        if (empty($this->allowMapTemplatePath)) {
-            $this->allowMapTemplatePath = 'EXT:maps2/Resources/Private/Templates/AllowMapForm.html';
-        }
-        return $this->allowMapTemplatePath;
-    }
-
-    /**
-     * @param string $allowMapTemplatePath
-     */
-    public function setAllowMapTemplatePath(string $allowMapTemplatePath)
-    {
-        $this->allowMapTemplatePath = (string)$allowMapTemplatePath;
-    }
-
-    /**
-     * @return string
-     */
     public function getStrokeColor(): string
     {
         if (empty($this->strokeColor)) {
@@ -410,17 +277,11 @@ class ExtConf implements SingletonInterface
         }
     }
 
-    /**
-     * @param string $strokeColor
-     */
     public function setStrokeColor(string $strokeColor)
     {
-        $this->strokeColor = (string)$strokeColor;
+        $this->strokeColor = $strokeColor;
     }
 
-    /**
-     * @return float
-     */
     public function getStrokeOpacity(): float
     {
         if (empty($this->strokeOpacity)) {
@@ -430,17 +291,11 @@ class ExtConf implements SingletonInterface
         }
     }
 
-    /**
-     * @param float $strokeOpacity
-     */
     public function setStrokeOpacity($strokeOpacity)
     {
         $this->strokeOpacity = (float)$strokeOpacity;
     }
 
-    /**
-     * @return int
-     */
     public function getStrokeWeight(): int
     {
         if (empty($this->strokeWeight)) {
@@ -450,17 +305,11 @@ class ExtConf implements SingletonInterface
         }
     }
 
-    /**
-     * @param int $strokeWeight
-     */
     public function setStrokeWeight($strokeWeight)
     {
         $this->strokeWeight = (int)$strokeWeight;
     }
 
-    /**
-     * @return string
-     */
     public function getFillColor(): string
     {
         if (empty($this->fillColor)) {
@@ -470,17 +319,11 @@ class ExtConf implements SingletonInterface
         }
     }
 
-    /**
-     * @param string $fillColor
-     */
     public function setFillColor(string $fillColor)
     {
-        $this->fillColor = (string)$fillColor;
+        $this->fillColor = $fillColor;
     }
 
-    /**
-     * @return float
-     */
     public function getFillOpacity(): float
     {
         if (empty($this->fillOpacity)) {
@@ -490,73 +333,46 @@ class ExtConf implements SingletonInterface
         }
     }
 
-    /**
-     * @param float $fillOpacity
-     */
     public function setFillOpacity($fillOpacity)
     {
         $this->fillOpacity = (float)$fillOpacity;
     }
 
-    /**
-     * @return int
-     */
     public function getMarkerIconWidth(): int
     {
         return $this->markerIconWidth;
     }
 
-    /**
-     * @param int $markerIconWidth
-     */
     public function setMarkerIconWidth($markerIconWidth)
     {
         $this->markerIconWidth = (int)$markerIconWidth;
     }
 
-    /**
-     * @return int
-     */
     public function getMarkerIconHeight(): int
     {
         return $this->markerIconHeight;
     }
 
-    /**
-     * @param int $markerIconHeight
-     */
     public function setMarkerIconHeight($markerIconHeight)
     {
         $this->markerIconHeight = (int)$markerIconHeight;
     }
 
-    /**
-     * @return int
-     */
     public function getMarkerIconAnchorPosX(): int
     {
         return $this->markerIconAnchorPosX;
     }
 
-    /**
-     * @param int $markerIconAnchorPosX
-     */
     public function setMarkerIconAnchorPosX($markerIconAnchorPosX)
     {
         $this->markerIconAnchorPosX = (int)$markerIconAnchorPosX;
     }
 
-    /**
-     * @return int
-     */
     public function getMarkerIconAnchorPosY(): int
     {
         return $this->markerIconAnchorPosY;
     }
 
-    /**
-     * @param int $markerIconAnchorPosY
-     */
     public function setMarkerIconAnchorPosY($markerIconAnchorPosY)
     {
         $this->markerIconAnchorPosY = (int)$markerIconAnchorPosY;

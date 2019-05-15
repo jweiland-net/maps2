@@ -21,10 +21,15 @@ allowMapTemplatePath = EXT:maps2/Resources/Private/Templates/AllowMapForm.html
 
 # cat=gm; type=wrap; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:googleMapsLibrary
 googleMapsLibrary = https://maps.googleapis.com/maps/api/js?key=|&libraries=places
+# cat=gm; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:googleMapsGeocodeUri
+googleMapsGeocodeUri = c
 # cat=gm; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:googleMapsApiKey
 googleMapsJavaScriptApiKey =
 # cat=gm; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:googleGeocodeApiKey
 googleMapsGeocodeApiKey =
+
+# cat=osm; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:openStreetMapGeocodeUri
+openStreetMapGeocodeUri = c
 
 # cat=design/color; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:strokeColor
 strokeColor = #FF0000

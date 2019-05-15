@@ -30,9 +30,12 @@ The settings are divided into several tabs and described here in detail:
    infoWindowContentTemplatePath_             basic    EXT:maps2/Resources/Private/Templates/InfoWindowContent.html
    allowMapTemplatePath_                      basic    EXT:maps2/Resources/Private/Templates/AllowMapForm.html
 
-   googleMapsLibrary_                         basic    ``https://maps.googleapis.com/maps/api/js?key=|&libraries=places``
-   googleMapsJavaScriptApiKey_                basic
-   googleMapsGeocodeApiKey_                   basic
+   googleMapsLibrary_                         gm       ``https://maps.googleapis.com/maps/api/js?key=|&libraries=places``
+   googleMapsGeocodeUri_                      gm       ``https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=%s``
+   googleMapsJavaScriptApiKey_                gm
+   googleMapsGeocodeApiKey_                   gm
+
+   openStreetMap_                             osm      ``https://nominatim.openstreetmap.org/search/%s?format=json&addressdetails=1``
 
    strokeColor_                               design   #FF0000
    strokeOpacity_                             design   0.8
@@ -174,6 +177,19 @@ can decide where the ApiKey has to be inserted.
    record creation.
 
 
+.. _extensionManager-googleMapsGeocodeUri:
+
+googleMapsGeocodeUri
+--------------------
+
+When you're searching for an address while creating PoiCollection records maps2 starts a Geocode request to
+Google Maps Geocode API. If needed you can change that URI here.
+
+.. important::
+   There are two %s placeholders in URI. We replace them with sprintf(), so, if you change that URI the new URI
+   must have these two placeholders, too.
+
+
 .. _extensionManager-googleMapsJavaScriptApiKey:
 
 googleMapsJavaScriptApiKey
@@ -192,6 +208,19 @@ Since version 2.0.0 this extension needs a Google Maps Geocode ApiKey, if you us
 It was needed to get Latitude and Longitude from a given address.
 
 Please visit `Google Console <http://console.developers.google.com>`_ to get one.
+
+
+.. _extensionManager-openStreetMapGeocodeUri:
+
+openStreetMapGeocodeUri
+-----------------------
+
+When you're searching for an address while creating PoiCollection records maps2 starts a Geocode request to
+Open Street Map Geocode API. If needed you can change that URI here.
+
+.. important::
+   There is one %s placeholder in URI for address. We replace it with sprintf(), so, if you change that URI the new URI
+   must have this placeholder, too.
 
 
 .. _extensionManager-strokeColor::

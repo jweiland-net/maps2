@@ -12,21 +12,6 @@
 			<trans-unit id="defaultMapProvider" xml:space="preserve">
 				<source>Set default Map Provider: If you have chosen "Both" above you can define a default here. New map records will be created with this selected type of map provider.</source>
 			</trans-unit>
-			<trans-unit id="googleMapsLibrary" xml:space="preserve">
-				<source>Link to Google Maps API: This setting is for TYPO3 Backend only. Visit your TypoScript-Templates if you want to change the library for Frontend. You only need to fill this field if you want to use an older or beta version.</source>
-			</trans-unit>
-			<trans-unit id="googleMapsApiKey" xml:space="preserve">
-				<source>Google Maps JavaScript ApiKey: This setting is for TYPO3 Backend only. Visit your TypoScript-Templates if you want to change the library for Frontend. Visit https://console.developers.google.com Create a new project for Google Maps JavaScript API and insert the retrieved Browser ApiKey here.</source>
-			</trans-unit>
-			<trans-unit id="googleGeocodeApiKey" xml:space="preserve">
-				<source>Google Maps Geocode ApiKey: Visit https://console.developers.google.com Create a new project for Google Maps Geocode API and insert here the retrieved Server ApiKey.</source>
-			</trans-unit>
-			<trans-unit id="explicitAllowMapProviderRequests" xml:space="preserve">
-				<source>Explicit allow Map: While showing Google Maps in frontend the browser sends multiple requests to Google Servers. These requests contains the IP address of the website visitor which is a user internal information. In some countries the user has to explicit allow sending theses information to third party servers.</source>
-			</trans-unit>
-			<trans-unit id="explicitAllowMapProviderRequestsBySessionOnly" xml:space="preserve">
-				<source>Allow Google Maps by Session: See explicitAllowMapProviderRequests for explanation. Normally we save activation in a Cookie (normally 1 day (TYPO3 default)). So there is no need to activate google maps again after browser restart. If you enable this option we save activation in session and you have to activate google maps again after each browser restart.</source>
-			</trans-unit>
 			<trans-unit id="defaultCountry" xml:space="preserve">
 				<source>Default Country: If someone searches for a postal code only, Google will search whole world for that postal code. If you want, you can assign a default country here to reduce that search to that country.</source>
 			</trans-unit>
@@ -39,11 +24,34 @@
 			<trans-unit id="defaultRadius" xml:space="preserve">
 				<source>Default Radius (in meters): When using collection type "Radius" you should set a default radius. Else you just see one single point</source>
 			</trans-unit>
+			<trans-unit id="explicitAllowMapProviderRequests" xml:space="preserve">
+				<source>Explicit allow Map: While showing Google Maps in frontend the browser sends multiple requests to Google Servers. These requests contains the IP address of the website visitor which is a user internal information. In some countries the user has to explicit allow sending theses information to third party servers.</source>
+			</trans-unit>
+			<trans-unit id="explicitAllowMapProviderRequestsBySessionOnly" xml:space="preserve">
+				<source>Allow Google Maps by Session: See explicitAllowMapProviderRequests for explanation. Normally we save activation in a Cookie (normally 1 day (TYPO3 default)). So there is no need to activate google maps again after browser restart. If you enable this option we save activation in session and you have to activate google maps again after each browser restart.</source>
+			</trans-unit>
 			<trans-unit id="infoWindowContentTemplatePath" xml:space="preserve">
 				<source>Template path for info window: If you click on a marker a little info window will appear. With this setting you can change that template to your own needs.</source>
 			</trans-unit>
 			<trans-unit id="allowMapTemplatePath" xml:space="preserve">
 				<source>Template path for Google Requests: Define a template which will be shown, if a user has to accept sending requests to Google Servers.</source>
+			</trans-unit>
+
+			<trans-unit id="googleMapsLibrary" xml:space="preserve">
+				<source>Link to Google Maps API: This setting is for TYPO3 Backend only. Visit your TypoScript-Templates if you want to change the library for Frontend. You only need to fill this field if you want to use an older or beta version.</source>
+			</trans-unit>
+			<trans-unit id="googleMapsGeocodeUri" xml:space="preserve">
+				<source>Google Maps Geocode URI: If needed you can change the URI of Google Maps Geocode API here. It MUST have two %s placeholders.</source>
+			</trans-unit>
+			<trans-unit id="googleMapsApiKey" xml:space="preserve">
+				<source>Google Maps JavaScript ApiKey: This setting is for TYPO3 Backend only. Visit your TypoScript-Templates if you want to change the library for Frontend. Visit https://console.developers.google.com Create a new project for Google Maps JavaScript API and insert the retrieved Browser ApiKey here.</source>
+			</trans-unit>
+			<trans-unit id="googleGeocodeApiKey" xml:space="preserve">
+				<source>Google Maps Geocode ApiKey: Visit https://console.developers.google.com Create a new project for Google Maps Geocode API and insert here the retrieved Server ApiKey.</source>
+			</trans-unit>
+
+			<trans-unit id="openStreetMapGeocodeUri" xml:space="preserve">
+				<source>OpenStreetMap Geocode URI: If needed you can change the URI of Open Street Map Geocode API here. It MUST have one %s placeholder for address.</source>
 			</trans-unit>
 
 			<trans-unit id="strokeColor" xml:space="preserve">
@@ -59,7 +67,7 @@
 				<source>Fill Color: Which color the overlay should have?</source>
 			</trans-unit>
 			<trans-unit id="fillOpacity" xml:space="preserve">
-				<source>Fill Opacity:  If you set this to 1, you can't see th map behind the overlay. So it's better to find a value between 0.3 and 0.6. But it should be less than the value of strokeOpacity</source>
+				<source>Fill Opacity: If you set this to 1, you can't see th map behind the overlay. So it's better to find a value between 0.3 and 0.6. But it should be less than the value of strokeOpacity</source>
 			</trans-unit>
 			<trans-unit id="markerIconWidth" xml:space="preserve">
 				<source>Marker icon width: Define a default width for Marker Icons in pixel. You can override this value individually in sys_category and PoiCollection records.</source>
