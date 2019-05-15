@@ -28,7 +28,8 @@ class GeocodeRequest extends AbstractRequest
      */
     protected $uri = '';
 
-    public function __construct(ExtConf $extConf = null) {
+    public function __construct(ExtConf $extConf = null)
+    {
         parent::__construct($extConf);
         $this->uri = $this->extConf->getOpenStreetMapGeocodeUri();
     }
