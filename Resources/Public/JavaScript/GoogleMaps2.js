@@ -145,7 +145,7 @@ function GoogleMaps2($element, environment) {
         if (this.countObjectProperties(this.categorizedMarkers) > 1) {
             this.showSwitchableCategories(environment);
         }
-        if (this.poiCollections.length > 1) {
+        if (this.poiCollections.length > 1 && environment.settings.forceZoom === false) {
             this.map.fitBounds(this.bounds);
         } else {
             this.map.setCenter(new google.maps.LatLng(this.poiCollections[0].latitude, this.poiCollections[0].longitude));

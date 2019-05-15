@@ -91,6 +91,8 @@ abstract class AbstractController extends AbstractWidgetController
             $this->addFlashMessage('Dear Admin: Please add default static template of maps2 into your TS-Template.');
         }
 
+        $this->settings['forceZoom'] = (bool)$this->settings['forceZoom'] ?? false;
+
         // https://wiki.openstreetmap.org/wiki/Tile_servers tolds to use ${x} placeholders, but they don't work.
         if (!empty($this->defaultSettings['mapTile'])) {
             $this->defaultSettings['mapTile'] = str_replace(
