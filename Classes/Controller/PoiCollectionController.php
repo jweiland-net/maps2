@@ -37,12 +37,11 @@ class PoiCollectionController extends AbstractController
      */
     public function showAction(PoiCollection $poiCollection = null)
     {
-        $mapService = GeneralUtility::makeInstance(MapService::class);
         $poiCollectionRepository = $this->objectManager->get(PoiCollectionRepository::class);
 
         // if uri is empty and a poiCollection is set in FlexForm
         if ($poiCollection === null && !empty($this->settings['poiCollection'])) {
-            $poiCollection = $poiCollectionRepository->findByUid((int)$this->settings['poiCollection']);
+            $poiCollection = $poiCollectionRepository->findByIdentifier((int)$this->settings['poiCollection']);
         }
         if ($poiCollection instanceof PoiCollection) {
             $poiCollections = [$poiCollection];
@@ -68,6 +67,7 @@ class PoiCollectionController extends AbstractController
             }
         }
 
+        $mapService = GeneralUtility::makeInstance(MapService::class);
         foreach ($poiCollections as $poiCollection) {
             $mapService->setInfoWindow($poiCollection);
         }
