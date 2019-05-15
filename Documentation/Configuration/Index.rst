@@ -113,6 +113,7 @@ This section covers all settings, which can be defined in the maps2 plugin and T
    mapHeight_             Map height                  General      string
    allowMapTemplatePath_  AllowMap template path      General      string
    zoom_                  Zoom                        Map Options  integer
+   forceZoom_             Force Zoom                  Map Options  boolean
    mapTypeId_             Map type                    Map Options  string
    zoomControl_           Zoom control                Map Options  boolean
    mapTypeControl_        Map type control            Map Options  boolean
@@ -167,6 +168,16 @@ zoom
 ~~~~
 
 A zoom value how deep to zoom in into the map.
+
+.. _forceZoom:
+
+forceZoom
+~~~~~~~~~
+
+This setting is only interessting, if you will show multiple POIs on map. In that case maps2 will zoom out until
+all POIs can be displayed. This is realized with the BoundingBox feature of Google Maps or OpenStreetMap. If
+you don't want maps2 to zoom out, because you have POIs all around the world for example, you can activate
+this checkbox to prevent automatic zooming.
 
 .. _mapTypeId:
 
