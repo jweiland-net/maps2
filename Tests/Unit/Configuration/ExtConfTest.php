@@ -49,227 +49,77 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function getGoogleMapsLibraryInitiallyReturnsEmptyString() {
+    public function getMapProviderInitiallyReturnsBothAsString() {
         $this->assertSame(
-            '',
-            $this->subject->getGoogleMapsLibrary()
+            'both',
+            $this->subject->getMapProvider()
         );
     }
 
     /**
      * @test
      */
-    public function setGoogleMapsLibraryWithNoPipeWillNotSetGoogleMapsLibrary() {
-        $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');
-        $this->subject->setGoogleMapsLibrary('foo bar');
-
-        $this->assertSame(
-            '',
-            $this->subject->getGoogleMapsLibrary()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function setGoogleMapsLibraryWithNoHttpInFrontWillNotSetGoogleMapsLibrary() {
-        $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');
-        $this->subject->setGoogleMapsLibrary('www.domain.de/api=|&mobile=1');
-
-        $this->assertSame(
-            '',
-            $this->subject->getGoogleMapsLibrary()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function setGoogleMapsLibraryWithPipeAndHttpWillSetGoogleMapsLibrary() {
-        $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');
-        $this->subject->setGoogleMapsLibrary('http://www.domain.de/api=|&mobile=1');
-
-        $this->assertSame(
-            'https://www.domain.de/api=myApiKey&mobile=1',
-            $this->subject->getGoogleMapsLibrary()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function setGoogleMapsLibraryWithPipeAndHttpsWillSetGoogleMapsLibrary() {
-        $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');
-        $this->subject->setGoogleMapsLibrary('https://www.domain.de/api=|&mobile=1');
-
-        $this->assertSame(
-            'https://www.domain.de/api=myApiKey&mobile=1',
-            $this->subject->getGoogleMapsLibrary()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function setGoogleMapsLibraryWithHttpUriAndActivatedHttpsWillSetGoogleMapsLibrary() {
-        $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');
-        $this->subject->setGoogleMapsLibrary('http://www.domain.de/api=|&mobile=1');
-
-        $this->assertSame(
-            'https://www.domain.de/api=myApiKey&mobile=1',
-            $this->subject->getGoogleMapsLibrary()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function setGoogleMapsLibraryWithIntegerResultsInEmptyString() {
-        $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');
-        $this->subject->setGoogleMapsLibrary(123);
-        $this->assertSame('', $this->subject->getGoogleMapsLibrary());
-    }
-
-    /**
-     * @test
-     */
-    public function setGoogleMapsLibraryWithBooleanResultsInEmptyString() {
-        $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');
-        $this->subject->setGoogleMapsLibrary(true);
-        $this->assertSame('', $this->subject->getGoogleMapsLibrary());
-    }
-
-    /**
-     * @test
-     */
-    public function setGoogleMapsJavaScriptApiKeySetsGoogleMapsJavaScriptApiKey() {
-        $this->subject->setGoogleMapsJavaScriptApiKey('foo bar');
+    public function setMapProviderSetsMapProvider() {
+        $this->subject->setMapProvider('foo bar');
 
         $this->assertSame(
             'foo bar',
-            $this->subject->getGoogleMapsJavaScriptApiKey()
+            $this->subject->getMapProvider()
         );
     }
 
     /**
      * @test
      */
-    public function setGoogleMapsJavaScriptApiKeyWithIntegerResultsInString() {
-        $this->subject->setGoogleMapsJavaScriptApiKey(123);
-        $this->assertSame('123', $this->subject->getGoogleMapsJavaScriptApiKey());
+    public function setMapProviderWithIntegerResultsInString() {
+        $this->subject->setMapProvider(123);
+        $this->assertSame('123', $this->subject->getMapProvider());
     }
 
     /**
      * @test
      */
-    public function setGoogleMapsJavaScriptApiKeyWithBooleanResultsInString() {
-        $this->subject->setGoogleMapsJavaScriptApiKey(true);
-        $this->assertSame('1', $this->subject->getGoogleMapsJavaScriptApiKey());
+    public function setMapProviderWithBooleanResultsInString() {
+        $this->subject->setMapProvider(TRUE);
+        $this->assertSame('1', $this->subject->getMapProvider());
     }
 
     /**
      * @test
      */
-    public function setGoogleMapsGeocodeApiKeySetsGoogleMapsGeocodeApiKey() {
-        $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');
-        $this->subject->setGoogleMapsGeocodeApiKey('foo bar');
+    public function getDefaultMapProviderInitiallyReturnsGoogleMapsAsString() {
+        $this->assertSame(
+            'gm',
+            $this->subject->getDefaultMapProvider()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function setDefaultMapProviderSetsDefaultMapProvider() {
+        $this->subject->setDefaultMapProvider('foo bar');
 
         $this->assertSame(
             'foo bar',
-            $this->subject->getGoogleMapsGeocodeApiKey()
+            $this->subject->getDefaultMapProvider()
         );
     }
 
     /**
      * @test
      */
-    public function setGoogleMapsGeocodeApiKeyWithIntegerResultsInString() {
-        $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');
-        $this->subject->setGoogleMapsGeocodeApiKey(123);
-        $this->assertSame('123', $this->subject->getGoogleMapsGeocodeApiKey());
+    public function setDefaultMapProviderWithIntegerResultsInString() {
+        $this->subject->setDefaultMapProvider(123);
+        $this->assertSame('123', $this->subject->getDefaultMapProvider());
     }
 
     /**
      * @test
      */
-    public function setGoogleMapsGeocodeApiKeyWithBooleanResultsInString() {
-        $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');
-        $this->subject->setGoogleMapsGeocodeApiKey(true);
-        $this->assertSame('1', $this->subject->getGoogleMapsGeocodeApiKey());
-    }
-
-    /**
-     * @test
-     */
-    public function getExplicitAllowMapProviderRequestsInitiallyReturnsFalse() {
-        $this->assertSame(
-            false,
-            $this->subject->getExplicitAllowMapProviderRequests()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function setExplicitAllowMapProviderRequestsSetsExplicitAllowGoogleMaps() {
-        $this->subject->setExplicitAllowMapProviderRequests(true);
-        $this->assertSame(
-            true,
-            $this->subject->getExplicitAllowMapProviderRequests()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function setExplicitAllowMapProviderRequestsWithStringReturnsTrue() {
-        $this->subject->setExplicitAllowMapProviderRequests('foo bar');
-        $this->assertTrue($this->subject->getExplicitAllowMapProviderRequests());
-    }
-
-    /**
-     * @test
-     */
-    public function setExplicitAllowMapProviderRequestsWithZeroReturnsFalse() {
-        $this->subject->setExplicitAllowMapProviderRequests(0);
-        $this->assertFalse($this->subject->getExplicitAllowMapProviderRequests());
-    }
-
-    /**
-     * @test
-     */
-    public function getExplicitAllowMapProviderRequestsBySessionOnlyInitiallyReturnsFalse() {
-        $this->assertSame(
-            false,
-            $this->subject->getExplicitAllowMapProviderRequestsBySessionOnly()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function setExplicitAllowMapProviderRequestsBySessionOnlySetsExplicitAllowGoogleMapsBySessionOnly() {
-        $this->subject->setExplicitAllowMapProviderRequestsBySessionOnly(true);
-        $this->assertSame(
-            true,
-            $this->subject->getExplicitAllowMapProviderRequestsBySessionOnly()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function setExplicitAllowMapProviderRequestsBySessionOnlyWithStringReturnsTrue() {
-        $this->subject->setExplicitAllowMapProviderRequestsBySessionOnly('foo bar');
-        $this->assertTrue($this->subject->getExplicitAllowMapProviderRequestsBySessionOnly());
-    }
-
-    /**
-     * @test
-     */
-    public function setExplicitAllowMapProviderRequestsBySessionOnlyWithZeroReturnsFalse() {
-        $this->subject->setExplicitAllowMapProviderRequestsBySessionOnly(0);
-        $this->assertFalse($this->subject->getExplicitAllowMapProviderRequestsBySessionOnly());
+    public function setDefaultMapProviderWithBooleanResultsInString() {
+        $this->subject->setDefaultMapProvider(TRUE);
+        $this->assertSame('1', $this->subject->getDefaultMapProvider());
     }
 
     /**
@@ -403,6 +253,80 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
+    public function getExplicitAllowMapProviderRequestsInitiallyReturnsFalse() {
+        $this->assertSame(
+            false,
+            $this->subject->getExplicitAllowMapProviderRequests()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function setExplicitAllowMapProviderRequestsSetsExplicitAllowGoogleMaps() {
+        $this->subject->setExplicitAllowMapProviderRequests(true);
+        $this->assertSame(
+            true,
+            $this->subject->getExplicitAllowMapProviderRequests()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function setExplicitAllowMapProviderRequestsWithStringReturnsTrue() {
+        $this->subject->setExplicitAllowMapProviderRequests('foo bar');
+        $this->assertTrue($this->subject->getExplicitAllowMapProviderRequests());
+    }
+
+    /**
+     * @test
+     */
+    public function setExplicitAllowMapProviderRequestsWithZeroReturnsFalse() {
+        $this->subject->setExplicitAllowMapProviderRequests(0);
+        $this->assertFalse($this->subject->getExplicitAllowMapProviderRequests());
+    }
+
+    /**
+     * @test
+     */
+    public function getExplicitAllowMapProviderRequestsBySessionOnlyInitiallyReturnsFalse() {
+        $this->assertSame(
+            false,
+            $this->subject->getExplicitAllowMapProviderRequestsBySessionOnly()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function setExplicitAllowMapProviderRequestsBySessionOnlySetsExplicitAllowGoogleMapsBySessionOnly() {
+        $this->subject->setExplicitAllowMapProviderRequestsBySessionOnly(true);
+        $this->assertSame(
+            true,
+            $this->subject->getExplicitAllowMapProviderRequestsBySessionOnly()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function setExplicitAllowMapProviderRequestsBySessionOnlyWithStringReturnsTrue() {
+        $this->subject->setExplicitAllowMapProviderRequestsBySessionOnly('foo bar');
+        $this->assertTrue($this->subject->getExplicitAllowMapProviderRequestsBySessionOnly());
+    }
+
+    /**
+     * @test
+     */
+    public function setExplicitAllowMapProviderRequestsBySessionOnlyWithZeroReturnsFalse() {
+        $this->subject->setExplicitAllowMapProviderRequestsBySessionOnly(0);
+        $this->assertFalse($this->subject->getExplicitAllowMapProviderRequestsBySessionOnly());
+    }
+
+    /**
+     * @test
+     */
     public function getInfoWindowContentTemplatePathInitiallyReturnsDefaultPath() {
         $this->assertSame(
             'EXT:maps2/Resources/Private/Templates/InfoWindowContent.html',
@@ -474,6 +398,234 @@ class ExtConfTest extends UnitTestCase
     public function setAllowMapTemplatePathWithBooleanResultsInString() {
         $this->subject->setAllowMapTemplatePath(true);
         $this->assertSame('1', $this->subject->getAllowMapTemplatePath());
+    }
+
+    /**
+     * @test
+     */
+    public function getGoogleMapsLibraryInitiallyReturnsEmptyString() {
+        $this->assertSame(
+            '',
+            $this->subject->getGoogleMapsLibrary()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function setGoogleMapsLibraryWithNoPipeWillNotSetGoogleMapsLibrary() {
+        $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');
+        $this->subject->setGoogleMapsLibrary('foo bar');
+
+        $this->assertSame(
+            '',
+            $this->subject->getGoogleMapsLibrary()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function setGoogleMapsLibraryWithNoHttpInFrontWillNotSetGoogleMapsLibrary() {
+        $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');
+        $this->subject->setGoogleMapsLibrary('www.domain.de/api=|&mobile=1');
+
+        $this->assertSame(
+            '',
+            $this->subject->getGoogleMapsLibrary()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function setGoogleMapsLibraryWithPipeAndHttpWillSetGoogleMapsLibrary() {
+        $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');
+        $this->subject->setGoogleMapsLibrary('http://www.domain.de/api=|&mobile=1');
+
+        $this->assertSame(
+            'https://www.domain.de/api=myApiKey&mobile=1',
+            $this->subject->getGoogleMapsLibrary()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function setGoogleMapsLibraryWithPipeAndHttpsWillSetGoogleMapsLibrary() {
+        $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');
+        $this->subject->setGoogleMapsLibrary('https://www.domain.de/api=|&mobile=1');
+
+        $this->assertSame(
+            'https://www.domain.de/api=myApiKey&mobile=1',
+            $this->subject->getGoogleMapsLibrary()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function setGoogleMapsLibraryWithHttpUriAndActivatedHttpsWillSetGoogleMapsLibrary() {
+        $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');
+        $this->subject->setGoogleMapsLibrary('http://www.domain.de/api=|&mobile=1');
+
+        $this->assertSame(
+            'https://www.domain.de/api=myApiKey&mobile=1',
+            $this->subject->getGoogleMapsLibrary()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function setGoogleMapsLibraryWithIntegerResultsInEmptyString() {
+        $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');
+        $this->subject->setGoogleMapsLibrary(123);
+        $this->assertSame('', $this->subject->getGoogleMapsLibrary());
+    }
+
+    /**
+     * @test
+     */
+    public function setGoogleMapsLibraryWithBooleanResultsInEmptyString() {
+        $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');
+        $this->subject->setGoogleMapsLibrary(true);
+        $this->assertSame('', $this->subject->getGoogleMapsLibrary());
+    }
+
+    /**
+     * @test
+     */
+    public function getGoogleMapsGeocodeUriInitiallyReturnsPreConfiguredUri() {
+        $this->assertSame(
+            'https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=%s',
+            $this->subject->getGoogleMapsGeocodeUri()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function setGoogleMapsGeocodeUriSetsGoogleMapsGeocodeUri() {
+        $this->subject->setGoogleMapsGeocodeUri('foo bar');
+
+        $this->assertSame(
+            'foo bar',
+            $this->subject->getGoogleMapsGeocodeUri()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function setGoogleMapsGeocodeUriWithIntegerResultsInString() {
+        $this->subject->setGoogleMapsGeocodeUri(123);
+        $this->assertSame('123', $this->subject->getGoogleMapsGeocodeUri());
+    }
+
+    /**
+     * @test
+     */
+    public function setGoogleMapsGeocodeUriWithBooleanResultsInString() {
+        $this->subject->setGoogleMapsGeocodeUri(TRUE);
+        $this->assertSame('1', $this->subject->getGoogleMapsGeocodeUri());
+    }
+
+    /**
+     * @test
+     */
+    public function setGoogleMapsJavaScriptApiKeySetsGoogleMapsJavaScriptApiKey() {
+        $this->subject->setGoogleMapsJavaScriptApiKey('foo bar');
+
+        $this->assertSame(
+            'foo bar',
+            $this->subject->getGoogleMapsJavaScriptApiKey()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function setGoogleMapsJavaScriptApiKeyWithIntegerResultsInString() {
+        $this->subject->setGoogleMapsJavaScriptApiKey(123);
+        $this->assertSame('123', $this->subject->getGoogleMapsJavaScriptApiKey());
+    }
+
+    /**
+     * @test
+     */
+    public function setGoogleMapsJavaScriptApiKeyWithBooleanResultsInString() {
+        $this->subject->setGoogleMapsJavaScriptApiKey(true);
+        $this->assertSame('1', $this->subject->getGoogleMapsJavaScriptApiKey());
+    }
+
+    /**
+     * @test
+     */
+    public function setGoogleMapsGeocodeApiKeySetsGoogleMapsGeocodeApiKey() {
+        $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');
+        $this->subject->setGoogleMapsGeocodeApiKey('foo bar');
+
+        $this->assertSame(
+            'foo bar',
+            $this->subject->getGoogleMapsGeocodeApiKey()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function setGoogleMapsGeocodeApiKeyWithIntegerResultsInString() {
+        $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');
+        $this->subject->setGoogleMapsGeocodeApiKey(123);
+        $this->assertSame('123', $this->subject->getGoogleMapsGeocodeApiKey());
+    }
+
+    /**
+     * @test
+     */
+    public function setGoogleMapsGeocodeApiKeyWithBooleanResultsInString() {
+        $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');
+        $this->subject->setGoogleMapsGeocodeApiKey(true);
+        $this->assertSame('1', $this->subject->getGoogleMapsGeocodeApiKey());
+    }
+
+    /**
+     * @test
+     */
+    public function getOpenStreetMapGeocodeUriInitiallyReturnsPreConfiguredUri() {
+        $this->assertSame(
+            'https://nominatim.openstreetmap.org/search/%s?format=json&addressdetails=1',
+            $this->subject->getOpenStreetMapGeocodeUri()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function setOpenStreetMapGeocodeUriSetsOpenStreetMapGeocodeUri() {
+        $this->subject->setOpenStreetMapGeocodeUri('foo bar');
+
+        $this->assertSame(
+            'foo bar',
+            $this->subject->getOpenStreetMapGeocodeUri()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function setOpenStreetMapGeocodeUriWithIntegerResultsInString() {
+        $this->subject->setOpenStreetMapGeocodeUri(123);
+        $this->assertSame('123', $this->subject->getOpenStreetMapGeocodeUri());
+    }
+
+    /**
+     * @test
+     */
+    public function setOpenStreetMapGeocodeUriWithBooleanResultsInString() {
+        $this->subject->setOpenStreetMapGeocodeUri(TRUE);
+        $this->assertSame('1', $this->subject->getOpenStreetMapGeocodeUri());
     }
 
     /**

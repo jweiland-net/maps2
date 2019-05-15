@@ -16,6 +16,7 @@ namespace JWeiland\Maps2\Client\Request\OpenStreetMap;
  */
 
 use JWeiland\Maps2\Client\Request\AbstractRequest;
+use JWeiland\Maps2\Configuration\ExtConf;
 
 /**
  * A Request class for Open Street Map Geocode API
@@ -25,7 +26,13 @@ class GeocodeRequest extends AbstractRequest
     /**
      * @var string
      */
-    protected $uri = 'https://nominatim.openstreetmap.org/search/%s?format=json&addressdetails=1';
+    protected $uri = '';
+
+    public function __construct(ExtConf $extConf = null)
+    {
+        parent::__construct($extConf);
+        $this->uri = $this->extConf->getOpenStreetMapGeocodeUri();
+    }
 
     /**
      * Get URI for Geocode

@@ -37,31 +37,41 @@ class PoiCollectionController extends AbstractController
      */
     public function showAction(PoiCollection $poiCollection = null)
     {
-        $mapService = GeneralUtility::makeInstance(MapService::class);
         $poiCollectionRepository = $this->objectManager->get(PoiCollectionRepository::class);
 
         // if uri is empty and a poiCollection is set in FlexForm
         if ($poiCollection === null && !empty($this->settings['poiCollection'])) {
-            $poiCollection = $poiCollectionRepository->findByUid((int)$this->settings['poiCollection']);
+            $poiCollection = $poiCollectionRepository->findByIdentifier((int)$this->settings['poiCollection']);
         }
         if ($poiCollection instanceof PoiCollection) {
-            $mapService->setInfoWindow($poiCollection);
-            $this->view->assign('poiCollections', $poiCollection);
+            $poiCollections = [$poiCollection];
         } elseif (!empty($this->settings['categories'])) {
             // if no poiCollection could be retrieved, but a category is set
             $poiCollections = $poiCollectionRepository->findPoisByCategories($this->settings['categories']);
-            foreach ($poiCollections as $poiCollection) {
-                $mapService->setInfoWindow($poiCollection);
+            if ($poiCollections->count() === 0) {
+                $this->addFlashMessage(
+                    'You have configured one or more categories but we can\'t find any PoiCollections which are assigned to these categories.',
+                    'No PoiCollections found',
+                    FlashMessage::NOTICE
+                );
             }
-            $this->view->assign('poiCollections', $poiCollections);
+        } else {
+            // show all PoiCollections of configured StorageFolder
+            $poiCollections = $poiCollectionRepository->findAll();
+            if ($poiCollections->count() === 0) {
+                $this->addFlashMessage(
+                    'You have configured one or more StorageFolders but we can\'t find any PoiCollections which are stored in this folder(s).',
+                    'No PoiCollections found',
+                    FlashMessage::NOTICE
+                );
+            }
         }
-        if ($poiCollection === null) {
-            $this->addFlashMessage(
-                'There are currently no PoiCollections defined. Either in URI nor in Plugin configuration',
-                'No POIs found',
-                FlashMessage::NOTICE
-            );
+
+        $mapService = GeneralUtility::makeInstance(MapService::class);
+        foreach ($poiCollections as $poiCollection) {
+            $mapService->setInfoWindow($poiCollection);
         }
+        $this->view->assign('poiCollections', $poiCollections);
     }
 
     /**

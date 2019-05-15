@@ -40,6 +40,10 @@
 				<source>Default zoom</source>
 				<target>Vorgegebener Zoomfaktor</target>
 			</trans-unit>
+			<trans-unit id="forceZoom" xml:space="preserve">
+				<source>Force zoom if you want to show more than one POI and don't want maps2 to zoom out to show all POIs.</source>
+				<target>Setzte den Zoom fest wenn Du mehrere POIs anzeigen lassen möchtest und maps2 nicht soweit rauszoomen soll, um alle POIs anzeigen zu lassen.</target>
+			</trans-unit>
 			<trans-unit id="zoomControl" xml:space="preserve">
 				<source>Show Zoom Control</source>
 				<target>Zeige Steuerelement: Zoom</target>

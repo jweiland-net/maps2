@@ -22,7 +22,7 @@ Create the records
 Before any maps2 record can be shown in the frontend those need to be
 created.
 
-#. Create a new sysfolder and switch to the list module.
+#. Create a new sysfolder.
    (Of course you can also use an existing sysfolder).
 
 #. Switch to **List module**
@@ -62,6 +62,20 @@ Maps2: Show map - Plugin
 #. Change the 1 :sup:`st` field to one of your created Marking records.
 
 #. Save the plugin.
+
+Here are some more possible configuration of the plugin:
+
+If you leave marking and category field empty we will show all POIs of configured StorageFolder
+
+If you leave marking field empty, but select some categories we will show all POIs of selected category. As long
+as they are available in configured StorageFolder.
+
+If marking and category field is set, marking field has precedence.
+
+If there is a PoiCollection UID in URI this POI has precedence over marking and category settings.
+
+Info: If there will be shown more than one POI on the map it is not possible to set zoom anymore. We are
+working with the BoundedBox feature of Google Maps and OpenStreetMap to zoom out until all POIs are visible.
 
 Maps2: Search Radius - Plugin
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

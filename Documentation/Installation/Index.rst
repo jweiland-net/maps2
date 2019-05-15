@@ -22,4 +22,5 @@ The extension needs to be installed like any other extension of TYPO3 CMS:
 
 **Next step**
 
-:ref:`Configure extension <configuration>`.
+Please edit ExtensionManager configuration of maps2 to decide, if you will use Google Maps or OpenStreetMap
+as your default rendering service: :ref:`Configure extension <extensionManager>`.

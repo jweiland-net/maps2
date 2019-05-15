@@ -101,6 +101,8 @@ class AbstractController extends ActionController
             $this->addFlashMessage('Dear Admin: Please add default static template of maps2 into your TS-Template.');
         }
 
+        $this->settings['forceZoom'] = (bool)$this->settings['forceZoom'] ?? false;
+
         if (empty($this->settings['mapProvider'])) {
             $mapService = GeneralUtility::makeInstance(MapService::class);
             $this->controllerContext

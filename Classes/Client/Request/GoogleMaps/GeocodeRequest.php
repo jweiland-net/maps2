@@ -16,6 +16,7 @@ namespace JWeiland\Maps2\Client\Request\GoogleMaps;
  */
 
 use JWeiland\Maps2\Client\Request\AbstractRequest;
+use JWeiland\Maps2\Configuration\ExtConf;
 
 /**
  * A Request class for Google Maps Geocode API
@@ -25,7 +26,13 @@ class GeocodeRequest extends AbstractRequest
     /**
      * @var string
      */
-    protected $uri = 'https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=%s';
+    protected $uri = '';
+
+    public function __construct(ExtConf $extConf = null)
+    {
+        parent::__construct($extConf);
+        $this->uri = $this->extConf->getGoogleMapsGeocodeUri();
+    }
 
     /**
      * Get URI for Geocode
