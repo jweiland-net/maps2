@@ -17,6 +17,7 @@ page.includeJSFooterlibs.googleMapsForMaps2 >
 
     googleMapsForMaps2 = https://maps.googleapis.com/maps/api/js?key={$plugin.tx_maps2.view.googleMapsJavaScriptApiKey}&libraries=places&callback=initMap
     googleMapsForMaps2.external = 1
+    googleMapsForMaps2.disableCompression = 1
   }
 [ELSE]
   # Do not cache maps2 output as long as user has not activated requests to Google Maps servers
