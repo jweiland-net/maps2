@@ -35,7 +35,7 @@ The settings are divided into several tabs and described here in detail:
    googleMapsJavaScriptApiKey_                gm
    googleMapsGeocodeApiKey_                   gm
 
-   openStreetMap_                             osm      ``https://nominatim.openstreetmap.org/search/%s?format=json&addressdetails=1``
+   openStreetMapGeocodeUri_                   osm      ``https://nominatim.openstreetmap.org/search/%s?format=json&addressdetails=1``
 
    strokeColor_                               design   #FF0000
    strokeOpacity_                             design   0.8
