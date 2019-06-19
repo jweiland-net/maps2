@@ -29,7 +29,7 @@ googleMapsJavaScriptApiKey =
 googleMapsGeocodeApiKey =
 
 # cat=osm; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:openStreetMapGeocodeUri
-openStreetMapGeocodeUri = ``https://nominatim.openstreetmap.org/search/%s?format=json&addressdetails=1
+openStreetMapGeocodeUri = https://nominatim.openstreetmap.org/search/%s?format=json&addressdetails=1
 
 # cat=design/color; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:strokeColor
 strokeColor = #FF0000
