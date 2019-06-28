@@ -82,7 +82,11 @@ class Maps2Registry implements SingletonInterface
             $this->cacheManager->setCacheConfigurations($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']);
             $this->cacheManager->flushCachesInGroup('system');
         }
-        $this->maps2RegistryCache = $this->cacheManager->getCache('maps2_registry');
+
+        // Check again. In case of TCA Analyzer getCache will still return false, as only core caches are loaded
+        if ($this->cacheManager->hasCache('maps2_registry') === true) {
+            $this->maps2RegistryCache = $this->cacheManager->getCache('maps2_registry');
+        }
 
         $this->template = str_repeat(PHP_EOL, 3) . 'CREATE TABLE %s (' . PHP_EOL
             . '  %s int(11) unsigned DEFAULT \'0\' NOT NULL' . PHP_EOL . ');' . str_repeat(PHP_EOL, 3);
