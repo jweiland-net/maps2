@@ -2,18 +2,18 @@ language: php
 
 jobs:
   include:
-  - stage: test
-    php: 7.0
-    env: TYPO3_VERSION=^8
-  - stage: test
-    php: 7.1
-    env: TYPO3_VERSION=^8
-  - stage: test
-    php: 7.2
-    env: TYPO3_VERSION=^8
-  - stage: test
-    php: 7.2
-    env: TYPO3_VERSION=^9
+    - stage: test
+      php: "7.0"
+      env: TYPO3_VERSION=^8
+    - stage: test
+      php: "7.1"
+      env: TYPO3_VERSION=^8
+    - stage: test
+      php: "7.2"
+      env: TYPO3_VERSION=^8
+    - stage: test
+      php: "7.2"
+      env: TYPO3_VERSION=^9
 
 sudo: false
 
@@ -28,10 +28,8 @@ cache:
 
 notifications:
   slack:
-    on_success: change
-    on_failure: always
     rooms:
-      - secure: "vswi5Un8JoT6mjxu0HFPh9HLo8cLB1qAZHRvsP81k240+Tvpc5Y0mQyvDcQoM1dqGxZaHbZElgdIT3iKL2tecNsOgIFH6k5LhSoebFHirIqtdqD6Ci4VHv35aTuawjky/NrYDfx7jjENYkNpVCyNEqzzM4HcaBQ4Qna9moJRpeJnOi0vJx7YSa397YHIqWb9IRgnBzTVHIjQg3HHMx2EIvVDyRfjkZRgyNIGE1OCuiDevnxT3V2AUSToAGQ1Zr/qHiCIC8CXDJM9o8J6+w9clY2JHS3sdq0nnwlKAfQF830dGA/BkN9vQDo/mZKuJlTXhwxG9rmf3uJBLHm8IfJhmxPogvghEMRhIrDWPgcEIzywE8uII9pbyCLmMlCoC+OnvaKA24nEm81eua1SLIUO17trlH5KUgBcmY/9CI/CQNbTFKVcZoQCMKZrUKQiZHdKK94QNC2DqtlgZeNpgDsmm3coR+q3O2piQBmuBdrITFcssOG0RdLG8glj3eGwpgNm/NRwszM9tYDlg6CjesGqyqNCg/NGjTWQCO2fUj+RtbwkCrBauwjCrFwqAMF0H2BIX1pGvyP3b4IkoFxPe4rigDBRwVJfuxUz6KO57w+icZAnA8wg8SYj0me2wfP6hZ1PnTvAugr24akgo2Zwk6AE//EFwcbwNMPIhb88CSbwFNM="
+      - secure: "G6szdRMEG0bLeBKIChqEoeNbLGNghEDFfSqB9ZPt5Te+ljge49VC/3cBcCZuZxofsNkr13MCKUy1peWBQBZ7tVU6IxNplLQOkaXYHEEWLAAhbLOy9E/8zfCaH7YJVhEMyXJ5M00dLLP0vf9EyrOWAzzOH44KvfZOfjM9NBl0XWDJ+G7IyrGi58dhh7cTlQ0eKxtbPtn1TaIp0zgxIB3V2xV/BYtgLO6dHS4wJE80XADPIUV1asFEnoA2oigzLu8dmiXRYHOOR6j3gw9VV4FWHWlSYPPbylSbnYMo+561YKz66IuBztmjLE7sIeG7R/LrPz9YdxHLSUl0D2yD2VU/0zu5fCkf5rZwDzbjU24iBC0orHGTT4wpfUzmeS0+8AYOnmAqZ4kU8LV8Xunz2Hiq1adVOhXJ03ZrGIFKE8v+DZJQHWPtPRj+3zfxymN4/Yjf5SOcaC40UZls6uyvgg1b8JTRYDoylWDLASXd0vbjvGuBBolRf/IUrAKY3xeCluqh4eUZmfSdLaBs74Vgxr9WD6pf2wq5/tUbjedn7zihmDKNozJSFbsFT4jEtgY6a8i3qZEMJmkO/d6SgFOd7Y2XwXN3uOC23xOqq0IVPhE+pl42h+LZvQ85Fo2ZUS6H/r8PRX/wehXQquwamU99JNQYcLQX086yKcYCERQXQfoOaqY="
 
 before_install:
   - if php -i | grep -q xdebug; then phpenv config-rm xdebug.ini; fi
