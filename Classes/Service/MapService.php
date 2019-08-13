@@ -286,7 +286,7 @@ class MapService
         $fieldValues['pid'] = (int)$pid;
         $fieldValues['tstamp'] = time();
         $fieldValues['crdate'] = time();
-        $fieldValues['cruser_id'] = $GLOBALS['BE_USER']->user['uid'];
+        $fieldValues['cruser_id'] = $GLOBALS['BE_USER']->user['uid'] ?? 0;
         $fieldValues['hidden'] = 0;
         $fieldValues['deleted'] = 0;
         $fieldValues['latitude'] = $latitude;
