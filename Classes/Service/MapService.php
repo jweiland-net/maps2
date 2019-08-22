@@ -57,7 +57,8 @@ class MapService
             $configurationManager = $objectManager->get(ConfigurationManagerInterface::class);
 
             $this->settings = $configurationManager->getConfiguration(
-                ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS
+                ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
+                'Maps2'
             );
         }
     }
