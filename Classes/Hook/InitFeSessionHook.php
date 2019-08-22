@@ -16,6 +16,7 @@ namespace JWeiland\Maps2\Hook;
 
 use JWeiland\Maps2\Configuration\ExtConf;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Service\EnvironmentService;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
@@ -34,9 +35,16 @@ class InitFeSessionHook
     public function __construct()
     {
         $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
+        $environmentService = GeneralUtility::makeInstance(EnvironmentService::class);
+
+        // Start SESSION
+        // if not in CLI mode
+        // if explicitAllowMapProviderRequests in ExtConf is activated
+        // if session was not already started
         if (
-            $this->extConf->getExplicitAllowMapProviderRequestsBySessionOnly()
-            && (!isset($_SESSION) || !is_array($_SESSION))
+            !$environmentService->isEnvironmentInCliMode()
+            && $this->extConf->getExplicitAllowMapProviderRequestsBySessionOnly()
+            && session_status() === PHP_SESSION_NONE
         ) {
             session_start();
         }
