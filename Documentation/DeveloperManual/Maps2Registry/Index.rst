@@ -15,7 +15,8 @@ name of the column will be ``tx_maps2_uid``, but you can change that, if you wan
 Our Maps2 registry is adapted from :ref:`TYPO3s Category Registry <t3coreapi:system-categories-api>`
 
 Create a new file in [yourExt]/Configuration/TCA/Overrides/[yourTableName].php
-and add following lines of code:
+and add the individually needed lines of code. Following is a slightly example for events2 with all possible
+properties:
 
 .. code-block:: php
 
