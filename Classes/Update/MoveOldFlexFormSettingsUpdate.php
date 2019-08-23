@@ -83,7 +83,7 @@ class MoveOldFlexFormSettingsUpdate extends AbstractUpdate
         $records = $this->getTtContentRecordsWithMaps2Plugin();
         foreach ($records as $record) {
             $valueFromDatabase = (string)$record['pi_flexform'] !== '' ? GeneralUtility::xml2array($record['pi_flexform']) : [];
-            if (!is_array($valueFromDatabase)) {
+            if (!is_array($valueFromDatabase) || empty($valueFromDatabase)) {
                 continue;
             }
             $this->moveSheetDefaultToDef($valueFromDatabase);
