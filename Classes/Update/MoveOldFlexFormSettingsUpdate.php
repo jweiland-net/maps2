@@ -84,7 +84,7 @@ class MoveOldFlexFormSettingsUpdate extends AbstractUpdate
         foreach ($records as $record) {
             $valueFromDatabase = (string)$record['pi_flexform'] !== '' ? GeneralUtility::xml2array($record['pi_flexform']) : [];
             if (!is_array($valueFromDatabase)) {
-                $valueFromDatabase = [];
+                continue;
             }
             $this->moveSheetDefaultToDef($valueFromDatabase);
             $this->moveFieldFromOldToNewSheet($valueFromDatabase, 'settings.activateScrollWheel', 'sMapOptions', 'sGoogleMapsOptions');
