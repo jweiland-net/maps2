@@ -371,7 +371,8 @@ class CreateMaps2RecordHook
             FlashMessage::class,
             $message,
             $title,
-            $severity
+            $severity,
+            true
         );
         $defaultFlashMessageQueue = $this->flashMessageService->getMessageQueueByIdentifier();
         $defaultFlashMessageQueue->enqueue($flashMessage);
