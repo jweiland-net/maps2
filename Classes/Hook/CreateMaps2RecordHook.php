@@ -137,9 +137,23 @@ class CreateMaps2RecordHook
                         $foreignLocationRecord,
                         $options
                     );
+                    $this->clearHtmlCache((int)$foreignLocationRecord[$foreignColumnName]);
                 }
             }
         }
+    }
+
+    /**
+     * After saving a PoiCollection the additional information RTE content may have changed.
+     * As this content will be stored in our maps2_cachedhtml cache, we have to remove that entry after save.
+     *
+     * @see Fluid VH cache.setCache()
+     * @param int $poiCollectionUid
+     */
+    protected function clearHtmlCache(int $poiCollectionUid)
+    {
+        $cache = GeneralUtility::makeInstance(CacheManager::class)->getCache('maps2_cachedhtml');
+        $cache->remove('htmlCache' . $poiCollectionUid);
     }
 
     /**
