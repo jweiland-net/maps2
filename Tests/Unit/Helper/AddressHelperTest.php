@@ -400,4 +400,43 @@ class AddressHelperTest extends AbstractUnitTestCase
             $this->subject->getAddress($record, $options)
         );
     }
+
+    public function addressDataProvider()
+    {
+        return [
+            'address with commas and spaces' => ['Mainstreet 15, 51324 Cologne, Germany'],
+            'address with and spaces' => ['Mainstreet 15 51324 Cologne Germany'],
+            'address without country' => ['Mainstreet 15, 51324 Cologne'],
+            'address with different position' => ['15 Cologne 51324 Germany Mainstreet'],
+            'address with lower cased values' => ['15 cologne 51324 germany mainstreet'],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider addressDataProvider
+     * @param string $address
+     */
+    public function isSameAddressWithCommaAndSpacesWillReturnTrue(string $address)
+    {
+        $foreignLocationRecord = [
+            'uid' => 123,
+            'pid' => 321,
+            'street' => 'Mainstreet',
+            'zip' => '51324',
+            'house_number' => '15',
+            'city' => 'Cologne'
+        ];
+        $options = [
+            'addressColumns' => [
+                'street',
+                'house_number',
+                'zip',
+                'city'
+            ]
+        ];
+        $this->assertTrue(
+            $this->subject->isSameAddress($address, $foreignLocationRecord, $options)
+        );
+    }
 }

@@ -74,6 +74,37 @@ class AddressHelper
     }
 
     /**
+     * Check, if a formatted address is still equal with the address parts of foreign location record.
+     *
+     * @param string $address
+     * @param array $foreignLocationRecord
+     * @param array $options
+     * @return bool
+     */
+    public function isSameAddress(string $address, array $foreignLocationRecord, array $options)
+    {
+        // Convert formatted address like "Mainstreet 15, 51324 Cologne, Germany" into array
+        $poiCollectionAddressParts = GeneralUtility::trimExplode(
+            ' ',
+            str_replace(',', '', strtolower($address))
+        );
+        $isSameAddress = true;
+        foreach ($options['addressColumns'] as $addressColumn) {
+            if (in_array(
+                strtolower($foreignLocationRecord[$addressColumn]),
+                $poiCollectionAddressParts,
+                true
+            )) {
+                continue;
+            } else {
+                $isSameAddress = false;
+                break;
+            }
+        }
+        return $isSameAddress;
+    }
+
+    /**
      * Try to get a country name from foreign extension record.
      * If we do not find a country name, we will try some fallbacks.
      *

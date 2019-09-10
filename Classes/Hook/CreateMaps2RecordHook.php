@@ -110,7 +110,7 @@ class CreateMaps2RecordHook
                         continue;
                     }
 
-                    $this->updateForeignLocationRecord($foreignLocationRecord, $foreignColumnName);
+                    $this->updateForeignLocationRecordIfPoiCollectionDoesNotExist($foreignLocationRecord, $foreignColumnName);
 
                     if (!$foreignLocationRecord[$foreignColumnName]) {
                         if ($this->createNewMapsRecord($foreignLocationRecord, $foreignTableName, $foreignColumnName, $options)) {
@@ -122,6 +122,7 @@ class CreateMaps2RecordHook
                             );
                         }
                     } else {
+                        $this->updateAddressInPoiCollectionIfNecessary($foreignLocationRecord, $foreignColumnName, $options);
                         $this->synchronizeColumnsFromForeignRecordWithPoiCollection($foreignLocationRecord, $foreignTableName, $foreignColumnName, $options);
                         $this->addMessage(
                             'While updating this record, we have automatically updated the related maps2 record, too',
@@ -142,6 +143,40 @@ class CreateMaps2RecordHook
     }
 
     /**
+     * Sometimes the address may change in foreign location records.
+     * We have to check for address changes.
+     * If any, we have to query GeoCode again and update address in PoiCollection
+     *
+     * @param array $foreignLocationRecord
+     * @param string $foreignColumnName
+     * @param array $options
+     */
+    protected function updateAddressInPoiCollectionIfNecessary(array $foreignLocationRecord, string $foreignColumnName, array $options)
+    {
+        $addressHelper = GeneralUtility::makeInstance(AddressHelper::class);
+        $poiCollection = $this->getPoiCollection((int)$foreignLocationRecord[$foreignColumnName]);
+        if (!$addressHelper->isSameAddress($poiCollection['address'], $foreignLocationRecord, $options)) {
+            $address = $addressHelper->getAddress($foreignLocationRecord, $options);
+
+            $position = $this->geoCodeService->getFirstFoundPositionByAddress($address);
+            if ($position instanceof Position) {
+                $connection = $this->getConnectionPool()->getConnectionForTable('tx_maps2_domain_model_poicollection');
+                $connection->update(
+                    'tx_maps2_domain_model_poicollection',
+                    [
+                        'latitude' => $position->getLatitude(),
+                        'longitude' => $position->getLongitude(),
+                        'address' => $position->getFormattedAddress()
+                    ],
+                    [
+                        'uid' => (int)$foreignLocationRecord[$foreignColumnName]
+                    ]
+                );
+            }
+        }
+    }
+
+    /**
      * If a related poi collection record was removed, the UID of this record will still stay in $foreignLocationRecord.
      * This method checks, if this UID is still valid. If not, we will remove this invalid relation from
      * $foreignLocationRecord.
@@ -149,27 +184,45 @@ class CreateMaps2RecordHook
      * @param array $foreignLocationRecord
      * @param string $foreignColumnName
      */
-    protected function updateForeignLocationRecord(array &$foreignLocationRecord, string $foreignColumnName)
+    protected function updateForeignLocationRecordIfPoiCollectionDoesNotExist(array &$foreignLocationRecord, string $foreignColumnName)
+    {
+        $poiCollection = $this->getPoiCollection((int)$foreignLocationRecord[$foreignColumnName], ['uid']);
+        if (empty($poiCollection)) {
+            // record does not exist anymore. Remove it from relation
+            $foreignLocationRecord[$foreignColumnName] = 0;
+        }
+    }
+
+    /**
+     * Get PoiCollection
+     *
+     * @param int $poiCollectionUid
+     * @param array $columnsToSelect
+     * @return array
+     */
+    protected function getPoiCollection(int $poiCollectionUid, array $columnsToSelect = ['*']): array
     {
         $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable('tx_maps2_domain_model_poicollection');
         $queryBuilder->getRestrictions()->removeAll()->add(
             GeneralUtility::makeInstance(DeletedRestriction::class)
         );
         $poiCollection = $queryBuilder
-            ->select('uid')
+            ->select(...$columnsToSelect)
             ->from('tx_maps2_domain_model_poicollection')
             ->where(
                 $queryBuilder->expr()->eq(
                     'uid',
-                    $queryBuilder->createNamedParameter($foreignLocationRecord[$foreignColumnName], \PDO::PARAM_INT)
+                    $queryBuilder->createNamedParameter($poiCollectionUid, \PDO::PARAM_INT)
                 )
             )
             ->execute()
             ->fetch();
-        if (empty($poiCollection)) {
-            // record does not exist anymore. Remove it from relation
-            $foreignLocationRecord[$foreignColumnName] = 0;
+
+        if ($poiCollection === false) {
+            $poiCollection = [];
         }
+
+        return $poiCollection;
     }
 
     /**
