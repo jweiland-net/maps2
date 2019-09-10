@@ -95,7 +95,7 @@ As we save the foreign extension record for you, we need the fieldname where to 
 Example
 -------
 
-Here we have an working example out of our extension events2:
+Here we have a working example out of our extension events2:
 
 .. code-block:: php
 
