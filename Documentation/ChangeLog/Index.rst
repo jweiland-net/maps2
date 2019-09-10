@@ -6,6 +6,63 @@
 ChangeLog
 =========
 
+**Version 5.3.0**
+
+- Task: Update address in PoiCollection if necessary
+- Feature: In AddressHelper you can now check a formatted address against foreignLocationRecord
+- Bugfix: Clear Maps2 HTML Cache after a PoiCollection was saved.
+
+**Version 5.2.10**
+
+- Bugfix: Repair checkForUpdate in Flexform migration class
+- Bugfix: Store FlashMessages in Session for BE context
+
+**Version 5.2.9**
+
+- Bugfix again: Do not try to update empty pi_flexform columns in Wizard
+
+**Version 5.2.8**
+
+- Bugfix: Do not try to update empty pi_flexform columns in Wizard
+
+**Version 5.2.7**
+
+- Bugfix: Add extKey to getConfiguration() settings of maps2 only
+
+**Version 5.2.6**
+
+- Documentation: Repair links to Cache VHs and Widget VHs in Documentation
+
+**Version 5.2.5**
+
+- Documentation: Better explaination of using Maps2Registry
+- Bugfix: Better check to prevent loading session again
+
+**Version 5.2.4**
+
+- UniTest: Update secure of slack notification in Travis
+- Bugfix: Fill cruser_id with be_user ID if set, else with 0
+
+**Version 5.2.3**
+
+- Bugfix: Add compatibility for UpdateWizard in TYPO3 8 and 9
+
+**Version 5.2.2**
+
+- Bugfix: Remove quotes from geocode uri
+- Bugfix: Disable compression for js files with get parameters
+- Bugfix: Re-check, if maps2 cache is initializable in Maps2Registry
+
+**Version 5.2.1**
+
+- Bugfix: Correct wrong geocode URIs in ext_conf_template
+
+**Version 5.2.0**
+
+- Feature: Show all PoiCollections of a StorageFolder
+- Feature: Force set zoom level
+- Feature: Add possibility to change Geocode API URI of map providers
+
 **Version 5.1.0**
 
 - Make use of initializeArguments in VH Widgets
