@@ -32,7 +32,7 @@
 				<source>Default zoom</source>
 			</trans-unit>
 			<trans-unit id="forceZoom" xml:space="preserve">
-				<source>Force zoom if you want to show more than one POI and don't want maps2 to zoom out to show all POIs.</source>
+				<source>Set a fix Zoomlevel if more than one POI will be displayed. Default: automatic zoomlevel to display all POIs.</source>
 			</trans-unit>
 			<trans-unit id="zoomControl" xml:space="preserve">
 				<source>Show Zoom Control</source>
