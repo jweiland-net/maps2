@@ -6,6 +6,15 @@
 ChangeLog
 =========
 
+**Version 6.0.0**
+
+- Breaking: Removed cacheIdentifier property from all Cache ViewHelpers
+- Bugfix: Create better multilingual CacheIdentifier for InfoWindow content.
+- Feature: New CacheService to manage CacheIdentifiers and CacheTags
+- Task: Remove CacheEntry after storing of PoiCollection in Backend with help of "flushByTag" instead of "remove"
+- Update Documentation of Cache ViewHelpers
+- Bugfix: Clear InfoWindowContent Cache for our own records, too.
+
 **Version 5.3.1**
 
 - Bugfix: Wrong HTML id in AllowMapForm as {data} was not assigned in MapService

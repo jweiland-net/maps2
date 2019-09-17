@@ -5,6 +5,22 @@ Updating
 
 If you update EXT:maps2 to a newer version, please read this section carefully!
 
+Update to Version 6.0.0
+-----------------------
+
+The current CacheIdentifier for InfoWindowContent is not save for multilingual environments.
+That way we have removed cacheIdentifier property from all Cache ViewHelpers and added the new property poiCollection.
+It helps us to build a more unique CacheIdentifier with GeneralUtility::stdAuthCode()
+
+You have to update all of your templates where our Cache ViewHelpers are used. In most cases only
+InfoWindowContent.html has to be modified. Please remove cacheIdentifier from all Cache ViewHelpers and add
+poiCollection instead:
+
+Before: ``<m:cache.setCache cacheIdentifier="htmlCode{poiCollection.uid}" data="{content -> f:format.raw()}" />``
+After: ``<m:cache.setCache data="{content -> f:format.raw()}" poiCollection="{poiCollection}" />``
+
+Please you are interested into Cache ViewHelper properties, please have a look into our updated Documentation.
+
 Update to Version 5.1.0
 -----------------------
 
