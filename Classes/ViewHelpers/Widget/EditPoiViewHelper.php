@@ -57,7 +57,8 @@ class EditPoiViewHelper extends AbstractWidgetViewHelper
             'property',
             'string',
             'Property where to save the new PoiCollection record',
-            false, 'txMapsUid'
+            false,
+            'txMapsUid'
         );
         $this->registerArgument(
             'override',
