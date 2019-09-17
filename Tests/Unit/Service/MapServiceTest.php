@@ -30,6 +30,7 @@ use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Service\EnvironmentService;
 use TYPO3\CMS\Fluid\View\StandaloneView;
+use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 /**
  * Test MapService
@@ -98,6 +99,11 @@ class MapServiceTest extends UnitTestCase
     {
         $testString = 'testHtml';
 
+        $contentObject = new ContentObjectRenderer();
+        $contentObject->data = [
+            'uid' => 123
+        ];
+
         $extConf = new ExtConf();
         $extConf->setAllowMapTemplatePath('typo3conf/ext/maps/Resources/Private/Templates/AllowMapForm.html');
         GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
@@ -109,6 +115,10 @@ class MapServiceTest extends UnitTestCase
             )
             ->shouldBeCalled()
             ->willReturn($this->settings);
+        $this->configurationManagerProphecy
+            ->getContentObject()
+            ->shouldBeCalled()
+            ->willReturn($contentObject);
 
         $flashMessage = new FlashMessage(
             'You have forgotten...',
@@ -134,6 +144,7 @@ class MapServiceTest extends UnitTestCase
         /** @var StandaloneView|ObjectProphecy $viewProphecy */
         $viewProphecy = $this->prophesize(StandaloneView::class);
         $viewProphecy->setTemplatePathAndFilename(Argument::any())->shouldBeCalled();
+        $viewProphecy->assign('data', $contentObject->data)->shouldBeCalled();
         $viewProphecy->assign('settings', $this->settings)->shouldBeCalled();
         $viewProphecy->assign('requestUri', 'MyCoolRequestUri')->shouldBeCalled();
         $viewProphecy->render()->shouldBeCalled()->willReturn($testString);
@@ -181,6 +192,11 @@ class MapServiceTest extends UnitTestCase
     {
         $testString = 'testHtml';
 
+        $contentObject = new ContentObjectRenderer();
+        $contentObject->data = [
+            'uid' => 123
+        ];
+
         $extConf = new ExtConf();
         $extConf->setAllowMapTemplatePath('typo3conf/ext/maps/Resources/Private/Templates/AllowMapForm.html');
         GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
@@ -193,6 +209,10 @@ class MapServiceTest extends UnitTestCase
             )
             ->shouldBeCalled()
             ->willReturn($this->settings);
+        $this->configurationManagerProphecy
+            ->getContentObject()
+            ->shouldBeCalled()
+            ->willReturn($contentObject);
 
         $flashMessage = new FlashMessage(
             'You have forgotten...',
@@ -218,6 +238,7 @@ class MapServiceTest extends UnitTestCase
         /** @var StandaloneView|ObjectProphecy $viewProphecy */
         $viewProphecy = $this->prophesize(StandaloneView::class);
         $viewProphecy->setTemplatePathAndFilename(Argument::any())->shouldBeCalled();
+        $viewProphecy->assign('data', $contentObject->data)->shouldBeCalled();
         $viewProphecy->assign('settings', $this->settings)->shouldBeCalled();
         $viewProphecy->assign('requestUri', 'MyCoolRequestUri')->shouldBeCalled();
         $viewProphecy->render()->shouldBeCalled()->willReturn($testString);
@@ -265,6 +286,11 @@ class MapServiceTest extends UnitTestCase
     {
         $testString = 'testHtml';
 
+        $contentObject = new ContentObjectRenderer();
+        $contentObject->data = [
+            'uid' => 123
+        ];
+
         $extConf = new ExtConf();
         $extConf->setAllowMapTemplatePath('typo3conf/ext/maps/Resources/Private/Templates/AllowMapForm.html');
         GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
@@ -277,10 +303,15 @@ class MapServiceTest extends UnitTestCase
             )
             ->shouldBeCalled()
             ->willReturn($this->settings);
+        $this->configurationManagerProphecy
+            ->getContentObject()
+            ->shouldBeCalled()
+            ->willReturn($contentObject);
 
         /** @var StandaloneView|ObjectProphecy $viewProphecy */
         $viewProphecy = $this->prophesize(StandaloneView::class);
         $viewProphecy->setTemplatePathAndFilename(Argument::any())->shouldBeCalled();
+        $viewProphecy->assign('data', $contentObject->data)->shouldBeCalled();
         $viewProphecy->assign('settings', $this->settings)->shouldBeCalled();
         $viewProphecy->assign('requestUri', 'MyCoolRequestUri')->shouldBeCalled();
         $viewProphecy->render()->shouldBeCalled()->willReturn($testString);
