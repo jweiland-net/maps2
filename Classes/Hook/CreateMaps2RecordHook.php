@@ -20,7 +20,7 @@ use JWeiland\Maps2\Helper\AddressHelper;
 use JWeiland\Maps2\Helper\StoragePidHelper;
 use JWeiland\Maps2\Service\GeoCodeService;
 use JWeiland\Maps2\Service\MapService;
-use JWeiland\Maps2\Utility\CacheUtility;
+use JWeiland\Maps2\Utility\CacheService;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Database\ConnectionPool;
@@ -29,6 +29,7 @@ use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
 
@@ -86,6 +87,15 @@ class CreateMaps2RecordHook
     public function processDatamap_afterAllOperations($dataHandler)
     {
         foreach ($dataHandler->datamap as $foreignTableName => $recordsFromRequest) {
+            // Clear InfoWindowContent Cache for our own entries
+            if ($foreignTableName === 'tx_maps2_domain_model_poicollection') {
+                foreach ($dataHandler->datamap['tx_maps2_domain_model_poicollection'] as $uid => $_) {
+                    if (MathUtility::canBeInterpretedAsInteger($uid)) {
+                        $this->clearHtmlCache((int)$uid);
+                    }
+                }
+                continue;
+            }
             // process this hook only on registered tables
             if (!array_key_exists($foreignTableName, $this->columnRegistry)) {
                 continue;
@@ -153,8 +163,7 @@ class CreateMaps2RecordHook
      */
     protected function clearHtmlCache(int $poiCollectionUid)
     {
-        $cache = GeneralUtility::makeInstance(CacheManager::class)
-            ->getCache('maps2_cachedhtml');
+        $cache = GeneralUtility::makeInstance(CacheManager::class)->getCache('maps2_cachedhtml');
         $cache->flushByTag('infoWindowUid' . $poiCollectionUid);
     }
 
