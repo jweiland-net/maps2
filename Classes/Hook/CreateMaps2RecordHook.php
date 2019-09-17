@@ -87,15 +87,11 @@ class CreateMaps2RecordHook
     public function processDatamap_afterAllOperations($dataHandler)
     {
         foreach ($dataHandler->datamap as $foreignTableName => $recordsFromRequest) {
-            // Clear InfoWindowContent Cache for our own entries
             if ($foreignTableName === 'tx_maps2_domain_model_poicollection') {
-                foreach ($dataHandler->datamap['tx_maps2_domain_model_poicollection'] as $uid => $_) {
-                    if (MathUtility::canBeInterpretedAsInteger($uid)) {
-                        $this->clearHtmlCache((int)$uid);
-                    }
-                }
+                $this->clearCacheForPoiCollectionRecords($recordsFromRequest);
                 continue;
             }
+
             // process this hook only on registered tables
             if (!array_key_exists($foreignTableName, $this->columnRegistry)) {
                 continue;
@@ -150,6 +146,26 @@ class CreateMaps2RecordHook
                     );
                     $this->clearHtmlCache((int)$foreignLocationRecord[$foreignColumnName]);
                 }
+            }
+        }
+    }
+
+    /**
+     * Clear InfoWindowContent Cache for our own PoiCollection records, too
+     *
+     * @param array $poiCollections
+     */
+    protected function clearCacheForPoiCollectionRecords(array $poiCollections)
+    {
+        foreach ($poiCollections as $uid => $poiCollection) {
+            // Clear InfoWindowContent Cache for translation of record
+            if (MathUtility::canBeInterpretedAsInteger($uid)) {
+                $this->clearHtmlCache((int)$uid);
+            }
+            // Clear InfoWindowContent Cache for original language of record
+            $originalTranslationColumn = $GLOBALS['TCA']['tx_maps2_domain_model_poicollection']['ctrl']['transOrigPointerField'];
+            if (isset($poiCollection[$originalTranslationColumn])) {
+                $this->clearHtmlCache((int)$poiCollection[$originalTranslationColumn]);
             }
         }
     }
