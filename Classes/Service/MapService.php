@@ -43,6 +43,11 @@ class MapService
     protected $objectManager;
 
     /**
+     * @var ConfigurationManagerInterface
+     */
+    protected $configurationManager;
+
+    /**
      * @var array
      */
     protected $settings = [];
@@ -51,12 +56,10 @@ class MapService
     {
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $this->objectManager = $objectManager;
-
+        $this->configurationManager = $objectManager->get(ConfigurationManagerInterface::class);
         $environmentService = GeneralUtility::makeInstance(EnvironmentService::class);
         if ($environmentService->isEnvironmentInFrontendMode()) {
-            $configurationManager = $objectManager->get(ConfigurationManagerInterface::class);
-
-            $this->settings = $configurationManager->getConfiguration(
+            $this->settings = $this->configurationManager->getConfiguration(
                 ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
                 'Maps2'
             );
@@ -81,12 +84,16 @@ class MapService
             $flashMessageQueue->enqueue($flashMessage);
         }
 
-        $view = GeneralUtility::makeInstance(StandaloneView::class);
+        $view = GeneralUtility::makeInstance(
+            StandaloneView::class,
+            $this->configurationManager->getContentObject()
+        );
         $view->setTemplatePathAndFilename(
             GeneralUtility::getFileAbsFileName(
                 $this->getAllowMapTemplatePath()
             )
         );
+        $view->assign('data', $this->configurationManager->getContentObject()->data);
         $view->assign('settings', $this->settings);
         $view->assign('requestUri', $this->getRequestUri());
 
