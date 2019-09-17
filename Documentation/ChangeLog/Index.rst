@@ -6,6 +6,11 @@
 ChangeLog
 =========
 
+**Version 5.3.1**
+
+- Bugfix: Wrong HTML id in AllowMapForm as {data} was not assigned in MapService
+- Task: Remove mapHeight und mapWidth from AllowMapForm template
+
 **Version 5.3.0**
 
 - Task: Update address in PoiCollection if necessary
