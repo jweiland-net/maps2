@@ -14,28 +14,55 @@ namespace JWeiland\Maps2\Utility;
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\CMS\Core\Database\ConnectionPool;
+use JWeiland\Maps2\Domain\Model\PoiCollection;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
- * A little helper to organize our DB queries
+ * A global accessible class to build Cache Identifier and Tags for Cache Entries.
+ * Used in Cache ViewHelpers and after storing PoiCollections in Backend: CreateMaps2RecordHook
  */
-class DatabaseUtility
+class CacheUtility
 {
     /**
-     * Get column definitions from table
+     * In previous versions our CacheIdentifier was infoWindow{PoiCollectionUid}.
+     * In multilingual environments, where UID is always the same, we have to build a more unique
+     * Cache Identifier.
      *
-     * @param string $tableName
+     * @param string $prefix A prefix you can prepend to the generated CacheIdentifier
+     * @param array $poiCollection
+     * @return string
+     */
+    public static function getCacheIdentifier(array $poiCollection, string $prefix = 'infoWindow'): string
+    {
+        return sprintf(
+            '%s%s',
+            $prefix,
+            GeneralUtility::stdAuthCode(
+                $poiCollection,
+                'uid, pid, sys_language_uid, title, address',
+                24
+            )
+        );
+    }
+
+    /**
+     * Add UID and PID of PoiCollection as Cache-Tags to Cache-Entry.
+     * Please do not use "infoWindowPid" and "infoWindowUid" as Cache-Tag-Prefix in your template,
+     * as we will override them here.
+     *
+     * @param array $poiCollection
+     * @param array $cacheTags
      * @return array
      */
-    public static function getColumnsFromTable($tableName)
+    public static function getCacheTags(array $poiCollection, array $cacheTags = []): array
     {
-        $output = [];
-        $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable($tableName);
-        $statement = $connection->query('SHOW FULL COLUMNS FROM `' . $tableName . '`');
-        while ($fieldRow = $statement->fetch()) {
-            $output[$fieldRow['Field']] = $fieldRow;
-        }
-        return $output;
+        return array_merge(
+            $cacheTags,
+            [
+                'infoWindowPid' . $poiCollection['pid'] ?? 0,
+                'infoWindowUid' . $poiCollection['uid'] ?? 0,
+            ]
+        );
     }
+
 }

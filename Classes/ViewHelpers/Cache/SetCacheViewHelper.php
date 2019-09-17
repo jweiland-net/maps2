@@ -14,8 +14,11 @@ namespace JWeiland\Maps2\ViewHelpers\Cache;
  * The TYPO3 project - inspiring people to share!
  */
 
+use JWeiland\Maps2\Domain\Model\PoiCollection;
+use JWeiland\Maps2\Utility\CacheUtility;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
@@ -37,14 +40,42 @@ class SetCacheViewHelper extends AbstractViewHelper
     /**
      * Initialize arguments.
      *
-     * @throws \TYPO3Fluid\Fluid\Core\ViewHelper\Exception
+     * @throws \Exception
      */
     public function initializeArguments()
     {
-        $this->registerArgument('cacheIdentifier', 'string', 'An identifier for this specific cache entry', true);
-        $this->registerArgument('data', 'string', 'The data to be stored', true);
-        $this->registerArgument('tags', 'array', 'Tags to associate with this cache entry', false, []);
-        $this->registerArgument('lifetime', 'int', 'Lifetime of this cache entry in seconds. If null is specified, the default lifetime is used. "0" means unlimited lifetime');
+        $this->registerArgument(
+            'prefix',
+            'string',
+            'A prefix for the cache identifier.',
+            false,
+            'infoWindow'
+        );
+        $this->registerArgument(
+            'poiCollection',
+            PoiCollection::class,
+            'We need the PoiCollection to build a better language independent CacheIdentifier.',
+            true
+        );
+        $this->registerArgument(
+            'data',
+            'string',
+            'The data to be stored',
+            true
+        );
+        $this->registerArgument(
+            'tags',
+            'array',
+            'Tags to associate with this cache entry',
+            false,
+            []
+        );
+        $this->registerArgument(
+            'lifetime',
+            'int',
+            'Lifetime of this cache entry in seconds. If null is specified, the default lifetime is used. "0" means unlimited lifetime',
+            false
+        );
     }
 
     /**
@@ -57,11 +88,12 @@ class SetCacheViewHelper extends AbstractViewHelper
      */
     public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
     {
+        $poiCollection = ObjectAccess::getGettableProperties($arguments['poiCollection']);
         $cache = GeneralUtility::makeInstance(CacheManager::class)->getCache('maps2_cachedhtml');
         $cache->set(
-            $arguments['cacheIdentifier'],
+            CacheUtility::getCacheIdentifier($poiCollection, $arguments['prefix']),
             $arguments['data'],
-            $arguments['tags'],
+            CacheUtility::getCacheTags($poiCollection, $arguments['tags']),
             ($arguments['lifetime'] === null ? null : (int)$arguments['lifetime'])
         );
     }

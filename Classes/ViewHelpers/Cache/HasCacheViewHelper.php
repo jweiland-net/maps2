@@ -14,8 +14,11 @@ namespace JWeiland\Maps2\ViewHelpers\Cache;
  * The TYPO3 project - inspiring people to share!
  */
 
+use JWeiland\Maps2\Domain\Model\PoiCollection;
+use JWeiland\Maps2\Utility\CacheUtility;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
@@ -30,11 +33,23 @@ class HasCacheViewHelper extends AbstractViewHelper
     /**
      * Initialize arguments.
      *
-     * @throws \TYPO3Fluid\Fluid\Core\ViewHelper\Exception
+     * @throws \Exception
      */
     public function initializeArguments()
     {
-        $this->registerArgument('cacheIdentifier', 'string', 'String to identify the cache entry', true);
+        $this->registerArgument(
+            'prefix',
+            'string',
+            'A prefix for the cache identifier.',
+            false,
+            'infoWindow'
+        );
+        $this->registerArgument(
+            'poiCollection',
+            PoiCollection::class,
+            'We need the PoiCollection to build a better language independent CacheIdentifier.',
+            true
+        );
     }
 
     /**
@@ -47,7 +62,13 @@ class HasCacheViewHelper extends AbstractViewHelper
      */
     public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
     {
+        $poiCollection = ObjectAccess::getGettableProperties($arguments['poiCollection']);
         $cache = GeneralUtility::makeInstance(CacheManager::class)->getCache('maps2_cachedhtml');
-        return $cache->has($arguments['cacheIdentifier']);
+        return $cache->has(
+            CacheUtility::getCacheIdentifier(
+                $poiCollection,
+                $arguments['prefix']
+            )
+        );
     }
 }

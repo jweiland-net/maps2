@@ -20,6 +20,7 @@ use JWeiland\Maps2\Helper\AddressHelper;
 use JWeiland\Maps2\Helper\StoragePidHelper;
 use JWeiland\Maps2\Service\GeoCodeService;
 use JWeiland\Maps2\Service\MapService;
+use JWeiland\Maps2\Utility\CacheUtility;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Database\ConnectionPool;
@@ -152,8 +153,9 @@ class CreateMaps2RecordHook
      */
     protected function clearHtmlCache(int $poiCollectionUid)
     {
-        $cache = GeneralUtility::makeInstance(CacheManager::class)->getCache('maps2_cachedhtml');
-        $cache->remove('htmlCache' . $poiCollectionUid);
+        $cache = GeneralUtility::makeInstance(CacheManager::class)
+            ->getCache('maps2_cachedhtml');
+        $cache->flushByTag('infoWindowUid' . $poiCollectionUid);
     }
 
     /**
