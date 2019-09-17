@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace JWeiland\Maps2\ViewHelpers\Form;
 
 /*
@@ -15,9 +16,12 @@ namespace JWeiland\Maps2\ViewHelpers\Form;
  */
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Service\ExtensionService;
 use TYPO3\CMS\Frontend\Page\CacheHashCalculator;
+use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
 /**
  * This ViewHelper is useful to render special hidden fields
@@ -25,6 +29,8 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
  */
 class RenderHiddenFieldsForGetViewHelper extends AbstractViewHelper
 {
+    use CompileWithRenderStatic;
+
     /**
      * @var bool
      */
@@ -34,36 +40,6 @@ class RenderHiddenFieldsForGetViewHelper extends AbstractViewHelper
      * @var bool
      */
     protected $escapeOutput = false;
-
-    /**
-     * @var ExtensionService
-     */
-    protected $extensionService;
-
-    /**
-     * @var CacheHashCalculator
-     */
-    protected $cacheHashCalculator;
-
-    /**
-     * inject extensionService
-     *
-     * @param ExtensionService $extensionService
-     */
-    public function injectExtensionService(ExtensionService $extensionService)
-    {
-        $this->extensionService = $extensionService;
-    }
-
-    /**
-     * inject cacheHashCalculator
-     *
-     * @param CacheHashCalculator $cacheHashCalculator
-     */
-    public function injectCacheHashCalculator(CacheHashCalculator $cacheHashCalculator)
-    {
-        $this->cacheHashCalculator = $cacheHashCalculator;
-    }
 
     /**
      * Initialize ViewHelper arguments
@@ -76,25 +52,33 @@ class RenderHiddenFieldsForGetViewHelper extends AbstractViewHelper
     }
 
     /**
-     * Implements a ViewHelper to trim explode comma separated strings
+     * Checks if caching framework has the requested cache entry
      *
-     * @return array
+     * @param array $arguments
+     * @param \Closure $renderChildrenClosure
+     * @param RenderingContextInterface $renderingContext
+     * @return bool
      */
-    public function render()
+    public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
     {
-        $pluginNamespace = $this->extensionService->getPluginNamespace(
-            $this->renderingContext->getControllerContext()->getRequest()->getControllerExtensionName(),
-            $this->renderingContext->getControllerContext()->getRequest()->getPluginName()
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        $extensionService = $objectManager->get(ExtensionService::class);
+        $cacheHashCalculator = $objectManager->get(CacheHashCalculator::class);
+
+        $pluginNamespace = $extensionService->getPluginNamespace(
+            $renderingContext->getControllerContext()->getRequest()->getControllerExtensionName(),
+            $renderingContext->getControllerContext()->getRequest()->getPluginName()
         );
+
         // get pageUid
-        $pageUid = $this->arguments['pageUid'] ?: $GLOBALS['TSFE']->id;
+        $pageUid = $arguments['pageUid'] ?: $GLOBALS['TSFE']->id;
 
         // create array for cHash calculation
         $parameters = [];
         $parameters['id'] = $pageUid;
-        $parameters[$pluginNamespace]['controller'] = $this->arguments['controller'];
-        $parameters[$pluginNamespace]['action'] = $this->arguments['action'];
-        $cacheHashArray = $this->cacheHashCalculator->getRelevantParameters(
+        $parameters[$pluginNamespace]['controller'] = $arguments['controller'];
+        $parameters[$pluginNamespace]['action'] = $arguments['action'];
+        $cacheHashArray = $cacheHashCalculator->getRelevantParameters(
             GeneralUtility::implodeArrayForUrl('', $parameters)
         );
 
@@ -107,18 +91,18 @@ class RenderHiddenFieldsForGetViewHelper extends AbstractViewHelper
         $fields[] = sprintf(
             '<input type="hidden" name="%s[controller]" value="%s" />',
             $pluginNamespace,
-            $this->arguments['controller']
+            $arguments['controller']
         );
         $fields[] = sprintf(
             '<input type="hidden" name="%s[action]" value="%s" />',
             $pluginNamespace,
-            $this->arguments['action']
+            $arguments['action']
         );
 
         // add cHash
         $fields[] = sprintf(
             '<input type="hidden" name="cHash" value="%s" />',
-            $this->cacheHashCalculator->calculateCacheHash(
+            $cacheHashCalculator->calculateCacheHash(
                 $cacheHashArray
             )
         );
