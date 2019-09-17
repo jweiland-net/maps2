@@ -1,5 +1,5 @@
 <?php
-namespace JWeiland\Maps2\Utility;
+namespace JWeiland\Maps2\Service;
 
 /*
  * This file is part of the maps2 project.
@@ -22,7 +22,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * A global accessible class to build Cache Identifier and Tags for Cache Entries.
  * Used in Cache ViewHelpers and after storing PoiCollections in Backend: CreateMaps2RecordHook
  */
-class CacheUtility
+class CacheService
 {
     /**
      * In previous versions our CacheIdentifier was infoWindow{PoiCollectionUid}.
@@ -34,14 +34,14 @@ class CacheUtility
      * @return string
      * @throws \Exception
      */
-    public static function getCacheIdentifier(array $poiCollection, string $prefix = 'infoWindow'): string
+    public function getCacheIdentifier(array $poiCollection, string $prefix = 'infoWindow'): string
     {
-        if (!self::isFrontendEnvironment()) {
+        if (!$this->isFrontendEnvironment()) {
             throw new \Exception('getCacheIdentifier can only be called from FE, as we have to add the true language ID to PoiCollection');
         }
 
         // We do not add the original sys_language_uid of PoiCollection, as it can be the same for different languages.
-        $poiCollection['language'] = self::getLanguageUid();
+        $poiCollection['language'] = $this->getLanguageUid();
 
         return sprintf(
             '%s%s',
@@ -63,7 +63,7 @@ class CacheUtility
      * @param array $cacheTags
      * @return array
      */
-    public static function getCacheTags(array $poiCollection, array $cacheTags = []): array
+    public function getCacheTags(array $poiCollection, array $cacheTags = []): array
     {
         return array_merge(
             $cacheTags,
@@ -75,14 +75,32 @@ class CacheUtility
     }
 
     /**
+     * In case of hooks where we have PoiCollection as array, we can assign PoiCollection directly
+     * to getCacheIdentifier. But in case of ViewHelpers we have a PoiCollection object. You can use
+     * this method to prepare/sanitize PoiCollection objects for use with getCacheIdentifier/getCacheTags.
+     *
+     * @param PoiCollection $poiCollection
+     * @return array
+     */
+    public function preparePoiCollectionForCacheMethods(PoiCollection $poiCollection): array
+    {
+        return [
+            'uid' => $poiCollection->getUid(),
+            'pid' => $poiCollection->getUid(),
+            'title' => $poiCollection->getTitle(),
+            'address' => $poiCollection->getAddress()
+        ];
+    }
+
+    /**
      * Returns the calculated (incl. fallback) sys_language_uid
      *
      * @return int
      * @throws \Exception
      */
-    protected static function getLanguageUid(): int
+    protected function getLanguageUid(): int
     {
-        if (!self::isFrontendEnvironment()) {
+        if (!$this->isFrontendEnvironment()) {
             throw new \Exception('getLanguageId can only be called from FE, as we have to add the true language ID to PoiCollection');
         }
 
@@ -96,29 +114,11 @@ class CacheUtility
     }
 
     /**
-     * In case of hooks where we have PoiCollection as array, we can assign PoiCollection directly
-     * to getCacheIdentifier. But in case of ViewHelpers we have a PoiCollection object. You can use
-     * this method to prepare/sanitize PoiCollection objects for use with getCacheIdentifier/getCacheTags.
-     *
-     * @param PoiCollection $poiCollection
-     * @return array
-     */
-    public static function preparePoiCollectionForCacheMethods(PoiCollection $poiCollection): array
-    {
-        return [
-            'uid' => $poiCollection->getUid(),
-            'pid' => $poiCollection->getUid(),
-            'title' => $poiCollection->getTitle(),
-            'address' => $poiCollection->getAddress()
-        ];
-    }
-
-    /**
      * Check, if we are in Frontend environment
      *
      * @return bool
      */
-    protected static function isFrontendEnvironment(): bool
+    protected function isFrontendEnvironment(): bool
     {
         return (defined('TYPO3_MODE') && TYPO3_MODE === 'FE') ?: false;
     }
