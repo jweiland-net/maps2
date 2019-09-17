@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace JWeiland\Maps2\ViewHelpers;
 
 /*
@@ -13,12 +14,15 @@ namespace JWeiland\Maps2\ViewHelpers;
  *
  * The TYPO3 project - inspiring people to share!
  */
+
 use JWeiland\Maps2\Domain\Model\Category;
 use JWeiland\Maps2\Domain\Model\Poi;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use TYPO3\CMS\Extbase\Persistence\Generic\LazyObjectStorage;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
+use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
 /**
  * As we need many information in frontend, this ViewHelper is really helpful to
@@ -26,6 +30,8 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
  */
 class ConvertToJsonViewHelper extends AbstractViewHelper
 {
+    use CompileWithRenderStatic;
+
     /**
      * @var bool
      */
@@ -37,18 +43,23 @@ class ConvertToJsonViewHelper extends AbstractViewHelper
     protected $escapeOutput = false;
 
     /**
-     * Implements a ViewHelper to convert an array into JSON format
+     * Convert all array and object types into a json string. Useful for data-Attributes
+     *
+     * @param array $arguments
+     * @param \Closure $renderChildrenClosure
+     * @param RenderingContextInterface $renderingContext
+     * @return array
      */
-    public function render(): string
+    public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
     {
-        $poiCollections = $this->renderChildren();
+        $poiCollections = $renderChildrenClosure();
 
         if ($poiCollections instanceof PoiCollection) {
             $poiCollections = [$poiCollections];
         }
 
-        if ($this->valueContainsPoiCollections($poiCollections)) {
-            $json = $this->getPoiCollectionsAsJson($poiCollections);
+        if (self::valueContainsPoiCollections($poiCollections)) {
+            $json = self::getPoiCollectionsAsJson($poiCollections);
         } else {
             $json = json_encode($poiCollections);
         }
@@ -62,7 +73,7 @@ class ConvertToJsonViewHelper extends AbstractViewHelper
      * @param array $poiCollections
      * @return string
      */
-    protected function getPoiCollectionsAsJson($poiCollections): string
+    protected static function getPoiCollectionsAsJson(array $poiCollections): string
     {
         $poiCollectionsAsArray = [];
         /** @var PoiCollection $poiCollection */
@@ -98,7 +109,7 @@ class ConvertToJsonViewHelper extends AbstractViewHelper
      * @param mixed $value
      * @return bool
      */
-    protected function valueContainsPoiCollections($value): bool
+    protected static function valueContainsPoiCollections($value): bool
     {
         $containsPoiCollections = false;
         if (is_array($value)) {

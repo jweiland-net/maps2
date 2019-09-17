@@ -32,7 +32,13 @@ class TrimExplodeViewHelper extends AbstractViewHelper
      */
     public function initializeArguments()
     {
-        $this->registerArgument('delimiter', 'string', 'The delimiter where the string should be exploded', false, ',');
+        $this->registerArgument(
+            'delimiter',
+            'string',
+            'The delimiter where the string should be exploded',
+            false,
+            ','
+        );
     }
 
     /**

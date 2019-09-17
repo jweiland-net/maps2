@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace JWeiland\Maps2\ViewHelpers\Widget;
 
 /*
@@ -33,8 +34,6 @@ class EditPoiViewHelper extends AbstractWidgetViewHelper
     protected $controller;
 
     /**
-     * inject controller
-     *
      * @param Controller\EditPoiController $controller
      */
     public function injectController(Controller\EditPoiController $controller)
@@ -43,15 +42,30 @@ class EditPoiViewHelper extends AbstractWidgetViewHelper
     }
 
     /**
-     * Initialize all arguments. You need to override this method and call
-     * $this->registerArgument(...) inside this method, to register all your arguments.
+     * Initialize all arguments
      */
     public function initializeArguments()
     {
         parent::initializeArguments();
-        $this->registerArgument('poiCollection', PoiCollection::class, 'The poiColleciton object to render', true);
-        $this->registerArgument('property', 'string', 'Property where to save the new PoiCollection record', false, 'txMapsUid');
-        $this->registerArgument('override', 'array', 'Here you can override default settings individually', false, []);
+        $this->registerArgument(
+            'poiCollection',
+            PoiCollection::class,
+            'The poiColleciton object to render',
+            true
+        );
+        $this->registerArgument(
+            'property',
+            'string',
+            'Property where to save the new PoiCollection record',
+            false, 'txMapsUid'
+        );
+        $this->registerArgument(
+            'override',
+            'array',
+            'Here you can override default settings individually',
+            false,
+            []
+        );
     }
 
     /**
