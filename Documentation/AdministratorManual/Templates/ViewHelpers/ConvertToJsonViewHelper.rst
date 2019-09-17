@@ -15,4 +15,4 @@ Basic example
 
 Code: ::
 
-  <div id="maps2" data-override="{override->maps2:convertToJson()}"></div>
+  <div id="maps2" data-override="{override -> maps2:convertToJson()}"></div>
