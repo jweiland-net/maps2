@@ -1,14 +1,19 @@
-{namespace maps2=JWeiland\Maps2\ViewHelpers}
+<html
+	xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+	xmlns:m="http://typo3.org/ns/JWeiland/Maps2/ViewHelpers"
+	data-namespace-typo3-fluid="true"
+>
 
-<f:if condition="{maps2:cache.hasCache(cacheIdentifier: 'htmlCache{poiCollection.uid}')}">
+<f:if condition="{m:cache.hasCache(poiCollection: poiCollection)}">
 	<f:then>
-		{maps2:cache.getCache(cacheIdentifier: 'htmlCache{poiCollection.uid}')}
+		{m:cache.getCache(poiCollection: poiCollection)}
 	</f:then>
 	<f:else>
-		<f:alias map="{content: '{f:render(section: \'infoWindowContent\', arguments: {poiCollection: poiCollection})}'}">
-			{maps2:cache.setCache(cacheIdentifier: 'htmlCache{poiCollection.uid}', data: '{content->f:format.raw()}', tags: {0: poiCollection.pid}, lifetime: 3600)}
-			{content->f:format.raw()}
-		</f:alias>
+		<f:variable name="content">
+			<f:render section="infoWindowContent" arguments="{poiCollection: poiCollection}" />
+		</f:variable>
+		<m:cache.setCache data="{content -> f:format.raw()}" poiCollection="{poiCollection}" />
+		{content -> f:format.raw()}
 	</f:else>
 </f:if>
 
@@ -34,7 +39,7 @@
 	<div class="titleWrapper"><strong>{poiCollection.title}</strong></div>
 
 	<div class="addressWrapper">
-		<f:for each="{poiCollection.address -> maps2:TrimExplode()}" as="address" iteration="iterator">
+		<f:for each="{poiCollection.address -> m:trimExplode()}" as="address" iteration="iterator">
 			<f:if condition="{iterator.isLast}">
 				<f:else>
 					<div>{address}</div>
@@ -45,6 +50,7 @@
 
 	<f:if condition="{poiCollection}">
 		<br />
-		<div class="infoWindowContent">{poiCollection.infoWindowContent->f:format.html()}</div>
+		<div class="infoWindowContent">{poiCollection.infoWindowContent -> f:format.html()}</div>
 	</f:if>
 </f:section>
+</html>

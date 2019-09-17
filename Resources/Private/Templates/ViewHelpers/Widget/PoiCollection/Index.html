@@ -1,3 +1,14 @@
-{namespace maps2=JWeiland\Maps2\ViewHelpers}
+<html
+	xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+	xmlns:m="http://typo3.org/ns/JWeiland/Maps2/ViewHelpers"
+	data-namespace-typo3-fluid="true"
+>
 
-<div id="maps2-{data.uid}" class="maps2" data-override="{override->maps2:convertToJson()}" data-environment="{environment->maps2:convertToJson()}" data-pois="{poiCollections->maps2:convertToJson()}"></div>
+<div
+	id="maps2-{data.uid}"
+	class="maps2"
+	data-override="{override -> m:convertToJson()}"
+	data-environment="{environment -> m:convertToJson()}"
+	data-pois="{poiCollections -> m:convertToJson()}"
+></div>
+</html>

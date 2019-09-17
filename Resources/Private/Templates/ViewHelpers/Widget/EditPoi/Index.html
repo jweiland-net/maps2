@@ -1,6 +1,16 @@
-{namespace maps2=JWeiland\Maps2\ViewHelpers}
+<html
+	xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+	xmlns:m="http://typo3.org/ns/JWeiland/Maps2/ViewHelpers"
+	data-namespace-typo3-fluid="true"
+>
 
 <f:form.hidden class="latitude-{data.uid}" property="{property}.latitude" />
 <f:form.hidden class="longitude-{data.uid}" property="{property}.longitude" />
 
-<div class="maps2 maps2-{data.uid} editMarker" data-override="{override->maps2:convertToJson()}" data-environment="{environment->maps2:convertToJson()}" data-pois="{poiCollection->maps2:convertToJson()}"></div>
+<div
+	class="maps2 maps2-{data.uid} editMarker"
+	data-override="{override -> m:convertToJson()}"
+	data-environment="{environment -> m:convertToJson()}"
+	data-pois="{poiCollection -> m:convertToJson()}"
+></div>
+</html>
