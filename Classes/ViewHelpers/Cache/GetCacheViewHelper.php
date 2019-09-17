@@ -16,10 +16,9 @@ namespace JWeiland\Maps2\ViewHelpers\Cache;
  */
 
 use JWeiland\Maps2\Domain\Model\PoiCollection;
-use JWeiland\Maps2\Utility\CacheUtility;
+use JWeiland\Maps2\Service\CacheService;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
@@ -71,10 +70,12 @@ class GetCacheViewHelper extends AbstractViewHelper
      */
     public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
     {
-        $poiCollection = ObjectAccess::getGettableProperties($arguments['poiCollection']);
+        $cacheService = GeneralUtility::makeInstance(CacheService::class);
+        $poiCollection = $cacheService->preparePoiCollectionForCacheMethods($arguments['poiCollection']);
         $cache = GeneralUtility::makeInstance(CacheManager::class)->getCache('maps2_cachedhtml');
+
         return $cache->get(
-            CacheUtility::getCacheIdentifier(
+            $cacheService->getCacheIdentifier(
                 $poiCollection,
                 $arguments['prefix']
             )
