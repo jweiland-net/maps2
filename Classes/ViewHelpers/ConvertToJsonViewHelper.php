@@ -19,6 +19,8 @@ use JWeiland\Maps2\Domain\Model\Category;
 use JWeiland\Maps2\Domain\Model\Poi;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use TYPO3\CMS\Extbase\Persistence\Generic\LazyObjectStorage;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
@@ -70,10 +72,10 @@ class ConvertToJsonViewHelper extends AbstractViewHelper
     /**
      * Convert poiCollections to array and pass them through json_encode
      *
-     * @param array $poiCollections
+     * @param array|QueryResultInterface|ObjectStorage $poiCollections
      * @return string
      */
-    protected static function getPoiCollectionsAsJson(array $poiCollections): string
+    protected static function getPoiCollectionsAsJson($poiCollections): string
     {
         $poiCollectionsAsArray = [];
         /** @var PoiCollection $poiCollection */
