@@ -249,7 +249,7 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDrag
          */
         var insertRouteToDb = function(coordinates) {
             $.ajax({
-                type: "GET",
+                type: "POST",
                 url: TYPO3.settings.ajaxUrls['maps2Ajax'],
                 data: {
                     tx_maps2_maps2: {

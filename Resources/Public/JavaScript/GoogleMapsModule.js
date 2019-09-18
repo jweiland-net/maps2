@@ -340,7 +340,7 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
      */
     var insertRouteToDb = function(route) {
       $.ajax({
-        type: "GET",
+        type: "POST",
         url: TYPO3.settings.ajaxUrls['maps2Ajax'],
         data: {
           tx_maps2_maps2: {
