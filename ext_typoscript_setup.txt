@@ -26,11 +26,13 @@ maps2AjaxResponse {
 
 config.tx_extbase {
   mvc {
+    # @ToDo: Registering RequestHandlers with TS will be removed with TYPO3 10.0
     requestHandlers {
       # show overlay if user has to explicit allow Google Maps requests
       JWeiland\Maps2\Mvc\MapProviderOverlayRequestHandler = JWeiland\Maps2\Mvc\MapProviderOverlayRequestHandler
     }
   }
+  # @ToDo: Domain model mapping in TS will be removed with TYPO3 10.0
   persistence.classes {
     # needed because of our own icon column
     JWeiland\Maps2\Domain\Model\Category {
