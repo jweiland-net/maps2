@@ -274,13 +274,7 @@ class MapService
      */
     public function createNewPoiCollection($pid, Position $position, array $overrideFieldValues = []): int
     {
-        if (
-            !empty($position->getLatitude())
-            || !empty($position->getLongitude())
-        ) {
-            $latitude = $position->getLatitude();
-            $longitude = $position->getLongitude();
-        } else {
+        if (empty($position->getLatitude()) || empty($position->getLongitude())) {
             $messageHelper = GeneralUtility::makeInstance(MessageHelper::class);
             $messageHelper->addFlashMessage(
                 'The is no latitude or longitude in Response of Map Provider.',
@@ -288,6 +282,9 @@ class MapService
                 FlashMessage::ERROR
             );
             return 0;
+        } else {
+            $latitude = $position->getLatitude();
+            $longitude = $position->getLongitude();
         }
 
         $fieldValues = [];
