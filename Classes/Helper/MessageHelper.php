@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types = 1);
 namespace JWeiland\Maps2\Helper;
 
 /*
@@ -50,11 +50,13 @@ class MessageHelper
      */
     public function addFlashMessage(string $message, string $title = '', int $severity = FlashMessage::OK)
     {
+        // We activate storeInSession, so that messages can be displayed when click on Save&Close button.
         $flashMessage = GeneralUtility::makeInstance(
             FlashMessage::class,
             $message,
             $title,
-            $severity
+            $severity,
+            true
         );
 
         $defaultFlashMessageQueue = $this->flashMessageService->getMessageQueueByIdentifier();
