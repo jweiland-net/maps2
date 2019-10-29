@@ -5,6 +5,12 @@ Updating
 
 If you update EXT:maps2 to a newer version, please read this section carefully!
 
+Update to Version 6.1.0
+-----------------------
+
+As mouseScrollWheelZoom is not available for all map providers you have to execute the Update Wizard
+to move this Option in FlexForm from Google Maps sheet to MapOptions sheet.
+
 Update to Version 6.0.0
 -----------------------
 

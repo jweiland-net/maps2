@@ -6,6 +6,12 @@
 ChangeLog
 =========
 
+**Version 6.1.0**
+
+- Option mouseScrollWheelZoom is now available for Google Maps and OpenStreetMap
+- All FlashMessages are now created by MessageHelper
+- All FlashMessages are now stored in Session
+
 **Version 6.0.0**
 
 - Breaking: Removed cacheIdentifier property from all Cache ViewHelpers
