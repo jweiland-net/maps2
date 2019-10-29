@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace JWeiland\Maps2\Update;
 
 /*
@@ -14,34 +14,55 @@ namespace JWeiland\Maps2\Update;
  *
  * The TYPO3 project - inspiring people to share!
  */
-
 use TYPO3\CMS\Core\Configuration\FlexForm\FlexFormTools;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Install\Updates\AbstractUpdate;
 
 /**
  * With maps2 5.0.0 we have moved some FlexForm Settings to another sheet.
  * To prevent duplicates in DB, this update wizard removes old settings from FlexForm.
  */
-class MoveOldFlexFormSettingsUpdate extends AbstractUpdate
+class MoveOldFlexFormSettingsUpdate
 {
     /**
-     * @var string Title of this updater
+     * Return the identifier for this wizard
+     * This should be the same string as used in the ext_localconf class registration
+     *
+     * @return string
      */
-    protected $title = '[maps2] Move old FlexForm fields to new FlexForm sheet';
+    public function getIdentifier(): string
+    {
+        return 'maps2MoveFlexFormFields';
+    }
+
+    /**
+     * Return the speaking name of this wizard
+     *
+     * @return string
+     */
+    public function getTitle(): string
+    {
+        return '[maps2] Move old FlexForm fields to new FlexForm sheet';
+    }
+
+    /**
+     * Return the description for this wizard
+     *
+     * @return string
+     */
+    public function getDescription(): string
+    {
+        return 'It seems that some fields from FlexForm of one Map Provider was available for all Map Providers now. ' .
+            'In that case we have to move these fields to another Sheet.';
+    }
 
     /**
      * Checks whether updates are required.
      *
-     * @param string &$description The description for the update
      * @return bool Whether an update is required (TRUE) or not (FALSE)
      */
-    public function checkForUpdate(&$description): bool
+    public function updateNecessary(): bool
     {
-        $description = 'With maps2 5.0.0 we have moved some FlexForm fields to another sheet.'
-            . 'To prevent duplicates in DB, this update wizard removes old fields from FlexForm';
-
         $records = $this->getTtContentRecordsWithMaps2Plugin();
         foreach ($records as $record) {
             $valueFromDatabase = (string)$record['pi_flexform'] !== '' ? GeneralUtility::xml2array($record['pi_flexform']) : [];
@@ -53,8 +74,11 @@ class MoveOldFlexFormSettingsUpdate extends AbstractUpdate
                 return true;
             }
 
+            if (array_key_exists('settings.activateScrollWheel', $valueFromDatabase['data']['sGoogleMapsOptions']['lDEF'])) {
+                return true;
+            }
+
             $oldFieldNames = [
-                'activateScrollWheel',
                 'mapTypeControl',
                 'mapTypeId',
                 'scaleControl',
@@ -74,11 +98,9 @@ class MoveOldFlexFormSettingsUpdate extends AbstractUpdate
     /**
      * Performs the accordant updates.
      *
-     * @param array &$dbQueries Queries done in this update
-     * @param string &$customMessage Custom message
      * @return bool Whether everything went smoothly or not
      */
-    public function performUpdate(array &$dbQueries, &$customMessage): bool
+    public function executeUpdate(): bool
     {
         $records = $this->getTtContentRecordsWithMaps2Plugin();
         foreach ($records as $record) {
@@ -87,7 +109,7 @@ class MoveOldFlexFormSettingsUpdate extends AbstractUpdate
                 continue;
             }
             $this->moveSheetDefaultToDef($valueFromDatabase);
-            $this->moveFieldFromOldToNewSheet($valueFromDatabase, 'settings.activateScrollWheel', 'sMapOptions', 'sGoogleMapsOptions');
+            $this->moveFieldFromOldToNewSheet($valueFromDatabase, 'settings.activateScrollWheel', 'sGoogleMapsOptions', 'sMapOptions');
             $this->moveFieldFromOldToNewSheet($valueFromDatabase, 'settings.mapTypeControl', 'sMapOptions', 'sGoogleMapsOptions');
             $this->moveFieldFromOldToNewSheet($valueFromDatabase, 'settings.mapTypeId', 'sMapOptions', 'sGoogleMapsOptions');
             $this->moveFieldFromOldToNewSheet($valueFromDatabase, 'settings.scaleControl', 'sMapOptions', 'sGoogleMapsOptions');
