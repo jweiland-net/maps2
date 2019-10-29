@@ -51,7 +51,8 @@ OpenStreetMaps2.prototype.createMap = function (environment) {
         this.$element.get(0), {
             center: [environment.extConf.defaultLatitude, environment.extConf.defaultLongitude],
             zoom: environment.settings.zoom ? environment.settings.zoom : 12,
-            editable: this.editable
+            editable: this.editable,
+            scrollWheelZoom: environment.settings.activateScrollWheel !== '0'
         }
     );
 

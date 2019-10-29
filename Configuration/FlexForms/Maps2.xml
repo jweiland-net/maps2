@@ -122,6 +122,15 @@
 							</config>
 						</TCEforms>
 					</settings.zoomControl>
+					<settings.activateScrollWheel>
+						<TCEforms>
+							<label>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:activateScrollWheel</label>
+							<config>
+								<type>check</type>
+								<default>1</default>
+							</config>
+						</TCEforms>
+					</settings.activateScrollWheel>
 					<settings.fullScreenControl>
 						<TCEforms>
 							<label>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:fullScreenControl</label>
@@ -195,15 +204,6 @@
 							</config>
 						</TCEforms>
 					</settings.streetViewControl>
-					<settings.activateScrollWheel>
-						<TCEforms>
-							<label>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:activateScrollWheel</label>
-							<config>
-								<type>check</type>
-								<default>1</default>
-							</config>
-						</TCEforms>
-					</settings.activateScrollWheel>
 					<settings.styles>
 						<TCEforms>
 							<label>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:styles</label>
