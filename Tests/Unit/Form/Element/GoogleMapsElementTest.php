@@ -13,11 +13,11 @@ namespace JWeiland\Maps2\Tests\Unit\Form\Element;
  *
  * The TYPO3 project - inspiring people to share!
  */
-
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
 use JWeiland\Maps2\Form\Element\GoogleMapsElement;
+use JWeiland\Maps2\Helper\MessageHelper;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -26,7 +26,6 @@ use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
-use TYPO3\CMS\Extbase\Security\Cryptography\HashService;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
@@ -70,6 +69,11 @@ class GoogleMapsElementTest extends UnitTestCase
     protected $poiCollectionRepository;
 
     /**
+     * @var MessageHelper|ObjectProphecy
+     */
+    protected $messageHelper;
+
+    /**
      * Sets up the fixture, for example, open a network connection.
      * This method is called before a test is executed.
      */
@@ -85,11 +89,21 @@ class GoogleMapsElementTest extends UnitTestCase
                 ]
             ]
         ];
+        $this->poiCollectionRepository = $this->prophesize(PoiCollectionRepository::class);
+        GeneralUtility::setSingletonInstance(
+            PoiCollectionRepository::class,
+            $this->poiCollectionRepository->reveal()
+        );
+
         $this->objectManager = $this->prophesize(ObjectManager::class);
+        $this->objectManager
+            ->get(PoiCollectionRepository::class)
+            ->shouldBeCalled()
+            ->willReturn($this->poiCollectionRepository->reveal());
+        GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManager->reveal());
 
         $this->extConf = new ExtConf();
         GeneralUtility::setSingletonInstance(ExtConf::class, $this->extConf);
-
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey'] = 'test@123';
 
         $this->view = $this->prophesize(StandaloneView::class);
@@ -98,15 +112,8 @@ class GoogleMapsElementTest extends UnitTestCase
         $this->pageRenderer = $this->prophesize(PageRenderer::class);
         GeneralUtility::setSingletonInstance(PageRenderer::class, $this->pageRenderer->reveal());
 
-        $this->poiCollectionRepository = $this->prophesize(PoiCollectionRepository::class);
-        GeneralUtility::setSingletonInstance(
-            PoiCollectionRepository::class,
-            $this->poiCollectionRepository->reveal()
-        );
-
-        $this->objectManager->get(PoiCollectionRepository::class)->shouldBeCalled()->willReturn($this->poiCollectionRepository->reveal());
-
-        GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManager->reveal());
+        $this->messageHelper = $this->prophesize(MessageHelper::class);
+        GeneralUtility::addInstance(MessageHelper::class, $this->messageHelper->reveal());
 
         /** @var IconFactory|ObjectProphecy $iconFactoryProphecy */
         $iconFactoryProphecy = $this->prophesize(IconFactory::class);

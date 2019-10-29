@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace JWeiland\Maps2\Hook;
 
 /*
@@ -14,9 +14,9 @@ namespace JWeiland\Maps2\Hook;
  *
  * The TYPO3 project - inspiring people to share!
  */
-
 use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Helper\AddressHelper;
+use JWeiland\Maps2\Helper\MessageHelper;
 use JWeiland\Maps2\Helper\StoragePidHelper;
 use JWeiland\Maps2\Service\GeoCodeService;
 use JWeiland\Maps2\Service\MapService;
@@ -26,7 +26,6 @@ use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
-use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
@@ -48,9 +47,9 @@ class CreateMaps2RecordHook
     protected $geoCodeService;
 
     /**
-     * @var FlashMessageService
+     * @var MessageHelper
      */
-    protected $flashMessageService;
+    protected $messageHelper;
 
     /**
      * @var FrontendInterface
@@ -62,14 +61,11 @@ class CreateMaps2RecordHook
      */
     protected $columnRegistry = [];
 
-    /**
-     * DataHandlerHook constructor.
-     */
     public function __construct()
     {
         $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $this->geoCodeService = $this->objectManager->get(GeoCodeService::class);
-        $this->flashMessageService = $this->objectManager->get(FlashMessageService::class);
+        $this->messageHelper = GeneralUtility::makeInstance(MessageHelper::class);
         $this->maps2RegistryCache = $this->objectManager
             ->get(CacheManager::class)
             ->getCache('maps2_registry');
@@ -80,10 +76,9 @@ class CreateMaps2RecordHook
      * Create a POI collection record while a foreign table was saved
      *
      * @param DataHandler $dataHandler
-     * @return void
      * @throws \Exception
      */
-    public function processDatamap_afterAllOperations($dataHandler)
+    public function processDatamap_afterAllOperations(DataHandler $dataHandler)
     {
         foreach ($dataHandler->datamap as $foreignTableName => $recordsFromRequest) {
             if ($foreignTableName === 'tx_maps2_domain_model_poicollection') {
@@ -121,7 +116,7 @@ class CreateMaps2RecordHook
                     if (!$foreignLocationRecord[$foreignColumnName]) {
                         if ($this->createNewMapsRecord($foreignLocationRecord, $foreignTableName, $foreignColumnName, $options)) {
                             $this->synchronizeColumnsFromForeignRecordWithPoiCollection($foreignLocationRecord, $foreignTableName, $foreignColumnName, $options);
-                            $this->addMessage(
+                            $this->messageHelper->addFlashMessage(
                                 'While creating this record, we have automatically inserted a new maps2 record, too',
                                 'Maps2 record creation successful',
                                 FlashMessage::OK
@@ -130,7 +125,7 @@ class CreateMaps2RecordHook
                     } else {
                         $this->updateAddressInPoiCollectionIfNecessary($foreignLocationRecord, $foreignColumnName, $options);
                         $this->synchronizeColumnsFromForeignRecordWithPoiCollection($foreignLocationRecord, $foreignTableName, $foreignColumnName, $options);
-                        $this->addMessage(
+                        $this->messageHelper->addFlashMessage(
                             'While updating this record, we have automatically updated the related maps2 record, too',
                             'Maps2 record update successful',
                             FlashMessage::OK
@@ -297,7 +292,7 @@ class CreateMaps2RecordHook
             );
             return true;
         }
-        $this->addMessage(
+        $this->messageHelper->addFlashMessage(
             'While saving this record, we tried to automatically create a new maps2 record, but Map Providers GeoCode API can not find your address: ' . $address,
             'Map Provider has not found your address',
             FlashMessage::ERROR
@@ -344,11 +339,11 @@ class CreateMaps2RecordHook
      * If a record was new, its uid is not an int. It's a string starting with "NEW"
      * This method returns the real uid as int.
      *
-     * @param string $uid
+     * @param int|string $uid If new, $uid can start with NEW.
      * @param DataHandler $dataHandler
      * @return int
      */
-    protected function getRealUid($uid, $dataHandler)
+    protected function getRealUid($uid, DataHandler $dataHandler): int
     {
         if (GeneralUtility::isFirstPartOfStr($uid, 'NEW')) {
             $uid = $dataHandler->substNEWwithIDs[$uid];
@@ -368,7 +363,7 @@ class CreateMaps2RecordHook
     public function synchronizeColumnsFromForeignRecordWithPoiCollection(array $foreignLocationRecord, $foreignTableName, $maps2ColumnName, array $columnOptions = []): bool
     {
         if (!array_key_exists('synchronizeColumns', $columnOptions)) {
-            $this->addMessage(
+            $this->messageHelper->addFlashMessage(
                 'There are no synchronizationColumns configured in your maps2 registration, so we are using the address as maps2 title',
                 'Using address as record title',
                 FlashMessage::INFO
@@ -423,7 +418,7 @@ class CreateMaps2RecordHook
             || !is_string($synchronizeColumns['foreignColumnName'])
             || !is_string($synchronizeColumns['poiCollectionColumnName'])
         ) {
-            $this->addMessage(
+            $this->messageHelper->addFlashMessage(
                 'Please check your Maps registration. The keys foreignColumnName and poiCollectionColumnName have to be set.',
                 'Missing registration keys',
                 FlashMessage::ERROR
@@ -438,7 +433,7 @@ class CreateMaps2RecordHook
             || !array_key_exists($foreignColumnName, $GLOBALS['TCA'][$foreignTableName]['columns'])
             || !is_array($GLOBALS['TCA'][$foreignTableName]['columns'][$foreignColumnName]['config'])
         ) {
-            $this->addMessage(
+            $this->messageHelper->addFlashMessage(
                 'Error while trying to synchronize columns of your record with maps2 record. It seems that "' . $foreignTableName . '" is not registered as table or "' . $foreignColumnName . '" is not a valid column in ' . $foreignTableName,
                 'Missing table/column in TCA',
                 FlashMessage::ERROR
@@ -447,28 +442,6 @@ class CreateMaps2RecordHook
         }
 
         return true;
-    }
-
-    /**
-     * Add a message to FlashMessage queue
-     *
-     * @param string $message
-     * @param string $title
-     * @param int $severity
-     * @return void
-     */
-    protected function addMessage($message, $title = '', $severity = FlashMessage::OK)
-    {
-        /** @var $flashMessage FlashMessage */
-        $flashMessage = GeneralUtility::makeInstance(
-            FlashMessage::class,
-            $message,
-            $title,
-            $severity,
-            true
-        );
-        $defaultFlashMessageQueue = $this->flashMessageService->getMessageQueueByIdentifier();
-        $defaultFlashMessageQueue->enqueue($flashMessage);
     }
 
     /**
@@ -508,7 +481,7 @@ class CreateMaps2RecordHook
      *
      * @return ConnectionPool
      */
-    protected function getConnectionPool()
+    protected function getConnectionPool(): ConnectionPool
     {
         return GeneralUtility::makeInstance(ConnectionPool::class);
     }
