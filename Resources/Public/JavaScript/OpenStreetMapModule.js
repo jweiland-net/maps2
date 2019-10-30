@@ -301,7 +301,6 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDrag
                                     case 'Radius':
                                         marker.setLatLng([lat, lng]);
                                         setLatLngFields(lat, lng, marker.getRadius(), formattedAddress);
-                                        //modifyMarkerInDb(lat, lng); // save radius to DB
                                         break;
                                 }
 
