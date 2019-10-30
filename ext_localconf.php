@@ -9,12 +9,10 @@ call_user_func(function() {
         'Maps2',
         [
             'PoiCollection' => 'show, allowMap',
-            'Ajax' => 'callAjaxObject',
         ],
         // non-cacheable actions
         [
             'PoiCollection' => '',
-            'Ajax' => 'callAjaxObject',
         ]
     );
 

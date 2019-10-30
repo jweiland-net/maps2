@@ -238,7 +238,7 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDrag
             if ($humanReadableField.length) {
                 $humanReadableField.val(value);
             }
-            // set the normal field which contains the data, which will be send by POST
+            // set the form field which contains the data, which will be send by POST
             document[TBE_EDITOR.formname][fieldName].value = value;
         };
 
@@ -250,7 +250,7 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDrag
         var insertRouteToDb = function(coordinates) {
             $.ajax({
                 type: "POST",
-                url: TYPO3.settings.ajaxUrls['maps2Ajax'],
+                url: TYPO3.settings.ajaxUrls["maps2Ajax"],
                 data: {
                     tx_maps2_maps2: {
                         objectName: "InsertRoute",
