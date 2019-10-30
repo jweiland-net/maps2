@@ -14,28 +14,13 @@ namespace JWeiland\Maps2\Ajax;
  *
  * The TYPO3 project - inspiring people to share!
  */
-use JWeiland\Maps2\Domain\Model\Poi;
-use JWeiland\Maps2\Domain\Model\PoiCollection;
-use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
+use TYPO3\CMS\Core\Database\Connection;
 
 /**
  * Ajax request class to insert a new Route
  */
 class InsertRoute extends AbstractAjaxRequest
 {
-    /**
-     * @var PoiCollectionRepository
-     */
-    protected $poiCollectionRepository;
-
-    /**
-     * @param PoiCollectionRepository $poiCollectionRepository
-     */
-    public function injectPoiCollectionRepository(PoiCollectionRepository $poiCollectionRepository)
-    {
-        $this->poiCollectionRepository = $poiCollectionRepository;
-    }
-
     /**
      * process ajax request
      *
@@ -50,17 +35,13 @@ class InsertRoute extends AbstractAjaxRequest
         $uid = (int)$arguments['uid'];
         $route = (array)$arguments['route'];
 
-        $poiCollection = $this->poiCollectionRepository->findByUid($uid);
-        if ($poiCollection instanceof PoiCollection) {
-            // validate uri arguments
+        $poiCollection = $this->getPoiCollection($uid);
+        if (!empty($poiCollection)) {
+            // validate URI-arguments against hash
             if (!$this->validateArguments($poiCollection, $hash)) {
                 return 'Arguments are not valid';
             }
-
-            $poiCollection = $this->getUpdatedPositionRecords($poiCollection, $route);
-
-            $this->poiCollectionRepository->update($poiCollection);
-            $this->persistenceManager->persistAll();
+            $this->updatePoiRecordsOfPoiCollection($poiCollection, $route);
             return '1';
         } else {
             return '0';
@@ -68,47 +49,108 @@ class InsertRoute extends AbstractAjaxRequest
     }
 
     /**
-     * Get updated position records
-     * this method loops through all route positions and insert or updates the expected record in db
+     * Delete all related POI records of given PoiCollection and rebuild them from scratch.
      *
-     * @param PoiCollection $poiCollection The parent object for pois
+     * @param array $poiCollection The POI collection record
      * @param array $routes Array containing all positions of the route
-     * @return PoiCollection A collection of position records
      */
-    public function getUpdatedPositionRecords(PoiCollection $poiCollection, array $routes)
+    public function updatePoiRecordsOfPoiCollection(array $poiCollection, array $routes)
     {
-        if (count($routes)) {
-            $this->removeAllPois($poiCollection);
+        if (!empty($routes)) {
+            $this->removeAllRelatedPoiRecords((int)$poiCollection['uid']);
+            $newPoiRecords = [];
             foreach ($routes as $posIndex => $route) {
-                // get latitude and longitude from current route
-                $latLng = explode(',', $route);
-                $lat = (float)$latLng[0];
-                $lng = (float)$latLng[1];
-
-                // create new poi
-                $poi = $this->objectManager->get(Poi::class);
-                $poi->setPid($poiCollection->getPid());
-                $poi->setLatitude($lat);
-                $poi->setLongitude($lng);
-                $poi->setPosIndex($posIndex);
-
-                $poiCollection->getPois()->attach($poi);
+                $newPoiRecords[] = $this->buildPoiRecord($poiCollection, $route, (int)$posIndex);
             }
-        }
 
-        return $poiCollection;
+            $connection = $this->getConnectionPool()->getConnectionForTable('tx_maps2_domain_model_poi');
+            $connection->bulkInsert(
+                'tx_maps2_domain_model_poi',
+                $newPoiRecords,
+                [
+                    'pid', 'poicollection', 'crdate', 'tstamp', 'cruser_id', 'latitude', 'longitude', 'pos_index'
+                ],
+                [
+                    Connection::PARAM_INT,
+                    Connection::PARAM_INT,
+                    Connection::PARAM_INT,
+                    Connection::PARAM_INT,
+                    Connection::PARAM_INT,
+                    Connection::PARAM_STR, // there is no PARAM_FLOAT
+                    Connection::PARAM_STR, // there is no PARAM_FLOAT
+                    Connection::PARAM_INT,
+                ]
+            );
+
+            // Update amount a related POI records in PoiCollection record
+            $connection = $this->getConnectionPool()->getConnectionForTable('tx_maps2_domain_model_poi');
+            $connection->update(
+                'tx_maps2_domain_model_poicollection',
+                [
+                    'pois' => count($newPoiRecords)
+                ],
+                [
+                    'uid' => (int)$poiCollection['uid']
+                ]
+            );
+        }
+    }
+
+    /**
+     * Build a new POI record
+     *
+     * @param array $poiCollection The POI collection record
+     * @param string $route Comma separated string containing lat and lng
+     * @param int $posIndex The ordering position index of the new POI record
+     * @return array
+     */
+    protected function buildPoiRecord(array $poiCollection, string $route, int $posIndex): array
+    {
+        // Get latitude and longitude from current route
+        $latLng = explode(',', $route);
+        $latitude = (float)$latLng[0];
+        $longitude = (float)$latLng[1];
+
+        // create new POI
+        return [
+            'pid' => $poiCollection['pid'],
+            'poicollection' => $poiCollection['uid'],
+            'crdate' => time(),
+            'tstamp' => time(),
+            'cruser_id' => $GLOBALS['BE_USER']->user['uid'],
+            'latitude' => $latitude,
+            'longitude' => $longitude,
+            'pos_index' => $posIndex
+        ];
     }
 
     /**
      * Instead of checking each POI for existence,
      * it's easier to remove all and create them from scratch
      *
-     * @param PoiCollection $poiCollection
-     * @return void
+     * @param int $poiCollectionUid
      */
-    protected function removeAllPois(PoiCollection $poiCollection)
+    protected function removeAllRelatedPoiRecords(int $poiCollectionUid)
     {
-        $pois = clone $poiCollection->getPois();
-        $poiCollection->getPois()->removeAll($pois);
+        // Remove all related POI records
+        $connection = $this->getConnectionPool()->getConnectionForTable('tx_maps2_domain_model_poi');
+        $connection->delete(
+            'tx_maps2_domain_model_poi',
+            [
+                'poicollection' => $poiCollectionUid
+            ]
+        );
+
+        // Update amount of POIs in parent record to 0
+        $connection = $this->getConnectionPool()->getConnectionForTable('tx_maps2_domain_model_poicollection');
+        $connection->update(
+            'tx_maps2_domain_model_poicollection',
+            [
+                'pois' => 0
+            ],
+            [
+                'uid' => $poiCollectionUid
+            ]
+        );
     }
 }
