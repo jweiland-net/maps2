@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace JWeiland\Maps2\Dispatch;
 
 /*
@@ -13,10 +14,10 @@ namespace JWeiland\Maps2\Dispatch;
  *
  * The TYPO3 project - inspiring people to share!
  */
-
 use JWeiland\Maps2\Ajax\AjaxInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 
@@ -26,15 +27,10 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
 class AjaxRequest
 {
     /**
-     * ObjectManager
-     *
      * @var ObjectManager
      */
     protected $objectManager;
 
-    /**
-     * Constructor of this class
-     */
     public function __construct()
     {
         $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
@@ -44,17 +40,21 @@ class AjaxRequest
      * Dispatcher for ajax requests
      *
      * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
+     * @param ResponseInterface|null $response @ToDo: Deprecated since TYPO3 9.5.
      * @return ResponseInterface
      */
-    public function dispatch(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    public function dispatch(ServerRequestInterface $request, ResponseInterface $response = null): ResponseInterface
     {
-        $queryParams = $request->getQueryParams();
-        if (!array_key_exists('tx_maps2_maps2', $queryParams)) {
+        if (!is_subclass_of($response,ResponseInterface::class)) {
+            $response = GeneralUtility::makeInstance(Response::class);
+        }
+
+        $postParams = $request->getParsedBody();
+        if (!array_key_exists('tx_maps2_maps2', $postParams)) {
             return $response;
         }
 
-        $parameters = $queryParams['tx_maps2_maps2'];
+        $parameters = $postParams['tx_maps2_maps2'];
 
         $className = 'JWeiland\\Maps2\\Ajax\\' . $parameters['objectName'];
         if (class_exists($className)) {
