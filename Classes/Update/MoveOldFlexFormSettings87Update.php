@@ -15,6 +15,7 @@ namespace JWeiland\Maps2\Update;
  * The TYPO3 project - inspiring people to share!
  */
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Install\Controller\Action\Tool\UpgradeWizard;
 use TYPO3\CMS\Install\Updates\AbstractUpdate;
 
 /**
@@ -28,8 +29,13 @@ class MoveOldFlexFormSettings87Update extends AbstractUpdate
      */
     protected $flexFormUpdate;
 
-    public function __construct(MoveOldFlexFormSettingsUpdate $flexFormUpdate = null)
-    {
+    public function __construct(
+        string $identifier,
+        int $versionAsInt,
+        string $userInput = null,
+        UpgradeWizard $parentObject = null,
+        MoveOldFlexFormSettingsUpdate $flexFormUpdate = null
+    ) {
         if ($flexFormUpdate === null) {
             $flexFormUpdate = GeneralUtility::makeInstance(MoveOldFlexFormSettingsUpdate::class);
         }
@@ -68,6 +74,7 @@ class MoveOldFlexFormSettings87Update extends AbstractUpdate
      */
     public function checkForUpdate(&$description): bool
     {
+        $description = $this->getDescription();
         return $this->flexFormUpdate->updateNecessary();
     }
 
