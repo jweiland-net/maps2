@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace JWeiland\Maps2\Ajax;
 
 /*
@@ -14,10 +15,8 @@ namespace JWeiland\Maps2\Ajax;
  * The TYPO3 project - inspiring people to share!
  */
 
-use JWeiland\Maps2\Domain\Model\PoiCollection;
-use TYPO3\CMS\Extbase\Configuration\BackendConfigurationManager;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
-use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
+use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Security\Cryptography\HashService;
 
 /**
@@ -26,52 +25,12 @@ use TYPO3\CMS\Extbase\Security\Cryptography\HashService;
 abstract class AbstractAjaxRequest implements AjaxInterface
 {
     /**
-     * @var ObjectManager
-     */
-    protected $objectManager;
-
-    /**
-     * @var PersistenceManagerInterface
-     */
-    protected $persistenceManager;
-
-    /**
      * @var HashService
      */
     protected $hashService;
 
     /**
-     * @var BackendConfigurationManager
-     */
-    protected $backendConfigurationManager;
-
-    /**
-     * inject objectManager
-     *
-     * @param ObjectManager $objectManager
-     * @return void
-     */
-    public function injectObjectManager(ObjectManager $objectManager)
-    {
-        $this->objectManager = $objectManager;
-    }
-
-    /**
-     * inject persistenceManager
-     *
-     * @param PersistenceManagerInterface $persistenceManager
-     * @return void
-     */
-    public function injectPersistenceManager(PersistenceManagerInterface $persistenceManager)
-    {
-        $this->persistenceManager = $persistenceManager;
-    }
-
-    /**
-     * inject hashService
-     *
      * @param HashService $hashService
-     * @return void
      */
     public function injectHashService(HashService $hashService)
     {
@@ -79,49 +38,61 @@ abstract class AbstractAjaxRequest implements AjaxInterface
     }
 
     /**
-     * inject backendConfigurationManager
+     * Find PoiCollection record by UID
      *
-     * @param BackendConfigurationManager $backendConfigurationManager
-     * @return void
+     * @param int $poiCollectionUid
+     * @return array
      */
-    public function injectBackendConfigurationManager(BackendConfigurationManager $backendConfigurationManager)
+    protected function getPoiCollection(int $poiCollectionUid): array
     {
-        $this->backendConfigurationManager = $backendConfigurationManager;
-    }
+        $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable('tx_maps2_domain_model_poicollection');
+        $poiCollection = $queryBuilder
+            ->select('*')
+            ->from('tx_maps2_domain_model_poicollection')
+            ->where(
+                $queryBuilder->expr()->eq(
+                    'uid',
+                    $queryBuilder->createNamedParameter($poiCollectionUid, \PDO::PARAM_INT))
+            )
+            ->execute()
+            ->fetch();
 
-    /**
-     * In Typo3QuerySettings there is a feature check which loads whole TS which needs about 250ms
-     * With this workaround I modify the 1st level cache of configuration manager
-     *
-     * @return void
-     */
-    public function initializeObject()
-    {
-        // set minimal configuration
-        $configuration = [];
-        $configuration['_']['features']['ignoreAllEnableFieldsInBe'] = 0;
-
-        // transport our minimal configuration into backendConfigurationManagers 1st-level Cache
-        if (property_exists(get_class($this->backendConfigurationManager), 'configurationCache')) {
-            $propertyReflection = new \ReflectionProperty(
-                get_class($this->backendConfigurationManager),
-                'configurationCache'
-            );
-            $propertyReflection->setAccessible(true);
-            $propertyReflection->setValue($this->backendConfigurationManager, $configuration);
+        if ($poiCollection === false) {
+            $poiCollection = [];
         }
+
+        return $poiCollection;
     }
+
     /**
-     * validate arguments against hash
+     * Validate arguments against hash
      *
-     * @param PoiCollection $poiCollection Model to validate hash against
+     * @param array $poiCollection The POI collection record
      * @param string $hash A generated hash value to verify that there are no modifications in the uri
      * @return bool
      */
-    public function validateArguments(PoiCollection $poiCollection, $hash)
+    public function validateArguments(array $poiCollection, string $hash): bool
     {
-        $hashArray['uid'] = $poiCollection->getUid();
-        $hashArray['collectionType'] = $poiCollection->getCollectionType();
-        return $this->hashService->validateHmac(serialize($hashArray), $hash);
+        $isValidPoiCollection = false;
+        if (!empty($poiCollection)) {
+            $isValidPoiCollection = $this->hashService->validateHmac(
+                serialize([
+                    'uid' => $poiCollection['uid'],
+                    'collectionType' => $poiCollection['collection_type']
+                ]),
+                $hash
+            );
+        }
+        return $isValidPoiCollection;
+    }
+
+    /**
+     * Get TYPO3s Connection Pool
+     *
+     * @return ConnectionPool
+     */
+    protected function getConnectionPool(): ConnectionPool
+    {
+        return GeneralUtility::makeInstance(ConnectionPool::class);
     }
 }
