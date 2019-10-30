@@ -5,6 +5,25 @@ Updating
 
 If you update EXT:maps2 to a newer version, please read this section carefully!
 
+Update to Version 7.0.0
+-----------------------
+
+As a normal user you can update to this version without any problems.
+
+As an extension developer who has modified maps2 you should read following lines:
+
+We have removed ModifyMarker class.
+--> Please update lat, lng and radius fields in BE form with JS directly.
+
+We have removed modifyMarkerInDb function in our Map Provider JS files for BE modules.
+--> Please update lat, lng and radius fields in BE form with JS directly.
+
+We have removed AjaxController.
+--> As it was not used since months, it was not used anymore.
+
+We have removed all extbase usage from all Ajax classes and have rewritten them completely with Doctrine.
+--> Please check your extension and check if an update is needed.
+
 Update to Version 6.1.0
 -----------------------
 
