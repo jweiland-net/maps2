@@ -1,4 +1,4 @@
-.. include:: ../../../Includes.rst.txt
+.. include:: ../../../Includes.txt
 
 ViewHelpers of EXT:maps2
 ========================
