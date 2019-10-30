@@ -329,7 +329,7 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
       if ($humanReadableField.length) {
         $humanReadableField.val(value);
       }
-      // set the normal field which contains the data, which will be send by POST
+      // set the form field which contains the data, which will be send by POST
       document[TBE_EDITOR.formname][fieldName].value = value;
     };
 
@@ -341,7 +341,7 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
     var insertRouteToDb = function(route) {
       $.ajax({
         type: "POST",
-        url: TYPO3.settings.ajaxUrls['maps2Ajax'],
+        url: TYPO3.settings.ajaxUrls["maps2Ajax"],
         data: {
           tx_maps2_maps2: {
             objectName: "InsertRoute",
@@ -360,7 +360,7 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
      */
     var findAddress = function() {
       var input = document.getElementById("pac-input");
-      var autocomplete = new gmaps.places.Autocomplete(input, {fields: ['place_id']});
+      var autocomplete = new gmaps.places.Autocomplete(input, {fields: ["place_id"]});
       var geocoder = new gmaps.Geocoder;
 
       autocomplete.bindTo("bounds", map);

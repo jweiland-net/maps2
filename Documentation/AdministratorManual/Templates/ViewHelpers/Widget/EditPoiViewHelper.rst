@@ -6,7 +6,7 @@ Widget / EditPoiViewHelper
 If you have your own extension you can use this widget to create a map
 with one Marker which a user can move via drag 'n drop or click on the map.
 The ViewHelper adds some hidden fields with the new position which you
-can catch in your extension with GeneralUtility::_POST
+can catch in your extension with GeneralUtility::_POST()
 
 .. important::
    Please make sure you have inserted the static template **Maps2 (maps2)**

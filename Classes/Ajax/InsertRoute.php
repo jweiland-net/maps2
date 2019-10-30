@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace JWeiland\Maps2\Ajax;
 
 /*
@@ -13,7 +14,6 @@ namespace JWeiland\Maps2\Ajax;
  *
  * The TYPO3 project - inspiring people to share!
  */
-
 use JWeiland\Maps2\Domain\Model\Poi;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
@@ -29,13 +29,10 @@ class InsertRoute extends AbstractAjaxRequest
     protected $poiCollectionRepository;
 
     /**
-     * inject poiCollectionRepository
-     *
      * @param PoiCollectionRepository $poiCollectionRepository
      */
-    public function injectPoiCollectionRepository(
-        PoiCollectionRepository $poiCollectionRepository
-    ) {
+    public function injectPoiCollectionRepository(PoiCollectionRepository $poiCollectionRepository)
+    {
         $this->poiCollectionRepository = $poiCollectionRepository;
     }
 
