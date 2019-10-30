@@ -6,6 +6,13 @@
 ChangeLog
 =========
 
+**Version 7.0.0**
+
+- Remove AjaxController. There is no need anymore after switch to AjaxDispatcher.
+- Remove ModifyMarker Ajax Request, as we update position fields in BE form directly.
+- Remove all extbase classes from Ajax Calls and switch over to Doctrine
+- Update Documentation
+
 **Version 6.1.0**
 
 - Option mouseScrollWheelZoom is now available for Google Maps and OpenStreetMap
