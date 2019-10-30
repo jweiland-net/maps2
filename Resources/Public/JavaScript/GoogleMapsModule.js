@@ -403,7 +403,6 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
             case 'Radius':
               marker.setCenter(results[0].geometry.location);
               setLatLngFields(lat, lng, marker.getRadius(), results[0].formatted_address);
-              modifyMarkerInDb(lat, lng); // save radius to DB
               break;
           }
 
@@ -413,38 +412,6 @@ define("TYPO3/CMS/Maps2/GoogleMapsModule", ["jquery", "gmaps"], function($, gmap
           infoWindowContent.children["place-address"].textContent = results[0].formatted_address;
           infoWindow.open(map, marker);
         });
-      });
-    };
-
-    /**
-     * Modify Marker in DB
-     *
-     * @param lat
-     * @param lng
-     * @param rad
-     */
-    var modifyMarkerInDb = function(lat, lng, rad) {
-      $.ajax({
-        type: "POST",
-        url: TYPO3.settings.ajaxUrls["maps2Ajax"],
-        data: {
-          tx_maps2_maps2: {
-            objectName: "ModifyMarker",
-            hash: config.hash,
-            arguments: {
-              uid: config.uid,
-              radius: rad,
-              coords: {
-                latitude: lat,
-                longitude: lng
-              }
-            }
-          }
-        }
-      }).done(function() {
-        // alert("Juhuu");
-      }).fail(function() {
-        // alert("Shit");
       });
     };
 
