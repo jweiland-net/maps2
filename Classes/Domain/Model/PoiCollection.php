@@ -186,7 +186,7 @@ class PoiCollection extends AbstractEntity
     }
 
     /**
-     * Initializes all Tx_Extbase_Persistence_ObjectStorage properties.
+     * Initializes all \TYPO3\CMS\Extbase\Persistence\ObjectStorage properties.
      */
     protected function initStorageObjects()
     {
