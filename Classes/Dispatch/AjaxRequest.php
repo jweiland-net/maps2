@@ -45,7 +45,7 @@ class AjaxRequest
      */
     public function dispatch(ServerRequestInterface $request, ResponseInterface $response = null): ResponseInterface
     {
-        if (!is_subclass_of($response,ResponseInterface::class)) {
+        if (!is_subclass_of($response, ResponseInterface::class)) {
             $response = GeneralUtility::makeInstance(Response::class);
         }
 

@@ -52,7 +52,8 @@ abstract class AbstractAjaxRequest implements AjaxInterface
             ->where(
                 $queryBuilder->expr()->eq(
                     'uid',
-                    $queryBuilder->createNamedParameter($poiCollectionUid, \PDO::PARAM_INT))
+                    $queryBuilder->createNamedParameter($poiCollectionUid, \PDO::PARAM_INT)
+                )
             )
             ->execute()
             ->fetch();
