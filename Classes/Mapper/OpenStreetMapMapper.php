@@ -66,14 +66,15 @@ class OpenStreetMapMapper implements MapperInterface
         if (array_key_exists('address', $data)) {
             $data['address']['city'] = $this->getCityFromAddress($data['address']);
 
-            $formattedAddress = trim(sprintf(
+            $formattedAddress = sprintf(
                 '%s %s, %s %s, %s',
                 $data['address']['road'] ?? '',
                 $data['address']['house_number'] ?? '',
                 $data['address']['postcode'] ?? '',
                 $data['address']['city'] ?? '',
                 $data['address']['country'] ?? ''
-            ), ' ,\t\n\r\0\x0B');
+            );
+            trim(' ,\t\n\r\0\x0B');
         } else {
             // 'display_name' can be a very long name.
             // We hope address key is set above to return a reduced formattedAddress
