@@ -74,13 +74,12 @@ class OpenStreetMapMapper implements MapperInterface
                 $data['address']['city'] ?? '',
                 $data['address']['country'] ?? ''
             );
-            trim(' ,\t\n\r\0\x0B');
         } else {
             // 'display_name' can be a very long name.
             // We hope address key is set above to return a reduced formattedAddress
             $formattedAddress = $data['display_name'];
         }
-        return $formattedAddress;
+        return trim($formattedAddress, ' ,\t\n\r\0\x0B');
     }
 
     /**
