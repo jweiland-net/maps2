@@ -36,6 +36,53 @@ properties:
             // If country could not be fetched, it will fallback to defaultCountry from above.
             'countryColumn' => 'country',
 
+            // Optional: If you want to assign a PoiCollection only to a reduced set of records, you should use
+            // ``columnMatch`` property. Internally this is a very simple array value comparison. No DB! If
+            // you need more than simple comparison you can use SignalSlot in ``CreateMaps2RecordHook``.
+            'columnMatch' => [
+                // Simple match
+                'pid' => '12',
+                'title' => 'jweiland.net',
+
+                // More complex examples:
+
+                // Same as above: equals
+                'pid' => [
+                    'expr' => 'eq',
+                    'value' => '12',
+                ]
+
+                // pid is in list of comma separated values
+                'pid' => [
+                    'expr' => 'in',
+                    'value' => '11,12,13',
+                ]
+
+                // pid is greater than 8
+                'pid' => [
+                    'expr' => 'gt',
+                    'value' => '8',
+                ]
+
+                // pid is greater than or equals 12
+                'pid' => [
+                    'expr' => 'gte',
+                    'value' => '12',
+                ]
+
+                // pid is less than 15
+                'pid' => [
+                    'expr' => 'lt',
+                    'value' => '15',
+                ]
+
+                // pid is less than or equals 12
+                'pid' => [
+                    'expr' => 'lte',
+                    'value' => '12',
+                ]
+            ],
+
             // With defaultStoragePid you can define where our maps2 record should be saved.
             // defaultStoragePid has following priority from low to high:
             // PID of your location record, Configuration of Maps2Registry, pageTSconfig (ext.maps2.defaultStoragePid)
