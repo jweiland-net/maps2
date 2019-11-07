@@ -6,6 +6,12 @@
 ChangeLog
 =========
 
+**Version 7.1.0**
+
+- Add possibility to pre-filter records with help of Maps2Registry API before attaching a PoiCollection record
+- Add possibility to pre-filter records with help of a SignalSlot before attaching a PoiCollection record
+- Update Documentation
+
 **Version 7.0.0**
 
 - Remove AjaxController. There is no need anymore after switch to AjaxDispatcher.
