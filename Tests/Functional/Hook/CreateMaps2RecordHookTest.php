@@ -1,0 +1,372 @@
+<?php
+declare(strict_types = 1);
+namespace JWeiland\Maps2\Tests\Functional\Hook;
+
+/*
+ * This file is part of the maps2 project.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ *
+ * The TYPO3 project - inspiring people to share!
+ */
+
+use JWeiland\Maps2\Domain\Model\Position;
+use JWeiland\Maps2\Helper\MessageHelper;
+use JWeiland\Maps2\Hook\CreateMaps2RecordHook;
+use JWeiland\Maps2\Service\GeoCodeService;
+use Nimut\TestingFramework\TestCase\FunctionalTestCase;
+use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
+use TYPO3\CMS\Core\Cache\CacheManager;
+use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
+use TYPO3\CMS\Core\Cache\Frontend\VariableFrontend;
+use TYPO3\CMS\Core\DataHandling\DataHandler;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
+
+/**
+ * Functional test for CreateMaps2RecordHook
+ */
+class CreateMaps2RecordHookTest extends FunctionalTestCase
+{
+    /**
+     * @var array
+     */
+    protected $maps2RegistryConfiguration = [];
+
+    /**
+     * @var FrontendInterface|ObjectProphecy
+     */
+    protected $cacheMaps2RegistryProphecy;
+
+    /**
+     * @var array
+     */
+    protected $testExtensionsToLoad = [
+        'typo3conf/ext/maps2'
+    ];
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->importDataSet(__DIR__ . '/../Fixtures/fe_groups.xml');
+        $this->importDataSet(__DIR__ . '/../Fixtures/fe_users.xml');
+
+        $this->maps2RegistryConfiguration = [
+            'fe_users' => [
+                'lastlogin' => [
+                    'addressColumns' => ['address', 'zip', 'city'],
+                    'countryColumn' => 'country',
+                    'columnMatch' => [
+                        'pid' => '12'
+                    ],
+                    'defaultStoragePid' => '21',
+                    'synchronizeColumns' => [
+                        [
+                            'foreignColumnName' => 'username',
+                            'poiCollectionColumnName' => 'title'
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        $this->cacheMaps2RegistryProphecy = $this->prophesize(VariableFrontend::class);
+    }
+
+    public function tearDown()
+    {
+        parent::tearDown();
+    }
+
+    /**
+     * @tester
+     */
+    public function processDatamapClearsInfoWindowContentCacheIfTableIsPoiCollection()
+    {
+        $this->cacheMaps2RegistryProphecy
+            ->get('fields')
+            ->willReturn($this->maps2RegistryConfiguration);
+
+        /** @var FrontendInterface|ObjectProphecy $cacheProphecy */
+        $cacheProphecy = $this->prophesize(VariableFrontend::class);
+        $cacheProphecy
+            ->flushByTag('infoWindowUid123')
+            ->shouldBeCalled();
+        $cacheProphecy
+            ->flushByTag('infoWindowUid234')
+            ->shouldBeCalled();
+
+        $cacheManagerProphecy = $this->prophesize(CacheManager::class);
+        $cacheManagerProphecy
+            ->getCache('maps2_cachedhtml')
+            ->shouldBeCalled()
+            ->willReturn($cacheProphecy->reveal());
+        $cacheManagerProphecy->hasCache(Argument::any())->shouldBeCalled();
+        $cacheManagerProphecy->getCache(Argument::any())->shouldBeCalled();
+        GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerProphecy->reveal());
+
+        $dataHandler = new DataHandler();
+        $dataHandler->datamap = [
+            'tx_maps2_domain_model_poicollection' => [
+                '123' => [
+                    'uid' => '123',
+                    'pid' => '12',
+                    'title' => 'Test',
+                    'l10n_parent' => '234',
+                ]
+            ]
+        ];
+
+        $hook = new CreateMaps2RecordHook(
+            null,
+            null,
+            null,
+            $this->cacheMaps2RegistryProphecy->reveal()
+        );
+        $hook->processDatamap_afterAllOperations($dataHandler);
+    }
+
+    /**
+     * @tester
+     */
+    public function processDatamapWillGetForeignLocationRecord()
+    {
+        $this->cacheMaps2RegistryProphecy
+            ->get('fields')
+            ->willReturn($this->maps2RegistryConfiguration);
+
+        /** @var Dispatcher|ObjectProphecy $dispatcherProphecy */
+        $dispatcherProphecy = $this->prophesize(Dispatcher::class);
+        $dispatcherProphecy
+            ->dispatch(
+                CreateMaps2RecordHook::class,
+                'preIsRecordAllowedToCreatePoiCollection',
+                Argument::allOf(
+                    Argument::withEntry(
+                        0,
+                        Argument::allOf(
+                            Argument::withEntry('uid', 1),
+                            Argument::withEntry('username', 'Stefan')
+                        )
+                    ),
+                    Argument::withEntry(4, true)
+                )
+            )
+            ->shouldBeCalled();
+        $dispatcherProphecy
+            ->dispatch(Argument::cetera())
+            ->shouldBeCalled();
+
+        $dataHandler = new DataHandler();
+        $dataHandler->datamap = [
+            'fe_users' => [
+                '1' => [
+                    'uid' => '1',
+                    'pid' => '12',
+                    'username' => 'Stefan',
+                    'lastlogin' => '0',
+                ]
+            ]
+        ];
+
+        $hook = new CreateMaps2RecordHook(
+            null,
+            $this->prophesize(MessageHelper::class)->reveal(),
+            $dispatcherProphecy->reveal(),
+            $this->cacheMaps2RegistryProphecy->reveal()
+        );
+        $hook->processDatamap_afterAllOperations($dataHandler);
+    }
+
+    /**
+     * @tester
+     */
+    public function processDatamapInvalidForeignRecordBecausePidIsNotEqual()
+    {
+        $maps2RegistryConfiguration = $this->maps2RegistryConfiguration;
+        $maps2RegistryConfiguration['fe_users']['lastlogin']['columnMatch']['pid'] = 432;
+        $this->cacheMaps2RegistryProphecy
+            ->get('fields')
+            ->willReturn($maps2RegistryConfiguration);
+
+        /** @var Dispatcher|ObjectProphecy $dispatcherProphecy */
+        $dispatcherProphecy = $this->prophesize(Dispatcher::class);
+        $dispatcherProphecy
+            ->dispatch(
+                CreateMaps2RecordHook::class,
+                'preIsRecordAllowedToCreatePoiCollection',
+                Argument::withEntry(4, false)
+           )
+            ->shouldBeCalled();
+        $dispatcherProphecy
+            ->dispatch(Argument::cetera())
+            ->shouldBeCalled();
+
+        $dataHandler = new DataHandler();
+        $dataHandler->datamap = [
+            'fe_users' => [
+                '1' => [
+                    'uid' => '1',
+                    'pid' => '12',
+                    'username' => 'Stefan',
+                    'lastlogin' => '0',
+                ]
+            ]
+        ];
+
+        $hook = new CreateMaps2RecordHook(
+            null,
+            $this->prophesize(MessageHelper::class)->reveal(),
+            $dispatcherProphecy->reveal(),
+            $this->cacheMaps2RegistryProphecy->reveal()
+        );
+        $hook->processDatamap_afterAllOperations($dataHandler);
+    }
+
+    /**
+     * Provides various expression configuration
+     *
+     * @return array
+     */
+    public function dataProcessorForExpressions()
+    {
+        return [
+            'Record invalid if pid is 432' => [['pid' => ['expr' => 'eq', 'value' => '432']], false],
+            'Record invalid if pid is greater than 12' => [['pid' => ['expr' => 'gt', 'value' => '12']], false],
+            'Record invalid if pid is greater than or equals 13' => [['pid' => ['expr' => 'gte', 'value' => '13']], false],
+            'Record invalid if pid is less than 12' => [['pid' => ['expr' => 'lt', 'value' => '12']], false],
+            'Record invalid if pid is less than or equals 11' => [['pid' => ['expr' => 'lte', 'value' => '11']], false],
+            'Record invalid if pid is in list of 11,13,14' => [['pid' => ['expr' => 'in', 'value' => '11,13,14']], false],
+            'Record valid if pid is 12' => [['pid' => ['expr' => 'eq', 'value' => '12']], true],
+            'Record valid if pid is greater than 8' => [['pid' => ['expr' => 'gt', 'value' => '8']], true],
+            'Record valid if pid is greater than or equals 12' => [['pid' => ['expr' => 'gte', 'value' => '12']], true],
+            'Record valid if pid is less than 15' => [['pid' => ['expr' => 'lt', 'value' => '15']], true],
+            'Record valid if pid is less than or equals 12' => [['pid' => ['expr' => 'lte', 'value' => '12']], true],
+            'Record valid if pid is in list of 11,12,13,14' => [['pid' => ['expr' => 'in', 'value' => '11,12,13,14']], true],
+        ];
+    }
+
+    /**
+     * @tester
+     *
+     * @param array $columnMatch
+     * @param bool $isValid
+     * @dataProvider dataProcessorForExpressions
+     */
+    public function processDatamapInvalidForeignRecordBecauseExpressionsAreNotEqual(array $columnMatch, bool $isValid)
+    {
+        $maps2RegistryConfiguration = $this->maps2RegistryConfiguration;
+        $maps2RegistryConfiguration['fe_users']['lastlogin']['columnMatch'] = $columnMatch;
+        $this->cacheMaps2RegistryProphecy
+            ->get('fields')
+            ->willReturn($maps2RegistryConfiguration);
+
+        /** @var Dispatcher|ObjectProphecy $dispatcherProphecy */
+        $dispatcherProphecy = $this->prophesize(Dispatcher::class);
+        $dispatcherProphecy
+            ->dispatch(
+                CreateMaps2RecordHook::class,
+                'preIsRecordAllowedToCreatePoiCollection',
+                Argument::withEntry(4, $isValid)
+            )
+            ->shouldBeCalled();
+        $dispatcherProphecy
+            ->dispatch(Argument::cetera())
+            ->shouldBeCalled();
+
+        $dataHandler = new DataHandler();
+        $dataHandler->datamap = [
+            'fe_users' => [
+                '1' => [
+                    'uid' => '1',
+                    'pid' => '12',
+                    'username' => 'Stefan',
+                    'lastlogin' => '0',
+                ]
+            ]
+        ];
+
+        $hook = new CreateMaps2RecordHook(
+            null,
+            $this->prophesize(MessageHelper::class)->reveal(),
+            $dispatcherProphecy->reveal(),
+            $this->cacheMaps2RegistryProphecy->reveal()
+        );
+        $hook->processDatamap_afterAllOperations($dataHandler);
+    }
+
+    /**
+     * @test
+     */
+    public function processDatamapCreatesNewPoiCollection()
+    {
+        $this->cacheMaps2RegistryProphecy
+            ->get('fields')
+            ->willReturn($this->maps2RegistryConfiguration);
+
+        $dataHandler = new DataHandler();
+        $dataHandler->datamap = [
+            'fe_users' => [
+                '1' => [
+                    'uid' => '1',
+                    'pid' => '12',
+                    'username' => 'Stefan',
+                    'lastlogin' => '0',
+                ]
+            ]
+        ];
+
+        /** @var Position|ObjectProphecy $positionProphecy */
+        $positionProphecy = $this->prophesize(Position::class);
+        $positionProphecy
+            ->getLatitude()
+            ->shouldBeCalled()
+            ->willReturn(12.34);
+        $positionProphecy
+            ->getLongitude()
+            ->shouldBeCalled()
+            ->willReturn(56.78);
+        $positionProphecy
+            ->getFormattedAddress()
+            ->shouldBeCalled()
+            ->willReturn('Echterdinger Straße 57, 70794 Filderstadt, Deutschland');
+        /** @var GeoCodeService|ObjectProphecy $geoCodeServiceProphecy */
+        $geoCodeServiceProphecy = $this->prophesize(GeoCodeService::class);
+        $geoCodeServiceProphecy
+            ->getFirstFoundPositionByAddress('Echterdinger Straße 57 70794 Filderstadt Deutschland')
+            ->shouldBeCalled()
+            ->willReturn($positionProphecy->reveal());
+
+        /** @var Dispatcher|ObjectProphecy $dispatcherProphecy */
+        $dispatcherProphecy = $this->prophesize(Dispatcher::class);
+        $dispatcherProphecy
+            ->dispatch(
+                CreateMaps2RecordHook::class,
+                'postUpdatePoiCollection',
+                Argument::allOf(
+                    Argument::withEntry(1, 1),
+                    Argument::withEntry(3, Argument::withEntry('lastlogin', 1))
+                )
+            )
+            ->shouldBeCalled();
+        $dispatcherProphecy
+            ->dispatch(Argument::cetera())
+            ->shouldBeCalled();
+
+        $hook = new CreateMaps2RecordHook(
+            $geoCodeServiceProphecy->reveal(),
+            $this->prophesize(MessageHelper::class)->reveal(),
+            $dispatcherProphecy->reveal(),
+            $this->cacheMaps2RegistryProphecy->reveal()
+        );
+        $hook->processDatamap_afterAllOperations($dataHandler);
+
+    }
+}

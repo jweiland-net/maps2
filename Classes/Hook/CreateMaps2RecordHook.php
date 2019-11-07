@@ -57,18 +57,44 @@ class CreateMaps2RecordHook
     protected $maps2RegistryCache;
 
     /**
+     * @var Dispatcher
+     */
+    protected $signalSlotDispatcher;
+
+    /**
      * @var array
      */
     protected $columnRegistry = [];
 
-    public function __construct()
-    {
+    public function __construct(
+        GeoCodeService $geoCodeService = null,
+        MessageHelper $messageHelper = null,
+        Dispatcher $signalSlotDispatcher = null,
+        FrontendInterface $maps2RegistryCache = null
+    ) {
         $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $this->geoCodeService = $this->objectManager->get(GeoCodeService::class);
-        $this->messageHelper = GeneralUtility::makeInstance(MessageHelper::class);
-        $this->maps2RegistryCache = $this->objectManager
-            ->get(CacheManager::class)
-            ->getCache('maps2_registry');
+
+        if ($geoCodeService === null) {
+            $geoCodeService = $this->objectManager->get(GeoCodeService::class);
+        }
+        $this->geoCodeService = $geoCodeService;
+
+        if ($messageHelper === null) {
+            $messageHelper = GeneralUtility::makeInstance(MessageHelper::class);
+        }
+        $this->messageHelper = $messageHelper;
+
+        if ($signalSlotDispatcher === null) {
+            $signalSlotDispatcher = GeneralUtility::makeInstance(Dispatcher::class);
+        }
+        $this->signalSlotDispatcher = $signalSlotDispatcher;
+
+        if ($maps2RegistryCache === null) {
+            $maps2RegistryCache = $this->objectManager
+                ->get(CacheManager::class)
+                ->getCache('maps2_registry');
+        }
+        $this->maps2RegistryCache = $maps2RegistryCache;
         $this->columnRegistry = $this->maps2RegistryCache->get('fields') ?: [];
     }
 
@@ -111,6 +137,11 @@ class CreateMaps2RecordHook
                         continue;
                     }
 
+                    if (!$this->isForeignLocationRecordAllowedToCreateNewPoiCollectionRecords($foreignLocationRecord, $foreignTableName, $foreignColumnName, $options)) {
+                        // We need $option of second foreach for this call. So, if this is false, we have to continue parent foreach.
+                        continue 2;
+                    }
+
                     $this->updateForeignLocationRecordIfPoiCollectionDoesNotExist($foreignLocationRecord, $foreignColumnName);
 
                     if (!$foreignLocationRecord[$foreignColumnName]) {
@@ -142,6 +173,98 @@ class CreateMaps2RecordHook
                 }
             }
         }
+    }
+
+    /**
+     * Check, if only a subset of records like pid=12 is allowed to create new PoiCollection records.
+     * Further you can change behaviour with your own signal.
+     *
+     * @param array $foreignLocationRecord
+     * @param string $foreignTableName
+     * @param string $foreignColumnName
+     * @param array $options
+     * @return bool
+     */
+    protected function isForeignLocationRecordAllowedToCreateNewPoiCollectionRecords(
+        array $foreignLocationRecord,
+        string $foreignTableName,
+        string $foreignColumnName,
+        array $options
+    ): bool {
+        $isValid = true;
+
+        // Process simple matching
+        if (
+            isset($options['columnMatch'])
+            && is_array($options['columnMatch'])
+        ) {
+            foreach ($options['columnMatch'] as $columnName => $configuration) {
+                $foreignValue = (string)$foreignLocationRecord[$columnName];
+                if (empty($configuration)) {
+                    continue;
+                }
+                if (
+                    is_array($configuration)
+                    && array_key_exists('expr', $configuration)
+                    && array_key_exists('value', $configuration)
+                ) {
+                    switch ($configuration['expr']) {
+                        case 'eq':
+                            if ($foreignValue !== (string)$configuration['value']) {
+                                $isValid = false;
+                            }
+                            break;
+                        case 'lt':
+                            if (!((int)$foreignValue < (int)$configuration['value'])) {
+                                $isValid = false;
+                            }
+                            break;
+                        case 'lte':
+                            if (!((int)$foreignValue <= (int)$configuration['value'])) {
+                                $isValid = false;
+                            }
+                            break;
+                        case 'gt':
+                            if (!((int)$foreignValue > (int)$configuration['value'])) {
+                                $isValid = false;
+                            }
+                            break;
+                        case 'gte':
+                            if (!((int)$foreignValue >= (int)$configuration['value'])) {
+                                $isValid = false;
+                            }
+                            break;
+                        case 'in':
+                        default:
+                            if (!in_array(
+                                $foreignValue,
+                                GeneralUtility::trimExplode(',', $configuration['value'], true),
+                                true
+                            )) {
+                                $isValid = false;
+                            }
+                            break;
+                    }
+                } elseif(!is_array($configuration) && array_key_exists($columnName, $foreignLocationRecord)) {
+                    // $configuration is the value to check against. equals.
+                    if ($foreignValue !== (string)$configuration) {
+                        $isValid = false;
+                        break;
+                    }
+                }
+            }
+        }
+
+        // You need JOINs or more complex matches? Please register SignalSlot.
+        $this->emitIsRecordAllowedToCreatePoiCollection(
+            $foreignLocationRecord,
+            $foreignTableName,
+            $foreignColumnName,
+            $options,
+            $isValid
+        );
+
+        return $isValid;
     }
 
     /**
@@ -280,6 +403,7 @@ class CreateMaps2RecordHook
 
         $addressHelper = GeneralUtility::makeInstance(AddressHelper::class);
         $address = $addressHelper->getAddress($foreignLocationRecord, $options);
+        var_dump($address);
 
         $position = $this->geoCodeService->getFirstFoundPositionByAddress($address);
         if ($position instanceof Position) {
@@ -445,19 +569,6 @@ class CreateMaps2RecordHook
     }
 
     /**
-     * Get the SignalSlot dispatcher
-     *
-     * @return Dispatcher
-     */
-    protected function getSignalSlotDispatcher()
-    {
-        if (!isset($this->signalSlotDispatcher)) {
-            $this->signalSlotDispatcher = GeneralUtility::makeInstance(ObjectManager::class)->get(Dispatcher::class);
-        }
-        return $this->signalSlotDispatcher;
-    }
-
-    /**
      * Use this signal, if you want to implement further modification to our POI collection record, while saving
      * a foreign location record.
      *
@@ -469,10 +580,28 @@ class CreateMaps2RecordHook
      */
     protected function emitPostUpdatePoiCollectionSignal(string $poiCollectionTableName, int $poiCollectionUid, string $foreignTableName, array $foreignLocationRecord, array $options)
     {
-        $this->getSignalSlotDispatcher()->dispatch(
+        $this->signalSlotDispatcher->dispatch(
             self::class,
             'postUpdatePoiCollection',
             [$poiCollectionTableName, $poiCollectionUid, $foreignTableName, $foreignLocationRecord, $options]
+        );
+    }
+
+    /**
+     * Use this signal, if you want to check, if record is allowed to create PoiCollections on your own.
+     *
+     * @param array $foreignLocationRecord
+     * @param string $foreignTableName
+     * @param string $foreignColumnName
+     * @param array $options
+     * @param bool $isValid Is Reference
+     */
+    protected function emitIsRecordAllowedToCreatePoiCollection(array $foreignLocationRecord, string $foreignTableName, string $foreignColumnName, array $options, bool &$isValid)
+    {
+        $this->signalSlotDispatcher->dispatch(
+            self::class,
+            'preIsRecordAllowedToCreatePoiCollection',
+            [$foreignLocationRecord, $foreignTableName, $foreignColumnName, $options, $isValid]
         );
     }
 
