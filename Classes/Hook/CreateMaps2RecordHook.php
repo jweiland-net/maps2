@@ -245,7 +245,7 @@ class CreateMaps2RecordHook
                             }
                             break;
                     }
-                } elseif(!is_array($configuration) && array_key_exists($columnName, $foreignLocationRecord)) {
+                } elseif (!is_array($configuration) && array_key_exists($columnName, $foreignLocationRecord)) {
                     // $configuration is the value to check against. equals.
                     if ($foreignValue !== (string)$configuration) {
                         $isValid = false;
