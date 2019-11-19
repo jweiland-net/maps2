@@ -6,6 +6,11 @@
 ChangeLog
 =========
 
+**Version 7.1.1**
+
+- As references can not be passed to call_user_func in SignalSlot Dispatcher, we have to use
+  the SlotReturn value to get new value of isValid.
+
 **Version 7.1.0**
 
 - Add possibility to pre-filter records with help of Maps2Registry API before attaching a PoiCollection record
