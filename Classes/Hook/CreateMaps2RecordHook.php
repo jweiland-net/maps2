@@ -598,11 +598,11 @@ class CreateMaps2RecordHook
      */
     protected function emitIsRecordAllowedToCreatePoiCollection(array $foreignLocationRecord, string $foreignTableName, string $foreignColumnName, array $options, bool &$isValid)
     {
-        $this->signalSlotDispatcher->dispatch(
+        $isValid = $this->signalSlotDispatcher->dispatch(
             self::class,
             'preIsRecordAllowedToCreatePoiCollection',
             [$foreignLocationRecord, $foreignTableName, $foreignColumnName, $options, $isValid]
-        );
+        )[4];
     }
 
     /**
