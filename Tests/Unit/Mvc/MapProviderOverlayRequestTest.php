@@ -22,6 +22,7 @@ use JWeiland\Maps2\Service\MapService;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\Web\Request;
 use TYPO3\CMS\Extbase\Mvc\Web\RequestBuilder;
 use TYPO3\CMS\Extbase\Mvc\Web\Response;
@@ -95,14 +96,18 @@ class MapProviderOverlayRequestTest extends UnitTestCase
         $environmentService->isEnvironmentInCliMode()->shouldBeCalled()->willReturn(false);
         GeneralUtility::setSingletonInstance(EnvironmentService::class, $environmentService->reveal());
 
-        /** @var Request|ObjectProphecy $request */
-        $request = $this->prophesize(Request::class);
-        $request->getControllerExtensionKey()->shouldBeCalled()->willReturn('events2');
-
-        /** @var RequestBuilder|ObjectProphecy $requestBuilder */
-        $requestBuilder = $this->prophesize(RequestBuilder::class);
-        $requestBuilder->build()->shouldBeCalled()->willReturn($request->reveal());
-        $this->objectManager->get(RequestBuilder::class)->shouldBeCalled()->willReturn($requestBuilder->reveal());
+        /** @var ConfigurationManagerInterface|ObjectProphecy $configurationManager */
+        $configurationManager = $this->prophesize(ConfigurationManagerInterface::class);
+        $configurationManager
+            ->getConfiguration('Framework')
+            ->shouldBeCalled()
+            ->willReturn([
+                'extensionName' => 'events2'
+            ]);
+        $this->objectManager
+            ->get(ConfigurationManagerInterface::class)
+            ->shouldBeCalled()
+            ->willReturn($configurationManager->reveal());
 
         $this->assertFalse(
             $this->subject->canHandleRequest()
@@ -119,14 +124,18 @@ class MapProviderOverlayRequestTest extends UnitTestCase
         $environmentService->isEnvironmentInCliMode()->shouldBeCalled()->willReturn(false);
         GeneralUtility::setSingletonInstance(EnvironmentService::class, $environmentService->reveal());
 
-        /** @var Request|ObjectProphecy $request */
-        $request = $this->prophesize(Request::class);
-        $request->getControllerExtensionKey()->shouldBeCalled()->willReturn('maps2');
-
-        /** @var RequestBuilder|ObjectProphecy $requestBuilder */
-        $requestBuilder = $this->prophesize(RequestBuilder::class);
-        $requestBuilder->build()->shouldBeCalled()->willReturn($request->reveal());
-        $this->objectManager->get(RequestBuilder::class)->shouldBeCalled()->willReturn($requestBuilder->reveal());
+        /** @var ConfigurationManagerInterface|ObjectProphecy $configurationManager */
+        $configurationManager = $this->prophesize(ConfigurationManagerInterface::class);
+        $configurationManager
+            ->getConfiguration('Framework')
+            ->shouldBeCalled()
+            ->willReturn([
+                'extensionName' => 'maps2'
+            ]);
+        $this->objectManager
+            ->get(ConfigurationManagerInterface::class)
+            ->shouldBeCalled()
+            ->willReturn($configurationManager->reveal());
 
         $this->assertTrue(
             $this->subject->canHandleRequest()
