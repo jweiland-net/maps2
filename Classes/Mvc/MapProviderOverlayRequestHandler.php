@@ -18,10 +18,9 @@ namespace JWeiland\Maps2\Mvc;
 use JWeiland\Maps2\Service\MapProviderRequestService;
 use JWeiland\Maps2\Service\MapService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\RequestHandlerInterface;
 use TYPO3\CMS\Extbase\Mvc\ResponseInterface;
-use TYPO3\CMS\Extbase\Mvc\Web\Request;
-use TYPO3\CMS\Extbase\Mvc\Web\RequestBuilder;
 use TYPO3\CMS\Extbase\Mvc\Web\Response;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Service\EnvironmentService;
@@ -56,21 +55,13 @@ class MapProviderOverlayRequestHandler implements RequestHandlerInterface
         $environmentService = GeneralUtility::makeInstance(EnvironmentService::class);
         if (!$environmentService->isEnvironmentInCliMode()) {
             $mapProviderRequestService = GeneralUtility::makeInstance(MapProviderRequestService::class);
-            return $this->buildRequest()->getControllerExtensionKey() === 'maps2'
+            $configurationManager = $this->objectManager->get(ConfigurationManagerInterface::class);
+            $configuration = $configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
+
+            return strtolower($configuration['extensionName']) === 'maps2'
                 && !$mapProviderRequestService->isRequestToMapProviderAllowed();
         }
         return false;
-    }
-
-    /**
-     * Build a Web Request
-     *
-     * @return Request
-     */
-    protected function buildRequest(): Request
-    {
-        $requestBuilder = $this->objectManager->get(RequestBuilder::class);
-        return $requestBuilder->build();
     }
 
     /**
