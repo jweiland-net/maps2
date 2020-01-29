@@ -6,6 +6,10 @@
 ChangeLog
 =========
 
+**Version 7.1.2**
+
+- Do not build Request of foreign extensions, to check, if map should be shown or not.
+
 **Version 7.1.1**
 
 - As references can not be passed to call_user_func in SignalSlot Dispatcher, we have to use
