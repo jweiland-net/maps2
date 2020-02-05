@@ -72,7 +72,9 @@ class EditPoiController extends AbstractController
     protected function setViewConfiguration(\TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view)
     {
         if ($view instanceof AbstractTemplateView) {
-            $view->setRenderingContext($this->renderingContext);
+            $view->getRenderingContext()->setViewHelperVariableContainer(
+                $this->renderingContext->getViewHelperVariableContainer()
+            );
         }
     }
 }
