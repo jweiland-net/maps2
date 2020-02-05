@@ -6,6 +6,10 @@
 ChangeLog
 =========
 
+**Version 7.1.3**
+
+- Set previous RenderingContext in edit POI Widget to have access to ViewHelperVariableContainer
+
 **Version 7.1.2**
 
 - Do not build Request of foreign extensions, to check, if map should be shown or not.
