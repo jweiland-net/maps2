@@ -16,6 +16,8 @@ namespace JWeiland\Maps2\ViewHelpers\Widget\Controller;
  */
 
 use JWeiland\Maps2\Domain\Model\PoiCollection;
+use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
+use TYPO3Fluid\Fluid\View\AbstractTemplateView;
 
 /**
  * An Edit controller for foreign extension authors
@@ -23,6 +25,11 @@ use JWeiland\Maps2\Domain\Model\PoiCollection;
  */
 class EditPoiController extends AbstractController
 {
+    /**
+     * @var RenderingContextInterface
+     */
+    protected $renderingContext;
+
     /**
      * index action
      */
@@ -43,5 +50,29 @@ class EditPoiController extends AbstractController
         $this->view->assign('poiCollection', $poiCollection);
         $this->view->assign('override', $this->widgetConfiguration['override']);
         $this->view->assign('property', $this->widgetConfiguration['property']);
+    }
+
+    /**
+     * This method will be and must be called from EditPoiViewHelper
+     * to have access to the previous ViewHelperVariableContainer where
+     * f:form stores its context.
+     *
+     * @param RenderingContextInterface $renderingContext
+     */
+    public function setRenderingContext(RenderingContextInterface $renderingContext)
+    {
+        $this->renderingContext = $renderingContext;
+    }
+
+    /**
+     * Set RenderingContext to current Template to have access to previous ViewHelperVariableContainer
+     *
+     * @param \TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view
+     */
+    protected function setViewConfiguration(\TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view)
+    {
+        if ($view instanceof AbstractTemplateView) {
+            $view->setRenderingContext($this->renderingContext);
+        }
     }
 }
