@@ -403,7 +403,6 @@ class CreateMaps2RecordHook
 
         $addressHelper = GeneralUtility::makeInstance(AddressHelper::class);
         $address = $addressHelper->getAddress($foreignLocationRecord, $options);
-        var_dump($address);
 
         $position = $this->geoCodeService->getFirstFoundPositionByAddress($address);
         if ($position instanceof Position) {
