@@ -6,6 +6,10 @@
 ChangeLog
 =========
 
+**Version 7.1.4**
+
+- Check FlexForm for each entry before processing them in UpgradeWizard
+
 **Version 7.1.3**
 
 - Set previous RenderingContext in edit POI Widget to have access to ViewHelperVariableContainer
