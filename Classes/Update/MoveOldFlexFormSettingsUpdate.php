@@ -16,6 +16,8 @@ namespace JWeiland\Maps2\Update;
  */
 use TYPO3\CMS\Core\Configuration\FlexForm\FlexFormTools;
 use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Utility\ArrayUtility;
+use TYPO3\CMS\Core\Utility\Exception\MissingArrayPathException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -66,7 +68,12 @@ class MoveOldFlexFormSettingsUpdate
         $records = $this->getTtContentRecordsWithMaps2Plugin();
         foreach ($records as $record) {
             $valueFromDatabase = (string)$record['pi_flexform'] !== '' ? GeneralUtility::xml2array($record['pi_flexform']) : [];
-            if (!is_array($valueFromDatabase) || empty($valueFromDatabase)) {
+            if (
+                !is_array($valueFromDatabase)
+                || empty($valueFromDatabase)
+                || !isset($valueFromDatabase['data'])
+                || !is_array($valueFromDatabase['data'])
+            ) {
                 continue;
             }
 
@@ -74,8 +81,17 @@ class MoveOldFlexFormSettingsUpdate
                 return true;
             }
 
-            if (array_key_exists('settings.activateScrollWheel', $valueFromDatabase['data']['sGoogleMapsOptions']['lDEF'])) {
-                return true;
+            try {
+                if (
+                    ArrayUtility::getValueByPath(
+                        $valueFromDatabase,
+                        'data/sGoogleMapsOptions/lDEF/settings.activateScrollWheel'
+                    )
+                ) {
+                    return true;
+                }
+            } catch (MissingArrayPathException $e) {
+                // If value does not exists, check further requirements
             }
 
             $oldFieldNames = [
@@ -204,7 +220,16 @@ class MoveOldFlexFormSettingsUpdate
      */
     protected function moveFieldFromOldToNewSheet(array &$valueFromDatabase, string $field, string $oldSheet, string $newSheet)
     {
-        if (array_key_exists($field, $valueFromDatabase['data'][$oldSheet]['lDEF'])) {
+        try {
+            $value = ArrayUtility::getValueByPath(
+                $valueFromDatabase,
+                sprintf(
+                    'data/%s/lDEF/%s',
+                    $oldSheet,
+                    $field
+                )
+            );
+
             // Create base sheet, if not exist
             if (!array_key_exists($newSheet, $valueFromDatabase['data'])) {
                 $valueFromDatabase['data'][$newSheet] = [
@@ -214,11 +239,13 @@ class MoveOldFlexFormSettingsUpdate
 
             // Move field to new location, if not already done
             if (!array_key_exists($field, $valueFromDatabase['data'][$newSheet]['lDEF'])) {
-                $valueFromDatabase['data'][$newSheet]['lDEF'][$field] = $valueFromDatabase['data'][$oldSheet]['lDEF'][$field];
+                $valueFromDatabase['data'][$newSheet]['lDEF'][$field] = $value;
             }
 
             // Remove old reference
             unset($valueFromDatabase['data'][$oldSheet]['lDEF'][$field]);
+        } catch (MissingArrayPathException $e) {
+            // Path does not exist in Array. Do not update anything
         }
     }
 
