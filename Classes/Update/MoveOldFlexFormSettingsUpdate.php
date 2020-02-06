@@ -92,6 +92,8 @@ class MoveOldFlexFormSettingsUpdate
                 }
             } catch (MissingArrayPathException $e) {
                 // If value does not exists, check further requirements
+            } catch (\RuntimeException $e) {
+                // Some as above, but for TYPO3 8
             }
 
             $oldFieldNames = [
@@ -246,6 +248,8 @@ class MoveOldFlexFormSettingsUpdate
             unset($valueFromDatabase['data'][$oldSheet]['lDEF'][$field]);
         } catch (MissingArrayPathException $e) {
             // Path does not exist in Array. Do not update anything
+        } catch (\RuntimeException $e) {
+            // Some as above, but for TYPO3 8
         }
     }
 

@@ -6,6 +6,10 @@
 ChangeLog
 =========
 
+**Version 7.1.5**
+
+- Catch Exception for TYPO3 8 in ArrayUtility of sysext core.
+
 **Version 7.1.4**
 
 - Check FlexForm for each entry before processing them in UpgradeWizard
