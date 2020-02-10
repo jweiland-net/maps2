@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace JWeiland\Maps2\Client;
 
 /*
@@ -16,7 +17,7 @@ namespace JWeiland\Maps2\Client;
 
 use JWeiland\Maps2\Client\Request\RequestInterface;
 use JWeiland\Maps2\Helper\MessageHelper;
-use TYPO3\CMS\Core\Utility\DebugUtility;
+use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -42,31 +43,62 @@ abstract class AbstractClient implements ClientInterface
      *
      * @param RequestInterface $request
      * @return array
-     * @throws \Exception
      */
-    public function processRequest(RequestInterface $request)
+    public function processRequest(RequestInterface $request): array
     {
         if (!$request->isValidRequest()) {
-            $this->messageHelper->addFlashMessage('Invalid request: ' . $request->getUri());
+            $this->messageHelper->addFlashMessage(
+                'URI is empty or contains invalid chars. URI: ' . $request->getUri(),
+                'Invalid request URI',
+                FlashMessage::ERROR
+            );
             return [];
         }
 
-        try {
-            $response = GeneralUtility::getUrl($request->getUri());
-            $result = json_decode($response, true);
-            if (
-                $this->requestHasErrors($result)
-                && $GLOBALS['TYPO3_CONF_VARS']['BE']['debug']
-            ) {
-                DebugUtility::debug($response, 'Response of the Map Providers GeoCode API');
-                $result = [];
-            }
-        } catch (\Exception $e) {
-            throw new \Exception($e->getMessage(), 1530698645);
+        $processedResponse = [];
+        $clientReport = [];
+        $response = GeneralUtility::getUrl($request->getUri(), 0, null, $clientReport);
+        $this->checkClientReportForErrors($clientReport);
+        if (!$this->hasErrors()) {
+            $processedResponse = json_decode($response, true);
+            $this->checkResponseForErrors($processedResponse);
         }
 
-        return $result;
+        if ($this->hasErrors()) {
+            $processedResponse = [];
+        }
+
+        return $processedResponse;
     }
 
-    abstract protected function requestHasErrors($result);
+    public function hasErrors(): bool
+    {
+        return $this->messageHelper->hasErrorMessages();
+    }
+
+    /**
+     * @return FlashMessage[]
+     */
+    public function getErrors(): array
+    {
+        return $this->messageHelper->getErrorMessages();
+    }
+
+    /**
+     * This method will only check the report of the client and not the result itself.
+     *
+     * @param array $clientReport
+     */
+    protected function checkClientReportForErrors(array $clientReport)
+    {
+        if (!empty($clientReport['message'])) {
+            $this->messageHelper->addFlashMessage(
+                $clientReport['message'],
+                $clientReport['title'],
+                $clientReport['severity']
+            );
+        }
+    }
+
+    abstract protected function checkResponseForErrors($processedResponse);
 }

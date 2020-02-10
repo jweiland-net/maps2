@@ -82,7 +82,11 @@ class GoogleMapsClientTest extends UnitTestCase
             ->willReturn('https://www.jweiland.net');
 
         $this->messageHelperProphecy
-            ->addFlashMessage('Invalid request: https://www.jweiland.net')
+            ->addFlashMessage(
+                'URI is empty or contains invalid chars. URI: https://www.jweiland.net',
+                'Invalid request URI',
+                2
+            )
             ->shouldBeCalled();
 
         $this->assertSame(

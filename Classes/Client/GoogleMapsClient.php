@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace JWeiland\Maps2\Client;
 
 /*
@@ -28,39 +29,43 @@ class GoogleMapsClient extends AbstractClient
     protected $title = 'Google Maps';
 
     /**
-     * Check result from Google Maps Server for errors
+     * Check processed response from Google Maps Server for errors
      *
-     * @param array|null $result
-     * @return bool
+     * @param array|null $response
      */
-    protected function requestHasErrors($result)
+    protected function checkResponseForErrors($response)
     {
-        $hasErrors = false;
-
-        if ($result === null) {
+        if ($response === null) {
             $this->messageHelper->addFlashMessage(
                 'The response of Google Maps was not a valid JSON response.',
                 'Invalid JSON response',
                 FlashMessage::ERROR
             );
-            $hasErrors = true;
+        } elseif ($response['status'] !== 'OK') {
+            switch ($response['status']) {
+                case 'ZERO_RESULTS':
+                    $this->messageHelper->addFlashMessage(
+                        LocalizationUtility::translate(
+                            'error.noPositionsFound.body',
+                            'maps2',
+                            [
+                                0 => $this->title
+                            ]
+                        ),
+                        LocalizationUtility::translate(
+                            'error.noPositionsFound.title',
+                            'maps2'
+                        ),
+                        FlashMessage::ERROR
+                    );
+                    break;
+                default:
+                    $this->messageHelper->addFlashMessage(
+                        $response['error_message'],
+                        'Error',
+                        FlashMessage::ERROR
+                    );
+            }
         }
-
-        if ($result['status'] !== 'OK') {
-            $this->messageHelper->addFlashMessage(
-                LocalizationUtility::translate(
-                    'error.noPositionsFound.body',
-                    'maps2',
-                    [
-                        0 => $this->title
-                    ]
-                ),
-                LocalizationUtility::translate('error.noPositionsFound.title', 'maps2'),
-                FlashMessage::INFO
-            );
-            $hasErrors = true;
-        }
-
-        return $hasErrors;
     }
 }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace JWeiland\Maps2\Client;
 
 /*
@@ -28,25 +29,19 @@ class OpenStreetMapClient extends AbstractClient
     protected $title = 'Open Street Map';
 
     /**
-     * Check result from Open Street Map Server for errors
+     * Check processed response from Open Street Map Server for errors
      *
-     * @param array|null $result
-     * @return bool
+     * @param array|null $response
      */
-    protected function requestHasErrors($result)
+    protected function checkResponseForErrors($response)
     {
-        $hasErrors = false;
-
-        if ($result === null) {
+        if ($response === null) {
             $this->messageHelper->addFlashMessage(
                 'The response of Open Street Map was not a valid JSON response.',
                 'Invalid JSON response',
                 FlashMessage::ERROR
             );
-            $hasErrors = true;
-        }
-
-        if (is_array($result) && empty($result)) {
+        } elseif (is_array($response) && empty($response)) {
             $this->messageHelper->addFlashMessage(
                 LocalizationUtility::translate(
                     'error.noPositionsFound.body',
@@ -55,12 +50,12 @@ class OpenStreetMapClient extends AbstractClient
                         0 => $this->title
                     ]
                 ),
-                LocalizationUtility::translate('error.noPositionsFound.title', 'maps2'),
-                FlashMessage::INFO
+                LocalizationUtility::translate(
+                    'error.noPositionsFound.title',
+                    'maps2'
+                ),
+                FlashMessage::ERROR
             );
-            $hasErrors = true;
         }
-
-        return $hasErrors;
     }
 }

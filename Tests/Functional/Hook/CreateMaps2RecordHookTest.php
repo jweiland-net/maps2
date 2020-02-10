@@ -19,6 +19,7 @@ use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Helper\MessageHelper;
 use JWeiland\Maps2\Hook\CreateMaps2RecordHook;
 use JWeiland\Maps2\Service\GeoCodeService;
+use JWeiland\Maps2\Tests\Functional\Fixtures\IsRecordAllowedToCreatePoiCollectionSignal;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -53,7 +54,8 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
 
     public function setUp()
     {
-        parent::setUp();
+        parent::setup();
+        parent::setUpBackendUserFromFixture(1);
 
         $this->importDataSet(__DIR__ . '/../Fixtures/fe_groups.xml');
         $this->importDataSet(__DIR__ . '/../Fixtures/fe_users.xml');
@@ -367,6 +369,50 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
             $this->cacheMaps2RegistryProphecy->reveal()
         );
         $hook->processDatamap_afterAllOperations($dataHandler);
+    }
 
+    /**
+     * @test
+     */
+    public function processDatamapDoesNotCreatesPoiCollectionBecauseOfHook()
+    {
+        $this->cacheMaps2RegistryProphecy
+            ->get('fields')
+            ->willReturn($this->maps2RegistryConfiguration);
+
+        $dataHandler = new DataHandler();
+        $dataHandler->datamap = [
+            'fe_users' => [
+                '1' => [
+                    'uid' => '1',
+                    'pid' => '12',
+                    'username' => 'Stefan',
+                    'lastlogin' => '0',
+                ]
+            ]
+        ];
+
+        /** @var GeoCodeService|ObjectProphecy $geoCodeServiceProphecy */
+        $geoCodeServiceProphecy = $this->prophesize(GeoCodeService::class);
+        $geoCodeServiceProphecy
+            ->getFirstFoundPositionByAddress('Echterdinger Straße 57 70794 Filderstadt Deutschland')
+            ->shouldNotBeCalled();
+
+        $signalSlotDispatcher = GeneralUtility::makeInstance(Dispatcher::class);
+        $signalSlotDispatcher
+            ->connect(
+                CreateMaps2RecordHook::class,
+                'preIsRecordAllowedToCreatePoiCollection',
+                IsRecordAllowedToCreatePoiCollectionSignal::class,
+                'invalidPoiCollection'
+            );
+
+        $hook = new CreateMaps2RecordHook(
+            $geoCodeServiceProphecy->reveal(),
+            $this->prophesize(MessageHelper::class)->reveal(),
+            null,
+            $this->cacheMaps2RegistryProphecy->reveal()
+        );
+        $hook->processDatamap_afterAllOperations($dataHandler);
     }
 }
