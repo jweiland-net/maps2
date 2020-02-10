@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace JWeiland\Maps2\Service;
 
 /*
@@ -20,6 +20,7 @@ use JWeiland\Maps2\Client\ClientInterface;
 use JWeiland\Maps2\Client\Request\RequestFactory;
 use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Mapper\MapperFactory;
+use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
@@ -90,9 +91,23 @@ class GeoCodeService implements SingletonInterface
         $positions = $this->getPositionsByAddress($address);
         if ($positions->count()) {
             $positions->rewind();
+            /** @var Position $position */
             $position = $positions->current();
         }
 
         return $position;
+    }
+
+    public function hasErrors(): bool
+    {
+        return $this->client->hasErrors();
+    }
+
+    /**
+     * @return FlashMessage[]
+     */
+    public function getErrors(): array
+    {
+        return $this->client->getErrors();
     }
 }

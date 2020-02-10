@@ -255,6 +255,8 @@ class CreateMaps2RecordHook
             }
         }
 
+        var_dump($isValid);
+
         // You need JOINs or more complex matches? Please register SignalSlot.
         $this->emitIsRecordAllowedToCreatePoiCollection(
             $foreignLocationRecord,
@@ -264,6 +266,7 @@ class CreateMaps2RecordHook
             $isValid
         );
 
+        var_dump($isValid);
         return $isValid;
     }
 
@@ -597,11 +600,11 @@ class CreateMaps2RecordHook
      */
     protected function emitIsRecordAllowedToCreatePoiCollection(array $foreignLocationRecord, string $foreignTableName, string $foreignColumnName, array $options, bool &$isValid)
     {
-        $isValid = $this->signalSlotDispatcher->dispatch(
+        $this->signalSlotDispatcher->dispatch(
             self::class,
             'preIsRecordAllowedToCreatePoiCollection',
-            [$foreignLocationRecord, $foreignTableName, $foreignColumnName, $options, $isValid]
-        )[4];
+            [$foreignLocationRecord, $foreignTableName, $foreignColumnName, $options, &$isValid]
+        );
     }
 
     /**
