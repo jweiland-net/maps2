@@ -5,6 +5,18 @@ Updating
 
 If you update EXT:maps2 to a newer version, please read this section carefully!
 
+Update to Version 8.0.0
+-----------------------
+
+As a normal user you can update to this version without any problems.
+
+We have changed the SignalSlot preIsRecordAllowedToCreatePoiCollection. It does not allow returning $isValid as 4th
+parameter anymore. As $isValid is a reference now, please change it directly and prevent your SignalSlot to return
+anything.
+
+There is no Debug Output of Map Provider response in Backend anymore, if request fails. We have added more detailed
+error messages instead. As a Dev, you can access all Messages of Client and GeoCodeService directly.
+
 Update to Version 7.0.0
 -----------------------
 

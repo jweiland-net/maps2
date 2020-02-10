@@ -6,6 +6,11 @@
 ChangeLog
 =========
 
+**Version 8.0.0**
+
+- SignalSlot preIsRecordAllowedToCreatePoiCollectionCatch does not allow returning $isValid as 4th parameter anymore
+- Add Message Handling to Map Provider Clients.
+
 **Version 7.1.5**
 
 - Catch Exception for TYPO3 8 in ArrayUtility of sysext core.
