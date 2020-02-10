@@ -255,8 +255,6 @@ class CreateMaps2RecordHook
             }
         }
 
-        var_dump($isValid);
-
         // You need JOINs or more complex matches? Please register SignalSlot.
         $this->emitIsRecordAllowedToCreatePoiCollection(
             $foreignLocationRecord,
@@ -266,7 +264,6 @@ class CreateMaps2RecordHook
             $isValid
         );
 
-        var_dump($isValid);
         return $isValid;
     }
 
