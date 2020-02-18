@@ -147,9 +147,7 @@ class GoogleMapsElement extends AbstractFormElement
             false
         );
         $resultArray['stylesheetFiles'][] = $backendRelPath . 'Resources/Public/Css/GoogleMapsModule.css';
-        $resultArray['requireJsModules'][] = [
-            'TYPO3/CMS/Maps2/GoogleMapsModule' => 'function(GoogleMaps){GoogleMaps();}'
-        ];
+        $resultArray['requireJsModules'][] = 'TYPO3/CMS/Maps2/GoogleMapsModule';
 
         $resultArray['html'] = $this->getMapHtml($this->getConfiguration($currentRecord));
 
