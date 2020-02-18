@@ -6,6 +6,10 @@
 ChangeLog
 =========
 
+**Version 8.0.1**
+
+- Restructured GoogleMapsModule JS file to be more compatible with requireJS
+
 **Version 8.0.0**
 
 - SignalSlot preIsRecordAllowedToCreatePoiCollectionCatch does not allow returning $isValid as 4th parameter anymore
