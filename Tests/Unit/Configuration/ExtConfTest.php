@@ -405,7 +405,7 @@ class ExtConfTest extends UnitTestCase
      */
     public function getGoogleMapsLibraryInitiallyReturnsEmptyString() {
         $this->assertSame(
-            '',
+            'https://maps.googleapis.com/maps/api/js?key=|&libraries=places',
             $this->subject->getGoogleMapsLibrary()
         );
     }
