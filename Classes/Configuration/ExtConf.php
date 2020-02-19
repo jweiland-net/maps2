@@ -200,7 +200,10 @@ class ExtConf implements SingletonInterface
 
     public function getGoogleMapsLibrary(): string
     {
-        if (trim($this->googleMapsLibrary) === '|') {
+        if (
+            trim($this->googleMapsLibrary) === '|'
+            || trim($this->googleMapsLibrary) === ''
+        ) {
             $library = 'https://maps.googleapis.com/maps/api/js?key=|&libraries=places';
         } else {
             $library = $this->googleMapsLibrary;
