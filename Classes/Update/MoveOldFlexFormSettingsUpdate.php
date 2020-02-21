@@ -96,6 +96,13 @@ class MoveOldFlexFormSettingsUpdate
                 // Some as above, but for TYPO3 8
             }
 
+            if (
+                !isset($valueFromDatabase['data']['sMapOptions']['lDEF'])
+                || !is_array($valueFromDatabase['data']['sMapOptions']['lDEF'])
+            ) {
+                continue;
+            }
+
             $oldFieldNames = [
                 'mapTypeControl',
                 'mapTypeId',
