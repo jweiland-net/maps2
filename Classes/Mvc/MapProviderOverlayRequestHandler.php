@@ -17,6 +17,7 @@ namespace JWeiland\Maps2\Mvc;
 
 use JWeiland\Maps2\Service\MapProviderRequestService;
 use JWeiland\Maps2\Service\MapService;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\RequestHandlerInterface;
@@ -52,8 +53,7 @@ class MapProviderOverlayRequestHandler implements RequestHandlerInterface
      */
     public function canHandleRequest(): bool
     {
-        $environmentService = GeneralUtility::makeInstance(EnvironmentService::class);
-        if (!$environmentService->isEnvironmentInCliMode()) {
+        if (!Environment::isCli()) {
             $mapProviderRequestService = GeneralUtility::makeInstance(MapProviderRequestService::class);
             $configurationManager = $this->objectManager->get(ConfigurationManagerInterface::class);
             $configuration = $configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);

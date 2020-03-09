@@ -21,6 +21,7 @@ use JWeiland\Maps2\Service\MapProviderRequestService;
 use JWeiland\Maps2\Service\MapService;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
 use Prophecy\Prophecy\ObjectProphecy;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\Web\Request;
@@ -77,9 +78,17 @@ class MapProviderOverlayRequestTest extends UnitTestCase
      */
     public function canHandleRequestWillReturnFalseInCliContext()
     {
-        $environmentService = $this->prophesize(EnvironmentService::class);
-        $environmentService->isEnvironmentInCliMode()->shouldBeCalled()->willReturn(true);
-        GeneralUtility::setSingletonInstance(EnvironmentService::class, $environmentService->reveal());
+        Environment::initialize(
+            Environment::getContext(),
+            true,
+            false,
+            Environment::getProjectPath(),
+            Environment::getPublicPath(),
+            Environment::getVarPath(),
+            Environment::getConfigPath(),
+            Environment::getBackendPath() . '/index.php',
+            Environment::isWindows() ? 'WINDOWS' : 'UNIX'
+        );
 
         $this->assertFalse(
             $this->subject->canHandleRequest()
@@ -91,10 +100,17 @@ class MapProviderOverlayRequestTest extends UnitTestCase
      */
     public function canHandleRequestWillReturnFalseWhenExtKeyIsNotMaps2()
     {
-        /** @var EnvironmentService|ObjectProphecy $environmentService */
-        $environmentService = $this->prophesize(EnvironmentService::class);
-        $environmentService->isEnvironmentInCliMode()->shouldBeCalled()->willReturn(false);
-        GeneralUtility::setSingletonInstance(EnvironmentService::class, $environmentService->reveal());
+        Environment::initialize(
+            Environment::getContext(),
+            false,
+            false,
+            Environment::getProjectPath(),
+            Environment::getPublicPath(),
+            Environment::getVarPath(),
+            Environment::getConfigPath(),
+            Environment::getBackendPath() . '/index.php',
+            Environment::isWindows() ? 'WINDOWS' : 'UNIX'
+        );
 
         /** @var ConfigurationManagerInterface|ObjectProphecy $configurationManager */
         $configurationManager = $this->prophesize(ConfigurationManagerInterface::class);
@@ -119,10 +135,17 @@ class MapProviderOverlayRequestTest extends UnitTestCase
      */
     public function canHandleRequestWillReturnTrueWhenExtKeyIsMaps2()
     {
-        /** @var EnvironmentService|ObjectProphecy $environmentService */
-        $environmentService = $this->prophesize(EnvironmentService::class);
-        $environmentService->isEnvironmentInCliMode()->shouldBeCalled()->willReturn(false);
-        GeneralUtility::setSingletonInstance(EnvironmentService::class, $environmentService->reveal());
+        Environment::initialize(
+            Environment::getContext(),
+            false,
+            false,
+            Environment::getProjectPath(),
+            Environment::getPublicPath(),
+            Environment::getVarPath(),
+            Environment::getConfigPath(),
+            Environment::getBackendPath() . '/index.php',
+            Environment::isWindows() ? 'WINDOWS' : 'UNIX'
+        );
 
         /** @var ConfigurationManagerInterface|ObjectProphecy $configurationManager */
         $configurationManager = $this->prophesize(ConfigurationManagerInterface::class);
