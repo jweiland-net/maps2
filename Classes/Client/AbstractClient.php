@@ -32,10 +32,7 @@ abstract class AbstractClient implements ClientInterface
 
     public function __construct(MessageHelper $messageHelper = null)
     {
-        if ($messageHelper === null) {
-            $messageHelper = GeneralUtility::makeInstance(MessageHelper::class);
-        }
-        $this->messageHelper = $messageHelper;
+        $this->messageHelper = $messageHelper ?? GeneralUtility::makeInstance(MessageHelper::class);;
     }
 
     /**

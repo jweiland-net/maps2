@@ -68,9 +68,6 @@ class Maps2Registry implements SingletonInterface
         return GeneralUtility::makeInstance(__CLASS__);
     }
 
-    /**
-     * Creates this object.
-     */
     public function __construct()
     {
         // As this constructor will only be called once after clearing SystemCache

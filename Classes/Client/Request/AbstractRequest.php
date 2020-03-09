@@ -41,10 +41,7 @@ abstract class AbstractRequest implements RequestInterface
 
     public function __construct(ExtConf $extConf = null)
     {
-        if ($extConf === null) {
-            $extConf = GeneralUtility::makeInstance(ExtConf::class);
-        }
-        $this->extConf = $extConf;
+        $this->extConf = $extConf ?? GeneralUtility::makeInstance(ExtConf::class);
     }
 
     /**

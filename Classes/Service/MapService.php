@@ -54,9 +54,8 @@ class MapService
 
     public function __construct()
     {
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $this->objectManager = $objectManager;
-        $this->configurationManager = $objectManager->get(ConfigurationManagerInterface::class);
+        $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        $this->configurationManager = $this->objectManager->get(ConfigurationManagerInterface::class);
         $environmentService = GeneralUtility::makeInstance(EnvironmentService::class);
         if ($environmentService->isEnvironmentInFrontendMode()) {
             $this->settings = $this->configurationManager->getConfiguration(

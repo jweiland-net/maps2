@@ -37,12 +37,9 @@ class MapProviderOverlayRequestHandler implements RequestHandlerInterface
      */
     protected $objectManager;
 
-    /**
-     * @param ObjectManager $objectManager
-     */
-    public function __construct(ObjectManager $objectManager)
+    public function __construct(ObjectManager $objectManager = null)
     {
-        $this->objectManager = $objectManager;
+        $this->objectManager = $objectManager ?? GeneralUtility::makeInstance(ObjectManager::class);
     }
 
     /**

@@ -35,9 +35,6 @@ class InitFeSessionMiddleware implements MiddlewareInterface
      */
     protected $extConf;
 
-    /**
-     * InitFeSessionHook constructor.
-     */
     public function __construct()
     {
         $this->extConf = GeneralUtility::makeInstance(ExtConf::class);

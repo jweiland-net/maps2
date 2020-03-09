@@ -67,9 +67,6 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
      */
     protected $sorting = 0;
 
-    /**
-     * Constructor of this model class
-     */
     public function __construct()
     {
         $this->initStorageObjects();

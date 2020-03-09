@@ -178,9 +178,6 @@ class PoiCollection extends AbstractEntity
      */
     protected $distance = 0.0;
 
-    /**
-     * Constructor of this model class
-     */
     public function __construct()
     {
         $this->initStorageObjects();
