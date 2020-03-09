@@ -1,5 +1,6 @@
 <?php
-namespace JWeiland\Maps2\Hook;
+declare(strict_types = 1);
+namespace JWeiland\Maps2\Middleware;
 
 /*
  * This file is part of the maps2 project.
@@ -15,14 +16,19 @@ namespace JWeiland\Maps2\Hook;
  */
 
 use JWeiland\Maps2\Configuration\ExtConf;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
- * A hook to save the information, if a customer has allowed requests to Servers of Map Providers
+ * We have to save the permission to allow map provider requests before TS-Template rendering.
+ * It's needed by our own TS Condition object
  */
-class InitFeSessionHook
+class InitFeSessionMiddleware implements MiddlewareInterface
 {
     /**
      * @var ExtConf
@@ -52,9 +58,11 @@ class InitFeSessionHook
     /**
      * Check GET parameters and allow google requests in session if valid
      *
-     * @return void
+     * @param ServerRequestInterface $request
+     * @param RequestHandlerInterface $handler
+     * @return ResponseInterface
      */
-    public function saveAllowGoogleRequestsInSession()
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $parameters = GeneralUtility::_GPmerged('tx_maps2_maps2');
         if (
@@ -76,6 +84,7 @@ class InitFeSessionHook
                 $this->getTypoScriptFrontendController()->fe_user->setAndSaveSessionData('mapProviderRequestsAllowedForMaps2', 1);
             }
         }
+        return $handler->handle($request);
     }
 
     /**
