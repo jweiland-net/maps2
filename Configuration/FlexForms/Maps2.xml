@@ -33,9 +33,9 @@
 							<label>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:categories</label>
 							<config>
 								<type>select</type>
+								<renderType>selectTree</renderType>
 								<foreign_table>sys_category</foreign_table>
 								<foreign_table_where>('0' = '###PAGE_TSCONFIG_IDLIST###' OR sys_category.pid IN (###PAGE_TSCONFIG_IDLIST###))</foreign_table_where>
-								<renderMode>tree</renderMode>
 								<treeConfig>
 									<parentField>parent</parentField>
 									<rootUid>0</rootUid>
