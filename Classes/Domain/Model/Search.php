@@ -22,56 +22,32 @@ namespace JWeiland\Maps2\Domain\Model;
 class Search
 {
     /**
-     * address
-     *
      * @var string
      */
     protected $address = '';
 
     /**
-     * radius
-     *
      * @var int
      */
     protected $radius = 50;
 
-    /**
-     * Returns the address
-     *
-     * @return string $address
-     */
-    public function getAddress()
+    public function getAddress(): string
     {
         return $this->address;
     }
 
-    /**
-     * Sets the address
-     *
-     * @param string $address
-     */
-    public function setAddress($address)
+    public function setAddress(string $address)
     {
-        $this->address = (string)$address;
+        $this->address = $address;
     }
 
-    /**
-     * Returns the radius
-     *
-     * @return int $radius
-     */
-    public function getRadius()
+    public function getRadius(): int
     {
         return $this->radius;
     }
 
-    /**
-     * Sets the radius
-     *
-     * @param int $radius
-     */
-    public function setRadius($radius)
+    public function setRadius(int $radius)
     {
-        $this->radius = (int)$radius;
+        $this->radius = $radius;
     }
 }

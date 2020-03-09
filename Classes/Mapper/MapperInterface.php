@@ -22,11 +22,5 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  */
 interface MapperInterface
 {
-    /**
-     * Map response of Map Provider into our Domain Models
-     *
-     * @param array $response
-     * @return ObjectStorage
-     */
     public function map(array $response): ObjectStorage;
 }

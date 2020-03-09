@@ -41,9 +41,6 @@ class RenderHiddenFieldsForGetViewHelper extends AbstractViewHelper
      */
     protected $escapeOutput = false;
 
-    /**
-     * Initialize ViewHelper arguments
-     */
     public function initializeArguments()
     {
         $this->registerArgument('pageUid', 'int', 'The target page UID', false, null);

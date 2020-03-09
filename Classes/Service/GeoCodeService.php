@@ -43,14 +43,6 @@ class GeoCodeService implements SingletonInterface
         $this->client = $client ?? GeneralUtility::makeInstance(ClientFactory::class)->create();
     }
 
-    /**
-     * Get positions by address
-     *
-     * @param string $address
-     * @return ObjectStorage|Position[]
-     * @throws \Exception
-     * @api
-     */
     public function getPositionsByAddress(string $address): ObjectStorage
     {
         $positions = GeneralUtility::makeInstance(ObjectStorage::class);
@@ -73,15 +65,7 @@ class GeoCodeService implements SingletonInterface
         return $positions;
     }
 
-    /**
-     * Get first found position by address
-     *
-     * @param string $address
-     * @return Position|null
-     * @throws \Exception
-     * @api
-     */
-    public function getFirstFoundPositionByAddress(string $address)
+    public function getFirstFoundPositionByAddress(string $address): ?Position
     {
         $position = null;
         $positions = $this->getPositionsByAddress($address);

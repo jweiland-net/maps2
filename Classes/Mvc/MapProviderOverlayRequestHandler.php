@@ -42,11 +42,6 @@ class MapProviderOverlayRequestHandler implements RequestHandlerInterface
         $this->objectManager = $objectManager ?? GeneralUtility::makeInstance(ObjectManager::class);
     }
 
-    /**
-     * Checks if the request handler can handle the current request.
-     *
-     * @return bool true if it can handle the request, otherwise false
-     */
     public function canHandleRequest(): bool
     {
         if (!Environment::isCli()) {
@@ -73,11 +68,6 @@ class MapProviderOverlayRequestHandler implements RequestHandlerInterface
         return 120;
     }
 
-    /**
-     * Handles a raw request and returns the response.
-     *
-     * @return ResponseInterface
-     */
     public function handleRequest(): ResponseInterface
     {
         $response = $this->objectManager->get(Response::class);

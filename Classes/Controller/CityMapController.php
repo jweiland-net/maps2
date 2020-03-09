@@ -24,19 +24,10 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class CityMapController extends AbstractController
 {
-    /**
-     * Action show
-     */
     public function showAction()
     {
     }
 
-    /**
-     * action search
-     *
-     * @param string $street
-     * @throws \Exception
-     */
     public function searchAction(string $street)
     {
         $geoCodeService = GeneralUtility::makeInstance(GeoCodeService::class);

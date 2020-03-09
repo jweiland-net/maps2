@@ -30,11 +30,6 @@ class HasCacheViewHelper extends AbstractViewHelper
 {
     use CompileWithRenderStatic;
 
-    /**
-     * Initialize arguments.
-     *
-     * @throws \Exception
-     */
     public function initializeArguments()
     {
         $this->registerArgument(

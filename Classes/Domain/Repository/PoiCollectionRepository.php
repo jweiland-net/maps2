@@ -17,6 +17,7 @@ namespace JWeiland\Maps2\Domain\Repository;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Query;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Persistence\Repository;
 use TYPO3\CMS\Extbase\Service\EnvironmentService;
 use TYPO3\CMS\Frontend\Page\PageRepository;
@@ -43,10 +44,7 @@ class PoiCollectionRepository extends Repository
         $this->environmentService = $environmentService;
     }
 
-    /**
-     * @return \TYPO3\CMS\Frontend\Page\PageRepository
-     */
-    protected function getPageRepository()
+    protected function getPageRepository(): PageRepository
     {
         if (!$this->pageRepository instanceof PageRepository) {
             if ($this->environmentService->isEnvironmentInFrontendMode() && is_object($GLOBALS['TSFE'])) {
@@ -58,16 +56,7 @@ class PoiCollectionRepository extends Repository
         return $this->pageRepository;
     }
 
-    /**
-     * search for poi collections within a given radius
-     *
-     * @param float $latitude the users position
-     * @param float $longitude the users position
-     * @param int $radius The range to search for poi collections (km)
-     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
-     * @throws \Exception
-     */
-    public function searchWithinRadius($latitude, $longitude, $radius)
+    public function searchWithinRadius(float $latitude, float $longitude, int $radius): QueryResultInterface
     {
         $radiusOfEarth = 6380;
 
@@ -87,14 +76,7 @@ class PoiCollectionRepository extends Repository
         )->execute();
     }
 
-    /**
-     * find all pois selected by categories
-     *
-     * @param string $categories comma separated list of category uids
-     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
-     * @throws \Exception
-     */
-    public function findPoisByCategories($categories)
+    public function findPoisByCategories($categories): QueryResultInterface
     {
         /** @var Query $query */
         $query = $this->createQuery();

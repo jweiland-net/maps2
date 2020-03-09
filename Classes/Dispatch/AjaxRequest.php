@@ -36,18 +36,9 @@ class AjaxRequest
         $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
     }
 
-    /**
-     * Dispatcher for ajax requests
-     *
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface|null $response @ToDo: Deprecated since TYPO3 9.5.
-     * @return ResponseInterface
-     */
-    public function dispatch(ServerRequestInterface $request, ResponseInterface $response = null): ResponseInterface
+    public function dispatch(ServerRequestInterface $request): ResponseInterface
     {
-        if (!is_subclass_of($response, ResponseInterface::class)) {
-            $response = GeneralUtility::makeInstance(Response::class);
-        }
+        $response = GeneralUtility::makeInstance(Response::class);
 
         $postParams = $request->getParsedBody();
         if (!array_key_exists('tx_maps2_maps2', $postParams)) {

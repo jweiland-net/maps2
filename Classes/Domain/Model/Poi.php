@@ -24,110 +24,62 @@ use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 class Poi extends AbstractEntity
 {
     /**
-     * cruser_id
-     *
      * @var int
      */
     protected $cruserId = 0;
 
     /**
-     * Position Index
-     *
      * @var int
      */
     protected $posIndex = 0;
 
     /**
-     * Latitude
-     *
      * @var float
      */
     protected $latitude = 0.0;
 
     /**
-     * Longitude
-     *
      * @var float
      */
     protected $longitude = 0.0;
 
-    /**
-     * Returns the cruserId
-     *
-     * @return float $cruserId
-     */
-    public function getCruserId()
+    public function getCruserId(): int
     {
         return $this->cruserId;
     }
 
-    /**
-     * Sets the cruserId
-     *
-     * @param int $cruserId
-     */
-    public function setCruserId($cruserId)
+    public function setCruserId(int $cruserId)
     {
-        $this->cruserId = (int)$cruserId;
+        $this->cruserId = $cruserId;
     }
 
-    /**
-     * Returns the pos_index
-     *
-     * @return int $posIndex
-     */
-    public function getPosIndex()
+    public function getPosIndex(): int
     {
         return $this->posIndex;
     }
 
-    /**
-     * Sets the pos_index
-     *
-     * @param int $posIndex
-     */
-    public function setPosIndex($posIndex)
+    public function setPosIndex(int $posIndex)
     {
-        $this->posIndex = (int)$posIndex;
+        $this->posIndex = $posIndex;
     }
 
-    /**
-     * Returns the latitude
-     *
-     * @return float $latitude
-     */
-    public function getLatitude()
+    public function getLatitude(): float
     {
         return $this->latitude;
     }
 
-    /**
-     * Sets the latitude
-     *
-     * @param float $latitude
-     */
-    public function setLatitude($latitude)
+    public function setLatitude(float $latitude)
     {
-        $this->latitude = (float)$latitude;
+        $this->latitude = $latitude;
     }
 
-    /**
-     * Returns the longitude
-     *
-     * @return float $longitude
-     */
-    public function getLongitude()
+    public function getLongitude(): float
     {
         return $this->longitude;
     }
 
-    /**
-     * Sets the longitude
-     *
-     * @param float $longitude
-     */
-    public function setLongitude($longitude)
+    public function setLongitude(float $longitude)
     {
-        $this->longitude = (float)$longitude;
+        $this->longitude = $longitude;
     }
 }

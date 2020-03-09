@@ -35,11 +35,6 @@ class MessageHelper
         $this->flashMessageService = $flashMessageService ?? GeneralUtility::makeInstance(FlashMessageService::class);
     }
 
-    /**
-     * @param string $message
-     * @param string $title
-     * @param int $severity
-     */
     public function addFlashMessage(string $message, string $title = '', int $severity = FlashMessage::OK)
     {
         // We activate storeInSession, so that messages can be displayed when click on Save&Close button.

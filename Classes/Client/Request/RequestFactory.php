@@ -61,14 +61,6 @@ class RequestFactory
         return $request;
     }
 
-    /**
-     * Sanitizes the filename
-     * We need UpperCamelCase
-     * We only need Filename body
-     *
-     * @param string $filename
-     * @return string
-     */
     protected function sanitizeFilename(string $filename): string
     {
         return ucfirst(GeneralUtility::split_fileref($filename)['filebody']);

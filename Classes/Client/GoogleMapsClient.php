@@ -28,12 +28,7 @@ class GoogleMapsClient extends AbstractClient
      */
     protected $title = 'Google Maps';
 
-    /**
-     * Check processed response from Google Maps Server for errors
-     *
-     * @param array|null $response
-     */
-    protected function checkResponseForErrors($response)
+    protected function checkResponseForErrors(?array $response)
     {
         if ($response === null) {
             $this->messageHelper->addFlashMessage(

@@ -25,12 +25,6 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  */
 class GoogleMapsMapper implements MapperInterface
 {
-    /**
-     * Map Response of Google Maps GeoCode API to ObjectStorage
-     *
-     * @param array $response
-     * @return ObjectStorage
-     */
     public function map(array $response): ObjectStorage
     {
         $objectStorage = GeneralUtility::makeInstance(ObjectStorage::class);
@@ -40,13 +34,7 @@ class GoogleMapsMapper implements MapperInterface
         return $objectStorage;
     }
 
-    /**
-     * Use values from $data to build a new Position Model
-     *
-     * @param $data
-     * @return Position
-     */
-    protected function getPosition($data): Position
+    protected function getPosition(array $data): Position
     {
         $position = GeneralUtility::makeInstance(Position::class);
         $position->setFormattedAddress($data['formatted_address']);

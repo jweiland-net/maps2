@@ -31,9 +31,6 @@ class ClientFactory
         'osm' => OpenStreetMapClient::class
     ];
 
-    /**
-     * @return ClientInterface
-     */
     public function create(): ClientInterface
     {
         $mapService = GeneralUtility::makeInstance(MapService::class);

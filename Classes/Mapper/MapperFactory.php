@@ -31,9 +31,6 @@ class MapperFactory
         'osm' => OpenStreetMapMapper::class
     ];
 
-    /**
-     * @return MapperInterface
-     */
     public function create(): MapperInterface
     {
         $mapService = GeneralUtility::makeInstance(MapService::class);

@@ -55,12 +55,6 @@ abstract class AbstractController extends AbstractWidgetController
         $this->mapService = $mapService;
     }
 
-    /**
-     * initialize view
-     * add some global vars to view
-     *
-     * @param ViewInterface $view
-     */
     public function initializeView(ViewInterface $view)
     {
         if (array_key_exists('infoWindowContentTemplatePath', $this->settings)) {
@@ -81,9 +75,6 @@ abstract class AbstractController extends AbstractWidgetController
         ]);
     }
 
-    /**
-     * Prepare and check settings
-     */
     protected function prepareSettings()
     {
         if (array_key_exists('infoWindowContentTemplatePath', $this->defaultSettings)) {
@@ -104,12 +95,7 @@ abstract class AbstractController extends AbstractWidgetController
         }
     }
 
-    /**
-     * Get TypoScript settings of maps2
-     *
-     * @return array
-     */
-    protected function getMaps2TypoScriptSettings()
+    protected function getMaps2TypoScriptSettings(): array
     {
         $fullTypoScript = $this->configurationManager->getConfiguration(
             ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT

@@ -23,9 +23,6 @@ use JWeiland\Maps2\Domain\Model\PoiCollection;
  */
 class PoiCollectionController extends AbstractController
 {
-    /**
-     * index action
-     */
     public function indexAction()
     {
         $poiCollection = $this->widgetConfiguration['poiCollection'];

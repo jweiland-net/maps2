@@ -37,9 +37,6 @@ class PoiCollectionViewHelper extends AbstractWidgetViewHelper
         $this->controller = $controller;
     }
 
-    /**
-     * Initialize all arguments.
-     */
     public function initializeArguments()
     {
         parent::initializeArguments();

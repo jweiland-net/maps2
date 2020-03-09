@@ -37,11 +37,6 @@ class SetCacheViewHelper extends AbstractViewHelper
      */
     protected $escapeOutput = false;
 
-    /**
-     * Initialize arguments.
-     *
-     * @throws \Exception
-     */
     public function initializeArguments()
     {
         $this->registerArgument(
