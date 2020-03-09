@@ -21,7 +21,6 @@ use JWeiland\Maps2\ViewHelpers\ConvertToJsonViewHelper;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
 use Prophecy\Argument;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Fluid\Core\Parser\SyntaxTree\ViewHelperNode;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
 
 /**
@@ -35,11 +34,6 @@ class ConvertToJsonViewHelperTest extends UnitTestCase
     protected $renderingContext;
 
     /**
-     * @var ViewHelperNode|\Prophecy\Prophecy\ObjectProphecy
-     */
-    protected $viewHelperNode;
-
-    /**
      * @var ConvertToJsonViewHelper
      */
     protected $subject;
@@ -50,12 +44,10 @@ class ConvertToJsonViewHelperTest extends UnitTestCase
      */
     protected function setUp()
     {
-        $this->viewHelperNode = $this->prophesize(ViewHelperNode::class);
         $this->renderingContext = $this->prophesize(RenderingContext::class);
 
         $this->subject = new ConvertToJsonViewHelper();
         $this->subject->setRenderingContext($this->renderingContext->reveal());
-        $this->subject->setViewHelperNode($this->viewHelperNode->reveal());
     }
 
     /**
@@ -73,10 +65,11 @@ class ConvertToJsonViewHelperTest extends UnitTestCase
      */
     public function renderWithStringWillJustCallJsonEncode()
     {
-        $this->viewHelperNode
-            ->evaluateChildNodes(Argument::cetera())
-            ->shouldBeCalled()
-            ->willReturn('simpleString');
+        $this->subject->setRenderChildrenClosure(
+            function() {
+                return 'simpleString';
+            }
+        );
 
         $this->assertSame(
             '&quot;simpleString&quot;',
@@ -89,10 +82,11 @@ class ConvertToJsonViewHelperTest extends UnitTestCase
      */
     public function renderWithSimpleArrayWillJustCallJsonEncode()
     {
-        $this->viewHelperNode
-            ->evaluateChildNodes(Argument::cetera())
-            ->shouldBeCalled()
-            ->willReturn(['foo' => 'bar']);
+        $this->subject->setRenderChildrenClosure(
+            function() {
+                return ['foo' => 'bar'];
+            }
+        );
 
         $this->assertSame(
             '{&quot;foo&quot;:&quot;bar&quot;}',
@@ -105,10 +99,11 @@ class ConvertToJsonViewHelperTest extends UnitTestCase
      */
     public function renderWithPoiCollectionWillSetItToArrayAndConvertItToJson()
     {
-        $this->viewHelperNode
-            ->evaluateChildNodes(Argument::cetera())
-            ->shouldBeCalled()
-            ->willReturn(new PoiCollection());
+        $this->subject->setRenderChildrenClosure(
+            function() {
+                return new PoiCollection();
+            }
+        );
 
         GeneralUtility::setSingletonInstance(ExtConf::class, new ExtConf());
 
@@ -129,10 +124,11 @@ class ConvertToJsonViewHelperTest extends UnitTestCase
      */
     public function renderWithPoiCollectionsWillConvertItToJson()
     {
-        $this->viewHelperNode
-            ->evaluateChildNodes(Argument::cetera())
-            ->shouldBeCalled()
-            ->willReturn([new PoiCollection()]);
+        $this->subject->setRenderChildrenClosure(
+            function() {
+                return [new PoiCollection()];
+            }
+        );
 
         $json = $this->subject->render();
 
@@ -154,10 +150,11 @@ class ConvertToJsonViewHelperTest extends UnitTestCase
         $poiCollection = new PoiCollection();
         $poiCollection->addCategory(new Category());
 
-        $this->viewHelperNode
-            ->evaluateChildNodes(Argument::cetera())
-            ->shouldBeCalled()
-            ->willReturn([$poiCollection]);
+        $this->subject->setRenderChildrenClosure(
+            function() use ($poiCollection) {
+                return [$poiCollection];
+            }
+        );
 
         $json = $this->subject->render();
 
@@ -178,10 +175,11 @@ class ConvertToJsonViewHelperTest extends UnitTestCase
     {
         $poiCollection = new PoiCollection();
 
-        $this->viewHelperNode
-            ->evaluateChildNodes(Argument::cetera())
-            ->shouldBeCalled()
-            ->willReturn([$poiCollection]);
+        $this->subject->setRenderChildrenClosure(
+            function() use ($poiCollection) {
+                return [$poiCollection];
+            }
+        );
 
         $json = $this->subject->render();
 
