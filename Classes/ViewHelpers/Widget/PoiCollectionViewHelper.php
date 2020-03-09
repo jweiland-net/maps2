@@ -32,9 +32,6 @@ class PoiCollectionViewHelper extends AbstractWidgetViewHelper
      */
     protected $controller;
 
-    /**
-     * @param Controller\PoiCollectionController $controller
-     */
     public function injectController(Controller\PoiCollectionController $controller)
     {
         $this->controller = $controller;

@@ -29,9 +29,6 @@ abstract class AbstractAjaxRequest implements AjaxInterface
      */
     protected $hashService;
 
-    /**
-     * @param HashService $hashService
-     */
     public function injectHashService(HashService $hashService)
     {
         $this->hashService = $hashService;
