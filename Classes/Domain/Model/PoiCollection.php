@@ -16,6 +16,7 @@ namespace JWeiland\Maps2\Domain\Model;
  */
 use JWeiland\Maps2\Configuration\ExtConf;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
@@ -37,7 +38,7 @@ class PoiCollection extends AbstractEntity
      * Title
      *
      * @var string
-     * @TYPO3\CMS\Extbase\Annotation\Validate NotEmpty
+     * @Extbase\Validate("NotEmpty")
      */
     protected $title = '';
 
@@ -73,8 +74,8 @@ class PoiCollection extends AbstractEntity
      * List of POIs
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\JWeiland\Maps2\Domain\Model\Poi>
-     * @cascade remove
-     * @lazy
+     * @TYPO3\CMS\Extbase\Annotation\ORM\Cascade("remove")
+     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
      */
     protected $pois;
 
