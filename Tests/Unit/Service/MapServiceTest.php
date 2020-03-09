@@ -19,6 +19,7 @@ use JWeiland\Maps2\Service\MapService;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageQueue;
@@ -43,11 +44,6 @@ class MapServiceTest extends UnitTestCase
     protected $objectManagerProphecy;
 
     /**
-     * @var EnvironmentService|ObjectProphecy
-     */
-    protected $environmentServiceProphecy;
-
-    /**
      * @var ConfigurationManagerInterface|ObjectProphecy
      */
     protected $configurationManagerProphecy;
@@ -68,12 +64,18 @@ class MapServiceTest extends UnitTestCase
      */
     protected function setUp()
     {
+        Environment::initialize(
+            Environment::getContext(),
+            true,
+            false,
+            Environment::getProjectPath(),
+            Environment::getPublicPath(),
+            Environment::getVarPath(),
+            Environment::getConfigPath(),
+            Environment::getBackendPath() . '/index.php',
+            Environment::isWindows() ? 'WINDOWS' : 'UNIX'
+        );
         $this->objectManagerProphecy = $this->prophesize(ObjectManager::class);
-        $this->environmentServiceProphecy = $this->prophesize(EnvironmentService::class);
-        $this->environmentServiceProphecy
-            ->isEnvironmentInFrontendMode()
-            ->shouldBeCalled()
-            ->willReturn(true);
 
         $this->configurationManagerProphecy = $this->prophesize(ConfigurationManager::class);
         $this->objectManagerProphecy
@@ -176,7 +178,6 @@ class MapServiceTest extends UnitTestCase
             ->willReturn($uriBuilderProphecy->reveal());
 
         GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManagerProphecy->reveal());
-        GeneralUtility::setSingletonInstance(EnvironmentService::class, $this->environmentServiceProphecy->reveal());
         $this->subject = new MapService();
 
         $this->assertSame(
@@ -270,7 +271,6 @@ class MapServiceTest extends UnitTestCase
             ->willReturn($uriBuilderProphecy->reveal());
 
         GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManagerProphecy->reveal());
-        GeneralUtility::setSingletonInstance(EnvironmentService::class, $this->environmentServiceProphecy->reveal());
         $this->subject = new MapService();
 
         $this->assertSame(
@@ -343,7 +343,6 @@ class MapServiceTest extends UnitTestCase
             ->willReturn($uriBuilderProphecy->reveal());
 
         GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManagerProphecy->reveal());
-        GeneralUtility::setSingletonInstance(EnvironmentService::class, $this->environmentServiceProphecy->reveal());
         $this->subject = new MapService();
 
         $this->assertSame(
@@ -370,7 +369,6 @@ class MapServiceTest extends UnitTestCase
         GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
 
         GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManagerProphecy->reveal());
-        GeneralUtility::setSingletonInstance(EnvironmentService::class, $this->environmentServiceProphecy->reveal());
         $this->subject = new MapService();
 
         $this->assertSame(
@@ -397,7 +395,6 @@ class MapServiceTest extends UnitTestCase
         GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
 
         GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManagerProphecy->reveal());
-        GeneralUtility::setSingletonInstance(EnvironmentService::class, $this->environmentServiceProphecy->reveal());
         $this->subject = new MapService();
 
         $this->assertSame(
@@ -425,7 +422,6 @@ class MapServiceTest extends UnitTestCase
         GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
 
         GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManagerProphecy->reveal());
-        GeneralUtility::setSingletonInstance(EnvironmentService::class, $this->environmentServiceProphecy->reveal());
         $this->subject = new MapService();
 
         $this->assertSame(
@@ -453,7 +449,6 @@ class MapServiceTest extends UnitTestCase
         GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
 
         GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManagerProphecy->reveal());
-        GeneralUtility::setSingletonInstance(EnvironmentService::class, $this->environmentServiceProphecy->reveal());
         $this->subject = new MapService();
 
         $this->assertSame(
@@ -483,7 +478,6 @@ class MapServiceTest extends UnitTestCase
         GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
 
         GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManagerProphecy->reveal());
-        GeneralUtility::setSingletonInstance(EnvironmentService::class, $this->environmentServiceProphecy->reveal());
         $this->subject = new MapService();
 
         $this->assertSame(
@@ -515,7 +509,6 @@ class MapServiceTest extends UnitTestCase
         GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
 
         GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManagerProphecy->reveal());
-        GeneralUtility::setSingletonInstance(EnvironmentService::class, $this->environmentServiceProphecy->reveal());
         $this->subject = new MapService();
 
         $this->assertSame(
@@ -545,7 +538,6 @@ class MapServiceTest extends UnitTestCase
         GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
 
         GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManagerProphecy->reveal());
-        GeneralUtility::setSingletonInstance(EnvironmentService::class, $this->environmentServiceProphecy->reveal());
         $this->subject = new MapService();
 
         $this->assertSame(
