@@ -42,7 +42,6 @@ class FloatType
      */
     public function evaluateFieldValue($value, $is_in, &$set)
     {
-        $floatValue = number_format((float)$value, 6);
-        return $floatValue;
+        return number_format((float)$value, 6);
     }
 }
