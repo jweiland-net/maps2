@@ -37,7 +37,7 @@ class PoiCollection extends AbstractEntity
      * Title
      *
      * @var string
-     * @validate NotEmpty
+     * @TYPO3\CMS\Extbase\Annotation\Validate NotEmpty
      */
     protected $title = '';
 
