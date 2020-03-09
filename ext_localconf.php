@@ -67,15 +67,15 @@ call_user_func(function() {
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['maps2MoveFlexFormFields'] = \JWeiland\Maps2\Update\MoveOldFlexFormSettings87Update::class;
     }
 
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeResolver'][1530869394] = [
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1530869394] = [
         'nodeName' => 'maps2ReadOnly',
         'priority' => 40,
-        'class' => \JWeiland\Maps2\Form\Resolver\ReadOnlyInputTextResolver::class,
+        'class' => \JWeiland\Maps2\Form\Element\ReadOnlyInputTextElement::class,
     ];
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeResolver'][1530778687] = [
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1530778687] = [
         'nodeName' => 'maps2InfoWindowContent',
         'priority' => 40,
-        'class' => \JWeiland\Maps2\Form\Resolver\InfoWindowContentResolver::class,
+        'class' => \JWeiland\Maps2\Form\Element\InfoWindowCkEditorElement::class,
     ];
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeResolver'][1551448205] = [
         'nodeName' => 'maps2MapProvider',
