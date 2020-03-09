@@ -39,7 +39,7 @@ class GeocodeRequestTest extends UnitTestCase
      */
     protected function setUp()
     {
-        $this->extConf = new ExtConf();
+        $this->extConf = new ExtConf([]);
         $this->subject = new GeocodeRequest($this->extConf);
     }
 

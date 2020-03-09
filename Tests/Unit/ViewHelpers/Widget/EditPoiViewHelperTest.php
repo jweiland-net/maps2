@@ -52,7 +52,7 @@ class EditPoiViewHelperTest extends UnitTestCase
     {
         $_SESSION['mapProviderRequestsAllowedForMaps2'] = false;
 
-        $this->extConf = new ExtConf();
+        $this->extConf = new ExtConf([]);
         $this->extConf->setExplicitAllowMapProviderRequests(1);
         $this->extConf->setExplicitAllowMapProviderRequestsBySessionOnly(1);
         GeneralUtility::setSingletonInstance(ExtConf::class, $this->extConf);

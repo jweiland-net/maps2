@@ -1,5 +1,5 @@
 <?php
-namespace JWeiland\Maps2\Tests\Unit\Condition;
+namespace JWeiland\Maps2\Tests\Unit\ExpressionLanguage;
 
 /*
  * This file is part of the maps2 project.
@@ -14,10 +14,11 @@ namespace JWeiland\Maps2\Tests\Unit\Condition;
  * The TYPO3 project - inspiring people to share!
  */
 
-use JWeiland\Maps2\Condition\AllowMapProviderRequestCondition;
 use JWeiland\Maps2\Configuration\ExtConf;
+use JWeiland\Maps2\ExpressionLanguage\AllowMapProviderRequestFunctionsProvider;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
 use Prophecy\Prophecy\ObjectProphecy;
+use Symfony\Component\ExpressionLanguage\ExpressionFunction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
@@ -25,7 +26,7 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 /**
  * Test AllowMapProviderRequestCondition
  */
-class AllowMapProviderRequestConditionTest extends UnitTestCase
+class AllowMapProviderRequestFunctionsProviderTest extends UnitTestCase
 {
     /**
      * @var ExtConf
@@ -33,7 +34,7 @@ class AllowMapProviderRequestConditionTest extends UnitTestCase
     protected $extConf;
 
     /**
-     * @var AllowMapProviderRequestCondition
+     * @var AllowMapProviderRequestFunctionsProvider
      */
     protected $subject;
 
@@ -43,10 +44,10 @@ class AllowMapProviderRequestConditionTest extends UnitTestCase
      */
     protected function setUp()
     {
-        $this->extConf = new ExtConf();
+        $this->extConf = new ExtConf([]);
         GeneralUtility::setSingletonInstance(ExtConf::class, $this->extConf);
 
-        $this->subject = new AllowMapProviderRequestCondition();
+        $this->subject = new AllowMapProviderRequestFunctionsProvider();
     }
 
     /**
@@ -62,59 +63,78 @@ class AllowMapProviderRequestConditionTest extends UnitTestCase
     /**
      * @test
      */
-    public function matchConditionWithDeactivatedSettingsWillReturnTrue()
+    public function getFunctionsWithDeactivatedSettingsWillReturnTrue()
     {
         $this->extConf->setExplicitAllowMapProviderRequests(0);
         $this->extConf->setExplicitAllowMapProviderRequestsBySessionOnly(0);
+
+        /** @var ExpressionFunction $expressionFunction */
+        $expressionFunction = $this->subject->getFunctions()[0];
+
         $this->assertTrue(
-            $this->subject->matchCondition([])
+            call_user_func($expressionFunction->getEvaluator(), [])
         );
     }
 
     /**
      * @test
      */
-    public function matchConditionOnSessionUsageWillReturnFalse()
+    public function getFunctionsOnSessionUsageWillReturnFalse()
     {
         $this->extConf->setExplicitAllowMapProviderRequests(1);
         $this->extConf->setExplicitAllowMapProviderRequestsBySessionOnly(1);
+
+        /** @var ExpressionFunction $expressionFunction */
+        $expressionFunction = $this->subject->getFunctions()[0];
+
         $this->assertFalse(
-            $this->subject->matchCondition([])
+            call_user_func($expressionFunction->getEvaluator(), [])
         );
     }
 
     /**
      * @test
      */
-    public function matchConditionOnSessionUsageWillReturnTrue()
+    public function getFunctionsOnSessionUsageWillReturnTrue()
     {
         $this->extConf->setExplicitAllowMapProviderRequests(1);
         $this->extConf->setExplicitAllowMapProviderRequestsBySessionOnly(1);
+
+        /** @var ExpressionFunction $expressionFunction */
+        $expressionFunction = $this->subject->getFunctions()[0];
+
         $_SESSION['mapProviderRequestsAllowedForMaps2'] = 1;
         $this->assertTrue(
-            $this->subject->matchCondition([])
+            call_user_func($expressionFunction->getEvaluator(), [])
         );
     }
 
     /**
      * @test
      */
-    public function matchConditionOnCookieUsageWillReturnFalseIfTsfeIsNotSet()
+    public function getFunctionsOnCookieUsageWillReturnFalseIfTsfeIsNotSet()
     {
         $this->extConf->setExplicitAllowMapProviderRequests(1);
         $this->extConf->setExplicitAllowMapProviderRequestsBySessionOnly(0);
+
+        /** @var ExpressionFunction $expressionFunction */
+        $expressionFunction = $this->subject->getFunctions()[0];
+
         $this->assertFalse(
-            $this->subject->matchCondition([])
+            call_user_func($expressionFunction->getEvaluator(), [])
         );
     }
 
     /**
      * @test
      */
-    public function matchConditionOnCookieUsageWillReturnFalse()
+    public function getFunctionsOnCookieUsageWillReturnFalse()
     {
         $this->extConf->setExplicitAllowMapProviderRequests(1);
         $this->extConf->setExplicitAllowMapProviderRequestsBySessionOnly(0);
+
+        /** @var ExpressionFunction $expressionFunction */
+        $expressionFunction = $this->subject->getFunctions()[0];
 
         $this->prophesize(TypoScriptFrontendController::class);
         $GLOBALS['TSFE'] = $this->prophesize(TypoScriptFrontendController::class)->reveal();
@@ -125,17 +145,20 @@ class AllowMapProviderRequestConditionTest extends UnitTestCase
         $GLOBALS['TSFE']->fe_user = $feUser->reveal();
 
         $this->assertFalse(
-            $this->subject->matchCondition([])
+            call_user_func($expressionFunction->getEvaluator(), [])
         );
     }
 
     /**
      * @test
      */
-    public function matchConditionOnCookieUsageWillReturnTrue()
+    public function getFunctionsOnCookieUsageWillReturnTrue()
     {
         $this->extConf->setExplicitAllowMapProviderRequests(1);
         $this->extConf->setExplicitAllowMapProviderRequestsBySessionOnly(0);
+
+        /** @var ExpressionFunction $expressionFunction */
+        $expressionFunction = $this->subject->getFunctions()[0];
 
         $GLOBALS['TSFE'] = $this->prophesize(TypoScriptFrontendController::class)->reveal();
 
@@ -145,7 +168,7 @@ class AllowMapProviderRequestConditionTest extends UnitTestCase
         $GLOBALS['TSFE']->fe_user = $feUser->reveal();
 
         $this->assertTrue(
-            $this->subject->matchCondition([])
+            call_user_func($expressionFunction->getEvaluator(), [])
         );
     }
 }

@@ -53,7 +53,7 @@ class MapProviderOverlayRequestTest extends UnitTestCase
     {
         $_SESSION['mapProviderRequestsAllowedForMaps2'] = false;
 
-        $extConf = new ExtConf();
+        $extConf = new ExtConf([]);
         $extConf->setExplicitAllowMapProviderRequests(1);
         $extConf->setExplicitAllowMapProviderRequestsBySessionOnly(1);
         GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);

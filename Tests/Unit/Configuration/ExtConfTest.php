@@ -33,7 +33,7 @@ class ExtConfTest extends UnitTestCase
      */
     protected function setUp()
     {
-        $this->subject = new ExtConf();
+        $this->subject = new ExtConf([]);
     }
 
     /**
