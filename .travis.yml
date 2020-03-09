@@ -6,17 +6,17 @@ os:
 jobs:
   include:
     - stage: test
-      php: "7.0"
-      env: TYPO3_VERSION=^8
-    - stage: test
-      php: "7.1"
-      env: TYPO3_VERSION=^8
-    - stage: test
-      php: "7.2"
-      env: TYPO3_VERSION=^8
-    - stage: test
       php: "7.2"
       env: TYPO3_VERSION=^9
+    - stage: test
+      php: "7.3"
+      env: TYPO3_VERSION=^9
+    - stage: test
+      php: "7.2"
+      env: TYPO3_VERSION=^10
+    - stage: test
+      php: "7.3"
+      env: TYPO3_VERSION=^10
 
 addons:
   apt:
