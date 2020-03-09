@@ -15,6 +15,7 @@ namespace JWeiland\Maps2\Client\Request;
  * The TYPO3 project - inspiring people to share!
  */
 
+use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Service\MapService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -36,10 +37,11 @@ class RequestFactory
      * Create a new Request by its filename
      *
      * @param string $filename Filename to build the Request object
+     * @param ExtConf $extConf
      * @return RequestInterface
      * @throws \Exception
      */
-    public function create(string $filename): RequestInterface
+    public function create(string $filename, ExtConf $extConf = null): RequestInterface
     {
         $mapService = GeneralUtility::makeInstance(MapService::class);
         $className = sprintf(
@@ -56,7 +58,7 @@ class RequestFactory
         }
 
         /** @var RequestInterface $request */
-        $request = GeneralUtility::makeInstance($className);
+        $request = GeneralUtility::makeInstance($className, $extConf);
 
         return $request;
     }

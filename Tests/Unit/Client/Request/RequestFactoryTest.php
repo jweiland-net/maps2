@@ -16,6 +16,7 @@ namespace JWeiland\Maps2\Tests\Unit\Client\Request;
 
 use JWeiland\Maps2\Client\Request\GoogleMaps\GeocodeRequest;
 use JWeiland\Maps2\Client\Request\RequestFactory;
+use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Service\MapService;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -72,7 +73,7 @@ class RequestFactoryTest extends UnitTestCase
 
         $this->assertInstanceOf(
             GeocodeRequest::class,
-            $this->subject->create('GeocodeRequest')
+            $this->subject->create('GeocodeRequest', new ExtConf([]))
         );
     }
 
@@ -88,7 +89,7 @@ class RequestFactoryTest extends UnitTestCase
 
         $this->assertInstanceOf(
             \JWeiland\Maps2\Client\Request\OpenStreetMap\GeocodeRequest::class,
-            $this->subject->create('GeocodeRequest')
+            $this->subject->create('GeocodeRequest', new ExtConf([]))
         );
     }
 
@@ -104,7 +105,7 @@ class RequestFactoryTest extends UnitTestCase
 
         $this->assertInstanceOf(
             GeocodeRequest::class,
-            $this->subject->create('GeocodeRequest.php')
+            $this->subject->create('GeocodeRequest.php', new ExtConf([]))
         );
     }
 
@@ -120,7 +121,7 @@ class RequestFactoryTest extends UnitTestCase
 
         $this->assertInstanceOf(
             GeocodeRequest::class,
-            $this->subject->create('geocodeRequest')
+            $this->subject->create('geocodeRequest', new ExtConf([]))
         );
     }
 
@@ -136,6 +137,6 @@ class RequestFactoryTest extends UnitTestCase
             ->shouldBeCalled()
             ->willReturn('gm');
 
-        $this->subject->create('NonExistingClass');
+        $this->subject->create('NonExistingClass', new ExtConf([]));
     }
 }
