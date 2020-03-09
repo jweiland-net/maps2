@@ -5,7 +5,7 @@ page.includeJSFooterlibs.maps2Leaflet >
 page.includeJSFooterlibs.maps2 >
 plugin.tx_maps2.settings.markerClusterer >
 
-[JWeiland\Maps2\Condition\AllowMapProviderRequestCondition]
+[isRequestToMapProviderAllowed()]
   page.includeCSS.leaflet = EXT:maps2/Resources/Public/Css/Leaflet/Leaflet.css
 
   page.includeJSFooterlibs {

@@ -4,7 +4,7 @@ page.includeJSFooterlibs.maps2 >
 page.includeJSFooterlibs.markerClustererForMaps2 >
 page.includeJSFooterlibs.googleMapsForMaps2 >
 
-[JWeiland\Maps2\Condition\AllowMapProviderRequestCondition]
+[isRequestToMapProviderAllowed()]
   page.includeJSFooterlibs {
     jQueryForMaps2 = https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js
     jQueryForMaps2.external = 1
