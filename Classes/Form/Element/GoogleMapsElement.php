@@ -19,6 +19,7 @@ use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
 use JWeiland\Maps2\Helper\MessageHelper;
 use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
@@ -125,7 +126,7 @@ class GoogleMapsElement extends AbstractFormElement
             'paths' => [
                 'async' => rtrim(
                     PathUtility::getRelativePath(
-                        PATH_typo3,
+                        Environment::getPublicPath() . '/typo3/',
                         GeneralUtility::getFileAbsFileName('EXT:maps2/Resources/Public/JavaScript/async')
                     ),
                     '/'

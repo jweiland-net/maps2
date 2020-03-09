@@ -19,6 +19,7 @@ use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
 use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -93,21 +94,21 @@ class OpenStreetMapElement extends AbstractFormElement
             'paths' => [
                 'leaflet' => rtrim(
                     PathUtility::getRelativePath(
-                        PATH_typo3,
+                        Environment::getPublicPath() . '/typo3/',
                         GeneralUtility::getFileAbsFileName('EXT:maps2/Resources/Public/JavaScript/Leaflet')
                     ),
                     '/'
                 ),
                 'leafletDragPath' => rtrim(
                     PathUtility::getRelativePath(
-                        PATH_typo3,
+                        Environment::getPublicPath() . '/typo3/',
                         GeneralUtility::getFileAbsFileName('EXT:maps2/Resources/Public/JavaScript/Leaflet.Drag.Path')
                     ),
                     '/'
                 ),
                 'leafletEditable' => rtrim(
                     PathUtility::getRelativePath(
-                        PATH_typo3,
+                        Environment::getPublicPath() . '/typo3/',
                         GeneralUtility::getFileAbsFileName('EXT:maps2/Resources/Public/JavaScript/Leaflet.Editable')
                     ),
                     '/'
