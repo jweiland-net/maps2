@@ -33,9 +33,6 @@ class EditPoiViewHelper extends AbstractWidgetViewHelper
      */
     protected $controller;
 
-    /**
-     * @param Controller\EditPoiController $controller
-     */
     public function injectController(Controller\EditPoiController $controller)
     {
         $this->controller = $controller;

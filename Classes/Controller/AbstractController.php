@@ -34,19 +34,11 @@ class AbstractController extends ActionController
      */
     protected $extConf;
 
-    /**
-     * inject extConf
-     *
-     * @param ExtConf $extConf
-     */
     public function injectExtConf(ExtConf $extConf)
     {
         $this->extConf = $extConf;
     }
 
-    /**
-     * @param ConfigurationManagerInterface $configurationManager
-     */
     public function injectConfigurationManager(ConfigurationManagerInterface $configurationManager)
     {
         $this->configurationManager = $configurationManager;
