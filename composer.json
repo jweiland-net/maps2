@@ -19,11 +19,11 @@
 	},
 	"require": {
 		"ext-json": "*",
-		"typo3/cms-core": "^8.7 || ^9.5"
+		"typo3/cms-core": "^9.5 || ^10.3"
 	},
 	"require-dev": {
 		"friendsofphp/php-cs-fixer": "^2.0",
-		"nimut/testing-framework": "^4.1"
+		"nimut/testing-framework": "^5.0"
 	},
 	"autoload": {
 		"psr-4": {
