@@ -114,12 +114,8 @@ class MapService
         );
     }
 
-    /**
-     * Get request URI
-     */
     protected function getRequestUri(): string
     {
-        /** @var UriBuilder $uriBuilder */
         $uriBuilder = $this->objectManager->get(UriBuilder::class);
 
         return $uriBuilder->reset()
@@ -133,9 +129,6 @@ class MapService
             ->build();
     }
 
-    /**
-     * Get template path for info window content
-     */
     protected function getAllowMapTemplatePath(): string
     {
         $extConf = GeneralUtility::makeInstance(ExtConf::class);

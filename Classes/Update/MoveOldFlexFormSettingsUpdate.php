@@ -268,7 +268,6 @@ class MoveOldFlexFormSettingsUpdate
      */
     public function checkValue_flexArray2Xml($array): string
     {
-        /** @var $flexObj FlexFormTools */
         $flexObj = GeneralUtility::makeInstance(FlexFormTools::class);
         return $flexObj->flexArray2Xml($array, true);
     }

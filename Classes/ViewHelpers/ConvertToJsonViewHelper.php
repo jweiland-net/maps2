@@ -72,13 +72,12 @@ class ConvertToJsonViewHelper extends AbstractViewHelper
     /**
      * Convert poiCollections to array and pass them through json_encode
      *
-     * @param array|QueryResultInterface|ObjectStorage $poiCollections
+     * @param array|QueryResultInterface|ObjectStorage|PoiCollection[] $poiCollections
      * @return string
      */
     protected static function getPoiCollectionsAsJson($poiCollections): string
     {
         $poiCollectionsAsArray = [];
-        /** @var PoiCollection $poiCollection */
         foreach ($poiCollections as $poiCollection) {
             $poiCollectionAsArray = ObjectAccess::getGettableProperties($poiCollection);
             unset($poiCollectionAsArray['markerIcons']);
