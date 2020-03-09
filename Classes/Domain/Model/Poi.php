@@ -64,7 +64,6 @@ class Poi extends AbstractEntity
      * Sets the cruserId
      *
      * @param int $cruserId
-     * @return void
      */
     public function setCruserId($cruserId)
     {
@@ -85,7 +84,6 @@ class Poi extends AbstractEntity
      * Sets the pos_index
      *
      * @param int $posIndex
-     * @return void
      */
     public function setPosIndex($posIndex)
     {
@@ -106,7 +104,6 @@ class Poi extends AbstractEntity
      * Sets the latitude
      *
      * @param float $latitude
-     * @return void
      */
     public function setLatitude($latitude)
     {
@@ -127,7 +124,6 @@ class Poi extends AbstractEntity
      * Sets the longitude
      *
      * @param float $longitude
-     * @return void
      */
     public function setLongitude($longitude)
     {
