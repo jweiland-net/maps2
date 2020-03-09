@@ -273,11 +273,6 @@ class MoveOldFlexFormSettingsUpdate
         return $flexObj->flexArray2Xml($array, true);
     }
 
-    /**
-     * Get TYPO3s Connection Pool
-     *
-     * @return ConnectionPool
-     */
     protected function getConnectionPool(): ConnectionPool
     {
         return GeneralUtility::makeInstance(ConnectionPool::class);
