@@ -17,7 +17,6 @@ namespace JWeiland\Maps2\Hook;
 use JWeiland\Maps2\Configuration\ExtConf;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Service\EnvironmentService;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
