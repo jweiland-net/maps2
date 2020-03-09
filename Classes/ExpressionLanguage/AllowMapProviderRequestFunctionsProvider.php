@@ -35,14 +35,10 @@ class AllowMapProviderRequestFunctionsProvider implements ExpressionFunctionProv
 
     protected function getIsRequestToMapProviderAllowed(): ExpressionFunction
     {
-        return new ExpressionFunction(
-            'isRequestToMapProviderAllowed',
-            function () {
-                // Not implemented, we only use the evaluator
-            },
-            function ($existingVariables) {
-                $mapProviderRequestService = GeneralUtility::makeInstance(MapProviderRequestService::class);
-                return $mapProviderRequestService->isRequestToMapProviderAllowed();
-            });
+        $evaluator = function ($existingVariables) {
+            $mapProviderRequestService = GeneralUtility::makeInstance(MapProviderRequestService::class);
+            return $mapProviderRequestService->isRequestToMapProviderAllowed();
+        };
+        return new ExpressionFunction('isRequestToMapProviderAllowed', function () {}, $evaluator);
     }
 }
