@@ -29,12 +29,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class PoiCollectionController extends AbstractController
 {
-    /**
-     * Action show
-     *
-     * @param PoiCollection $poiCollection PoiCollection from URI has highest priority
-     * @throws \Exception
-     */
     public function showAction(PoiCollection $poiCollection = null)
     {
         $poiCollectionRepository = $this->objectManager->get(PoiCollectionRepository::class);
@@ -74,11 +68,6 @@ class PoiCollectionController extends AbstractController
         $this->view->assign('poiCollections', $poiCollections);
     }
 
-    /**
-     * This action shows a form to start a new radius search
-     *
-     * @param Search $search
-     */
     public function searchAction(Search $search = null)
     {
         if ($search === null) {
@@ -87,13 +76,6 @@ class PoiCollectionController extends AbstractController
         $this->view->assign('search', $search);
     }
 
-    /**
-     * action listRadius
-     * Search for POIs within a radius and show them in a list
-     *
-     * @param Search $search
-     * @throws \Exception
-     */
     public function listRadiusAction(Search $search)
     {
         $mapService = GeneralUtility::makeInstance(MapService::class);

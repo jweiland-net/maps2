@@ -113,7 +113,7 @@ class Maps2Registry implements SingletonInterface
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
      */
-    public function add($extensionKey, $tableName, array $options = [], $fieldName = 'tx_maps2_uid', $override = false)
+    public function add(string $extensionKey, string $tableName, array $options = [], string $fieldName = 'tx_maps2_uid', bool $override = false)
     {
         // Do nothing in case of ExtensionManager or Installtool
         if ($this->cacheManager->hasCache('maps2_registry') === false) {
@@ -147,44 +147,22 @@ class Maps2Registry implements SingletonInterface
         return $didRegister;
     }
 
-    /**
-     * Gets all extension keys that registered a maps2 configuration.
-     *
-     * @return array
-     */
-    public function getExtensionKeys()
+    public function getExtensionKeys(): array
     {
         return array_keys($this->extensions);
     }
 
-    /**
-     * Gets all tables with a configured maps2 column
-     *
-     * @return array
-     */
-    public function getCategorizedTables()
+    public function getCategorizedTables(): array
     {
         return array_keys($this->registry);
     }
 
-    /**
-     * Tells whether a table has a maps2 configuration in the registry.
-     *
-     * @param string $tableName Name of the table to be looked up
-     * @param string $fieldName Name of the field to be looked up
-     * @return bool
-     */
-    public function isRegistered($tableName, $fieldName = 'tx_maps2_uid')
+    public function isRegistered(string $tableName, string $fieldName = 'tx_maps2_uid'): bool
     {
         return isset($this->registry[$tableName][$fieldName]);
     }
 
-    /**
-     * Generates tables definitions for all registered tables.
-     *
-     * @return string
-     */
-    public function getDatabaseTableDefinitions()
+    public function getDatabaseTableDefinitions(): string
     {
         $sql = '';
         foreach ($this->getExtensionKeys() as $extensionKey) {
@@ -193,13 +171,7 @@ class Maps2Registry implements SingletonInterface
         return $sql;
     }
 
-    /**
-     * Generates table definitions for registered tables by an extension.
-     *
-     * @param string $extensionKey Extension key to have the database definitions created for
-     * @return string
-     */
-    public function getDatabaseTableDefinition($extensionKey)
+    public function getDatabaseTableDefinition(string $extensionKey): string
     {
         if (!isset($this->extensions[$extensionKey]) || !is_array($this->extensions[$extensionKey])) {
             return '';
@@ -214,13 +186,7 @@ class Maps2Registry implements SingletonInterface
         return $sql;
     }
 
-    /**
-     * Applies the additions directly to the TCA
-     *
-     * @param string $tableName
-     * @param string $fieldName
-     */
-    protected function applyTcaForTableAndField($tableName, $fieldName)
+    protected function applyTcaForTableAndField(string $tableName, string $fieldName)
     {
         $this->addTcaColumn($tableName, $fieldName, $this->registry[$tableName][$fieldName]);
         $this->addToAllTCAtypes($tableName, $fieldName, $this->registry[$tableName][$fieldName]);
@@ -236,7 +202,7 @@ class Maps2Registry implements SingletonInterface
      *              + typesList: list of types that shall visualize the maps2 field
      *              + position: insert position of the maps2 field
      */
-    protected function addToAllTCAtypes($tableName, $fieldName, array $options)
+    protected function addToAllTCAtypes(string $tableName, string $fieldName, array $options)
     {
 
         // Makes sure to add more TCA to an existing structure
@@ -262,16 +228,7 @@ class Maps2Registry implements SingletonInterface
         }
     }
 
-    /**
-     * Creates the 'fieldList' string for $fieldName which includes a maps2 tab.
-     * But only one maps2 tab is added per table.
-     *
-     * @param string $tableName
-     * @param string $fieldName
-     *
-     * @return string
-     */
-    protected function addMaps2Tab($tableName, $fieldName)
+    protected function addMaps2Tab(string $tableName, string $fieldName): string
     {
         $fieldList = '';
         if (!isset($this->addedMaps2Tabs[$tableName])) {
@@ -294,7 +251,7 @@ class Maps2Registry implements SingletonInterface
      *              + l10n_mode
      *              + l10n_display
      */
-    protected function addTcaColumn($tableName, $fieldName, array $options)
+    protected function addTcaColumn(string $tableName, string $fieldName, array $options)
     {
         // Makes sure to add more TCA to an existing structure
         if (isset($GLOBALS['TCA'][$tableName]['columns'])) {
@@ -350,10 +307,9 @@ class Maps2Registry implements SingletonInterface
      * This has to be taken care of manually!
      *
      * @param array $fieldConfigurationOverride Changes to the default configuration
-     *
      * @return array
      */
-    public static function getTcaFieldConfiguration(array $fieldConfigurationOverride = [])
+    public static function getTcaFieldConfiguration(array $fieldConfigurationOverride = []): array
     {
         // Forges a new field, default name is "categories"
         $fieldConfiguration = [
@@ -392,10 +348,9 @@ class Maps2Registry implements SingletonInterface
      *
      * @param array $sqlString
      * @param string $extensionKey
-     *
      * @return array
      */
-    public function addMaps2DatabaseSchemaToTablesDefinition(array $sqlString, $extensionKey)
+    public function addMaps2DatabaseSchemaToTablesDefinition(array $sqlString, string $extensionKey): array
     {
         $sqlString[] = $this->getDatabaseTableDefinition($extensionKey);
         return ['sqlString' => $sqlString, 'extensionKey' => $extensionKey];
@@ -408,10 +363,9 @@ class Maps2Registry implements SingletonInterface
      * Called by Installtool. Compare Database
      *
      * @param array $sqlString
-     *
      * @return array
      */
-    public function addMaps2DatabaseSchemasToTablesDefinition(array $sqlString)
+    public function addMaps2DatabaseSchemasToTablesDefinition(array $sqlString): array
     {
         $sqlString[] = $this->getDatabaseTableDefinitions();
         return ['sqlString' => $sqlString];
@@ -428,7 +382,7 @@ class Maps2Registry implements SingletonInterface
      * @param string $tableName The name of the table for which the registration should be removed.
      * @param string $fieldName The name of the field for which the registration should be removed.
      */
-    protected function remove($tableName, $fieldName)
+    protected function remove(string $tableName, string $fieldName)
     {
         if (!$this->isRegistered($tableName, $fieldName)) {
             return;

@@ -73,7 +73,7 @@ class AddressHelper
      * @param array $options
      * @return bool
      */
-    public function isSameAddress(string $address, array $foreignLocationRecord, array $options)
+    public function isSameAddress(string $address, array $foreignLocationRecord, array $options): bool
     {
         // Convert formatted address like "Mainstreet 15, 51324 Cologne, Germany" into array
         $poiCollectionAddressParts = GeneralUtility::trimExplode(
@@ -124,7 +124,7 @@ class AddressHelper
      * @param array $options The options from maps2 registry
      * @return string
      */
-    protected function getFallbackCountryName(array $options)
+    protected function getFallbackCountryName(array $options): string
     {
         // try to get defaultCountry from maps2 registry
         if (array_key_exists('defaultCountry', $options) && !empty($options['defaultCountry'])) {
@@ -193,7 +193,7 @@ class AddressHelper
      * @param string $countryColumn
      * @return bool
      */
-    protected function canCountryBeLoadedFromStaticCountry(array $record, string $countryColumn)
+    protected function canCountryBeLoadedFromStaticCountry(array $record, string $countryColumn): bool
     {
         return !empty($countryColumn)
             && array_key_exists($countryColumn, $record)

@@ -60,12 +60,7 @@ class AbstractController extends ActionController
 
         $this->settings = $originalSettings;
     }
-    /**
-     * initialize view
-     * add some global vars to view
-     *
-     * @param ViewInterface $view The view to be initialized
-     */
+
     public function initializeView(ViewInterface $view)
     {
         // remove unneeded columns from tt_content array
@@ -82,9 +77,6 @@ class AbstractController extends ActionController
         ]);
     }
 
-    /**
-     * Prepare and check settings
-     */
     protected function prepareSettings()
     {
         if (array_key_exists('infoWindowContentTemplatePath', $this->settings)) {

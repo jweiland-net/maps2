@@ -24,12 +24,6 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  */
 class OpenStreetMapMapper implements MapperInterface
 {
-    /**
-     * Map Response of Open Street Map GeoCode API to ObjectStorage
-     *
-     * @param array $response
-     * @return ObjectStorage|Position[]
-     */
     public function map(array $response): ObjectStorage
     {
         $objectStorage = GeneralUtility::makeInstance(ObjectStorage::class);
@@ -39,13 +33,7 @@ class OpenStreetMapMapper implements MapperInterface
         return $objectStorage;
     }
 
-    /**
-     * Use values from $data to build a new Position Model
-     *
-     * @param $data
-     * @return Position
-     */
-    protected function getPosition($data): Position
+    protected function getPosition(array $data): Position
     {
         $position = GeneralUtility::makeInstance(Position::class);
         $position->setFormattedAddress($this->getFormattedAddress($data));

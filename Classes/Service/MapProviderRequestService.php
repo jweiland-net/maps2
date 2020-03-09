@@ -25,12 +25,7 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
  */
 class MapProviderRequestService
 {
-    /**
-     * Check, if Browser(Cookie) or $_SESSION allows request to server of Map Provider
-     *
-     * @return bool
-     */
-    public function isRequestToMapProviderAllowed()
+    public function isRequestToMapProviderAllowed(): bool
     {
         $extConf = GeneralUtility::makeInstance(ExtConf::class);
 

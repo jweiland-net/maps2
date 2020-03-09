@@ -36,13 +36,6 @@ class StoragePidHelper
         $this->messageHelper = $messageHelper ?? GeneralUtility::makeInstance(MessageHelper::class);
     }
 
-    /**
-     * Gets default storage page where new POI collections should be stored
-     *
-     * @param array $foreignLocationRecord The foreign record with tx_maps2_uid column
-     * @param array $options The configuration of Maps2 Registry
-     * @return int
-     */
     public function getDefaultStoragePidForNewPoiCollection(array $foreignLocationRecord, array $options): int
     {
         $defaultStoragePid = 0;

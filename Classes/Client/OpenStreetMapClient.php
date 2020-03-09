@@ -28,12 +28,7 @@ class OpenStreetMapClient extends AbstractClient
      */
     protected $title = 'Open Street Map';
 
-    /**
-     * Check processed response from Open Street Map Server for errors
-     *
-     * @param array|null $response
-     */
-    protected function checkResponseForErrors($response)
+    protected function checkResponseForErrors(?array $response)
     {
         if ($response === null) {
             $this->messageHelper->addFlashMessage(

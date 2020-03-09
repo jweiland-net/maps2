@@ -90,7 +90,6 @@ class CreateMaps2RecordHook
      * Create a POI collection record while a foreign table was saved
      *
      * @param DataHandler $dataHandler
-     * @throws \Exception
      */
     public function processDatamap_afterAllOperations(DataHandler $dataHandler)
     {

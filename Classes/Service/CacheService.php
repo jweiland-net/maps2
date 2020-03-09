@@ -114,11 +114,6 @@ class CacheService
         return $languageId;
     }
 
-    /**
-     * Check, if we are in Frontend environment
-     *
-     * @return bool
-     */
     protected function isFrontendEnvironment(): bool
     {
         return (defined('TYPO3_MODE') && TYPO3_MODE === 'FE') ?: false;

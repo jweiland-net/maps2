@@ -35,12 +35,6 @@ abstract class AbstractClient implements ClientInterface
         $this->messageHelper = $messageHelper ?? GeneralUtility::makeInstance(MessageHelper::class);;
     }
 
-    /**
-     * Process Google Maps Requests
-     *
-     * @param RequestInterface $request
-     * @return array
-     */
     public function processRequest(RequestInterface $request): array
     {
         if (!$request->isValidRequest()) {
@@ -97,5 +91,5 @@ abstract class AbstractClient implements ClientInterface
         }
     }
 
-    abstract protected function checkResponseForErrors($processedResponse);
+    abstract protected function checkResponseForErrors(?array $processedResponse);
 }

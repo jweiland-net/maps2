@@ -23,8 +23,6 @@ use JWeiland\Maps2\Client\Request\RequestInterface;
 interface ClientInterface
 {
     /**
-     * Process Google Maps Requests
-     *
      * @param RequestInterface $request
      * @return mixed
      * @throws \Exception

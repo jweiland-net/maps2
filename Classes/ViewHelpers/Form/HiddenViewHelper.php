@@ -31,9 +31,6 @@ class HiddenViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\AbstractFormFie
      */
     protected $tagName = 'input';
 
-    /**
-     * Initialize the arguments.
-     */
     public function initializeArguments()
     {
         parent::initializeArguments();

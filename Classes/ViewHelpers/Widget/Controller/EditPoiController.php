@@ -30,9 +30,6 @@ class EditPoiController extends AbstractController
      */
     protected $renderingContext;
 
-    /**
-     * index action
-     */
     public function indexAction()
     {
         $poiCollection = $this->widgetConfiguration['poiCollection'];

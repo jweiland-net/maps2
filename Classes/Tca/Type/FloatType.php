@@ -20,28 +20,14 @@ namespace JWeiland\Maps2\Tca\Type;
  */
 class FloatType
 {
-    /**
-     * This method returns js code for validating float dataTypes
-     *
-     * @return string
-     */
-    public function returnFieldJS()
+    public function returnFieldJS(): string
     {
         return '
             return value;
         ';
     }
 
-    /**
-     * This method converts the value into dataType float
-     *
-     * @param string $value
-     * @param string $is_in
-     * @param string $set
-     *
-     * @return string
-     */
-    public function evaluateFieldValue($value, $is_in, &$set)
+    public function evaluateFieldValue(string $value, $is_in, &$set): string
     {
         return number_format((float)$value, 6);
     }

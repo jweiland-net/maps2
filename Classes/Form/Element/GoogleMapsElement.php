@@ -71,9 +71,6 @@ class GoogleMapsElement extends AbstractFormElement
      */
     protected $messageHelper;
 
-    /**
-     * initializes this class
-     */
     public function init()
     {
         $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);

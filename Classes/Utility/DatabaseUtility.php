@@ -23,13 +23,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class DatabaseUtility
 {
-    /**
-     * Get column definitions from table
-     *
-     * @param string $tableName
-     * @return array
-     */
-    public static function getColumnsFromTable($tableName)
+    public static function getColumnsFromTable(string $tableName): array
     {
         $output = [];
         $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable($tableName);
