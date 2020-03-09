@@ -78,7 +78,6 @@ class PoiCollectionRepository extends Repository
 
     public function findPoisByCategories($categories): QueryResultInterface
     {
-        /** @var Query $query */
         $query = $this->createQuery();
         $orConstraint = [];
         foreach (GeneralUtility::trimExplode(',', $categories) as $category) {

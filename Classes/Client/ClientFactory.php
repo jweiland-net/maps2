@@ -24,7 +24,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class ClientFactory
 {
     /**
-     * @var array
+     * @var ClientInterface[]
      */
     protected $mapping = [
         'gm' => GoogleMapsClient::class,

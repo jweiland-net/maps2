@@ -100,7 +100,6 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
             empty($this->maps2MarkerIconWidth)
             || (!empty($this->maps2MarkerIconWidth) && $this->getMaps2MarkerIcons()->count() === 0)
         ) {
-            /** @var ExtConf $extConf */
             $extConf = GeneralUtility::makeInstance(ExtConf::class);
             return $extConf->getMarkerIconWidth();
         }
@@ -119,7 +118,6 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
             empty($this->maps2MarkerIconHeight)
             || (!empty($this->maps2MarkerIconHeight) && $this->getMaps2MarkerIcons()->count() === 0)
         ) {
-            /** @var ExtConf $extConf */
             $extConf = GeneralUtility::makeInstance(ExtConf::class);
             return $extConf->getMarkerIconHeight();
         }
@@ -138,7 +136,6 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
             empty($this->maps2MarkerIconAnchorPosX)
             || (!empty($this->maps2MarkerIconAnchorPosX) && $this->getMaps2MarkerIcons()->count() === 0)
         ) {
-            /** @var ExtConf $extConf */
             $extConf = GeneralUtility::makeInstance(ExtConf::class);
             return $extConf->getMarkerIconAnchorPosX();
         }
@@ -157,7 +154,6 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
             empty($this->maps2MarkerIconAnchorPosY)
             || (!empty($this->maps2MarkerIconAnchorPosY) && $this->getMaps2MarkerIcons()->count() === 0)
         ) {
-            /** @var ExtConf $extConf */
             $extConf = GeneralUtility::makeInstance(ExtConf::class);
             return $extConf->getMarkerIconAnchorPosY();
         }

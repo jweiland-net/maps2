@@ -37,7 +37,6 @@ class EditPoiController extends AbstractController
             $this->mapService->setInfoWindow($poiCollection);
         } else {
             // this is more a fallback. It would be better that the foreign extension author generates a PoiCollection on its own
-            /** @var PoiCollection $poiCollection */
             $poiCollection = $this->objectManager->get(PoiCollection::class);
             $poiCollection->setTitle('Temporary Fallback');
             $poiCollection->setLatitude($this->extConf->getDefaultLatitude());

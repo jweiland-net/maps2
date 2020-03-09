@@ -221,6 +221,9 @@ class PoiCollection extends AbstractEntity
         $this->pois->detach($poiToRemove);
     }
 
+    /**
+     * @return ObjectStorage|Poi[]
+     */
     public function getPois(): ObjectStorage
     {
         return $this->pois;
@@ -301,6 +304,9 @@ class PoiCollection extends AbstractEntity
         $this->categories->detach($category);
     }
 
+    /**
+     * @return ObjectStorage|Category[]
+     */
     public function getCategories(): ObjectStorage
     {
         return $this->categories;
@@ -398,7 +404,6 @@ class PoiCollection extends AbstractEntity
             if ($categoryWithIcon instanceof Category) {
                 return $categoryWithIcon->getMaps2MarkerIconWidth();
             } else {
-                /** @var ExtConf $extConf */
                 $extConf = GeneralUtility::makeInstance(ExtConf::class);
                 return $extConf->getMarkerIconWidth();
             }
@@ -422,7 +427,6 @@ class PoiCollection extends AbstractEntity
             if ($categoryWithIcon instanceof Category) {
                 return $categoryWithIcon->getMaps2MarkerIconHeight();
             } else {
-                /** @var ExtConf $extConf */
                 $extConf = GeneralUtility::makeInstance(ExtConf::class);
                 return $extConf->getMarkerIconHeight();
             }
@@ -469,7 +473,6 @@ class PoiCollection extends AbstractEntity
             if ($categoryWithIcon instanceof Category) {
                 return $categoryWithIcon->getMaps2MarkerIconAnchorPosY();
             } else {
-                /** @var ExtConf $extConf */
                 $extConf = GeneralUtility::makeInstance(ExtConf::class);
                 return $extConf->getMarkerIconAnchorPosY();
             }

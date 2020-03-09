@@ -175,7 +175,6 @@ class OpenStreetMapElement extends AbstractFormElement
                 case 'Route':
                 case 'Area':
                     // set pois
-                    /** @var $poi \JWeiland\Maps2\Domain\Model\Poi */
                     foreach ($poiCollection->getPois() as $poi) {
                         $latLng['latitude'] = $poi->getLatitude();
                         $latLng['longitude'] = $poi->getLongitude();
