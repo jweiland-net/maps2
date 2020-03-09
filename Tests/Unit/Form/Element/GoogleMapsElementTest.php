@@ -102,7 +102,7 @@ class GoogleMapsElementTest extends UnitTestCase
             ->willReturn($this->poiCollectionRepository->reveal());
         GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManager->reveal());
 
-        $this->extConf = new ExtConf();
+        $this->extConf = new ExtConf([]);
         GeneralUtility::setSingletonInstance(ExtConf::class, $this->extConf);
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey'] = 'test@123';
 

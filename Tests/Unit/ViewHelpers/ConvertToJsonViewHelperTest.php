@@ -105,7 +105,7 @@ class ConvertToJsonViewHelperTest extends UnitTestCase
             }
         );
 
-        GeneralUtility::setSingletonInstance(ExtConf::class, new ExtConf());
+        GeneralUtility::setSingletonInstance(ExtConf::class, new ExtConf([]));
 
         $json = $this->subject->render();
 

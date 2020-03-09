@@ -56,10 +56,12 @@ class ExtConf implements SingletonInterface
     protected $markerIconAnchorPosX = 0;
     protected $markerIconAnchorPosY = 0;
 
-    public function __construct()
+    public function __construct(array $extConf = null)
     {
-        $extConf = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('maps2');
-        if (is_array($extConf) && count($extConf)) {
+        if (!isset($extConf)) {
+            $extConf = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('maps2');
+        }
+        if (is_array($extConf) && !empty($extConf)) {
             // call setter method foreach configuration entry
             foreach ($extConf as $key => $value) {
                 $methodName = 'set' . ucfirst($key);

@@ -104,7 +104,7 @@ class MapServiceTest extends UnitTestCase
             'uid' => 123
         ];
 
-        $extConf = new ExtConf();
+        $extConf = new ExtConf([]);
         $extConf->setAllowMapTemplatePath('typo3conf/ext/maps/Resources/Private/Templates/AllowMapForm.html');
         GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
 
@@ -197,7 +197,7 @@ class MapServiceTest extends UnitTestCase
             'uid' => 123
         ];
 
-        $extConf = new ExtConf();
+        $extConf = new ExtConf([]);
         $extConf->setAllowMapTemplatePath('typo3conf/ext/maps/Resources/Private/Templates/AllowMapForm.html');
         GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
 
@@ -291,7 +291,7 @@ class MapServiceTest extends UnitTestCase
             'uid' => 123
         ];
 
-        $extConf = new ExtConf();
+        $extConf = new ExtConf([]);
         $extConf->setAllowMapTemplatePath('typo3conf/ext/maps/Resources/Private/Templates/AllowMapForm.html');
         GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
 
@@ -365,7 +365,7 @@ class MapServiceTest extends UnitTestCase
             ->shouldBeCalled()
             ->willReturn($this->settings);
 
-        $extConf = new ExtConf();
+        $extConf = new ExtConf([]);
         $extConf->setMapProvider('osm');
         GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
 
@@ -392,7 +392,7 @@ class MapServiceTest extends UnitTestCase
             ->shouldBeCalled()
             ->willReturn($this->settings);
 
-        $extConf = new ExtConf();
+        $extConf = new ExtConf([]);
         $extConf->setMapProvider('gm');
         GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
 
@@ -419,7 +419,7 @@ class MapServiceTest extends UnitTestCase
             ->shouldBeCalled()
             ->willReturn($this->settings);
 
-        $extConf = new ExtConf();
+        $extConf = new ExtConf([]);
         $extConf->setMapProvider('both');
         $extConf->setDefaultMapProvider('osm');
         GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
@@ -447,7 +447,7 @@ class MapServiceTest extends UnitTestCase
             ->shouldBeCalled()
             ->willReturn($this->settings);
 
-        $extConf = new ExtConf();
+        $extConf = new ExtConf([]);
         $extConf->setMapProvider('both');
         $extConf->setDefaultMapProvider('osm');
         GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
@@ -477,7 +477,7 @@ class MapServiceTest extends UnitTestCase
             ->shouldBeCalled()
             ->willReturn($this->settings);
 
-        $extConf = new ExtConf();
+        $extConf = new ExtConf([]);
         $extConf->setMapProvider('both');
         $extConf->setDefaultMapProvider('osm');
         GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
@@ -509,7 +509,7 @@ class MapServiceTest extends UnitTestCase
             ->shouldBeCalled()
             ->willReturn($this->settings);
 
-        $extConf = new ExtConf();
+        $extConf = new ExtConf([]);
         $extConf->setMapProvider('both');
         $extConf->setDefaultMapProvider('gm');
         GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
@@ -539,7 +539,7 @@ class MapServiceTest extends UnitTestCase
             ->shouldBeCalled()
             ->willReturn($this->settings);
 
-        $extConf = new ExtConf();
+        $extConf = new ExtConf([]);
         $extConf->setMapProvider('both');
         $extConf->setDefaultMapProvider('gm');
         GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);

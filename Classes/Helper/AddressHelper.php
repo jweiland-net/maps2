@@ -107,7 +107,7 @@ class AddressHelper
     protected function getCountryName(array $record, array $options): string
     {
         if ($this->canCountryBeLoadedFromStaticCountry($record, $options['countryColumn'])) {
-            $countryName = $this->getCountryNameFromStaticCountries($record[$options['countryColumn']]);
+            $countryName = $this->getCountryNameFromStaticCountries((int)$record[$options['countryColumn']]);
         } elseif (array_key_exists($options['countryColumn'], $record)) {
             $countryName = $record[$options['countryColumn']];
         } else {
@@ -153,12 +153,6 @@ class AddressHelper
         return '';
     }
 
-    /**
-     * Get country name from static_countries table
-     *
-     * @param int $uid
-     * @return string
-     */
     protected function getCountryNameFromStaticCountries(int $uid): string
     {
         $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable('static_countries');
