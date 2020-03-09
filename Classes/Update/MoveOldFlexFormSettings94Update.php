@@ -31,10 +31,7 @@ class MoveOldFlexFormSettings94Update implements UpgradeWizardInterface
 
     public function __construct(MoveOldFlexFormSettingsUpdate $flexFormUpdate = null)
     {
-        if ($flexFormUpdate === null) {
-            $flexFormUpdate = GeneralUtility::makeInstance(MoveOldFlexFormSettingsUpdate::class);
-        }
-        $this->flexFormUpdate = $flexFormUpdate;
+        $this->flexFormUpdate = $flexFormUpdate ?? GeneralUtility::makeInstance(MoveOldFlexFormSettingsUpdate::class);
     }
 
     /**

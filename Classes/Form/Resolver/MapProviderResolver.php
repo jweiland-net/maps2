@@ -34,12 +34,6 @@ class MapProviderResolver implements NodeResolverInterface
      */
     protected $data = [];
 
-    /**
-     * Default constructor receives full data array
-     *
-     * @param NodeFactory $nodeFactory
-     * @param array $data
-     */
     public function __construct(NodeFactory $nodeFactory, array $data)
     {
         $this->data = $data;

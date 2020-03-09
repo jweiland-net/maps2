@@ -73,21 +73,9 @@ class CreateMaps2RecordHook
         FrontendInterface $maps2RegistryCache = null
     ) {
         $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-
-        if ($geoCodeService === null) {
-            $geoCodeService = $this->objectManager->get(GeoCodeService::class);
-        }
-        $this->geoCodeService = $geoCodeService;
-
-        if ($messageHelper === null) {
-            $messageHelper = GeneralUtility::makeInstance(MessageHelper::class);
-        }
-        $this->messageHelper = $messageHelper;
-
-        if ($signalSlotDispatcher === null) {
-            $signalSlotDispatcher = GeneralUtility::makeInstance(Dispatcher::class);
-        }
-        $this->signalSlotDispatcher = $signalSlotDispatcher;
+        $this->geoCodeService = $geoCodeService ?? $this->objectManager->get(GeoCodeService::class);
+        $this->messageHelper = $messageHelper ?? GeneralUtility::makeInstance(MessageHelper::class);
+        $this->signalSlotDispatcher = $signalSlotDispatcher ?? GeneralUtility::makeInstance(Dispatcher::class);
 
         if ($maps2RegistryCache === null) {
             $maps2RegistryCache = $this->objectManager
