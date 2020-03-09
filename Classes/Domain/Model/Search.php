@@ -48,7 +48,6 @@ class Search
      * Sets the address
      *
      * @param string $address
-     * @return void
      */
     public function setAddress($address)
     {
@@ -69,7 +68,6 @@ class Search
      * Sets the radius
      *
      * @param int $radius
-     * @return void
      */
     public function setRadius($radius)
     {

@@ -76,8 +76,6 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
 
     /**
      * Initializes all ObjectStorage properties.
-     *
-     * @return void
      */
     protected function initStorageObjects()
     {
@@ -121,8 +119,6 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
      * Sets the maps2MarkerIcons
      *
      * @param ObjectStorage $maps2MarkerIcons
-     *
-     * @return void
      */
     public function setMaps2MarkerIcons(ObjectStorage $maps2MarkerIcons)
     {
@@ -152,8 +148,6 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
      * Sets the maps2MarkerIconWidth
      *
      * @param int $maps2MarkerIconWidth
-     *
-     * @return void
      */
     public function setMaps2MarkerIconWidth($maps2MarkerIconWidth)
     {
@@ -183,8 +177,6 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
      * Sets the maps2MarkerIconHeight
      *
      * @param int $maps2MarkerIconHeight
-     *
-     * @return void
      */
     public function setMaps2MarkerIconHeight($maps2MarkerIconHeight)
     {
@@ -214,8 +206,6 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
      * Sets the maps2MarkerIconAnchorPosX
      *
      * @param int $maps2MarkerIconAnchorPosX
-     *
-     * @return void
      */
     public function setMaps2MarkerIconAnchorPosX($maps2MarkerIconAnchorPosX)
     {
@@ -245,8 +235,6 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
      * Sets the maps2MarkerIconAnchorPosY
      *
      * @param int $maps2MarkerIconAnchorPosY
-     *
-     * @return void
      */
     public function setMaps2MarkerIconAnchorPosY($maps2MarkerIconAnchorPosY)
     {
@@ -267,8 +255,6 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
      * Sets the sorting
      *
      * @param int $sorting
-     *
-     * @return void
      */
     public function setSorting($sorting)
     {

@@ -28,8 +28,6 @@ Now it's time to process the fields in your controller.
    /**
     * initialize create action
     * allow modification of submodel
-    *
-    * @return void
     */
    public function initializeCreateAction()
    {

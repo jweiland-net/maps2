@@ -237,8 +237,6 @@ class Maps2Registry implements SingletonInterface
      *              + fieldList: field configuration to be added to showitems
      *              + typesList: list of types that shall visualize the maps2 field
      *              + position: insert position of the maps2 field
-     *
-     * @return void
      */
     protected function addToAllTCAtypes($tableName, $fieldName, array $options)
     {
@@ -297,8 +295,6 @@ class Maps2Registry implements SingletonInterface
      *              + interface: boolean if the maps2 should be included in the "interface" section of the TCA table
      *              + l10n_mode
      *              + l10n_display
-     *
-     * @return void
      */
     protected function addTcaColumn($tableName, $fieldName, array $options)
     {

@@ -41,7 +41,6 @@ class PoiCollectionRepository extends Repository
      * inject environmentService
      *
      * @param EnvironmentService $environmentService
-     * @return void
      */
     public function injectEnvironmentService(EnvironmentService $environmentService)
     {

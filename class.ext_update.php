@@ -113,8 +113,6 @@ class ext_update
 
     /**
      * The actual update function. Add your update task in here.
-     *
-     * @return void
      */
     protected function processUpdates()
     {
@@ -124,8 +122,6 @@ class ext_update
 
     /**
      * Remove SwitchableControllerActions from tt_content records as they are not needed anymore
-     *
-     * @return void
      */
     protected function removeSCAFromTtContentRecords()
     {
