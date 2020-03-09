@@ -1,5 +1,5 @@
 <?php
-namespace JWeiland\Maps2\Tests\Unit\Helper;
+namespace JWeiland\Maps2\Tests\Functional\Helper;
 
 /*
  * This file is part of the maps2 project.
@@ -16,15 +16,11 @@ namespace JWeiland\Maps2\Tests\Unit\Helper;
 
 use JWeiland\Maps2\Helper\MessageHelper;
 use JWeiland\Maps2\Helper\StoragePidHelper;
-use JWeiland\Maps2\Tests\Unit\AbstractUnitTestCase;
+use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
-use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\VariableFrontend;
-use TYPO3\CMS\Core\Messaging\FlashMessage;
-use TYPO3\CMS\Core\Messaging\FlashMessageQueue;
-use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -32,7 +28,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 /**
  * Test StoragePidHelper
  */
-class StoragePidHelperTest extends AbstractUnitTestCase
+class StoragePidHelperTest extends FunctionalTestCase
 {
     /**
      * @var StoragePidHelper
@@ -50,6 +46,7 @@ class StoragePidHelperTest extends AbstractUnitTestCase
      */
     protected function setUp()
     {
+        parent::setUp();
         $this->messageHelperProphecy = $this->prophesize(MessageHelper::class);
         $this->subject = new StoragePidHelper($this->messageHelperProphecy->reveal());
     }
@@ -100,7 +97,6 @@ class StoragePidHelperTest extends AbstractUnitTestCase
         $variableFrontend = $this->prophesize(VariableFrontend::class);
         $variableFrontend
             ->has('pagesTsConfigIdToHash200')
-            ->shouldBeCalled()
             ->willReturn(true);
         $variableFrontend
             ->get('pagesTsConfigIdToHash200')
@@ -114,7 +110,7 @@ class StoragePidHelperTest extends AbstractUnitTestCase
         /** @var CacheManager|ObjectProphecy $cacheManagerProphecy */
         $cacheManagerProphecy = $this->prophesize(CacheManager::class);
         $cacheManagerProphecy
-            ->getCache('cache_runtime')
+            ->getCache(Argument::containingString('runtime'))
             ->shouldBeCalled()
             ->willReturn($variableFrontend->reveal());
         GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerProphecy->reveal());
@@ -141,7 +137,6 @@ class StoragePidHelperTest extends AbstractUnitTestCase
         $variableFrontend = $this->prophesize(VariableFrontend::class);
         $variableFrontend
             ->has('pagesTsConfigIdToHash200')
-            ->shouldBeCalled()
             ->willReturn(true);
         $variableFrontend
             ->get('pagesTsConfigIdToHash200')
@@ -155,7 +150,7 @@ class StoragePidHelperTest extends AbstractUnitTestCase
         /** @var CacheManager|ObjectProphecy $cacheManagerProphecy */
         $cacheManagerProphecy = $this->prophesize(CacheManager::class);
         $cacheManagerProphecy
-            ->getCache('cache_runtime')
+            ->getCache(Argument::containingString('runtime'))
             ->shouldBeCalled()
             ->willReturn($variableFrontend->reveal());
         GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerProphecy->reveal());
@@ -184,7 +179,6 @@ class StoragePidHelperTest extends AbstractUnitTestCase
         $variableFrontend = $this->prophesize(VariableFrontend::class);
         $variableFrontend
             ->has('pagesTsConfigIdToHash200')
-            ->shouldBeCalled()
             ->willReturn(true);
         $variableFrontend
             ->get('pagesTsConfigIdToHash200')
@@ -198,7 +192,7 @@ class StoragePidHelperTest extends AbstractUnitTestCase
         /** @var CacheManager|ObjectProphecy $cacheManagerProphecy */
         $cacheManagerProphecy = $this->prophesize(CacheManager::class);
         $cacheManagerProphecy
-            ->getCache('cache_runtime')
+            ->getCache(Argument::containingString('runtime'))
             ->shouldBeCalled()
             ->willReturn($variableFrontend->reveal());
         GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerProphecy->reveal());
@@ -261,7 +255,6 @@ class StoragePidHelperTest extends AbstractUnitTestCase
         $variableFrontend = $this->prophesize(VariableFrontend::class);
         $variableFrontend
             ->has('pagesTsConfigIdToHash200')
-            ->shouldBeCalled()
             ->willReturn(true);
         $variableFrontend
             ->get('pagesTsConfigIdToHash200')
@@ -275,7 +268,7 @@ class StoragePidHelperTest extends AbstractUnitTestCase
         /** @var CacheManager|ObjectProphecy $cacheManagerProphecy */
         $cacheManagerProphecy = $this->prophesize(CacheManager::class);
         $cacheManagerProphecy
-            ->getCache('cache_runtime')
+            ->getCache(Argument::containingString('runtime'))
             ->shouldBeCalled()
             ->willReturn($variableFrontend->reveal());
         GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerProphecy->reveal());
@@ -319,7 +312,6 @@ class StoragePidHelperTest extends AbstractUnitTestCase
         $variableFrontend = $this->prophesize(VariableFrontend::class);
         $variableFrontend
             ->has('pagesTsConfigIdToHash200')
-            ->shouldBeCalled()
             ->willReturn(true);
         $variableFrontend
             ->get('pagesTsConfigIdToHash200')
@@ -333,7 +325,7 @@ class StoragePidHelperTest extends AbstractUnitTestCase
         /** @var CacheManager|ObjectProphecy $cacheManagerProphecy */
         $cacheManagerProphecy = $this->prophesize(CacheManager::class);
         $cacheManagerProphecy
-            ->getCache('cache_runtime')
+            ->getCache(Argument::containingString('runtime'))
             ->shouldBeCalled()
             ->willReturn($variableFrontend->reveal());
         GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerProphecy->reveal());
@@ -378,7 +370,6 @@ class StoragePidHelperTest extends AbstractUnitTestCase
         $variableFrontend = $this->prophesize(VariableFrontend::class);
         $variableFrontend
             ->has('pagesTsConfigIdToHash5438')
-            ->shouldBeCalled()
             ->willReturn(true);
         $variableFrontend
             ->get('pagesTsConfigIdToHash5438')
@@ -398,7 +389,7 @@ class StoragePidHelperTest extends AbstractUnitTestCase
         /** @var CacheManager|ObjectProphecy $cacheManagerProphecy */
         $cacheManagerProphecy = $this->prophesize(CacheManager::class);
         $cacheManagerProphecy
-            ->getCache('cache_runtime')
+            ->getCache(Argument::containingString('runtime'))
             ->shouldBeCalled()
             ->willReturn($variableFrontend->reveal());
         GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerProphecy->reveal());
@@ -425,7 +416,6 @@ class StoragePidHelperTest extends AbstractUnitTestCase
         $variableFrontend = $this->prophesize(VariableFrontend::class);
         $variableFrontend
             ->has('pagesTsConfigIdToHash5438')
-            ->shouldBeCalled()
             ->willReturn(true);
         $variableFrontend
             ->get('pagesTsConfigIdToHash5438')
@@ -445,7 +435,7 @@ class StoragePidHelperTest extends AbstractUnitTestCase
         /** @var CacheManager|ObjectProphecy $cacheManagerProphecy */
         $cacheManagerProphecy = $this->prophesize(CacheManager::class);
         $cacheManagerProphecy
-            ->getCache('cache_runtime')
+            ->getCache(Argument::containingString('runtime'))
             ->shouldBeCalled()
             ->willReturn($variableFrontend->reveal());
         GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerProphecy->reveal());
@@ -478,7 +468,6 @@ class StoragePidHelperTest extends AbstractUnitTestCase
         $variableFrontend = $this->prophesize(VariableFrontend::class);
         $variableFrontend
             ->has('pagesTsConfigIdToHash5438')
-            ->shouldBeCalled()
             ->willReturn(true);
         $variableFrontend
             ->get('pagesTsConfigIdToHash5438')
@@ -501,7 +490,7 @@ class StoragePidHelperTest extends AbstractUnitTestCase
         /** @var CacheManager|ObjectProphecy $cacheManagerProphecy */
         $cacheManagerProphecy = $this->prophesize(CacheManager::class);
         $cacheManagerProphecy
-            ->getCache('cache_runtime')
+            ->getCache(Argument::containingString('runtime'))
             ->shouldBeCalled()
             ->willReturn($variableFrontend->reveal());
         GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerProphecy->reveal());
@@ -534,7 +523,6 @@ class StoragePidHelperTest extends AbstractUnitTestCase
         $variableFrontend = $this->prophesize(VariableFrontend::class);
         $variableFrontend
             ->has('pagesTsConfigIdToHash5438')
-            ->shouldBeCalled()
             ->willReturn(true);
         $variableFrontend
             ->get('pagesTsConfigIdToHash5438')
@@ -554,7 +542,7 @@ class StoragePidHelperTest extends AbstractUnitTestCase
         /** @var CacheManager|ObjectProphecy $cacheManagerProphecy */
         $cacheManagerProphecy = $this->prophesize(CacheManager::class);
         $cacheManagerProphecy
-            ->getCache('cache_runtime')
+            ->getCache(Argument::containingString('runtime'))
             ->shouldBeCalled()
             ->willReturn($variableFrontend->reveal());
         GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerProphecy->reveal());
@@ -583,7 +571,6 @@ class StoragePidHelperTest extends AbstractUnitTestCase
         $variableFrontend = $this->prophesize(VariableFrontend::class);
         $variableFrontend
             ->has('pagesTsConfigIdToHash5438')
-            ->shouldBeCalled()
             ->willReturn(true);
         $variableFrontend
             ->get('pagesTsConfigIdToHash5438')
@@ -603,7 +590,7 @@ class StoragePidHelperTest extends AbstractUnitTestCase
         /** @var CacheManager|ObjectProphecy $cacheManagerProphecy */
         $cacheManagerProphecy = $this->prophesize(CacheManager::class);
         $cacheManagerProphecy
-            ->getCache('cache_runtime')
+            ->getCache(Argument::containingString('runtime'))
             ->shouldBeCalled()
             ->willReturn($variableFrontend->reveal());
         GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerProphecy->reveal());
@@ -664,7 +651,6 @@ class StoragePidHelperTest extends AbstractUnitTestCase
         $variableFrontend = $this->prophesize(VariableFrontend::class);
         $variableFrontend
             ->has('pagesTsConfigIdToHash5438')
-            ->shouldBeCalled()
             ->willReturn(true);
         $variableFrontend
             ->get('pagesTsConfigIdToHash5438')
@@ -684,7 +670,7 @@ class StoragePidHelperTest extends AbstractUnitTestCase
         /** @var CacheManager|ObjectProphecy $cacheManagerProphecy */
         $cacheManagerProphecy = $this->prophesize(CacheManager::class);
         $cacheManagerProphecy
-            ->getCache('cache_runtime')
+            ->getCache(Argument::containingString('runtime'))
             ->shouldBeCalled()
             ->willReturn($variableFrontend->reveal());
         GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerProphecy->reveal());
@@ -749,7 +735,6 @@ class StoragePidHelperTest extends AbstractUnitTestCase
         $variableFrontend = $this->prophesize(VariableFrontend::class);
         $variableFrontend
             ->has('pagesTsConfigIdToHash5438')
-            ->shouldBeCalled()
             ->willReturn(true);
         $variableFrontend
             ->get('pagesTsConfigIdToHash5438')
@@ -772,7 +757,7 @@ class StoragePidHelperTest extends AbstractUnitTestCase
         /** @var CacheManager|ObjectProphecy $cacheManagerProphecy */
         $cacheManagerProphecy = $this->prophesize(CacheManager::class);
         $cacheManagerProphecy
-            ->getCache('cache_runtime')
+            ->getCache(Argument::containingString('runtime'))
             ->shouldBeCalled()
             ->willReturn($variableFrontend->reveal());
         GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerProphecy->reveal());
