@@ -1,5 +1,4 @@
 <?php
-declare(strict_types = 1);
 namespace JWeiland\Maps2\Form\Element;
 
 /*
@@ -97,7 +96,7 @@ class ReadOnlyInputTextElement extends AbstractFormElement
 
         // @todo: The whole eval handling is a mess and needs refactoring
         foreach ($evalList as $func) {
-            // @todo: This is ugly: The code should find out on it's own whether a eval definition is a
+            // @todo: This is ugly: The code should find out on it's own whether an eval definition is a
             // @todo: keyword like "date", or a class reference. The global registration could be dropped then
             // Pair hook to the one in \TYPO3\CMS\Core\DataHandling\DataHandler::checkValue_input_Eval()
             if (isset($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tce']['formevals'][$func])) {
@@ -188,18 +187,23 @@ class ReadOnlyInputTextElement extends AbstractFormElement
             }
             $callbackParams = [ $table, $row['uid'], $fieldName, $parameterArray['itemFormElName'] ];
             $id = 'slider-' . md5($parameterArray['itemFormElName']);
-            $valueSliderHtml[] = '<div';
-            $valueSliderHtml[] =    ' id="' . $id . '"';
-            $valueSliderHtml[] =    ' data-slider-id="' . $id . '"';
-            $valueSliderHtml[] =    ' data-slider-min="' . (int)$min . '"';
-            $valueSliderHtml[] =    ' data-slider-max="' . (int)$max . '"';
-            $valueSliderHtml[] =    ' data-slider-step="' . htmlspecialchars($step) . '"';
-            $valueSliderHtml[] =    ' data-slider-value="' . htmlspecialchars($itemValue) . '"';
-            $valueSliderHtml[] =    ' data-slider-value-type="' . htmlspecialchars($valueType) . '"';
-            $valueSliderHtml[] =    ' data-slider-item-name="' . htmlspecialchars($parameterArray['itemFormElName']) . '"';
-            $valueSliderHtml[] =    ' data-slider-callback-params="' . htmlspecialchars(json_encode($callbackParams)) . '"';
-            $valueSliderHtml[] =    ' style="width: ' . $width . 'px;"';
-            $valueSliderHtml[] = '>';
+            $rangeAttributes = [
+                'id' => $id,
+                'type' => 'range',
+                'class' => 'slider',
+                'min' => (int)$min,
+                'max' => (int)$max,
+                'step' => $step,
+                'style' => 'width: ' . (int)$width . 'px',
+                'title' => $itemValue,
+                'value' => $itemValue,
+                'data-slider-id' => $id,
+                'data-slider-value-type' => $valueType,
+                'data-slider-item-name' => $parameterArray['itemFormElName'],
+                'data-slider-callback-params' => json_encode($callbackParams),
+            ];
+            $valueSliderHtml[] = '<div class="slider-wrapper">';
+            $valueSliderHtml[] = '<input ' . GeneralUtility::implodeAttributes($rangeAttributes, true) . '>';
             $valueSliderHtml[] = '</div>';
         }
 
