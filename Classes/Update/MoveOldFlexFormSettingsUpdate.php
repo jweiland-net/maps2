@@ -14,22 +14,32 @@ namespace JWeiland\Maps2\Update;
  *
  * The TYPO3 project - inspiring people to share!
  */
+
 use TYPO3\CMS\Core\Configuration\FlexForm\FlexFormTools;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\Exception\MissingArrayPathException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Install\Updates\DatabaseUpdatedPrerequisite;
+use TYPO3\CMS\Install\Updates\UpgradeWizardInterface;
 
 /**
  * With maps2 5.0.0 we have moved some FlexForm Settings to another sheet.
  * To prevent duplicates in DB, this update wizard removes old settings from FlexForm.
  */
-class MoveOldFlexFormSettingsUpdate
+class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
 {
     /**
-     * Return the identifier for this wizard
-     * This should be the same string as used in the ext_localconf class registration
-     *
+     * @var MoveOldFlexFormSettingsUpdate
+     */
+    protected $flexFormUpdate;
+
+    public function __construct(MoveOldFlexFormSettingsUpdate $flexFormUpdate = null)
+    {
+        $this->flexFormUpdate = $flexFormUpdate ?? GeneralUtility::makeInstance(MoveOldFlexFormSettingsUpdate::class);
+    }
+
+    /**
      * @return string
      */
     public function getIdentifier(): string
@@ -38,8 +48,6 @@ class MoveOldFlexFormSettingsUpdate
     }
 
     /**
-     * Return the speaking name of this wizard
-     *
      * @return string
      */
     public function getTitle(): string
@@ -48,8 +56,6 @@ class MoveOldFlexFormSettingsUpdate
     }
 
     /**
-     * Return the description for this wizard
-     *
      * @return string
      */
     public function getDescription(): string
@@ -59,9 +65,7 @@ class MoveOldFlexFormSettingsUpdate
     }
 
     /**
-     * Checks whether updates are required.
-     *
-     * @return bool Whether an update is required (TRUE) or not (FALSE)
+     * @return bool
      */
     public function updateNecessary(): bool
     {
@@ -83,10 +87,10 @@ class MoveOldFlexFormSettingsUpdate
 
             try {
                 if (
-                    ArrayUtility::getValueByPath(
-                        $valueFromDatabase,
-                        'data/sGoogleMapsOptions/lDEF/settings.activateScrollWheel'
-                    )
+                ArrayUtility::getValueByPath(
+                    $valueFromDatabase,
+                    'data/sGoogleMapsOptions/lDEF/settings.activateScrollWheel'
+                )
                 ) {
                     return true;
                 }
@@ -121,9 +125,7 @@ class MoveOldFlexFormSettingsUpdate
     }
 
     /**
-     * Performs the accordant updates.
-     *
-     * @return bool Whether everything went smoothly or not
+     * @return bool
      */
     public function executeUpdate(): bool
     {
@@ -158,6 +160,16 @@ class MoveOldFlexFormSettingsUpdate
         }
 
         return true;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getPrerequisites(): array
+    {
+        return [
+            DatabaseUpdatedPrerequisite::class
+        ];
     }
 
     /**
