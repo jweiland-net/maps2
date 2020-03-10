@@ -5,6 +5,20 @@ Updating
 
 If you update EXT:maps2 to a newer version, please read this section carefully!
 
+Update to Version 9.0.0
+-----------------------
+
+As Maps2 is TYPO3 10 compatible now we have removed TYPO3 8 compatibility. Please install an old version of maps2,
+if you still need TYPO3 8 compatibility. On GitHub we have created a new Branch called `TYPO3_8-7`.
+
+We have removed Maps2Registry Cache from TYPO3 CachingFramework. So you can remove the Maps2Registry Caching
+Tables from DB. The cached Maps2Registry configuration will now be saved in typo3conf/Maps2/Registry.json. In case
+of Composer it will be stored in config/Maps2/Registry.json.
+
+As a normal user you only need to clear the caches.
+If you make use of the Maps2Registry API, please check, if the new json configuration file was created. Further
+it would be good to check, if the tx_maps2_uid columns still exists in DB.
+
 Update to Version 8.0.0
 -----------------------
 
