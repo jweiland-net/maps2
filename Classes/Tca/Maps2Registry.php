@@ -52,7 +52,7 @@ class Maps2Registry implements SingletonInterface
      */
     protected $template = '';
 
-    public static function getInstance(): Maps2Registry
+    public static function getInstance(): self
     {
         return GeneralUtility::makeInstance(__CLASS__);
     }
