@@ -22,6 +22,7 @@ use JWeiland\Maps2\Service\GeoCodeService;
 use JWeiland\Maps2\Service\MapService;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
@@ -69,21 +70,23 @@ class CreateMaps2RecordHook
     public function __construct(
         GeoCodeService $geoCodeService = null,
         MessageHelper $messageHelper = null,
-        Dispatcher $signalSlotDispatcher = null,
-        FrontendInterface $maps2RegistryCache = null
+        Dispatcher $signalSlotDispatcher = null
     ) {
         $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $this->geoCodeService = $geoCodeService ?? $this->objectManager->get(GeoCodeService::class);
         $this->messageHelper = $messageHelper ?? GeneralUtility::makeInstance(MessageHelper::class);
         $this->signalSlotDispatcher = $signalSlotDispatcher ?? GeneralUtility::makeInstance(Dispatcher::class);
 
-        if ($maps2RegistryCache === null) {
-            $maps2RegistryCache = $this->objectManager
-                ->get(CacheManager::class)
-                ->getCache('maps2_registry');
+        $configurationFile = Environment::getConfigPath() . '/Maps2/Registry.json';
+        if (@is_file($configurationFile)) {
+            $configuration = json_decode(file_get_contents($configurationFile), true);
+            if (
+                is_array($configuration) && count($configuration) === 2
+                && array_key_exists('registry', $configuration)
+            ) {
+                $this->columnRegistry = $configuration['registry'] ?: [];
+            }
         }
-        $this->maps2RegistryCache = $maps2RegistryCache;
-        $this->columnRegistry = $this->maps2RegistryCache->get('fields') ?: [];
     }
 
     /**
