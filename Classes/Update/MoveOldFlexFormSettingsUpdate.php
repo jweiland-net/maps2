@@ -30,16 +30,6 @@ use TYPO3\CMS\Install\Updates\UpgradeWizardInterface;
 class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
 {
     /**
-     * @var MoveOldFlexFormSettingsUpdate
-     */
-    protected $flexFormUpdate;
-
-    public function __construct(MoveOldFlexFormSettingsUpdate $flexFormUpdate = null)
-    {
-        $this->flexFormUpdate = $flexFormUpdate ?? GeneralUtility::makeInstance(MoveOldFlexFormSettingsUpdate::class);
-    }
-
-    /**
      * @return string
      */
     public function getIdentifier(): string
