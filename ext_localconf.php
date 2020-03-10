@@ -52,11 +52,7 @@ call_user_func(function() {
     // Create maps2 records while saving foreign records
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][] = \JWeiland\Maps2\Hook\CreateMaps2RecordHook::class;
     // Move old flex form settings to new location before saving to DB
-    if (version_compare(TYPO3_branch, '9.4', '>=')) {
-        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['maps2MoveFlexFormFields'] = \JWeiland\Maps2\Update\MoveOldFlexFormSettings94Update::class;
-    } else {
-        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['maps2MoveFlexFormFields'] = \JWeiland\Maps2\Update\MoveOldFlexFormSettings87Update::class;
-    }
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['maps2MoveFlexFormFields'] = \JWeiland\Maps2\Update\MoveOldFlexFormSettingsUpdate::class;
 
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1530869394] = [
         'nodeName' => 'maps2ReadOnly',
