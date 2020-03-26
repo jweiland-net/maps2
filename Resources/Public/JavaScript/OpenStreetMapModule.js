@@ -2,11 +2,11 @@
  * Module: TYPO3/CMS/Maps2/GoogleMapsModule
  */
 define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDragPath", "leafletEditable"], function($, L) {
-    var initialize = function(element, config, extConf) {
-        var marker = {};
-        var map = {};
+    let initialize = function(element, config, extConf) {
+        let marker = {};
+        let map = {};
 
-        var createMap = function () {
+        let createMap = function () {
             map = L.map(
                 element,
                 {
@@ -25,7 +25,7 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDrag
         /**
          * Create Marker
          */
-        var createMarker = function() {
+        let createMarker = function() {
             marker = L.marker(
                 [config.latitude, config.longitude],
                 {
@@ -56,10 +56,10 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDrag
         /**
          * Create Area
          */
-        var createArea = function() {
-            var area = {};
-            var coordinatesArray = [];
-            var options = {
+        let createArea = function() {
+            let area = {};
+            let coordinatesArray = [];
+            let options = {
                 color: extConf.strokeColor,
                 weight: extConf.strokeWeight,
                 opacity: extConf.strokeOpacity,
@@ -68,7 +68,7 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDrag
             };
 
             if (typeof config.pois !== 'undefined') {
-                for (var i = 0; i < config.pois.length; i++) {
+                for (let i = 0; i < config.pois.length; i++) {
                     coordinatesArray.push([config.pois[i].latitude, config.pois[i].longitude]);
                 }
             }
@@ -101,17 +101,17 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDrag
         /**
          * Create Route
          */
-        var createRoute = function() {
-            var route = {};
-            var coordinatesArray = [];
-            var options = {
+        let createRoute = function() {
+            let route = {};
+            let coordinatesArray = [];
+            let options = {
                 color: extConf.strokeColor,
                 weight: extConf.strokeWeight,
                 opacity: extConf.strokeOpacity
             };
 
             if (typeof config.pois !== 'undefined') {
-                for (var i = 0; i < config.pois.length; i++) {
+                for (let i = 0; i < config.pois.length; i++) {
                     coordinatesArray.push([config.pois[i].latitude, config.pois[i].longitude]);
                 }
             }
@@ -144,7 +144,7 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDrag
         /**
          * Create Radius
          */
-        var createRadius = function() {
+        let createRadius = function() {
             marker = L.circle(
                 [config.latitude, config.longitude],
                 {
@@ -176,7 +176,7 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDrag
          * @param rad
          * @param address
          */
-        var setLatLngFields = function(lat, lng, rad, address) {
+        let setLatLngFields = function(lat, lng, rad, address) {
             setFieldValue("latitude", lat);
             setFieldValue("longitude", lng);
             TBE_EDITOR.fieldChanged("tx_maps2_domain_model_poicollection", config.uid, "latitude", createFieldName("latitude", false));
@@ -198,9 +198,9 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDrag
          *
          * @param coordinates
          */
-        var getUriForCoordinates = function(coordinates) {
-            var routeObject = {};
-            for (var index = 0; index < coordinates.length; index++) {
+        let getUriForCoordinates = function(coordinates) {
+            let routeObject = {};
+            for (let index = 0; index < coordinates.length; index++) {
                 routeObject[index] = coordinates[index]['lat'] + ',' + coordinates[index]['lng'];
             }
             return routeObject;
@@ -213,7 +213,7 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDrag
          * @param hiddenRecord
          * @returns {string}
          */
-        var createFieldName = function(field, hiddenRecord) {
+        let createFieldName = function(field, hiddenRecord) {
             if (hiddenRecord === true) {
                 return 'data[tx_maps2_domain_model_poicollection][' + config.uid + '][' + field + ']_hr';
             }
@@ -226,15 +226,15 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDrag
          * @param field
          * @param value
          */
-        var setFieldValue = function(field, value) {
-            var fieldName = createFieldName(field, true);
+        let setFieldValue = function(field, value) {
+            let fieldName = createFieldName(field, true);
             // set the old (< TYPO3 7.5) hidden record fields "*_hr"
             if (typeof document[TBE_EDITOR.formname][fieldName] !== 'undefined') {
                 document[TBE_EDITOR.formname][fieldName].value = value;
             }
             // set the new (>= TYPO3 7.5) data fields "data-formengine-input-name"
             fieldName = createFieldName(field, false);
-            var $humanReadableField = $('[data-formengine-input-name="' + fieldName + '"]');
+            let $humanReadableField = $('[data-formengine-input-name="' + fieldName + '"]');
             if ($humanReadableField.length) {
                 $humanReadableField.val(value);
             }
@@ -247,7 +247,7 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDrag
          *
          * @param coordinates
          */
-        var insertRouteToDb = function(coordinates) {
+        let insertRouteToDb = function(coordinates) {
             $.ajax({
                 type: "POST",
                 url: TYPO3.settings.ajaxUrls["maps2Ajax"],
@@ -267,8 +267,8 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDrag
         /**
          * read address, send it to Google and move map/marker to new location
          */
-        var findAddress = function() {
-            var $pacSearch = $(document.getElementById("pac-search"));
+        let findAddress = function() {
+            let $pacSearch = $(document.getElementById("pac-search"));
 
             // Prevent submitting the BE form on enter
             $pacSearch.keydown(function (event) {
@@ -282,10 +282,10 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDrag
                             if (data.length === 0) {
                                 alert('Address not found');
                             } else {
-                                var lat = parseFloat(data[0].lat).toFixed(6);
-                                var lng = parseFloat(data[0].lon).toFixed(6);
-                                var address = data[0].address;
-                                var formattedAddress = getFormattedAddress(address);
+                                let lat = parseFloat(data[0].lat).toFixed(6);
+                                let lng = parseFloat(data[0].lon).toFixed(6);
+                                let address = data[0].address;
+                                let formattedAddress = getFormattedAddress(address);
 
                                 switch (config.collectionType) {
                                     case 'Point':
@@ -322,9 +322,9 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDrag
          * @param address
          * @returns {string}
          */
-        var getFormattedAddress = function (address) {
-            var formattedAddress = '';
-            var city = '';
+        let getFormattedAddress = function (address) {
+            let formattedAddress = '';
+            let city = '';
 
             if (address.hasOwnProperty('road')) {
                 formattedAddress += address.road;
