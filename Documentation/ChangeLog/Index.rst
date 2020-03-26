@@ -6,6 +6,24 @@
 ChangeLog
 =========
 
+**Version 9.0.1**
+
+- Replace "var" with "let" in OpenStreetMap Module JS
+- Use same scheme from current request for MapTiles in OpenStreetMap Module JS
+
+**Version 9.0.0**
+
+- First version which is compatible with TYPO3 10.
+- Removed TYPO3 8.7 compatibility
+- Replace Extbase @validate annotations
+- Replace Extbase @lazy and @cascade Annotations
+- Remove old Form Elements for TYPO3 8.7
+- Make use of new ExtensionConfiguration class
+- Reduce ext_tables.sql to business columns only
+- Use Symfony expressions in TypoScript
+- Add strict types where possible
+- Adopt UnitTests
+
 **Version 8.0.1**
 
 - Restructured GoogleMapsModule JS file to be more compatible with requireJS
