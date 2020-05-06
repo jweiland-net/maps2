@@ -6,6 +6,10 @@
 ChangeLog
 =========
 
+**Version 9.1.0**
+
+- Feature: Allow Info Window for all Map Types
+
 **Version 9.0.1**
 
 - Replace "var" with "let" in OpenStreetMap Module JS
