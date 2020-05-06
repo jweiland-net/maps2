@@ -1,4 +1,4 @@
-var $maps2GoogleMaps = [];
+let $maps2GoogleMaps = [];
 
 /**
  * Create a MapOptions object which can be assigned to the Map object of Google
@@ -119,8 +119,8 @@ function GoogleMaps2($element, environment) {
 
     if (typeof this.poiCollections === "undefined" || jQuery.isEmptyObject(this.poiCollections)) {
         // Plugin: CityMap
-        var lat = this.$element.data("latitude");
-        var lng = this.$element.data("longitude");
+        let lat = this.$element.data("latitude");
+        let lng = this.$element.data("longitude");
         if (lat && lng) {
             this.createMarkerByLatLng(lat, lng);
             this.map.setCenter(new google.maps.LatLng(lat, lng));
@@ -171,10 +171,10 @@ GoogleMaps2.prototype.createMap = function (environment) {
  * @param environment
  */
 GoogleMaps2.prototype.groupCategories = function (environment) {
-    var groupedCategories = {};
-    var categoryUid = "0";
-    for (var x = 0; x < this.poiCollections.length; x++) {
-        for (var y = 0; y < this.poiCollections[x].categories.length; y++) {
+    let groupedCategories = {};
+    let categoryUid = "0";
+    for (let x = 0; x < this.poiCollections.length; x++) {
+        for (let y = 0; y < this.poiCollections[x].categories.length; y++) {
             categoryUid = String(this.poiCollections[x].categories[y].uid);
             if (this.inList(environment.settings.categories, categoryUid) > -1 && !groupedCategories.hasOwnProperty(categoryUid)) {
                 groupedCategories[categoryUid] = this.poiCollections[x].categories[y];
@@ -190,13 +190,13 @@ GoogleMaps2.prototype.groupCategories = function (environment) {
  * @param environment
  */
 GoogleMaps2.prototype.showSwitchableCategories = function (environment) {
-    var categories = this.groupCategories(environment);
-    var $form = jQuery("<form>")
+    let categories = this.groupCategories(environment);
+    let $form = jQuery("<form>")
         .addClass("txMaps2Form")
         .attr("id", "txMaps2Form-" + environment.contentRecord.uid);
 
     // Add checkbox for category
-    for (var categoryUid in categories) {
+    for (let categoryUid in categories) {
         if (categories.hasOwnProperty(categoryUid)) {
             $form.append(this.getCheckbox(categories[categoryUid]));
             $form.find("#checkCategory_" + categoryUid).after(jQuery("<span />")
@@ -205,12 +205,12 @@ GoogleMaps2.prototype.showSwitchableCategories = function (environment) {
         }
     }
     // create form
-    var markers = this.categorizedMarkers;
+    let markers = this.categorizedMarkers;
     $form.find("input").on("click", function () {
-        var isChecked = jQuery(this).is(":checked");
-        var categoryUid = jQuery(this).val();
+        let isChecked = jQuery(this).is(":checked");
+        let categoryUid = jQuery(this).val();
         if (markers.hasOwnProperty(categoryUid)) {
-            for (var i = 0; i < markers[categoryUid].length; i++) {
+            for (let i = 0; i < markers[categoryUid].length; i++) {
                 markers[categoryUid][i].setVisible(isChecked);
             }
         }
@@ -248,8 +248,8 @@ GoogleMaps2.prototype.getCheckbox = function (category) {
  * @param obj
  */
 GoogleMaps2.prototype.countObjectProperties = function (obj) {
-    var count = 0;
-    for (var key in obj) {
+    let count = 0;
+    for (let key in obj) {
         if (obj.hasOwnProperty(key)) {
             count++;
         }
@@ -263,7 +263,7 @@ GoogleMaps2.prototype.countObjectProperties = function (obj) {
  * @param environment
  */
 GoogleMaps2.prototype.createPointByCollectionType = function (environment) {
-    for (var i = 0; i < this.poiCollections.length; i++) {
+    for (let i = 0; i < this.poiCollections.length; i++) {
         if (this.poiCollections[i].strokeColor === "") {
             this.poiCollections[i].strokeColor = environment.extConf.strokeColor;
         }
@@ -303,13 +303,13 @@ GoogleMaps2.prototype.createPointByCollectionType = function (environment) {
  * @param environment
  */
 GoogleMaps2.prototype.createMarker = function (poiCollection, environment) {
-    var categoryUid = "0";
-    var marker = new google.maps.Marker({
+    let categoryUid = "0";
+    let marker = new google.maps.Marker({
         position: new google.maps.LatLng(poiCollection.latitude, poiCollection.longitude),
         map: this.map
     });
     marker.setDraggable(this.editable);
-    for (var i = 0; i < poiCollection.categories.length; i++) {
+    for (let i = 0; i < poiCollection.categories.length; i++) {
         categoryUid = poiCollection.categories[i].uid;
         if (!this.categorizedMarkers.hasOwnProperty(categoryUid)) {
             this.categorizedMarkers[categoryUid] = [];
@@ -320,7 +320,7 @@ GoogleMaps2.prototype.createMarker = function (poiCollection, environment) {
 
     // assign first found marker icon, if available
     if (poiCollection.markerIcon !== "") {
-        var icon = {
+        let icon = {
             url: poiCollection.markerIcon,
             scaledSize: new google.maps.Size(poiCollection.markerIconWidth, poiCollection.markerIconHeight),
             anchor: new google.maps.Point(poiCollection.markerIconAnchorPosX, poiCollection.markerIconAnchorPosY)
@@ -330,20 +330,93 @@ GoogleMaps2.prototype.createMarker = function (poiCollection, environment) {
 
     this.bounds.extend(marker.position);
 
-    // we need these both vars to be set global. So that we can access them in Listener
-    var infoWindow = this.infoWindow;
-    var map = this.map;
-
     if (this.editable) {
         this.addEditListeners(this.$element, marker, poiCollection, environment);
     } else {
-        google.maps.event.addListener(marker, "click", function () {
-            infoWindow.close();
-            infoWindow.setContent(poiCollection.infoWindowContent);
-            infoWindow.open(map, marker);
-        });
+        this.addInfoWindow(marker, poiCollection);
     }
 };
+
+/**
+ * Create Area
+ *
+ * @param poiCollection
+ */
+GoogleMaps2.prototype.createArea = function (poiCollection) {
+    let latLng;
+    let paths = [];
+    for (let i = 0; i < poiCollection.pois.length; i++) {
+        latLng = new google.maps.LatLng(poiCollection.pois[i].latitude, poiCollection.pois[i].longitude);
+        this.bounds.extend(latLng);
+        paths.push(latLng);
+    }
+
+    if (paths.length === 0) {
+        paths.push(this.mapPosition);
+    } else {
+        let area = new google.maps.Polygon(new PolygonOptions(paths, poiCollection));
+        area.setMap(this.map);
+        this.addInfoWindow(area, poiCollection);
+    }
+};
+
+/**
+ * Create Route
+ *
+ * @param poiCollection
+ */
+GoogleMaps2.prototype.createRoute = function (poiCollection) {
+    let latLng;
+    let paths = [];
+    for (let i = 0; i < poiCollection.pois.length; i++) {
+        latLng = new google.maps.LatLng(poiCollection.pois[i].latitude, poiCollection.pois[i].longitude);
+        this.bounds.extend(latLng);
+        paths.push(latLng);
+    }
+
+    if (paths.length === 0) {
+        paths.push(this.mapPosition);
+    } else {
+        let route = new google.maps.Polyline(new PolylineOptions(paths, poiCollection));
+        route.setMap(this.map);
+        this.addInfoWindow(route, poiCollection);
+    }
+};
+
+/**
+ * Create Radius
+ *
+ * @param poiCollection
+ */
+GoogleMaps2.prototype.createRadius = function (poiCollection) {
+    let circle = new google.maps.Circle(
+        new CircleOptions(
+            this.map,
+            new google.maps.LatLng(poiCollection.latitude, poiCollection.longitude),
+            poiCollection
+        )
+    );
+    this.bounds.union(circle.getBounds());
+    this.addInfoWindow(circle, poiCollection);
+};
+
+/**
+ * Add Info Window to element
+ *
+ * @param element
+ * @param poiCollection
+ */
+GoogleMaps2.prototype.addInfoWindow = function (element, poiCollection) {
+    // we need these both vars to be set global. So that we can access them in Listener
+    let infoWindow = this.infoWindow;
+    let map = this.map;
+    google.maps.event.addListener(element, "click", function () {
+        infoWindow.close();
+        infoWindow.setContent(poiCollection.infoWindowContent);
+        infoWindow.setPosition(new google.maps.LatLng(poiCollection.latitude, poiCollection.longitude));
+        infoWindow.open(map);
+    });
+}
 
 /**
  * Check for item in list
@@ -353,7 +426,7 @@ GoogleMaps2.prototype.createMarker = function (poiCollection, environment) {
  * @param item
  */
 GoogleMaps2.prototype.inList = function (list, item) {
-    var catSearch = ',' + list + ',';
+    let catSearch = ',' + list + ',';
     item = ',' + item + ',';
     return catSearch.search(item);
 };
@@ -365,71 +438,11 @@ GoogleMaps2.prototype.inList = function (list, item) {
  * @param longitude
  */
 GoogleMaps2.prototype.createMarkerByLatLng = function (latitude, longitude) {
-    var marker = new google.maps.Marker({
+    let marker = new google.maps.Marker({
         position: new google.maps.LatLng(latitude, longitude),
         map: this.map
     });
     this.bounds.extend(marker.position);
-};
-
-/**
- * Create Area
- *
- * @param poiCollection
- */
-GoogleMaps2.prototype.createArea = function (poiCollection) {
-    var latLng;
-    var paths = [];
-    for (var i = 0; i < poiCollection.pois.length; i++) {
-        latLng = new google.maps.LatLng(poiCollection.pois[i].latitude, poiCollection.pois[i].longitude);
-        this.bounds.extend(latLng);
-        paths.push(latLng);
-    }
-
-    if (paths.length === 0) {
-        paths.push(this.mapPosition);
-    } else {
-        var area = new google.maps.Polygon(new PolygonOptions(paths, poiCollection));
-        area.setMap(this.map);
-    }
-};
-
-/**
- * Create Route
- *
- * @param poiCollection
- */
-GoogleMaps2.prototype.createRoute = function (poiCollection) {
-    var latLng;
-    var paths = [];
-    for (var i = 0; i < poiCollection.pois.length; i++) {
-        latLng = new google.maps.LatLng(poiCollection.pois[i].latitude, poiCollection.pois[i].longitude);
-        this.bounds.extend(latLng);
-        paths.push(latLng);
-    }
-
-    if (paths.length === 0) {
-        paths.push(this.mapPosition);
-    } else {
-        var route = new google.maps.Polyline(new PolylineOptions(paths, poiCollection));
-        route.setMap(this.map);
-    }
-};
-
-/**
- * Create Radius
- *
- * @param poiCollection
- */
-GoogleMaps2.prototype.createRadius = function (poiCollection) {
-    var circle = new google.maps.Circle(
-        new CircleOptions(
-            this.map,
-            new google.maps.LatLng(poiCollection.latitude, poiCollection.longitude),
-            poiCollection
-        )
-    );
-    this.bounds.union(circle.getBounds());
 };
 
 /**
@@ -444,8 +457,8 @@ GoogleMaps2.prototype.createRadius = function (poiCollection) {
 GoogleMaps2.prototype.addEditListeners = function ($mapContainer, marker, poiCollection, environment) {
     // update fields and marker while dragging
     google.maps.event.addListener(marker, 'dragend', function () {
-        var lat = marker.getPosition().lat().toFixed(6);
-        var lng = marker.getPosition().lng().toFixed(6);
+        let lat = marker.getPosition().lat().toFixed(6);
+        let lng = marker.getPosition().lng().toFixed(6);
         $mapContainer.prevAll("input.latitude-" + environment.contentRecord.uid).val(lat);
         $mapContainer.prevAll("input.longitude-" + environment.contentRecord.uid).val(lng);
     });
@@ -462,23 +475,23 @@ GoogleMaps2.prototype.addEditListeners = function ($mapContainer, marker, poiCol
  * This function will be called by the &callback argument of the Google Maps API library
  */
 function initMap() {
-    var $element;
-    var environment;
+    let $element;
+    let environment;
     jQuery(".maps2").each(function () {
         $element = jQuery(this);
         // override environment with settings of override
-        var environment = $element.data("environment");
-        var override = $element.data("override");
+        let environment = $element.data("environment");
+        let override = $element.data("override");
         environment = jQuery.extend(true, environment, override);
         $maps2GoogleMaps.push(new GoogleMaps2($element, environment));
     });
 
     // initialize radius search
-    var $address = jQuery("#maps2Address");
-    var $radius = jQuery("#maps2Radius");
+    let $address = jQuery("#maps2Address");
+    let $radius = jQuery("#maps2Radius");
     if ($address.length && $radius.length) {
-        var input = document.getElementById("maps2Address");
-        var autocomplete = new google.maps.places.Autocomplete(input, {fields: ['place_id']});
+        let input = document.getElementById("maps2Address");
+        let autocomplete = new google.maps.places.Autocomplete(input, {fields: ['place_id']});
         $(input).keydown(function (e) {
             if (e.which === 13) return false;
         });
