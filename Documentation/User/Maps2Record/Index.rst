@@ -87,6 +87,11 @@ Additional fields for Area
 
  - :Field:        Field
    :Description:  Description
+ - :Field:        Info window content
+   :Description:  Here you can define a text which will be displayed in a little popup, if you click on a marker in
+                  frontend
+ - :Field:        Image(s) for info window content
+   :Description:  Here you can define some images which should be added to the little popup.
  - :Field:        Stroke color
    :Description:  Set stroke color of the outer border. If not set we use value from Extensionmanager configuration.
  - :Field:        Stroke opacity
@@ -111,6 +116,11 @@ Additional fields for Route
 
  - :Field:        Field
    :Description:  Description
+ - :Field:        Info window content
+   :Description:  Here you can define a text which will be displayed in a little popup, if you click on a marker in
+                  frontend
+ - :Field:        Image(s) for info window content
+   :Description:  Here you can define some images which should be added to the little popup.
  - :Field:        Stroke color
    :Description:  Set stroke color of the outer border. If not set we use value from Extensionmanager configuration.
  - :Field:        Stroke opacity
@@ -128,6 +138,11 @@ Additional fields for Radius
 
  - :Field:        Field
    :Description:  Description
+ - :Field:        Info window content
+   :Description:  Here you can define a text which will be displayed in a little popup, if you click on a marker in
+                  frontend
+ - :Field:        Image(s) for info window content
+   :Description:  Here you can define some images which should be added to the little popup.
  - :Field:        Radius
    :Description:  Type in the radius of your marker or resize the radius on the map to update that field.
  - :Field:        Stroke color
