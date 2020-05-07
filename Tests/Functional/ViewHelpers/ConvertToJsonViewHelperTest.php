@@ -1,5 +1,5 @@
 <?php
-namespace JWeiland\Maps2\Tests\Unit\ViewHelpers;
+namespace JWeiland\Maps2\Tests\Functional\ViewHelpers;
 
 /*
  * This file is part of the maps2 project.
@@ -18,15 +18,14 @@ use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\Category;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\ViewHelpers\ConvertToJsonViewHelper;
-use Nimut\TestingFramework\TestCase\UnitTestCase;
-use Prophecy\Argument;
+use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
 
 /**
  * Class ConvertToJsonViewHelper
  */
-class ConvertToJsonViewHelperTest extends UnitTestCase
+class ConvertToJsonViewHelperTest extends FunctionalTestCase
 {
     /**
      * @var RenderingContext|\Prophecy\Prophecy\ObjectProphecy
