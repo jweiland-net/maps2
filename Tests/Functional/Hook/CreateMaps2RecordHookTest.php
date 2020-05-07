@@ -55,7 +55,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
     public function setUp()
     {
         parent::setup();
-        parent::setUpBackendUserFromFixture(1);
+        $this->setUpBackendUserFromFixture(1);
 
         $this->importDataSet(__DIR__ . '/../Fixtures/fe_groups.xml');
         $this->importDataSet(__DIR__ . '/../Fixtures/fe_users.xml');
@@ -309,10 +309,6 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
      */
     public function processDatamapCreatesNewPoiCollection()
     {
-        $this->cacheMaps2RegistryProphecy
-            ->get('fields')
-            ->willReturn($this->maps2RegistryConfiguration);
-
         $dataHandler = new DataHandler();
         $dataHandler->datamap = [
             'fe_users' => [
@@ -365,8 +361,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
         $hook = new CreateMaps2RecordHook(
             $geoCodeServiceProphecy->reveal(),
             $this->prophesize(MessageHelper::class)->reveal(),
-            $dispatcherProphecy->reveal(),
-            $this->cacheMaps2RegistryProphecy->reveal()
+            $dispatcherProphecy->reveal()
         );
         $hook->processDatamap_afterAllOperations($dataHandler);
     }
@@ -376,10 +371,6 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
      */
     public function processDatamapDoesNotCreatesPoiCollectionBecauseOfHook()
     {
-        $this->cacheMaps2RegistryProphecy
-            ->get('fields')
-            ->willReturn($this->maps2RegistryConfiguration);
-
         $dataHandler = new DataHandler();
         $dataHandler->datamap = [
             'fe_users' => [
@@ -410,8 +401,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
         $hook = new CreateMaps2RecordHook(
             $geoCodeServiceProphecy->reveal(),
             $this->prophesize(MessageHelper::class)->reveal(),
-            null,
-            $this->cacheMaps2RegistryProphecy->reveal()
+            null
         );
         $hook->processDatamap_afterAllOperations($dataHandler);
     }
