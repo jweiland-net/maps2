@@ -52,8 +52,25 @@ infoWindowContentTemplatePath
 Example:
 plugin.tx_maps2.settings.infoWindowContentTemplatePath = EXT:your_sitepackage/Resources/Templates/InfoWindowContent.html
 
-Here you can define your own Fluid-Template for these little PopUps of Markers
+Here you can define your own Fluid-Template for these little PopUps of Markers.
 
+Since maps2 9.2.0 you have access to all related foreign records of your PoiCollection in Template.
+Use: `<f:for each="{poiCollection.foreignRecords}" as="foreignRecord">...</f:for>`
+
+As such a PoiCollection can be assigned to multiple different tables like tt_address, news, what ever, you can differ
+between the foreign records with f.e.:
+
+.. code-block:: html
+   <f:groupedFor each="{poiCollection.foreignRecords}" as="groupedForeignRecords" groupBy="jwMaps2TableName" groupKey="tableName">
+     <div>Table: {tableName}</div>
+     <ul>
+       <f:for each="{groupedForeignRecords}" as="foreignRecord">
+         <li>PoiCollection URL: {foreignRecord.url}</li>
+       </f:for>
+     </ul>
+   </f:groupedFor>
+
+`jwMaps2TableName` and `jwMaps2ColumnName` are two special keys we have added to each foreign record.
 
 .. _infoWindow:
 
@@ -73,6 +90,7 @@ Set the maximum width of images within the InfoWindow PopUp
 
 Set the maximum height of images within the InfoWindow PopUp
 
+
 .. _mapProvider:
 
 mapProvider
@@ -81,6 +99,7 @@ mapProvider
 Normally you don't have to change that value, as it will be set automatically with the chosen static template. So,
 if you use static template for OSM, this value will be set to `osm`. In case of the static template for Google Maps the
 value will be set to `gm`.
+
 
 .. _markerClusterer:
 
@@ -130,6 +149,7 @@ poiCollection
 
 Define a poiCollection which should be shown on the website
 
+
 .. _categories:
 
 categories
@@ -139,6 +159,7 @@ If you have not set a fixed poiCollection above you can choose one or more categ
 than one category some checkboxes will appear below the map in frontend where you can switch the markers of the
 chosen category on and off.
 
+
 .. _mapWidth:
 
 mapWidth
@@ -146,12 +167,14 @@ mapWidth
 
 The width of the map.
 
+
 .. _mapHeight:
 
 mapHeight
 ~~~~~~~~~
 
 The height of the map.
+
 
 .. _allowMapTemplatePath:
 
@@ -162,12 +185,14 @@ With this setting you can override the default template from extension configura
  plugin configuration and can only be set within the settings-part in TS setup. File prefixes like EXT: are allowed.
  Please have a look into the extension configuration for a detailed explaination.
 
+
 .. _zoom:
 
 zoom
 ~~~~
 
 A zoom value how deep to zoom in into the map.
+
 
 .. _forceZoom:
 
@@ -179,12 +204,14 @@ all POIs can be displayed. This is realized with the BoundingBox feature of Goog
 you don't want maps2 to zoom out, because you have POIs all around the world for example, you can activate
 this checkbox to prevent automatic zooming.
 
+
 .. _mapTypeId:
 
 mapTypeId
 ~~~~~~~~~
 
 Show Roadmap, Earthview or Streetview
+
 
 .. _zoomControl:
 
@@ -193,12 +220,14 @@ zoomControl
 
 Show a zoom control.
 
+
 .. _mapTypeControl:
 
 mapTypeControl
 ~~~~~~~~~~~~~~
 
 Show a map type control.
+
 
 .. _scaleControl:
 
@@ -207,6 +236,7 @@ scaleControl
 
 Show a scale control.
 
+
 .. _streetViewControl:
 
 streetViewControl
@@ -214,12 +244,14 @@ streetViewControl
 
 Show a street view control.
 
+
 .. _fullScreenControl:
 
 fullScreenControl
 ~~~~~~~~~~~~~~~~~
 
 Toggle between normal and full screen mode.
+
 
 .. _activateScrollWheel:
 
