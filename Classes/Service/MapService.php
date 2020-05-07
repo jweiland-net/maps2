@@ -420,7 +420,8 @@ class MapService
         if (@is_file($configurationFile)) {
             $configuration = json_decode(file_get_contents($configurationFile), true);
             if (
-                array_key_exists('registry', $configuration)
+                is_array($configuration)
+                && array_key_exists('registry', $configuration)
                 && is_array($configuration)
                 && count($configuration) === 2
             ) {
