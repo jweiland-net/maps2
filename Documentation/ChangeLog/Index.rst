@@ -6,6 +6,10 @@
 ChangeLog
 =========
 
+**Version 9.2.1**
+
+- Bugfix: Fallback to "footway", if "road" was not found in OSM response
+
 **Version 9.2.0**
 
 - Feature: Add all related foreign records to PoiCollection
