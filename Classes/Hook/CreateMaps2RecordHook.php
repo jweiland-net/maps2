@@ -52,11 +52,6 @@ class CreateMaps2RecordHook
     protected $messageHelper;
 
     /**
-     * @var FrontendInterface
-     */
-    protected $maps2RegistryCache;
-
-    /**
      * @var Dispatcher
      */
     protected $signalSlotDispatcher;
