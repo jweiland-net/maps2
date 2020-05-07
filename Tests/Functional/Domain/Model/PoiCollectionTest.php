@@ -1,5 +1,5 @@
 <?php
-namespace JWeiland\Maps2\Tests\Unit\Domain\Model;
+namespace JWeiland\Maps2\Tests\Functional\Domain\Model;
 
 /*
  * This file is part of the maps2 project.
@@ -18,7 +18,7 @@ use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\Category;
 use JWeiland\Maps2\Domain\Model\Poi;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
-use Nimut\TestingFramework\TestCase\UnitTestCase;
+use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
@@ -26,7 +26,7 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 /**
  * Class PoiCollectionTest
  */
-class PoiCollectionTest extends UnitTestCase
+class PoiCollectionTest extends FunctionalTestCase
 {
     /**
      * @var PoiCollection
@@ -39,11 +39,19 @@ class PoiCollectionTest extends UnitTestCase
     protected $extConf;
 
     /**
+     * @var array
+     */
+    protected $testExtensionsToLoad = [
+        'typo3conf/ext/maps2'
+    ];
+
+    /**
      * Sets up the fixture, for example, open a network connection.
      * This method is called before a test is executed.
      */
     protected function setUp()
     {
+        parent::setUp();
         $this->extConf = new ExtConf([]);
         GeneralUtility::setSingletonInstance(ExtConf::class, $this->extConf);
         $this->subject = new PoiCollection();
