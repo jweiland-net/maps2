@@ -42,11 +42,6 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
     protected $maps2RegistryConfiguration = [];
 
     /**
-     * @var FrontendInterface|ObjectProphecy
-     */
-    protected $cacheMaps2RegistryProphecy;
-
-    /**
      * @var array
      */
     protected $testExtensionsToLoad = [
@@ -79,8 +74,6 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
                 ]
             ]
         ];
-
-        $this->cacheMaps2RegistryProphecy = $this->prophesize(VariableFrontend::class);
     }
 
     public function tearDown()
@@ -89,14 +82,10 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
     }
 
     /**
-     * @tester
+     * @test
      */
     public function processDatamapClearsInfoWindowContentCacheIfTableIsPoiCollection()
     {
-        $this->cacheMaps2RegistryProphecy
-            ->get('fields')
-            ->willReturn($this->maps2RegistryConfiguration);
-
         /** @var FrontendInterface|ObjectProphecy $cacheProphecy */
         $cacheProphecy = $this->prophesize(VariableFrontend::class);
         $cacheProphecy
@@ -111,7 +100,6 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
             ->getCache('maps2_cachedhtml')
             ->shouldBeCalled()
             ->willReturn($cacheProphecy->reveal());
-        $cacheManagerProphecy->hasCache(Argument::any())->shouldBeCalled();
         $cacheManagerProphecy->getCache(Argument::any())->shouldBeCalled();
         GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerProphecy->reveal());
 
@@ -127,24 +115,23 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
             ]
         ];
 
+        $mapService = new MapService();
+        $mapService->setColumnRegistry($this->maps2RegistryConfiguration);
+
         $hook = new CreateMaps2RecordHook(
             null,
             null,
             null,
-            $this->cacheMaps2RegistryProphecy->reveal()
+            $mapService
         );
         $hook->processDatamap_afterAllOperations($dataHandler);
     }
 
     /**
-     * @tester
+     * @test
      */
     public function processDatamapWillGetForeignLocationRecord()
     {
-        $this->cacheMaps2RegistryProphecy
-            ->get('fields')
-            ->willReturn($this->maps2RegistryConfiguration);
-
         /** @var Dispatcher|ObjectProphecy $dispatcherProphecy */
         $dispatcherProphecy = $this->prophesize(Dispatcher::class);
         $dispatcherProphecy
@@ -179,25 +166,25 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
             ]
         ];
 
+        $mapService = new MapService();
+        $mapService->setColumnRegistry($this->maps2RegistryConfiguration);
+
         $hook = new CreateMaps2RecordHook(
             null,
             $this->prophesize(MessageHelper::class)->reveal(),
             $dispatcherProphecy->reveal(),
-            $this->cacheMaps2RegistryProphecy->reveal()
+            $mapService
         );
         $hook->processDatamap_afterAllOperations($dataHandler);
     }
 
     /**
-     * @tester
+     * @test
      */
     public function processDatamapInvalidForeignRecordBecausePidIsNotEqual()
     {
         $maps2RegistryConfiguration = $this->maps2RegistryConfiguration;
         $maps2RegistryConfiguration['fe_users']['lastlogin']['columnMatch']['pid'] = 432;
-        $this->cacheMaps2RegistryProphecy
-            ->get('fields')
-            ->willReturn($maps2RegistryConfiguration);
 
         /** @var Dispatcher|ObjectProphecy $dispatcherProphecy */
         $dispatcherProphecy = $this->prophesize(Dispatcher::class);
@@ -224,11 +211,14 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
             ]
         ];
 
+        $mapService = new MapService();
+        $mapService->setColumnRegistry($maps2RegistryConfiguration);
+
         $hook = new CreateMaps2RecordHook(
             null,
             $this->prophesize(MessageHelper::class)->reveal(),
             $dispatcherProphecy->reveal(),
-            $this->cacheMaps2RegistryProphecy->reveal()
+            $mapService
         );
         $hook->processDatamap_afterAllOperations($dataHandler);
     }
@@ -257,7 +247,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
     }
 
     /**
-     * @tester
+     * @test
      *
      * @param array $columnMatch
      * @param bool $isValid
@@ -267,9 +257,6 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
     {
         $maps2RegistryConfiguration = $this->maps2RegistryConfiguration;
         $maps2RegistryConfiguration['fe_users']['lastlogin']['columnMatch'] = $columnMatch;
-        $this->cacheMaps2RegistryProphecy
-            ->get('fields')
-            ->willReturn($maps2RegistryConfiguration);
 
         /** @var Dispatcher|ObjectProphecy $dispatcherProphecy */
         $dispatcherProphecy = $this->prophesize(Dispatcher::class);
@@ -296,11 +283,14 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
             ]
         ];
 
+        $mapService = new MapService();
+        $mapService->setColumnRegistry($maps2RegistryConfiguration);
+
         $hook = new CreateMaps2RecordHook(
             null,
             $this->prophesize(MessageHelper::class)->reveal(),
             $dispatcherProphecy->reveal(),
-            $this->cacheMaps2RegistryProphecy->reveal()
+            $mapService
         );
         $hook->processDatamap_afterAllOperations($dataHandler);
     }
@@ -359,11 +349,14 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
             ->dispatch(Argument::cetera())
             ->shouldBeCalled();
 
+        $mapService = new MapService();
+        $mapService->setColumnRegistry($this->maps2RegistryConfiguration);
+
         $hook = new CreateMaps2RecordHook(
             $geoCodeServiceProphecy->reveal(),
             $this->prophesize(MessageHelper::class)->reveal(),
             $dispatcherProphecy->reveal(),
-            new MapService()
+            $mapService
         );
         $hook->processDatamap_afterAllOperations($dataHandler);
     }
@@ -400,11 +393,14 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
                 'invalidPoiCollection'
             );
 
+        $mapService = new MapService();
+        $mapService->setColumnRegistry($this->maps2RegistryConfiguration);
+
         $hook = new CreateMaps2RecordHook(
             $geoCodeServiceProphecy->reveal(),
             $this->prophesize(MessageHelper::class)->reveal(),
             null,
-            new MapService()
+            $mapService
         );
         $hook->processDatamap_afterAllOperations($dataHandler);
     }
