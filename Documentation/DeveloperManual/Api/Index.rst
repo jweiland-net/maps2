@@ -92,6 +92,21 @@ Default: tx_maps2_uid
 
 As we save the foreign extension record for you, we need the fieldname where to save the UID of PoiCollection.
 
+getColumnRegistry
+~~~~~~~~~~~~~~~~~
+
+Get the Maps2 registry as array for all tables, columns and its configuration
+
+getColumnRegistry
+~~~~~~~~~~~~~~~~~
+
+addForeignRecordsToPoiCollection
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This method is NOT public API. It will be called automatically, if you call getForeignRecords
+of a PoiCollection. It contains a SignalSlot where you can remove or modify foreignRecords
+before adding them to PoiCollection.
+
 Example
 -------
 

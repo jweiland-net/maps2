@@ -6,6 +6,11 @@
 ChangeLog
 =========
 
+**Version 9.2.0**
+
+- Feature: Add all related foreign records to PoiCollection
+- Feature: New SignalSlot to modify related foreign records before adding them to PoiCollection
+
 **Version 9.1.0**
 
 - Feature: Allow Info Window for all Map Types
