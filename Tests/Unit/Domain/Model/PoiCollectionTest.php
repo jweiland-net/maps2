@@ -1233,4 +1233,84 @@ class PoiCollectionTest extends UnitTestCase
             $this->subject->getDistance()
         );
     }
+
+    /**
+     * @test
+     */
+    public function getForeignRecordsInitiallyReturnsArray()
+    {
+        $this->assertSame(
+            [],
+            $this->subject->getForeignRecords()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function setForeignRecordsSetsForeignRecords()
+    {
+        $this->subject->setForeignRecords(
+            [
+                [
+                    'uid' => 12
+                ]
+            ]
+        );
+
+        $this->assertSame(
+            [
+                12 => [
+                    'uid' => 12
+                ]
+            ],
+            $this->subject->getForeignRecords()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function addForeignRecordAddsOneForeignRecord()
+    {
+        $this->subject->addForeignRecord(
+            [
+                'uid' => 12
+            ]
+        );
+
+        $this->assertSame(
+            [
+                12 => [
+                    'uid' => 12
+                ]
+            ],
+            $this->subject->getForeignRecords()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function removeForeignRecordRemovesOneForeignRecord()
+    {
+        $this->subject->setForeignRecords(
+            [
+                [
+                    'uid' => 12
+                ]
+            ]
+        );
+
+        $this->subject->removeForeignRecord(
+            [
+                'uid' => 12
+            ]
+        );
+
+        $this->assertSame(
+            [],
+            $this->subject->getForeignRecords()
+        );
+    }
 }
