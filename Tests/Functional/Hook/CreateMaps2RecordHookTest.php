@@ -19,6 +19,7 @@ use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Helper\MessageHelper;
 use JWeiland\Maps2\Hook\CreateMaps2RecordHook;
 use JWeiland\Maps2\Service\GeoCodeService;
+use JWeiland\Maps2\Service\MapService;
 use JWeiland\Maps2\Tests\Functional\Fixtures\IsRecordAllowedToCreatePoiCollectionSignal;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Prophecy\Argument;
@@ -361,7 +362,8 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
         $hook = new CreateMaps2RecordHook(
             $geoCodeServiceProphecy->reveal(),
             $this->prophesize(MessageHelper::class)->reveal(),
-            $dispatcherProphecy->reveal()
+            $dispatcherProphecy->reveal(),
+            new MapService()
         );
         $hook->processDatamap_afterAllOperations($dataHandler);
     }
@@ -401,7 +403,8 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
         $hook = new CreateMaps2RecordHook(
             $geoCodeServiceProphecy->reveal(),
             $this->prophesize(MessageHelper::class)->reveal(),
-            null
+            null,
+            new MapService()
         );
         $hook->processDatamap_afterAllOperations($dataHandler);
     }
