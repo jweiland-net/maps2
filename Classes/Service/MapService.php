@@ -55,6 +55,13 @@ class MapService
      */
     protected $settings = [];
 
+    /**
+     * "null", if uninitialized
+     *
+     * @var array|null
+     */
+    protected $columnRegistry;
+
     public function __construct()
     {
         $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
@@ -415,20 +422,32 @@ class MapService
      */
     public function getColumnRegistry(): array
     {
-        $columnRegistry = [];
-        $configurationFile = Environment::getConfigPath() . '/Maps2/Registry.json';
-        if (@is_file($configurationFile)) {
-            $configuration = json_decode(file_get_contents($configurationFile), true);
-            if (
-                is_array($configuration)
-                && array_key_exists('registry', $configuration)
-                && is_array($configuration)
-                && count($configuration) === 2
-            ) {
-                $columnRegistry = $configuration['registry'] ?: [];
+        if ($this->columnRegistry === null) {
+            $this->columnRegistry = [];
+            $configurationFile = Environment::getConfigPath() . '/Maps2/Registry.json';
+            if (@is_file($configurationFile)) {
+                $configuration = json_decode(file_get_contents($configurationFile), true);
+                if (
+                    is_array($configuration)
+                    && array_key_exists('registry', $configuration)
+                    && is_array($configuration)
+                    && count($configuration) === 2
+                ) {
+                    $this->columnRegistry = $configuration['registry'] ?: [];
+                }
             }
         }
-        return $columnRegistry;
+        return $this->columnRegistry;
+    }
+
+    /**
+     * Currently used by UnitTests, only.
+     *
+     * @param array $columnRegistry
+     */
+    public function setColumnRegistry(array $columnRegistry): void
+    {
+        $this->columnRegistry = $columnRegistry;
     }
 
     /**
