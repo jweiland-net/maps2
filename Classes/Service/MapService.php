@@ -20,7 +20,9 @@ use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Helper\MessageHelper;
 use JWeiland\Maps2\Utility\DatabaseUtility;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Database\Query\Restriction\FrontendRestrictionContainer;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
@@ -30,6 +32,8 @@ use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Service\EnvironmentService;
+use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
@@ -207,7 +211,7 @@ class MapService
      *
      * @param PoiCollection $poiCollection
      */
-    public function setInfoWindow(PoiCollection $poiCollection)
+    public function setInfoWindow(PoiCollection $poiCollection): void
     {
         $poiCollection->setInfoWindowContent(
             $this->renderInfoWindow($poiCollection)
@@ -274,10 +278,9 @@ class MapService
                 FlashMessage::ERROR
             );
             return 0;
-        } else {
-            $latitude = $position->getLatitude();
-            $longitude = $position->getLongitude();
         }
+        $latitude = $position->getLatitude();
+        $longitude = $position->getLongitude();
 
         $fieldValues = [];
         $fieldValues['pid'] = (int)$pid;
@@ -320,8 +323,12 @@ class MapService
      * @throws \Exception
      * @api
      */
-    public function assignPoiCollectionToForeignRecord(int $poiCollectionUid, array &$foreignRecord, string $foreignTableName, string $foreignFieldName = 'tx_maps2_uid')
-    {
+    public function assignPoiCollectionToForeignRecord(
+        int $poiCollectionUid,
+        array &$foreignRecord,
+        string $foreignTableName,
+        string $foreignFieldName = 'tx_maps2_uid'
+    ): void {
         $hasErrors = false;
         $messageHelper = GeneralUtility::makeInstance(MessageHelper::class);
 
@@ -399,6 +406,98 @@ class MapService
             ['uid' => (int)$foreignRecord['uid']]
         );
         $foreignRecord[$foreignFieldName] = $poiCollectionUid;
+    }
+
+    /**
+     * Reads, extract and returns Maps2 Column Configuration (Registry)
+     *
+     * @return array
+     * @api
+     */
+    public function getColumnRegistry(): array
+    {
+        $columnRegistry = [];
+        $configurationFile = Environment::getConfigPath() . '/Maps2/Registry.json';
+        if (@is_file($configurationFile)) {
+            $configuration = json_decode(file_get_contents($configurationFile), true);
+            if (
+                array_key_exists('registry', $configuration)
+                && is_array($configuration)
+                && count($configuration) === 2
+            ) {
+                $columnRegistry = $configuration['registry'] ?: [];
+            }
+        }
+        return $columnRegistry;
+    }
+
+    /**
+     * Adds the related foreign records of a PoiCollection to PoiCollection itself.
+     *
+     * @param PoiCollection $poiCollection
+     */
+    public function addForeignRecordsToPoiCollection(PoiCollection $poiCollection): void
+    {
+        $columnRegistry = $this->getColumnRegistry();
+        if (empty($columnRegistry) || $poiCollection->getUid() === 0) {
+            return;
+        }
+
+        // loop through all configured tables and columns and add the foreignRecord to PoiCollection
+        foreach ($columnRegistry as $tableName => $columns) {
+            foreach ($columns as $columnName => $configuration) {
+                $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable($tableName);
+                $queryBuilder->setRestrictions(
+                    GeneralUtility::makeInstance(FrontendRestrictionContainer::class)
+                );
+                $statement = $queryBuilder
+                    ->select('*')
+                    ->from($tableName)
+                    ->where(
+                        $queryBuilder->expr()->eq(
+                            $columnName,
+                            $queryBuilder->createNamedParameter($poiCollection->getUid(), \PDO::PARAM_INT)
+                        )
+                    )
+                    ->execute();
+                while ($foreignRecord = $statement->fetch()) {
+                    // Hopefully these keys are unique enough
+                    // Very useful to f:groupedFor in Fluid Templates
+                    $foreignRecord['jwMaps2TableName'] = $tableName;
+                    $foreignRecord['jwMaps2ColumnName'] = $columnName;
+
+                    // Add or remove your own values
+                    $this->emitPreAddForeignRecordToPoiCollectionSignal(
+                        $foreignRecord,
+                        $tableName,
+                        $columnName
+                    );
+
+                    $poiCollection->addForeignRecord($foreignRecord);
+                }
+            }
+        }
+    }
+
+    /**
+     * Use this signal, if you want to modify the foreign record, before adding it to PoiCollection record.
+     * If you set $foreignRecord to [] (empty) it will NOT be added to PoiCollection.
+     *
+     * @param array $foreignRecord
+     * @param string $tableName
+     * @param string $columnName
+     */
+    protected function emitPreAddForeignRecordToPoiCollectionSignal(
+        array &$foreignRecord,
+        string $tableName,
+        string $columnName
+    ): void {
+        $signalSlotDispatcher = $this->objectManager->get(Dispatcher::class);
+        $signalSlotDispatcher->dispatch(
+            self::class,
+            'preAddForeignRecordToPoiCollection',
+            [&$foreignRecord, $tableName, $columnName]
+        );
     }
 
     protected function getConnectionPool(): ConnectionPool

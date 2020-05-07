@@ -63,6 +63,11 @@ class CreateMaps2RecordHook
     protected $signalSlotDispatcher;
 
     /**
+     * @var MapService
+     */
+    protected $mapService;
+
+    /**
      * @var array
      */
     protected $columnRegistry = [];
@@ -70,23 +75,15 @@ class CreateMaps2RecordHook
     public function __construct(
         GeoCodeService $geoCodeService = null,
         MessageHelper $messageHelper = null,
-        Dispatcher $signalSlotDispatcher = null
+        Dispatcher $signalSlotDispatcher = null,
+        MapService $mapService = null
     ) {
         $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $this->geoCodeService = $geoCodeService ?? $this->objectManager->get(GeoCodeService::class);
         $this->messageHelper = $messageHelper ?? GeneralUtility::makeInstance(MessageHelper::class);
         $this->signalSlotDispatcher = $signalSlotDispatcher ?? GeneralUtility::makeInstance(Dispatcher::class);
-
-        $configurationFile = Environment::getConfigPath() . '/Maps2/Registry.json';
-        if (@is_file($configurationFile)) {
-            $configuration = json_decode(file_get_contents($configurationFile), true);
-            if (
-                is_array($configuration) && count($configuration) === 2
-                && array_key_exists('registry', $configuration)
-            ) {
-                $this->columnRegistry = $configuration['registry'] ?: [];
-            }
-        }
+        $this->mapService = $mapService ?? GeneralUtility::makeInstance(MapService::class);
+        $this->columnRegistry = $this->mapService->getColumnRegistry();
     }
 
     /**
@@ -396,9 +393,8 @@ class CreateMaps2RecordHook
 
         $position = $this->geoCodeService->getFirstFoundPositionByAddress($address);
         if ($position instanceof Position) {
-            $mapService = GeneralUtility::makeInstance(MapService::class);
-            $mapService->assignPoiCollectionToForeignRecord(
-                $mapService->createNewPoiCollection($defaultStoragePid, $position),
+            $this->mapService->assignPoiCollectionToForeignRecord(
+                $this->mapService->createNewPoiCollection($defaultStoragePid, $position),
                 $foreignLocationRecord,
                 $foreignTableName,
                 $foreignColumnName

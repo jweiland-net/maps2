@@ -29,7 +29,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class PoiCollectionController extends AbstractController
 {
-    public function showAction(PoiCollection $poiCollection = null)
+    public function showAction(PoiCollection $poiCollection = null): void
     {
         $poiCollectionRepository = $this->objectManager->get(PoiCollectionRepository::class);
 
@@ -68,7 +68,7 @@ class PoiCollectionController extends AbstractController
         $this->view->assign('poiCollections', $poiCollections);
     }
 
-    public function searchAction(Search $search = null)
+    public function searchAction(Search $search = null): void
     {
         if ($search === null) {
             $search = $this->objectManager->get(Search::class);
@@ -76,7 +76,7 @@ class PoiCollectionController extends AbstractController
         $this->view->assign('search', $search);
     }
 
-    public function listRadiusAction(Search $search)
+    public function listRadiusAction(Search $search): void
     {
         $mapService = GeneralUtility::makeInstance(MapService::class);
         $geoCodeService = GeneralUtility::makeInstance(GeoCodeService::class);
