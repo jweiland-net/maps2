@@ -15,6 +15,7 @@ namespace JWeiland\Maps2\Domain\Model;
  * The TYPO3 project - inspiring people to share!
  */
 use JWeiland\Maps2\Configuration\ExtConf;
+use JWeiland\Maps2\Service\MapService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
@@ -138,12 +139,20 @@ class PoiCollection extends AbstractEntity
      */
     protected $distance = 0.0;
 
+    /**
+     * As I don't know, if foreign record has a valid DomainModel, the foreign records are arrays.
+     * "null" marks this property as uninitialized.
+     *
+     * @var array|null
+     */
+    protected $foreignRecords;
+
     public function __construct()
     {
         $this->initStorageObjects();
     }
 
-    protected function initStorageObjects()
+    protected function initStorageObjects(): void
     {
         $this->pois = new ObjectStorage();
         $this->categories = new ObjectStorage();
@@ -156,7 +165,7 @@ class PoiCollection extends AbstractEntity
         return $this->collectionType;
     }
 
-    public function setCollectionType(string $collectionType)
+    public function setCollectionType(string $collectionType): void
     {
         $this->collectionType = $collectionType;
     }
@@ -166,7 +175,7 @@ class PoiCollection extends AbstractEntity
         return $this->title;
     }
 
-    public function setTitle(string $title)
+    public function setTitle(string $title): void
     {
         $this->title = $title;
     }
@@ -176,7 +185,7 @@ class PoiCollection extends AbstractEntity
         return $this->address;
     }
 
-    public function setAddress(string $address)
+    public function setAddress(string $address): void
     {
         $this->address = $address;
     }
@@ -186,7 +195,7 @@ class PoiCollection extends AbstractEntity
         return $this->latitude;
     }
 
-    public function setLatitude($latitude)
+    public function setLatitude($latitude): void
     {
         $this->latitude = (float)$latitude;
     }
@@ -196,7 +205,7 @@ class PoiCollection extends AbstractEntity
         return $this->longitude;
     }
 
-    public function setLongitude($longitude)
+    public function setLongitude($longitude): void
     {
         $this->longitude = (float)$longitude;
     }
@@ -206,17 +215,17 @@ class PoiCollection extends AbstractEntity
         return $this->radius;
     }
 
-    public function setRadius(int $radius)
+    public function setRadius(int $radius): void
     {
         $this->radius = $radius;
     }
 
-    public function addPoi(Poi $poi)
+    public function addPoi(Poi $poi): void
     {
         $this->pois->attach($poi);
     }
 
-    public function removePoi(Poi $poiToRemove)
+    public function removePoi(Poi $poiToRemove): void
     {
         $this->pois->detach($poiToRemove);
     }
@@ -229,7 +238,7 @@ class PoiCollection extends AbstractEntity
         return $this->pois;
     }
 
-    public function setPois(ObjectStorage $pois)
+    public function setPois(ObjectStorage $pois): void
     {
         $this->pois = $pois;
     }
@@ -239,7 +248,7 @@ class PoiCollection extends AbstractEntity
         return $this->strokeColor;
     }
 
-    public function setStrokeColor(string $strokeColor)
+    public function setStrokeColor(string $strokeColor): void
     {
         $this->strokeColor = $strokeColor;
     }
@@ -249,7 +258,7 @@ class PoiCollection extends AbstractEntity
         return $this->strokeOpacity;
     }
 
-    public function setStrokeOpacity(string $strokeOpacity)
+    public function setStrokeOpacity(string $strokeOpacity): void
     {
         $this->strokeOpacity = $strokeOpacity;
     }
@@ -259,7 +268,7 @@ class PoiCollection extends AbstractEntity
         return $this->strokeWeight;
     }
 
-    public function setStrokeWeight(string $strokeWeight)
+    public function setStrokeWeight(string $strokeWeight): void
     {
         $this->strokeWeight = $strokeWeight;
     }
@@ -269,7 +278,7 @@ class PoiCollection extends AbstractEntity
         return $this->fillColor;
     }
 
-    public function setFillColor(string $fillColor)
+    public function setFillColor(string $fillColor): void
     {
         $this->fillColor = $fillColor;
     }
@@ -279,7 +288,7 @@ class PoiCollection extends AbstractEntity
         return $this->fillOpacity;
     }
 
-    public function setFillOpacity(string $fillOpacity)
+    public function setFillOpacity(string $fillOpacity): void
     {
         $this->fillOpacity = $fillOpacity;
     }
@@ -289,17 +298,17 @@ class PoiCollection extends AbstractEntity
         return $this->infoWindowContent;
     }
 
-    public function setInfoWindowContent(string $infoWindowContent)
+    public function setInfoWindowContent(string $infoWindowContent): void
     {
         $this->infoWindowContent = $infoWindowContent;
     }
 
-    public function addCategory(Category $category)
+    public function addCategory(Category $category): void
     {
         $this->categories->attach($category);
     }
 
-    public function removeCategory(Category $category)
+    public function removeCategory(Category $category): void
     {
         $this->categories->detach($category);
     }
@@ -323,7 +332,7 @@ class PoiCollection extends AbstractEntity
         return $category;
     }
 
-    public function setCategories(ObjectStorage $categories)
+    public function setCategories(ObjectStorage $categories): void
     {
         $this->categories = $categories;
     }
@@ -333,17 +342,17 @@ class PoiCollection extends AbstractEntity
         return $this->infoWindowImages;
     }
 
-    public function setInfoWindowImages(ObjectStorage $infoWindowImages)
+    public function setInfoWindowImages(ObjectStorage $infoWindowImages): void
     {
         $this->infoWindowImages = $infoWindowImages;
     }
 
-    public function addInfoWindowImage(FileReference $fileReference)
+    public function addInfoWindowImage(FileReference $fileReference): void
     {
         $this->infoWindowImages->attach($fileReference);
     }
 
-    public function removeInfoWindowImage(FileReference $fileReference)
+    public function removeInfoWindowImage(FileReference $fileReference): void
     {
         $this->infoWindowImages->detach($fileReference);
     }
@@ -378,17 +387,17 @@ class PoiCollection extends AbstractEntity
         return $siteUrl . $falIconReference->getPublicUrl(false);
     }
 
-    public function setMarkerIcons(ObjectStorage $markerIcons)
+    public function setMarkerIcons(ObjectStorage $markerIcons): void
     {
         $this->markerIcons = $markerIcons;
     }
 
-    public function addMarkerIcon(FileReference $fileReference)
+    public function addMarkerIcon(FileReference $fileReference): void
     {
         $this->markerIcons->attach($fileReference);
     }
 
-    public function removeMarkerIcon(FileReference $fileReference)
+    public function removeMarkerIcon(FileReference $fileReference): void
     {
         $this->markerIcons->detach($fileReference);
     }
@@ -403,15 +412,14 @@ class PoiCollection extends AbstractEntity
             $categoryWithIcon = $this->getFirstFoundCategoryWithIcon();
             if ($categoryWithIcon instanceof Category) {
                 return $categoryWithIcon->getMaps2MarkerIconWidth();
-            } else {
-                $extConf = GeneralUtility::makeInstance(ExtConf::class);
-                return $extConf->getMarkerIconWidth();
             }
+            $extConf = GeneralUtility::makeInstance(ExtConf::class);
+            return $extConf->getMarkerIconWidth();
         }
         return $this->markerIconWidth;
     }
 
-    public function setMarkerIconWidth(int $markerIconWidth)
+    public function setMarkerIconWidth(int $markerIconWidth): void
     {
         $this->markerIconWidth = $markerIconWidth;
     }
@@ -426,15 +434,14 @@ class PoiCollection extends AbstractEntity
             $categoryWithIcon = $this->getFirstFoundCategoryWithIcon();
             if ($categoryWithIcon instanceof Category) {
                 return $categoryWithIcon->getMaps2MarkerIconHeight();
-            } else {
-                $extConf = GeneralUtility::makeInstance(ExtConf::class);
-                return $extConf->getMarkerIconHeight();
             }
+            $extConf = GeneralUtility::makeInstance(ExtConf::class);
+            return $extConf->getMarkerIconHeight();
         }
         return $this->markerIconHeight;
     }
 
-    public function setMarkerIconHeight(int $markerIconHeight)
+    public function setMarkerIconHeight(int $markerIconHeight): void
     {
         $this->markerIconHeight = $markerIconHeight;
     }
@@ -449,15 +456,14 @@ class PoiCollection extends AbstractEntity
             $categoryWithIcon = $this->getFirstFoundCategoryWithIcon();
             if ($categoryWithIcon instanceof Category) {
                 return $categoryWithIcon->getMaps2MarkerIconAnchorPosX();
-            } else {
-                $extConf = GeneralUtility::makeInstance(ExtConf::class);
-                return $extConf->getMarkerIconAnchorPosX();
             }
+            $extConf = GeneralUtility::makeInstance(ExtConf::class);
+            return $extConf->getMarkerIconAnchorPosX();
         }
         return $this->markerIconAnchorPosX;
     }
 
-    public function setMarkerIconAnchorPosX(int $markerIconAnchorPosX)
+    public function setMarkerIconAnchorPosX(int $markerIconAnchorPosX): void
     {
         $this->markerIconAnchorPosX = $markerIconAnchorPosX;
     }
@@ -472,15 +478,14 @@ class PoiCollection extends AbstractEntity
             $categoryWithIcon = $this->getFirstFoundCategoryWithIcon();
             if ($categoryWithIcon instanceof Category) {
                 return $categoryWithIcon->getMaps2MarkerIconAnchorPosY();
-            } else {
-                $extConf = GeneralUtility::makeInstance(ExtConf::class);
-                return $extConf->getMarkerIconAnchorPosY();
             }
+            $extConf = GeneralUtility::makeInstance(ExtConf::class);
+            return $extConf->getMarkerIconAnchorPosY();
         }
         return $this->markerIconAnchorPosY;
     }
 
-    public function setMarkerIconAnchorPosY(int $markerIconAnchorPosY)
+    public function setMarkerIconAnchorPosY(int $markerIconAnchorPosY): void
     {
         $this->markerIconAnchorPosY = $markerIconAnchorPosY;
     }
@@ -490,8 +495,37 @@ class PoiCollection extends AbstractEntity
         return $this->distance;
     }
 
-    public function setDistance(float $distance)
+    public function setDistance(float $distance): void
     {
         $this->distance = $distance;
+    }
+
+    public function getForeignRecords(): array
+    {
+        if ($this->foreignRecords === null) {
+            $this->foreignRecords = [];
+            $mapService = GeneralUtility::makeInstance(MapService::class);
+            $mapService->addForeignRecordsToPoiCollection($this);
+        }
+        return $this->foreignRecords;
+    }
+
+    public function setForeignRecords(array $foreignRecords): void
+    {
+        foreach ($foreignRecords as $foreignRecord) {
+            $this->addForeignRecord($foreignRecord);
+        }
+    }
+
+    public function addForeignRecord(array $foreignRecord): void
+    {
+        if (!empty($foreignRecord)) {
+            $this->foreignRecords[$foreignRecord['uid']] = $foreignRecord;
+        }
+    }
+
+    public function removeForeignRecord(array $foreignRecord): void
+    {
+        unset($this->foreignRecords[$foreignRecord['uid']]);
     }
 }
