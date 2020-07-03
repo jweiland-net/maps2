@@ -315,7 +315,6 @@ GoogleMaps2.prototype.createMarker = function (poiCollection, environment) {
             this.categorizedMarkers[categoryUid] = [];
         }
         this.categorizedMarkers[categoryUid].push(marker);
-        this.pointMarkers.push(marker);
     }
 
     // assign first found marker icon, if available
@@ -328,6 +327,7 @@ GoogleMaps2.prototype.createMarker = function (poiCollection, environment) {
         marker.setIcon(icon);
     }
 
+    this.pointMarkers.push(marker);
     this.bounds.extend(marker.position);
 
     if (this.editable) {
