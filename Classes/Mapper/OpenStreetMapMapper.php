@@ -68,7 +68,7 @@ class OpenStreetMapMapper implements MapperInterface
 
             $formattedAddress = sprintf(
                 '%s %s, %s %s, %s',
-                $data['address']['road'] ?? '',
+                $data['address']['road'] ?? $data['address']['footway'] ?? '',
                 $data['address']['house_number'] ?? '',
                 $data['address']['postcode'] ?? '',
                 $data['address']['city'] ?? '',

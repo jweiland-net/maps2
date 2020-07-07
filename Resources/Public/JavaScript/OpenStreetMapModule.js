@@ -13,7 +13,7 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDrag
                     editable: true
                 }).setView([51.505, -0.09], 15);
 
-            L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            L.tileLayer(location.protocol + '//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 18,
                 attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +  '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' + 'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
                 id: 'mapbox.streets'

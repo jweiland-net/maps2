@@ -15,6 +15,7 @@ namespace JWeiland\Maps2\Domain\Model;
  * The TYPO3 project - inspiring people to share!
  */
 use JWeiland\Maps2\Configuration\ExtConf;
+use JWeiland\Maps2\Service\MapService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
@@ -176,6 +177,14 @@ class PoiCollection extends AbstractEntity
      * @var float
      */
     protected $distance = 0.0;
+
+    /**
+     * As I don't know, if foreign record has a valid DomainModel, the foreign records are arrays.
+     * "null" marks this property as uninitialized.
+     *
+     * @var array|null
+     */
+    protected $foreignRecords;
 
     /**
      * Constructor of this model class
@@ -628,11 +637,9 @@ class PoiCollection extends AbstractEntity
             $categoryWithIcon = $this->getFirstFoundCategoryWithIcon();
             if ($categoryWithIcon instanceof Category) {
                 return $categoryWithIcon->getMaps2MarkerIconWidth();
-            } else {
-                /** @var ExtConf $extConf */
-                $extConf = GeneralUtility::makeInstance(ExtConf::class);
-                return $extConf->getMarkerIconWidth();
             }
+            $extConf = GeneralUtility::makeInstance(ExtConf::class);
+            return $extConf->getMarkerIconWidth();
         }
         return $this->markerIconWidth;
     }
@@ -660,11 +667,9 @@ class PoiCollection extends AbstractEntity
             $categoryWithIcon = $this->getFirstFoundCategoryWithIcon();
             if ($categoryWithIcon instanceof Category) {
                 return $categoryWithIcon->getMaps2MarkerIconHeight();
-            } else {
-                /** @var ExtConf $extConf */
-                $extConf = GeneralUtility::makeInstance(ExtConf::class);
-                return $extConf->getMarkerIconHeight();
             }
+            $extConf = GeneralUtility::makeInstance(ExtConf::class);
+            return $extConf->getMarkerIconHeight();
         }
         return $this->markerIconHeight;
     }
@@ -692,10 +697,9 @@ class PoiCollection extends AbstractEntity
             $categoryWithIcon = $this->getFirstFoundCategoryWithIcon();
             if ($categoryWithIcon instanceof Category) {
                 return $categoryWithIcon->getMaps2MarkerIconAnchorPosX();
-            } else {
-                $extConf = GeneralUtility::makeInstance(ExtConf::class);
-                return $extConf->getMarkerIconAnchorPosX();
             }
+            $extConf = GeneralUtility::makeInstance(ExtConf::class);
+            return $extConf->getMarkerIconAnchorPosX();
         }
         return $this->markerIconAnchorPosX;
     }
@@ -723,11 +727,9 @@ class PoiCollection extends AbstractEntity
             $categoryWithIcon = $this->getFirstFoundCategoryWithIcon();
             if ($categoryWithIcon instanceof Category) {
                 return $categoryWithIcon->getMaps2MarkerIconAnchorPosY();
-            } else {
-                /** @var ExtConf $extConf */
-                $extConf = GeneralUtility::makeInstance(ExtConf::class);
-                return $extConf->getMarkerIconAnchorPosY();
             }
+            $extConf = GeneralUtility::makeInstance(ExtConf::class);
+            return $extConf->getMarkerIconAnchorPosY();
         }
         return $this->markerIconAnchorPosY;
     }
@@ -758,5 +760,34 @@ class PoiCollection extends AbstractEntity
     public function setDistance($distance)
     {
         $this->distance = (float)$distance;
+    }
+
+    public function getForeignRecords(): array
+    {
+        if ($this->foreignRecords === null) {
+            $this->foreignRecords = [];
+            $mapService = GeneralUtility::makeInstance(MapService::class);
+            $mapService->addForeignRecordsToPoiCollection($this);
+        }
+        return $this->foreignRecords;
+    }
+
+    public function setForeignRecords(array $foreignRecords): void
+    {
+        foreach ($foreignRecords as $foreignRecord) {
+            $this->addForeignRecord($foreignRecord);
+        }
+    }
+
+    public function addForeignRecord(array $foreignRecord): void
+    {
+        if (!empty($foreignRecord)) {
+            $this->foreignRecords[$foreignRecord['uid']] = $foreignRecord;
+        }
+    }
+
+    public function removeForeignRecord(array $foreignRecord): void
+    {
+        unset($this->foreignRecords[$foreignRecord['uid']]);
     }
 }

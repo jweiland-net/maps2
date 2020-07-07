@@ -21,7 +21,6 @@ use JWeiland\Maps2\Helper\StoragePidHelper;
 use JWeiland\Maps2\Service\GeoCodeService;
 use JWeiland\Maps2\Service\MapService;
 use TYPO3\CMS\Core\Cache\CacheManager;
-use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
@@ -52,14 +51,14 @@ class CreateMaps2RecordHook
     protected $messageHelper;
 
     /**
-     * @var FrontendInterface
-     */
-    protected $maps2RegistryCache;
-
-    /**
      * @var Dispatcher
      */
     protected $signalSlotDispatcher;
+
+    /**
+     * @var MapService
+     */
+    protected $mapService;
 
     /**
      * @var array
@@ -70,7 +69,7 @@ class CreateMaps2RecordHook
         GeoCodeService $geoCodeService = null,
         MessageHelper $messageHelper = null,
         Dispatcher $signalSlotDispatcher = null,
-        FrontendInterface $maps2RegistryCache = null
+        MapService $mapService = null
     ) {
         $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
 
@@ -88,14 +87,8 @@ class CreateMaps2RecordHook
             $signalSlotDispatcher = GeneralUtility::makeInstance(Dispatcher::class);
         }
         $this->signalSlotDispatcher = $signalSlotDispatcher;
-
-        if ($maps2RegistryCache === null) {
-            $maps2RegistryCache = $this->objectManager
-                ->get(CacheManager::class)
-                ->getCache('maps2_registry');
-        }
-        $this->maps2RegistryCache = $maps2RegistryCache;
-        $this->columnRegistry = $this->maps2RegistryCache->get('fields') ?: [];
+        $this->mapService = $mapService ?? GeneralUtility::makeInstance(MapService::class);
+        $this->columnRegistry = $this->mapService->getColumnRegistry();
     }
 
     /**
@@ -406,9 +399,8 @@ class CreateMaps2RecordHook
 
         $position = $this->geoCodeService->getFirstFoundPositionByAddress($address);
         if ($position instanceof Position) {
-            $mapService = GeneralUtility::makeInstance(MapService::class);
-            $mapService->assignPoiCollectionToForeignRecord(
-                $mapService->createNewPoiCollection($defaultStoragePid, $position),
+            $this->mapService->assignPoiCollectionToForeignRecord(
+                $this->mapService->createNewPoiCollection($defaultStoragePid, $position),
                 $foreignLocationRecord,
                 $foreignTableName,
                 $foreignColumnName

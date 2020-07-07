@@ -14,8 +14,6 @@ namespace JWeiland\Maps2\Tca;
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\CMS\Core\Cache\CacheManager;
-use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
@@ -33,16 +31,6 @@ class Maps2Registry implements SingletonInterface
     protected $registry = [];
 
     /**
-     * @var CacheManager
-     */
-    protected $cacheManager;
-
-    /**
-     * @var FrontendInterface
-     */
-    protected $maps2RegistryCache;
-
-    /**
      * @var array
      */
     protected $extensions = [];
@@ -55,14 +43,14 @@ class Maps2Registry implements SingletonInterface
     /**
      * @var string
      */
-    protected $template = '';
+    protected $configurationFile = '';
 
     /**
-     * Returns a class instance
-     *
-     * @return Maps2Registry
+     * @var string
      */
-    public static function getInstance()
+    protected $template = '';
+
+    public static function getInstance(): Maps2Registry
     {
         return GeneralUtility::makeInstance(__CLASS__);
     }
@@ -72,24 +60,27 @@ class Maps2Registry implements SingletonInterface
      */
     public function __construct()
     {
-        // As this constructor will only be called once after clearing SystemCache
-        // we can securely remove all registered fields
-        $this->cacheManager = GeneralUtility::makeInstance(CacheManager::class);
-        if ($this->cacheManager->hasCache('maps2_registry') === false) {
-            // @link: https://forge.typo3.org/issues/87546
-            // Seems we are in ExtensionManager or Installtool.
-            // TYPO3 missed to reload CacheConfigurations right after loading ext_localconf.php and before loading TCA.
-            $this->cacheManager->setCacheConfigurations($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']);
-            $this->cacheManager->flushCachesInGroup('system');
-        }
-
-        // Check again. In case of TCA Analyzer getCache will still return false, as only core caches are loaded
-        if ($this->cacheManager->hasCache('maps2_registry') === true) {
-            $this->maps2RegistryCache = $this->cacheManager->getCache('maps2_registry');
-        }
-
+        $this->configurationFile = PATH_site . 'typo3conf/Maps2Registry.json';
         $this->template = str_repeat(PHP_EOL, 3) . 'CREATE TABLE %s (' . PHP_EOL
             . '  %s int(11) unsigned DEFAULT \'0\' NOT NULL' . PHP_EOL . ');' . str_repeat(PHP_EOL, 3);
+    }
+
+    protected function initialize()
+    {
+        if (@is_file($this->configurationFile)) {
+            $configuration = json_decode(file_get_contents($this->configurationFile), true);
+            if (
+                is_array($configuration) && count($configuration) === 2
+                && array_key_exists('registry', $configuration)
+                && array_key_exists('extensions', $configuration)
+            ) {
+                $this->registry = $configuration['registry'];
+                $this->extensions = $configuration['extensions'];
+            }
+        } else {
+            GeneralUtility::mkdir_deep(dirname($this->configurationFile));
+            GeneralUtility::writeFile($this->configurationFile, '');
+        }
     }
 
     /**
@@ -117,11 +108,7 @@ class Maps2Registry implements SingletonInterface
      */
     public function add($extensionKey, $tableName, array $options = [], $fieldName = 'tx_maps2_uid', $override = false)
     {
-        // Do nothing in case of ExtensionManager or Installtool
-        if ($this->cacheManager->hasCache('maps2_registry') === false) {
-            return false;
-        }
-
+        $this->initialize();
         $didRegister = false;
         if (empty($tableName) || !is_string($tableName)) {
             throw new \InvalidArgumentException('No or invalid table name "' . $tableName . '" given.', 1369122038);
@@ -139,10 +126,10 @@ class Maps2Registry implements SingletonInterface
 
         if (isset($GLOBALS['TCA'][$tableName]['columns'])) {
             $this->applyTcaForTableAndField($tableName, $fieldName);
-            $this->maps2RegistryCache->set(
-                'fields',
-                $this->registry
-            );
+            file_put_contents($this->configurationFile, json_encode([
+                'registry' => $this->registry,
+                'extensions' => $this->extensions
+                ]));
             $didRegister = true;
         }
 
@@ -419,6 +406,7 @@ class Maps2Registry implements SingletonInterface
      */
     public function addMaps2DatabaseSchemasToTablesDefinition(array $sqlString)
     {
+        $this->initialize();
         $sqlString[] = $this->getDatabaseTableDefinitions();
         return ['sqlString' => $sqlString];
     }

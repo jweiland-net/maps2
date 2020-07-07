@@ -47,13 +47,6 @@ call_user_func(function() {
         ];
     }
 
-    // Register cache to store registry entries of foreign extensions
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['maps2_registry'] = [
-        'frontend' => \TYPO3\CMS\Core\Cache\Frontend\VariableFrontend::class,
-        'backend' => \TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend::class,
-        'groups' => ['all', 'system']
-    ];
-
     // This is a solution to build GET forms.
     $GLOBALS['TYPO3_CONF_VARS']['FE']['cacheHash']['excludedParameters'][] = 'tx_maps2_citymap[street]';
     // We have to save the permission to allow map provider requests before TS-Template rendering. It's needed by our own TS Condition object
