@@ -45,7 +45,7 @@ class SearchTest extends UnitTestCase
      * @test
      */
     public function getAddressInitiallyReturnsEmptyString() {
-        $this->assertSame(
+        self::assertSame(
             '',
             $this->subject->getAddress()
         );
@@ -57,7 +57,7 @@ class SearchTest extends UnitTestCase
     public function setAddressSetsAddress() {
         $this->subject->setAddress('foo bar');
 
-        $this->assertSame(
+        self::assertSame(
             'foo bar',
             $this->subject->getAddress()
         );
@@ -68,7 +68,7 @@ class SearchTest extends UnitTestCase
      */
     public function setAddressWithIntegerResultsInString() {
         $this->subject->setAddress(123);
-        $this->assertSame('123', $this->subject->getAddress());
+        self::assertSame('123', $this->subject->getAddress());
     }
 
     /**
@@ -76,14 +76,14 @@ class SearchTest extends UnitTestCase
      */
     public function setAddressWithBooleanResultsInString() {
         $this->subject->setAddress(true);
-        $this->assertSame('1', $this->subject->getAddress());
+        self::assertSame('1', $this->subject->getAddress());
     }
 
     /**
      * @test
      */
     public function getRadiusInitiallyReturnsZero() {
-        $this->assertSame(
+        self::assertSame(
             50,
             $this->subject->getRadius()
         );
@@ -95,7 +95,7 @@ class SearchTest extends UnitTestCase
     public function setRadiusSetsRadius() {
         $this->subject->setRadius(123456);
 
-        $this->assertSame(
+        self::assertSame(
             123456,
             $this->subject->getRadius()
         );
@@ -107,7 +107,7 @@ class SearchTest extends UnitTestCase
     public function setRadiusWithStringResultsInInteger() {
         $this->subject->setRadius('123Test');
 
-        $this->assertSame(
+        self::assertSame(
             123,
             $this->subject->getRadius()
         );
@@ -119,7 +119,7 @@ class SearchTest extends UnitTestCase
     public function setRadiusWithBooleanResultsInInteger() {
         $this->subject->setRadius(true);
 
-        $this->assertSame(
+        self::assertSame(
             1,
             $this->subject->getRadius()
         );

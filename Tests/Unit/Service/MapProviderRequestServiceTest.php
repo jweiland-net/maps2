@@ -61,7 +61,7 @@ class MapProviderRequestServiceTest extends UnitTestCase
     {
         $this->extConf->setExplicitAllowMapProviderRequests(0);
         $this->extConf->setExplicitAllowMapProviderRequestsBySessionOnly(0);
-        $this->assertTrue(
+        self::assertTrue(
             $this->subject->isRequestToMapProviderAllowed()
         );
     }
@@ -73,7 +73,7 @@ class MapProviderRequestServiceTest extends UnitTestCase
     {
         $this->extConf->setExplicitAllowMapProviderRequests(1);
         $this->extConf->setExplicitAllowMapProviderRequestsBySessionOnly(1);
-        $this->assertFalse(
+        self::assertFalse(
             $this->subject->isRequestToMapProviderAllowed()
         );
     }
@@ -86,7 +86,7 @@ class MapProviderRequestServiceTest extends UnitTestCase
         $this->extConf->setExplicitAllowMapProviderRequests(1);
         $this->extConf->setExplicitAllowMapProviderRequestsBySessionOnly(1);
         $_SESSION['mapProviderRequestsAllowedForMaps2'] = 1;
-        $this->assertTrue(
+        self::assertTrue(
             $this->subject->isRequestToMapProviderAllowed()
         );
     }
@@ -98,7 +98,7 @@ class MapProviderRequestServiceTest extends UnitTestCase
     {
         $this->extConf->setExplicitAllowMapProviderRequests(1);
         $this->extConf->setExplicitAllowMapProviderRequestsBySessionOnly(0);
-        $this->assertFalse(
+        self::assertFalse(
             $this->subject->isRequestToMapProviderAllowed()
         );
     }
@@ -119,7 +119,7 @@ class MapProviderRequestServiceTest extends UnitTestCase
         $feUser->getSessionData('mapProviderRequestsAllowedForMaps2')->shouldBeCalled()->willReturn(false);
         $GLOBALS['TSFE']->fe_user = $feUser->reveal();
 
-        $this->assertFalse(
+        self::assertFalse(
             $this->subject->isRequestToMapProviderAllowed()
         );
     }
@@ -139,7 +139,7 @@ class MapProviderRequestServiceTest extends UnitTestCase
         $feUser->getSessionData('mapProviderRequestsAllowedForMaps2')->shouldBeCalled()->willReturn(true);
         $GLOBALS['TSFE']->fe_user = $feUser->reveal();
 
-        $this->assertTrue(
+        self::assertTrue(
             $this->subject->isRequestToMapProviderAllowed()
         );
     }

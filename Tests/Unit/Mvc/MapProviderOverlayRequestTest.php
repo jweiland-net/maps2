@@ -85,7 +85,7 @@ class MapProviderOverlayRequestTest extends UnitTestCase
             Environment::isWindows() ? 'WINDOWS' : 'UNIX'
         );
 
-        $this->assertFalse(
+        self::assertFalse(
             $this->subject->canHandleRequest()
         );
     }
@@ -120,7 +120,7 @@ class MapProviderOverlayRequestTest extends UnitTestCase
             ->shouldBeCalled()
             ->willReturn($configurationManager->reveal());
 
-        $this->assertFalse(
+        self::assertFalse(
             $this->subject->canHandleRequest()
         );
     }
@@ -155,7 +155,7 @@ class MapProviderOverlayRequestTest extends UnitTestCase
             ->shouldBeCalled()
             ->willReturn($configurationManager->reveal());
 
-        $this->assertTrue(
+        self::assertTrue(
             $this->subject->canHandleRequest()
         );
     }
@@ -165,7 +165,7 @@ class MapProviderOverlayRequestTest extends UnitTestCase
      */
     public function getPriorityReturnsHigherValueThan100()
     {
-        $this->assertGreaterThan(
+        self::assertGreaterThan(
             100,
             $this->subject->getPriority()
         );
@@ -186,7 +186,7 @@ class MapProviderOverlayRequestTest extends UnitTestCase
         $mapService->showAllowMapForm()->shouldBeCalled()->willReturn($testString);
         GeneralUtility::addInstance(MapService::class, $mapService->reveal());
 
-        $this->assertSame(
+        self::assertSame(
             $testString,
             $this->subject->handleRequest()->getContent()
         );

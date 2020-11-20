@@ -66,7 +66,7 @@ class RequestFactoryTest extends UnitTestCase
             ->shouldBeCalled()
             ->willReturn('gm');
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             GeocodeRequest::class,
             $this->subject->create('GeocodeRequest', new ExtConf([]))
         );
@@ -82,7 +82,7 @@ class RequestFactoryTest extends UnitTestCase
             ->shouldBeCalled()
             ->willReturn('osm');
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             \JWeiland\Maps2\Client\Request\OpenStreetMap\GeocodeRequest::class,
             $this->subject->create('GeocodeRequest', new ExtConf([]))
         );
@@ -98,7 +98,7 @@ class RequestFactoryTest extends UnitTestCase
             ->shouldBeCalled()
             ->willReturn('gm');
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             GeocodeRequest::class,
             $this->subject->create('GeocodeRequest.php', new ExtConf([]))
         );
@@ -114,7 +114,7 @@ class RequestFactoryTest extends UnitTestCase
             ->shouldBeCalled()
             ->willReturn('gm');
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             GeocodeRequest::class,
             $this->subject->create('geocodeRequest', new ExtConf([]))
         );

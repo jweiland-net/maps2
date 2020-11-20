@@ -77,7 +77,7 @@ class AddressHelperTest extends AbstractUnitTestCase
         ];
         $options = [];
 
-        $this->assertSame(
+        self::assertSame(
             '',
             $this->subject->getAddress($record, $options)
         );
@@ -104,7 +104,7 @@ class AddressHelperTest extends AbstractUnitTestCase
             'addressColumns' => []
         ];
 
-        $this->assertSame(
+        self::assertSame(
             '',
             $this->subject->getAddress($record, $options)
         );
@@ -150,7 +150,7 @@ class AddressHelperTest extends AbstractUnitTestCase
             'countryColumn' => 'country'
         ];
 
-        $this->assertSame(
+        self::assertSame(
             'Mainstreet 17 23145 Munich',
             $this->subject->getAddress($record, $options)
         );
@@ -189,7 +189,7 @@ class AddressHelperTest extends AbstractUnitTestCase
             'countryColumn' => 'country'
         ];
 
-        $this->assertSame(
+        self::assertSame(
             'Mainstreet 17 23145 Munich Germany',
             $this->subject->getAddress($record, $options)
         );
@@ -219,7 +219,7 @@ class AddressHelperTest extends AbstractUnitTestCase
             'defaultCountry' => 'France'
         ];
 
-        $this->assertSame(
+        self::assertSame(
             'Mainstreet 17 23145 Paris France',
             $this->subject->getAddress($record, $options)
         );
@@ -265,7 +265,7 @@ class AddressHelperTest extends AbstractUnitTestCase
             'countryColumn' => 'country'
         ];
 
-        $this->assertSame(
+        self::assertSame(
             'Mainstreet 17 23145 Warschau Poland',
             $this->subject->getAddress($record, $options)
         );
@@ -317,7 +317,7 @@ class AddressHelperTest extends AbstractUnitTestCase
             'countryColumn' => 'country'
         ];
 
-        $this->assertSame(
+        self::assertSame(
             'Mainstreet 17 23145 Warschau',
             $this->subject->getAddress($record, $options)
         );
@@ -341,7 +341,7 @@ class AddressHelperTest extends AbstractUnitTestCase
             'countryColumn' => '    country   '
         ];
 
-        $this->assertSame(
+        self::assertSame(
             'Mainstreet 17 23145 Madrid Spain',
             $this->subject->getAddress($record, $options)
         );
@@ -365,7 +365,7 @@ class AddressHelperTest extends AbstractUnitTestCase
             'countryColumn' => '    country   '
         ];
 
-        $this->assertSame(
+        self::assertSame(
             'Mainstreet 17 23145 Madrid Spain',
             $this->subject->getAddress($record, $options)
         );
@@ -390,7 +390,7 @@ class AddressHelperTest extends AbstractUnitTestCase
             'countryColumn' => 'country'
         ];
 
-        $this->assertSame(
+        self::assertSame(
             'Mainstreet 23 00367 Madrid Spain',
             $this->subject->getAddress($record, $options)
         );
@@ -430,7 +430,7 @@ class AddressHelperTest extends AbstractUnitTestCase
                 'city'
             ]
         ];
-        $this->assertTrue(
+        self::assertTrue(
             $this->subject->isSameAddress($address, $foreignLocationRecord, $options)
         );
     }

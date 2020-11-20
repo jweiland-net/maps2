@@ -66,7 +66,7 @@ class AllowMapProviderRequestFunctionsProviderTest extends UnitTestCase
         /** @var ExpressionFunction $expressionFunction */
         $expressionFunction = $this->subject->getFunctions()[0];
 
-        $this->assertTrue(
+        self::assertTrue(
             call_user_func($expressionFunction->getEvaluator(), [])
         );
     }
@@ -82,7 +82,7 @@ class AllowMapProviderRequestFunctionsProviderTest extends UnitTestCase
         /** @var ExpressionFunction $expressionFunction */
         $expressionFunction = $this->subject->getFunctions()[0];
 
-        $this->assertFalse(
+        self::assertFalse(
             call_user_func($expressionFunction->getEvaluator(), [])
         );
     }
@@ -99,7 +99,7 @@ class AllowMapProviderRequestFunctionsProviderTest extends UnitTestCase
         $expressionFunction = $this->subject->getFunctions()[0];
 
         $_SESSION['mapProviderRequestsAllowedForMaps2'] = 1;
-        $this->assertTrue(
+        self::assertTrue(
             call_user_func($expressionFunction->getEvaluator(), [])
         );
     }
@@ -115,7 +115,7 @@ class AllowMapProviderRequestFunctionsProviderTest extends UnitTestCase
         /** @var ExpressionFunction $expressionFunction */
         $expressionFunction = $this->subject->getFunctions()[0];
 
-        $this->assertFalse(
+        self::assertFalse(
             call_user_func($expressionFunction->getEvaluator(), [])
         );
     }
@@ -139,7 +139,7 @@ class AllowMapProviderRequestFunctionsProviderTest extends UnitTestCase
         $feUser->getSessionData('mapProviderRequestsAllowedForMaps2')->shouldBeCalled()->willReturn(false);
         $GLOBALS['TSFE']->fe_user = $feUser->reveal();
 
-        $this->assertFalse(
+        self::assertFalse(
             call_user_func($expressionFunction->getEvaluator(), [])
         );
     }
@@ -162,7 +162,7 @@ class AllowMapProviderRequestFunctionsProviderTest extends UnitTestCase
         $feUser->getSessionData('mapProviderRequestsAllowedForMaps2')->shouldBeCalled()->willReturn(true);
         $GLOBALS['TSFE']->fe_user = $feUser->reveal();
 
-        $this->assertTrue(
+        self::assertTrue(
             call_user_func($expressionFunction->getEvaluator(), [])
         );
     }

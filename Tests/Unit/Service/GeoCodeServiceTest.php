@@ -78,7 +78,7 @@ class GeoCodeServiceTest extends AbstractUnitTestCase
         $objectStorage = new ObjectStorage();
         GeneralUtility::addInstance(ObjectStorage::class, $objectStorage);
 
-        $this->assertSame(
+        self::assertSame(
             $objectStorage,
             $this->subject->getPositionsByAddress('')
         );
@@ -93,7 +93,7 @@ class GeoCodeServiceTest extends AbstractUnitTestCase
         $objectStorage = new ObjectStorage();
         GeneralUtility::addInstance(ObjectStorage::class, $objectStorage);
 
-        $this->assertSame(
+        self::assertSame(
             $objectStorage,
             $this->subject->getPositionsByAddress('    ')
         );
@@ -127,7 +127,7 @@ class GeoCodeServiceTest extends AbstractUnitTestCase
             ->shouldBeCalled()
             ->willReturn([]);
 
-        $this->assertSame(
+        self::assertSame(
             $objectStorage,
             $this->subject->getPositionsByAddress('My private address')
         );
@@ -179,7 +179,7 @@ class GeoCodeServiceTest extends AbstractUnitTestCase
             ->willReturn($googleMapsMapper);
         GeneralUtility::addInstance(MapperFactory::class, $mapperFactoryProphecy->reveal());
 
-        $this->assertCount(
+        self::assertCount(
             1,
             $this->subject->getPositionsByAddress('My private address')
         );
@@ -194,7 +194,7 @@ class GeoCodeServiceTest extends AbstractUnitTestCase
         $objectStorage = new ObjectStorage();
         GeneralUtility::addInstance(ObjectStorage::class, $objectStorage);
 
-        $this->assertSame(
+        self::assertSame(
             null,
             $this->subject->getFirstFoundPositionByAddress('')
         );
@@ -209,7 +209,7 @@ class GeoCodeServiceTest extends AbstractUnitTestCase
         $objectStorage = new ObjectStorage();
         GeneralUtility::addInstance(ObjectStorage::class, $objectStorage);
 
-        $this->assertSame(
+        self::assertSame(
             null,
             $this->subject->getFirstFoundPositionByAddress('     ')
         );
@@ -243,7 +243,7 @@ class GeoCodeServiceTest extends AbstractUnitTestCase
             ->shouldBeCalled()
             ->willReturn([]);
 
-        $this->assertSame(
+        self::assertSame(
             null,
             $this->subject->getFirstFoundPositionByAddress('My private address')
         );
@@ -298,7 +298,7 @@ class GeoCodeServiceTest extends AbstractUnitTestCase
             ->willReturn($googleMapsMapper);
         GeneralUtility::addInstance(MapperFactory::class, $mapperFactoryProphecy->reveal());
 
-        $this->assertEquals(
+        self::assertEquals(
             $expectedPosition,
             $this->subject->getFirstFoundPositionByAddress('My private address')
         );

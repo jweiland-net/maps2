@@ -77,7 +77,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         ];
         $options = [];
 
-        $this->assertSame(
+        self::assertSame(
             0,
             $this->subject->getDefaultStoragePidForNewPoiCollection($recordWithoutPid, $options)
         );
@@ -117,7 +117,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         ];
         $options = [];
 
-        $this->assertSame(
+        self::assertSame(
             200,
             $this->subject->getDefaultStoragePidForNewPoiCollection($record, $options)
         );
@@ -159,7 +159,7 @@ class StoragePidHelperTest extends FunctionalTestCase
             'defaultStoragePid' => 428
         ];
 
-        $this->assertSame(
+        self::assertSame(
             428,
             $this->subject->getDefaultStoragePidForNewPoiCollection($record, $options)
         );
@@ -201,7 +201,7 @@ class StoragePidHelperTest extends FunctionalTestCase
             'defaultStoragePid' => '428'
         ];
 
-        $this->assertSame(
+        self::assertSame(
             428,
             $this->subject->getDefaultStoragePidForNewPoiCollection($record, $options)
         );
@@ -235,7 +235,7 @@ class StoragePidHelperTest extends FunctionalTestCase
             ]
         ];
 
-        $this->assertSame(
+        self::assertSame(
             385,
             $this->subject->getDefaultStoragePidForNewPoiCollection($recordWithoutPid, $options)
         );
@@ -292,7 +292,7 @@ class StoragePidHelperTest extends FunctionalTestCase
             ]
         ];
 
-        $this->assertSame(
+        self::assertSame(
             197,
             $this->subject->getDefaultStoragePidForNewPoiCollection($record, $options)
         );
@@ -350,7 +350,7 @@ class StoragePidHelperTest extends FunctionalTestCase
             ]
         ];
 
-        $this->assertSame(
+        self::assertSame(
             197,
             $this->subject->getDefaultStoragePidForNewPoiCollection($record, $options)
         );
@@ -396,7 +396,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         ];
         $options = [];
 
-        $this->assertSame(
+        self::assertSame(
             582,
             $this->subject->getDefaultStoragePidForNewPoiCollection($record, $options)
         );
@@ -448,7 +448,7 @@ class StoragePidHelperTest extends FunctionalTestCase
             ]
         ];
 
-        $this->assertSame(
+        self::assertSame(
             582,
             $this->subject->getDefaultStoragePidForNewPoiCollection($record, $options)
         );
@@ -503,7 +503,7 @@ class StoragePidHelperTest extends FunctionalTestCase
             ]
         ];
 
-        $this->assertSame(
+        self::assertSame(
             927,
             $this->subject->getDefaultStoragePidForNewPoiCollection($record, $options)
         );
@@ -551,7 +551,7 @@ class StoragePidHelperTest extends FunctionalTestCase
             'defaultStoragePid' => 428
         ];
 
-        $this->assertSame(
+        self::assertSame(
             582,
             $this->subject->getDefaultStoragePidForNewPoiCollection($record, $options)
         );
@@ -631,7 +631,7 @@ class StoragePidHelperTest extends FunctionalTestCase
             ]
         ];
 
-        $this->assertSame(
+        self::assertSame(
             4297,
             $this->subject->getDefaultStoragePidForNewPoiCollection($record, $options)
         );
@@ -715,7 +715,7 @@ class StoragePidHelperTest extends FunctionalTestCase
             ]
         ];
 
-        $this->assertSame(
+        self::assertSame(
             4867,
             $this->subject->getDefaultStoragePidForNewPoiCollection($record, $options)
         );
@@ -798,7 +798,7 @@ class StoragePidHelperTest extends FunctionalTestCase
             ]
         ];
 
-        $this->assertSame(
+        self::assertSame(
             5837,
             $this->subject->getDefaultStoragePidForNewPoiCollection($record, $options)
         );
