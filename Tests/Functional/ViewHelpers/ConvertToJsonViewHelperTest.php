@@ -39,7 +39,6 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
         'typo3conf/ext/maps2'
     ];
 
-
     /**
      * Sets up the fixture, for example, open a network connection.
      * This method is called before a test is executed.
@@ -69,7 +68,7 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
     public function renderWithStringWillJustCallJsonEncode()
     {
         $this->subject->setRenderChildrenClosure(
-            function() {
+            function () {
                 return 'simpleString';
             }
         );
@@ -86,7 +85,7 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
     public function renderWithSimpleArrayWillJustCallJsonEncode()
     {
         $this->subject->setRenderChildrenClosure(
-            function() {
+            function () {
                 return ['foo' => 'bar'];
             }
         );
@@ -103,7 +102,7 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
     public function renderWithPoiCollectionWillSetItToArrayAndConvertItToJson()
     {
         $this->subject->setRenderChildrenClosure(
-            function() {
+            function () {
                 return new PoiCollection();
             }
         );
@@ -119,7 +118,7 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
         );
 
         // we have set PoiCollection into an array, so JSON should start with [{
-        $this->stringStartsWith('[{');
+        self::stringStartsWith('[{');
     }
 
     /**
@@ -128,7 +127,7 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
     public function renderWithPoiCollectionsWillConvertItToJson()
     {
         $this->subject->setRenderChildrenClosure(
-            function() {
+            function () {
                 return [new PoiCollection()];
             }
         );
@@ -142,7 +141,7 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
         );
 
         // we have set PoiCollection into an array, so JSON should start with [{
-        $this->stringStartsWith('[{');
+        self::stringStartsWith('[{');
     }
 
     /**
@@ -154,7 +153,7 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
         $poiCollection->addCategory(new Category());
 
         $this->subject->setRenderChildrenClosure(
-            function() use ($poiCollection) {
+            function () use ($poiCollection) {
                 return [$poiCollection];
             }
         );
@@ -179,7 +178,7 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
         $poiCollection = new PoiCollection();
 
         $this->subject->setRenderChildrenClosure(
-            function() use ($poiCollection) {
+            function () use ($poiCollection) {
                 return [$poiCollection];
             }
         );

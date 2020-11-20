@@ -84,10 +84,9 @@ class AddressHelper
                 true
             )) {
                 continue;
-            } else {
-                $isSameAddress = false;
-                break;
             }
+            $isSameAddress = false;
+            break;
         }
         return $isSameAddress;
     }
@@ -125,13 +124,12 @@ class AddressHelper
         // try to get defaultCountry from maps2 registry
         if (array_key_exists('defaultCountry', $options) && !empty($options['defaultCountry'])) {
             return trim($options['defaultCountry']);
-        } else {
-            $this->messageHelper->addFlashMessage(
-                'We can not find any country information within your extension. Either in Maps2 Registry nor in this record. Please check your configuration or update your extension.',
-                'No country information found',
-                FlashMessage::WARNING
-            );
         }
+        $this->messageHelper->addFlashMessage(
+            'We can not find any country information within your extension. Either in Maps2 Registry nor in this record. Please check your configuration or update your extension.',
+            'No country information found',
+            FlashMessage::WARNING
+        );
 
         // try to get default country of maps2 extConf
         $extConf = GeneralUtility::makeInstance(ExtConf::class);
@@ -171,9 +169,8 @@ class AddressHelper
                 FlashMessage::WARNING
             );
             return '';
-        } else {
-            return $countryRecord['cn_short_en'];
         }
+        return $countryRecord['cn_short_en'];
     }
 
     /**

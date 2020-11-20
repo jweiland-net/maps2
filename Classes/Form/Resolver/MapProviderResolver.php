@@ -45,9 +45,8 @@ class MapProviderResolver implements NodeResolverInterface
         $mapService = GeneralUtility::makeInstance(MapService::class);
         if ($mapService->getMapProvider($this->data['databaseRow']) === 'osm') {
             return OpenStreetMapElement::class;
-        } else {
-            return GoogleMapsElement::class;
         }
+        return GoogleMapsElement::class;
     }
 
     /**

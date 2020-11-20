@@ -189,7 +189,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
                 CreateMaps2RecordHook::class,
                 'preIsRecordAllowedToCreatePoiCollection',
                 Argument::withEntry(4, false)
-           )
+            )
             ->shouldBeCalled();
         $dispatcherProphecy
             ->dispatch(Argument::cetera())

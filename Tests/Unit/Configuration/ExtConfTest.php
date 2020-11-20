@@ -270,8 +270,7 @@ class ExtConfTest extends UnitTestCase
      */
     public function getExplicitAllowMapProviderRequestsInitiallyReturnsFalse()
     {
-        self::assertSame(
-            false,
+        self::assertFalse(
             $this->subject->getExplicitAllowMapProviderRequests()
         );
     }
@@ -282,8 +281,7 @@ class ExtConfTest extends UnitTestCase
     public function setExplicitAllowMapProviderRequestsSetsExplicitAllowGoogleMaps()
     {
         $this->subject->setExplicitAllowMapProviderRequests(true);
-        self::assertSame(
-            true,
+        self::assertTrue(
             $this->subject->getExplicitAllowMapProviderRequests()
         );
     }
@@ -311,8 +309,7 @@ class ExtConfTest extends UnitTestCase
      */
     public function getExplicitAllowMapProviderRequestsBySessionOnlyInitiallyReturnsFalse()
     {
-        self::assertSame(
-            false,
+        self::assertFalse(
             $this->subject->getExplicitAllowMapProviderRequestsBySessionOnly()
         );
     }
@@ -323,8 +320,7 @@ class ExtConfTest extends UnitTestCase
     public function setExplicitAllowMapProviderRequestsBySessionOnlySetsExplicitAllowGoogleMapsBySessionOnly()
     {
         $this->subject->setExplicitAllowMapProviderRequestsBySessionOnly(true);
-        self::assertSame(
-            true,
+        self::assertTrue(
             $this->subject->getExplicitAllowMapProviderRequestsBySessionOnly()
         );
     }
@@ -335,7 +331,9 @@ class ExtConfTest extends UnitTestCase
     public function setExplicitAllowMapProviderRequestsBySessionOnlyWithStringReturnsTrue()
     {
         $this->subject->setExplicitAllowMapProviderRequestsBySessionOnly('foo bar');
-        self::assertTrue($this->subject->getExplicitAllowMapProviderRequestsBySessionOnly());
+        self::assertTrue(
+            $this->subject->getExplicitAllowMapProviderRequestsBySessionOnly()
+        );
     }
 
     /**
@@ -344,7 +342,9 @@ class ExtConfTest extends UnitTestCase
     public function setExplicitAllowMapProviderRequestsBySessionOnlyWithZeroReturnsFalse()
     {
         $this->subject->setExplicitAllowMapProviderRequestsBySessionOnly(0);
-        self::assertFalse($this->subject->getExplicitAllowMapProviderRequestsBySessionOnly());
+        self::assertFalse(
+            $this->subject->getExplicitAllowMapProviderRequestsBySessionOnly()
+        );
     }
 
     /**
@@ -386,7 +386,10 @@ class ExtConfTest extends UnitTestCase
     public function setInfoWindowContentTemplatePathWithBooleanResultsInString()
     {
         $this->subject->setInfoWindowContentTemplatePath(true);
-        self::assertSame('1', $this->subject->getInfoWindowContentTemplatePath());
+        self::assertSame(
+            '1',
+            $this->subject->getInfoWindowContentTemplatePath()
+        );
     }
 
     /**

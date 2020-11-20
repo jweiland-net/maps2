@@ -10,18 +10,13 @@
 namespace JWeiland\Maps2\Tests\Unit\ViewHelpers\Widget;
 
 use JWeiland\Maps2\Configuration\ExtConf;
-use JWeiland\Maps2\Service\GeoCodeService;
 use JWeiland\Maps2\Service\MapProviderRequestService;
 use JWeiland\Maps2\Service\MapService;
 use JWeiland\Maps2\ViewHelpers\Widget\Controller\EditPoiController;
 use JWeiland\Maps2\ViewHelpers\Widget\EditPoiViewHelper;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
-use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 
 /**

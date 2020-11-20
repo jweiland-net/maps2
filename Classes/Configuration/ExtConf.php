@@ -110,9 +110,8 @@ class ExtConf implements SingletonInterface
     {
         if (empty($this->defaultLatitude)) {
             return 0.00;
-        } else {
-            return $this->defaultLatitude;
         }
+        return $this->defaultLatitude;
     }
 
     public function setDefaultLatitude($defaultLatitude)
@@ -124,9 +123,8 @@ class ExtConf implements SingletonInterface
     {
         if (empty($this->defaultLongitude)) {
             return 0.00;
-        } else {
-            return $this->defaultLongitude;
         }
+        return $this->defaultLongitude;
     }
 
     public function setDefaultLongitude($defaultLongitude)
@@ -138,9 +136,8 @@ class ExtConf implements SingletonInterface
     {
         if (empty($this->defaultRadius)) {
             return 250;
-        } else {
-            return $this->defaultRadius;
         }
+        return $this->defaultRadius;
     }
 
     public function setDefaultRadius($defaultRadius)
@@ -271,9 +268,8 @@ class ExtConf implements SingletonInterface
     {
         if (empty($this->strokeColor)) {
             return '#FF0000';
-        } else {
-            return $this->strokeColor;
         }
+        return $this->strokeColor;
     }
 
     public function setStrokeColor(string $strokeColor)
@@ -285,9 +281,8 @@ class ExtConf implements SingletonInterface
     {
         if (empty($this->strokeOpacity)) {
             return 0.8;
-        } else {
-            return $this->strokeOpacity;
         }
+        return $this->strokeOpacity;
     }
 
     public function setStrokeOpacity($strokeOpacity)
@@ -299,9 +294,8 @@ class ExtConf implements SingletonInterface
     {
         if (empty($this->strokeWeight)) {
             return 2;
-        } else {
-            return $this->strokeWeight;
         }
+        return $this->strokeWeight;
     }
 
     public function setStrokeWeight($strokeWeight)
@@ -313,9 +307,8 @@ class ExtConf implements SingletonInterface
     {
         if (empty($this->fillColor)) {
             return '#FF0000';
-        } else {
-            return $this->fillColor;
         }
+        return $this->fillColor;
     }
 
     public function setFillColor(string $fillColor)
@@ -327,9 +320,8 @@ class ExtConf implements SingletonInterface
     {
         if (empty($this->fillOpacity)) {
             return 0.35;
-        } else {
-            return $this->fillOpacity;
         }
+        return $this->fillOpacity;
     }
 
     public function setFillOpacity($fillOpacity)
