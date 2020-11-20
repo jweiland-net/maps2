@@ -9,9 +9,6 @@
 
 namespace JWeiland\Maps2\Tests\Unit\Controller;
 
-use JWeiland\Events2\Controller\DayController;
-use JWeiland\Events2\Domain\Repository\DayRepository;
-use JWeiland\Events2\Domain\Repository\EventRepository;
 use JWeiland\Maps2\Controller\PoiCollectionController;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
@@ -172,7 +169,6 @@ class PoiCollectionControllerTest extends UnitTestCase
             ->shouldBeCalled()
             ->willReturn($flashMessageQueueProphecy->reveal());
 
-
         /** @var QueryResultInterface|ObjectProphecy $queryResultProphecy */
         $queryResultProphecy = $this->prophesize(QueryResultInterface::class);
         $queryResultProphecy
@@ -252,7 +248,6 @@ class PoiCollectionControllerTest extends UnitTestCase
             ->getFlashMessageQueue()
             ->shouldBeCalled()
             ->willReturn($flashMessageQueueProphecy->reveal());
-
 
         /** @var QueryResultInterface|ObjectProphecy $queryResultProphecy */
         $queryResultProphecy = $this->prophesize(QueryResultInterface::class);

@@ -100,8 +100,7 @@ abstract class AbstractController extends AbstractWidgetController
             $typoScriptService = GeneralUtility::makeInstance(TypoScriptService::class);
             $settings = ArrayUtility::getValueByPath($fullTypoScript, 'plugin./tx_maps2./settings.');
             return $typoScriptService->convertTypoScriptArrayToPlainArray($settings);
-        } else {
-            return [];
         }
+        return [];
     }
 }

@@ -145,9 +145,8 @@ class StoragePidHelper
                     }
                 }
                 return $defaultStoragePid;
-            } else {
-                return $this->getDynamicStoragePidBySingleArray($options['defaultStoragePid'], $foreignLocationRecord);
             }
+            return $this->getDynamicStoragePidBySingleArray($options['defaultStoragePid'], $foreignLocationRecord);
         }
 
         return 0;

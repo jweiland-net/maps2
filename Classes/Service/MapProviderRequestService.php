@@ -28,15 +28,13 @@ class MapProviderRequestService
         if ($extConf->getExplicitAllowMapProviderRequests()) {
             if ($extConf->getExplicitAllowMapProviderRequestsBySessionOnly()) {
                 return (bool)$_SESSION['mapProviderRequestsAllowedForMaps2'];
-            } else {
-                if ($GLOBALS['TSFE'] instanceof TypoScriptFrontendController) {
-                    return (bool)$GLOBALS['TSFE']->fe_user->getSessionData('mapProviderRequestsAllowedForMaps2');
-                } else {
-                    return false;
-                }
             }
-        } else {
-            return true;
+            if ($GLOBALS['TSFE'] instanceof TypoScriptFrontendController) {
+                return (bool)$GLOBALS['TSFE']->fe_user->getSessionData('mapProviderRequestsAllowedForMaps2');
+            } else {
+                return false;
+            }
         }
+        return true;
     }
 }

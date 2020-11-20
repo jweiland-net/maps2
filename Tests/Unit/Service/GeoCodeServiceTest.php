@@ -9,26 +9,18 @@
 
 namespace JWeiland\Maps2\Tests\Unit\Service;
 
-use Doctrine\DBAL\Driver\Statement;
 use JWeiland\Maps2\Client\ClientInterface;
 use JWeiland\Maps2\Client\GoogleMapsClient;
 use JWeiland\Maps2\Client\Request\GoogleMaps\GeocodeRequest;
 use JWeiland\Maps2\Client\Request\RequestFactory;
-use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\Position;
-use JWeiland\Maps2\Helper\MessageHelper;
 use JWeiland\Maps2\Mapper\GoogleMapsMapper;
 use JWeiland\Maps2\Mapper\MapperFactory;
 use JWeiland\Maps2\Service\GeoCodeService;
 use JWeiland\Maps2\Tests\Unit\AbstractUnitTestCase;
 use Prophecy\Prophecy\ObjectProphecy;
-use TYPO3\CMS\Core\Database\Connection;
-use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
-use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
  * Test GeoCode Service class
@@ -194,8 +186,7 @@ class GeoCodeServiceTest extends AbstractUnitTestCase
         $objectStorage = new ObjectStorage();
         GeneralUtility::addInstance(ObjectStorage::class, $objectStorage);
 
-        self::assertSame(
-            null,
+        self::assertNull(
             $this->subject->getFirstFoundPositionByAddress('')
         );
     }
@@ -209,8 +200,7 @@ class GeoCodeServiceTest extends AbstractUnitTestCase
         $objectStorage = new ObjectStorage();
         GeneralUtility::addInstance(ObjectStorage::class, $objectStorage);
 
-        self::assertSame(
-            null,
+        self::assertNull(
             $this->subject->getFirstFoundPositionByAddress('     ')
         );
     }
@@ -243,8 +233,7 @@ class GeoCodeServiceTest extends AbstractUnitTestCase
             ->shouldBeCalled()
             ->willReturn([]);
 
-        self::assertSame(
-            null,
+        self::assertNull(
             $this->subject->getFirstFoundPositionByAddress('My private address')
         );
     }
