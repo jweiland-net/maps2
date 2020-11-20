@@ -42,6 +42,7 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
     protected function setUp()
     {
         parent::setUp();
+
         $this->renderingContext = $this->prophesize(RenderingContext::class);
 
         $this->subject = new ConvertToJsonViewHelper();
@@ -50,7 +51,10 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
 
     protected function tearDown()
     {
-        unset($this->subject);
+        unset(
+            $this->subject
+        );
+
         parent::tearDown();
     }
 
