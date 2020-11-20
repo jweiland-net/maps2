@@ -35,9 +35,17 @@ class StoragePidHelperTest extends FunctionalTestCase
      */
     protected $messageHelperProphecy;
 
+    /**
+     * @var array
+     */
+    protected $testExtensionsToLoad = [
+        'typo3conf/ext/events2'
+    ];
+
     protected function setUp()
     {
         parent::setUp();
+
         $this->messageHelperProphecy = $this->prophesize(MessageHelper::class);
         $this->subject = new StoragePidHelper($this->messageHelperProphecy->reveal());
     }
@@ -48,6 +56,7 @@ class StoragePidHelperTest extends FunctionalTestCase
             $this->subject,
             $this->messageHelperProphecy
         );
+
         parent::tearDown();
     }
 
@@ -204,9 +213,9 @@ class StoragePidHelperTest extends FunctionalTestCase
      */
     public function getStoragePidWithoutPidWillReturnPidFromExtensionManager()
     {
-        $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['foreign_ext'] = serialize([
+        $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['foreign_ext'] = [
             'maps2Storage' => 385
-        ]);
+        ];
 
         /** @var PackageManager|ObjectProphecy $packageManagerProphecy */
         $packageManagerProphecy = $this->prophesize(PackageManager::class);
@@ -260,9 +269,9 @@ class StoragePidHelperTest extends FunctionalTestCase
             ->willReturn($variableFrontend->reveal());
         GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerProphecy->reveal());
 
-        $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['foreign_ext'] = serialize([
+        $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['foreign_ext'] = [
             'maps2Storage' => 197
-        ]);
+        ];
 
         /** @var PackageManager|ObjectProphecy $packageManagerProphecy */
         $packageManagerProphecy = $this->prophesize(PackageManager::class);
@@ -317,9 +326,9 @@ class StoragePidHelperTest extends FunctionalTestCase
             ->willReturn($variableFrontend->reveal());
         GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerProphecy->reveal());
 
-        $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['foreign_ext'] = serialize([
+        $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['foreign_ext'] = [
             'maps2Storage' => 197
-        ]);
+        ];
 
         /** @var PackageManager|ObjectProphecy $packageManagerProphecy */
         $packageManagerProphecy = $this->prophesize(PackageManager::class);
@@ -592,7 +601,18 @@ class StoragePidHelperTest extends FunctionalTestCase
             ->isPackageActive('events2')
             ->shouldBeCalled()
             ->willReturn(true);
+        $packageManagerProphecy
+            ->isPackageActive(Argument::any())
+            ->shouldBeCalled()
+            ->willReturn(false);
         ExtensionManagementUtility::setPackageManager($packageManagerProphecy->reveal());
+
+        $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['foreign_ext'] = [
+            'maps2Storage' => 0
+        ];
+        $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['events2'] = [
+            'defaultLocationPid' => 0
+        ];
 
         $record = [
             'uid' => 100,
@@ -662,9 +682,12 @@ class StoragePidHelperTest extends FunctionalTestCase
             ->willReturn($variableFrontend->reveal());
         GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerProphecy->reveal());
 
-        $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['events2'] = serialize([
+        $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['foreign_ext'] = [
+            'invalidPidKey' => 3985
+        ];
+        $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['events2'] = [
             'defaultLocationPid' => 4867
-        ]);
+        ];
 
         /** @var PackageManager|ObjectProphecy $packageManagerProphecy */
         $packageManagerProphecy = $this->prophesize(PackageManager::class);
@@ -759,7 +782,18 @@ class StoragePidHelperTest extends FunctionalTestCase
             ->isPackageActive('events2')
             ->shouldBeCalled()
             ->willReturn(true);
+        $packageManagerProphecy
+            ->isPackageActive(Argument::any())
+            ->shouldBeCalled()
+            ->willReturn(false);
         ExtensionManagementUtility::setPackageManager($packageManagerProphecy->reveal());
+
+        $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['foreign_ext'] = [
+            'invalidPidKey' => 0
+        ];
+        $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['events2'] = [
+            'defaultLocationPid' => 0
+        ];
 
         $record = [
             'uid' => 100,
