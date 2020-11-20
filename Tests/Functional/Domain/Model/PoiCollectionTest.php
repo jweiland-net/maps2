@@ -59,7 +59,7 @@ class PoiCollectionTest extends FunctionalTestCase
     protected function tearDown()
     {
         unset($this->subject);
-        GeneralUtility::resetSingletonInstances(array());
+        GeneralUtility::resetSingletonInstances([]);
         parent::tearDown();
     }
 
