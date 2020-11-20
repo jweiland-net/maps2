@@ -23,8 +23,8 @@
 	},
 	"require-dev": {
 		"roave/security-advisories": "dev-master",
-		"friendsofphp/php-cs-fixer": "^2.0",
-		"nimut/testing-framework": "^5.0"
+		"friendsofphp/php-cs-fixer": "^2.16",
+		"nimut/testing-framework": "^5.1"
 	},
 	"autoload": {
 		"psr-4": {
@@ -37,8 +37,7 @@
 		}
 	},
 	"config": {
-		"vendor-dir": ".Build/vendor",
-		"bin-dir": ".Build/bin"
+		"vendor-dir": ".build/vendor"
 	},
 	"extra": {
 		"typo3/cms": {
