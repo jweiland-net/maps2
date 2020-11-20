@@ -35,10 +35,6 @@ class MapProviderOverlayRequestTest extends UnitTestCase
      */
     protected $subject;
 
-    /**
-     * Sets up the fixture, for example, open a network connection.
-     * This method is called before a test is executed.
-     */
     protected function setUp()
     {
         $_SESSION['mapProviderRequestsAllowedForMaps2'] = false;
@@ -53,10 +49,6 @@ class MapProviderOverlayRequestTest extends UnitTestCase
         $this->subject = new MapProviderOverlayRequestHandler($this->objectManager->reveal());
     }
 
-    /**
-     * Tears down the fixture, for example, close a network connection.
-     * This method is called after a test is executed.
-     */
     protected function tearDown()
     {
         unset($this->googleMapsService, $this->mapProviderRequestService, $this->subject);

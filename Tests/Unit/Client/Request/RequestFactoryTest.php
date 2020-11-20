@@ -31,10 +31,6 @@ class RequestFactoryTest extends UnitTestCase
      */
     protected $subject;
 
-    /**
-     * Sets up the fixture, for example, open a network connection.
-     * This method is called before a test is executed.
-     */
     protected function setUp()
     {
         $this->mapServiceProphecy = $this->prophesize(MapService::class);
@@ -43,10 +39,6 @@ class RequestFactoryTest extends UnitTestCase
         $this->subject = new RequestFactory();
     }
 
-    /**
-     * Tears down the fixture, for example, close a network connection.
-     * This method is called after a test is executed.
-     */
     protected function tearDown()
     {
         unset(

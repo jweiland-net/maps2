@@ -14,7 +14,7 @@ use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
 use JWeiland\Maps2\Form\Element\GoogleMapsElement;
 use JWeiland\Maps2\Helper\MessageHelper;
-use Nimut\TestingFramework\TestCase\UnitTestCase;
+use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\CMS\Backend\Form\NodeFactory;
@@ -27,7 +27,7 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
 /**
  * Class GoogleMapsElementTest
  */
-class GoogleMapsElementTest extends UnitTestCase
+class GoogleMapsElementTest extends FunctionalTestCase
 {
     /**
      * @var GoogleMapsElement
@@ -70,11 +70,16 @@ class GoogleMapsElementTest extends UnitTestCase
     protected $messageHelper;
 
     /**
-     * Sets up the fixture, for example, open a network connection.
-     * This method is called before a test is executed.
+     * @var array
      */
+    protected $testExtensionsToLoad = [
+        'typo3conf/ext/maps2'
+    ];
+
     protected function setUp()
     {
+        parent::setUp();
+
         $this->data = [
             'databaseRow' => [
                 'uid' => '123',
@@ -120,10 +125,6 @@ class GoogleMapsElementTest extends UnitTestCase
         $this->subject = new GoogleMapsElement($nodeFactory->reveal(), $this->data);
     }
 
-    /**
-     * Tears down the fixture, for example, close a network connection.
-     * This method is called after a test is executed.
-     */
     protected function tearDown()
     {
         unset(
@@ -134,6 +135,7 @@ class GoogleMapsElementTest extends UnitTestCase
             $this->pageRenderer,
             $this->poiCollectionRepository
         );
+
         parent::tearDown();
     }
 

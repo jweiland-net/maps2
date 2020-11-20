@@ -65,9 +65,6 @@ class PoiCollectionControllerTest extends UnitTestCase
      */
     protected $viewProphecy;
 
-    /**
-     * set up.
-     */
     public function setUp()
     {
         $this->objectManagerProphecy = $this->prophesize(ObjectManager::class);
@@ -92,10 +89,6 @@ class PoiCollectionControllerTest extends UnitTestCase
         $this->subject->_set('controllerContext', $this->controllerContextProphecy->reveal());
     }
 
-    /**
-     * Tears down the fixture, for example, close a network connection.
-     * This method is called after a test is executed.
-     */
     protected function tearDown()
     {
         unset($this->subject);
