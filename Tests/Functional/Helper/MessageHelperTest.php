@@ -64,7 +64,7 @@ class MessageHelperTest extends FunctionalTestCase
 
         $this->subject->addFlashMessage('Hello');
 
-        $this->assertEquals(
+        self::assertEquals(
             [$expectedFlashMessage],
             $this->subject->getAllFlashMessages()
         );
@@ -84,7 +84,7 @@ class MessageHelperTest extends FunctionalTestCase
 
         $this->subject->addFlashMessage('Hello', 'Subject');
 
-        $this->assertEquals(
+        self::assertEquals(
             [$expectedFlashMessage],
             $this->subject->getAllFlashMessages()
         );
@@ -104,7 +104,7 @@ class MessageHelperTest extends FunctionalTestCase
 
         $this->subject->addFlashMessage('Hello', 'Subject', FlashMessage::ERROR);
 
-        $this->assertEquals(
+        self::assertEquals(
             [$expectedFlashMessage],
             $this->subject->getAllFlashMessages()
         );
@@ -120,11 +120,11 @@ class MessageHelperTest extends FunctionalTestCase
         $this->subject->addFlashMessage('together', 'together', 2);
 
         // Test two times, to be save that messages were NOT flushed
-        $this->assertCount(
+        self::assertCount(
             3,
             $this->subject->getAllFlashMessages(false)
         );
-        $this->assertCount(
+        self::assertCount(
             3,
             $this->subject->getAllFlashMessages(false)
         );
@@ -140,11 +140,11 @@ class MessageHelperTest extends FunctionalTestCase
         $this->subject->addFlashMessage('together', 'together', 2);
 
         // Test two times, to be save that messages were flushed
-        $this->assertCount(
+        self::assertCount(
             3,
             $this->subject->getAllFlashMessages(true)
         );
-        $this->assertCount(
+        self::assertCount(
             0,
             $this->subject->getAllFlashMessages(true)
         );
@@ -159,7 +159,7 @@ class MessageHelperTest extends FunctionalTestCase
         $this->subject->addFlashMessage('all', 'all', 1);
         $this->subject->addFlashMessage('together', 'together', 2);
 
-        $this->assertTrue(
+        self::assertTrue(
             $this->subject->hasMessages()
         );
     }
@@ -174,21 +174,21 @@ class MessageHelperTest extends FunctionalTestCase
         $this->subject->addFlashMessage('together', 'together', 2);
 
         // Test two times, to be save that messages were flushed
-        $this->assertCount(
+        self::assertCount(
             1,
             $this->subject->getFlashMessagesBySeverityAndFlush(FlashMessage::ERROR)
         );
-        $this->assertCount(
+        self::assertCount(
             0,
             $this->subject->getFlashMessagesBySeverityAndFlush(FlashMessage::ERROR)
         );
 
         // Test two times, to be save that messages were flushed
-        $this->assertCount(
+        self::assertCount(
             2,
             $this->subject->getFlashMessagesBySeverityAndFlush(FlashMessage::WARNING)
         );
-        $this->assertCount(
+        self::assertCount(
             0,
             $this->subject->getFlashMessagesBySeverityAndFlush(FlashMessage::WARNING)
         );
@@ -203,7 +203,7 @@ class MessageHelperTest extends FunctionalTestCase
         $this->subject->addFlashMessage('all', 'all', 2);
         $this->subject->addFlashMessage('together', 'together', 2);
 
-        $this->assertTrue(
+        self::assertTrue(
             $this->subject->hasErrorMessages()
         );
     }
@@ -217,7 +217,7 @@ class MessageHelperTest extends FunctionalTestCase
         $this->subject->addFlashMessage('all', 'all', 0);
         $this->subject->addFlashMessage('together', 'together', 0);
 
-        $this->assertFalse(
+        self::assertFalse(
             $this->subject->hasErrorMessages()
         );
     }
@@ -231,7 +231,7 @@ class MessageHelperTest extends FunctionalTestCase
         $this->subject->addFlashMessage('all', 'all', 2);
         $this->subject->addFlashMessage('together', 'together', 2);
 
-        $this->assertCount(
+        self::assertCount(
             2,
             $this->subject->getErrorMessages()
         );
@@ -246,7 +246,7 @@ class MessageHelperTest extends FunctionalTestCase
         $this->subject->addFlashMessage('all', 'all', 1);
         $this->subject->addFlashMessage('together', 'together', 1);
 
-        $this->assertTrue(
+        self::assertTrue(
             $this->subject->hasWarningMessages()
         );
     }
@@ -260,7 +260,7 @@ class MessageHelperTest extends FunctionalTestCase
         $this->subject->addFlashMessage('all', 'all', 2);
         $this->subject->addFlashMessage('together', 'together', 2);
 
-        $this->assertFalse(
+        self::assertFalse(
             $this->subject->hasWarningMessages()
         );
     }
@@ -274,7 +274,7 @@ class MessageHelperTest extends FunctionalTestCase
         $this->subject->addFlashMessage('all', 'all', 1);
         $this->subject->addFlashMessage('together', 'together', 1);
 
-        $this->assertCount(
+        self::assertCount(
             2,
             $this->subject->getWarningMessages()
         );
@@ -289,7 +289,7 @@ class MessageHelperTest extends FunctionalTestCase
         $this->subject->addFlashMessage('all', 'all', 0);
         $this->subject->addFlashMessage('together', 'together', 0);
 
-        $this->assertTrue(
+        self::assertTrue(
             $this->subject->hasOkMessages()
         );
     }
@@ -303,7 +303,7 @@ class MessageHelperTest extends FunctionalTestCase
         $this->subject->addFlashMessage('all', 'all', 1);
         $this->subject->addFlashMessage('together', 'together', 1);
 
-        $this->assertFalse(
+        self::assertFalse(
             $this->subject->hasOkMessages()
         );
     }
@@ -317,7 +317,7 @@ class MessageHelperTest extends FunctionalTestCase
         $this->subject->addFlashMessage('all', 'all', 0);
         $this->subject->addFlashMessage('together', 'together', 0);
 
-        $this->assertCount(
+        self::assertCount(
             2,
             $this->subject->getOkMessages()
         );
@@ -332,7 +332,7 @@ class MessageHelperTest extends FunctionalTestCase
         $this->subject->addFlashMessage('all', 'all', -1);
         $this->subject->addFlashMessage('together', 'together', -1);
 
-        $this->assertTrue(
+        self::assertTrue(
             $this->subject->hasInfoMessages()
         );
     }
@@ -346,7 +346,7 @@ class MessageHelperTest extends FunctionalTestCase
         $this->subject->addFlashMessage('all', 'all', 1);
         $this->subject->addFlashMessage('together', 'together', 1);
 
-        $this->assertFalse(
+        self::assertFalse(
             $this->subject->hasInfoMessages()
         );
     }
@@ -360,7 +360,7 @@ class MessageHelperTest extends FunctionalTestCase
         $this->subject->addFlashMessage('all', 'all', -1);
         $this->subject->addFlashMessage('together', 'together', -1);
 
-        $this->assertCount(
+        self::assertCount(
             2,
             $this->subject->getInfoMessages()
         );
@@ -375,7 +375,7 @@ class MessageHelperTest extends FunctionalTestCase
         $this->subject->addFlashMessage('all', 'all', -2);
         $this->subject->addFlashMessage('together', 'together', -2);
 
-        $this->assertTrue(
+        self::assertTrue(
             $this->subject->hasNoticeMessages()
         );
     }
@@ -389,7 +389,7 @@ class MessageHelperTest extends FunctionalTestCase
         $this->subject->addFlashMessage('all', 'all', 1);
         $this->subject->addFlashMessage('together', 'together', 1);
 
-        $this->assertFalse(
+        self::assertFalse(
             $this->subject->hasNoticeMessages()
         );
     }
@@ -403,7 +403,7 @@ class MessageHelperTest extends FunctionalTestCase
         $this->subject->addFlashMessage('all', 'all', -2);
         $this->subject->addFlashMessage('together', 'together', -2);
 
-        $this->assertCount(
+        self::assertCount(
             2,
             $this->subject->getNoticeMessages()
         );

@@ -84,7 +84,7 @@ class GoogleMapsClientTest extends UnitTestCase
             )
             ->shouldBeCalled();
 
-        $this->assertSame(
+        self::assertSame(
             [],
             $this->subject->processRequest($this->geocodeRequestProphecy->reveal())
         );

@@ -59,7 +59,7 @@ class CategoryTest extends UnitTestCase
      * @test
      */
     public function getMaps2MarkerIconsInitiallyReturnsObjectStorage() {
-        $this->assertEquals(
+        self::assertEquals(
             new ObjectStorage(),
             $this->subject->getMaps2MarkerIcons()
         );
@@ -74,7 +74,7 @@ class CategoryTest extends UnitTestCase
         $objectStorage->attach($object);
         $this->subject->setMaps2MarkerIcons($objectStorage);
 
-        $this->assertSame(
+        self::assertSame(
             $objectStorage,
             $this->subject->getMaps2MarkerIcons()
         );
@@ -84,7 +84,7 @@ class CategoryTest extends UnitTestCase
      * @test
      */
     public function getMaps2MarkerIconWithEmptyStorageWillReturnEmptyString() {
-        $this->assertSame(
+        self::assertSame(
             '',
             $this->subject->getMaps2MarkerIcon()
         );
@@ -98,7 +98,7 @@ class CategoryTest extends UnitTestCase
         $fileReference = $this->prophesize(FileReference::class);
         $fileReference->getOriginalResource()->shouldBeCalled()->willReturn(null);
         $this->subject->getMaps2MarkerIcons()->attach($fileReference->reveal());
-        $this->assertSame(
+        self::assertSame(
             '',
             $this->subject->getMaps2MarkerIcon()
         );
@@ -109,7 +109,7 @@ class CategoryTest extends UnitTestCase
      */
     public function getMaps2MarkerIconWithWrongObjectInStorageWillReturnEmptyString() {
         $this->subject->getMaps2MarkerIcons()->attach(new PoiCollection());
-        $this->assertSame(
+        self::assertSame(
             '',
             $this->subject->getMaps2MarkerIcon()
         );
@@ -128,7 +128,7 @@ class CategoryTest extends UnitTestCase
         $fileReference = new FileReference();
         $fileReference->setOriginalResource($coreFileReference->reveal());
         $this->subject->getMaps2MarkerIcons()->attach($fileReference);
-        $this->assertStringEndsWith(
+        self::assertStringEndsWith(
             'ImagePath',
             $this->subject->getMaps2MarkerIcon()
         );
@@ -138,7 +138,7 @@ class CategoryTest extends UnitTestCase
      * @test
      */
     public function getMaps2MarkerIconWidthInitiallyReturnsZero() {
-        $this->assertSame(
+        self::assertSame(
             0,
             $this->subject->getMaps2MarkerIconWidth()
         );
@@ -154,7 +154,7 @@ class CategoryTest extends UnitTestCase
 
         $this->subject->setMaps2MarkerIcons($images);
         $this->extConf->setMarkerIconWidth(123);
-        $this->assertSame(
+        self::assertSame(
             123,
             $this->subject->getMaps2MarkerIconWidth()
         );
@@ -166,7 +166,7 @@ class CategoryTest extends UnitTestCase
     public function getMaps2MarkerIconWidthReturnsValueFromExtConfIfImageIsEmpty() {
         $this->subject->setMaps2MarkerIconWidth(123);
         $this->extConf->setMarkerIconWidth(321);
-        $this->assertSame(
+        self::assertSame(
             321,
             $this->subject->getMaps2MarkerIconWidth()
         );
@@ -182,7 +182,7 @@ class CategoryTest extends UnitTestCase
 
         $this->subject->setMaps2MarkerIcons($images);
         $this->subject->setMaps2MarkerIconWidth(123456);
-        $this->assertSame(
+        self::assertSame(
             123456,
             $this->subject->getMaps2MarkerIconWidth()
         );
@@ -198,7 +198,7 @@ class CategoryTest extends UnitTestCase
 
         $this->subject->setMaps2MarkerIcons($images);
         $this->subject->setMaps2MarkerIconWidth('123Test');
-        $this->assertSame(
+        self::assertSame(
             123,
             $this->subject->getMaps2MarkerIconWidth()
         );
@@ -214,7 +214,7 @@ class CategoryTest extends UnitTestCase
 
         $this->subject->setMaps2MarkerIcons($images);
         $this->subject->setMaps2MarkerIconWidth(true);
-        $this->assertSame(
+        self::assertSame(
             1,
             $this->subject->getMaps2MarkerIconWidth()
         );
@@ -224,7 +224,7 @@ class CategoryTest extends UnitTestCase
      * @test
      */
     public function getMaps2MarkerIconHeightInitiallyReturnsZero() {
-        $this->assertSame(
+        self::assertSame(
             0,
             $this->subject->getMaps2MarkerIconHeight()
         );
@@ -240,7 +240,7 @@ class CategoryTest extends UnitTestCase
 
         $this->subject->setMaps2MarkerIcons($images);
         $this->extConf->setMarkerIconHeight(123);
-        $this->assertSame(
+        self::assertSame(
             123,
             $this->subject->getMaps2MarkerIconHeight()
         );
@@ -252,7 +252,7 @@ class CategoryTest extends UnitTestCase
     public function getMaps2MarkerIconHeightReturnsValueFromExtConfIfImageIsEmpty() {
         $this->subject->setMaps2MarkerIconHeight(123);
         $this->extConf->setMarkerIconHeight(321);
-        $this->assertSame(
+        self::assertSame(
             321,
             $this->subject->getMaps2MarkerIconHeight()
         );
@@ -268,7 +268,7 @@ class CategoryTest extends UnitTestCase
 
         $this->subject->setMaps2MarkerIcons($images);
         $this->subject->setMaps2MarkerIconHeight(123456);
-        $this->assertSame(
+        self::assertSame(
             123456,
             $this->subject->getMaps2MarkerIconHeight()
         );
@@ -284,7 +284,7 @@ class CategoryTest extends UnitTestCase
 
         $this->subject->setMaps2MarkerIcons($images);
         $this->subject->setMaps2MarkerIconHeight('123Test');
-        $this->assertSame(
+        self::assertSame(
             123,
             $this->subject->getMaps2MarkerIconHeight()
         );
@@ -300,7 +300,7 @@ class CategoryTest extends UnitTestCase
 
         $this->subject->setMaps2MarkerIcons($images);
         $this->subject->setMaps2MarkerIconHeight(true);
-        $this->assertSame(
+        self::assertSame(
             1,
             $this->subject->getMaps2MarkerIconHeight()
         );
@@ -310,7 +310,7 @@ class CategoryTest extends UnitTestCase
      * @test
      */
     public function getMaps2MarkerIconAnchorPosXInitiallyReturnsZero() {
-        $this->assertSame(
+        self::assertSame(
             0,
             $this->subject->getMaps2MarkerIconAnchorPosX()
         );
@@ -326,7 +326,7 @@ class CategoryTest extends UnitTestCase
 
         $this->subject->setMaps2MarkerIcons($images);
         $this->extConf->setMarkerIconAnchorPosX(123);
-        $this->assertSame(
+        self::assertSame(
             123,
             $this->subject->getMaps2MarkerIconAnchorPosX()
         );
@@ -338,7 +338,7 @@ class CategoryTest extends UnitTestCase
     public function getMaps2MarkerIconAnchorPosXReturnsValueFromExtConfIfImageIsEmpty() {
         $this->subject->setMaps2MarkerIconAnchorPosX(123);
         $this->extConf->setMarkerIconAnchorPosX(321);
-        $this->assertSame(
+        self::assertSame(
             321,
             $this->subject->getMaps2MarkerIconAnchorPosX()
         );
@@ -354,7 +354,7 @@ class CategoryTest extends UnitTestCase
 
         $this->subject->setMaps2MarkerIcons($images);
         $this->subject->setMaps2MarkerIconAnchorPosX(123456);
-        $this->assertSame(
+        self::assertSame(
             123456,
             $this->subject->getMaps2MarkerIconAnchorPosX()
         );
@@ -370,7 +370,7 @@ class CategoryTest extends UnitTestCase
 
         $this->subject->setMaps2MarkerIcons($images);
         $this->subject->setMaps2MarkerIconAnchorPosX('123Test');
-        $this->assertSame(
+        self::assertSame(
             123,
             $this->subject->getMaps2MarkerIconAnchorPosX()
         );
@@ -386,7 +386,7 @@ class CategoryTest extends UnitTestCase
 
         $this->subject->setMaps2MarkerIcons($images);
         $this->subject->setMaps2MarkerIconAnchorPosX(true);
-        $this->assertSame(
+        self::assertSame(
             1,
             $this->subject->getMaps2MarkerIconAnchorPosX()
         );
@@ -396,7 +396,7 @@ class CategoryTest extends UnitTestCase
      * @test
      */
     public function getMaps2MarkerIconAnchorPosYInitiallyReturnsZero() {
-        $this->assertSame(
+        self::assertSame(
             0,
             $this->subject->getMaps2MarkerIconAnchorPosY()
         );
@@ -412,7 +412,7 @@ class CategoryTest extends UnitTestCase
 
         $this->subject->setMaps2MarkerIcons($images);
         $this->extConf->setMarkerIconAnchorPosY(123);
-        $this->assertSame(
+        self::assertSame(
             123,
             $this->subject->getMaps2MarkerIconAnchorPosY()
         );
@@ -424,7 +424,7 @@ class CategoryTest extends UnitTestCase
     public function getMaps2MarkerIconAnchorPosYWidthReturnsValueFromExtConfIfImageIsEmpty() {
         $this->subject->setMaps2MarkerIconAnchorPosY(123);
         $this->extConf->setMarkerIconAnchorPosY(321);
-        $this->assertSame(
+        self::assertSame(
             321,
             $this->subject->getMaps2MarkerIconAnchorPosY()
         );
@@ -440,7 +440,7 @@ class CategoryTest extends UnitTestCase
 
         $this->subject->setMaps2MarkerIcons($images);
         $this->subject->setMaps2MarkerIconAnchorPosY(123456);
-        $this->assertSame(
+        self::assertSame(
             123456,
             $this->subject->getMaps2MarkerIconAnchorPosY()
         );
@@ -456,7 +456,7 @@ class CategoryTest extends UnitTestCase
 
         $this->subject->setMaps2MarkerIcons($images);
         $this->subject->setMaps2MarkerIconAnchorPosY('123Test');
-        $this->assertSame(
+        self::assertSame(
             123,
             $this->subject->getMaps2MarkerIconAnchorPosY()
         );
@@ -472,7 +472,7 @@ class CategoryTest extends UnitTestCase
 
         $this->subject->setMaps2MarkerIcons($images);
         $this->subject->setMaps2MarkerIconAnchorPosY(true);
-        $this->assertSame(
+        self::assertSame(
             1,
             $this->subject->getMaps2MarkerIconAnchorPosY()
         );
@@ -482,7 +482,7 @@ class CategoryTest extends UnitTestCase
      * @test
      */
     public function getSortingInitiallyReturnsZero() {
-        $this->assertSame(
+        self::assertSame(
             0,
             $this->subject->getSorting()
         );
@@ -494,7 +494,7 @@ class CategoryTest extends UnitTestCase
     public function setSortingSetsSorting() {
         $this->subject->setSorting(123456);
 
-        $this->assertSame(
+        self::assertSame(
             123456,
             $this->subject->getSorting()
         );
@@ -506,7 +506,7 @@ class CategoryTest extends UnitTestCase
     public function setSortingWithStringResultsInInteger() {
         $this->subject->setSorting('123Test');
 
-        $this->assertSame(
+        self::assertSame(
             123,
             $this->subject->getSorting()
         );
@@ -518,7 +518,7 @@ class CategoryTest extends UnitTestCase
     public function setSortingWithBooleanResultsInInteger() {
         $this->subject->setSorting(true);
 
-        $this->assertSame(
+        self::assertSame(
             1,
             $this->subject->getSorting()
         );

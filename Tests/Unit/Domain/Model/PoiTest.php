@@ -45,7 +45,7 @@ class PoiTest extends UnitTestCase
      * @test
      */
     public function getCruserIdInitiallyReturnsZero() {
-        $this->assertSame(
+        self::assertSame(
             0,
             $this->subject->getCruserId()
         );
@@ -57,7 +57,7 @@ class PoiTest extends UnitTestCase
     public function setCruserIdSetsCruserId() {
         $this->subject->setCruserId(123456);
 
-        $this->assertSame(
+        self::assertSame(
             123456,
             $this->subject->getCruserId()
         );
@@ -69,7 +69,7 @@ class PoiTest extends UnitTestCase
     public function setCruserIdWithStringResultsInInteger() {
         $this->subject->setCruserId('123Test');
 
-        $this->assertSame(
+        self::assertSame(
             123,
             $this->subject->getCruserId()
         );
@@ -81,7 +81,7 @@ class PoiTest extends UnitTestCase
     public function setCruserIdWithBooleanResultsInInteger() {
         $this->subject->setCruserId(true);
 
-        $this->assertSame(
+        self::assertSame(
             1,
             $this->subject->getCruserId()
         );
@@ -91,7 +91,7 @@ class PoiTest extends UnitTestCase
      * @test
      */
     public function getPosIndexInitiallyReturnsZero() {
-        $this->assertSame(
+        self::assertSame(
             0,
             $this->subject->getPosIndex()
         );
@@ -103,7 +103,7 @@ class PoiTest extends UnitTestCase
     public function setPosIndexSetsPosIndex() {
         $this->subject->setPosIndex(123456);
 
-        $this->assertSame(
+        self::assertSame(
             123456,
             $this->subject->getPosIndex()
         );
@@ -115,7 +115,7 @@ class PoiTest extends UnitTestCase
     public function setPosIndexWithStringResultsInInteger() {
         $this->subject->setPosIndex('123Test');
 
-        $this->assertSame(
+        self::assertSame(
             123,
             $this->subject->getPosIndex()
         );
@@ -127,7 +127,7 @@ class PoiTest extends UnitTestCase
     public function setPosIndexWithBooleanResultsInInteger() {
         $this->subject->setPosIndex(true);
 
-        $this->assertSame(
+        self::assertSame(
             1,
             $this->subject->getPosIndex()
         );
@@ -137,7 +137,7 @@ class PoiTest extends UnitTestCase
      * @test
      */
     public function getLatitudeInitiallyReturnsZero() {
-        $this->assertSame(
+        self::assertSame(
             0.0,
             $this->subject->getLatitude()
         );
@@ -149,7 +149,7 @@ class PoiTest extends UnitTestCase
     public function setLatitudeSetsLatitude() {
         $this->subject->setLatitude(1234.56);
 
-        $this->assertSame(
+        self::assertSame(
             1234.56,
             $this->subject->getLatitude()
         );
@@ -159,7 +159,7 @@ class PoiTest extends UnitTestCase
      * @test
      */
     public function getLongitudeInitiallyReturnsZero() {
-        $this->assertSame(
+        self::assertSame(
             0.0,
             $this->subject->getLongitude()
         );
@@ -171,7 +171,7 @@ class PoiTest extends UnitTestCase
     public function setLongitudeSetsLongitude() {
         $this->subject->setLongitude(1234.56);
 
-        $this->assertSame(
+        self::assertSame(
             1234.56,
             $this->subject->getLongitude()
         );

@@ -74,7 +74,7 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
             }
         );
 
-        $this->assertSame(
+        self::assertSame(
             '&quot;simpleString&quot;',
             $this->subject->render()
         );
@@ -91,7 +91,7 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
             }
         );
 
-        $this->assertSame(
+        self::assertSame(
             '{&quot;foo&quot;:&quot;bar&quot;}',
             $this->subject->render()
         );
@@ -113,7 +113,7 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
         $json = $this->subject->render();
 
         // a property of PoiCollection should be found in string
-        $this->assertContains(
+        self::assertContains(
             'address',
             $json
         );
@@ -136,7 +136,7 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
         $json = $this->subject->render();
 
         // a property of PoiCollection should be found in string
-        $this->assertContains(
+        self::assertContains(
             'address',
             $json
         );
@@ -161,11 +161,11 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
 
         $json = $this->subject->render();
 
-        $this->assertNotContains(
+        self::assertNotContains(
             'maps2MarkerIcons',
             $json
         );
-        $this->assertNotContains(
+        self::assertNotContains(
             'parent',
             $json
         );
@@ -186,7 +186,7 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
 
         $json = $this->subject->render();
 
-        $this->assertNotContains(
+        self::assertNotContains(
             'markerIcons',
             $json
         );

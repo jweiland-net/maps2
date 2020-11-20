@@ -66,7 +66,7 @@ class ClientFactoryTest extends UnitTestCase
             ->shouldBeCalled()
             ->willReturn('gm');
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             GoogleMapsClient::class,
             $this->subject->create()
         );
@@ -82,7 +82,7 @@ class ClientFactoryTest extends UnitTestCase
             ->shouldBeCalled()
             ->willReturn('osm');
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             OpenStreetMapClient::class,
             $this->subject->create()
         );

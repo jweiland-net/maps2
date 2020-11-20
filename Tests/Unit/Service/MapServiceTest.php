@@ -174,7 +174,7 @@ class MapServiceTest extends UnitTestCase
         GeneralUtility::setSingletonInstance(EnvironmentService::class, $this->environmentServiceProphecy->reveal());
         $this->subject = new MapService();
 
-        $this->assertSame(
+        self::assertSame(
             $testString,
             $this->subject->showAllowMapForm()
         );
@@ -268,7 +268,7 @@ class MapServiceTest extends UnitTestCase
         GeneralUtility::setSingletonInstance(EnvironmentService::class, $this->environmentServiceProphecy->reveal());
         $this->subject = new MapService();
 
-        $this->assertSame(
+        self::assertSame(
             $testString,
             $this->subject->showAllowMapForm()
         );
@@ -341,7 +341,7 @@ class MapServiceTest extends UnitTestCase
         GeneralUtility::setSingletonInstance(EnvironmentService::class, $this->environmentServiceProphecy->reveal());
         $this->subject = new MapService();
 
-        $this->assertSame(
+        self::assertSame(
             $testString,
             $this->subject->showAllowMapForm()
         );
@@ -368,7 +368,7 @@ class MapServiceTest extends UnitTestCase
         GeneralUtility::setSingletonInstance(EnvironmentService::class, $this->environmentServiceProphecy->reveal());
         $this->subject = new MapService();
 
-        $this->assertSame(
+        self::assertSame(
             'osm',
             $this->subject->getMapProvider()
         );
@@ -395,7 +395,7 @@ class MapServiceTest extends UnitTestCase
         GeneralUtility::setSingletonInstance(EnvironmentService::class, $this->environmentServiceProphecy->reveal());
         $this->subject = new MapService();
 
-        $this->assertSame(
+        self::assertSame(
             'gm',
             $this->subject->getMapProvider()
         );
@@ -423,7 +423,7 @@ class MapServiceTest extends UnitTestCase
         GeneralUtility::setSingletonInstance(EnvironmentService::class, $this->environmentServiceProphecy->reveal());
         $this->subject = new MapService();
 
-        $this->assertSame(
+        self::assertSame(
             'osm',
             $this->subject->getMapProvider()
         );
@@ -451,7 +451,7 @@ class MapServiceTest extends UnitTestCase
         GeneralUtility::setSingletonInstance(EnvironmentService::class, $this->environmentServiceProphecy->reveal());
         $this->subject = new MapService();
 
-        $this->assertSame(
+        self::assertSame(
             'gm',
             $this->subject->getMapProvider([
                 'map_provider' => 'gm'
@@ -481,7 +481,7 @@ class MapServiceTest extends UnitTestCase
         GeneralUtility::setSingletonInstance(EnvironmentService::class, $this->environmentServiceProphecy->reveal());
         $this->subject = new MapService();
 
-        $this->assertSame(
+        self::assertSame(
             'gm',
             $this->subject->getMapProvider([
                 'map_provider' => [
@@ -513,7 +513,7 @@ class MapServiceTest extends UnitTestCase
         GeneralUtility::setSingletonInstance(EnvironmentService::class, $this->environmentServiceProphecy->reveal());
         $this->subject = new MapService();
 
-        $this->assertSame(
+        self::assertSame(
             'gm',
             $this->subject->getMapProvider([
                 'map_provider' => ''
@@ -543,7 +543,7 @@ class MapServiceTest extends UnitTestCase
         GeneralUtility::setSingletonInstance(EnvironmentService::class, $this->environmentServiceProphecy->reveal());
         $this->subject = new MapService();
 
-        $this->assertSame(
+        self::assertSame(
             'gm',
             $this->subject->getMapProvider([
                 'uid' => 123

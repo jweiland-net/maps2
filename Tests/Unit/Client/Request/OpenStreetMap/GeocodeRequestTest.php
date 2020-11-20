@@ -58,7 +58,7 @@ class GeocodeRequestTest extends UnitTestCase
     {
         $uri = 'https://www.jweiland.net';
         $this->subject->setUri($uri);
-        $this->assertSame(
+        self::assertSame(
             $uri,
             $this->subject->getUri()
         );
@@ -74,7 +74,7 @@ class GeocodeRequestTest extends UnitTestCase
             'address' => 'Echterdinger Straße 57'
         ];
         $this->subject->setParameters($parameters);
-        $this->assertSame(
+        self::assertSame(
             $parameters,
             $this->subject->getParameters()
         );
@@ -91,11 +91,11 @@ class GeocodeRequestTest extends UnitTestCase
         ];
         $this->subject->setParameters($parameters);
         $this->subject->addParameter('city', 'Filderstadt');
-        $this->assertSame(
+        self::assertSame(
             'Filderstadt',
             $this->subject->getParameter('city')
         );
-        $this->assertCount(
+        self::assertCount(
             3,
             $this->subject->getParameters()
         );
@@ -111,7 +111,7 @@ class GeocodeRequestTest extends UnitTestCase
             'address' => 'Echterdinger Straße 57'
         ];
         $this->subject->setParameters($parameters);
-        $this->assertTrue(
+        self::assertTrue(
             $this->subject->hasParameter('uri')
         );
     }
@@ -126,7 +126,7 @@ class GeocodeRequestTest extends UnitTestCase
             'address' => 'Echterdinger Straße 57'
         ];
         $this->subject->setParameters($parameters);
-        $this->assertFalse(
+        self::assertFalse(
             $this->subject->hasParameter('city')
         );
     }
@@ -137,7 +137,7 @@ class GeocodeRequestTest extends UnitTestCase
     public function isValidRequestWithEmptyUriReturnsFalse()
     {
         $this->subject->setUri('  ');
-        $this->assertFalse(
+        self::assertFalse(
             $this->subject->isValidRequest()
         );
     }
@@ -148,7 +148,7 @@ class GeocodeRequestTest extends UnitTestCase
     public function isValidRequestWithInvalidUriReturnsFalse()
     {
         $this->subject->setUri('nice try');
-        $this->assertFalse(
+        self::assertFalse(
             $this->subject->isValidRequest()
         );
     }
@@ -159,7 +159,7 @@ class GeocodeRequestTest extends UnitTestCase
     public function isValidRequestWithValidUriReturnsTrue()
     {
         $this->subject->setUri('https://www.jweiland.net/what/ever/%s.html');
-        $this->assertTrue(
+        self::assertTrue(
             $this->subject->isValidRequest()
         );
     }
@@ -172,7 +172,7 @@ class GeocodeRequestTest extends UnitTestCase
     {
         $this->subject->setUri('https://www.jweiland.net/what/ever/%s.html');
         $this->subject->addParameter('address', 'My Address');
-        $this->assertSame(
+        self::assertSame(
             'https://www.jweiland.net/what/ever/My%20Address.html',
             $this->subject->getUri()
         );
@@ -186,7 +186,7 @@ class GeocodeRequestTest extends UnitTestCase
     {
         $this->subject->setUri('nice try');
         $this->subject->addParameter('address', 'My Address');
-        $this->assertFalse(
+        self::assertFalse(
             $this->subject->isValidRequest()
         );
     }

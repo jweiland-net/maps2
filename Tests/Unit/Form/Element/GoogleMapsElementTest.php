@@ -248,7 +248,7 @@ class GoogleMapsElementTest extends UnitTestCase
         $this->poiCollectionRepository->findByUid(123)->shouldBeCalled()->willReturn(new PoiCollection());
 
         $result = $this->subject->render();
-        $this->assertSame(
+        self::assertSame(
             [
                 'TYPO3/CMS/Maps2/GoogleMapsModule'
             ],

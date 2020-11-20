@@ -86,7 +86,7 @@ class EditPoiViewHelperTest extends UnitTestCase
         $mapServiceProphecy->showAllowMapForm()->shouldBeCalled()->willReturn('Please activate maps2');
         GeneralUtility::addInstance(MapService::class, $mapServiceProphecy->reveal());
 
-        $this->assertSame(
+        self::assertSame(
             'Please activate maps2',
             $this->subject->render()
         );
