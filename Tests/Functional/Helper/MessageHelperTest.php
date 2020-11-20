@@ -24,6 +24,13 @@ class MessageHelperTest extends FunctionalTestCase
      */
     protected $subject;
 
+    /**
+     * @var array
+     */
+    protected $testExtensionsToLoad = [
+        'typo3conf/ext/maps2'
+    ];
+
     protected function setUp()
     {
         parent::setup();

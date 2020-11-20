@@ -39,6 +39,7 @@ class StoragePidHelperTest extends FunctionalTestCase
      * @var array
      */
     protected $testExtensionsToLoad = [
+        'typo3conf/ext/maps2',
         'typo3conf/ext/events2'
     ];
 
