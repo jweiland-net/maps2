@@ -125,10 +125,16 @@ class Maps2Registry implements SingletonInterface
 
         if (isset($GLOBALS['TCA'][$tableName]['columns'])) {
             $this->applyTcaForTableAndField($tableName, $fieldName);
-            file_put_contents($this->configurationFile, json_encode([
-                'registry' => $this->registry,
-                'extensions' => $this->extensions
-            ]));
+            file_put_contents(
+                $this->configurationFile,
+                json_encode(
+                    [
+                        'registry' => $this->registry,
+                        'extensions' => $this->extensions
+                    ],
+                    JSON_PRETTY_PRINT
+                )
+            );
             $didRegister = true;
         }
 
