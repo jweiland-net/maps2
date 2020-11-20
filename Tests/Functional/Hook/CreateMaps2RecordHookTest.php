@@ -16,6 +16,7 @@ use JWeiland\Maps2\Helper\MessageHelper;
 use JWeiland\Maps2\Hook\CreateMaps2RecordHook;
 use JWeiland\Maps2\Service\GeoCodeService;
 use JWeiland\Maps2\Service\MapService;
+use JWeiland\Maps2\Tca\Maps2Registry;
 use JWeiland\Maps2\Tests\Functional\Fixtures\IsRecordAllowedToCreatePoiCollectionSignal;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Prophecy\Argument;
@@ -163,13 +164,20 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
         ];
 
         $mapService = new MapService();
-        $mapService->setColumnRegistry($this->maps2RegistryConfiguration);
+
+        /** @var Maps2Registry|ObjectProphecy $maps2Registry */
+        $maps2Registry = $this->prophesize(Maps2Registry::class);
+        $maps2Registry
+            ->getColumnRegistry()
+            ->shouldBeCalled()
+            ->willReturn($this->maps2RegistryConfiguration);
 
         $hook = new CreateMaps2RecordHook(
             null,
             $this->prophesize(MessageHelper::class)->reveal(),
             $dispatcherProphecy->reveal(),
-            $mapService
+            $mapService,
+            $maps2Registry->reveal()
         );
         $hook->processDatamap_afterAllOperations($dataHandler);
     }
@@ -208,13 +216,20 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
         ];
 
         $mapService = new MapService();
-        $mapService->setColumnRegistry($maps2RegistryConfiguration);
+
+        /** @var Maps2Registry|ObjectProphecy $maps2Registry */
+        $maps2Registry = $this->prophesize(Maps2Registry::class);
+        $maps2Registry
+            ->getColumnRegistry()
+            ->shouldBeCalled()
+            ->willReturn($maps2RegistryConfiguration);
 
         $hook = new CreateMaps2RecordHook(
             null,
             $this->prophesize(MessageHelper::class)->reveal(),
             $dispatcherProphecy->reveal(),
-            $mapService
+            $mapService,
+            $maps2Registry->reveal()
         );
         $hook->processDatamap_afterAllOperations($dataHandler);
     }
@@ -280,13 +295,20 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
         ];
 
         $mapService = new MapService();
-        $mapService->setColumnRegistry($maps2RegistryConfiguration);
+
+        /** @var Maps2Registry|ObjectProphecy $maps2Registry */
+        $maps2Registry = $this->prophesize(Maps2Registry::class);
+        $maps2Registry
+            ->getColumnRegistry()
+            ->shouldBeCalled()
+            ->willReturn($maps2RegistryConfiguration);
 
         $hook = new CreateMaps2RecordHook(
             null,
             $this->prophesize(MessageHelper::class)->reveal(),
             $dispatcherProphecy->reveal(),
-            $mapService
+            $mapService,
+            $maps2Registry->reveal()
         );
         $hook->processDatamap_afterAllOperations($dataHandler);
     }
@@ -346,13 +368,20 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
             ->shouldBeCalled();
 
         $mapService = new MapService();
-        $mapService->setColumnRegistry($this->maps2RegistryConfiguration);
+
+        /** @var Maps2Registry|ObjectProphecy $maps2Registry */
+        $maps2Registry = $this->prophesize(Maps2Registry::class);
+        $maps2Registry
+            ->getColumnRegistry()
+            ->shouldBeCalled()
+            ->willReturn($this->maps2RegistryConfiguration);
 
         $hook = new CreateMaps2RecordHook(
             $geoCodeServiceProphecy->reveal(),
             $this->prophesize(MessageHelper::class)->reveal(),
             $dispatcherProphecy->reveal(),
-            $mapService
+            $mapService,
+            $maps2Registry->reveal()
         );
         $hook->processDatamap_afterAllOperations($dataHandler);
     }
@@ -390,13 +419,20 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
             );
 
         $mapService = new MapService();
-        $mapService->setColumnRegistry($this->maps2RegistryConfiguration);
+
+        /** @var Maps2Registry|ObjectProphecy $maps2Registry */
+        $maps2Registry = $this->prophesize(Maps2Registry::class);
+        $maps2Registry
+            ->getColumnRegistry()
+            ->shouldBeCalled()
+            ->willReturn($this->maps2RegistryConfiguration);
 
         $hook = new CreateMaps2RecordHook(
             $geoCodeServiceProphecy->reveal(),
             $this->prophesize(MessageHelper::class)->reveal(),
             null,
-            $mapService
+            $mapService,
+            $maps2Registry->reveal()
         );
         $hook->processDatamap_afterAllOperations($dataHandler);
     }

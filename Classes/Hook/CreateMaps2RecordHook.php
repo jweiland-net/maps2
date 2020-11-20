@@ -17,6 +17,7 @@ use JWeiland\Maps2\Helper\MessageHelper;
 use JWeiland\Maps2\Helper\StoragePidHelper;
 use JWeiland\Maps2\Service\GeoCodeService;
 use JWeiland\Maps2\Service\MapService;
+use JWeiland\Maps2\Tca\Maps2Registry;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
@@ -66,14 +67,17 @@ class CreateMaps2RecordHook
         GeoCodeService $geoCodeService = null,
         MessageHelper $messageHelper = null,
         Dispatcher $signalSlotDispatcher = null,
-        MapService $mapService = null
+        MapService $mapService = null,
+        Maps2Registry $maps2Registry = null
     ) {
         $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $this->geoCodeService = $geoCodeService ?? $this->objectManager->get(GeoCodeService::class);
         $this->messageHelper = $messageHelper ?? GeneralUtility::makeInstance(MessageHelper::class);
         $this->signalSlotDispatcher = $signalSlotDispatcher ?? GeneralUtility::makeInstance(Dispatcher::class);
         $this->mapService = $mapService ?? GeneralUtility::makeInstance(MapService::class);
-        $this->columnRegistry = $this->mapService->getColumnRegistry();
+
+        $maps2Registry = $maps2Registry ?? GeneralUtility::makeInstance(Maps2Registry::class);
+        $this->columnRegistry = $maps2Registry->getColumnRegistry();
     }
 
     /**
