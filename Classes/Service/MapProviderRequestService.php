@@ -31,9 +31,8 @@ class MapProviderRequestService
             }
             if ($GLOBALS['TSFE'] instanceof TypoScriptFrontendController) {
                 return (bool)$GLOBALS['TSFE']->fe_user->getSessionData('mapProviderRequestsAllowedForMaps2');
-            } else {
-                return false;
             }
+            return false;
         }
         return true;
     }
