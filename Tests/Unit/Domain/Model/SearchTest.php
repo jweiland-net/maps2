@@ -44,7 +44,8 @@ class SearchTest extends UnitTestCase
     /**
      * @test
      */
-    public function getAddressInitiallyReturnsEmptyString() {
+    public function getAddressInitiallyReturnsEmptyString()
+    {
         self::assertSame(
             '',
             $this->subject->getAddress()
@@ -54,7 +55,8 @@ class SearchTest extends UnitTestCase
     /**
      * @test
      */
-    public function setAddressSetsAddress() {
+    public function setAddressSetsAddress()
+    {
         $this->subject->setAddress('foo bar');
 
         self::assertSame(
@@ -66,7 +68,8 @@ class SearchTest extends UnitTestCase
     /**
      * @test
      */
-    public function setAddressWithIntegerResultsInString() {
+    public function setAddressWithIntegerResultsInString()
+    {
         $this->subject->setAddress(123);
         self::assertSame('123', $this->subject->getAddress());
     }
@@ -74,7 +77,8 @@ class SearchTest extends UnitTestCase
     /**
      * @test
      */
-    public function setAddressWithBooleanResultsInString() {
+    public function setAddressWithBooleanResultsInString()
+    {
         $this->subject->setAddress(true);
         self::assertSame('1', $this->subject->getAddress());
     }
@@ -82,7 +86,8 @@ class SearchTest extends UnitTestCase
     /**
      * @test
      */
-    public function getRadiusInitiallyReturnsZero() {
+    public function getRadiusInitiallyReturnsZero()
+    {
         self::assertSame(
             50,
             $this->subject->getRadius()
@@ -92,7 +97,8 @@ class SearchTest extends UnitTestCase
     /**
      * @test
      */
-    public function setRadiusSetsRadius() {
+    public function setRadiusSetsRadius()
+    {
         $this->subject->setRadius(123456);
 
         self::assertSame(
@@ -104,7 +110,8 @@ class SearchTest extends UnitTestCase
     /**
      * @test
      */
-    public function setRadiusWithStringResultsInInteger() {
+    public function setRadiusWithStringResultsInInteger()
+    {
         $this->subject->setRadius('123Test');
 
         self::assertSame(
@@ -116,7 +123,8 @@ class SearchTest extends UnitTestCase
     /**
      * @test
      */
-    public function setRadiusWithBooleanResultsInInteger() {
+    public function setRadiusWithBooleanResultsInInteger()
+    {
         $this->subject->setRadius(true);
 
         self::assertSame(

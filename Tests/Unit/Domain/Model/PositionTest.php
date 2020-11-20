@@ -44,7 +44,8 @@ class PositionTest extends UnitTestCase
     /**
      * @test
      */
-    public function getLatitudeInitiallyReturnsZero() {
+    public function getLatitudeInitiallyReturnsZero()
+    {
         self::assertSame(
             0.0,
             $this->subject->getLatitude()
@@ -54,7 +55,8 @@ class PositionTest extends UnitTestCase
     /**
      * @test
      */
-    public function setLatitudeSetsLatitude() {
+    public function setLatitudeSetsLatitude()
+    {
         $this->subject->setLatitude(1234.56);
 
         self::assertSame(
@@ -66,7 +68,8 @@ class PositionTest extends UnitTestCase
     /**
      * @test
      */
-    public function getLongitudeInitiallyReturnsZero() {
+    public function getLongitudeInitiallyReturnsZero()
+    {
         self::assertSame(
             0.0,
             $this->subject->getLongitude()
@@ -76,7 +79,8 @@ class PositionTest extends UnitTestCase
     /**
      * @test
      */
-    public function setLongitudeSetsLongitude() {
+    public function setLongitudeSetsLongitude()
+    {
         $this->subject->setLongitude(1234.56);
 
         self::assertSame(
@@ -88,7 +92,8 @@ class PositionTest extends UnitTestCase
     /**
      * @test
      */
-    public function getFormattedAddressInitiallyReturnsEmptyString() {
+    public function getFormattedAddressInitiallyReturnsEmptyString()
+    {
         self::assertSame(
             '',
             $this->subject->getFormattedAddress()
@@ -98,7 +103,8 @@ class PositionTest extends UnitTestCase
     /**
      * @test
      */
-    public function setFormattedAddressSetsFormattedAddress() {
+    public function setFormattedAddressSetsFormattedAddress()
+    {
         $this->subject->setFormattedAddress('foo bar');
 
         self::assertSame(
@@ -110,7 +116,8 @@ class PositionTest extends UnitTestCase
     /**
      * @test
      */
-    public function setFormattedAddressWithIntegerResultsInString() {
+    public function setFormattedAddressWithIntegerResultsInString()
+    {
         $this->subject->setFormattedAddress(123);
         self::assertSame('123', $this->subject->getFormattedAddress());
     }
@@ -118,8 +125,9 @@ class PositionTest extends UnitTestCase
     /**
      * @test
      */
-    public function setFormattedAddressWithBooleanResultsInString() {
-        $this->subject->setFormattedAddress(TRUE);
+    public function setFormattedAddressWithBooleanResultsInString()
+    {
+        $this->subject->setFormattedAddress(true);
         self::assertSame('1', $this->subject->getFormattedAddress());
     }
 }
