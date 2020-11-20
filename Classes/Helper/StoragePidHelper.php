@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Helper;
 
 use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -182,18 +183,23 @@ class StoragePidHelper
 
             switch ($type) {
                 case 'extensionmanager':
+                    if (!ExtensionManagementUtility::isLoaded($configuration['extKey'])) {
+                        return $defaultStoragePid;
+                    }
+
+                    try {
+                        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class);
+                        $extConf = (array)$extensionConfiguration->get($extKey);
+                    } catch (\Exception $e) {
+                        return $defaultStoragePid;
+                    }
+
                     if (
-                        ExtensionManagementUtility::isLoaded($configuration['extKey'])
-                        && is_array($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'])
-                        && array_key_exists($configuration['extKey'], $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'])
+                        array_key_exists($property, $extConf)
+                        && MathUtility::canBeInterpretedAsInteger($extConf[$property])
+                        && (int)$extConf[$property] > 0
                     ) {
-                        $extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$extKey]);
-                        if (
-                            MathUtility::canBeInterpretedAsInteger($extConf[$property])
-                            && (int)$extConf[$property] > 0
-                        ) {
-                            return (int)$extConf[$property];
-                        }
+                        return (int)$extConf[$property];
                     }
                     break;
                 default:
