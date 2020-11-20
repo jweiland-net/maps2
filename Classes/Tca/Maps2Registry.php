@@ -141,6 +141,29 @@ class Maps2Registry implements SingletonInterface
         return $didRegister;
     }
 
+    /**
+     * Reads, extract and returns Maps2 Column Configuration (Registry)
+     *
+     * @return array
+     * @api
+     */
+    public function getColumnRegistry(): array
+    {
+        $columnRegistry = [];
+        if (@is_file($this->configurationFile)) {
+            $configuration = json_decode(file_get_contents($this->configurationFile), true);
+            if (
+                is_array($configuration)
+                && array_key_exists('registry', $configuration)
+                && is_array($configuration['registry'])
+            ) {
+                $columnRegistry = $configuration['registry'];
+            }
+        }
+
+        return $columnRegistry;
+    }
+
     public function getExtensionKeys(): array
     {
         return array_keys($this->extensions);

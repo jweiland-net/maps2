@@ -19,8 +19,8 @@ use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Helper\MessageHelper;
+use JWeiland\Maps2\Tca\Maps2Registry;
 use JWeiland\Maps2\Utility\DatabaseUtility;
-use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\FrontendRestrictionContainer;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
@@ -56,16 +56,18 @@ class MapService
     protected $settings = [];
 
     /**
-     * "null", if uninitialized
-     *
-     * @var array|null
+     * @var array
      */
-    protected $columnRegistry;
+    protected $columnRegistry = '';
 
     public function __construct()
     {
         $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $this->configurationManager = $this->objectManager->get(ConfigurationManagerInterface::class);
+
+        $maps2Registry = GeneralUtility::makeInstance(Maps2Registry::class);
+        $this->columnRegistry = $maps2Registry->getColumnRegistry();
+
         $environmentService = GeneralUtility::makeInstance(EnvironmentService::class);
         if ($environmentService->isEnvironmentInFrontendMode()) {
             $this->settings = $this->configurationManager->getConfiguration(
@@ -415,32 +417,6 @@ class MapService
     }
 
     /**
-     * Reads, extract and returns Maps2 Column Configuration (Registry)
-     *
-     * @return array
-     * @api
-     */
-    public function getColumnRegistry(): array
-    {
-        if ($this->columnRegistry === null) {
-            $this->columnRegistry = [];
-            $configurationFile = Environment::getConfigPath() . '/Maps2/Registry.json';
-            if (@is_file($configurationFile)) {
-                $configuration = json_decode(file_get_contents($configurationFile), true);
-                if (
-                    is_array($configuration)
-                    && array_key_exists('registry', $configuration)
-                    && is_array($configuration)
-                    && count($configuration) === 2
-                ) {
-                    $this->columnRegistry = $configuration['registry'] ?: [];
-                }
-            }
-        }
-        return $this->columnRegistry;
-    }
-
-    /**
      * Currently used by UnitTests, only.
      *
      * @param array $columnRegistry
@@ -457,13 +433,12 @@ class MapService
      */
     public function addForeignRecordsToPoiCollection(PoiCollection $poiCollection): void
     {
-        $columnRegistry = $this->getColumnRegistry();
-        if (empty($columnRegistry) || $poiCollection->getUid() === 0) {
+        if (empty($this->columnRegistry) || $poiCollection->getUid() === 0) {
             return;
         }
 
-        // loop through all configured tables and columns and add the foreignRecord to PoiCollection
-        foreach ($columnRegistry as $tableName => $columns) {
+        // Loop through all configured tables and columns and add the foreignRecord to PoiCollection
+        foreach ($this->columnRegistry as $tableName => $columns) {
             foreach ($columns as $columnName => $configuration) {
                 $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable($tableName);
                 $queryBuilder->setRestrictions(
