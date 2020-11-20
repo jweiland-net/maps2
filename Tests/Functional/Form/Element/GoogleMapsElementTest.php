@@ -7,7 +7,7 @@
  * LICENSE file that was distributed with this source code.
  */
 
-namespace JWeiland\Maps2\Tests\Unit\Form\Element;
+namespace JWeiland\Maps2\Tests\Functional\Form\Element;
 
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
