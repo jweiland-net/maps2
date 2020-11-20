@@ -47,7 +47,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
 
     public function setUp()
     {
-        parent::setup();
+        parent::setUp();
         $this->setUpBackendUserFromFixture(1);
 
         $this->importDataSet(__DIR__ . '/../Fixtures/fe_groups.xml');

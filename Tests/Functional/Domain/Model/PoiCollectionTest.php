@@ -43,6 +43,7 @@ class PoiCollectionTest extends FunctionalTestCase
     protected function setUp()
     {
         parent::setUp();
+
         $this->extConf = new ExtConf([]);
         GeneralUtility::setSingletonInstance(ExtConf::class, $this->extConf);
         $this->subject = new PoiCollection();

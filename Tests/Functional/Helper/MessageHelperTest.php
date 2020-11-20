@@ -33,8 +33,9 @@ class MessageHelperTest extends FunctionalTestCase
 
     protected function setUp()
     {
-        parent::setup();
+        parent::setUp();
         parent::setUpBackendUserFromFixture(1);
+
         $this->subject = new MessageHelper(
             new FlashMessageService()
         );
