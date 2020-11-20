@@ -33,10 +33,6 @@ class AllowMapProviderRequestFunctionsProviderTest extends UnitTestCase
      */
     protected $subject;
 
-    /**
-     * Sets up the fixture, for example, open a network connection.
-     * This method is called before a test is executed.
-     */
     protected function setUp()
     {
         $this->extConf = new ExtConf([]);
@@ -45,10 +41,6 @@ class AllowMapProviderRequestFunctionsProviderTest extends UnitTestCase
         $this->subject = new AllowMapProviderRequestFunctionsProvider();
     }
 
-    /**
-     * Tears down the fixture, for example, close a network connection.
-     * This method is called after a test is executed.
-     */
     protected function tearDown()
     {
         unset($this->extConf, $this->subject);

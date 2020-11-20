@@ -35,20 +35,12 @@ class AddressHelperTest extends AbstractUnitTestCase
      */
     protected $messageHelperProphecy;
 
-    /**
-     * Sets up the fixture, for example, open a network connection.
-     * This method is called before a test is executed.
-     */
     protected function setUp()
     {
         $this->messageHelperProphecy = $this->prophesize(MessageHelper::class);
         $this->subject = new AddressHelper($this->messageHelperProphecy->reveal());
     }
 
-    /**
-     * Tears down the fixture, for example, close a network connection.
-     * This method is called after a test is executed.
-     */
     protected function tearDown()
     {
         unset(

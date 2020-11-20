@@ -37,10 +37,6 @@ class GeoCodeServiceTest extends AbstractUnitTestCase
      */
     protected $subject;
 
-    /**
-     * Sets up the fixture, for example, open a network connection.
-     * This method is called before a test is executed.
-     */
     protected function setUp()
     {
         $this->clientProphecy = $this->prophesize(GoogleMapsClient::class);
@@ -48,10 +44,6 @@ class GeoCodeServiceTest extends AbstractUnitTestCase
         $this->subject = new GeoCodeService($this->clientProphecy->reveal());
     }
 
-    /**
-     * Tears down the fixture, for example, close a network connection.
-     * This method is called after a test is executed.
-     */
     protected function tearDown()
     {
         unset(

@@ -57,10 +57,6 @@ class MapServiceTest extends UnitTestCase
      */
     protected $subject;
 
-    /**
-     * Sets up the fixture, for example, open a network connection.
-     * This method is called before a test is executed.
-     */
     protected function setUp()
     {
         $this->objectManagerProphecy = $this->prophesize(ObjectManager::class);
@@ -77,10 +73,6 @@ class MapServiceTest extends UnitTestCase
             ->willReturn($this->configurationManagerProphecy->reveal());
     }
 
-    /**
-     * Tears down the fixture, for example, close a network connection.
-     * This method is called after a test is executed.
-     */
     protected function tearDown()
     {
         unset($this->objectManagerProphecy, $this->configurationManagerProphecy, $this->subject);
