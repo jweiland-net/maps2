@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 /*
  * With TYPO3 10.0 the TypoScript settings persistence.classes has been migrated to this file
