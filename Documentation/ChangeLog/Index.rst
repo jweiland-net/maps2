@@ -6,6 +6,10 @@
 ChangeLog
 =========
 
+**Version 9.3.1**
+
+- Bugfix: Remove strict types from ReadOnly Input text element to be in sync with class from core
+
 **Version 9.2.1**
 
 - Bugfix: Fallback to "footway", if "road" was not found in OSM response

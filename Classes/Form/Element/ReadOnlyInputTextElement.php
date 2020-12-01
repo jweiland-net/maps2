@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /*
  * This file is part of the package jweiland/maps2.
  *
@@ -19,11 +17,10 @@ use TYPO3\CMS\Core\Utility\StringUtility;
 
 /**
  * General type=input element.
- * Instead of the original of TYPO3, which renders the inputbox completely different, if readOnly is activated,
- * our solution keeps the original rendering and adds readOnly as additional attribute
+ * Instead of the original of TYPO3, which renders the inputbox completely different if readOnly is activated,
+ * our solution keeps the original rendering and adds readOnly as additional attribute.
  *
- * This one kicks in if no specific renderType like "inputDateTime"
- * or "inputColorPicker" is set.
+ * SF: Do NOT add strict types. Keep it in sync with original class from core!
  */
 class ReadOnlyInputTextElement extends AbstractFormElement
 {
@@ -113,9 +110,11 @@ class ReadOnlyInputTextElement extends AbstractFormElement
             }
         }
 
+        $fieldId = StringUtility::getUniqueId('formengine-input-');
+
         $attributes = [
             'value' => '',
-            'id' => StringUtility::getUniqueId('formengine-input-'),
+            'id' => $fieldId,
             'class' => implode(' ', [
                 'form-control',
                 't3js-clearable',
@@ -169,7 +168,10 @@ class ReadOnlyInputTextElement extends AbstractFormElement
 
         $valueSliderHtml = [];
         if (isset($config['slider']) && is_array($config['slider'])) {
-            $resultArray['requireJsModules'][] = 'TYPO3/CMS/Backend/ValueSlider';
+            $id = 'slider-' . $fieldId;
+            $resultArray['requireJsModules'][] = ['TYPO3/CMS/Backend/FormEngine/FieldWizard/ValueSlider' =>
+                'function(ValueSlider) { new ValueSlider(' . GeneralUtility::quoteJSvalue($id) . '); }'
+            ];
             $min = $config['range']['lower'] ?? 0;
             $max = $config['range']['upper'] ?? 10000;
             $step = $config['slider']['step'] ?? 1;
@@ -183,7 +185,6 @@ class ReadOnlyInputTextElement extends AbstractFormElement
                 $itemValue = (double)$itemValue;
             }
             $callbackParams = [ $table, $row['uid'], $fieldName, $parameterArray['itemFormElName'] ];
-            $id = 'slider-' . md5($parameterArray['itemFormElName']);
             $rangeAttributes = [
                 'id' => $id,
                 'type' => 'range',
@@ -230,7 +231,7 @@ class ReadOnlyInputTextElement extends AbstractFormElement
         $mainFieldHtml[] = '<div class="form-control-wrap" style="max-width: ' . $width . 'px">';
         $mainFieldHtml[] =  '<div class="form-wizards-wrap">';
         $mainFieldHtml[] =      '<div class="form-wizards-element">';
-        $mainFieldHtml[] =          '<input type="' . $inputType . '"' . GeneralUtility::implodeAttributes($attributes, true) . ' />';
+        $mainFieldHtml[] =          '<input type="' . $inputType . '" ' . GeneralUtility::implodeAttributes($attributes, true) . ' />';
         $mainFieldHtml[] =          '<input type="hidden" name="' . $parameterArray['itemFormElName'] . '" value="' . htmlspecialchars($itemValue) . '" />';
         $mainFieldHtml[] =      '</div>';
         if (!empty($valuePickerHtml) || !empty($valueSliderHtml) || !empty($fieldControlHtml)) {
@@ -267,7 +268,7 @@ class ReadOnlyInputTextElement extends AbstractFormElement
             $fullElement = implode(LF, $fullElement);
         } elseif ($this->hasNullCheckboxWithPlaceholder()) {
             $checked = $itemValue !== null ? ' checked="checked"' : '';
-            $placeholder = $shortenedPlaceholder = $config['placeholder'] ?? '';
+            $placeholder = $shortenedPlaceholder = trim($config['placeholder']) ?? '';
             $disabled = '';
             $fallbackValue = 0;
             if (strlen($placeholder) > 0) {
@@ -298,7 +299,7 @@ class ReadOnlyInputTextElement extends AbstractFormElement
             $fullElement[] = '</div>';
             $fullElement[] = '<div class="t3js-formengine-placeholder-placeholder">';
             $fullElement[] =    '<div class="form-control-wrap" style="max-width:' . $width . 'px">';
-            $fullElement[] =        '<input type="text" class="form-control" disabled="disabled" value="' . $shortenedPlaceholder . '" />';
+            $fullElement[] =        '<input type="text" class="form-control" disabled="disabled" value="' . htmlspecialchars($shortenedPlaceholder) . '" />';
             $fullElement[] =    '</div>';
             $fullElement[] = '</div>';
             $fullElement[] = '<div class="t3js-formengine-placeholder-formfield">';
@@ -311,7 +312,10 @@ class ReadOnlyInputTextElement extends AbstractFormElement
         return $resultArray;
     }
 
-    protected function getLanguageService(): LanguageService
+    /**
+     * @return LanguageService
+     */
+    protected function getLanguageService()
     {
         return $GLOBALS['LANG'];
     }
