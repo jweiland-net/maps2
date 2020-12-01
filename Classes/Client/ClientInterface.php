@@ -26,4 +26,10 @@ interface ClientInterface
      */
     public function processRequest(RequestInterface $request);
 
+    public function hasErrors(): bool;
+
+    /**
+     * @return FlashMessage[]
+     */
+    public function getErrors(): array;
 }
