@@ -6,6 +6,10 @@
 ChangeLog
 =========
 
+**Version 9.3.2**
+
+- Add title parameter to EditPoi VH
+
 **Version 9.3.1**
 
 - Bugfix: Remove strict types from ReadOnly Input text element to be in sync with class from core

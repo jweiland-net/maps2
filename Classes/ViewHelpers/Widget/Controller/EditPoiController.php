@@ -40,6 +40,7 @@ class EditPoiController extends AbstractController
             $poiCollection->setCollectionType('Point');
         }
         $this->view->assign('poiCollection', $poiCollection);
+        $this->view->assign('title', $this->widgetConfiguration['title']);
         $this->view->assign('override', $this->widgetConfiguration['override']);
         $this->view->assign('property', $this->widgetConfiguration['property']);
     }
