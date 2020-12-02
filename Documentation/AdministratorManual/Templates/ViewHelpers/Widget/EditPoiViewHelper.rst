@@ -1,5 +1,6 @@
 .. include:: ../../../../Includes.txt
 
+==========================
 Widget / EditPoiViewHelper
 ==========================
 
@@ -15,30 +16,47 @@ can catch in your extension with GeneralUtility::_POST()
 **Type:** Basic
 
 General properties
-------------------
+==================
 
-.. t3-field-list-table::
- :header-rows: 1
-
- - :Name: Name:
-   :Type: Type:
-     :Description: Description:
-     :Default value: Default value:
-
-   - :Name:
-           \* poiCollection
-   :Type:
-           integer|PoiCollection
-     :Description:
-           Which PoiCollection should be shown on Google Maps?
-     :Default value:
-
-Examples
+property
 --------
 
-Basic example
-~~~~~~~~~~~~~
+In the Widget template itself the property will be used for the property attribute of the m:form.hidden element.
+Check your domain model where you have added a relation to PoiCollection. If the getter method name is
+`getLocationPoi` you have to set property to `locationPoi`. But in most cases it will be `txMaps2Uid`.
 
 Code: ::
 
-  <maps2:widget.editPoi poiCollection="{location.txMaps2Uid}" override="{settings: {mapWidth: '100%', mapHeight: '300'}}" />
+   <m:form.hidden class="title-{data.uid}" property="{property}.title" value="{title}" />
+
+
+poiCollection
+-------------
+
+Set the object of type PoiCollection to this property. We will use it and prepare the HTML form to change
+latitude and longitude.
+
+title
+-----
+
+Title is a mandatory field in PoiCollection object. Set it to the title of your current model, if you want or assign a
+hard-coded title.
+
+override
+--------
+
+As you know the plugin settings will override the TypoScript settings. With `override` you can override
+these settings again here in the template. Do not use it too often, as it will be hard to debug.
+
+Examples
+========
+
+Basic example
+-------------
+
+Code: ::
+
+   <maps2:widget.editPoi property="txMaps2Uid"
+                         poiCollection="{company.txMaps2Uid}"
+                         title="{company.title}"
+                         override="{settings: {mapWidth: '100%', mapHeight: '300'}}" />

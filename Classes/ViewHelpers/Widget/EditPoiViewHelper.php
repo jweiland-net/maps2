@@ -38,6 +38,19 @@ class EditPoiViewHelper extends AbstractWidgetViewHelper
     {
         parent::initializeArguments();
         $this->registerArgument(
+            'title',
+            'string',
+            'As title is required in PoiCollection, you have to assign a title here, too',
+            true
+        );
+        $this->registerArgument(
+            'override',
+            'array',
+            'Here you can override default settings individually',
+            false,
+            []
+        );
+        $this->registerArgument(
             'poiCollection',
             PoiCollection::class,
             'The poiColleciton object to render',
@@ -49,13 +62,6 @@ class EditPoiViewHelper extends AbstractWidgetViewHelper
             'Property where to save the new PoiCollection record',
             false,
             'txMapsUid'
-        );
-        $this->registerArgument(
-            'override',
-            'array',
-            'Here you can override default settings individually',
-            false,
-            []
         );
     }
 
