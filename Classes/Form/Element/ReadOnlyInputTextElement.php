@@ -124,7 +124,7 @@ class ReadOnlyInputTextElement extends AbstractFormElement
             'data-formengine-input-params' => json_encode([
                 'field' => $parameterArray['itemFormElName'],
                 'evalList' => implode(',', $evalList),
-                'is_in' => trim($config['is_in'])
+                'is_in' => trim($config['is_in'] ?? '')
             ]),
             'data-formengine-input-name' => $parameterArray['itemFormElName'],
         ];
