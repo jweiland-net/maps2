@@ -53,13 +53,13 @@ abstract class AbstractController extends AbstractWidgetController
 
     public function initializeView(ViewInterface $view)
     {
-        if (array_key_exists('infoWindowContentTemplatePath', $this->settings)) {
-            $this->settings['infoWindowContentTemplatePath'] = trim($this->settings['infoWindowContentTemplatePath']);
+        ArrayUtility::mergeRecursiveWithOverrule($this->defaultSettings, $this->getMaps2TypoScriptSettings());
+
+        if (array_key_exists('infoWindowContentTemplatePath', $this->defaultSettings)) {
+            $this->defaultSettings['infoWindowContentTemplatePath'] = trim($this->defaultSettings['infoWindowContentTemplatePath']);
         } else {
             $this->addFlashMessage('Dear Admin: Please add default static template of maps2 into your TS-Template.');
         }
-
-        ArrayUtility::mergeRecursiveWithOverrule($this->defaultSettings, $this->getMaps2TypoScriptSettings());
 
         $this->prepareSettings();
         $view->assign('data', $this->configurationManager->getContentObject()->data);
@@ -79,7 +79,7 @@ abstract class AbstractController extends AbstractWidgetController
             $this->addFlashMessage('Dear Admin: Please add default static template of maps2 into your TS-Template.');
         }
 
-        $this->settings['forceZoom'] = (bool)$this->settings['forceZoom'] ?? false;
+        $this->defaultSettings['forceZoom'] = (bool)$this->defaultSettings['forceZoom'] ?? false;
 
         // https://wiki.openstreetmap.org/wiki/Tile_servers tolds to use ${x} placeholders, but they don't work.
         if (!empty($this->defaultSettings['mapTile'])) {
