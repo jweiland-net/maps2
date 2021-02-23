@@ -7,36 +7,60 @@
  * LICENSE file that was distributed with this source code.
  */
 
-namespace JWeiland\Maps2\Tests\Unit\Mvc;
+namespace JWeiland\Maps2\Tests\Functional\Mvc;
 
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Mvc\MapProviderOverlayRequestHandler;
+use JWeiland\Maps2\Service\MapProviderRequestService;
 use JWeiland\Maps2\Service\MapService;
-use Nimut\TestingFramework\TestCase\UnitTestCase;
+use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\Web\Response;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * Class MapProviderOverlayRequest
  */
-class MapProviderOverlayRequestTest extends UnitTestCase
+class MapProviderOverlayRequestTest extends FunctionalTestCase
 {
-    /**
-     * @var ObjectManager|ObjectProphecy
-     */
-    protected $objectManager;
-
     /**
      * @var MapProviderOverlayRequestHandler
      */
     protected $subject;
 
+    /**
+     * @var MapProviderRequestService
+     */
+    protected $mapProviderRequestService;
+
+    /**
+     * @var ConfigurationManagerInterface|ObjectProphecy
+     */
+    protected $configurationManagerProphecy;
+
+    /**
+     * @var Response
+     */
+    protected $response;
+
+    /**
+     * @var MapService|ObjectProphecy
+     */
+    protected $mapServiceProphecy;
+
+    /**
+     * @var array
+     */
+    protected $testExtensionsToLoad = [
+        'typo3conf/ext/maps2'
+    ];
+
     protected function setUp()
     {
+        parent::setUp();
+
         $_SESSION['mapProviderRequestsAllowedForMaps2'] = false;
 
         $extConf = new ExtConf([]);
@@ -44,14 +68,26 @@ class MapProviderOverlayRequestTest extends UnitTestCase
         $extConf->setExplicitAllowMapProviderRequestsBySessionOnly(1);
         GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
 
-        $this->objectManager = $this->prophesize(ObjectManager::class);
+        $this->configurationManagerProphecy = $this->prophesize(ConfigurationManagerInterface::class);
+        $this->mapServiceProphecy = $this->prophesize(MapService::class);
 
-        $this->subject = new MapProviderOverlayRequestHandler($this->objectManager->reveal());
+        $this->subject = new MapProviderOverlayRequestHandler(
+            new MapProviderRequestService(),
+            $this->configurationManagerProphecy->reveal(),
+            new Response(),
+            $this->mapServiceProphecy->reveal()
+        );
     }
 
     protected function tearDown()
     {
-        unset($this->googleMapsService, $this->mapProviderRequestService, $this->subject);
+        unset(
+            $this->subject,
+            $this->mapProviderRequestService,
+            $this->configurationManagerProphecy,
+            $this->response,
+            $this->mapServiceProphecy
+        );
         parent::tearDown();
     }
 
@@ -94,18 +130,12 @@ class MapProviderOverlayRequestTest extends UnitTestCase
             Environment::isWindows() ? 'WINDOWS' : 'UNIX'
         );
 
-        /** @var ConfigurationManagerInterface|ObjectProphecy $configurationManager */
-        $configurationManager = $this->prophesize(ConfigurationManagerInterface::class);
-        $configurationManager
+        $this->configurationManagerProphecy
             ->getConfiguration('Framework')
             ->shouldBeCalled()
             ->willReturn([
                 'extensionName' => 'events2'
             ]);
-        $this->objectManager
-            ->get(ConfigurationManagerInterface::class)
-            ->shouldBeCalled()
-            ->willReturn($configurationManager->reveal());
 
         self::assertFalse(
             $this->subject->canHandleRequest()
@@ -129,18 +159,12 @@ class MapProviderOverlayRequestTest extends UnitTestCase
             Environment::isWindows() ? 'WINDOWS' : 'UNIX'
         );
 
-        /** @var ConfigurationManagerInterface|ObjectProphecy $configurationManager */
-        $configurationManager = $this->prophesize(ConfigurationManagerInterface::class);
-        $configurationManager
+        $this->configurationManagerProphecy
             ->getConfiguration('Framework')
             ->shouldBeCalled()
             ->willReturn([
                 'extensionName' => 'maps2'
             ]);
-        $this->objectManager
-            ->get(ConfigurationManagerInterface::class)
-            ->shouldBeCalled()
-            ->willReturn($configurationManager->reveal());
 
         self::assertTrue(
             $this->subject->canHandleRequest()
@@ -165,13 +189,10 @@ class MapProviderOverlayRequestTest extends UnitTestCase
     {
         $testString = 'testHtml';
 
-        $response = new Response();
-        $this->objectManager->get(Response::class)->shouldBeCalled()->willReturn($response);
-
-        /** @var MapService|ObjectProphecy $mapService */
-        $mapService = $this->prophesize(MapService::class);
-        $mapService->showAllowMapForm()->shouldBeCalled()->willReturn($testString);
-        GeneralUtility::addInstance(MapService::class, $mapService->reveal());
+        $this->mapServiceProphecy
+            ->showAllowMapForm()
+            ->shouldBeCalled()
+            ->willReturn($testString);
 
         self::assertSame(
             $testString,

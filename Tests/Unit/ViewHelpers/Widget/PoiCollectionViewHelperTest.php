@@ -10,13 +10,14 @@
 namespace JWeiland\Maps2\Tests\Unit\ViewHelpers\Widget;
 
 use JWeiland\Maps2\Configuration\ExtConf;
-use JWeiland\Maps2\Service\GeoCodeService;
 use JWeiland\Maps2\Service\MapProviderRequestService;
 use JWeiland\Maps2\Service\MapService;
+use JWeiland\Maps2\ViewHelpers\Widget\Controller\PoiCollectionController;
 use JWeiland\Maps2\ViewHelpers\Widget\PoiCollectionViewHelper;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 
 /**
  * Class PoiCollectionViewHelper
@@ -24,24 +25,19 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class PoiCollectionViewHelperTest extends UnitTestCase
 {
     /**
+     * @var PoiCollectionViewHelper
+     */
+    protected $subject;
+
+    /**
      * @var ExtConf
      */
     protected $extConf;
 
     /**
-     * @var \Prophecy\Prophecy\ObjectProphecy|GeoCodeService
+     * @var MapService|ObjectProphecy
      */
-    protected $googleMapsService;
-
-    /**
-     * @var MapProviderRequestService
-     */
-    protected $mapProviderRequestService;
-
-    /**
-     * @var PoiCollectionViewHelper
-     */
-    protected $subject;
+    protected $mapServiceProphecy;
 
     protected function setUp()
     {
@@ -52,10 +48,13 @@ class PoiCollectionViewHelperTest extends UnitTestCase
         $this->extConf->setExplicitAllowMapProviderRequestsBySessionOnly(1);
         GeneralUtility::setSingletonInstance(ExtConf::class, $this->extConf);
 
-        $mapProviderRequestService = new MapProviderRequestService();
-        GeneralUtility::addInstance(MapProviderRequestService::class, $mapProviderRequestService);
+        $this->mapServiceProphecy = $this->prophesize(MapService::class);
 
         $this->subject = new PoiCollectionViewHelper();
+        $this->subject->setRenderingContext($this->prophesize(RenderingContextInterface::class)->reveal());
+        $this->subject->injectController($this->prophesize(PoiCollectionController::class)->reveal());
+        $this->subject->injectMapProviderRequestService(new MapProviderRequestService());
+        $this->subject->injectMapService($this->mapServiceProphecy->reveal());
     }
 
     protected function tearDown()
@@ -69,10 +68,7 @@ class PoiCollectionViewHelperTest extends UnitTestCase
      */
     public function renderWillCallShowAllowMapFormWhenGoogleRequestsAreNotAllowed()
     {
-        /** @var MapService|ObjectProphecy $mapServiceProphecy */
-        $mapServiceProphecy = $this->prophesize(MapService::class);
-        $mapServiceProphecy->showAllowMapForm()->shouldBeCalled()->willReturn('Please activate maps2');
-        GeneralUtility::addInstance(MapService::class, $mapServiceProphecy->reveal());
+        $this->mapServiceProphecy->showAllowMapForm()->shouldBeCalled()->willReturn('Please activate maps2');
 
         self::assertSame(
             'Please activate maps2',

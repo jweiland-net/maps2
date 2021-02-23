@@ -29,24 +29,47 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
 class MapProviderOverlayRequestHandler implements RequestHandlerInterface
 {
     /**
-     * @var ObjectManager
+     * @var MapProviderRequestService
      */
-    protected $objectManager;
+    protected $mapProviderRequestService;
 
-    public function __construct(ObjectManager $objectManager = null)
-    {
-        $this->objectManager = $objectManager ?? GeneralUtility::makeInstance(ObjectManager::class);
+    /**
+     * @var ConfigurationManagerInterface
+     */
+    protected $configurationManager;
+
+    /**
+     * @var Response
+     */
+    protected $response;
+
+    /**
+     * @var MapService
+     */
+    protected $mapService;
+
+    public function __construct(
+        MapProviderRequestService $mapProviderRequestService = null,
+        ConfigurationManagerInterface $configurationManager = null,
+        Response $response = null,
+        MapService $mapService = null
+    ) {
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        $this->mapProviderRequestService = $mapProviderRequestService ?? GeneralUtility::makeInstance(MapProviderRequestService::class);
+        $this->configurationManager = $configurationManager ?? $objectManager->get(ConfigurationManagerInterface::class);
+        $this->response = $response ?? $objectManager->get(Response::class);
+        $this->mapService = $mapService ?? GeneralUtility::makeInstance(MapService::class);
     }
 
     public function canHandleRequest(): bool
     {
         if (!Environment::isCli()) {
-            $mapProviderRequestService = GeneralUtility::makeInstance(MapProviderRequestService::class);
-            $configurationManager = $this->objectManager->get(ConfigurationManagerInterface::class);
-            $configuration = $configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
+            $configuration = $this->configurationManager->getConfiguration(
+                ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK
+            );
 
             return strtolower($configuration['extensionName']) === 'maps2'
-                && !$mapProviderRequestService->isRequestToMapProviderAllowed();
+                && !$this->mapProviderRequestService->isRequestToMapProviderAllowed();
         }
         return false;
     }
@@ -66,10 +89,10 @@ class MapProviderOverlayRequestHandler implements RequestHandlerInterface
 
     public function handleRequest(): ResponseInterface
     {
-        $response = $this->objectManager->get(Response::class);
-        $mapService = GeneralUtility::makeInstance(MapService::class);
+        $this->response->appendContent(
+            $this->mapService->showAllowMapForm()
+        );
 
-        $response->appendContent($mapService->showAllowMapForm());
-        return $response;
+        return $this->response;
     }
 }

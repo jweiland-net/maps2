@@ -28,9 +28,29 @@ class PoiCollectionViewHelper extends AbstractWidgetViewHelper
      */
     protected $controller;
 
+    /**
+     * @var MapProviderRequestService
+     */
+    protected $mapProviderRequestService;
+
+    /**
+     * @var MapService
+     */
+    protected $mapService;
+
     public function injectController(Controller\PoiCollectionController $controller)
     {
         $this->controller = $controller;
+    }
+
+    public function injectMapProviderRequestService(MapProviderRequestService $mapProviderRequestService)
+    {
+        $this->mapProviderRequestService = $mapProviderRequestService;
+    }
+
+    public function injectMapService(MapService $mapService)
+    {
+        $this->mapService = $mapService;
     }
 
     public function initializeArguments()
@@ -62,10 +82,8 @@ class PoiCollectionViewHelper extends AbstractWidgetViewHelper
      */
     public function render()
     {
-        $mapProviderRequestService = GeneralUtility::makeInstance(MapProviderRequestService::class);
-        if (!$mapProviderRequestService->isRequestToMapProviderAllowed()) {
-            $mapService = GeneralUtility::makeInstance(MapService::class);
-            return $mapService->showAllowMapForm();
+        if (!$this->mapProviderRequestService->isRequestToMapProviderAllowed()) {
+            return $this->mapService->showAllowMapForm();
         }
 
         return $this->initiateSubRequest();
