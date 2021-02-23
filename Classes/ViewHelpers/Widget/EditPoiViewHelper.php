@@ -14,7 +14,6 @@ namespace JWeiland\Maps2\ViewHelpers\Widget;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Service\MapProviderRequestService;
 use JWeiland\Maps2\Service\MapService;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetViewHelper;
 
 /**
