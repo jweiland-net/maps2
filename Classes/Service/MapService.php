@@ -217,6 +217,12 @@ class MapService
      */
     public function setInfoWindow(PoiCollection $poiCollection): void
     {
+        trigger_error(
+            'MapService::setInfoWindow is deprecated please use MapService::renderInfoWindow directly.',
+            'MapService::setInfoWindow is deprecated please use MapService::renderInfoWindow directly.',
+            E_USER_DEPRECATED
+        );
+
         $poiCollection->setInfoWindowContent(
             $this->renderInfoWindow($poiCollection)
         );
@@ -228,7 +234,7 @@ class MapService
      * @param PoiCollection $poiCollection
      * @return string
      */
-    protected function renderInfoWindow(PoiCollection $poiCollection): string
+    public function renderInfoWindow(PoiCollection $poiCollection): string
     {
         $view = $this->objectManager->get(StandaloneView::class);
         $view->assign('settings', $this->settings);
@@ -238,7 +244,7 @@ class MapService
                 $this->getInfoWindowContentTemplatePath()
             )
         );
-        return $view->render();
+        return (string)$view->render();
     }
 
     /**

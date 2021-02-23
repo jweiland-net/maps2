@@ -284,13 +284,13 @@ GoogleMaps2.prototype.createPointByCollectionType = function (environment) {
                 this.createMarker(this.poiCollections[i], environment);
                 break;
             case "Area":
-                this.createArea(this.poiCollections[i], environment.extConf);
+                this.createArea(this.poiCollections[i], environment);
                 break;
             case "Route":
-                this.createRoute(this.poiCollections[i], environment.extConf);
+                this.createRoute(this.poiCollections[i], environment);
                 break;
             case "Radius":
-                this.createRadius(this.poiCollections[i], environment.extConf);
+                this.createRadius(this.poiCollections[i], environment);
                 break;
         }
     }
@@ -333,7 +333,7 @@ GoogleMaps2.prototype.createMarker = function (poiCollection, environment) {
     if (this.editable) {
         this.addEditListeners(this.$element, marker, poiCollection, environment);
     } else {
-        this.addInfoWindow(marker, poiCollection);
+        this.addInfoWindow(marker, poiCollection, environment);
     }
 };
 
@@ -341,8 +341,9 @@ GoogleMaps2.prototype.createMarker = function (poiCollection, environment) {
  * Create Area
  *
  * @param poiCollection
+ * @param environment
  */
-GoogleMaps2.prototype.createArea = function (poiCollection) {
+GoogleMaps2.prototype.createArea = function (poiCollection, environment) {
     let latLng;
     let paths = [];
     for (let i = 0; i < poiCollection.pois.length; i++) {
@@ -356,7 +357,7 @@ GoogleMaps2.prototype.createArea = function (poiCollection) {
     } else {
         let area = new google.maps.Polygon(new PolygonOptions(paths, poiCollection));
         area.setMap(this.map);
-        this.addInfoWindow(area, poiCollection);
+        this.addInfoWindow(area, poiCollection, environment);
     }
 };
 
@@ -364,8 +365,9 @@ GoogleMaps2.prototype.createArea = function (poiCollection) {
  * Create Route
  *
  * @param poiCollection
+ * @param environment
  */
-GoogleMaps2.prototype.createRoute = function (poiCollection) {
+GoogleMaps2.prototype.createRoute = function (poiCollection, environment) {
     let latLng;
     let paths = [];
     for (let i = 0; i < poiCollection.pois.length; i++) {
@@ -379,7 +381,7 @@ GoogleMaps2.prototype.createRoute = function (poiCollection) {
     } else {
         let route = new google.maps.Polyline(new PolylineOptions(paths, poiCollection));
         route.setMap(this.map);
-        this.addInfoWindow(route, poiCollection);
+        this.addInfoWindow(route, poiCollection, environment);
     }
 };
 
@@ -387,8 +389,9 @@ GoogleMaps2.prototype.createRoute = function (poiCollection) {
  * Create Radius
  *
  * @param poiCollection
+ * @param environment
  */
-GoogleMaps2.prototype.createRadius = function (poiCollection) {
+GoogleMaps2.prototype.createRadius = function (poiCollection, environment) {
     let circle = new google.maps.Circle(
         new CircleOptions(
             this.map,
@@ -397,7 +400,7 @@ GoogleMaps2.prototype.createRadius = function (poiCollection) {
         )
     );
     this.bounds.union(circle.getBounds());
-    this.addInfoWindow(circle, poiCollection);
+    this.addInfoWindow(circle, poiCollection, environment);
 };
 
 /**
@@ -405,16 +408,35 @@ GoogleMaps2.prototype.createRadius = function (poiCollection) {
  *
  * @param element
  * @param poiCollection
+ * @param environment
  */
-GoogleMaps2.prototype.addInfoWindow = function (element, poiCollection) {
+GoogleMaps2.prototype.addInfoWindow = function (element, poiCollection, environment) {
     // we need these both vars to be set global. So that we can access them in Listener
     let infoWindow = this.infoWindow;
     let map = this.map;
-    google.maps.event.addListener(element, "click", function () {
-        infoWindow.close();
-        infoWindow.setContent(poiCollection.infoWindowContent);
-        infoWindow.setPosition(new google.maps.LatLng(poiCollection.latitude, poiCollection.longitude));
-        infoWindow.open(map);
+    google.maps.event.addListener(element, "click", function (event) {
+        jQuery.ajax({
+            url: window.location.protocol + "//" + window.location.host + "/index.php?id=" + environment.id + "&type=1614075471",
+            method: "POST",
+            dataType: "json",
+            data: {
+                method: "renderInfoWindowContent",
+                poiCollection: poiCollection.uid
+            }
+        }).done(function(data) {
+            infoWindow.close();
+            infoWindow.setContent(data.content);
+
+            // Do not set pointer of InfoWindow to the same pointer of the POI icon.
+            // In case of Point the pointer of InfoWindow should be at mouse position.
+            if (poiCollection.collectionType === "Point") {
+                infoWindow.setPosition(null);
+                infoWindow.open(map, element);
+            } else {
+                infoWindow.setPosition(new google.maps.LatLng(poiCollection.latitude, poiCollection.longitude));
+                infoWindow.open(map);
+            }
+        })
     });
 }
 

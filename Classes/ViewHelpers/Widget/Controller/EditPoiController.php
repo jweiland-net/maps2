@@ -29,16 +29,17 @@ class EditPoiController extends AbstractController
     public function indexAction()
     {
         $poiCollection = $this->widgetConfiguration['poiCollection'];
-        if ($poiCollection instanceof PoiCollection) {
-            $this->mapService->setInfoWindow($poiCollection);
-        } else {
-            // this is more a fallback. It would be better that the foreign extension author generates a PoiCollection on its own
+
+        // This is more a fallback. It would be better, if the foreign extension author generates a PoiCollection on its own
+        if (!$poiCollection instanceof PoiCollection) {
+            /** @var PoiCollection $poiCollection */
             $poiCollection = $this->objectManager->get(PoiCollection::class);
             $poiCollection->setTitle('Temporary Fallback');
             $poiCollection->setLatitude($this->extConf->getDefaultLatitude());
             $poiCollection->setLongitude($this->extConf->getDefaultLongitude());
             $poiCollection->setCollectionType('Point');
         }
+
         $this->view->assign('poiCollection', $poiCollection);
         $this->view->assign('title', $this->widgetConfiguration['title']);
         $this->view->assign('override', $this->widgetConfiguration['override']);

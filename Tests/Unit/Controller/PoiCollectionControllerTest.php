@@ -101,9 +101,6 @@ class PoiCollectionControllerTest extends UnitTestCase
     public function showActionShowsPoiCollectionFromUri()
     {
         $poiCollection = new PoiCollection();
-        $this->mapServiceProphecy
-            ->setInfoWindow($poiCollection)
-            ->shouldBeCalled();
         $this->viewProphecy
             ->assign('poiCollections', [$poiCollection])
             ->shouldBeCalled();

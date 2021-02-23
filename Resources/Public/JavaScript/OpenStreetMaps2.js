@@ -185,13 +185,13 @@ OpenStreetMaps2.prototype.createPointByCollectionType = function (environment) {
                 this.createMarker(this.poiCollections[i], environment);
                 break;
             case "Area":
-             this.createArea(this.poiCollections[i], environment.extConf);
+             this.createArea(this.poiCollections[i], environment);
              break;
            case "Route":
-             this.createRoute(this.poiCollections[i], environment.extConf);
+             this.createRoute(this.poiCollections[i], environment);
              break;
             case "Radius":
-                this.createRadius(this.poiCollections[i], environment.extConf);
+                this.createRadius(this.poiCollections[i], environment);
                 break;
         }
     }
@@ -236,7 +236,7 @@ OpenStreetMaps2.prototype.createMarker = function (poiCollection, environment) {
     if (this.editable) {
         this.addEditListeners(this.$element, marker, poiCollection, environment);
     } else {
-        marker.bindPopup(poiCollection.infoWindowContent);
+        this.addInfoWindow(marker, poiCollection, environment);
     }
 };
 
@@ -244,8 +244,9 @@ OpenStreetMaps2.prototype.createMarker = function (poiCollection, environment) {
  * Create Area
  *
  * @param poiCollection
+ * @param environment
  */
-OpenStreetMaps2.prototype.createArea = function (poiCollection) {
+OpenStreetMaps2.prototype.createArea = function (poiCollection, environment) {
     let latlngs = [];
     for (let i = 0; i < poiCollection.pois.length; i++) {
         let latLng = [poiCollection.pois[i].latitude, poiCollection.pois[i].longitude];
@@ -261,15 +262,16 @@ OpenStreetMaps2.prototype.createArea = function (poiCollection) {
         fillOpacity: poiCollection.fillOpacity,
         radius: poiCollection.radius
     }).addTo(this.map);
-    marker.bindPopup(poiCollection.infoWindowContent);
+    this.addInfoWindow(marker, poiCollection, environment);
 };
 
 /**
  * Create Route
  *
  * @param poiCollection
+ * @param environment
  */
-OpenStreetMaps2.prototype.createRoute = function (poiCollection) {
+OpenStreetMaps2.prototype.createRoute = function (poiCollection, environment) {
     let latlngs = [];
     for (let i = 0; i < poiCollection.pois.length; i++) {
         let latLng = [poiCollection.pois[i].latitude, poiCollection.pois[i].longitude];
@@ -285,15 +287,16 @@ OpenStreetMaps2.prototype.createRoute = function (poiCollection) {
         fillOpacity: poiCollection.fillOpacity,
         radius: poiCollection.radius
     }).addTo(this.map);
-    marker.bindPopup(poiCollection.infoWindowContent);
+    this.addInfoWindow(marker, poiCollection, environment);
 };
 
 /**
  * Create Radius
  *
  * @param poiCollection
+ * @param environment
  */
-OpenStreetMaps2.prototype.createRadius = function (poiCollection) {
+OpenStreetMaps2.prototype.createRadius = function (poiCollection, environment) {
     let marker = L.circle([poiCollection.latitude, poiCollection.longitude], {
         color: poiCollection.strokeColor,
         opacity: poiCollection.strokeOpacity,
@@ -304,8 +307,31 @@ OpenStreetMaps2.prototype.createRadius = function (poiCollection) {
     }).addTo(this.map);
 
     this.bounds.extend(marker.getBounds());
-    marker.bindPopup(poiCollection.infoWindowContent);
+    this.addInfoWindow(marker, poiCollection, environment);
 };
+
+/**
+ * Add Info Window to element
+ *
+ * @param element
+ * @param poiCollection
+ * @param environment
+ */
+OpenStreetMaps2.prototype.addInfoWindow = function (element, poiCollection, environment) {
+    element.on("click", function () {
+        jQuery.ajax({
+            url: window.location.protocol + "//" + window.location.host + "/index.php?id=" + environment.id + "&type=1614075471",
+            method: "POST",
+            dataType: "json",
+            data: {
+                method: "renderInfoWindowContent",
+                poiCollection: poiCollection.uid
+            }
+        }).done(function(data) {
+            element.bindPopup(data.content).openPopup();
+        });
+    });
+}
 
 /**
  * Create Marker with InfoWindow
