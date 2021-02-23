@@ -236,7 +236,17 @@ OpenStreetMaps2.prototype.createMarker = function (poiCollection, environment) {
     if (this.editable) {
         this.addEditListeners(this.$element, marker, poiCollection, environment);
     } else {
-        marker.bindPopup(poiCollection.infoWindowContent);
+        jQuery.ajax({
+            url: window.location.protocol + "//" + window.location.host + "/index.php?id=" + environment.id + "&type=1614075471",
+            method: "POST",
+            dataType: "json",
+            data: {
+                method: "renderInfoWindowContent",
+                poiCollection: poiCollection.uid
+            }
+        }).done(function(data) {
+            marker.bindPopup(data.content);
+        })
     }
 };
 

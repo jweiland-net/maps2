@@ -23,20 +23,12 @@ use JWeiland\Maps2\Domain\Model\PoiCollection;
  */
 class PoiCollectionController extends AbstractController
 {
-    /**
-     * index action
-     */
     public function indexAction()
     {
         $poiCollection = $this->widgetConfiguration['poiCollection'];
         if ($poiCollection instanceof PoiCollection) {
-            $this->mapService->setInfoWindow($poiCollection);
             $this->view->assign('poiCollections', [$poiCollection]);
         } elseif ($this->widgetConfiguration['poiCollections'] instanceof \Traversable) {
-            /** @var PoiCollection $poiCollection */
-            foreach ($this->widgetConfiguration['poiCollections'] as $poiCollection) {
-                $this->mapService->setInfoWindow($poiCollection);
-            }
             $this->view->assign('poiCollections', $this->widgetConfiguration['poiCollections']);
         }
         $this->view->assign('override', $this->widgetConfiguration['override']);

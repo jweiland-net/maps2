@@ -19,7 +19,6 @@ use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Domain\Model\Search;
 use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
 use JWeiland\Maps2\Service\GeoCodeService;
-use JWeiland\Maps2\Service\MapService;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -67,10 +66,6 @@ class PoiCollectionController extends AbstractController
             }
         }
 
-        $mapService = GeneralUtility::makeInstance(MapService::class);
-        foreach ($poiCollections as $poiCollection) {
-            $mapService->setInfoWindow($poiCollection);
-        }
         $this->view->assign('poiCollections', $poiCollections);
     }
 
@@ -96,7 +91,6 @@ class PoiCollectionController extends AbstractController
      */
     public function listRadiusAction(Search $search)
     {
-        $mapService = GeneralUtility::makeInstance(MapService::class);
         $geoCodeService = GeneralUtility::makeInstance(GeoCodeService::class);
 
         $this->view->assign('search', $search);
@@ -108,9 +102,6 @@ class PoiCollectionController extends AbstractController
                 $position->getLongitude(),
                 $search->getRadius()
             );
-            foreach ($poiCollections as $poiCollection) {
-                $mapService->setInfoWindow($poiCollection);
-            }
 
             $this->view->assign('poiCollections', $poiCollections);
         } else {
