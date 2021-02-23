@@ -338,9 +338,19 @@ GoogleMaps2.prototype.createMarker = function (poiCollection, environment) {
         this.addEditListeners(this.$element, marker, poiCollection, environment);
     } else {
         google.maps.event.addListener(marker, "click", function () {
-            infoWindow.close();
-            infoWindow.setContent(poiCollection.infoWindowContent);
-            infoWindow.open(map, marker);
+            jQuery.ajax({
+                url: window.location.protocol + "//" + window.location.host + "/index.php?id=" + environment.id + "&type=1614075471",
+                method: "POST",
+                dataType: "json",
+                data: {
+                    method: "renderInfoWindowContent",
+                    poiCollection: poiCollection.uid
+                }
+            }).done(function(data) {
+                infoWindow.close();
+                infoWindow.setContent(data.content);
+                infoWindow.open(map, marker);
+            })
         });
     }
 };
