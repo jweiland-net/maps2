@@ -11,8 +11,6 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\ViewHelpers\Widget\Controller;
 
-use JWeiland\Maps2\Domain\Model\PoiCollection;
-
 /**
  * A show controller for foreign extension authors
  * to show Google Maps with a fixed poi collection record
