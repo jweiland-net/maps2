@@ -222,7 +222,7 @@ OpenStreetMaps2.prototype.createMarker = function (poiCollection, environment) {
     }
 
     // assign first found marker icon, if available
-    if (poiCollection.markerIcon !== "") {
+    if (poiCollection.hasOwnProperty("markerIcon") && poiCollection.markerIcon !== "") {
         let icon = L.icon({
             iconUrl: poiCollection.markerIcon,
             iconSize: [poiCollection.markerIconWidth, poiCollection.markerIconHeight],
