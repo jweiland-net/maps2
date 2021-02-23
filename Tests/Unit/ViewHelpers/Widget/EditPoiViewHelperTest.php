@@ -25,14 +25,19 @@ use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 class EditPoiViewHelperTest extends UnitTestCase
 {
     /**
+     * @var EditPoiViewHelper
+     */
+    protected $subject;
+
+    /**
      * @var ExtConf
      */
     protected $extConf;
 
     /**
-     * @var EditPoiViewHelper
+     * @var MapService|ObjectProphecy
      */
-    protected $subject;
+    protected $mapServiceProphecy;
 
     protected function setUp()
     {
@@ -43,23 +48,23 @@ class EditPoiViewHelperTest extends UnitTestCase
         $this->extConf->setExplicitAllowMapProviderRequestsBySessionOnly(1);
         GeneralUtility::setSingletonInstance(ExtConf::class, $this->extConf);
 
-        $mapProviderRequestService = new MapProviderRequestService();
-        GeneralUtility::addInstance(MapProviderRequestService::class, $mapProviderRequestService);
-
-        /** @var RenderingContextInterface|ObjectProphecy $renderingContextProphecy */
-        $renderingContextProphecy = $this->prophesize(RenderingContextInterface::class);
-
-        /** @var EditPoiController|ObjectProphecy $editPoiControllerProphecy */
-        $editPoiControllerProphecy = $this->prophesize(EditPoiController::class);
+        $this->mapServiceProphecy = $this->prophesize(MapService::class);
 
         $this->subject = new EditPoiViewHelper();
-        $this->subject->setRenderingContext($renderingContextProphecy->reveal());
-        $this->subject->injectController($editPoiControllerProphecy->reveal());
+        $this->subject->setRenderingContext($this->prophesize(RenderingContextInterface::class)->reveal());
+        $this->subject->injectController($this->prophesize(EditPoiController::class)->reveal());
+        $this->subject->injectMapProviderRequestService(new MapProviderRequestService());
+        $this->subject->injectMapService($this->mapServiceProphecy->reveal());
     }
 
     protected function tearDown()
     {
-        unset($this->extConf, $this->googleMapsService, $this->mapProviderRequestService, $this->subject);
+        unset(
+            $this->subject,
+            $this->extConf,
+            $this->mapProviderRequestService,
+            $this->mapServiceProphecy
+        );
         parent::tearDown();
     }
 
@@ -68,10 +73,10 @@ class EditPoiViewHelperTest extends UnitTestCase
      */
     public function renderWillCallShowAllowMapFormWhenMapProviderRequestsAreNotAllowed()
     {
-        /** @var MapService|ObjectProphecy $mapServiceProphecy */
-        $mapServiceProphecy = $this->prophesize(MapService::class);
-        $mapServiceProphecy->showAllowMapForm()->shouldBeCalled()->willReturn('Please activate maps2');
-        GeneralUtility::addInstance(MapService::class, $mapServiceProphecy->reveal());
+        $this->mapServiceProphecy
+            ->showAllowMapForm()
+            ->shouldBeCalled()
+            ->willReturn('Please activate maps2');
 
         self::assertSame(
             'Please activate maps2',

@@ -165,12 +165,6 @@ class PoiCollectionControllerTest extends UnitTestCase
             ->count()
             ->shouldBeCalled()
             ->willReturn(0);
-        $queryResultProphecy
-            ->rewind()
-            ->shouldBeCalled();
-        $queryResultProphecy
-            ->valid()
-            ->shouldBeCalled();
 
         $this->poiCollectionRepositoryProphecy
             ->findPoisByCategories('12,13')
@@ -201,12 +195,6 @@ class PoiCollectionControllerTest extends UnitTestCase
             ->count()
             ->shouldBeCalled()
             ->willReturn(2);
-        $queryResultProphecy
-            ->rewind()
-            ->shouldBeCalled();
-        $queryResultProphecy
-            ->valid()
-            ->shouldBeCalled();
 
         $this->poiCollectionRepositoryProphecy
             ->findPoisByCategories('12,13')
@@ -245,12 +233,6 @@ class PoiCollectionControllerTest extends UnitTestCase
             ->count()
             ->shouldBeCalled()
             ->willReturn(0);
-        $queryResultProphecy
-            ->rewind()
-            ->shouldBeCalled();
-        $queryResultProphecy
-            ->valid()
-            ->shouldBeCalled();
 
         $this->poiCollectionRepositoryProphecy
             ->findAll()
@@ -274,12 +256,6 @@ class PoiCollectionControllerTest extends UnitTestCase
             ->count()
             ->shouldBeCalled()
             ->willReturn(2);
-        $queryResultProphecy
-            ->rewind()
-            ->shouldBeCalled();
-        $queryResultProphecy
-            ->valid()
-            ->shouldBeCalled();
 
         $this->poiCollectionRepositoryProphecy
             ->findAll()
