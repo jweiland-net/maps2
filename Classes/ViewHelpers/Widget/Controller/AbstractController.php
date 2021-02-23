@@ -20,6 +20,7 @@ use JWeiland\Maps2\Service\MapService;
 use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
@@ -100,6 +101,20 @@ abstract class AbstractController extends AbstractWidgetController
                 ['${s}', '${x}', '${y}', '${z}'],
                 ['{s}', '{x}', '{y}', '{z}'],
                 $this->defaultSettings['mapTile']
+            );
+        }
+
+        if (
+            isset($this->defaultSettings['markerClusterer']['enable'])
+            && !empty($this->defaultSettings['markerClusterer']['enable'])
+            && isset($this->defaultSettings['markerClusterer']['imagePath'])
+            && !empty($this->defaultSettings['markerClusterer']['imagePath'])
+        ) {
+            $this->defaultSettings['markerClusterer']['enable'] = 1;
+            $this->defaultSettings['markerClusterer']['imagePath'] = PathUtility::getAbsoluteWebPath(
+                GeneralUtility::getFileAbsFileName(
+                    $this->defaultSettings['markerClusterer']['imagePath']
+                )
             );
         }
     }
