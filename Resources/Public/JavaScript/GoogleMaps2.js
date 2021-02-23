@@ -318,7 +318,7 @@ GoogleMaps2.prototype.createMarker = function (poiCollection, environment) {
     }
 
     // assign first found marker icon, if available
-    if (poiCollection.markerIcon !== "") {
+    if (poiCollection.hasOwnProperty("markerIcon") && poiCollection.markerIcon !== "") {
         var icon = {
             url: poiCollection.markerIcon,
             scaledSize: new google.maps.Size(poiCollection.markerIconWidth, poiCollection.markerIconHeight),
