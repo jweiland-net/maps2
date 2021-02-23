@@ -26,9 +26,12 @@ class PoiCollectionController extends AbstractController
     public function indexAction()
     {
         $poiCollection = $this->widgetConfiguration['poiCollection'];
-        if ($poiCollection instanceof PoiCollection) {
+        if ($poiCollection !== null) {
             $this->view->assign('poiCollections', [$poiCollection]);
-        } elseif ($this->widgetConfiguration['poiCollections'] instanceof \Traversable) {
+        } elseif (
+            $this->widgetConfiguration['poiCollections'] instanceof \Traversable
+            || is_array($this->widgetConfiguration['poiCollections'])
+        ) {
             $this->view->assign('poiCollections', $this->widgetConfiguration['poiCollections']);
         }
         $this->view->assign('override', $this->widgetConfiguration['override']);
