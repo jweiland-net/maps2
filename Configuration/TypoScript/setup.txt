@@ -37,3 +37,8 @@ plugin.tx_maps2 {
     }
   }
 }
+# TYPO3 8 comes with a new security feature which requires a cHash for all URLs.
+# As we work with individual data via Ajax request, we have do disable that feature for Ajax->process calls
+[globalVar = GP:tx_maps2_maps2|action = process]
+  plugin.tx_maps2_maps2.features.requireCHashArgumentForActionArguments = 0
+[end]
