@@ -237,11 +237,11 @@ OpenStreetMaps2.prototype.createMarker = function (poiCollection, environment) {
         this.addEditListeners(this.$element, marker, poiCollection, environment);
     } else {
         jQuery.ajax({
-            url: window.location.protocol + "//" + window.location.host + "/index.php?id=" + environment.id + "&type=1614075471",
+            url: window.location.protocol + "//" + window.location.host + "/index.php?id=" + environment.id + "&type=1614075471&tx_maps2_maps2[controller]=Ajax&tx_maps2_maps2[action]=process&tx_maps2_maps2[method]=renderInfoWindowContent",
             method: "POST",
             dataType: "json",
             data: {
-                method: "renderInfoWindowContent",
+                storagePids: environment.contentRecord.pages,
                 poiCollection: poiCollection.uid
             }
         }).done(function(data) {
