@@ -15,9 +15,8 @@ use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
 use JWeiland\Maps2\Service\MapService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
-use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 /**
  * Handle Ajax requests.
@@ -25,35 +24,35 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
  * This controller is not connected to the extbase environment and is reachable
  * over typeNum 1614075471
  */
-class AjaxController
+class AjaxController extends ActionController
 {
-    /**
-     * @var ContentObjectRenderer
-     */
-    public $cObj;
-
     /**
      * @var array
      */
     public $errors = [];
 
     /**
-     * @var ObjectManager
+     * @var PoiCollectionRepository
      */
-    public $objectManager;
+    public $poiCollectionRepository;
 
-    public function __construct(ObjectManager $objectManager = null)
+    public function __construct(PoiCollectionRepository $poiCollectionRepository)
     {
-        $this->objectManager = $objectManager ?? GeneralUtility::makeInstance(ObjectManager::class);
+        parent::__construct();
+        $this->poiCollectionRepository = $poiCollectionRepository;
     }
 
-    public function processAction(string $content, array $parameters): string
+    /**
+     * @param string $method
+     * @return string
+     */
+    public function processAction(string $method): string
     {
         $response = [
             'content' => ''
         ];
 
-        if (isset($_POST['method']) && $_POST['method'] === 'renderInfoWindowContent') {
+        if ($method === 'renderInfoWindowContent') {
             $response['content'] = $this->renderInfoWindowContentAction(
                 (int)$_POST['poiCollection']
             );
@@ -69,8 +68,7 @@ class AjaxController
         $infoWindowContent = $this->emitRenderInfoWindowSignal($poiCollectionUid);
 
         if ($infoWindowContent === '') {
-            $poiCollectionRepository = $this->objectManager->get(PoiCollectionRepository::class);
-            $poiCollection = $poiCollectionRepository->findByIdentifier($poiCollectionUid);
+            $poiCollection = $this->poiCollectionRepository->findByIdentifier($poiCollectionUid);
             if ($poiCollection instanceof PoiCollection) {
                 $mapService = GeneralUtility::makeInstance(MapService::class);
                 $infoWindowContent = $mapService->renderInfoWindow($poiCollection);
@@ -105,7 +103,7 @@ class AjaxController
             [
                 $poiCollectionUid,
                 $infoWindowContent,
-                $this->cObj
+                $this->configurationManager->getContentObject()
             ]
         );
 
