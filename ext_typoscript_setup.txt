@@ -12,9 +12,13 @@ maps2AjaxResponse {
   }
   10 = USER_INT
   10 {
-    #settings =< plugin.tx_events2.settings
-    #persistence =< plugin.tx_events2.persistence
-    userFunc = JWeiland\Maps2\Controller\AjaxController->processAction
+    userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
+    extensionName = Maps2
+    pluginName = Maps2
+    vendorName = JWeiland
+    view < plugin.tx_maps2.view
+    persistence < plugin.tx_maps2.persistence
+    settings < plugin.tx_maps2.settings
   }
 }
 
