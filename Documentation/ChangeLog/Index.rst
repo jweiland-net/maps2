@@ -6,6 +6,10 @@
 ChangeLog
 =========
 
+**Version 9.3.4**
+
+- Repair AJAX calls on POI click
+
 **Version 9.3.3**
 
 - Use RequestBuilder instead of ConfigurationManager to retrieve extKey

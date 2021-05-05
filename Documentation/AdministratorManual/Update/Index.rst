@@ -5,11 +5,12 @@ Updating
 
 If you update EXT:maps2 to a newer version, please read this section carefully!
 
-Update to Version 9.3.3
+Update to Version 9.3.4
 -----------------------
 
-We have moved all constructor classes into inject-methods in MapProviderRequestService. So please clear all cache after
-update. Please use "Flush Cache" in Installtool for TYPO3 10.* to update DI cache.
+We have moved all constructor arguments into inject-methods in MapProviderRequestService.
+We have moved all constructor arguments into inject-methods in AjaxController.
+So please clear all cache after update. Please use "Flush Cache" in Installtool for TYPO3 10.* to update DI cache.
 
 Update to Version 9.0.0
 -----------------------
