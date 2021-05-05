@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the package jweiland/maps2.
  *
@@ -11,14 +13,15 @@ namespace JWeiland\Maps2\Tests\Functional\Mvc;
 
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Mvc\MapProviderOverlayRequestHandler;
-use JWeiland\Maps2\Service\MapProviderRequestService;
 use JWeiland\Maps2\Service\MapService;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
-use TYPO3\CMS\Extbase\Mvc\Web\Response;
+use TYPO3\CMS\Extbase\Mvc\Request;
+use TYPO3\CMS\Extbase\Mvc\Web\RequestBuilder;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Service\EnvironmentService;
 
 /**
  * Class MapProviderOverlayRequest
@@ -31,24 +34,24 @@ class MapProviderOverlayRequestTest extends FunctionalTestCase
     protected $subject;
 
     /**
-     * @var MapProviderRequestService
-     */
-    protected $mapProviderRequestService;
-
-    /**
-     * @var ConfigurationManagerInterface|ObjectProphecy
-     */
-    protected $configurationManagerProphecy;
-
-    /**
-     * @var Response
-     */
-    protected $response;
-
-    /**
      * @var MapService|ObjectProphecy
      */
     protected $mapServiceProphecy;
+
+    /**
+     * @var RequestBuilder|ObjectProphecy
+     */
+    protected $requestBuilderProphecy;
+
+    /**
+     * @var EnvironmentService|ObjectProphecy
+     */
+    protected $environmentServiceProphecy;
+
+    /**
+     * @var Request|ObjectProphecy
+     */
+    protected $requestProphecy;
 
     /**
      * @var array
@@ -57,7 +60,7 @@ class MapProviderOverlayRequestTest extends FunctionalTestCase
         'typo3conf/ext/maps2'
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -68,24 +71,22 @@ class MapProviderOverlayRequestTest extends FunctionalTestCase
         $extConf->setExplicitAllowMapProviderRequestsBySessionOnly(1);
         GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
 
-        $this->configurationManagerProphecy = $this->prophesize(ConfigurationManagerInterface::class);
         $this->mapServiceProphecy = $this->prophesize(MapService::class);
+        $this->requestBuilderProphecy = $this->prophesize(RequestBuilder::class);
+        $this->requestProphecy = $this->prophesize(Request::class);
+        $this->environmentServiceProphecy = $this->prophesize(EnvironmentService::class);
 
-        $this->subject = new MapProviderOverlayRequestHandler(
-            new MapProviderRequestService(),
-            $this->configurationManagerProphecy->reveal(),
-            new Response(),
-            $this->mapServiceProphecy->reveal()
-        );
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        $this->subject = $objectManager->get(MapProviderOverlayRequestHandler::class);
+        $this->subject->injectMapService($this->mapServiceProphecy->reveal());
+        $this->subject->injectRequestBuilder($this->requestBuilderProphecy->reveal());
+        $this->subject->injectEnvironmentService($this->environmentServiceProphecy->reveal());
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset(
             $this->subject,
-            $this->mapProviderRequestService,
-            $this->configurationManagerProphecy,
-            $this->response,
             $this->mapServiceProphecy
         );
         parent::tearDown();
@@ -94,7 +95,7 @@ class MapProviderOverlayRequestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function canHandleRequestWillReturnFalseInCliContext()
+    public function canHandleRequestWillReturnFalseInCliContext(): void
     {
         Environment::initialize(
             Environment::getContext(),
@@ -108,6 +109,11 @@ class MapProviderOverlayRequestTest extends FunctionalTestCase
             Environment::isWindows() ? 'WINDOWS' : 'UNIX'
         );
 
+        $this->environmentServiceProphecy
+            ->isEnvironmentInFrontendMode()
+            ->shouldBeCalled()
+            ->willReturn(true);
+
         self::assertFalse(
             $this->subject->canHandleRequest()
         );
@@ -116,7 +122,7 @@ class MapProviderOverlayRequestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function canHandleRequestWillReturnFalseWhenExtKeyIsNotMaps2()
+    public function canHandleRequestWillReturnFalseWhenExtKeyIsNotMaps2(): void
     {
         Environment::initialize(
             Environment::getContext(),
@@ -130,12 +136,20 @@ class MapProviderOverlayRequestTest extends FunctionalTestCase
             Environment::isWindows() ? 'WINDOWS' : 'UNIX'
         );
 
-        $this->configurationManagerProphecy
-            ->getConfiguration('Framework')
+        $this->environmentServiceProphecy
+            ->isEnvironmentInFrontendMode()
             ->shouldBeCalled()
-            ->willReturn([
-                'extensionName' => 'events2'
-            ]);
+            ->willReturn(true);
+
+        $this->requestProphecy
+            ->getControllerExtensionKey()
+            ->shouldBeCalled()
+            ->willReturn('events2');
+
+        $this->requestBuilderProphecy
+            ->build()
+            ->shouldBeCalled()
+            ->willReturn($this->requestProphecy->reveal());
 
         self::assertFalse(
             $this->subject->canHandleRequest()
@@ -145,7 +159,7 @@ class MapProviderOverlayRequestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function canHandleRequestWillReturnTrueWhenExtKeyIsMaps2()
+    public function canHandleRequestWillReturnTrueWhenExtKeyIsMaps2(): void
     {
         Environment::initialize(
             Environment::getContext(),
@@ -159,12 +173,20 @@ class MapProviderOverlayRequestTest extends FunctionalTestCase
             Environment::isWindows() ? 'WINDOWS' : 'UNIX'
         );
 
-        $this->configurationManagerProphecy
-            ->getConfiguration('Framework')
+        $this->environmentServiceProphecy
+            ->isEnvironmentInFrontendMode()
             ->shouldBeCalled()
-            ->willReturn([
-                'extensionName' => 'maps2'
-            ]);
+            ->willReturn(true);
+
+        $this->requestProphecy
+            ->getControllerExtensionKey()
+            ->shouldBeCalled()
+            ->willReturn('maps2');
+
+        $this->requestBuilderProphecy
+            ->build()
+            ->shouldBeCalled()
+            ->willReturn($this->requestProphecy->reveal());
 
         self::assertTrue(
             $this->subject->canHandleRequest()
@@ -174,7 +196,7 @@ class MapProviderOverlayRequestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getPriorityReturnsHigherValueThan100()
+    public function getPriorityReturnsHigherValueThan100(): void
     {
         self::assertGreaterThan(
             100,
@@ -185,7 +207,7 @@ class MapProviderOverlayRequestTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function handleRequestWillAppendMapFormToContent()
+    public function handleRequestWillAppendMapFormToContent(): void
     {
         $testString = 'testHtml';
 
