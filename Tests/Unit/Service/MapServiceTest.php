@@ -69,7 +69,6 @@ class MapServiceTest extends UnitTestCase
         $this->objectManagerProphecy
             ->get(ConfigurationManagerInterface::class)
             ->willReturn($this->configurationManagerProphecy->reveal());
-
     }
 
     protected function tearDown()

@@ -14,9 +14,9 @@ namespace JWeiland\Maps2\Mvc;
 use JWeiland\Maps2\Service\MapProviderRequestService;
 use JWeiland\Maps2\Service\MapService;
 use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Extbase\Mvc\Response;
 use TYPO3\CMS\Extbase\Mvc\ResponseInterface;
 use TYPO3\CMS\Extbase\Mvc\Web\AbstractRequestHandler;
-use TYPO3\CMS\Extbase\Mvc\Response;
 
 /**
  * This RequestHandler will be used to show an overlay for maps2 output
