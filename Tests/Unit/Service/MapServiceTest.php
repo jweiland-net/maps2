@@ -63,14 +63,13 @@ class MapServiceTest extends UnitTestCase
         $this->environmentServiceProphecy = $this->prophesize(EnvironmentService::class);
         $this->environmentServiceProphecy
             ->isEnvironmentInFrontendMode()
-            ->shouldBeCalled()
             ->willReturn(true);
 
         $this->configurationManagerProphecy = $this->prophesize(ConfigurationManager::class);
         $this->objectManagerProphecy
             ->get(ConfigurationManagerInterface::class)
-            ->shouldBeCalled()
             ->willReturn($this->configurationManagerProphecy->reveal());
+
     }
 
     protected function tearDown()
@@ -98,6 +97,7 @@ class MapServiceTest extends UnitTestCase
         $this->configurationManagerProphecy
             ->getConfiguration(
                 ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
+                'Maps2',
                 'Maps2'
             )
             ->shouldBeCalled()
@@ -106,6 +106,10 @@ class MapServiceTest extends UnitTestCase
             ->getContentObject()
             ->shouldBeCalled()
             ->willReturn($contentObject);
+
+        $this->objectManagerProphecy
+            ->get(ConfigurationManagerInterface::class)
+            ->willReturn($this->configurationManagerProphecy->reveal());
 
         $flashMessage = new FlashMessage(
             'You have forgotten...',
@@ -192,6 +196,7 @@ class MapServiceTest extends UnitTestCase
         $this->configurationManagerProphecy
             ->getConfiguration(
                 ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
+                'Maps2',
                 'Maps2'
             )
             ->shouldBeCalled()
@@ -200,6 +205,10 @@ class MapServiceTest extends UnitTestCase
             ->getContentObject()
             ->shouldBeCalled()
             ->willReturn($contentObject);
+
+        $this->objectManagerProphecy
+            ->get(ConfigurationManagerInterface::class)
+            ->willReturn($this->configurationManagerProphecy->reveal());
 
         $flashMessage = new FlashMessage(
             'You have forgotten...',
@@ -286,6 +295,7 @@ class MapServiceTest extends UnitTestCase
         $this->configurationManagerProphecy
             ->getConfiguration(
                 ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
+                'Maps2',
                 'Maps2'
             )
             ->shouldBeCalled()
@@ -294,6 +304,10 @@ class MapServiceTest extends UnitTestCase
             ->getContentObject()
             ->shouldBeCalled()
             ->willReturn($contentObject);
+
+        $this->objectManagerProphecy
+            ->get(ConfigurationManagerInterface::class)
+            ->willReturn($this->configurationManagerProphecy->reveal());
 
         /** @var StandaloneView|ObjectProphecy $viewProphecy */
         $viewProphecy = $this->prophesize(StandaloneView::class);
@@ -344,14 +358,6 @@ class MapServiceTest extends UnitTestCase
      */
     public function getMapProviderWillReturnOsm()
     {
-        $this->configurationManagerProphecy
-            ->getConfiguration(
-                ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
-                'Maps2'
-            )
-            ->shouldBeCalled()
-            ->willReturn($this->settings);
-
         $extConf = new ExtConf([]);
         $extConf->setMapProvider('osm');
         GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
@@ -371,14 +377,6 @@ class MapServiceTest extends UnitTestCase
      */
     public function getMapProviderWillReturnGm()
     {
-        $this->configurationManagerProphecy
-            ->getConfiguration(
-                ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
-                'Maps2'
-            )
-            ->shouldBeCalled()
-            ->willReturn($this->settings);
-
         $extConf = new ExtConf([]);
         $extConf->setMapProvider('gm');
         GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
@@ -398,14 +396,6 @@ class MapServiceTest extends UnitTestCase
      */
     public function getMapProviderWillReturnDefaultMapProvider()
     {
-        $this->configurationManagerProphecy
-            ->getConfiguration(
-                ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
-                'Maps2'
-            )
-            ->shouldBeCalled()
-            ->willReturn($this->settings);
-
         $extConf = new ExtConf([]);
         $extConf->setMapProvider('both');
         $extConf->setDefaultMapProvider('osm');
@@ -426,14 +416,6 @@ class MapServiceTest extends UnitTestCase
      */
     public function getMapProviderWillReturnMapProviderAsStringFromDatabase()
     {
-        $this->configurationManagerProphecy
-            ->getConfiguration(
-                ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
-                'Maps2'
-            )
-            ->shouldBeCalled()
-            ->willReturn($this->settings);
-
         $extConf = new ExtConf([]);
         $extConf->setMapProvider('both');
         $extConf->setDefaultMapProvider('osm');
@@ -456,14 +438,6 @@ class MapServiceTest extends UnitTestCase
      */
     public function getMapProviderWillReturnMapProviderAsArrayFromDatabase()
     {
-        $this->configurationManagerProphecy
-            ->getConfiguration(
-                ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
-                'Maps2'
-            )
-            ->shouldBeCalled()
-            ->willReturn($this->settings);
-
         $extConf = new ExtConf([]);
         $extConf->setMapProvider('both');
         $extConf->setDefaultMapProvider('osm');
@@ -488,14 +462,6 @@ class MapServiceTest extends UnitTestCase
      */
     public function getMapProviderWillReturnDefaultMapProviderFromDatabaseIfEmpty()
     {
-        $this->configurationManagerProphecy
-            ->getConfiguration(
-                ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
-                'Maps2'
-            )
-            ->shouldBeCalled()
-            ->willReturn($this->settings);
-
         $extConf = new ExtConf([]);
         $extConf->setMapProvider('both');
         $extConf->setDefaultMapProvider('gm');
@@ -518,14 +484,6 @@ class MapServiceTest extends UnitTestCase
      */
     public function getMapProviderWillReturnDefaultMapProviderFromDatabaseIfMissing()
     {
-        $this->configurationManagerProphecy
-            ->getConfiguration(
-                ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
-                'Maps2'
-            )
-            ->shouldBeCalled()
-            ->willReturn($this->settings);
-
         $extConf = new ExtConf([]);
         $extConf->setMapProvider('both');
         $extConf->setDefaultMapProvider('gm');

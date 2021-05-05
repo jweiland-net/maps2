@@ -63,14 +63,6 @@ class MapService
 
         $maps2Registry = GeneralUtility::makeInstance(Maps2Registry::class);
         $this->columnRegistry = $maps2Registry->getColumnRegistry();
-
-        $environmentService = GeneralUtility::makeInstance(EnvironmentService::class);
-        if ($environmentService->isEnvironmentInFrontendMode()) {
-            $this->settings = $this->configurationManager->getConfiguration(
-                ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
-                'Maps2'
-            );
-        }
     }
 
     /**
@@ -78,11 +70,12 @@ class MapService
      */
     public function showAllowMapForm(): string
     {
+        $settings = $this->getSettings();
         if (
-            is_array($this->settings)
+            is_array($settings)
             && (
-                !array_key_exists('mapProvider', $this->settings)
-                || empty($this->settings['mapProvider'])
+                !array_key_exists('mapProvider', $settings)
+                || empty($settings['mapProvider'])
             )
         ) {
             $flashMessage = $this->getFlashMessageForMissingStaticTemplate();
@@ -101,7 +94,7 @@ class MapService
             )
         );
         $view->assign('data', $this->configurationManager->getContentObject()->data);
-        $view->assign('settings', $this->settings);
+        $view->assign('settings', $settings);
         $view->assign('requestUri', $this->getRequestUri());
 
         return $view->render();
@@ -139,15 +132,16 @@ class MapService
 
     protected function getAllowMapTemplatePath(): string
     {
+        $settings = $this->getSettings();
         $extConf = GeneralUtility::makeInstance(ExtConf::class);
 
         // get default template path
         $path = $extConf->getAllowMapTemplatePath();
         if (
-            isset($this->settings['allowMapTemplatePath'])
-            && !empty($this->settings['allowMapTemplatePath'])
+            isset($settings['allowMapTemplatePath'])
+            && !empty($settings['allowMapTemplatePath'])
         ) {
-            $path = $this->settings['allowMapTemplatePath'];
+            $path = $settings['allowMapTemplatePath'];
         }
 
         return $path;
@@ -191,17 +185,14 @@ class MapService
     {
         $mapProvider = '';
 
-        if (array_key_exists('map_provider', $databaseRow)) {
-            if (
-                is_array($databaseRow['map_provider'])
-                && !empty($databaseRow['map_provider'])
-            ) {
+        if (
+            array_key_exists('map_provider', $databaseRow)
+            && !empty($databaseRow['map_provider'])
+        ) {
+            if (is_array($databaseRow['map_provider'])) {
                 // We have a record from TCEMAIN
                 $mapProvider = (string)current($databaseRow['map_provider']);
-            } elseif (
-                is_string($databaseRow['map_provider'])
-                && !empty($databaseRow['map_provider'])
-            ) {
+            } elseif (is_string($databaseRow['map_provider'])) {
                 // We have a normal array based record from database
                 $mapProvider = $databaseRow['map_provider'];
             }
@@ -218,7 +209,6 @@ class MapService
     public function setInfoWindow(PoiCollection $poiCollection): void
     {
         trigger_error(
-            'MapService::setInfoWindow is deprecated please use MapService::renderInfoWindow directly.',
             'MapService::setInfoWindow is deprecated please use MapService::renderInfoWindow directly.',
             E_USER_DEPRECATED
         );
@@ -237,7 +227,7 @@ class MapService
     public function renderInfoWindow(PoiCollection $poiCollection): string
     {
         $view = $this->objectManager->get(StandaloneView::class);
-        $view->assign('settings', $this->settings);
+        $view->assign('settings', $this->getSettings());
         $view->assign('poiCollection', $poiCollection);
         $view->setTemplatePathAndFilename(
             GeneralUtility::getFileAbsFileName(
@@ -253,17 +243,35 @@ class MapService
     protected function getInfoWindowContentTemplatePath(): string
     {
         $extConf = GeneralUtility::makeInstance(ExtConf::class);
+        $settings = $this->getSettings();
 
         // get default template path
         $path = $extConf->getInfoWindowContentTemplatePath();
         if (
-            isset($this->settings['infoWindowContentTemplatePath'])
-            && !empty($this->settings['infoWindowContentTemplatePath'])
+            isset($settings['infoWindowContentTemplatePath'])
+            && !empty($settings['infoWindowContentTemplatePath'])
         ) {
-            $path = $this->settings['infoWindowContentTemplatePath'];
+            $path = $settings['infoWindowContentTemplatePath'];
         }
 
         return $path;
+    }
+
+    protected function getSettings(): array
+    {
+        $settings = [];
+        $environmentService = GeneralUtility::makeInstance(EnvironmentService::class);
+        if ($environmentService->isEnvironmentInFrontendMode()) {
+            // Keep ExtName and PluginName, else the extKey will not be added to return-value
+            // in further getConfiguration calls.
+            $settings = $this->configurationManager->getConfiguration(
+                ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
+                'Maps2',
+                'Maps2'
+            );
+        }
+
+        return $settings;
     }
 
     /**

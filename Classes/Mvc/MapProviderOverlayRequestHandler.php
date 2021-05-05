@@ -14,29 +14,21 @@ namespace JWeiland\Maps2\Mvc;
 use JWeiland\Maps2\Service\MapProviderRequestService;
 use JWeiland\Maps2\Service\MapService;
 use TYPO3\CMS\Core\Core\Environment;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
-use TYPO3\CMS\Extbase\Mvc\RequestHandlerInterface;
 use TYPO3\CMS\Extbase\Mvc\ResponseInterface;
-use TYPO3\CMS\Extbase\Mvc\Web\Response;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Mvc\Web\AbstractRequestHandler;
+use TYPO3\CMS\Extbase\Mvc\Response;
 
 /**
  * This RequestHandler will be used to show an overlay for maps2 output
  * which will ask users to explicit allow requests to Map Providers.
  * This feature has to be activated in extension manager configuration.
  */
-class MapProviderOverlayRequestHandler implements RequestHandlerInterface
+class MapProviderOverlayRequestHandler extends AbstractRequestHandler
 {
     /**
      * @var MapProviderRequestService
      */
     protected $mapProviderRequestService;
-
-    /**
-     * @var ConfigurationManagerInterface
-     */
-    protected $configurationManager;
 
     /**
      * @var Response
@@ -48,30 +40,27 @@ class MapProviderOverlayRequestHandler implements RequestHandlerInterface
      */
     protected $mapService;
 
-    public function __construct(
-        MapProviderRequestService $mapProviderRequestService = null,
-        ConfigurationManagerInterface $configurationManager = null,
-        Response $response = null,
-        MapService $mapService = null
-    ) {
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $this->mapProviderRequestService = $mapProviderRequestService ?? GeneralUtility::makeInstance(MapProviderRequestService::class);
-        $this->configurationManager = $configurationManager ?? $objectManager->get(ConfigurationManagerInterface::class);
-        $this->response = $response ?? $objectManager->get(Response::class);
-        $this->mapService = $mapService ?? GeneralUtility::makeInstance(MapService::class);
+    public function injectMapProviderRequestService(MapProviderRequestService $mapProviderRequestService): void
+    {
+        $this->mapProviderRequestService = $mapProviderRequestService;
+    }
+
+    public function injectResponse(Response $response): void
+    {
+        $this->response = $response;
+    }
+
+    public function injectMapService(MapService $mapService): void
+    {
+        $this->mapService = $mapService;
     }
 
     public function canHandleRequest(): bool
     {
-        if (!Environment::isCli()) {
-            $configuration = $this->configurationManager->getConfiguration(
-                ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK
-            );
-
-            return strtolower($configuration['extensionName']) === 'maps2'
-                && !$this->mapProviderRequestService->isRequestToMapProviderAllowed();
-        }
-        return false;
+        return $this->environmentService->isEnvironmentInFrontendMode()
+            && !Environment::isCli()
+            && $this->requestBuilder->build()->getControllerExtensionKey() === 'maps2'
+            && !$this->mapProviderRequestService->isRequestToMapProviderAllowed();
     }
 
     /**
