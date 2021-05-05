@@ -36,9 +36,8 @@ class AjaxController extends ActionController
      */
     public $poiCollectionRepository;
 
-    public function __construct(PoiCollectionRepository $poiCollectionRepository)
+    public function injectPoiCollectionRepository(PoiCollectionRepository $poiCollectionRepository): void
     {
-        parent::__construct();
         $this->poiCollectionRepository = $poiCollectionRepository;
     }
 
