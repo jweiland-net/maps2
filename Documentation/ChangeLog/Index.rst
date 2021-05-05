@@ -6,6 +6,10 @@
 ChangeLog
 =========
 
+**Version 9.3.3**
+
+- Use RequestBuilder instead of ConfigurationManager to retrieve extKey
+
 **Version 9.3.2**
 
 - Add title parameter to EditPoi VH
