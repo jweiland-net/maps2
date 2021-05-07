@@ -6,6 +6,10 @@
 ChangeLog
 =========
 
+**Version 9.3.5**
+
+- Update old TS condition for requireCHashArgumentForActionArguments
+
 **Version 9.3.4**
 
 - Repair AJAX calls on POI click
