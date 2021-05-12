@@ -6,6 +6,10 @@
 ChangeLog
 =========
 
+**Version 9.3.6**
+
+- Update TS condition for requireCHashArgumentForActionArguments
+
 **Version 9.3.5**
 
 - Update old TS condition for requireCHashArgumentForActionArguments
