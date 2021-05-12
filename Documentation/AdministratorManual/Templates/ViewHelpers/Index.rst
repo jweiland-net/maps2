@@ -44,14 +44,13 @@ another namespace declaration like:
      xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
      xmlns:maps2="http://typo3.org/ns/JWeiland/Maps2/ViewHelpers"
      xmlns:e="http://typo3.org/ns/JWeiland/Events2/ViewHelpers"
-     data-namespace-typo3-fluid="true"
-   >
+     data-namespace-typo3-fluid="true">
 
 and call the ViewHelper like
 
 .. code-block:: html
 
-   <e:NameOfTheViewHelper />
+   <e:nameOfTheViewHelper />
 
 All ViewHelpers
 ---------------
