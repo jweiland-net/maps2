@@ -6,6 +6,10 @@
 ChangeLog
 =========
 
+**Version 9.3.6**
+
+- [BUGFIX] Re-Implement OverlayRequestHandler
+
 **Version 9.3.5**
 
 - Update old TS condition for requireCHashArgumentForActionArguments
