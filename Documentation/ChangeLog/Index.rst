@@ -6,6 +6,10 @@
 ChangeLog
 =========
 
+**Version 9.3.7**
+
+- Replace plain SQL query with SchemaManager to be PostgreSQL compatible
+
 **Version 9.3.6**
 
 - Update TS condition for requireCHashArgumentForActionArguments

@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Utility;
 
+use Doctrine\DBAL\Schema\AbstractSchemaManager;
+use Doctrine\DBAL\Schema\Column;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -19,14 +21,20 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class DatabaseUtility
 {
+    /**
+     * maps2 internal we only need the array keys to filter out invalid columns.
+     *
+     * @param string $tableName
+     * @return array|Column[]
+     */
     public static function getColumnsFromTable(string $tableName): array
     {
-        $output = [];
+        $columns = [];
         $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable($tableName);
-        $statement = $connection->query('SHOW FULL COLUMNS FROM `' . $tableName . '`');
-        while ($fieldRow = $statement->fetch()) {
-            $output[$fieldRow['Field']] = $fieldRow;
+        if ($connection->getSchemaManager() instanceof AbstractSchemaManager) {
+            $columns = $connection->getSchemaManager()->listTableColumns($tableName);
         }
-        return $output;
+
+        return $columns;
     }
 }
