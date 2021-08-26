@@ -47,18 +47,6 @@
 				<source>Marking</source>
 				<target>Markierung</target>
 			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poicollection.mapProvider" xml:space="preserve">
-				<source>Choose a preferred Map Provider to render the map for this record. This option is only valid for the TYPO3 backend and will reload the form if you switch to another value.</source>
-				<target>Wähle einen bevorzugten Kartenanbieter, um die Karte für diesen Datensatz darzustellen. Diese Option ist nur für das TYPO3 Backend gültig und läd bei Wechsel das Formular neu.</target>
-			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poicollection.mapProvider.gm" xml:space="preserve">
-				<source>Google Maps</source>
-				<target>Google Maps</target>
-			</trans-unit>
-			<trans-unit id="tx_maps2_domain_model_poicollection.mapProvider.osm" xml:space="preserve">
-				<source>Open Street Map</source>
-				<target>Open Street Map</target>
-			</trans-unit>
 			<trans-unit id="tx_maps2_domain_model_poicollection.collectionType" xml:space="preserve">
 				<source>Type</source>
 				<target>Typ</target>
@@ -92,12 +80,36 @@
 				<target>Karte</target>
 			</trans-unit>
 			<trans-unit id="tx_maps2_domain_model_poicollection.address" xml:space="preserve" approved="yes">
-				<source>address</source>
-				<target>Adresse</target>
+				<source>Formatted address</source>
+				<target>Formatierte Adresse</target>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poicollection.address.description" xml:space="preserve" approved="yes">
+				<source>Please enter an address in the search field near the map. If search was successfully a formatted version of your address will be inserted here automatically.</source>
+				<target>Trage zunächst eine Adresse in das Suchfeld bei der Karte ein. Wenn die Suche erfolgreich war wird dieses Feld hier automatisch mit einer formattierten Fassung der Adresse befüllt.</target>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poicollection.mapProvider" xml:space="preserve">
+				<source>Choose a preferred Map Provider to render the map for this record.</source>
+				<target>Wähle einen bevorzugten Kartenanbieter, um die Karte für diesen Datensatz darzustellen.</target>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poicollection.mapProvider.description" xml:space="preserve">
+				<source>This option is only valid for the TYPO3 backend and will reload the form, if you switch to another value.</source>
+				<target>Diese Option ist nur für das TYPO3 Backend gültig und läd bei Wechsel das Formular neu.</target>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poicollection.mapProvider.gm" xml:space="preserve">
+				<source>Google Maps</source>
+				<target>Google Maps</target>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poicollection.mapProvider.osm" xml:space="preserve">
+				<source>Open Street Map</source>
+				<target>Open Street Map</target>
 			</trans-unit>
 			<trans-unit id="tx_maps2_domain_model_poicollection.configuration_map" xml:space="preserve" approved="yes">
 				<source>Configure position on Map</source>
 				<target>Konfiguration der Kartenposition</target>
+			</trans-unit>
+			<trans-unit id="tx_maps2_domain_model_poicollection.configuration_map.description" xml:space="preserve" approved="yes">
+				<source>Please use the search field to move the pointer to your given address. With help of drag and drop you can finetune the position of the pointer.</source>
+				<target>Verwende das Suchfeld, um den Marker auf die angegebende Adresse zu verschieben. Mittels Drag and Drop kann der Marker noch nachträglich versetzt werden</target>
 			</trans-unit>
 			<trans-unit id="tx_maps2_domain_model_poicollection.latitude" xml:space="preserve">
 				<source>Latitude for map position</source>

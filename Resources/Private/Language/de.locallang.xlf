@@ -36,8 +36,8 @@
 				<target>Aktivieren</target>
 			</trans-unit>
 			<trans-unit id="backend.form.searchAddress" xml:space="preserve" approved="yes">
-				<source>Enter a location</source>
-				<target>Gebt hier die zu suchende Adresse ein</target>
+				<source>Insert address to search for</source>
+				<target>Adresse einfügen, nach der gesucht werden soll</target>
 			</trans-unit>
 
 			<trans-unit id="tx_maps2_domain_model_poi.latitude" xml:space="preserve" approved="yes">
