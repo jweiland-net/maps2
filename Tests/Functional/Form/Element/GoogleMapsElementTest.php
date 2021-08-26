@@ -120,9 +120,10 @@ class GoogleMapsElementTest extends FunctionalTestCase
         $iconFactoryProphecy = $this->prophesize(IconFactory::class);
         GeneralUtility::addInstance(IconFactory::class, $iconFactoryProphecy->reveal());
 
-        /** @var NodeFactory|ObjectProphecy $nodeFactory */
-        $nodeFactory = $this->prophesize(NodeFactory::class);
-        $this->subject = new GoogleMapsElement($nodeFactory->reveal(), $this->data);
+        $this->subject = new GoogleMapsElement(
+            GeneralUtility::makeInstance(NodeFactory::class),
+            $this->data
+        );
     }
 
     protected function tearDown()
