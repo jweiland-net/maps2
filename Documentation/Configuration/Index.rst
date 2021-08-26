@@ -12,17 +12,28 @@ Target group: **Developers, Integrators**
 Minimal Example
 ---------------
 
-- It is necessary to include static template `Maps2 Default (maps2)`
-- It is necessary to include one of these static templates `Maps2 for Google Maps (maps2)` or
+.. hint::
+
+   If you want to work with Google Maps in TYPO3 backend you or an administrator have to configure the
+   Google Maps API keys in :ref:`Configure extension <extensionManager>` to get a working environment.
+
+- Include static template `Maps2 Default (maps2)`
+- include one of these static templates `Maps2 for Google Maps (maps2)` or
    `Maps2 for Open Street Map (maps2)`
 
-We prefer to set a Storage PID with help of TypoScript Constants:
+Update these properties in TypoScript Constant Editor:
 
 .. code-block:: none
 
-   plugin.tx_maps2.persistence {
-      # Define Storage PID where Maps records are located
-      storagePid = 4
+   plugin.tx_maps2 {
+       persistence {
+           # We prefer to set a Storage PID where the maps2 records are located
+           storagePid = 4
+       }
+       settings {
+           # If you're using Google Maps you have to set an API key to allow loading the map in frontend
+           googleMapsJavaScriptApiKey = ABC123...
+       }
    }
 
 .. _configuration-typoscript:
@@ -71,6 +82,7 @@ between the foreign records with f.e.:
    </f:groupedFor>
 
 `jwMaps2TableName` and `jwMaps2ColumnName` are two special keys we have added to each foreign record.
+
 
 .. _infoWindow:
 
