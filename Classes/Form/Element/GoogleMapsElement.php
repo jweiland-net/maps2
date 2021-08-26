@@ -67,6 +67,17 @@ class GoogleMapsElement extends AbstractFormElement
      */
     protected $messageHelper;
 
+    /**
+     * Default field information enabled for this element.
+     *
+     * @var array
+     */
+    protected $defaultFieldInformation = [
+        'tcaDescription' => [
+            'renderType' => 'tcaDescription',
+        ],
+    ];
+
     public function init()
     {
         $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
@@ -144,7 +155,14 @@ class GoogleMapsElement extends AbstractFormElement
         $resultArray['stylesheetFiles'][] = $backendRelPath . 'Resources/Public/Css/GoogleMapsModule.css';
         $resultArray['requireJsModules'][] = 'TYPO3/CMS/Maps2/GoogleMapsModule';
 
-        $resultArray['html'] = $this->getMapHtml($this->getConfiguration($currentRecord));
+        $fieldInformationResult = $this->renderFieldInformation();
+        $resultArray['html'] = sprintf(
+            '%s%s%s%s',
+            '<div class="formengine-field-item t3js-formengine-field-item">',
+            $fieldInformationResult['html'],
+            $this->getMapHtml($this->getConfiguration($currentRecord)),
+            '</div>'
+        );
 
         return $resultArray;
     }

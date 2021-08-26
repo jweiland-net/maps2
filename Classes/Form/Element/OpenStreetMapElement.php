@@ -61,6 +61,17 @@ class OpenStreetMapElement extends AbstractFormElement
     protected $poiCollectionRepository;
 
     /**
+     * Default field information enabled for this element.
+     *
+     * @var array
+     */
+    protected $defaultFieldInformation = [
+        'tcaDescription' => [
+            'renderType' => 'tcaDescription',
+        ],
+    ];
+
+    /**
      * initializes this class
      */
     public function init()
@@ -129,7 +140,14 @@ class OpenStreetMapElement extends AbstractFormElement
             'TYPO3/CMS/Maps2/OpenStreetMapModule' => 'function(OpenStreetMap){OpenStreetMap();}'
         ];
 
-        $resultArray['html'] = $this->getMapHtml($this->getConfiguration($currentRecord));
+        $fieldInformationResult = $this->renderFieldInformation();
+        $resultArray['html'] = sprintf(
+            '%s%s%s%s',
+            '<div class="formengine-field-item t3js-formengine-field-item">',
+            $fieldInformationResult['html'],
+            $this->getMapHtml($this->getConfiguration($currentRecord)),
+            '</div>'
+        );
 
         return $resultArray;
     }
