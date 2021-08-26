@@ -195,8 +195,12 @@ Google Maps Geocode API. If needed you can change that URI here.
 googleMapsJavaScriptApiKey
 --------------------------
 
-Since version 2.0.0 this extension needs a Google Maps JavaScript ApiKey which you have to get
-over `Google Console<http://console.developers.google.com>`_
+Since 2018 Google Maps needs API keys to get their services to work. So with version 2.0.0 of maps2 you can and have
+to set an API key for JavaScript based requests to Google to show the map in TYPO3 backend. Yes, this
+configuration is for the backend only. To allow loading maps for frontend you should set the same or another API key
+in TypoScript (see section `Configuration`).
+
+You can register API keys here: `Google Console<http://console.developers.google.com>`_
 
 
 .. _extensionManager-googleMapsGeocodeApiKey:
@@ -204,10 +208,11 @@ over `Google Console<http://console.developers.google.com>`_
 googleMapsGeocodeApiKey
 -----------------------
 
-Since version 2.0.0 this extension needs a Google Maps Geocode ApiKey, if you use the CityMap plugin.
-It was needed to get Latitude and Longitude from a given address.
+Since 2018 Google Maps needs API keys to get their services to work. So with version 2.0.0 of maps2 you can and have
+to set an API key for Geocoding requests to Google to allow searching for latitude/longitude by a given address in
+TYPO3 backend and frontend (Plugin CityMap).
 
-Please visit `Google Console <http://console.developers.google.com>`_ to get one.
+You can register API keys here: `Google Console<http://console.developers.google.com>`_
 
 
 .. _extensionManager-openStreetMapGeocodeUri:
