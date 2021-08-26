@@ -84,10 +84,6 @@ class ReadOnlyInputTextElement extends AbstractFormElement
         $fieldInformationHtml = $fieldInformationResult['html'];
         $resultArray = $this->mergeChildReturnIntoExistingResult($resultArray, $fieldInformationResult, false);
 
-        if ($config['readOnly']) {
-            $attributes['readOnly'] = 'readOnly';
-        }
-
         // @todo: The whole eval handling is a mess and needs refactoring
         foreach ($evalList as $func) {
             // @todo: This is ugly: The code should find out on it's own whether an eval definition is a
@@ -138,6 +134,10 @@ class ReadOnlyInputTextElement extends AbstractFormElement
         }
         if (isset($config['autocomplete'])) {
             $attributes['autocomplete'] = empty($config['autocomplete']) ? 'new-' . $fieldName : 'on';
+        }
+
+        if ($config['readOnly']) {
+            $attributes['readOnly'] = 'readOnly';
         }
 
         $valuePickerHtml = [];
