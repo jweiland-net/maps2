@@ -246,6 +246,7 @@ return [
         'address' => [
             'exclude' => true,
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.address',
+            'description' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.address.description',
             'config' => [
                 'type' => 'input',
                 'renderType' => 'maps2ReadOnly',
@@ -258,6 +259,7 @@ return [
         'map_provider' => [
             'exclude' => true,
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.mapProvider',
+            'description' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.mapProvider.description',
             'onChange' => 'reload',
             'config' => [
                 'type' => 'select',
@@ -278,6 +280,7 @@ return [
         'configuration_map' => [
             'exclude' => true,
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.configuration_map',
+            'description' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.configuration_map.description',
             'config' => [
                 'type' => 'user',
                 'renderType' => 'maps2MapProvider'
