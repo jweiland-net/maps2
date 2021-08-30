@@ -121,6 +121,7 @@ class MapService
 
         return $uriBuilder->reset()
             ->setAddQueryString(true)
+            ->setAddQueryStringMethod('GET')
             ->setArguments([
                 'tx_maps2_maps2' => [
                     'mapProviderRequestsAllowedForMaps2' => 1
