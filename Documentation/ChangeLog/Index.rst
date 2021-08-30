@@ -6,6 +6,15 @@
 ChangeLog
 =========
 
+**Version 9.3.9**
+
+- BUGFIX: Add all GET-params to requestUri. Needed for AllowMap template
+
+**Version 9.3.8**
+
+- Set address column as readonly
+- Add further description for TCA columns
+
 **Version 9.3.7**
 
 - Replace plain SQL query with SchemaManager to be PostgreSQL compatible
