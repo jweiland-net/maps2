@@ -144,6 +144,7 @@ class MapServiceTest extends UnitTestCase
         $uriBuilderProphecy = $this->prophesize(UriBuilder::class);
         $uriBuilderProphecy->reset()->shouldBeCalled()->willReturn($uriBuilderProphecy->reveal());
         $uriBuilderProphecy->setAddQueryString(true)->shouldBeCalled()->willReturn($uriBuilderProphecy->reveal());
+        $uriBuilderProphecy->setAddQueryStringMethod('GET')->shouldBeCalled()->willReturn($uriBuilderProphecy->reveal());
         $uriBuilderProphecy
             ->setArguments([
                 'tx_maps2_maps2' => [
@@ -243,6 +244,7 @@ class MapServiceTest extends UnitTestCase
         $uriBuilderProphecy = $this->prophesize(UriBuilder::class);
         $uriBuilderProphecy->reset()->shouldBeCalled()->willReturn($uriBuilderProphecy->reveal());
         $uriBuilderProphecy->setAddQueryString(true)->shouldBeCalled()->willReturn($uriBuilderProphecy->reveal());
+        $uriBuilderProphecy->setAddQueryStringMethod('GET')->shouldBeCalled()->willReturn($uriBuilderProphecy->reveal());
         $uriBuilderProphecy
             ->setArguments([
                 'tx_maps2_maps2' => [
@@ -321,6 +323,7 @@ class MapServiceTest extends UnitTestCase
         $uriBuilderProphecy = $this->prophesize(UriBuilder::class);
         $uriBuilderProphecy->reset()->shouldBeCalled()->willReturn($uriBuilderProphecy->reveal());
         $uriBuilderProphecy->setAddQueryString(true)->shouldBeCalled()->willReturn($uriBuilderProphecy->reveal());
+        $uriBuilderProphecy->setAddQueryStringMethod('GET')->shouldBeCalled()->willReturn($uriBuilderProphecy->reveal());
         $uriBuilderProphecy
             ->setArguments([
                 'tx_maps2_maps2' => [
