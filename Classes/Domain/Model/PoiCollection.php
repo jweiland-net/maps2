@@ -26,6 +26,16 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 class PoiCollection extends AbstractEntity
 {
     /**
+     * @var int
+     */
+    protected $sysLanguageUid;
+
+    /**
+     * @var int
+     */
+    protected $l10nParent;
+
+    /**
      * @var string
      */
     protected $collectionType = '';
@@ -155,6 +165,26 @@ class PoiCollection extends AbstractEntity
         $this->categories = new ObjectStorage();
         $this->infoWindowImages = new ObjectStorage();
         $this->markerIcons = new ObjectStorage();
+    }
+
+    public function getSysLanguageUid(): int
+    {
+        return $this->sysLanguageUid;
+    }
+
+    public function setSysLanguageUid(int $sysLanguageUid): void
+    {
+        $this->sysLanguageUid = $sysLanguageUid;
+    }
+
+    public function getL10nParent(): int
+    {
+        return $this->l10nParent;
+    }
+
+    public function setL10nParent(int $l10nParent): void
+    {
+        $this->l10nParent = $l10nParent;
     }
 
     public function getCollectionType(): string
