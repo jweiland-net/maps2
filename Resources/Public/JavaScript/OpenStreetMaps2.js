@@ -319,8 +319,14 @@ OpenStreetMaps2.prototype.createRadius = function (poiCollection, environment) {
  */
 OpenStreetMaps2.prototype.addInfoWindow = function (element, poiCollection, environment) {
     element.on("click", function () {
+        let url = window.location.protocol + "//" + window.location.host;
+        url += "/index.php?id=" + environment.id + "&type=1614075471";
+        if (poiCollection.sysLanguageUid) {
+            url += "&L=" + poiCollection.sysLanguageUid;
+        }
+        url += "&tx_maps2_maps2[controller]=Ajax&tx_maps2_maps2[action]=process&tx_maps2_maps2[method]=renderInfoWindowContent"
         jQuery.ajax({
-            url: window.location.protocol + "//" + window.location.host + "/index.php?id=" + environment.id + "&type=1614075471&tx_maps2_maps2[controller]=Ajax&tx_maps2_maps2[action]=process&tx_maps2_maps2[method]=renderInfoWindowContent",
+            url: url,
             method: "POST",
             dataType: "json",
             data: {
