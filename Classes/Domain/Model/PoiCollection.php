@@ -28,12 +28,12 @@ class PoiCollection extends AbstractEntity
     /**
      * @var int
      */
-    protected $sysLanguageUid;
+    protected $sysLanguageUid = 0;
 
     /**
      * @var int
      */
-    protected $l10nParent;
+    protected $l10nParent = 0;
 
     /**
      * @var string
