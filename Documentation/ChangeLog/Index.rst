@@ -6,6 +6,10 @@
 ChangeLog
 =========
 
+**Version 9.3.10**
+
+- BUGFIX: Show InfoWindowContent in translated language
+
 **Version 9.3.9**
 
 - BUGFIX: Add all GET-params to requestUri. Needed for AllowMap template
