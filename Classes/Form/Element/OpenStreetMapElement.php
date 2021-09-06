@@ -100,22 +100,19 @@ class OpenStreetMapElement extends AbstractFormElement
         $this->pageRenderer->addRequireJsConfiguration([
             'paths' => [
                 'leaflet' => rtrim(
-                    PathUtility::getRelativePath(
-                        Environment::getPublicPath() . '/typo3/',
+                    PathUtility::getRelativePathTo(
                         GeneralUtility::getFileAbsFileName('EXT:maps2/Resources/Public/JavaScript/Leaflet')
                     ),
                     '/'
                 ),
                 'leafletDragPath' => rtrim(
-                    PathUtility::getRelativePath(
-                        Environment::getPublicPath() . '/typo3/',
+                    PathUtility::getRelativePathTo(
                         GeneralUtility::getFileAbsFileName('EXT:maps2/Resources/Public/JavaScript/Leaflet.Drag.Path')
                     ),
                     '/'
                 ),
                 'leafletEditable' => rtrim(
-                    PathUtility::getRelativePath(
-                        Environment::getPublicPath() . '/typo3/',
+                    PathUtility::getRelativePathTo(
                         GeneralUtility::getFileAbsFileName('EXT:maps2/Resources/Public/JavaScript/Leaflet.Editable')
                     ),
                     '/'

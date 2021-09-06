@@ -130,8 +130,7 @@ class GoogleMapsElement extends AbstractFormElement
         $this->pageRenderer->addRequireJsConfiguration([
             'paths' => [
                 'async' => rtrim(
-                    PathUtility::getRelativePath(
-                        Environment::getPublicPath() . '/typo3/',
+                    PathUtility::getRelativePathTo(
                         GeneralUtility::getFileAbsFileName('EXT:maps2/Resources/Public/JavaScript/async')
                     ),
                     '/'
