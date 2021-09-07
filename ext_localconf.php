@@ -55,15 +55,10 @@ call_user_func(function() {
     // Move old flex form settings to new location before saving to DB
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['maps2MoveFlexFormFields'] = \JWeiland\Maps2\Update\MoveOldFlexFormSettingsUpdate::class;
 
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1530869394] = [
-        'nodeName' => 'maps2ReadOnly',
-        'priority' => 40,
-        'class' => \JWeiland\Maps2\Form\Element\ReadOnlyInputTextElement::class,
-    ];
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1530778687] = [
         'nodeName' => 'maps2InfoWindowContent',
         'priority' => 40,
-        'class' => \JWeiland\Maps2\Form\Element\InfoWindowCkEditorElement::class,
+        'class' => \JWeiland\Maps2\Form\FieldInformation\InfoWindowContent::class,
     ];
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeResolver'][1551448205] = [
         'nodeName' => 'maps2MapProvider',

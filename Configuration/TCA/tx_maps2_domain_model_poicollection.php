@@ -249,7 +249,6 @@ return [
             'description' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.address.description',
             'config' => [
                 'type' => 'input',
-                'renderType' => 'maps2ReadOnly',
                 'size' => 30,
                 'readOnly' => true,
                 'placeholder' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.address.useSearchField',
@@ -376,12 +375,16 @@ return [
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.info_window_content',
             'config' => [
                 'type' => 'text',
-                'renderType' => 'maps2InfoWindowContent',
                 'cols' => 80,
                 'rows' => 15,
                 'softref' => 'rtehtmlarea_images,typolink_tag,images,email[subst],url',
                 'enableRichtext' => true,
                 'richtextConfiguration' => 'default',
+                'fieldInformation' => [
+                    'showInfoWindowContentAbove' => [
+                        'renderType' => 'maps2InfoWindowContent'
+                    ]
+                ]
             ],
         ],
         'info_window_images' => [
