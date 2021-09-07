@@ -94,28 +94,14 @@ class OpenStreetMapElement extends AbstractFormElement
         $this->init();
         $resultArray = $this->initializeResultArray();
         $currentRecord = $this->cleanUpCurrentRecord($this->data['databaseRow']);
-        $backendRelPath = 'EXT:maps2/';
+        $publicResourcesPath =
+            PathUtility::getAbsoluteWebPath(ExtensionManagementUtility::extPath('maps2')) . 'Resources/Public/';
 
         $this->pageRenderer->addRequireJsConfiguration([
             'paths' => [
-                'leaflet' => rtrim(
-                    PathUtility::getRelativePathTo(
-                        GeneralUtility::getFileAbsFileName('EXT:maps2/Resources/Public/JavaScript/Leaflet')
-                    ),
-                    '/'
-                ),
-                'leafletDragPath' => rtrim(
-                    PathUtility::getRelativePathTo(
-                        GeneralUtility::getFileAbsFileName('EXT:maps2/Resources/Public/JavaScript/Leaflet.Drag.Path')
-                    ),
-                    '/'
-                ),
-                'leafletEditable' => rtrim(
-                    PathUtility::getRelativePathTo(
-                        GeneralUtility::getFileAbsFileName('EXT:maps2/Resources/Public/JavaScript/Leaflet.Editable')
-                    ),
-                    '/'
-                )
+                'leaflet' => $publicResourcesPath . 'JavaScript/Leaflet',
+                'leafletDragPath' => $publicResourcesPath . 'JavaScript/Leaflet.Drag.Path',
+                'leafletEditable' => $publicResourcesPath . 'JavaScript/Leaflet.Editable'
             ],
             'shim' => [
                 'leaflet' => [
@@ -131,7 +117,7 @@ class OpenStreetMapElement extends AbstractFormElement
             ]
         ]);
 
-        $resultArray['stylesheetFiles'][] = $backendRelPath . 'Resources/Public/Css/Leaflet/Leaflet.css';
+        $resultArray['stylesheetFiles'][] = $publicResourcesPath . 'Css/Leaflet/Leaflet.css';
         $resultArray['requireJsModules'][] = [
             'TYPO3/CMS/Maps2/OpenStreetMapModule' => 'function(OpenStreetMap){OpenStreetMap();}'
         ];

@@ -123,17 +123,13 @@ class GoogleMapsElement extends AbstractFormElement
         $this->init();
         $resultArray = $this->initializeResultArray();
         $currentRecord = $this->cleanUpCurrentRecord($this->data['databaseRow']);
-        $backendRelPath = 'EXT:maps2/';
+        $publicResourcesPath =
+            PathUtility::getAbsoluteWebPath(ExtensionManagementUtility::extPath('maps2')) . 'Resources/Public/';
 
         // loadRequireJsModule has to be loaded before configuring additional paths, else all ext paths will not be initialized
         $this->pageRenderer->addRequireJsConfiguration([
             'paths' => [
-                'async' => rtrim(
-                    PathUtility::getRelativePathTo(
-                        GeneralUtility::getFileAbsFileName('EXT:maps2/Resources/Public/JavaScript/async')
-                    ),
-                    '/'
-                )
+                'async' => $publicResourcesPath . 'JavaScript/async'
             ]
         ]);
         // make Google Maps2 available as dependency for all RequireJS modules
@@ -150,7 +146,7 @@ class GoogleMapsElement extends AbstractFormElement
             ),
             false
         );
-        $resultArray['stylesheetFiles'][] = $backendRelPath . 'Resources/Public/Css/GoogleMapsModule.css';
+        $resultArray['stylesheetFiles'][] = $publicResourcesPath . 'Css/GoogleMapsModule.css';
         $resultArray['requireJsModules'][] = 'TYPO3/CMS/Maps2/GoogleMapsModule';
 
         $fieldInformationResult = $this->renderFieldInformation();
