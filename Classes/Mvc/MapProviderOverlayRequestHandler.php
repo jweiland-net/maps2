@@ -13,17 +13,22 @@ namespace JWeiland\Maps2\Mvc;
 
 use JWeiland\Maps2\Service\MapProviderRequestService;
 use JWeiland\Maps2\Service\MapService;
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Http\ApplicationType;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Mvc\RequestHandlerInterface;
 use TYPO3\CMS\Extbase\Mvc\Response;
 use TYPO3\CMS\Extbase\Mvc\ResponseInterface;
-use TYPO3\CMS\Extbase\Mvc\Web\AbstractRequestHandler;
+use TYPO3\CMS\Extbase\Mvc\Web\RequestBuilder;
+use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 
 /**
  * This RequestHandler will be used to show an overlay for maps2 output
  * which will ask users to explicit allow requests to Map Providers.
  * This feature has to be activated in extension manager configuration.
  */
-class MapProviderOverlayRequestHandler extends AbstractRequestHandler
+class MapProviderOverlayRequestHandler implements RequestHandlerInterface
 {
     /**
      * @var MapProviderRequestService
@@ -31,33 +36,28 @@ class MapProviderOverlayRequestHandler extends AbstractRequestHandler
     protected $mapProviderRequestService;
 
     /**
-     * @var Response
-     */
-    protected $response;
-
-    /**
      * @var MapService
      */
     protected $mapService;
 
-    public function injectMapProviderRequestService(MapProviderRequestService $mapProviderRequestService): void
-    {
+    /**
+     * @var RequestBuilder
+     */
+    protected $requestBuilder;
+
+    public function __construct(
+        MapProviderRequestService $mapProviderRequestService,
+        MapService $mapService,
+        RequestBuilder $requestBuilder
+    ) {
         $this->mapProviderRequestService = $mapProviderRequestService;
-    }
-
-    public function injectResponse(Response $response): void
-    {
-        $this->response = $response;
-    }
-
-    public function injectMapService(MapService $mapService): void
-    {
         $this->mapService = $mapService;
+        $this->requestBuilder = $requestBuilder;
     }
 
     public function canHandleRequest(): bool
     {
-        return $this->environmentService->isEnvironmentInFrontendMode()
+        return $this->isEnvironmentInFrontendMode()
             && !Environment::isCli()
             && $this->requestBuilder->build()->getControllerExtensionKey() === 'maps2'
             && !$this->mapProviderRequestService->isRequestToMapProviderAllowed();
@@ -78,10 +78,24 @@ class MapProviderOverlayRequestHandler extends AbstractRequestHandler
 
     public function handleRequest(): ResponseInterface
     {
-        $this->response->appendContent(
+        $response = GeneralUtility::makeInstance(Response::class);
+        $response->appendContent(
             $this->mapService->showAllowMapForm()
         );
 
-        return $this->response;
+        return $response;
+    }
+
+    /**
+     * EnvironmentService is deprecated in TYPO3 11. So this is a copy
+     * of the new solution.
+     *
+     * @return bool
+     */
+    protected function isEnvironmentInFrontendMode(): bool
+    {
+        // Frontend mode stays false if backend or cli without request object
+        return ($GLOBALS['TYPO3_REQUEST'] ?? null) instanceof ServerRequestInterface
+            && ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend();
     }
 }
