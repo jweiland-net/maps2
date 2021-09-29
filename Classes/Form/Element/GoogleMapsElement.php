@@ -185,7 +185,10 @@ class GoogleMapsElement extends AbstractFormElement
      */
     protected function getConfiguration(array $currentRecord)
     {
-        $config = [];
+        $config = [
+            'latitude' => $this->extConf->getDefaultLatitude(),
+            'longitude' => $this->extConf->getDefaultLongitude()
+        ];
 
         // get poi collection model
         $uid = (int)$currentRecord['uid'];
@@ -214,15 +217,16 @@ class GoogleMapsElement extends AbstractFormElement
                 default:
                     break;
             }
-
-            $config['address'] =  $currentRecord['address'];
-            $config['collectionType'] = is_array($currentRecord['collection_type']) ? $currentRecord['collection_type'][0] : $currentRecord['collection_type'];
-            $config['uid'] =  $uid;
-
-            $hashArray['uid'] = $uid;
-            $hashArray['collectionType'] = $currentRecord['collection_type'];
-            $config['hash'] = $this->hashService->generateHmac(serialize($hashArray));
         }
+
+        $config['address'] =  $currentRecord['address'];
+        $config['collectionType'] = is_array($currentRecord['collection_type']) ? $currentRecord['collection_type'][0] : $currentRecord['collection_type'];
+        $config['uid'] =  $uid === 0 ? $currentRecord['uid'] : $uid;
+
+        $hashArray['uid'] = $uid === 0 ? $currentRecord['uid'] : $uid;
+        $hashArray['collectionType'] = $currentRecord['collection_type'];
+        $config['hash'] = $this->hashService->generateHmac(serialize($hashArray));
+
         return $config;
     }
 
