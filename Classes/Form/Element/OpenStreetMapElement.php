@@ -181,8 +181,7 @@ class OpenStreetMapElement extends AbstractFormElement
                     }
                     break;
                 case 'Radius':
-                    $config['radius'] = ($poiCollection->getRadius()) ? $poiCollection->getRadius() : $this->extConf->getDefaultRadius();
-                    $config['radius'] = $poiCollection->getRadius();
+                    $config['radius'] = $poiCollection->getRadius() ?: $this->extConf->getDefaultRadius();
                     break;
                 default:
                     break;
