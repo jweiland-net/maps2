@@ -21,7 +21,6 @@ use TYPO3\CMS\Extbase\Mvc\RequestHandlerInterface;
 use TYPO3\CMS\Extbase\Mvc\Response;
 use TYPO3\CMS\Extbase\Mvc\ResponseInterface;
 use TYPO3\CMS\Extbase\Mvc\Web\RequestBuilder;
-use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 
 /**
  * This RequestHandler will be used to show an overlay for maps2 output
