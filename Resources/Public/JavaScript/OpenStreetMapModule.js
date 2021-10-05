@@ -179,17 +179,13 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDrag
         let setLatLngFields = function(lat, lng, rad, address) {
             setFieldValue("latitude", lat);
             setFieldValue("longitude", lng);
-            TBE_EDITOR.fieldChanged("tx_maps2_domain_model_poicollection", config.uid, "latitude", createFieldName("latitude", false));
-            TBE_EDITOR.fieldChanged("tx_maps2_domain_model_poicollection", config.uid, "longitude", createFieldName("longitude", false));
 
             if (typeof rad !== "undefined" && rad > 0) {
                 setFieldValue("radius", parseInt(rad));
-                TBE_EDITOR.fieldChanged("tx_maps2_domain_model_poicollection", config.uid, "radius", createFieldName("radius", false));
             }
 
             if (typeof address !== "undefined") {
                 setFieldValue("address", address);
-                TBE_EDITOR.fieldChanged("tx_maps2_domain_model_poicollection", config.uid, "address", createFieldName("address", false));
             }
         };
 
@@ -207,16 +203,23 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDrag
         };
 
         /**
-         * Create field value
+         * Return FieldElement from TCEFORM by fieldName
          *
          * @param field
-         * @param hiddenRecord
+         * @returns {*|HTMLElement} jQuery object. FormEngine works with $ selectors
+         */
+        let getFieldElement = function(field) {
+            // Return the FieldElement which is visible to the editor
+            return TYPO3.FormEngine.getFieldElement(buildFieldName(field), '_list');
+        };
+
+        /**
+         * Build fieldName like 'data[tx_maps2_domain_model_poicollection][1][latitude]'
+         *
+         * @param field
          * @returns {string}
          */
-        let createFieldName = function(field, hiddenRecord) {
-            if (hiddenRecord === true) {
-                return 'data[tx_maps2_domain_model_poicollection][' + config.uid + '][' + field + ']_hr';
-            }
+        let buildFieldName = function(field) {
             return 'data[tx_maps2_domain_model_poicollection][' + config.uid + '][' + field + ']';
         };
 
@@ -227,19 +230,11 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDrag
          * @param value
          */
         let setFieldValue = function(field, value) {
-            let fieldName = createFieldName(field, true);
-            // set the old (< TYPO3 7.5) hidden record fields "*_hr"
-            if (typeof document[TBE_EDITOR.formname][fieldName] !== 'undefined') {
-                document[TBE_EDITOR.formname][fieldName].value = value;
+            let $fieldElement = getFieldElement(field);
+            if ($fieldElement && $fieldElement.length) {
+                $fieldElement.val(value);
+                $fieldElement.triggerHandler("change");
             }
-            // set the new (>= TYPO3 7.5) data fields "data-formengine-input-name"
-            fieldName = createFieldName(field, false);
-            let $humanReadableField = $('[data-formengine-input-name="' + fieldName + '"]');
-            if ($humanReadableField.length) {
-                $humanReadableField.val(value);
-            }
-            // set the form field which contains the data, which will be send by POST
-            document[TBE_EDITOR.formname][fieldName].value = value;
         };
 
         /**

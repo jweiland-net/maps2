@@ -258,39 +258,17 @@ define(["jquery", "gmaps"], function($, gmaps) {
      * @param address
      */
     GoogleMaps.setLatLngFields = function(lat, lng, rad, address) {
+        let $fieldElement;
+
         GoogleMaps.setFieldValue("latitude", lat);
         GoogleMaps.setFieldValue("longitude", lng);
-        TBE_EDITOR.fieldChanged(
-            "tx_maps2_domain_model_poicollection",
-            GoogleMaps.config.uid,
-            "latitude",
-            GoogleMaps.createFieldName("latitude", false)
-        );
-        TBE_EDITOR.fieldChanged(
-            "tx_maps2_domain_model_poicollection",
-            GoogleMaps.config.uid,
-            "longitude",
-            GoogleMaps.createFieldName("longitude", false)
-        );
 
         if (typeof rad !== "undefined" && rad > 0) {
             GoogleMaps.setFieldValue("radius", parseInt(rad));
-            TBE_EDITOR.fieldChanged(
-                "tx_maps2_domain_model_poicollection",
-                GoogleMaps.config.uid,
-                "radius",
-                GoogleMaps.createFieldName("radius", false)
-            );
         }
 
         if (typeof address !== "undefined") {
             GoogleMaps.setFieldValue("address", address);
-            TBE_EDITOR.fieldChanged(
-                "tx_maps2_domain_model_poicollection",
-                GoogleMaps.config.uid,
-                "address",
-                GoogleMaps.createFieldName("address", false)
-            );
         }
     };
 
@@ -308,16 +286,23 @@ define(["jquery", "gmaps"], function($, gmaps) {
     };
 
     /**
-     * Create field value
+     * Return FieldElement from TCEFORM by fieldName
      *
      * @param field
-     * @param hiddenRecord
+     * @returns {*|HTMLElement} jQuery object. FormEngine works with $ selectors
+     */
+    GoogleMaps.getFieldElement = function(field) {
+        // Return the FieldElement which is visible to the editor
+        return TYPO3.FormEngine.getFieldElement(GoogleMaps.buildFieldName(field), '_list');
+    };
+
+    /**
+     * Build fieldName like 'data[tx_maps2_domain_model_poicollection][1][latitude]'
+     *
+     * @param field
      * @returns {string}
      */
-    GoogleMaps.createFieldName = function(field, hiddenRecord) {
-        if (hiddenRecord === true) {
-            return 'data[tx_maps2_domain_model_poicollection][' + GoogleMaps.config.uid + '][' + field + ']_hr';
-        }
+    GoogleMaps.buildFieldName = function(field) {
         return 'data[tx_maps2_domain_model_poicollection][' + GoogleMaps.config.uid + '][' + field + ']';
     };
 
@@ -328,19 +313,11 @@ define(["jquery", "gmaps"], function($, gmaps) {
      * @param value
      */
     GoogleMaps.setFieldValue = function(field, value) {
-        let fieldName = GoogleMaps.createFieldName(field, true);
-        // set the old (< TYPO3 7.5) hidden record fields "*_hr"
-        if (typeof document[TBE_EDITOR.formname][fieldName] !== 'undefined') {
-            document[TBE_EDITOR.formname][fieldName].value = value;
+        let $fieldElement = GoogleMaps.getFieldElement(field);
+        if ($fieldElement && $fieldElement.length) {
+            $fieldElement.val(value);
+            $fieldElement.triggerHandler("change");
         }
-        // set the new (>= TYPO3 7.5) data fields "data-formengine-input-name"
-        fieldName = GoogleMaps.createFieldName(field, false);
-        let $humanReadableField = $('[data-formengine-input-name="' + fieldName + '"]');
-        if ($humanReadableField.length) {
-            $humanReadableField.val(value);
-        }
-        // set the form field which contains the data, which will be send by POST
-        document[TBE_EDITOR.formname][fieldName].value = value;
     };
 
     /**
