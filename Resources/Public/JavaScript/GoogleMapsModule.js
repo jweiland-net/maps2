@@ -258,8 +258,6 @@ define(["jquery", "gmaps"], function($, gmaps) {
      * @param address
      */
     GoogleMaps.setLatLngFields = function(lat, lng, rad, address) {
-        let $fieldElement;
-
         GoogleMaps.setFieldValue("latitude", lat);
         GoogleMaps.setFieldValue("longitude", lng);
 
