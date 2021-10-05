@@ -12,6 +12,9 @@
 			<trans-unit id="defaultMapProvider" xml:space="preserve">
 				<source>Set default Map Provider: If you have chosen "Both" above you can define a default here. New map records will be created with this selected type of map provider.</source>
 			</trans-unit>
+			<trans-unit id="defaultMapType" xml:space="preserve">
+				<source>Default map type: If desired, you can specify a default map type for new POI records. With the default "Empty", the editor must first select a type when creating a new POI.</source>
+			</trans-unit>
 			<trans-unit id="defaultCountry" xml:space="preserve">
 				<source>Default Country: If someone searches for a postal code only, Google will search whole world for that postal code. If you want, you can assign a default country here to reduce that search to that country.</source>
 			</trans-unit>

@@ -15,6 +15,10 @@
 				<source>Set default Map Provider: If you have chosen "Both" above you can define a default here. New map records will be created with this selected type of map provider.</source>
 				<target>Standard Kartenanbieter: Wenn Ihr oben "Beide" gewählt habt, dann entscheidet Euch für einen Standard Kartenanbieter. Beim Neuanlegen von Karten-Datensätzen wird dann dieser Anbieter als Standard vorausgewählt.</target>
 			</trans-unit>
+			<trans-unit id="defaultMapType" xml:space="preserve">
+				<source>Default map type: If desired, you can specify a default map type for new POI records. With the default "Empty", the editor must first select a type when creating a new POI.</source>
+				<target>Standard Kartentyp: Falls gewünscht könnt ihr hier einen Standard Kartentyp für neue POI Datensätze vorgeben. Mit dem Standard "Empty" muss der Redakteur beim Neuanlegen zunächst einen Typen auswählen.</target>
+			</trans-unit>
 			<trans-unit id="defaultCountry" xml:space="preserve">
 				<source>Default Country: If someone searches for a postal code only, Google will search whole world for that postal code. If you want, you can assign a default country here to reduce that search to that country.</source>
 				<target>Standard Land: Wenn jemand nur nach einer PLZ sucht, dann startet Google eine weltweite Suche. Da sich viele Webseiten auf nur ein Land beziehen, ist es evtl. sinnvoll diesen Wert auf Euer Land zu setzen, um eine ZIP-Suche auf eben dieses zu beschränken</target>

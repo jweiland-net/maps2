@@ -27,7 +27,8 @@ use TYPO3\CMS\Extbase\Mvc\Web\RequestBuilder;
  * which will ask users to explicit allow requests to Map Providers.
  * This feature has to be activated in extension manager configuration.
  */
-class MapProviderOverlayRequestHandler implements RequestHandlerInterface
+//class MapProviderOverlayRequestHandler implements RequestHandlerInterface
+class MapProviderOverlayRequestHandler
 {
     /**
      * @var MapProviderRequestService

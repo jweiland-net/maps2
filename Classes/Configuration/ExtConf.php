@@ -23,6 +23,7 @@ class ExtConf implements SingletonInterface
     // general
     protected $mapProvider = '';
     protected $defaultMapProvider = '';
+    protected $defaultMapType = 'Empty';
     protected $defaultCountry = '';
     protected $defaultLatitude;
     protected $defaultLongitude;
@@ -77,7 +78,7 @@ class ExtConf implements SingletonInterface
         return $this->mapProvider;
     }
 
-    public function setMapProvider(string $mapProvider)
+    public function setMapProvider(string $mapProvider): void
     {
         $this->mapProvider = $mapProvider;
     }
@@ -91,9 +92,23 @@ class ExtConf implements SingletonInterface
         return $this->defaultMapProvider;
     }
 
-    public function setDefaultMapProvider(string $defaultMapProvider)
+    public function setDefaultMapProvider(string $defaultMapProvider): void
     {
         $this->defaultMapProvider = $defaultMapProvider;
+    }
+
+    public function getDefaultMapType(): string
+    {
+        if (empty($this->defaultMapType)) {
+            $this->defaultMapType = 'Empty';
+        }
+
+        return $this->defaultMapType;
+    }
+
+    public function setDefaultMapType(string $defaultMapType): void
+    {
+        $this->defaultMapType = $defaultMapType;
     }
 
     public function getDefaultCountry(): string
@@ -101,7 +116,7 @@ class ExtConf implements SingletonInterface
         return $this->defaultCountry;
     }
 
-    public function setDefaultCountry(string $defaultCountry)
+    public function setDefaultCountry(string $defaultCountry): void
     {
         $this->defaultCountry = trim($defaultCountry);
     }
@@ -114,7 +129,7 @@ class ExtConf implements SingletonInterface
         return $this->defaultLatitude;
     }
 
-    public function setDefaultLatitude($defaultLatitude)
+    public function setDefaultLatitude($defaultLatitude): void
     {
         $this->defaultLatitude = (float)$defaultLatitude;
     }
@@ -127,7 +142,7 @@ class ExtConf implements SingletonInterface
         return $this->defaultLongitude;
     }
 
-    public function setDefaultLongitude($defaultLongitude)
+    public function setDefaultLongitude($defaultLongitude): void
     {
         $this->defaultLongitude = (float)$defaultLongitude;
     }
@@ -140,7 +155,7 @@ class ExtConf implements SingletonInterface
         return $this->defaultRadius;
     }
 
-    public function setDefaultRadius($defaultRadius)
+    public function setDefaultRadius($defaultRadius): void
     {
         $this->defaultRadius = (int)$defaultRadius;
     }
@@ -150,7 +165,7 @@ class ExtConf implements SingletonInterface
         return $this->explicitAllowMapProviderRequests;
     }
 
-    public function setExplicitAllowMapProviderRequests($explicitAllowMapProviderRequests)
+    public function setExplicitAllowMapProviderRequests($explicitAllowMapProviderRequests): void
     {
         $this->explicitAllowMapProviderRequests = (bool)$explicitAllowMapProviderRequests;
     }
@@ -160,7 +175,7 @@ class ExtConf implements SingletonInterface
         return $this->explicitAllowMapProviderRequestsBySessionOnly;
     }
 
-    public function setExplicitAllowMapProviderRequestsBySessionOnly($explicitAllowMapProviderRequestsBySessionOnly)
+    public function setExplicitAllowMapProviderRequestsBySessionOnly($explicitAllowMapProviderRequestsBySessionOnly): void
     {
         $this->explicitAllowMapProviderRequestsBySessionOnly = (bool)$explicitAllowMapProviderRequestsBySessionOnly;
     }
@@ -173,7 +188,7 @@ class ExtConf implements SingletonInterface
         return $this->infoWindowContentTemplatePath;
     }
 
-    public function setInfoWindowContentTemplatePath(string $infoWindowContentTemplatePath)
+    public function setInfoWindowContentTemplatePath(string $infoWindowContentTemplatePath): void
     {
         $this->infoWindowContentTemplatePath = $infoWindowContentTemplatePath;
     }
@@ -186,20 +201,16 @@ class ExtConf implements SingletonInterface
         return $this->allowMapTemplatePath;
     }
 
-    public function setAllowMapTemplatePath(string $allowMapTemplatePath)
+    public function setAllowMapTemplatePath(string $allowMapTemplatePath): void
     {
         $this->allowMapTemplatePath = $allowMapTemplatePath;
     }
 
     public function getGoogleMapsLibrary(): string
     {
-        if (
-            trim($this->googleMapsLibrary) === '|'
-            || trim($this->googleMapsLibrary) === ''
-        ) {
+        $library = $this->googleMapsLibrary;
+        if (in_array($this->googleMapsLibrary, ['|', ''])) {
             $library = 'https://maps.googleapis.com/maps/api/js?key=|&libraries=places';
-        } else {
-            $library = $this->googleMapsLibrary;
         }
 
         if (!empty($library)) {
@@ -213,7 +224,7 @@ class ExtConf implements SingletonInterface
         return '';
     }
 
-    public function setGoogleMapsLibrary(string $googleMapsLibrary)
+    public function setGoogleMapsLibrary(string $googleMapsLibrary): void
     {
         $this->googleMapsLibrary = trim($googleMapsLibrary);
     }
@@ -226,7 +237,7 @@ class ExtConf implements SingletonInterface
         return $this->googleMapsGeocodeUri;
     }
 
-    public function setGoogleMapsGeocodeUri(string $googleMapsGeocodeUri)
+    public function setGoogleMapsGeocodeUri(string $googleMapsGeocodeUri): void
     {
         $this->googleMapsGeocodeUri = trim($googleMapsGeocodeUri);
     }
@@ -236,7 +247,7 @@ class ExtConf implements SingletonInterface
         return $this->googleMapsJavaScriptApiKey;
     }
 
-    public function setGoogleMapsJavaScriptApiKey(string $googleMapsJavaScriptApiKey)
+    public function setGoogleMapsJavaScriptApiKey(string $googleMapsJavaScriptApiKey): void
     {
         $this->googleMapsJavaScriptApiKey = trim($googleMapsJavaScriptApiKey);
     }
@@ -246,7 +257,7 @@ class ExtConf implements SingletonInterface
         return $this->googleMapsGeocodeApiKey;
     }
 
-    public function setGoogleMapsGeocodeApiKey(string $googleMapsGeocodeApiKey)
+    public function setGoogleMapsGeocodeApiKey(string $googleMapsGeocodeApiKey): void
     {
         $this->googleMapsGeocodeApiKey = trim($googleMapsGeocodeApiKey);
     }
@@ -259,7 +270,7 @@ class ExtConf implements SingletonInterface
         return $this->openStreetMapGeocodeUri;
     }
 
-    public function setOpenStreetMapGeocodeUri(string $openStreetMapGeocodeUri)
+    public function setOpenStreetMapGeocodeUri(string $openStreetMapGeocodeUri): void
     {
         $this->openStreetMapGeocodeUri = trim($openStreetMapGeocodeUri);
     }
@@ -272,7 +283,7 @@ class ExtConf implements SingletonInterface
         return $this->strokeColor;
     }
 
-    public function setStrokeColor(string $strokeColor)
+    public function setStrokeColor(string $strokeColor): void
     {
         $this->strokeColor = $strokeColor;
     }
@@ -285,7 +296,7 @@ class ExtConf implements SingletonInterface
         return $this->strokeOpacity;
     }
 
-    public function setStrokeOpacity($strokeOpacity)
+    public function setStrokeOpacity($strokeOpacity): void
     {
         $this->strokeOpacity = (float)$strokeOpacity;
     }
@@ -298,7 +309,7 @@ class ExtConf implements SingletonInterface
         return $this->strokeWeight;
     }
 
-    public function setStrokeWeight($strokeWeight)
+    public function setStrokeWeight($strokeWeight): void
     {
         $this->strokeWeight = (int)$strokeWeight;
     }
@@ -311,7 +322,7 @@ class ExtConf implements SingletonInterface
         return $this->fillColor;
     }
 
-    public function setFillColor(string $fillColor)
+    public function setFillColor(string $fillColor): void
     {
         $this->fillColor = $fillColor;
     }
@@ -324,7 +335,7 @@ class ExtConf implements SingletonInterface
         return $this->fillOpacity;
     }
 
-    public function setFillOpacity($fillOpacity)
+    public function setFillOpacity($fillOpacity): void
     {
         $this->fillOpacity = (float)$fillOpacity;
     }
@@ -334,7 +345,7 @@ class ExtConf implements SingletonInterface
         return $this->markerIconWidth;
     }
 
-    public function setMarkerIconWidth($markerIconWidth)
+    public function setMarkerIconWidth($markerIconWidth): void
     {
         $this->markerIconWidth = (int)$markerIconWidth;
     }
@@ -344,7 +355,7 @@ class ExtConf implements SingletonInterface
         return $this->markerIconHeight;
     }
 
-    public function setMarkerIconHeight($markerIconHeight)
+    public function setMarkerIconHeight($markerIconHeight): void
     {
         $this->markerIconHeight = (int)$markerIconHeight;
     }
@@ -354,7 +365,7 @@ class ExtConf implements SingletonInterface
         return $this->markerIconAnchorPosX;
     }
 
-    public function setMarkerIconAnchorPosX($markerIconAnchorPosX)
+    public function setMarkerIconAnchorPosX($markerIconAnchorPosX): void
     {
         $this->markerIconAnchorPosX = (int)$markerIconAnchorPosX;
     }
@@ -364,7 +375,7 @@ class ExtConf implements SingletonInterface
         return $this->markerIconAnchorPosY;
     }
 
-    public function setMarkerIconAnchorPosY($markerIconAnchorPosY)
+    public function setMarkerIconAnchorPosY($markerIconAnchorPosY): void
     {
         $this->markerIconAnchorPosY = (int)$markerIconAnchorPosY;
     }

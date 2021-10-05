@@ -2,6 +2,8 @@
 mapProvider = both
 # cat=basic; type=options[Google=gm,OpenStreetMap=osm]; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:defaultMapProvider
 defaultMapProvider = gm
+# cat=basic; type=options[Empty=Empty,Point=Point,Radius=Radius,Area=Area,Route=Route]; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:defaultMapType
+defaultMapType = Empty
 # cat=basic; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:defaultCountry
 defaultCountry =
 # cat=basic; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:defaultLatitude

@@ -3,10 +3,21 @@ if (!defined('TYPO3_MODE')) {
     die('Access denied.');
 }
 
-call_user_func(function() {
+call_user_func(static function() {
     $extConf = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
         \JWeiland\Maps2\Configuration\ExtConf::class
     );
+    $mapService = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+        \JWeiland\Maps2\Service\MapService::class
+    );
+
+    // Set a default for column map_provider on save
+    $GLOBALS['TCA']['tx_maps2_domain_model_poicollection']['columns']['map_provider']['config']['default']
+        = $mapService->getMapProvider();
+
+    // Set default for poi collection type
+    $GLOBALS['TCA']['tx_maps2_domain_model_poicollection']['columns']['collection_type']['config']['default']
+        = $extConf->getDefaultMapType();
 
     // Set latitude/longitude to float representation of extension configuration
     $GLOBALS['TCA']['tx_maps2_domain_model_poicollection']['columns']['latitude']['config']['default'] = number_format(
@@ -27,10 +38,6 @@ call_user_func(function() {
             'before:configuration_map'
         );
     }
-
-    // Set a default for column map_provider on save
-    $mapService = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\JWeiland\Maps2\Service\MapService::class);
-    $GLOBALS['TCA']['tx_maps2_domain_model_poicollection']['columns']['map_provider']['config']['default'] = $mapService->getMapProvider();
 
     // Add column "categories" to tx_maps2_domain_model_poicollection table
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::makeCategorizable(
