@@ -3,6 +3,7 @@
 
 .. _configuration:
 
+=============
 Configuration
 =============
 
@@ -10,7 +11,7 @@ Target group: **Developers, Integrators**
 
 
 Minimal Example
----------------
+===============
 
 .. hint::
 
@@ -39,7 +40,7 @@ Update these properties in TypoScript Constant Editor:
 .. _configuration-typoscript:
 
 TypoScript Setup Reference
---------------------------
+==========================
 
 In this section we describe the TS properties of `plugin.tx_maps2.setting.*`
 
@@ -58,7 +59,7 @@ In this section we describe the TS properties of `plugin.tx_maps2.setting.*`
 .. _infoWindowContentTemplatePath:
 
 infoWindowContentTemplatePath
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------------
 
 Example:
 plugin.tx_maps2.settings.infoWindowContentTemplatePath = EXT:your_sitepackage/Resources/Templates/InfoWindowContent.html
@@ -87,7 +88,7 @@ between the foreign records with f.e.:
 .. _infoWindow:
 
 infoWindow
-~~~~~~~~~~
+----------
 
 This property contains currently two properties to set the size of the images within infoWindow PopUp of Markers.
 
@@ -106,7 +107,7 @@ Set the maximum height of images within the InfoWindow PopUp
 .. _mapProvider:
 
 mapProvider
-~~~~~~~~~~~
+-----------
 
 Normally you don't have to change that value, as it will be set automatically with the chosen static template. So,
 if you use static template for OSM, this value will be set to `osm`. In case of the static template for Google Maps the
@@ -116,7 +117,7 @@ value will be set to `gm`.
 .. _markerClusterer:
 
 markerClusterer
-~~~~~~~~~~~~~~~
+---------------
 
 This feature is only available for mapProvider `gm` (Google Maps).
 
@@ -127,7 +128,7 @@ the original POI again.
 
 
 Plugin settings
----------------
+===============
 
 This section covers all settings, which can be defined in the maps2 plugin and TypoScript.
 
@@ -157,7 +158,7 @@ This section covers all settings, which can be defined in the maps2 plugin and T
 .. _poiCollection:
 
 poiCollection
-~~~~~~~~~~~~~
+-------------
 
 Define a poiCollection which should be shown on the website
 
@@ -165,7 +166,7 @@ Define a poiCollection which should be shown on the website
 .. _categories:
 
 categories
-~~~~~~~~~~
+----------
 
 If you have not set a fixed poiCollection above you can choose one or more categories here. If you have chosen more
 than one category some checkboxes will appear below the map in frontend where you can switch the markers of the
@@ -175,7 +176,7 @@ chosen category on and off.
 .. _mapWidth:
 
 mapWidth
-~~~~~~~~
+--------
 
 The width of the map.
 
@@ -183,7 +184,7 @@ The width of the map.
 .. _mapHeight:
 
 mapHeight
-~~~~~~~~~
+---------
 
 The height of the map.
 
@@ -191,7 +192,7 @@ The height of the map.
 .. _allowMapTemplatePath:
 
 allowMapTemplatePath
-~~~~~~~~~~~~~~~~~~~~
+--------------------
 
 With this setting you can override the default template from extension configuration. This setting it not part of the
  plugin configuration and can only be set within the settings-part in TS setup. File prefixes like EXT: are allowed.
@@ -201,7 +202,7 @@ With this setting you can override the default template from extension configura
 .. _zoom:
 
 zoom
-~~~~
+----
 
 A zoom value how deep to zoom in into the map.
 
@@ -209,7 +210,7 @@ A zoom value how deep to zoom in into the map.
 .. _forceZoom:
 
 forceZoom
-~~~~~~~~~
+---------
 
 This setting is only interessting, if you will show multiple POIs on map. In that case maps2 will zoom out until
 all POIs can be displayed. This is realized with the BoundingBox feature of Google Maps or OpenStreetMap. If
@@ -220,7 +221,7 @@ this checkbox to prevent automatic zooming.
 .. _mapTypeId:
 
 mapTypeId
-~~~~~~~~~
+---------
 
 Show Roadmap, Earthview or Streetview
 
@@ -228,7 +229,7 @@ Show Roadmap, Earthview or Streetview
 .. _zoomControl:
 
 zoomControl
-~~~~~~~~~~~
+-----------
 
 Show a zoom control.
 
@@ -236,7 +237,7 @@ Show a zoom control.
 .. _mapTypeControl:
 
 mapTypeControl
-~~~~~~~~~~~~~~
+--------------
 
 Show a map type control.
 
@@ -244,7 +245,7 @@ Show a map type control.
 .. _scaleControl:
 
 scaleControl
-~~~~~~~~~~~~
+------------
 
 Show a scale control.
 
@@ -252,7 +253,7 @@ Show a scale control.
 .. _streetViewControl:
 
 streetViewControl
-~~~~~~~~~~~~~~~~~
+-----------------
 
 Show a street view control.
 
@@ -260,7 +261,7 @@ Show a street view control.
 .. _fullScreenControl:
 
 fullScreenControl
-~~~~~~~~~~~~~~~~~
+-----------------
 
 Toggle between normal and full screen mode.
 
@@ -268,6 +269,6 @@ Toggle between normal and full screen mode.
 .. _activateScrollWheel:
 
 activateScrollWheel
-~~~~~~~~~~~~~~~~~~~
+-------------------
 
 If deactivated you can not zoom via your mouse scroll wheel.

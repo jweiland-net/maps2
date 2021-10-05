@@ -1,5 +1,6 @@
 .. include:: ../../../Includes.txt
 
+=====================
 TrimExplodeViewHelper
 =====================
 
@@ -9,7 +10,7 @@ All values will be trimmed.
 **Type:** Basic
 
 General properties
-------------------
+==================
 
 .. t3-field-list-table::
  :header-rows: 1
@@ -29,10 +30,10 @@ General properties
            ,
 
 Examples
---------
+========
 
 Basic example
-~~~~~~~~~~~~~
+-------------
 
 Code: ::
 

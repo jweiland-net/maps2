@@ -2,6 +2,7 @@
 
 .. _admin-manual:
 
+====================
 Administrator manual
 ====================
 

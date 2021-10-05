@@ -2,6 +2,7 @@
 
 .. _developer-maps2registry:
 
+==============
 Maps2 Registry
 ==============
 
@@ -167,7 +168,7 @@ properties:
 
 
 Example for tt_address
-----------------------
+======================
 
 .. code-block:: php
 

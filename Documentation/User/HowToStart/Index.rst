@@ -2,6 +2,7 @@
 
 .. _howToStart:
 
+============
 How to start
 ============
 
@@ -17,7 +18,7 @@ TYPO3 site. The installation is covered :ref:`here <installation>`.
 .. _howToStartCreateRecords:
 
 Create the records
-------------------
+==================
 
 Before any maps2 record can be shown in the frontend those need to be
 created.
@@ -46,13 +47,13 @@ created.
 .. _howToStartAddPlugin:
 
 Add a plugin to a page
-----------------------
+======================
 
 A plugin is used to render a defined selection of records in the frontend.
 Follow this steps to add a plugin to a page:
 
 Maps2: Show map - Plugin
-~~~~~~~~~~~~~~~~~~~~~~~~
+------------------------
 
 #. Create a new page with a title like "Location" which will be used to show
    a Marking record.
@@ -78,7 +79,7 @@ Info: If there will be shown more than one POI on the map it is not possible to 
 working with the BoundedBox feature of Google Maps and OpenStreetMap to zoom out until all POIs are visible.
 
 Maps2: Search Radius - Plugin
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------------
 
 #. Create a new page with a title like "Radius Search" which will be used to show
    a form, where a website visitor can enter an address and a range to search for Markings.
@@ -93,7 +94,7 @@ Maps2: Search Radius - Plugin
 #. Save the plugin.
 
 Maps2: City Map - Plugin
-~~~~~~~~~~~~~~~~~~~~~~~~
+------------------------
 
 #. Create a new page with a title like "City Map" which will be used to show
    a form, where a website visitor can enter a street name.

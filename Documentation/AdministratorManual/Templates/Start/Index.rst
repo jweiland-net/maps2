@@ -1,5 +1,6 @@
 .. include:: ../../../Includes.txt
 
+============================
 Changing & editing templates
 ============================
 
@@ -15,7 +16,8 @@ Extbase-Fluid/dp/3897219654/>`_ or online, e.g. at
 other sites.
 
 Changing paths of the template
-------------------------------
+==============================
+
 You should never edit the original templates of an extension as those changes will vanish if you upgrade the extension.
 As any extbase based extension, you can find the templates in the directory ``Resources/Private/``.
 
@@ -45,7 +47,7 @@ This can be a directory in ``fileadmin`` or a custom extension. Multiple fallbac
   }
 
 Change the templates using TypoScript constants
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------------------------------
 
 You can use the following TypoScript in the  **constants** to change
 the paths
@@ -61,7 +63,7 @@ the paths
   }
 
 Change path of the poiCollection widget
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+---------------------------------------
 
 The path of the poiCollection widget can be changed by using a configuration like below.
 
@@ -74,7 +76,7 @@ The path of the poiCollection widget can be changed by using a configuration lik
   }
 
 Change path of the editPoi widget
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+---------------------------------
 
 The path of the editPoi widget can be changed by using a configuration like below.
 

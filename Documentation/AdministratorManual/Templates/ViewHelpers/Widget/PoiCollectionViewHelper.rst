@@ -1,5 +1,6 @@
 .. include:: ../../../../Includes.txt
 
+================================
 Widget / PoiCollectionViewHelper
 ================================
 
@@ -13,7 +14,7 @@ in your own extension.
 **Type:** Basic
 
 General properties
-------------------
+==================
 
 .. t3-field-list-table::
  :header-rows: 1
@@ -32,10 +33,10 @@ General properties
      :Default value:
 
 Examples
---------
+========
 
 Basic example
-~~~~~~~~~~~~~
+-------------
 
 Code: ::
 
