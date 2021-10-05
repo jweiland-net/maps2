@@ -80,6 +80,18 @@ This setting is only relevant if you have chosen ``both`` at mapProvider. c
    provider in your TS-template record. And yes, you can't show maps of both map providers on the same page.
 
 
+.. _extensionManager-defaultMapType:
+
+defaultMapType
+==============
+
+**Default**: Empty
+
+By default an editor has to choose which type of PoiCollection he wants to create. As an administror or integrator
+you have the possibility to reduce the allowed types. In that case it may make sense to set default type
+to another allowed value. Further the editor saves one further click.
+
+
 .. _extensionManager-defaultCountry:
 
 defaultCountry
