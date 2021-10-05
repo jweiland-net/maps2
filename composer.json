@@ -19,7 +19,7 @@
 	},
 	"require": {
 		"ext-json": "*",
-		"typo3/cms-core": "^9.5.17 || ^10.4.2"
+		"typo3/cms-core": "^10.4.19 || ^11.3"
 	},
 	"require-dev": {
 		"roave/security-advisories": "dev-latest",
