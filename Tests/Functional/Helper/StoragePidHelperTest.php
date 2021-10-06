@@ -43,7 +43,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         'typo3conf/ext/events2'
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -51,7 +51,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         $this->subject = new StoragePidHelper($this->messageHelperProphecy->reveal());
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset(
             $this->subject,

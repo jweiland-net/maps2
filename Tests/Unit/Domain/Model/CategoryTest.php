@@ -33,14 +33,14 @@ class CategoryTest extends UnitTestCase
      */
     protected $extConf;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->extConf = new ExtConf([]);
         GeneralUtility::setSingletonInstance(ExtConf::class, $this->extConf);
         $this->subject = new Category();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->subject);
         GeneralUtility::resetSingletonInstances([]);

@@ -31,7 +31,7 @@ class ClientFactoryTest extends UnitTestCase
      */
     protected $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mapServiceProphecy = $this->prophesize(MapService::class);
         GeneralUtility::addInstance(MapService::class, $this->mapServiceProphecy->reveal());
@@ -39,7 +39,7 @@ class ClientFactoryTest extends UnitTestCase
         $this->subject = new ClientFactory();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset(
             $this->subject,

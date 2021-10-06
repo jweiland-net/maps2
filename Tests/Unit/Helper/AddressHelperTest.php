@@ -35,13 +35,13 @@ class AddressHelperTest extends AbstractUnitTestCase
      */
     protected $messageHelperProphecy;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->messageHelperProphecy = $this->prophesize(MessageHelper::class);
         $this->subject = new AddressHelper($this->messageHelperProphecy->reveal());
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset(
             $this->subject,

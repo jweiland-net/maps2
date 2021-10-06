@@ -76,7 +76,7 @@ class GoogleMapsElementTest extends FunctionalTestCase
         'typo3conf/ext/maps2'
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -126,7 +126,7 @@ class GoogleMapsElementTest extends FunctionalTestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset(
             $this->subject,

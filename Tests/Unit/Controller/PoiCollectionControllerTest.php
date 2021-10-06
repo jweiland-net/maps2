@@ -65,7 +65,7 @@ class PoiCollectionControllerTest extends UnitTestCase
      */
     protected $viewProphecy;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->objectManagerProphecy = $this->prophesize(ObjectManager::class);
         $this->poiCollectionRepositoryProphecy = $this->prophesize(PoiCollectionRepository::class);
@@ -89,7 +89,7 @@ class PoiCollectionControllerTest extends UnitTestCase
         $this->subject->_set('controllerContext', $this->controllerContextProphecy->reveal());
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->subject);
         parent::tearDown();

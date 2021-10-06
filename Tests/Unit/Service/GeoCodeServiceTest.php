@@ -37,14 +37,14 @@ class GeoCodeServiceTest extends AbstractUnitTestCase
      */
     protected $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->clientProphecy = $this->prophesize(GoogleMapsClient::class);
 
         $this->subject = new GeoCodeService($this->clientProphecy->reveal());
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset(
             $this->subject,

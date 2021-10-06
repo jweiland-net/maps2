@@ -39,7 +39,7 @@ class EditPoiViewHelperTest extends UnitTestCase
      */
     protected $mapServiceProphecy;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $_SESSION['mapProviderRequestsAllowedForMaps2'] = false;
 
@@ -57,7 +57,7 @@ class EditPoiViewHelperTest extends UnitTestCase
         $this->subject->injectMapService($this->mapServiceProphecy->reveal());
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset(
             $this->subject,

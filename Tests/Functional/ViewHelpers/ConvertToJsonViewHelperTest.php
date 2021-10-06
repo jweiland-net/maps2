@@ -39,7 +39,7 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
         'typo3conf/ext/maps2'
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -49,7 +49,7 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
         $this->subject->setRenderingContext($this->renderingContext->reveal());
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset(
             $this->subject
