@@ -12,6 +12,9 @@ Update to Version 10.0.0
 We have added a new Option `defaultMapType` to Extension Settings of `maps2`. Please check, if this value
 matches your needs and can be found in `LocalConfiguration.php`.
 
+Table `tx_maps2_domain_model_poi` has been removed. All POIs will be stored in
+table `tx_maps2_domain_model_poicollection` now. Please execute UpgradeWizard to migrate existing POI records.
+
 Update to Version 9.3.4
 =======================
 

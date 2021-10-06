@@ -12,52 +12,32 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Form\Element;
 
 use JWeiland\Maps2\Configuration\ExtConf;
-use JWeiland\Maps2\Domain\Model\PoiCollection;
-use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
 use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
+use TYPO3\CMS\Backend\Form\NodeFactory;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Core\Utility\StringUtility;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
-use TYPO3\CMS\Extbase\Security\Cryptography\HashService;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
-/**
- * Special backend FormEngine element to show Open Street Map
+/*
+ * Special backend FormEngine element to show Open Street Map.
+ * This is a very reduced InputTextElement. The textfield itself will not be displayed,
+ * but it contains the JSON for all the POIs.
  */
 class OpenStreetMapElement extends AbstractFormElement
 {
-    /**
-     * @var ObjectManager
-     */
-    protected $objectManager;
-
     /**
      * @var ExtConf
      */
     protected $extConf;
 
     /**
-     * @var HashService
-     */
-    protected $hashService;
-
-    /**
-     * @var StandaloneView
-     */
-    protected $view;
-
-    /**
      * @var PageRenderer
      */
     protected $pageRenderer;
-
-    /**
-     * @var PoiCollectionRepository
-     */
-    protected $poiCollectionRepository;
 
     /**
      * Default field information enabled for this element.
@@ -70,17 +50,12 @@ class OpenStreetMapElement extends AbstractFormElement
         ],
     ];
 
-    /**
-     * initializes this class
-     */
-    public function init()
+    public function __construct(NodeFactory $nodeFactory, array $data)
     {
-        $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $this->extConf = $this->objectManager->get(ExtConf::class);
-        $this->hashService = $this->objectManager->get(HashService::class);
-        $this->view = $this->objectManager->get(StandaloneView::class);
-        $this->pageRenderer = $this->objectManager->get(PageRenderer::class);
-        $this->poiCollectionRepository = $this->objectManager->get(PoiCollectionRepository::class);
+        parent::__construct($nodeFactory, $data);
+
+        $this->pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
+        $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
     }
 
     /**
@@ -91,9 +66,13 @@ class OpenStreetMapElement extends AbstractFormElement
      */
     public function render(): array
     {
-        $this->init();
+        $parameterArray = $this->data['parameterArray'];
         $resultArray = $this->initializeResultArray();
-        $currentRecord = $this->cleanUpCurrentRecord($this->data['databaseRow']);
+
+        $itemValue = $parameterArray['itemFormElValue'];
+        $config = $parameterArray['fieldConf']['config'];
+        $evalList = GeneralUtility::trimExplode(',', $config['eval'] ?? '', true);
+
         $publicResourcesPath =
             PathUtility::getAbsoluteWebPath(ExtensionManagementUtility::extPath('maps2')) . 'Resources/Public/';
 
@@ -123,12 +102,44 @@ class OpenStreetMapElement extends AbstractFormElement
         ];
 
         $fieldInformationResult = $this->renderFieldInformation();
+        $fieldInformationHtml = $fieldInformationResult['html'];
+
+        $attributes = [
+            'value' => '',
+            'id' => StringUtility::getUniqueId('formengine-input-'),
+            'class' => implode(' ', [
+                'form-control',
+                't3js-clearable',
+                'hasDefaultValue',
+            ]),
+            'data-formengine-validation-rules' => $this->getValidationDataAsJsonString($config),
+            'data-formengine-input-params' => (string)json_encode([
+                'field' => $parameterArray['itemFormElName'],
+                'evalList' => implode(',', $evalList),
+                'is_in' => ''
+            ]),
+            'data-formengine-input-name' => (string)$parameterArray['itemFormElName'],
+        ];
+
+        // SF: We can not set this field to type="hidden" as FormEngine.getFieldElement
+        // will not find it. That's why I work with display: none;
+        $attributes['style'] = 'display: none;';
+
+        $html = [];
+        $html[] = '<div class="form-control-wrap">';
+        $html[] =     '<div class="form-wizards-wrap">';
+        $html[] =         '<div class="form-wizards-element">';
+        $html[] =             $this->getMapHtml($this->cleanUpCurrentRecord($this->data['databaseRow']));
+        $html[] =             '<input type="text" ' . GeneralUtility::implodeAttributes($attributes, true) . ' />';
+        $html[] =             '<input type="hidden" name="' . $parameterArray['itemFormElName'] . '" value="' . htmlspecialchars($itemValue) . '" />';
+        $html[] =         '</div>';
+        $html[] =     '</div>';
+        $html[] = '</div>';
+
         $resultArray['html'] = sprintf(
-            '%s%s%s%s',
-            '<div class="formengine-field-item t3js-formengine-field-item">',
-            $fieldInformationResult['html'],
-            $this->getMapHtml($this->getConfiguration($currentRecord)),
-            '</div>'
+            '<div class="formengine-field-item t3js-formengine-field-item">%s%s</div>',
+            $fieldInformationHtml,
+            implode(LF, $html)
         );
 
         return $resultArray;
@@ -138,79 +149,41 @@ class OpenStreetMapElement extends AbstractFormElement
      * Since TYPO3 7.5 $this->data['databaseRow'] consists of arrays where TCA was configured as type "select"
      * Convert these types back to strings/int
      *
-     * @param array $currentRecord
+     * @param array $record
      * @return array
      */
-    protected function cleanUpCurrentRecord(array $currentRecord): array
+    protected function cleanUpCurrentRecord(array $record): array
     {
-        foreach ($currentRecord as $field => $value) {
-            $currentRecord[$field] = is_array($value) ? $value[0] : $value;
-        }
-        return $currentRecord;
-    }
+        foreach ($record as $field => $value) {
+            if ($field === 'configuration_map') {
+                $record[$field] = [];
+                $routes = json_decode($value, true) ?? [];
 
-    /**
-     * Get configuration array from PA array
-     *
-     * @param array $currentRecord
-     * @return array
-     * @throws \Exception
-     */
-    protected function getConfiguration(array $currentRecord): array
-    {
-        $config = [];
-
-        // get poi collection model
-        $uid = (int)$currentRecord['uid'];
-        $poiCollection = $this->poiCollectionRepository->findByUid($uid);
-        if ($poiCollection instanceof PoiCollection) {
-            // set map center
-            $config['latitude'] = $poiCollection->getLatitude();
-            $config['longitude'] = $poiCollection->getLongitude();
-            switch ($poiCollection->getCollectionType()) {
-                case 'Route':
-                case 'Area':
-                    // set pois
-                    foreach ($poiCollection->getPois() as $poi) {
-                        $latLng['latitude'] = $poi->getLatitude();
-                        $latLng['longitude'] = $poi->getLongitude();
-                        $config['pois'][] = $latLng;
-                    }
-                    if (!isset($config['pois'])) {
-                        $config['pois'] = [];
-                    }
-                    break;
-                case 'Radius':
-                    $config['radius'] = $poiCollection->getRadius() ?: $this->extConf->getDefaultRadius();
-                    break;
-                default:
-                    break;
+                // GoogleMaps function "toUrlValue" separates lat and lng with comma
+                foreach ($routes as $route) {
+                    $record[$field][] = array_combine(
+                        [
+                            'latitude',
+                            'longitude'
+                        ],
+                        GeneralUtility::trimExplode(',', $route)
+                    );
+                }
+            } else {
+                $record[$field] = is_array($value) ? $value[0] : $value;
             }
-
-            $config['address'] =  $currentRecord['address'];
-            $config['collectionType'] = is_array($currentRecord['collection_type']) ? $currentRecord['collection_type'][0] : $currentRecord['collection_type'];
-            $config['uid'] =  $uid;
-
-            $hashArray['uid'] = $uid;
-            $hashArray['collectionType'] = $currentRecord['collection_type'];
-            $config['hash'] = $this->hashService->generateHmac(serialize($hashArray));
         }
-        return $config;
+
+        return $record;
     }
 
-    /**
-     * Get parsed content from template
-     *
-     * @param array $config
-     * @return string
-     */
-    protected function getMapHtml(array $config): string
+    protected function getMapHtml(array $record): string
     {
-        $extPath = ExtensionManagementUtility::extPath('maps2');
-        $this->view->setTemplatePathAndFilename($extPath . 'Resources/Private/Templates/Tca/OpenStreetMap.html');
-        $this->view->assign('config', json_encode($config));
-        $this->view->assign('extConf', json_encode(ObjectAccess::getGettableProperties($this->extConf)));
+        $view = GeneralUtility::makeInstance(StandaloneView::class);
+        $view->setTemplatePathAndFilename('EXT:maps2/Resources/Private/Templates/Tca/OpenStreetMap.html');
+        $view->assign('record', json_encode($record));
+        $view->assign('extConf', json_encode(ObjectAccess::getGettableProperties($this->extConf)));
 
-        return $this->view->render();
+        return $view->render();
     }
 }
