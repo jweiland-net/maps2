@@ -13,6 +13,7 @@ namespace JWeiland\Maps2\Form\Resolver;
 
 use JWeiland\Maps2\Form\Element\GoogleMapsElement;
 use JWeiland\Maps2\Form\Element\OpenStreetMapElement;
+use JWeiland\Maps2\Helper\MapHelper;
 use JWeiland\Maps2\Service\MapService;
 use TYPO3\CMS\Backend\Form\NodeFactory;
 use TYPO3\CMS\Backend\Form\NodeResolverInterface;
@@ -30,9 +31,15 @@ class MapProviderResolver implements NodeResolverInterface
      */
     protected $data = [];
 
+    /**
+     * @var MapHelper
+     */
+    protected $mapHelper;
+
     public function __construct(NodeFactory $nodeFactory, array $data)
     {
         $this->data = $data;
+        $this->mapHelper = GeneralUtility::makeInstance(MapHelper::class);
     }
 
     /**
@@ -40,10 +47,9 @@ class MapProviderResolver implements NodeResolverInterface
      *
      * @return string|null New class name or void if this resolver does not change current class name.
      */
-    public function resolve()
+    public function resolve(): string
     {
-        $mapService = GeneralUtility::makeInstance(MapService::class);
-        if ($mapService->getMapProvider($this->data['databaseRow']) === 'osm') {
+        if ($this->mapHelper->getMapProvider($this->data['databaseRow']) === 'osm') {
             return OpenStreetMapElement::class;
         }
         return GoogleMapsElement::class;

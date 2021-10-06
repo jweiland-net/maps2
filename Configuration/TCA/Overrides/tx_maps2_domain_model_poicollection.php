@@ -7,13 +7,13 @@ call_user_func(static function() {
     $extConf = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
         \JWeiland\Maps2\Configuration\ExtConf::class
     );
-    $mapService = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-        \JWeiland\Maps2\Service\MapService::class
+    $mapHelper = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+        \JWeiland\Maps2\Helper\MapHelper::class
     );
 
     // Set a default for column map_provider on save
     $GLOBALS['TCA']['tx_maps2_domain_model_poicollection']['columns']['map_provider']['config']['default']
-        = $mapService->getMapProvider();
+        = $mapHelper->getMapProvider();
 
     // Set default for poi collection type
     $GLOBALS['TCA']['tx_maps2_domain_model_poicollection']['columns']['collection_type']['config']['default']

@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Client\Request;
 
 use JWeiland\Maps2\Configuration\ExtConf;
+use JWeiland\Maps2\Helper\MapHelper;
 use JWeiland\Maps2\Service\MapService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -30,6 +31,16 @@ class RequestFactory
     ];
 
     /**
+     * @var MapHelper
+     */
+    protected $mapHelper;
+
+    public function __construct(MapHelper $mapHelper)
+    {
+        $this->mapHelper = $mapHelper;
+    }
+
+    /**
      * Create a new Request by its filename
      *
      * @param string $filename Filename to build the Request object
@@ -39,10 +50,9 @@ class RequestFactory
      */
     public function create(string $filename, ExtConf $extConf = null): RequestInterface
     {
-        $mapService = GeneralUtility::makeInstance(MapService::class);
         $className = sprintf(
             '%s\\%s',
-            $this->mapping[$mapService->getMapProvider()],
+            $this->mapping[$this->mapHelper->getMapProvider()],
             $this->sanitizeFilename($filename)
         );
 

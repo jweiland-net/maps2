@@ -14,6 +14,7 @@ namespace JWeiland\Maps2\Service;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Domain\Model\Position;
+use JWeiland\Maps2\Helper\MapHelper;
 use JWeiland\Maps2\Helper\MessageHelper;
 use JWeiland\Maps2\Tca\Maps2Registry;
 use JWeiland\Maps2\Utility\DatabaseUtility;
@@ -153,53 +154,15 @@ class MapService
      *
      * @param array $databaseRow If set, we will try to retrieve map provider from this row before.
      * @return string Returns either "gm" or "osm"
+     * @deprecated
      */
     public function getMapProvider(array $databaseRow = []): string
     {
-        $mapProvider = '';
-        $extConf = GeneralUtility::makeInstance(ExtConf::class);
+        trigger_error('Method MapService::getMapProvider is deprecated and has been moved to MapHelper::getMapProvider.', E_USER_DEPRECATED);
 
-        // Only if both map providers are allowed, we can read map provider from Database
-        if ($extConf->getMapProvider() === 'both') {
-            if (!empty($databaseRow)) {
-                $mapProvider = $this->getMapProviderFromDatabase($databaseRow);
-            }
+        $mapHelper = GeneralUtility::makeInstance(MapHelper::class);
 
-            if (empty($mapProvider)) {
-                $mapProvider = $extConf->getDefaultMapProvider();
-            }
-        } else {
-            // We have a strict map provider.
-            $mapProvider = $extConf->getMapProvider();
-        }
-
-        return $mapProvider;
-    }
-
-    /**
-     * Try to retrieve a default map provider from given database record
-     *
-     * @param array $databaseRow
-     * @return string
-     */
-    protected function getMapProviderFromDatabase(array $databaseRow): string
-    {
-        $mapProvider = '';
-
-        if (
-            array_key_exists('map_provider', $databaseRow)
-            && !empty($databaseRow['map_provider'])
-        ) {
-            if (is_array($databaseRow['map_provider'])) {
-                // We have a record from TCEMAIN
-                $mapProvider = (string)current($databaseRow['map_provider']);
-            } elseif (is_string($databaseRow['map_provider'])) {
-                // We have a normal array based record from database
-                $mapProvider = $databaseRow['map_provider'];
-            }
-        }
-
-        return $mapProvider;
+        return $mapHelper->getMapProvider($databaseRow);
     }
 
     /**

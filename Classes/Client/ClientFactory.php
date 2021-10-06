@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Client;
 
-use JWeiland\Maps2\Service\MapService;
+use JWeiland\Maps2\Helper\MapHelper;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -27,13 +27,21 @@ class ClientFactory
         'osm' => OpenStreetMapClient::class
     ];
 
+    /**
+     * @var MapHelper
+     */
+    protected $mapHelper;
+
+    public function __construct(MapHelper $mapHelper)
+    {
+        $this->mapHelper = $mapHelper;
+    }
+
     public function create(): ClientInterface
     {
-        $mapService = GeneralUtility::makeInstance(MapService::class);
-
         /** @var ClientInterface $client */
         $client = GeneralUtility::makeInstance(
-            $this->mapping[$mapService->getMapProvider()]
+            $this->mapping[$this->mapHelper->getMapProvider()]
         );
 
         return $client;

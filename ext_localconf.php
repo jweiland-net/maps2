@@ -5,39 +5,39 @@ if (!defined('TYPO3_MODE')) {
 
 call_user_func(static function() {
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-        'JWeiland.maps2',
+        'maps2',
         'Maps2',
         [
-            'PoiCollection' => 'show, allowMap',
-            'Ajax' => 'process',
+            \JWeiland\Maps2\Controller\PoiCollectionController::class => 'show, allowMap',
+            \JWeiland\Maps2\Controller\AjaxController::class => 'process',
         ],
         // non-cacheable actions
         [
-            'PoiCollection' => '',
+            \JWeiland\Maps2\Controller\PoiCollectionController::class => 'allowMap',
         ]
     );
 
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-        'JWeiland.maps2',
+        'maps2',
         'SearchWithinRadius',
         [
-            'PoiCollection' => 'search, listRadius',
+            \JWeiland\Maps2\Controller\PoiCollectionController::class => 'search, listRadius',
         ],
         // non-cacheable actions
         [
-            'PoiCollection' => 'listRadius',
+            \JWeiland\Maps2\Controller\PoiCollectionController::class => 'listRadius',
         ]
     );
 
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-        'JWeiland.maps2',
+        'maps2',
         'CityMap',
         [
-            'CityMap' => 'show, search',
+            \JWeiland\Maps2\Controller\CityMapController::class => 'show, search',
         ],
         // non-cacheable actions
         [
-            'CityMap' => 'search',
+            \JWeiland\Maps2\Controller\CityMapController::class => 'search',
         ]
     );
 

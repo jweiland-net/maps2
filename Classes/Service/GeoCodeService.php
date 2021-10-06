@@ -34,9 +34,9 @@ class GeoCodeService implements SingletonInterface
      */
     protected $client;
 
-    public function __construct(ClientInterface $client = null)
+    public function __construct(ClientFactory $clientFactory)
     {
-        $this->client = $client ?? GeneralUtility::makeInstance(ClientFactory::class)->create();
+        $this->client = $clientFactory->create();
     }
 
     /**
