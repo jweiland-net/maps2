@@ -13,6 +13,7 @@ ChangeLog
 - Add TYPO3 11 compatibility
 - Removed tx_maps2_domain_model_poi table (Please execute UpgradeWizard)
 - Update Documentation (Adopt TYPO3 Doc Styleguide)
+- Move MapService::getMapProvider to MapHelper:getMapProvider
 
 **Version 9.3.10**
 

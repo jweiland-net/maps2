@@ -15,6 +15,13 @@ matches your needs and can be found in `LocalConfiguration.php`.
 Table `tx_maps2_domain_model_poi` has been removed. All POIs will be stored in
 table `tx_maps2_domain_model_poicollection` now. Please execute UpgradeWizard to migrate existing POI records.
 
+**Only valid for developers:**
+
+As we have loaded Extbase ConfigurationManager within Middleware before TSFE it may switch to the
+BackendConfigurationManager which is completely wrong. To  prevent that we have moved
+MapService::getMapProvider to MapHelper:getMapProvider and deprecated `MapService::getMapProvider`. Please adopt that
+in your extension.
+
 Update to Version 9.3.4
 =======================
 
