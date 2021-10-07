@@ -29,7 +29,6 @@ The settings are divided into several tabs and described here in detail:
    explicitAllowMapProviderRequests_          basic    0
    explicitAllowMapProviderRequestsBySession_ basic    0
    infoWindowContentTemplatePath_             basic    EXT:maps2/Resources/Private/Templates/InfoWindowContent.html
-   allowMapTemplatePath_                      basic    EXT:maps2/Resources/Private/Templates/AllowMapForm.html
 
    googleMapsLibrary_                         gm       ``https://maps.googleapis.com/maps/api/js?key=|&libraries=places``
    googleMapsGeocodeUri_                      gm       ``https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=%s``
@@ -161,17 +160,6 @@ infoWindowContentTemplatePath
 
 You can define your own default template for these little info window content when clicking on a marker.
 Further you can override this template path again with TypoScript at settings.infoWindowContentTemplatePath = [path]
-
-
-.. _extensionManager-allowMapTemplatePath::
-
-allowMapTemplatePath
-====================
-
-This option is only valid if explicitAllowMapProviderRequests is activ.
-Define your own template which will be shown, as long as the visitor has not explicit allowed requests
-to Google Servers
-You can override this template path again with TypoScript at settings.allowMapTemplatePath = [path]
 
 
 .. _extensionManager-googleMapsLibrary:

@@ -143,7 +143,6 @@ This section covers all settings, which can be defined in the maps2 plugin and T
    categories_            Categories                  General      string
    mapWidth_              Map width                   General      string
    mapHeight_             Map height                  General      string
-   allowMapTemplatePath_  AllowMap template path      General      string
    zoom_                  Zoom                        Map Options  integer
    forceZoom_             Force Zoom                  Map Options  boolean
    mapTypeId_             Map type                    Map Options  string
@@ -187,16 +186,6 @@ mapHeight
 ---------
 
 The height of the map.
-
-
-.. _allowMapTemplatePath:
-
-allowMapTemplatePath
---------------------
-
-With this setting you can override the default template from extension configuration. This setting it not part of the
- plugin configuration and can only be set within the settings-part in TS setup. File prefixes like EXT: are allowed.
- Please have a look into the extension configuration for a detailed explaination.
 
 
 .. _zoom:

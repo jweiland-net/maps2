@@ -11,12 +11,19 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Domain\Repository;
 
+use JWeiland\Maps2\Event\ModifyQueryOfFindPoiCollectionsEvent;
+use JWeiland\Maps2\Helper\OverlayHelper;
+use TYPO3\CMS\Core\Database\Connection;
+use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder;
+use TYPO3\CMS\Core\Database\Query\Restriction\FrontendRestrictionContainer;
+use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 use TYPO3\CMS\Extbase\Persistence\Generic\Query;
+use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Persistence\Repository;
-use TYPO3\CMS\Extbase\Service\EnvironmentService;
-use TYPO3\CMS\Frontend\Page\PageRepository;
 
 /**
  * Repository to collect poi collection records
@@ -24,32 +31,62 @@ use TYPO3\CMS\Frontend\Page\PageRepository;
 class PoiCollectionRepository extends Repository
 {
     /**
-     * The TYPO3 page repository. Used for language and workspace overlay
-     *
-     * @var PageRepository
+     * @var array
      */
-    protected $pageRepository;
+    protected $defaultOrderings = [
+        'title' => QueryInterface::ORDER_ASCENDING
+    ];
 
     /**
-     * @var EnvironmentService
+     * @var EventDispatcher
      */
-    protected $environmentService;
+    protected $eventDispatcher;
 
-    public function injectEnvironmentService(EnvironmentService $environmentService)
-    {
-        $this->environmentService = $environmentService;
+    /**
+     * @var OverlayHelper
+     */
+    protected $overlayHelper;
+
+    public function __construct(
+        ObjectManagerInterface $objectManager,
+        OverlayHelper $overlayHelper,
+        EventDispatcher $eventDispatcher
+    ) {
+        parent::__construct($objectManager);
+
+        $this->overlayHelper = $overlayHelper;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
-    protected function getPageRepository(): PageRepository
+    public function findPoiCollections(array $settings, int $poiCollectionUid = 0): QueryResultInterface
     {
-        if (!$this->pageRepository instanceof PageRepository) {
-            if ($this->environmentService->isEnvironmentInFrontendMode() && is_object($GLOBALS['TSFE'])) {
-                $this->pageRepository = $GLOBALS['TSFE']->sys_page;
-            } else {
-                $this->pageRepository = GeneralUtility::makeInstance(PageRepository::class);
-            }
+        $extbaseQuery = $this->createQuery();
+        $queryBuilder = $this->getQueryBuilderForTable('tx_maps2_domain_model_poicollection', 'pc');
+        $queryBuilder->select('*');
+
+        if ($poiCollectionUid) {
+            $queryBuilder->andWhere(
+                $queryBuilder->expr()->eq(
+                    'pc.uid',
+                    $queryBuilder->createNamedParameter($poiCollectionUid, \PDO::PARAM_INT)
+                )
+            );
+        } elseif (isset($settings['categories']) && is_string($settings['categories'])) {
+            $this->addConstraintForCategories(
+                $queryBuilder,
+                GeneralUtility::intExplode(',', $settings['categories'], true)
+            );
         }
-        return $this->pageRepository;
+
+        $this->eventDispatcher->dispatch(
+            new ModifyQueryOfFindPoiCollectionsEvent(
+                $queryBuilder,
+                $settings,
+                $poiCollectionUid
+            )
+        );
+
+        return $extbaseQuery->statement($queryBuilder)->execute();
     }
 
     public function searchWithinRadius(float $latitude, float $longitude, int $radius): QueryResultInterface
@@ -82,5 +119,72 @@ class PoiCollectionRepository extends Repository
         return $query->matching(
             $query->logicalOr($orConstraint)
         )->execute();
+    }
+
+    protected function addConstraintForCategories(
+        QueryBuilder $queryBuilder,
+        array $categories
+    ): void {
+        $queryBuilder->leftJoin(
+            'pc',
+            'sys_category_record_mm',
+            'category_mm',
+            (string)$queryBuilder->expr()->andX(
+                $queryBuilder->expr()->eq(
+                    'pc.uid',
+                    $queryBuilder->quoteIdentifier('category_mm.uid_foreign')
+                ),
+                $queryBuilder->expr()->eq(
+                    'category_mm.tablenames',
+                    $queryBuilder->createNamedParameter(
+                        'tx_maps2_domain_model_poicollection'
+                    )
+                ),
+                $queryBuilder->expr()->eq(
+                    'category_mm.fieldname',
+                    $queryBuilder->createNamedParameter(
+                        'categories'
+                    )
+                )
+            )
+        );
+
+        $queryBuilder->andWhere(
+            $queryBuilder->expr()->in(
+                'category_mm.uid_local',
+                $queryBuilder->createNamedParameter(
+                    $categories,
+                    Connection::PARAM_INT_ARRAY
+                )
+            )
+        );
+    }
+
+    protected function getQueryBuilderForTable(string $table, string $alias, bool $useLangStrict = false): QueryBuilder
+    {
+        $extbaseQuery = $this->createQuery();
+
+        $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable($table);
+        $queryBuilder->setRestrictions(GeneralUtility::makeInstance(FrontendRestrictionContainer::class));
+        $queryBuilder
+            ->from($table, $alias)
+            ->andWhere(
+                $queryBuilder->expr()->in(
+                    'pid',
+                    $queryBuilder->createNamedParameter(
+                        $extbaseQuery->getQuerySettings()->getStoragePageIds(),
+                        Connection::PARAM_INT_ARRAY
+                    )
+                )
+            );
+
+        $this->overlayHelper->addWhereForOverlay($queryBuilder, $table, $alias, $useLangStrict);
+
+        return $queryBuilder;
+    }
+
+    protected function getConnectionPool(): ConnectionPool
+    {
+        return GeneralUtility::makeInstance(ConnectionPool::class);
     }
 }

@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\ExpressionLanguage;
 
-use JWeiland\Maps2\Service\MapProviderRequestService;
+use JWeiland\Maps2\Helper\MapHelper;
 use Symfony\Component\ExpressionLanguage\ExpressionFunction;
 use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -31,12 +31,13 @@ class AllowMapProviderRequestFunctionsProvider implements ExpressionFunctionProv
 
     protected function getIsRequestToMapProviderAllowed(): ExpressionFunction
     {
-        $compiler = function () {
-        };
-        $evaluator = function ($existingVariables) {
-            $mapProviderRequestService = GeneralUtility::makeInstance(MapProviderRequestService::class);
-            return $mapProviderRequestService->isRequestToMapProviderAllowed();
-        };
-        return new ExpressionFunction('isRequestToMapProviderAllowed', $compiler, $evaluator);
+        return new ExpressionFunction(
+            'isRequestToMapProviderAllowed',
+            static function () {},
+            static function ($existingVariables) {
+                $mapHelper = GeneralUtility::makeInstance(MapHelper::class);
+                return $mapHelper->isRequestToMapProviderAllowed();
+            }
+        );
     }
 }

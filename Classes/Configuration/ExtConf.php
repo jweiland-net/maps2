@@ -31,7 +31,6 @@ class ExtConf implements SingletonInterface
     protected $explicitAllowMapProviderRequests = false;
     protected $explicitAllowMapProviderRequestsBySessionOnly = false;
     protected $infoWindowContentTemplatePath = '';
-    protected $allowMapTemplatePath = '';
 
     // Google Maps
     protected $googleMapsLibrary = '';
@@ -191,19 +190,6 @@ class ExtConf implements SingletonInterface
     public function setInfoWindowContentTemplatePath(string $infoWindowContentTemplatePath): void
     {
         $this->infoWindowContentTemplatePath = $infoWindowContentTemplatePath;
-    }
-
-    public function getAllowMapTemplatePath(): string
-    {
-        if (empty($this->allowMapTemplatePath)) {
-            $this->allowMapTemplatePath = 'EXT:maps2/Resources/Private/Templates/AllowMapForm.html';
-        }
-        return $this->allowMapTemplatePath;
-    }
-
-    public function setAllowMapTemplatePath(string $allowMapTemplatePath): void
-    {
-        $this->allowMapTemplatePath = $allowMapTemplatePath;
     }
 
     public function getGoogleMapsLibrary(): string

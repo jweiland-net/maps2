@@ -12,7 +12,9 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Controller;
 
 use JWeiland\Maps2\Configuration\ExtConf;
-use JWeiland\Maps2\Service\MapService;
+use JWeiland\Maps2\Event\PostProcessFluidVariablesEvent;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
@@ -30,7 +32,7 @@ class AbstractController extends ActionController
      */
     protected $extConf;
 
-    public function injectExtConf(ExtConf $extConf)
+    public function __construct(ExtConf $extConf)
     {
         $this->extConf = $extConf;
     }
@@ -57,14 +59,18 @@ class AbstractController extends ActionController
         $this->settings = $originalSettings;
     }
 
-    public function initializeView(ViewInterface $view)
+    public function initializeView(ViewInterface $view): void
     {
-        // remove unneeded columns from tt_content array
         $contentRecord = $this->configurationManager->getContentObject()->data;
-        unset($contentRecord['pi_flexform'], $contentRecord['l18n_diffsource']);
+
+        // Remove unneeded columns from tt_content array
+        unset(
+            $contentRecord['pi_flexform'],
+            $contentRecord['l18n_diffsource']
+        );
 
         $this->prepareSettings();
-        $view->assign('data', $this->configurationManager->getContentObject()->data);
+        $view->assign('data', $contentRecord);
         $view->assign('environment', [
             'settings' => $this->settings,
             'extConf' => ObjectAccess::getGettableProperties($this->extConf),
@@ -73,7 +79,7 @@ class AbstractController extends ActionController
         ]);
     }
 
-    protected function prepareSettings()
+    protected function prepareSettings(): void
     {
         if (array_key_exists('infoWindowContentTemplatePath', $this->settings)) {
             $this->settings['infoWindowContentTemplatePath'] = trim($this->settings['infoWindowContentTemplatePath']);
@@ -81,13 +87,17 @@ class AbstractController extends ActionController
             $this->addFlashMessage('Dear Admin: Please add default static template of maps2 into your TS-Template.');
         }
 
-        $this->settings['forceZoom'] = (bool)$this->settings['forceZoom'] ?? false;
+        $this->settings['forceZoom'] = (bool)($this->settings['forceZoom'] ?? false);
 
         if (empty($this->settings['mapProvider'])) {
-            $mapService = GeneralUtility::makeInstance(MapService::class);
             $this->controllerContext
                 ->getFlashMessageQueue()
-                ->enqueue($mapService->getFlashMessageForMissingStaticTemplate());
+                ->enqueue(GeneralUtility::makeInstance(
+                    FlashMessage::class,
+                    'You have forgotten to add maps2 static template for either Google Maps or OpenStreetMap',
+                    'Missing static template',
+                    AbstractMessage::ERROR
+                ));
         }
 
         // https://wiki.openstreetmap.org/wiki/Tile_servers tolds to use ${x} placeholders, but they don't work.
@@ -100,9 +110,11 @@ class AbstractController extends ActionController
         }
 
         if (
-            isset($this->settings['markerClusterer']['enable'])
+            isset(
+                $this->settings['markerClusterer']['enable'],
+                $this->settings['markerClusterer']['imagePath']
+            )
             && !empty($this->settings['markerClusterer']['enable'])
-            && isset($this->settings['markerClusterer']['imagePath'])
             && !empty($this->settings['markerClusterer']['imagePath'])
         ) {
             $this->settings['markerClusterer']['enable'] = 1;
@@ -113,4 +125,19 @@ class AbstractController extends ActionController
             );
         }
     }
+
+    protected function postProcessAndAssignFluidVariables(array $variables = []): void
+    {
+        /** @var PostProcessFluidVariablesEvent $event */
+        $event = $this->eventDispatcher->dispatch(
+            new PostProcessFluidVariablesEvent(
+                $this->request,
+                $this->settings,
+                $variables
+            )
+        );
+
+        $this->view->assignMultiple($event->getFluidVariables());
+    }
+
 }

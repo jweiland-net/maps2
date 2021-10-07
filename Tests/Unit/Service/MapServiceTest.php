@@ -90,7 +90,6 @@ class MapServiceTest extends UnitTestCase
         ];
 
         $extConf = new ExtConf([]);
-        $extConf->setAllowMapTemplatePath('typo3conf/ext/maps/Resources/Private/Templates/AllowMapForm.html');
         GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
 
         $this->configurationManagerProphecy
@@ -189,7 +188,6 @@ class MapServiceTest extends UnitTestCase
         ];
 
         $extConf = new ExtConf([]);
-        $extConf->setAllowMapTemplatePath('typo3conf/ext/maps/Resources/Private/Templates/AllowMapForm.html');
         GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
 
         $this->settings['mapProvider'] = '';
@@ -289,7 +287,6 @@ class MapServiceTest extends UnitTestCase
         ];
 
         $extConf = new ExtConf([]);
-        $extConf->setAllowMapTemplatePath('typo3conf/ext/maps/Resources/Private/Templates/AllowMapForm.html');
         GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
 
         $this->settings['mapProvider'] = 'gm';

@@ -22,6 +22,9 @@ BackendConfigurationManager which is completely wrong. To  prevent that we have 
 MapService::getMapProvider to MapHelper:getMapProvider and deprecated `MapService::getMapProvider`. Please adopt that
 in your extension.
 
+Extension Setting and TypoScript setting `allowMapTemplatePath` was completely removed. We have added a new
+ControllerAction called `OverlayAction`, so please overwrite FluidTemplate Overlay.html instead.
+
 Update to Version 9.3.4
 =======================
 

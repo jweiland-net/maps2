@@ -36,9 +36,6 @@
 			<trans-unit id="infoWindowContentTemplatePath" xml:space="preserve">
 				<source>Template path for info window: If you click on a marker a little info window will appear. With this setting you can change that template to your own needs.</source>
 			</trans-unit>
-			<trans-unit id="allowMapTemplatePath" xml:space="preserve">
-				<source>Template path for Google Requests: Define a template which will be shown, if a user has to accept sending requests to Google Servers.</source>
-			</trans-unit>
 
 			<trans-unit id="googleMapsLibrary" xml:space="preserve">
 				<source>Link to Google Maps API: This setting is for TYPO3 Backend only. Visit your TypoScript-Templates if you want to change the library for Frontend. You only need to fill this field if you want to use an older or beta version.</source>

@@ -17,6 +17,7 @@ plugin.tx_maps2.settings.markerClusterer >
 [ELSE]
   # Do not cache maps2 output as long as user has not activated requests to osm servers
   tt_content.list.20.maps2_maps2 = USER_INT
+  tt_content.list.20.maps2_maps2.pluginName = Overlay
 [END]
 
 plugin.tx_maps2 {

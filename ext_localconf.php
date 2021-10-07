@@ -8,12 +8,20 @@ call_user_func(static function() {
         'maps2',
         'Maps2',
         [
-            \JWeiland\Maps2\Controller\PoiCollectionController::class => 'show, allowMap',
+            \JWeiland\Maps2\Controller\PoiCollectionController::class => 'show',
             \JWeiland\Maps2\Controller\AjaxController::class => 'process',
+        ]
+    );
+
+    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+        'maps2',
+        'Overlay',
+        [
+            \JWeiland\Maps2\Controller\PoiCollectionController::class => 'overlay',
         ],
         // non-cacheable actions
         [
-            \JWeiland\Maps2\Controller\PoiCollectionController::class => 'allowMap',
+            \JWeiland\Maps2\Controller\PoiCollectionController::class => 'overlay',
         ]
     );
 

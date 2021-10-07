@@ -387,48 +387,6 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function getAllowMapTemplatePathInitiallyReturnsEmptyString()
-    {
-        self::assertSame(
-            'EXT:maps2/Resources/Private/Templates/AllowMapForm.html',
-            $this->subject->getAllowMapTemplatePath()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function setAllowMapTemplatePathSetsAllowMapTemplatePath()
-    {
-        $this->subject->setAllowMapTemplatePath('foo bar');
-
-        self::assertSame(
-            'foo bar',
-            $this->subject->getAllowMapTemplatePath()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function setAllowMapTemplatePathWithIntegerResultsInString()
-    {
-        $this->subject->setAllowMapTemplatePath(123);
-        self::assertSame('123', $this->subject->getAllowMapTemplatePath());
-    }
-
-    /**
-     * @test
-     */
-    public function setAllowMapTemplatePathWithBooleanResultsInString()
-    {
-        $this->subject->setAllowMapTemplatePath(true);
-        self::assertSame('1', $this->subject->getAllowMapTemplatePath());
-    }
-
-    /**
-     * @test
-     */
     public function getGoogleMapsLibraryInitiallyReturnsEmptyString()
     {
         $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');

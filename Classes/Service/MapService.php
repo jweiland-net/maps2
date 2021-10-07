@@ -20,13 +20,10 @@ use JWeiland\Maps2\Tca\Maps2Registry;
 use JWeiland\Maps2\Utility\DatabaseUtility;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\FrontendRestrictionContainer;
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
-use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
-use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Service\EnvironmentService;
 use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
@@ -64,89 +61,6 @@ class MapService
 
         $maps2Registry = GeneralUtility::makeInstance(Maps2Registry::class);
         $this->columnRegistry = $maps2Registry->getColumnRegistry();
-    }
-
-    /**
-     * Show form to allow requests to Google Maps2 servers
-     */
-    public function showAllowMapForm(): string
-    {
-        $settings = $this->getSettings();
-        if (
-            is_array($settings)
-            && (
-                !array_key_exists('mapProvider', $settings)
-                || empty($settings['mapProvider'])
-            )
-        ) {
-            $flashMessage = $this->getFlashMessageForMissingStaticTemplate();
-            $flashMessageService = GeneralUtility::makeInstance(FlashMessageService::class);
-            $flashMessageQueue = $flashMessageService->getMessageQueueByIdentifier('maps2.allowMap');
-            $flashMessageQueue->enqueue($flashMessage);
-        }
-
-        $view = GeneralUtility::makeInstance(
-            StandaloneView::class,
-            $this->configurationManager->getContentObject()
-        );
-        $view->setTemplatePathAndFilename(
-            GeneralUtility::getFileAbsFileName(
-                $this->getAllowMapTemplatePath()
-            )
-        );
-        $view->assign('data', $this->configurationManager->getContentObject()->data);
-        $view->assign('settings', $settings);
-        $view->assign('requestUri', $this->getRequestUri());
-
-        return $view->render();
-    }
-
-    /**
-     * Returns a FlashMessage with a hint on a missing static template
-     *
-     * @return FlashMessage
-     */
-    public function getFlashMessageForMissingStaticTemplate(): FlashMessage
-    {
-        return GeneralUtility::makeInstance(
-            FlashMessage::class,
-            'You have forgotten to add maps2 static template for either Google Maps or OpenStreetMap',
-            'Missing static template',
-            AbstractMessage::ERROR
-        );
-    }
-
-    protected function getRequestUri(): string
-    {
-        $uriBuilder = $this->objectManager->get(UriBuilder::class);
-
-        return $uriBuilder->reset()
-            ->setAddQueryString(true)
-            ->setAddQueryStringMethod('GET')
-            ->setArguments([
-                'tx_maps2_maps2' => [
-                    'mapProviderRequestsAllowedForMaps2' => 1
-                ]
-            ])
-            ->setArgumentsToBeExcludedFromQueryString(['cHash'])
-            ->build();
-    }
-
-    protected function getAllowMapTemplatePath(): string
-    {
-        $settings = $this->getSettings();
-        $extConf = GeneralUtility::makeInstance(ExtConf::class);
-
-        // get default template path
-        $path = $extConf->getAllowMapTemplatePath();
-        if (
-            isset($settings['allowMapTemplatePath'])
-            && !empty($settings['allowMapTemplatePath'])
-        ) {
-            $path = $settings['allowMapTemplatePath'];
-        }
-
-        return $path;
     }
 
     /**

@@ -14,6 +14,8 @@ ChangeLog
 - Removed tx_maps2_domain_model_poi table (Please execute UpgradeWizard)
 - Update Documentation (Adopt TYPO3 Doc Styleguide)
 - Move MapService::getMapProvider to MapHelper:getMapProvider
+- Remove MapProviderOverlayRequestHandler
+- Implement new uncached ControllerAction to show Overlay
 
 **Version 9.3.10**
 

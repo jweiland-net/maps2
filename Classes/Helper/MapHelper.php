@@ -13,10 +13,11 @@ namespace JWeiland\Maps2\Helper;
 
 use JWeiland\Maps2\Configuration\ExtConf;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
- * Little helper with a very reduced set of dependencies. Useful, if you need f.e. MapProvider at
- * a very early state of TYPO3 like Middlewares. As it does not load Extbase, it should not be a problem.
+ * Little helper with a very reduced set of dependencies like Extbase. Useful, if you need f.e. the configured
+ * MapProvider at a very early state of TYPO3 like Middlewares.
  */
 class MapHelper
 {
@@ -95,5 +96,28 @@ class MapHelper
         }
 
         return $pois;
+    }
+
+    /**
+     * Check, if the current request is allowed to process/show the map in frontend.
+     * It respects the settings from Extension Settings.
+     * If false is returned, an overlay will be shown instead of the map and no JavaScript files
+     * will be loaded for maps2.
+     *
+     * @return bool
+     */
+    public function isRequestToMapProviderAllowed(): bool
+    {
+        $extConf = GeneralUtility::makeInstance(ExtConf::class);
+        if ($extConf->getExplicitAllowMapProviderRequests()) {
+            if ($extConf->getExplicitAllowMapProviderRequestsBySessionOnly()) {
+                return (bool)$_SESSION['mapProviderRequestsAllowedForMaps2'];
+            }
+            if ($GLOBALS['TSFE'] instanceof TypoScriptFrontendController) {
+                return (bool)$GLOBALS['TSFE']->fe_user->getSessionData('mapProviderRequestsAllowedForMaps2');
+            }
+            return false;
+        }
+        return true;
     }
 }
