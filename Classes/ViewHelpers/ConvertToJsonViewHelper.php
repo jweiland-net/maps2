@@ -12,7 +12,6 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\ViewHelpers;
 
 use JWeiland\Maps2\Domain\Model\Category;
-use JWeiland\Maps2\Domain\Model\Poi;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use TYPO3\CMS\Extbase\Persistence\Generic\LazyObjectStorage;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
@@ -77,15 +76,6 @@ class ConvertToJsonViewHelper extends AbstractViewHelper
         foreach ($poiCollections as $poiCollection) {
             $poiCollectionAsArray = ObjectAccess::getGettableProperties($poiCollection);
             unset($poiCollectionAsArray['markerIcons']);
-
-            /** @var LazyObjectStorage $pois */
-            $pois = $poiCollectionAsArray['pois'];
-            $poiCollectionAsArray['pois'] = [];
-            /** @var Poi $poi */
-            foreach ($pois->toArray() as $key => $poi) {
-                // do not remove toArray() as it converts the long hash keys to 0, 1, 2, ...
-                $poiCollectionAsArray['pois'][$key] = ObjectAccess::getGettableProperties($poi);
-            }
 
             $poiCollectionAsArray['categories'] = [];
             /** @var Category $category */
