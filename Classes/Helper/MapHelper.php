@@ -73,4 +73,27 @@ class MapHelper
 
         return $mapProvider;
     }
+
+    /**
+     * POIs are stored as JSON in tx_maps_domain_model_poicollection.
+     * Use this method to convert the JSON back into an array.
+     *
+     * @param string $poisAsJson That's normally the content of column "configuration_map"
+     * @return array
+     */
+    public function convertPoisAsJsonToArray(string $poisAsJson): array
+    {
+        $pois = [];
+        foreach (json_decode($poisAsJson, true) ?? [] as $poi) {
+            $pois[] = array_combine(
+                [
+                    'latitude',
+                    'longitude'
+                ],
+                GeneralUtility::trimExplode(',', $poi)
+            );
+        }
+
+        return $pois;
+    }
 }
