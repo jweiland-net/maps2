@@ -13,6 +13,4 @@ This chapter describes how to manage the extension from a developer point of vie
    :titlesonly:
 
    Api/Index
-   EditMarker/Index
    Maps2Registry/Index
-   Override/Index

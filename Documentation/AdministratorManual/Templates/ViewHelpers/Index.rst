@@ -67,6 +67,3 @@ All ViewHelpers
    Cache/GetCacheViewHelper
    Cache/HasCacheViewHelper
    Cache/SetCacheViewHelper
-
-   Widget/PoiCollectionViewHelper
-   Widget/EditPoiViewHelper

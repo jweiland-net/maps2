@@ -61,29 +61,3 @@ the paths
       layoutRootPath = fileadmin/templates/ext/maps2/Layouts/
     }
   }
-
-Change path of the poiCollection widget
----------------------------------------
-
-The path of the poiCollection widget can be changed by using a configuration like below.
-
-.. code-block:: typoscript
-
-  plugin.tx_maps2 {
-    view {
-      widget.JWeiland\Maps2\ViewHelpers\Widget\PoiCollectionViewHelper.templateRootPath = {$plugin.tx_maps2.view.templateRootPath}
-    }
-  }
-
-Change path of the editPoi widget
----------------------------------
-
-The path of the editPoi widget can be changed by using a configuration like below.
-
-.. code-block:: typoscript
-
-   plugin.tx_maps2 {
-     view {
-       widget.JWeiland\Maps2\ViewHelpers\Widget\EditPoiViewHelper.templateRootPath = [PATH]
-     }
-   }

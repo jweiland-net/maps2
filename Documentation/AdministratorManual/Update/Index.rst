@@ -15,15 +15,17 @@ matches your needs and can be found in `LocalConfiguration.php`.
 Table `tx_maps2_domain_model_poi` has been removed. All POIs will be stored in
 table `tx_maps2_domain_model_poicollection` now. Please execute UpgradeWizard to migrate existing POI records.
 
+Extension Setting and TypoScript setting `allowMapTemplatePath` was completely removed. We have added a new
+ControllerAction called `OverlayAction`, so please overwrite FluidTemplate Overlay.html instead.
+
+All widget are removed, as TYPO3 11 does not support Widgets anymore.
+
 **Only valid for developers:**
 
 As we have loaded Extbase ConfigurationManager within Middleware before TSFE it may switch to the
 BackendConfigurationManager which is completely wrong. To  prevent that we have moved
 MapService::getMapProvider to MapHelper:getMapProvider and deprecated `MapService::getMapProvider`. Please adopt that
 in your extension.
-
-Extension Setting and TypoScript setting `allowMapTemplatePath` was completely removed. We have added a new
-ControllerAction called `OverlayAction`, so please overwrite FluidTemplate Overlay.html instead.
 
 Update to Version 9.3.4
 =======================
