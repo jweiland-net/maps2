@@ -6,9 +6,3 @@ services:
 
   JWeiland\Maps2\:
     resource: '../Classes/*'
-
-  JWeiland\Maps2\Configuration\ExtConf:
-    public: false
-
-  JWeiland\Maps2\Helper\MapHelper:
-    public: false
