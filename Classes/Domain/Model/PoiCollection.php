@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Domain\Model;
 
 use JWeiland\Maps2\Configuration\ExtConf;
+use JWeiland\Maps2\Helper\MapHelper;
 use JWeiland\Maps2\Service\MapService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Annotation as Extbase;
@@ -47,6 +48,13 @@ class PoiCollection extends AbstractEntity
     protected $title = '';
 
     /**
+     * JSON string containing all POIs for Area and Route
+     *
+     * @var string
+     */
+    protected $configurationMap = '';
+
+    /**
      * @var string
      */
     protected $address = '';
@@ -65,13 +73,6 @@ class PoiCollection extends AbstractEntity
      * @var int
      */
     protected $radius = 0;
-
-    /**
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\JWeiland\Maps2\Domain\Model\Poi>
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Cascade("remove")
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
-     */
-    protected $pois;
 
     /**
      * @var string
@@ -161,7 +162,6 @@ class PoiCollection extends AbstractEntity
 
     protected function initStorageObjects(): void
     {
-        $this->pois = new ObjectStorage();
         $this->categories = new ObjectStorage();
         $this->infoWindowImages = new ObjectStorage();
         $this->markerIcons = new ObjectStorage();
@@ -207,6 +207,16 @@ class PoiCollection extends AbstractEntity
         $this->title = $title;
     }
 
+    public function getConfigurationMap(): string
+    {
+        return $this->configurationMap;
+    }
+
+    public function setConfigurationMap(string $configurationMap): void
+    {
+        $this->configurationMap = $configurationMap;
+    }
+
     public function getAddress(): string
     {
         return $this->address;
@@ -245,29 +255,6 @@ class PoiCollection extends AbstractEntity
     public function setRadius(int $radius): void
     {
         $this->radius = $radius;
-    }
-
-    public function addPoi(Poi $poi): void
-    {
-        $this->pois->attach($poi);
-    }
-
-    public function removePoi(Poi $poiToRemove): void
-    {
-        $this->pois->detach($poiToRemove);
-    }
-
-    /**
-     * @return ObjectStorage|Poi[]
-     */
-    public function getPois(): ObjectStorage
-    {
-        return $this->pois;
-    }
-
-    public function setPois(ObjectStorage $pois): void
-    {
-        $this->pois = $pois;
     }
 
     public function getStrokeColor(): string
@@ -515,6 +502,18 @@ class PoiCollection extends AbstractEntity
     public function setMarkerIconAnchorPosY(int $markerIconAnchorPosY): void
     {
         $this->markerIconAnchorPosY = $markerIconAnchorPosY;
+    }
+
+    public function getPois(): array
+    {
+        $mapHelper = GeneralUtility::makeInstance(MapHelper::class);
+
+        $configurationMap = $this->getConfigurationMap();
+        if ($configurationMap === '' || $configurationMap === null) {
+            $configurationMap = '[]';
+        }
+
+        return $mapHelper->convertPoisAsJsonToArray($configurationMap);
     }
 
     public function getDistance(): float
