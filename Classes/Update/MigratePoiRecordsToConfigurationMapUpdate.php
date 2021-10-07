@@ -132,7 +132,7 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
                 ]
             );
 
-            $connection->delete(
+            /*$connection->delete(
                 'tx_maps2_domain_model_poi',
                 [
                     'poicollection' => $poiCollectionRecord['uid']
@@ -140,7 +140,7 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
                 [
                     \PDO::PARAM_INT
                 ]
-            );
+            );*/
         }
 
         return true;
@@ -163,7 +163,7 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
         $queryBuilder->getRestrictions()->add(GeneralUtility::makeInstance(DeletedRestriction::class));
 
         $statement = $queryBuilder
-            ->select('uid', 'latitude', 'longitude')
+            ->select('uid', 'pos_index', 'latitude', 'longitude')
             ->from('tx_maps2_domain_model_poi')
             ->where(
                 $queryBuilder->expr()->eq(
