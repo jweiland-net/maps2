@@ -33,7 +33,19 @@ function OpenStreetMaps2($element, environment) {
         if (this.countObjectProperties(this.categorizedMarkers) > 1) {
             this.showSwitchableCategories(environment);
         }
-        if (this.poiCollections.length > 1 && environment.settings.forceZoom === false) {
+        if (
+            environment.settings.forceZoom === false
+            && (
+                this.poiCollections.length > 1
+                || (
+                    this.poiCollections.length === 1
+                    && (
+                        this.poiCollections[0].collectionType === "Area"
+                        || this.poiCollections[0].collectionType === "Route"
+                    )
+                )
+            )
+        ) {
             this.map.fitBounds(this.bounds);
         } else {
             this.map.panTo([this.poiCollections[0].latitude, this.poiCollections[0].longitude]);
