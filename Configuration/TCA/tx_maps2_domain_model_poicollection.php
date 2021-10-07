@@ -249,10 +249,9 @@ return [
             'description' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.address.description',
             'config' => [
                 'type' => 'input',
-                'size' => 30,
-                'readOnly' => true,
+                'renderType' => 'maps2ReadOnlyInputText',
+                'size' => 48,
                 'placeholder' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.address.useSearchField',
-                'eval' => 'required,trim',
             ],
         ],
         'map_provider' => [

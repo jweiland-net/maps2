@@ -74,6 +74,11 @@ call_user_func(static function() {
         'priority' => 40,
         'class' => \JWeiland\Maps2\Form\FieldInformation\InfoWindowContent::class,
     ];
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1633612058] = [
+        'nodeName' => 'maps2ReadOnlyInputText',
+        'priority' => 40,
+        'class' => \JWeiland\Maps2\Form\Element\ReadOnlyInputTextElement::class,
+    ];
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeResolver'][1551448205] = [
         'nodeName' => 'maps2MapProvider',
         'priority' => 40,
