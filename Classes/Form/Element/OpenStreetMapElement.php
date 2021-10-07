@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Form\Element;
 
 use JWeiland\Maps2\Configuration\ExtConf;
+use JWeiland\Maps2\Helper\MapHelper;
 use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
 use TYPO3\CMS\Backend\Form\NodeFactory;
 use TYPO3\CMS\Core\Page\PageRenderer;
@@ -40,6 +41,11 @@ class OpenStreetMapElement extends AbstractFormElement
     protected $pageRenderer;
 
     /**
+     * @var MapHelper
+     */
+    protected $mapHelper;
+
+    /**
      * Default field information enabled for this element.
      *
      * @var array
@@ -54,8 +60,9 @@ class OpenStreetMapElement extends AbstractFormElement
     {
         parent::__construct($nodeFactory, $data);
 
-        $this->pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
         $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
+        $this->pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
+        $this->mapHelper = GeneralUtility::makeInstance(MapHelper::class);
     }
 
     /**
@@ -156,19 +163,7 @@ class OpenStreetMapElement extends AbstractFormElement
     {
         foreach ($record as $field => $value) {
             if ($field === 'configuration_map') {
-                $record[$field] = [];
-                $routes = json_decode($value, true) ?? [];
-
-                // GoogleMaps function "toUrlValue" separates lat and lng with comma
-                foreach ($routes as $route) {
-                    $record[$field][] = array_combine(
-                        [
-                            'latitude',
-                            'longitude'
-                        ],
-                        GeneralUtility::trimExplode(',', $route)
-                    );
-                }
+                $record[$field] = $this->mapHelper->convertPoisAsJsonToArray($record[$field]);
             } else {
                 $record[$field] = is_array($value) ? $value[0] : $value;
             }
