@@ -98,7 +98,7 @@
 				<source>Radius</source>
 			</trans-unit>
 			<trans-unit id="tx_maps2_domain_model_poicollection.address.useSearchField" xml:space="preserve" approved="yes">
-				<source>Please use search field in Google Maps, to fill this field</source>
+				<source>Please use search field in map below to fill this field</source>
 			</trans-unit>
 			<trans-unit id="tx_maps2_domain_model_poicollection.style" xml:space="preserve">
 				<source>Style</source>
