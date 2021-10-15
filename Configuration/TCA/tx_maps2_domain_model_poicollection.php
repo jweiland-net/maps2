@@ -49,15 +49,7 @@ return [
                 --palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:palette.marker_icon_size;marker_icon_size,
                 --palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:palette.marker_icon_pos;marker_icon_pos,
                 --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.access, 
-                --palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.access;access',
-            'columnsOverrides' => [
-                'info_window_content' => [
-                    'config' => [
-                        'enableRichtext' => true,
-                        'richtextConfiguration' => 'default'
-                    ]
-                ]
-            ]
+                --palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.access;access'
         ],
         'Area' => [
             'showitem' => '--palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:palette.language_hidden;language_hidden, l10n_parent, l10n_diffsource,
@@ -377,9 +369,8 @@ return [
                 'type' => 'text',
                 'cols' => 80,
                 'rows' => 15,
-                'softref' => 'rtehtmlarea_images,typolink_tag,images,email[subst],url',
+                'softref' => 'typolink_tag,images,email[subst],url',
                 'enableRichtext' => true,
-                'richtextConfiguration' => 'default',
                 'fieldInformation' => [
                     'showInfoWindowContentAbove' => [
                         'renderType' => 'maps2InfoWindowContent'
