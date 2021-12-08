@@ -33,6 +33,11 @@ class GeoCodeServiceTest extends AbstractUnitTestCase
     protected $clientProphecy;
 
     /**
+     * @var RequestFactory|ObjectProphecy
+     */
+    protected $requestFactoryProphecy;
+
+    /**
      * @var GeoCodeService
      */
     protected $subject;
@@ -40,8 +45,12 @@ class GeoCodeServiceTest extends AbstractUnitTestCase
     protected function setUp(): void
     {
         $this->clientProphecy = $this->prophesize(GoogleMapsClient::class);
+        $this->requestFactoryProphecy = $this->prophesize(RequestFactory::class);
 
-        $this->subject = new GeoCodeService($this->clientProphecy->reveal());
+        $this->subject = new GeoCodeService(
+            $this->clientProphecy->reveal(),
+            $this->requestFactoryProphecy->reveal()
+        );
     }
 
     protected function tearDown(): void
@@ -98,13 +107,10 @@ class GeoCodeServiceTest extends AbstractUnitTestCase
             ->addParameter('address', 'My private address')
             ->shouldBeCalled();
 
-        /** @var RequestFactory|ObjectProphecy $requestFactoryProphecy */
-        $requestFactoryProphecy = $this->prophesize(RequestFactory::class);
-        $requestFactoryProphecy
+        $this->requestFactoryProphecy
             ->create('GeocodeRequest')
             ->shouldBeCalled()
             ->willReturn($geocodeRequestProphecy->reveal());
-        GeneralUtility::addInstance(RequestFactory::class, $requestFactoryProphecy->reveal());
 
         $this->clientProphecy
             ->processRequest($geocodeRequestProphecy->reveal())
@@ -140,13 +146,10 @@ class GeoCodeServiceTest extends AbstractUnitTestCase
             ->addParameter('address', 'My private address')
             ->shouldBeCalled();
 
-        /** @var RequestFactory|ObjectProphecy $requestFactoryProphecy */
-        $requestFactoryProphecy = $this->prophesize(RequestFactory::class);
-        $requestFactoryProphecy
+        $this->requestFactoryProphecy
             ->create('GeocodeRequest')
             ->shouldBeCalled()
             ->willReturn($geocodeRequestProphecy->reveal());
-        GeneralUtility::addInstance(RequestFactory::class, $requestFactoryProphecy->reveal());
 
         $this->clientProphecy
             ->processRequest($geocodeRequestProphecy->reveal())
@@ -212,13 +215,10 @@ class GeoCodeServiceTest extends AbstractUnitTestCase
             ->addParameter('address', 'My private address')
             ->shouldBeCalled();
 
-        /** @var RequestFactory|ObjectProphecy $requestFactoryProphecy */
-        $requestFactoryProphecy = $this->prophesize(RequestFactory::class);
-        $requestFactoryProphecy
+        $this->requestFactoryProphecy
             ->create('GeocodeRequest')
             ->shouldBeCalled()
             ->willReturn($geocodeRequestProphecy->reveal());
-        GeneralUtility::addInstance(RequestFactory::class, $requestFactoryProphecy->reveal());
 
         $this->clientProphecy
             ->processRequest($geocodeRequestProphecy->reveal())
@@ -256,13 +256,10 @@ class GeoCodeServiceTest extends AbstractUnitTestCase
             ->addParameter('address', 'My private address')
             ->shouldBeCalled();
 
-        /** @var RequestFactory|ObjectProphecy $requestFactoryProphecy */
-        $requestFactoryProphecy = $this->prophesize(RequestFactory::class);
-        $requestFactoryProphecy
+        $this->requestFactoryProphecy
             ->create('GeocodeRequest')
             ->shouldBeCalled()
             ->willReturn($geocodeRequestProphecy->reveal());
-        GeneralUtility::addInstance(RequestFactory::class, $requestFactoryProphecy->reveal());
 
         $this->clientProphecy
             ->processRequest($geocodeRequestProphecy->reveal())

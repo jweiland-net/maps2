@@ -34,9 +34,15 @@ class GeoCodeService implements SingletonInterface
      */
     protected $client;
 
-    public function __construct(ClientFactory $clientFactory)
+    /**
+     * @var RequestFactory
+     */
+    protected $requestFactory;
+
+    public function __construct(ClientFactory $clientFactory, RequestFactory $requestFactory)
     {
         $this->client = $clientFactory->create();
+        $this->requestFactory = $requestFactory;
     }
 
     /**
@@ -52,8 +58,7 @@ class GeoCodeService implements SingletonInterface
             return $positions;
         }
 
-        $requestFactory = GeneralUtility::makeInstance(RequestFactory::class);
-        $geocodeRequest = $requestFactory->create('GeocodeRequest');
+        $geocodeRequest = $this->requestFactory->create('GeocodeRequest');
         $geocodeRequest->addParameter('address', (string)$address);
 
         $response = $this->client->processRequest($geocodeRequest);
