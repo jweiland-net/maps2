@@ -1,9 +1,10 @@
 <?php
+
 if (!defined('TYPO3_MODE')) {
     die('Access denied.');
 }
 
-call_user_func(static function() {
+call_user_func(static function(): void {
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
         'maps2',
         'Maps2',
@@ -115,20 +116,4 @@ call_user_func(static function() {
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
         '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:maps2/Configuration/TSconfig/ContentElementWizard.txt">'
     );
-
-    $signalSlotDispatcher = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\SignalSlot\Dispatcher::class);
-    $signalSlotDispatcher->connect(
-        \TYPO3\CMS\Install\Service\SqlExpectedSchemaService::class,
-        'tablesDefinitionIsBeingBuilt',
-        \JWeiland\Maps2\Tca\Maps2Registry::class,
-        'addMaps2DatabaseSchemasToTablesDefinition'
-    );
-    if (!(TYPO3_REQUESTTYPE & TYPO3_REQUESTTYPE_INSTALL)) {
-        $signalSlotDispatcher->connect(
-            \TYPO3\CMS\Extensionmanager\Utility\InstallUtility::class,
-            'tablesDefinitionIsBeingBuilt',
-            \JWeiland\Maps2\Tca\Maps2Registry::class,
-            'addMaps2DatabaseSchemaToTablesDefinition'
-        );
-    }
 });

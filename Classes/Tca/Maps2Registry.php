@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Tca;
 
 use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Database\Event\AlterTableDefinitionStatementsEvent;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
@@ -371,18 +372,13 @@ class Maps2Registry implements SingletonInterface
 
     /**
      * A slot method to inject the required maps2 database fields of
-     * various extensions to the tables definition string
-     *
-     * Called by Installtool. Compare Database
-     *
-     * @param array $sqlString
-     * @return array
+     * various extensions to the table definition string
      */
-    public function addMaps2DatabaseSchemasToTablesDefinition(array $sqlString): array
-    {
+    public function addMaps2DatabaseSchemasToTablesDefinition(
+        AlterTableDefinitionStatementsEvent $alterTableDefinitionStatementsEvent
+    ): void {
         $this->initialize();
-        $sqlString[] = $this->getDatabaseTableDefinitions();
-        return ['sqlString' => $sqlString];
+        $alterTableDefinitionStatementsEvent->addSqlData($this->getDatabaseTableDefinitions());
     }
 
     protected function getLanguageService(): LanguageService

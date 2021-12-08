@@ -6,3 +6,9 @@ services:
 
   JWeiland\Maps2\:
     resource: '../Classes/*'
+
+  JWeiland\Maps2\Tca\Maps2Registry:
+    tags:
+      - name: event.listener
+        method: 'addMaps2DatabaseSchemasToTablesDefinition'
+        event: TYPO3\CMS\Core\Database\Event\AlterTableDefinitionStatementsEvent
