@@ -38,6 +38,11 @@ class GeoCodeServiceTest extends AbstractUnitTestCase
     protected $requestFactoryProphecy;
 
     /**
+     * @var MapperFactory|ObjectProphecy
+     */
+    protected $mapperFactoryProphecy;
+
+    /**
      * @var GeoCodeService
      */
     protected $subject;
@@ -46,10 +51,12 @@ class GeoCodeServiceTest extends AbstractUnitTestCase
     {
         $this->clientProphecy = $this->prophesize(GoogleMapsClient::class);
         $this->requestFactoryProphecy = $this->prophesize(RequestFactory::class);
+        $this->mapperFactoryProphecy = $this->prophesize(MapperFactory::class);
 
         $this->subject = new GeoCodeService(
             $this->clientProphecy->reveal(),
-            $this->requestFactoryProphecy->reveal()
+            $this->requestFactoryProphecy->reveal(),
+            $this->mapperFactoryProphecy->reveal()
         );
     }
 
@@ -158,13 +165,10 @@ class GeoCodeServiceTest extends AbstractUnitTestCase
 
         $googleMapsMapper = new GoogleMapsMapper();
 
-        /** @var MapperFactory|ObjectProphecy $mapperFactoryProphecy */
-        $mapperFactoryProphecy = $this->prophesize(MapperFactory::class);
-        $mapperFactoryProphecy
+        $this->mapperFactoryProphecy
             ->create()
             ->shouldBeCalled()
             ->willReturn($googleMapsMapper);
-        GeneralUtility::addInstance(MapperFactory::class, $mapperFactoryProphecy->reveal());
 
         self::assertCount(
             1,
@@ -268,13 +272,10 @@ class GeoCodeServiceTest extends AbstractUnitTestCase
 
         $googleMapsMapper = new GoogleMapsMapper();
 
-        /** @var MapperFactory|ObjectProphecy $mapperFactoryProphecy */
-        $mapperFactoryProphecy = $this->prophesize(MapperFactory::class);
-        $mapperFactoryProphecy
+        $this->mapperFactoryProphecy
             ->create()
             ->shouldBeCalled()
             ->willReturn($googleMapsMapper);
-        GeneralUtility::addInstance(MapperFactory::class, $mapperFactoryProphecy->reveal());
 
         self::assertEquals(
             $expectedPosition,

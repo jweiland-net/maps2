@@ -39,10 +39,19 @@ class GeoCodeService implements SingletonInterface
      */
     protected $requestFactory;
 
-    public function __construct(ClientFactory $clientFactory, RequestFactory $requestFactory)
-    {
+    /**
+     * @var MapperFactory
+     */
+    protected $mapperFactory;
+
+    public function __construct(
+        ClientFactory $clientFactory,
+        RequestFactory $requestFactory,
+        MapperFactory $mapperFactory
+    ) {
         $this->client = $clientFactory->create();
         $this->requestFactory = $requestFactory;
+        $this->mapperFactory = $mapperFactory;
     }
 
     /**
@@ -59,12 +68,11 @@ class GeoCodeService implements SingletonInterface
         }
 
         $geocodeRequest = $this->requestFactory->create('GeocodeRequest');
-        $geocodeRequest->addParameter('address', (string)$address);
+        $geocodeRequest->addParameter('address', $address);
 
         $response = $this->client->processRequest($geocodeRequest);
         if (!empty($response)) {
-            $mapperFactory = GeneralUtility::makeInstance(MapperFactory::class);
-            $positions = $mapperFactory->create()->map($response);
+            $positions = $this->mapperFactory->create()->map($response);
         }
 
         return $positions;
