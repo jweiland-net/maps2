@@ -11,6 +11,7 @@ namespace JWeiland\Maps2\Tests\Functional\Helper;
 
 use JWeiland\Maps2\Helper\MessageHelper;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 
@@ -19,6 +20,8 @@ use TYPO3\CMS\Core\Messaging\FlashMessageService;
  */
 class MessageHelperTest extends FunctionalTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var MessageHelper
      */
@@ -31,17 +34,17 @@ class MessageHelperTest extends FunctionalTestCase
         'typo3conf/ext/maps2'
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
-        parent::setUpBackendUserFromFixture(1);
+        $this->setUpBackendUserFromFixture(1);
 
         $this->subject = new MessageHelper(
             new FlashMessageService()
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset(
             $this->subject,
@@ -53,7 +56,7 @@ class MessageHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function addFlashMessageWithMessageCallsEnqueue()
+    public function addFlashMessageWithMessageCallsEnqueue(): void
     {
         $expectedFlashMessage = new FlashMessage(
             'Hello',
@@ -73,7 +76,7 @@ class MessageHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function addFlashMessageWithMessageAndSubjectCallsEnqueue()
+    public function addFlashMessageWithMessageAndSubjectCallsEnqueue(): void
     {
         $expectedFlashMessage = new FlashMessage(
             'Hello',
@@ -93,7 +96,7 @@ class MessageHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function addFlashMessageWithAllArgumentsCallsEnqueue()
+    public function addFlashMessageWithAllArgumentsCallsEnqueue(): void
     {
         $expectedFlashMessage = new FlashMessage(
             'Hello',
@@ -113,7 +116,7 @@ class MessageHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getAllFlashMessagesReturnsAllFlashMessages()
+    public function getAllFlashMessagesReturnsAllFlashMessages(): void
     {
         $this->subject->addFlashMessage('Hello', 'Hello', 0);
         $this->subject->addFlashMessage('all', 'all', 1);
@@ -133,7 +136,7 @@ class MessageHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getAllFlashMessagesReturnsAllFlashMessagesAndFlush()
+    public function getAllFlashMessagesReturnsAllFlashMessagesAndFlush(): void
     {
         $this->subject->addFlashMessage('Hello', 'Hello', 0);
         $this->subject->addFlashMessage('all', 'all', 1);
@@ -153,7 +156,7 @@ class MessageHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function hasMessagesChecksQueueIfThereAreAnyMessages()
+    public function hasMessagesChecksQueueIfThereAreAnyMessages(): void
     {
         $this->subject->addFlashMessage('Hello', 'Hello', 0);
         $this->subject->addFlashMessage('all', 'all', 1);
@@ -167,7 +170,7 @@ class MessageHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getFlashMessagesBySeverityAndFlushReturnsFlashMessages()
+    public function getFlashMessagesBySeverityAndFlushReturnsFlashMessages(): void
     {
         $this->subject->addFlashMessage('Hello', 'Hello', 1);
         $this->subject->addFlashMessage('all', 'all', 1);
@@ -197,7 +200,7 @@ class MessageHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function hasErrorMessagesReturnsTrue()
+    public function hasErrorMessagesReturnsTrue(): void
     {
         $this->subject->addFlashMessage('Hello', 'Hello', 1);
         $this->subject->addFlashMessage('all', 'all', 2);
@@ -211,7 +214,7 @@ class MessageHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function hasErrorMessagesReturnsFalse()
+    public function hasErrorMessagesReturnsFalse(): void
     {
         $this->subject->addFlashMessage('Hello', 'Hello', 1);
         $this->subject->addFlashMessage('all', 'all', 0);
@@ -225,7 +228,7 @@ class MessageHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getErrorMessagesReturnsErrorMessages()
+    public function getErrorMessagesReturnsErrorMessages(): void
     {
         $this->subject->addFlashMessage('Hello', 'Hello', 1);
         $this->subject->addFlashMessage('all', 'all', 2);
@@ -240,7 +243,7 @@ class MessageHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function hasWarningMessagesReturnsTrue()
+    public function hasWarningMessagesReturnsTrue(): void
     {
         $this->subject->addFlashMessage('Hello', 'Hello', 0);
         $this->subject->addFlashMessage('all', 'all', 1);
@@ -254,7 +257,7 @@ class MessageHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function hasWarningMessagesReturnsFalse()
+    public function hasWarningMessagesReturnsFalse(): void
     {
         $this->subject->addFlashMessage('Hello', 'Hello', 0);
         $this->subject->addFlashMessage('all', 'all', 2);
@@ -268,7 +271,7 @@ class MessageHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getWarningMessagesReturnsErrorMessages()
+    public function getWarningMessagesReturnsErrorMessages(): void
     {
         $this->subject->addFlashMessage('Hello', 'Hello', 0);
         $this->subject->addFlashMessage('all', 'all', 1);
@@ -283,7 +286,7 @@ class MessageHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function hasOkMessagesReturnsTrue()
+    public function hasOkMessagesReturnsTrue(): void
     {
         $this->subject->addFlashMessage('Hello', 'Hello', 1);
         $this->subject->addFlashMessage('all', 'all', 0);
@@ -297,7 +300,7 @@ class MessageHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function hasOkMessagesReturnsFalse()
+    public function hasOkMessagesReturnsFalse(): void
     {
         $this->subject->addFlashMessage('Hello', 'Hello', 2);
         $this->subject->addFlashMessage('all', 'all', 1);
@@ -311,7 +314,7 @@ class MessageHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getOkMessagesReturnsErrorMessages()
+    public function getOkMessagesReturnsErrorMessages(): void
     {
         $this->subject->addFlashMessage('Hello', 'Hello', 1);
         $this->subject->addFlashMessage('all', 'all', 0);
@@ -326,7 +329,7 @@ class MessageHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function hasInfoMessagesReturnsTrue()
+    public function hasInfoMessagesReturnsTrue(): void
     {
         $this->subject->addFlashMessage('Hello', 'Hello', 1);
         $this->subject->addFlashMessage('all', 'all', -1);
@@ -340,7 +343,7 @@ class MessageHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function hasInfoMessagesReturnsFalse()
+    public function hasInfoMessagesReturnsFalse(): void
     {
         $this->subject->addFlashMessage('Hello', 'Hello', 2);
         $this->subject->addFlashMessage('all', 'all', 1);
@@ -354,7 +357,7 @@ class MessageHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getInfoMessagesReturnsErrorMessages()
+    public function getInfoMessagesReturnsErrorMessages(): void
     {
         $this->subject->addFlashMessage('Hello', 'Hello', 1);
         $this->subject->addFlashMessage('all', 'all', -1);
@@ -369,7 +372,7 @@ class MessageHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function hasNoticeMessagesReturnsTrue()
+    public function hasNoticeMessagesReturnsTrue(): void
     {
         $this->subject->addFlashMessage('Hello', 'Hello', 1);
         $this->subject->addFlashMessage('all', 'all', -2);
@@ -383,7 +386,7 @@ class MessageHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function hasNoticeMessagesReturnsFalse()
+    public function hasNoticeMessagesReturnsFalse(): void
     {
         $this->subject->addFlashMessage('Hello', 'Hello', 2);
         $this->subject->addFlashMessage('all', 'all', 1);
@@ -397,7 +400,7 @@ class MessageHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getNoticeMessagesReturnsErrorMessages()
+    public function getNoticeMessagesReturnsErrorMessages(): void
     {
         $this->subject->addFlashMessage('Hello', 'Hello', 1);
         $this->subject->addFlashMessage('all', 'all', -2);

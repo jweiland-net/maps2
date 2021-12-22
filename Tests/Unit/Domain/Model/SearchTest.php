@@ -11,23 +11,26 @@ namespace JWeiland\Maps2\Tests\Unit\Domain\Model;
 
 use JWeiland\Maps2\Domain\Model\Search;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * Class SearchTest
  */
 class SearchTest extends UnitTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var Search
      */
     protected $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->subject = new Search();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->subject);
         parent::tearDown();
@@ -36,7 +39,7 @@ class SearchTest extends UnitTestCase
     /**
      * @test
      */
-    public function getAddressInitiallyReturnsEmptyString()
+    public function getAddressInitiallyReturnsEmptyString(): void
     {
         self::assertSame(
             '',
@@ -47,7 +50,7 @@ class SearchTest extends UnitTestCase
     /**
      * @test
      */
-    public function setAddressSetsAddress()
+    public function setAddressSetsAddress(): void
     {
         $this->subject->setAddress('foo bar');
 
@@ -60,7 +63,7 @@ class SearchTest extends UnitTestCase
     /**
      * @test
      */
-    public function setAddressWithIntegerResultsInString()
+    public function setAddressWithIntegerResultsInString(): void
     {
         $this->subject->setAddress(123);
         self::assertSame('123', $this->subject->getAddress());
@@ -69,7 +72,7 @@ class SearchTest extends UnitTestCase
     /**
      * @test
      */
-    public function setAddressWithBooleanResultsInString()
+    public function setAddressWithBooleanResultsInString(): void
     {
         $this->subject->setAddress(true);
         self::assertSame('1', $this->subject->getAddress());
@@ -78,7 +81,7 @@ class SearchTest extends UnitTestCase
     /**
      * @test
      */
-    public function getRadiusInitiallyReturnsZero()
+    public function getRadiusInitiallyReturnsZero(): void
     {
         self::assertSame(
             50,
@@ -89,7 +92,7 @@ class SearchTest extends UnitTestCase
     /**
      * @test
      */
-    public function setRadiusSetsRadius()
+    public function setRadiusSetsRadius(): void
     {
         $this->subject->setRadius(123456);
 
@@ -102,7 +105,7 @@ class SearchTest extends UnitTestCase
     /**
      * @test
      */
-    public function setRadiusWithStringResultsInInteger()
+    public function setRadiusWithStringResultsInInteger(): void
     {
         $this->subject->setRadius('123Test');
 
@@ -115,7 +118,7 @@ class SearchTest extends UnitTestCase
     /**
      * @test
      */
-    public function setRadiusWithBooleanResultsInInteger()
+    public function setRadiusWithBooleanResultsInInteger(): void
     {
         $this->subject->setRadius(true);
 

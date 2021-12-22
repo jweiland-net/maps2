@@ -14,6 +14,7 @@ use JWeiland\Maps2\Helper\AddressHelper;
 use JWeiland\Maps2\Helper\MessageHelper;
 use JWeiland\Maps2\Tests\Unit\AbstractUnitTestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Package\PackageManager;
@@ -25,6 +26,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class AddressHelperTest extends AbstractUnitTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var AddressHelper
      */
@@ -35,13 +38,13 @@ class AddressHelperTest extends AbstractUnitTestCase
      */
     protected $messageHelperProphecy;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->messageHelperProphecy = $this->prophesize(MessageHelper::class);
         $this->subject = new AddressHelper($this->messageHelperProphecy->reveal());
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset(
             $this->subject,
@@ -53,7 +56,7 @@ class AddressHelperTest extends AbstractUnitTestCase
     /**
      * @test
      */
-    public function getAddressWithMissingAddressColumnsKeyAddsFlashMessage()
+    public function getAddressWithMissingAddressColumnsKeyAddsFlashMessage(): void
     {
         $this->messageHelperProphecy
             ->addFlashMessage(
@@ -78,7 +81,7 @@ class AddressHelperTest extends AbstractUnitTestCase
     /**
      * @test
      */
-    public function getAddressWithEmptyAddressColumnsAddsFlashMessage()
+    public function getAddressWithEmptyAddressColumnsAddsFlashMessage(): void
     {
         $this->messageHelperProphecy
             ->addFlashMessage(
@@ -105,7 +108,7 @@ class AddressHelperTest extends AbstractUnitTestCase
     /**
      * @test
      */
-    public function getAddressWithoutCountryAndNoFallbackGeneratesTwoFlashMessages()
+    public function getAddressWithoutCountryAndNoFallbackGeneratesTwoFlashMessages(): void
     {
         $this->messageHelperProphecy
             ->addFlashMessage(
@@ -151,7 +154,7 @@ class AddressHelperTest extends AbstractUnitTestCase
     /**
      * @test
      */
-    public function getAddressWithoutCountryButWithMaps2FallbackGeneratesOneFlashMessages()
+    public function getAddressWithoutCountryButWithMaps2FallbackGeneratesOneFlashMessages(): void
     {
         $this->messageHelperProphecy
             ->addFlashMessage(
@@ -190,7 +193,7 @@ class AddressHelperTest extends AbstractUnitTestCase
     /**
      * @test
      */
-    public function getAddressWithoutCountryButWithMaps2RegistryFallbackGeneratesNoFlashMessage()
+    public function getAddressWithoutCountryButWithMaps2RegistryFallbackGeneratesNoFlashMessage(): void
     {
         /** @var ExtConf|ObjectProphecy $extConfProphecy */
         $extConfProphecy = $this->prophesize(ExtConf::class);
@@ -220,7 +223,7 @@ class AddressHelperTest extends AbstractUnitTestCase
     /**
      * @test
      */
-    public function getAddressWithCountryUidWillGetCountryNameFromStaticCountries()
+    public function getAddressWithCountryUidWillGetCountryNameFromStaticCountries(): void
     {
         /** @var PackageManager|ObjectProphecy $packageManagerProphecy */
         $packageManagerProphecy = $this->prophesize(PackageManager::class);
@@ -266,7 +269,7 @@ class AddressHelperTest extends AbstractUnitTestCase
     /**
      * @test
      */
-    public function getAddressWithCountryUidWillNotFindCountryNameFromStaticCountries()
+    public function getAddressWithCountryUidWillNotFindCountryNameFromStaticCountries(): void
     {
         /** @var PackageManager|ObjectProphecy $packageManagerProphecy */
         $packageManagerProphecy = $this->prophesize(PackageManager::class);
@@ -318,7 +321,7 @@ class AddressHelperTest extends AbstractUnitTestCase
     /**
      * @test
      */
-    public function getAddressWillUnifyMaps2RegistryOptions()
+    public function getAddressWillUnifyMaps2RegistryOptions(): void
     {
         $record = [
             'uid' => 100,
@@ -342,7 +345,7 @@ class AddressHelperTest extends AbstractUnitTestCase
     /**
      * @test
      */
-    public function getAddressWillRemoveCountryFromAddressColumnsIfAvailable()
+    public function getAddressWillRemoveCountryFromAddressColumnsIfAvailable(): void
     {
         $record = [
             'uid' => 100,
@@ -366,7 +369,7 @@ class AddressHelperTest extends AbstractUnitTestCase
     /**
      * @test
      */
-    public function getAddressWillConvertCommaSeparatedAddressColumnsIntoArray()
+    public function getAddressWillConvertCommaSeparatedAddressColumnsIntoArray(): void
     {
         $record = [
             'uid' => 100,
@@ -388,7 +391,7 @@ class AddressHelperTest extends AbstractUnitTestCase
         );
     }
 
-    public function addressDataProvider()
+    public function addressDataProvider(): array
     {
         return [
             'address with commas and spaces' => ['Mainstreet 15, 51324 Cologne, Germany'],
@@ -404,7 +407,7 @@ class AddressHelperTest extends AbstractUnitTestCase
      * @dataProvider addressDataProvider
      * @param string $address
      */
-    public function isSameAddressWithCommaAndSpacesWillReturnTrue(string $address)
+    public function isSameAddressWithCommaAndSpacesWillReturnTrue(string $address): void
     {
         $foreignLocationRecord = [
             'uid' => 123,

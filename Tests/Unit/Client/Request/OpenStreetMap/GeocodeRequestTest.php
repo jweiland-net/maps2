@@ -12,12 +12,15 @@ namespace JWeiland\Maps2\Tests\Unit\Client\Request\OpenStreetMap;
 use JWeiland\Maps2\Client\Request\OpenStreetMap\GeocodeRequest;
 use JWeiland\Maps2\Configuration\ExtConf;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * Test Open Street Map Geocode Request class
  */
 class GeocodeRequestTest extends UnitTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var ExtConf
      */
@@ -28,13 +31,13 @@ class GeocodeRequestTest extends UnitTestCase
      */
     protected $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->extConf = new ExtConf([]);
         $this->subject = new GeocodeRequest($this->extConf);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset(
             $this->subject,
@@ -46,7 +49,7 @@ class GeocodeRequestTest extends UnitTestCase
     /**
      * @test
      */
-    public function setUriSetsUri()
+    public function setUriSetsUri(): void
     {
         $uri = 'https://www.jweiland.net';
         $this->subject->setUri($uri);
@@ -59,7 +62,7 @@ class GeocodeRequestTest extends UnitTestCase
     /**
      * @test
      */
-    public function setParametersSetsParameters()
+    public function setParametersSetsParameters(): void
     {
         $parameters = [
             'uri' => 'https://www.jweiland.net',
@@ -75,7 +78,7 @@ class GeocodeRequestTest extends UnitTestCase
     /**
      * @test
      */
-    public function addParameterSetsParameter()
+    public function addParameterSetsParameter(): void
     {
         $parameters = [
             'uri' => 'https://www.jweiland.net',
@@ -96,7 +99,7 @@ class GeocodeRequestTest extends UnitTestCase
     /**
      * @test
      */
-    public function hasParameterReturnsTrue()
+    public function hasParameterReturnsTrue(): void
     {
         $parameters = [
             'uri' => 'https://www.jweiland.net',
@@ -111,7 +114,7 @@ class GeocodeRequestTest extends UnitTestCase
     /**
      * @test
      */
-    public function hasParameterReturnsFalse()
+    public function hasParameterReturnsFalse(): void
     {
         $parameters = [
             'uri' => 'https://www.jweiland.net',
@@ -126,7 +129,7 @@ class GeocodeRequestTest extends UnitTestCase
     /**
      * @test
      */
-    public function isValidRequestWithEmptyUriReturnsFalse()
+    public function isValidRequestWithEmptyUriReturnsFalse(): void
     {
         $this->subject->setUri('  ');
         self::assertFalse(
@@ -137,7 +140,7 @@ class GeocodeRequestTest extends UnitTestCase
     /**
      * @test
      */
-    public function isValidRequestWithInvalidUriReturnsFalse()
+    public function isValidRequestWithInvalidUriReturnsFalse(): void
     {
         $this->subject->setUri('nice try');
         self::assertFalse(
@@ -148,7 +151,7 @@ class GeocodeRequestTest extends UnitTestCase
     /**
      * @test
      */
-    public function isValidRequestWithValidUriReturnsTrue()
+    public function isValidRequestWithValidUriReturnsTrue(): void
     {
         $this->subject->setUri('https://www.jweiland.net/what/ever/%s.html');
         self::assertTrue(
@@ -160,7 +163,7 @@ class GeocodeRequestTest extends UnitTestCase
      * @test
      * @throws \Exception
      */
-    public function getUriWillAddAddressAndApiKeyToUri()
+    public function getUriWillAddAddressAndApiKeyToUri(): void
     {
         $this->subject->setUri('https://www.jweiland.net/what/ever/%s.html');
         $this->subject->addParameter('address', 'My Address');
@@ -174,7 +177,7 @@ class GeocodeRequestTest extends UnitTestCase
      * @test
      * @throws \Exception
      */
-    public function getUriAddsAddressAndApiKeyToUriButUriIsInvalid()
+    public function getUriAddsAddressAndApiKeyToUriButUriIsInvalid(): void
     {
         $this->subject->setUri('nice try');
         $this->subject->addParameter('address', 'My Address');

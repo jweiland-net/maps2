@@ -15,6 +15,7 @@ use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
 use JWeiland\Maps2\Service\MapService;
 use Nimut\TestingFramework\MockObject\AccessibleMockObjectInterface;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageQueue;
@@ -30,6 +31,8 @@ use TYPO3\CMS\Fluid\View\TemplateView;
  */
 class PoiCollectionControllerTest extends UnitTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var PoiCollectionController|\PHPUnit_Framework_MockObject_MockObject|AccessibleMockObjectInterface
      */
@@ -65,7 +68,7 @@ class PoiCollectionControllerTest extends UnitTestCase
      */
     protected $viewProphecy;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerProphecy = $this->prophesize(ObjectManager::class);
         $this->poiCollectionRepositoryProphecy = $this->prophesize(PoiCollectionRepository::class);
@@ -89,7 +92,7 @@ class PoiCollectionControllerTest extends UnitTestCase
         $this->subject->_set('controllerContext', $this->controllerContextProphecy->reveal());
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->subject);
         parent::tearDown();
@@ -98,7 +101,7 @@ class PoiCollectionControllerTest extends UnitTestCase
     /**
      * @test
      */
-    public function showActionShowsPoiCollectionFromUri()
+    public function showActionShowsPoiCollectionFromUri(): void
     {
         $poiCollection = new PoiCollection();
         $this->viewProphecy
@@ -111,7 +114,7 @@ class PoiCollectionControllerTest extends UnitTestCase
     /**
      * @test
      */
-    public function showActionShowsPoiCollectionByItsIdentifier()
+    public function showActionShowsPoiCollectionByItsIdentifier(): void
     {
         $this->subject->_set(
             'settings',
@@ -135,7 +138,7 @@ class PoiCollectionControllerTest extends UnitTestCase
     /**
      * @test
      */
-    public function showActionWithCategoriesButWithoutPoiCollectionsAddsFlashMessage()
+    public function showActionWithCategoriesButWithoutPoiCollectionsAddsFlashMessage(): void
     {
         $this->subject->_set(
             'settings',
@@ -180,7 +183,7 @@ class PoiCollectionControllerTest extends UnitTestCase
     /**
      * @test
      */
-    public function showActionWithCategoriesWithPoiCollections()
+    public function showActionWithCategoriesWithPoiCollections(): void
     {
         $this->subject->_set(
             'settings',
@@ -210,7 +213,7 @@ class PoiCollectionControllerTest extends UnitTestCase
     /**
      * @test
      */
-    public function showActionWithStorageFoldersButWithoutPoiCollectionsAddsFlashMessage()
+    public function showActionWithStorageFoldersButWithoutPoiCollectionsAddsFlashMessage(): void
     {
         /** @var FlashMessage|ObjectProphecy $flashMessageProphecy */
         $flashMessageProphecy = $this->prophesize(FlashMessage::class);
@@ -248,7 +251,7 @@ class PoiCollectionControllerTest extends UnitTestCase
     /**
      * @test
      */
-    public function showActionWithStorageFoldersWithPoiCollections()
+    public function showActionWithStorageFoldersWithPoiCollections(): void
     {
         /** @var QueryResultInterface|ObjectProphecy $queryResultProphecy */
         $queryResultProphecy = $this->prophesize(QueryResultInterface::class);

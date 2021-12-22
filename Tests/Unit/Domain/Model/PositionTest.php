@@ -11,23 +11,26 @@ namespace JWeiland\Maps2\Tests\Unit\Domain\Model;
 
 use JWeiland\Maps2\Domain\Model\Position;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * Class PositionTest
  */
 class PositionTest extends UnitTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var Position
      */
     protected $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->subject = new Position();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->subject);
         parent::tearDown();
@@ -36,7 +39,7 @@ class PositionTest extends UnitTestCase
     /**
      * @test
      */
-    public function getLatitudeInitiallyReturnsZero()
+    public function getLatitudeInitiallyReturnsZero(): void
     {
         self::assertSame(
             0.0,
@@ -47,7 +50,7 @@ class PositionTest extends UnitTestCase
     /**
      * @test
      */
-    public function setLatitudeSetsLatitude()
+    public function setLatitudeSetsLatitude(): void
     {
         $this->subject->setLatitude(1234.56);
 
@@ -60,7 +63,7 @@ class PositionTest extends UnitTestCase
     /**
      * @test
      */
-    public function getLongitudeInitiallyReturnsZero()
+    public function getLongitudeInitiallyReturnsZero(): void
     {
         self::assertSame(
             0.0,
@@ -71,7 +74,7 @@ class PositionTest extends UnitTestCase
     /**
      * @test
      */
-    public function setLongitudeSetsLongitude()
+    public function setLongitudeSetsLongitude(): void
     {
         $this->subject->setLongitude(1234.56);
 
@@ -84,7 +87,7 @@ class PositionTest extends UnitTestCase
     /**
      * @test
      */
-    public function getFormattedAddressInitiallyReturnsEmptyString()
+    public function getFormattedAddressInitiallyReturnsEmptyString(): void
     {
         self::assertSame(
             '',
@@ -95,7 +98,7 @@ class PositionTest extends UnitTestCase
     /**
      * @test
      */
-    public function setFormattedAddressSetsFormattedAddress()
+    public function setFormattedAddressSetsFormattedAddress(): void
     {
         $this->subject->setFormattedAddress('foo bar');
 
@@ -108,7 +111,7 @@ class PositionTest extends UnitTestCase
     /**
      * @test
      */
-    public function setFormattedAddressWithIntegerResultsInString()
+    public function setFormattedAddressWithIntegerResultsInString(): void
     {
         $this->subject->setFormattedAddress(123);
         self::assertSame('123', $this->subject->getFormattedAddress());
@@ -117,7 +120,7 @@ class PositionTest extends UnitTestCase
     /**
      * @test
      */
-    public function setFormattedAddressWithBooleanResultsInString()
+    public function setFormattedAddressWithBooleanResultsInString(): void
     {
         $this->subject->setFormattedAddress(true);
         self::assertSame('1', $this->subject->getFormattedAddress());

@@ -11,23 +11,26 @@ namespace JWeiland\Maps2\Tests\Unit\Domain\Model;
 
 use JWeiland\Maps2\Domain\Model\Poi;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * Class PoiTest
  */
 class PoiTest extends UnitTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var Poi
      */
     protected $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->subject = new Poi();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->subject);
         parent::tearDown();
@@ -36,7 +39,7 @@ class PoiTest extends UnitTestCase
     /**
      * @test
      */
-    public function getCruserIdInitiallyReturnsZero()
+    public function getCruserIdInitiallyReturnsZero(): void
     {
         self::assertSame(
             0,
@@ -47,7 +50,7 @@ class PoiTest extends UnitTestCase
     /**
      * @test
      */
-    public function setCruserIdSetsCruserId()
+    public function setCruserIdSetsCruserId(): void
     {
         $this->subject->setCruserId(123456);
 
@@ -60,7 +63,7 @@ class PoiTest extends UnitTestCase
     /**
      * @test
      */
-    public function setCruserIdWithStringResultsInInteger()
+    public function setCruserIdWithStringResultsInInteger(): void
     {
         $this->subject->setCruserId('123Test');
 
@@ -73,7 +76,7 @@ class PoiTest extends UnitTestCase
     /**
      * @test
      */
-    public function setCruserIdWithBooleanResultsInInteger()
+    public function setCruserIdWithBooleanResultsInInteger(): void
     {
         $this->subject->setCruserId(true);
 
@@ -86,7 +89,7 @@ class PoiTest extends UnitTestCase
     /**
      * @test
      */
-    public function getPosIndexInitiallyReturnsZero()
+    public function getPosIndexInitiallyReturnsZero(): void
     {
         self::assertSame(
             0,
@@ -97,7 +100,7 @@ class PoiTest extends UnitTestCase
     /**
      * @test
      */
-    public function setPosIndexSetsPosIndex()
+    public function setPosIndexSetsPosIndex(): void
     {
         $this->subject->setPosIndex(123456);
 
@@ -110,7 +113,7 @@ class PoiTest extends UnitTestCase
     /**
      * @test
      */
-    public function setPosIndexWithStringResultsInInteger()
+    public function setPosIndexWithStringResultsInInteger(): void
     {
         $this->subject->setPosIndex('123Test');
 
@@ -123,7 +126,7 @@ class PoiTest extends UnitTestCase
     /**
      * @test
      */
-    public function setPosIndexWithBooleanResultsInInteger()
+    public function setPosIndexWithBooleanResultsInInteger(): void
     {
         $this->subject->setPosIndex(true);
 
@@ -136,7 +139,7 @@ class PoiTest extends UnitTestCase
     /**
      * @test
      */
-    public function getLatitudeInitiallyReturnsZero()
+    public function getLatitudeInitiallyReturnsZero(): void
     {
         self::assertSame(
             0.0,
@@ -147,7 +150,7 @@ class PoiTest extends UnitTestCase
     /**
      * @test
      */
-    public function setLatitudeSetsLatitude()
+    public function setLatitudeSetsLatitude(): void
     {
         $this->subject->setLatitude(1234.56);
 
@@ -160,7 +163,7 @@ class PoiTest extends UnitTestCase
     /**
      * @test
      */
-    public function getLongitudeInitiallyReturnsZero()
+    public function getLongitudeInitiallyReturnsZero(): void
     {
         self::assertSame(
             0.0,
@@ -171,7 +174,7 @@ class PoiTest extends UnitTestCase
     /**
      * @test
      */
-    public function setLongitudeSetsLongitude()
+    public function setLongitudeSetsLongitude(): void
     {
         $this->subject->setLongitude(1234.56);
 

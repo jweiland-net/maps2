@@ -14,6 +14,7 @@ use JWeiland\Maps2\Domain\Model\Category;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\ViewHelpers\ConvertToJsonViewHelper;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
 
@@ -22,6 +23,8 @@ use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
  */
 class ConvertToJsonViewHelperTest extends FunctionalTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var RenderingContext|\Prophecy\Prophecy\ObjectProphecy
      */
@@ -39,7 +42,7 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
         'typo3conf/ext/maps2'
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -49,7 +52,7 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
         $this->subject->setRenderingContext($this->renderingContext->reveal());
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset(
             $this->subject
@@ -61,7 +64,7 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function renderWithStringWillJustCallJsonEncode()
+    public function renderWithStringWillJustCallJsonEncode(): void
     {
         $this->subject->setRenderChildrenClosure(
             function () {
@@ -78,7 +81,7 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function renderWithSimpleArrayWillJustCallJsonEncode()
+    public function renderWithSimpleArrayWillJustCallJsonEncode(): void
     {
         $this->subject->setRenderChildrenClosure(
             function () {
@@ -95,7 +98,7 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function renderWithPoiCollectionWillSetItToArrayAndConvertItToJson()
+    public function renderWithPoiCollectionWillSetItToArrayAndConvertItToJson(): void
     {
         $this->subject->setRenderChildrenClosure(
             function () {
@@ -108,19 +111,19 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
         $json = $this->subject->render();
 
         // a property of PoiCollection should be found in string
-        self::assertContains(
+        self::assertStringContainsString(
             'address',
             $json
         );
 
         // we have set PoiCollection into an array, so JSON should start with [{
-        self::stringStartsWith('[{');
+        self::assertStringStartsWith('[{', $json);
     }
 
     /**
      * @test
      */
-    public function renderWithPoiCollectionsWillConvertItToJson()
+    public function renderWithPoiCollectionsWillConvertItToJson(): void
     {
         $this->subject->setRenderChildrenClosure(
             function () {
@@ -131,19 +134,19 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
         $json = $this->subject->render();
 
         // a property of PoiCollection should be found in string
-        self::assertContains(
+        self::assertStringContainsString(
             'address',
             $json
         );
 
         // we have set PoiCollection into an array, so JSON should start with [{
-        self::stringStartsWith('[{');
+        self::assertStringStartsWith('[{', $json);
     }
 
     /**
      * @test
      */
-    public function renderWithPoiCollectionsWillRemoveMaps2MarkerIconsFromCategories()
+    public function renderWithPoiCollectionsWillRemoveMaps2MarkerIconsFromCategories(): void
     {
         $poiCollection = new PoiCollection();
         $poiCollection->addCategory(new Category());
@@ -156,11 +159,11 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
 
         $json = $this->subject->render();
 
-        self::assertNotContains(
+        self::assertStringNotContainsString(
             'maps2MarkerIcons',
             $json
         );
-        self::assertNotContains(
+        self::assertStringNotContainsString(
             'parent',
             $json
         );
@@ -169,7 +172,7 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function renderWithPoiCollectionsWillRemoveMarkerIconsFromPoiCollection()
+    public function renderWithPoiCollectionsWillRemoveMarkerIconsFromPoiCollection(): void
     {
         $poiCollection = new PoiCollection();
 
@@ -181,7 +184,7 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
 
         $json = $this->subject->render();
 
-        self::assertNotContains(
+        self::assertStringNotContainsString(
             'markerIcons',
             $json
         );
