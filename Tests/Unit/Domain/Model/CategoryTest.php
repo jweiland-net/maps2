@@ -198,40 +198,6 @@ class CategoryTest extends UnitTestCase
     /**
      * @test
      */
-    public function setMaps2MarkerIconWidthWithStringResultsInInteger(): void
-    {
-        $image = $this->prophesize(FileReference::class);
-        $images = new ObjectStorage();
-        $images->attach($image->reveal());
-
-        $this->subject->setMaps2MarkerIcons($images);
-        $this->subject->setMaps2MarkerIconWidth('123Test');
-        self::assertSame(
-            123,
-            $this->subject->getMaps2MarkerIconWidth()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function setMaps2MarkerIconWidthWithBooleanResultsInInteger(): void
-    {
-        $image = $this->prophesize(FileReference::class);
-        $images = new ObjectStorage();
-        $images->attach($image->reveal());
-
-        $this->subject->setMaps2MarkerIcons($images);
-        $this->subject->setMaps2MarkerIconWidth(true);
-        self::assertSame(
-            1,
-            $this->subject->getMaps2MarkerIconWidth()
-        );
-    }
-
-    /**
-     * @test
-     */
     public function getMaps2MarkerIconHeightInitiallyReturnsZero(): void
     {
         self::assertSame(
@@ -283,40 +249,6 @@ class CategoryTest extends UnitTestCase
         $this->subject->setMaps2MarkerIconHeight(123456);
         self::assertSame(
             123456,
-            $this->subject->getMaps2MarkerIconHeight()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function setMaps2MarkerIconHeightWithStringResultsInInteger(): void
-    {
-        $image = $this->prophesize(FileReference::class);
-        $images = new ObjectStorage();
-        $images->attach($image->reveal());
-
-        $this->subject->setMaps2MarkerIcons($images);
-        $this->subject->setMaps2MarkerIconHeight('123Test');
-        self::assertSame(
-            123,
-            $this->subject->getMaps2MarkerIconHeight()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function setMaps2MarkerIconHeightWithBooleanResultsInInteger(): void
-    {
-        $image = $this->prophesize(FileReference::class);
-        $images = new ObjectStorage();
-        $images->attach($image->reveal());
-
-        $this->subject->setMaps2MarkerIcons($images);
-        $this->subject->setMaps2MarkerIconHeight(true);
-        self::assertSame(
-            1,
             $this->subject->getMaps2MarkerIconHeight()
         );
     }
@@ -382,40 +314,6 @@ class CategoryTest extends UnitTestCase
     /**
      * @test
      */
-    public function setMaps2MarkerIconAnchorPosXWithStringResultsInInteger(): void
-    {
-        $image = $this->prophesize(FileReference::class);
-        $images = new ObjectStorage();
-        $images->attach($image->reveal());
-
-        $this->subject->setMaps2MarkerIcons($images);
-        $this->subject->setMaps2MarkerIconAnchorPosX('123Test');
-        self::assertSame(
-            123,
-            $this->subject->getMaps2MarkerIconAnchorPosX()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function setMaps2MarkerIconAnchorPosXWithBooleanResultsInInteger(): void
-    {
-        $image = $this->prophesize(FileReference::class);
-        $images = new ObjectStorage();
-        $images->attach($image->reveal());
-
-        $this->subject->setMaps2MarkerIcons($images);
-        $this->subject->setMaps2MarkerIconAnchorPosX(true);
-        self::assertSame(
-            1,
-            $this->subject->getMaps2MarkerIconAnchorPosX()
-        );
-    }
-
-    /**
-     * @test
-     */
     public function getMaps2MarkerIconAnchorPosYInitiallyReturnsZero(): void
     {
         self::assertSame(
@@ -474,40 +372,6 @@ class CategoryTest extends UnitTestCase
     /**
      * @test
      */
-    public function setMaps2MarkerIconAnchorPosYWithStringResultsInInteger(): void
-    {
-        $image = $this->prophesize(FileReference::class);
-        $images = new ObjectStorage();
-        $images->attach($image->reveal());
-
-        $this->subject->setMaps2MarkerIcons($images);
-        $this->subject->setMaps2MarkerIconAnchorPosY('123Test');
-        self::assertSame(
-            123,
-            $this->subject->getMaps2MarkerIconAnchorPosY()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function setMaps2MarkerIconAnchorPosYWithBooleanResultsInInteger(): void
-    {
-        $image = $this->prophesize(FileReference::class);
-        $images = new ObjectStorage();
-        $images->attach($image->reveal());
-
-        $this->subject->setMaps2MarkerIcons($images);
-        $this->subject->setMaps2MarkerIconAnchorPosY(true);
-        self::assertSame(
-            1,
-            $this->subject->getMaps2MarkerIconAnchorPosY()
-        );
-    }
-
-    /**
-     * @test
-     */
     public function getSortingInitiallyReturnsZero(): void
     {
         self::assertSame(
@@ -525,32 +389,6 @@ class CategoryTest extends UnitTestCase
 
         self::assertSame(
             123456,
-            $this->subject->getSorting()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function setSortingWithStringResultsInInteger(): void
-    {
-        $this->subject->setSorting('123Test');
-
-        self::assertSame(
-            123,
-            $this->subject->getSorting()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function setSortingWithBooleanResultsInInteger(): void
-    {
-        $this->subject->setSorting(true);
-
-        self::assertSame(
-            1,
             $this->subject->getSorting()
         );
     }

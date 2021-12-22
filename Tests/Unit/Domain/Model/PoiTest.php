@@ -65,32 +65,6 @@ class PoiTest extends UnitTestCase
     /**
      * @test
      */
-    public function setCruserIdWithStringResultsInInteger(): void
-    {
-        $this->subject->setCruserId('123Test');
-
-        self::assertSame(
-            123,
-            $this->subject->getCruserId()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function setCruserIdWithBooleanResultsInInteger(): void
-    {
-        $this->subject->setCruserId(true);
-
-        self::assertSame(
-            1,
-            $this->subject->getCruserId()
-        );
-    }
-
-    /**
-     * @test
-     */
     public function getPosIndexInitiallyReturnsZero(): void
     {
         self::assertSame(
@@ -108,32 +82,6 @@ class PoiTest extends UnitTestCase
 
         self::assertSame(
             123456,
-            $this->subject->getPosIndex()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function setPosIndexWithStringResultsInInteger(): void
-    {
-        $this->subject->setPosIndex('123Test');
-
-        self::assertSame(
-            123,
-            $this->subject->getPosIndex()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function setPosIndexWithBooleanResultsInInteger(): void
-    {
-        $this->subject->setPosIndex(true);
-
-        self::assertSame(
-            1,
             $this->subject->getPosIndex()
         );
     }

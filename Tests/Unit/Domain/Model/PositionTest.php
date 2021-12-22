@@ -109,22 +109,4 @@ class PositionTest extends UnitTestCase
             $this->subject->getFormattedAddress()
         );
     }
-
-    /**
-     * @test
-     */
-    public function setFormattedAddressWithIntegerResultsInString(): void
-    {
-        $this->subject->setFormattedAddress(123);
-        self::assertSame('123', $this->subject->getFormattedAddress());
-    }
-
-    /**
-     * @test
-     */
-    public function setFormattedAddressWithBooleanResultsInString(): void
-    {
-        $this->subject->setFormattedAddress(true);
-        self::assertSame('1', $this->subject->getFormattedAddress());
-    }
 }
