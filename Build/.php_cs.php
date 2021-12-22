@@ -43,7 +43,7 @@ return $config
             'header' => $headerComment
         ],
         'array_syntax' => ['syntax' => 'short'],
-        'blank_line_after_opening_tag' => true,
+        'blank_line_after_opening_tag' => false,
         'braces' => ['allow_single_line_closure' => true],
         'cast_spaces' => ['space' => 'none'],
         'compact_nullable_typehint' => true,
