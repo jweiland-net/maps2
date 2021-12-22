@@ -16,6 +16,7 @@ use JWeiland\Maps2\Form\Element\GoogleMapsElement;
 use JWeiland\Maps2\Helper\MessageHelper;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\CMS\Backend\Form\NodeFactory;
 use TYPO3\CMS\Core\Imaging\IconFactory;
@@ -29,6 +30,8 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
  */
 class GoogleMapsElementTest extends FunctionalTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var GoogleMapsElement
      */
@@ -76,7 +79,7 @@ class GoogleMapsElementTest extends FunctionalTestCase
         'typo3conf/ext/maps2'
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -126,7 +129,7 @@ class GoogleMapsElementTest extends FunctionalTestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset(
             $this->subject,
@@ -143,7 +146,7 @@ class GoogleMapsElementTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function renderWillCleanUpCurrentRecord()
+    public function renderWillCleanUpCurrentRecord(): void
     {
         $this->poiCollectionRepository->findByUid(123)->shouldBeCalled()->willReturn(new PoiCollection());
 
@@ -174,7 +177,7 @@ class GoogleMapsElementTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function renderWillAddRadiusToConfigArray()
+    public function renderWillAddRadiusToConfigArray(): void
     {
         $poiCollection = new PoiCollection();
         $poiCollection->setCollectionType('Radius');
@@ -210,7 +213,7 @@ class GoogleMapsElementTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function renderWillAddLatAndLngToConfigArray()
+    public function renderWillAddLatAndLngToConfigArray(): void
     {
         $poiCollection = new PoiCollection();
         $poiCollection->setCollectionType('Point');
@@ -246,7 +249,7 @@ class GoogleMapsElementTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function renderWillAddRequireJsModule()
+    public function renderWillAddRequireJsModule(): void
     {
         $this->poiCollectionRepository->findByUid(123)->shouldBeCalled()->willReturn(new PoiCollection());
 

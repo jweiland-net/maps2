@@ -12,6 +12,7 @@ namespace JWeiland\Maps2\Tests\Unit;
 use Doctrine\DBAL\Driver\Statement;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Expression\ExpressionBuilder;
@@ -23,6 +24,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 abstract class AbstractUnitTestCase extends UnitTestCase
 {
+    use ProphecyTrait;
+
     /**
      * Helper method for UnitTests
      * Let Database query return given $returnValue
@@ -31,8 +34,11 @@ abstract class AbstractUnitTestCase extends UnitTestCase
      * @param mixed $returnValue
      * @param array $expressions
      */
-    protected function buildAssertionForDatabaseWithReturnValue($tableName, $returnValue, array $expressions = [['expr' => 'eq', ['expr' => 'in']]])
-    {
+    protected function buildAssertionForDatabaseWithReturnValue(
+        $tableName,
+        $returnValue,
+        array $expressions = [['expr' => 'eq', ['expr' => 'in']]]
+    ): void {
         /** @var Statement|ObjectProphecy $statement */
         $statement = $this->prophesize(Statement::class);
         /** @var ExpressionBuilder|ObjectProphecy $expressionBuilder */

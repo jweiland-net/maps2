@@ -20,6 +20,7 @@ use JWeiland\Maps2\Tca\Maps2Registry;
 use JWeiland\Maps2\Tests\Functional\Fixtures\IsRecordAllowedToCreatePoiCollectionSignal;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
@@ -33,6 +34,8 @@ use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
  */
 class CreateMaps2RecordHookTest extends FunctionalTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var array
      */
@@ -45,7 +48,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
         'typo3conf/ext/maps2'
     ];
 
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->setUpBackendUserFromFixture(1);
@@ -73,15 +76,10 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
         ];
     }
 
-    public function tearDown()
-    {
-        parent::tearDown();
-    }
-
     /**
      * @test
      */
-    public function processDatamapClearsInfoWindowContentCacheIfTableIsPoiCollection()
+    public function processDatamapClearsInfoWindowContentCacheIfTableIsPoiCollection(): void
     {
         /** @var FrontendInterface|ObjectProphecy $cacheProphecy */
         $cacheProphecy = $this->prophesize(VariableFrontend::class);
@@ -127,7 +125,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function processDatamapWillGetForeignLocationRecord()
+    public function processDatamapWillGetForeignLocationRecord(): void
     {
         /** @var Dispatcher|ObjectProphecy $dispatcherProphecy */
         $dispatcherProphecy = $this->prophesize(Dispatcher::class);
@@ -185,7 +183,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function processDatamapInvalidForeignRecordBecausePidIsNotEqual()
+    public function processDatamapInvalidForeignRecordBecausePidIsNotEqual(): void
     {
         $maps2RegistryConfiguration = $this->maps2RegistryConfiguration;
         $maps2RegistryConfiguration['fe_users']['lastlogin']['columnMatch']['pid'] = 432;
@@ -239,7 +237,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
      *
      * @return array
      */
-    public function dataProcessorForExpressions()
+    public function dataProcessorForExpressions(): array
     {
         return [
             'Record invalid if pid is 432' => [['pid' => ['expr' => 'eq', 'value' => '432']], false],
@@ -264,8 +262,10 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
      * @param bool $isValid
      * @dataProvider dataProcessorForExpressions
      */
-    public function processDatamapInvalidForeignRecordBecauseExpressionsAreNotEqual(array $columnMatch, bool $isValid)
-    {
+    public function processDatamapInvalidForeignRecordBecauseExpressionsAreNotEqual(
+        array $columnMatch,
+        bool $isValid
+    ): void {
         $maps2RegistryConfiguration = $this->maps2RegistryConfiguration;
         $maps2RegistryConfiguration['fe_users']['lastlogin']['columnMatch'] = $columnMatch;
 
@@ -316,7 +316,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function processDatamapCreatesNewPoiCollection()
+    public function processDatamapCreatesNewPoiCollection(): void
     {
         $dataHandler = new DataHandler();
         $dataHandler->datamap = [
@@ -389,7 +389,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function processDatamapDoesNotCreatesPoiCollectionBecauseOfHook()
+    public function processDatamapDoesNotCreatesPoiCollectionBecauseOfHook(): void
     {
         $dataHandler = new DataHandler();
         $dataHandler->datamap = [

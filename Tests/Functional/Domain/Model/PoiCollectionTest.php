@@ -14,6 +14,7 @@ use JWeiland\Maps2\Domain\Model\Category;
 use JWeiland\Maps2\Domain\Model\Poi;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
@@ -23,6 +24,8 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  */
 class PoiCollectionTest extends FunctionalTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var PoiCollection
      */
@@ -40,7 +43,7 @@ class PoiCollectionTest extends FunctionalTestCase
         'typo3conf/ext/maps2'
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -49,7 +52,7 @@ class PoiCollectionTest extends FunctionalTestCase
         $this->subject = new PoiCollection();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->subject);
         GeneralUtility::resetSingletonInstances([]);
@@ -59,7 +62,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getCollectionTypeInitiallyReturnsEmptyString()
+    public function getCollectionTypeInitiallyReturnsEmptyString(): void
     {
         self::assertSame(
             '',
@@ -70,7 +73,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setCollectionTypeSetsCollectionType()
+    public function setCollectionTypeSetsCollectionType(): void
     {
         $this->subject->setCollectionType('foo bar');
 
@@ -83,7 +86,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setCollectionTypeWithIntegerResultsInString()
+    public function setCollectionTypeWithIntegerResultsInString(): void
     {
         $this->subject->setCollectionType(123);
         self::assertSame('123', $this->subject->getCollectionType());
@@ -92,7 +95,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setCollectionTypeWithBooleanResultsInString()
+    public function setCollectionTypeWithBooleanResultsInString(): void
     {
         $this->subject->setCollectionType(true);
         self::assertSame('1', $this->subject->getCollectionType());
@@ -101,7 +104,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getTitleInitiallyReturnsEmptyString()
+    public function getTitleInitiallyReturnsEmptyString(): void
     {
         self::assertSame(
             '',
@@ -112,7 +115,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setTitleSetsTitle()
+    public function setTitleSetsTitle(): void
     {
         $this->subject->setTitle('foo bar');
 
@@ -125,7 +128,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setTitleWithIntegerResultsInString()
+    public function setTitleWithIntegerResultsInString(): void
     {
         $this->subject->setTitle(123);
         self::assertSame('123', $this->subject->getTitle());
@@ -134,7 +137,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setTitleWithBooleanResultsInString()
+    public function setTitleWithBooleanResultsInString(): void
     {
         $this->subject->setTitle(true);
         self::assertSame('1', $this->subject->getTitle());
@@ -143,7 +146,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getAddressInitiallyReturnsEmptyString()
+    public function getAddressInitiallyReturnsEmptyString(): void
     {
         self::assertSame(
             '',
@@ -154,7 +157,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setAddressSetsAddress()
+    public function setAddressSetsAddress(): void
     {
         $this->subject->setAddress('foo bar');
 
@@ -167,7 +170,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setAddressWithIntegerResultsInString()
+    public function setAddressWithIntegerResultsInString(): void
     {
         $this->subject->setAddress(123);
         self::assertSame('123', $this->subject->getAddress());
@@ -176,7 +179,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setAddressWithBooleanResultsInString()
+    public function setAddressWithBooleanResultsInString(): void
     {
         $this->subject->setAddress(true);
         self::assertSame('1', $this->subject->getAddress());
@@ -185,7 +188,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getLatitudeInitiallyReturnsZero()
+    public function getLatitudeInitiallyReturnsZero(): void
     {
         self::assertSame(
             0.0,
@@ -196,7 +199,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setLatitudeSetsLatitude()
+    public function setLatitudeSetsLatitude(): void
     {
         $this->subject->setLatitude(1234.56);
 
@@ -209,7 +212,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getLongitudeInitiallyReturnsZero()
+    public function getLongitudeInitiallyReturnsZero(): void
     {
         self::assertSame(
             0.0,
@@ -220,7 +223,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setLongitudeSetsLongitude()
+    public function setLongitudeSetsLongitude(): void
     {
         $this->subject->setLongitude(1234.56);
 
@@ -233,7 +236,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getRadiusInitiallyReturnsZero()
+    public function getRadiusInitiallyReturnsZero(): void
     {
         self::assertSame(
             0,
@@ -244,7 +247,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setRadiusSetsRadius()
+    public function setRadiusSetsRadius(): void
     {
         $this->subject->setRadius(123456);
 
@@ -257,7 +260,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setRadiusWithStringResultsInInteger()
+    public function setRadiusWithStringResultsInInteger(): void
     {
         $this->subject->setRadius('123Test');
 
@@ -270,7 +273,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setRadiusWithBooleanResultsInInteger()
+    public function setRadiusWithBooleanResultsInInteger(): void
     {
         $this->subject->setRadius(true);
 
@@ -283,7 +286,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getPoisInitiallyReturnsObjectStorage()
+    public function getPoisInitiallyReturnsObjectStorage(): void
     {
         self::assertEquals(
             new ObjectStorage(),
@@ -294,7 +297,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setPoisSetsPois()
+    public function setPoisSetsPois(): void
     {
         $object = new Poi();
         $objectStorage = new ObjectStorage();
@@ -310,7 +313,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function addPoiAddsOnePoi()
+    public function addPoiAddsOnePoi(): void
     {
         $objectStorage = new ObjectStorage();
         $this->subject->setPois($objectStorage);
@@ -329,7 +332,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function removePoiRemovesOnePoi()
+    public function removePoiRemovesOnePoi(): void
     {
         $object = new Poi();
         $objectStorage = new ObjectStorage();
@@ -348,7 +351,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getStrokeColorInitiallyReturnsEmptyString()
+    public function getStrokeColorInitiallyReturnsEmptyString(): void
     {
         self::assertSame(
             '',
@@ -359,7 +362,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setStrokeColorSetsStrokeColor()
+    public function setStrokeColorSetsStrokeColor(): void
     {
         $this->subject->setStrokeColor('foo bar');
 
@@ -372,7 +375,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setStrokeColorWithIntegerResultsInString()
+    public function setStrokeColorWithIntegerResultsInString(): void
     {
         $this->subject->setStrokeColor(123);
         self::assertSame('123', $this->subject->getStrokeColor());
@@ -381,7 +384,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setStrokeColorWithBooleanResultsInString()
+    public function setStrokeColorWithBooleanResultsInString(): void
     {
         $this->subject->setStrokeColor(true);
         self::assertSame('1', $this->subject->getStrokeColor());
@@ -390,7 +393,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getStrokeOpacityInitiallyReturnsEmptyString()
+    public function getStrokeOpacityInitiallyReturnsEmptyString(): void
     {
         self::assertSame(
             '',
@@ -401,7 +404,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setStrokeOpacitySetsStrokeOpacity()
+    public function setStrokeOpacitySetsStrokeOpacity(): void
     {
         $this->subject->setStrokeOpacity('foo bar');
 
@@ -414,7 +417,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setStrokeOpacityWithIntegerResultsInString()
+    public function setStrokeOpacityWithIntegerResultsInString(): void
     {
         $this->subject->setStrokeOpacity(123);
         self::assertSame('123', $this->subject->getStrokeOpacity());
@@ -423,7 +426,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setStrokeOpacityWithBooleanResultsInString()
+    public function setStrokeOpacityWithBooleanResultsInString(): void
     {
         $this->subject->setStrokeOpacity(true);
         self::assertSame('1', $this->subject->getStrokeOpacity());
@@ -432,7 +435,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getStrokeWeightInitiallyReturnsEmptyString()
+    public function getStrokeWeightInitiallyReturnsEmptyString(): void
     {
         self::assertSame(
             '',
@@ -443,7 +446,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setStrokeWeightSetsStrokeWeight()
+    public function setStrokeWeightSetsStrokeWeight(): void
     {
         $this->subject->setStrokeWeight('foo bar');
 
@@ -456,7 +459,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setStrokeWeightWithIntegerResultsInString()
+    public function setStrokeWeightWithIntegerResultsInString(): void
     {
         $this->subject->setStrokeWeight(123);
         self::assertSame('123', $this->subject->getStrokeWeight());
@@ -465,7 +468,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setStrokeWeightWithBooleanResultsInString()
+    public function setStrokeWeightWithBooleanResultsInString(): void
     {
         $this->subject->setStrokeWeight(true);
         self::assertSame('1', $this->subject->getStrokeWeight());
@@ -474,7 +477,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getFillColorInitiallyReturnsEmptyString()
+    public function getFillColorInitiallyReturnsEmptyString(): void
     {
         self::assertSame(
             '',
@@ -485,7 +488,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setFillColorSetsFillColor()
+    public function setFillColorSetsFillColor(): void
     {
         $this->subject->setFillColor('foo bar');
 
@@ -498,7 +501,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setFillColorWithIntegerResultsInString()
+    public function setFillColorWithIntegerResultsInString(): void
     {
         $this->subject->setFillColor(123);
         self::assertSame('123', $this->subject->getFillColor());
@@ -507,7 +510,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setFillColorWithBooleanResultsInString()
+    public function setFillColorWithBooleanResultsInString(): void
     {
         $this->subject->setFillColor(true);
         self::assertSame('1', $this->subject->getFillColor());
@@ -516,7 +519,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getFillOpacityInitiallyReturnsEmptyString()
+    public function getFillOpacityInitiallyReturnsEmptyString(): void
     {
         self::assertSame(
             '',
@@ -527,7 +530,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setFillOpacitySetsFillOpacity()
+    public function setFillOpacitySetsFillOpacity(): void
     {
         $this->subject->setFillOpacity('foo bar');
 
@@ -540,7 +543,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setFillOpacityWithIntegerResultsInString()
+    public function setFillOpacityWithIntegerResultsInString(): void
     {
         $this->subject->setFillOpacity(123);
         self::assertSame('123', $this->subject->getFillOpacity());
@@ -549,7 +552,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setFillOpacityWithBooleanResultsInString()
+    public function setFillOpacityWithBooleanResultsInString(): void
     {
         $this->subject->setFillOpacity(true);
         self::assertSame('1', $this->subject->getFillOpacity());
@@ -558,7 +561,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getInfoWindowContentInitiallyReturnsEmptyString()
+    public function getInfoWindowContentInitiallyReturnsEmptyString(): void
     {
         self::assertSame(
             '',
@@ -569,7 +572,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setInfoWindowContentSetsInfoWindowContent()
+    public function setInfoWindowContentSetsInfoWindowContent(): void
     {
         $this->subject->setInfoWindowContent('foo bar');
 
@@ -582,7 +585,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setInfoWindowContentWithIntegerResultsInString()
+    public function setInfoWindowContentWithIntegerResultsInString(): void
     {
         $this->subject->setInfoWindowContent(123);
         self::assertSame('123', $this->subject->getInfoWindowContent());
@@ -591,7 +594,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setInfoWindowContentWithBooleanResultsInString()
+    public function setInfoWindowContentWithBooleanResultsInString(): void
     {
         $this->subject->setInfoWindowContent(true);
         self::assertSame('1', $this->subject->getInfoWindowContent());
@@ -600,7 +603,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getInfoWindowImagesInitiallyReturnsObjectStorage()
+    public function getInfoWindowImagesInitiallyReturnsObjectStorage(): void
     {
         self::assertEquals(
             new ObjectStorage(),
@@ -611,7 +614,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setInfoWindowImagesSetsInfoWindowImages()
+    public function setInfoWindowImagesSetsInfoWindowImages(): void
     {
         $object = new FileReference();
         $objectStorage = new ObjectStorage();
@@ -627,7 +630,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function addInfoWindowImageAddsOneInfoWindowImage()
+    public function addInfoWindowImageAddsOneInfoWindowImage(): void
     {
         $objectStorage = new ObjectStorage();
         $this->subject->setInfoWindowImages($objectStorage);
@@ -646,7 +649,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function removeInfoWindowImageRemovesOneInfoWindowImage()
+    public function removeInfoWindowImageRemovesOneInfoWindowImage(): void
     {
         $object = new FileReference();
         $objectStorage = new ObjectStorage();
@@ -665,7 +668,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getMarkerIconsInitiallyReturnsObjectStorage()
+    public function getMarkerIconsInitiallyReturnsObjectStorage(): void
     {
         self::assertEquals(
             new ObjectStorage(),
@@ -676,7 +679,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setMarkerIconsSetsMarkerIcons()
+    public function setMarkerIconsSetsMarkerIcons(): void
     {
         $object = new FileReference();
         $objectStorage = new ObjectStorage();
@@ -692,7 +695,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function addMarkerIconAddsOneMarkerIcon()
+    public function addMarkerIconAddsOneMarkerIcon(): void
     {
         $objectStorage = new ObjectStorage();
         $this->subject->setMarkerIcons($objectStorage);
@@ -711,7 +714,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function removeMarkerIconRemovesOneMarkerIcon()
+    public function removeMarkerIconRemovesOneMarkerIcon(): void
     {
         $object = new FileReference();
         $objectStorage = new ObjectStorage();
@@ -730,7 +733,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getMarkerIconWidthInitiallyReturnsZero()
+    public function getMarkerIconWidthInitiallyReturnsZero(): void
     {
         self::assertSame(
             0,
@@ -741,7 +744,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setMarkerIconWidthSetsMarkerIconWidth()
+    public function setMarkerIconWidthSetsMarkerIconWidth(): void
     {
         $image = $this->prophesize(FileReference::class);
         $images = new ObjectStorage();
@@ -759,7 +762,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setMarkerIconWidthWillGetValueFromCategoryIfEmpty()
+    public function setMarkerIconWidthWillGetValueFromCategoryIfEmpty(): void
     {
         $fileReference = $this->prophesize(FileReference::class);
         $category = new Category();
@@ -776,7 +779,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setMarkerIconWidthWillGetValueFromCategoryIfImageIsEmpty()
+    public function setMarkerIconWidthWillGetValueFromCategoryIfImageIsEmpty(): void
     {
         $this->subject->setMarkerIconWidth(123456);
         $fileReference = $this->prophesize(FileReference::class);
@@ -794,7 +797,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setMarkerIconWidthWillGetValueFromExtConfIfEmpty()
+    public function setMarkerIconWidthWillGetValueFromExtConfIfEmpty(): void
     {
         $this->extConf->setMarkerIconWidth(123456);
 
@@ -807,7 +810,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setMarkerIconWidthWillGetValueFromExtConfIfImageIsEmpty()
+    public function setMarkerIconWidthWillGetValueFromExtConfIfImageIsEmpty(): void
     {
         $this->subject->setMarkerIconWidth(123456);
         $this->extConf->setMarkerIconWidth(654321);
@@ -821,7 +824,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setMarkerIconWidthWithStringResultsInInteger()
+    public function setMarkerIconWidthWithStringResultsInInteger(): void
     {
         $image = $this->prophesize(FileReference::class);
         $images = new ObjectStorage();
@@ -839,7 +842,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setMarkerIconWidthWithBooleanResultsInInteger()
+    public function setMarkerIconWidthWithBooleanResultsInInteger(): void
     {
         $image = $this->prophesize(FileReference::class);
         $images = new ObjectStorage();
@@ -857,7 +860,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getMarkerIconHeightInitiallyReturnsZero()
+    public function getMarkerIconHeightInitiallyReturnsZero(): void
     {
         self::assertSame(
             0,
@@ -868,7 +871,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setMarkerIconHeightSetsMarkerIconHeight()
+    public function setMarkerIconHeightSetsMarkerIconHeight(): void
     {
         $image = $this->prophesize(FileReference::class);
         $images = new ObjectStorage();
@@ -886,7 +889,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setMarkerIconHeightWillGetValueFromCategoryIfEmpty()
+    public function setMarkerIconHeightWillGetValueFromCategoryIfEmpty(): void
     {
         $fileReference = $this->prophesize(FileReference::class);
         $category = new Category();
@@ -903,7 +906,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setMarkerIconHeightWillGetValueFromCategoryIfImageIsEmpty()
+    public function setMarkerIconHeightWillGetValueFromCategoryIfImageIsEmpty(): void
     {
         $this->subject->setMarkerIconHeight(123456);
         $fileReference = $this->prophesize(FileReference::class);
@@ -921,7 +924,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setMarkerIconHeightWillGetValueFromExtConfIfEmpty()
+    public function setMarkerIconHeightWillGetValueFromExtConfIfEmpty(): void
     {
         $this->extConf->setMarkerIconHeight(123456);
 
@@ -934,7 +937,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setMarkerIconHeightWithStringResultsInInteger()
+    public function setMarkerIconHeightWithStringResultsInInteger(): void
     {
         $image = $this->prophesize(FileReference::class);
         $images = new ObjectStorage();
@@ -952,7 +955,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setMarkerIconHeightWithBooleanResultsInInteger()
+    public function setMarkerIconHeightWithBooleanResultsInInteger(): void
     {
         $image = $this->prophesize(FileReference::class);
         $images = new ObjectStorage();
@@ -970,7 +973,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getMarkerIconAnchorPosXInitiallyReturnsZero()
+    public function getMarkerIconAnchorPosXInitiallyReturnsZero(): void
     {
         self::assertSame(
             0,
@@ -981,7 +984,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setMarkerIconAnchorPosXSetsMarkerIconAnchorPosX()
+    public function setMarkerIconAnchorPosXSetsMarkerIconAnchorPosX(): void
     {
         $image = $this->prophesize(FileReference::class);
         $images = new ObjectStorage();
@@ -999,7 +1002,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setMarkerIconAnchorPosXWillGetValueFromCategoryIfEmpty()
+    public function setMarkerIconAnchorPosXWillGetValueFromCategoryIfEmpty(): void
     {
         $fileReference = $this->prophesize(FileReference::class);
         $category = new Category();
@@ -1016,7 +1019,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setMarkerIconAnchorPosXWillGetValueFromCategoryIfImageIsEmpty()
+    public function setMarkerIconAnchorPosXWillGetValueFromCategoryIfImageIsEmpty(): void
     {
         $this->subject->setMarkerIconAnchorPosX(123456);
         $fileReference = $this->prophesize(FileReference::class);
@@ -1034,7 +1037,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setMarkerIconAnchorPosXWillGetValueFromExtConfIfEmpty()
+    public function setMarkerIconAnchorPosXWillGetValueFromExtConfIfEmpty(): void
     {
         $this->extConf->setMarkerIconAnchorPosX(123456);
 
@@ -1047,7 +1050,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setMarkerIconAnchorPosXWillGetValueFromExtConfIfImageIsEmpty()
+    public function setMarkerIconAnchorPosXWillGetValueFromExtConfIfImageIsEmpty(): void
     {
         $this->subject->setMarkerIconAnchorPosX(123456);
         $this->extConf->setMarkerIconAnchorPosX(654321);
@@ -1061,7 +1064,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setMarkerIconHeightWillGetValueFromExtConfIfImageIsEmpty()
+    public function setMarkerIconHeightWillGetValueFromExtConfIfImageIsEmpty(): void
     {
         $this->subject->setMarkerIconHeight(123456);
         $this->extConf->setMarkerIconHeight(654321);
@@ -1075,7 +1078,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setMarkerIconAnchorPosXWithStringResultsInInteger()
+    public function setMarkerIconAnchorPosXWithStringResultsInInteger(): void
     {
         $image = $this->prophesize(FileReference::class);
         $images = new ObjectStorage();
@@ -1093,7 +1096,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setMarkerIconAnchorPosXWithBooleanResultsInInteger()
+    public function setMarkerIconAnchorPosXWithBooleanResultsInInteger(): void
     {
         $image = $this->prophesize(FileReference::class);
         $images = new ObjectStorage();
@@ -1111,7 +1114,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getMarkerIconAnchorPosYInitiallyReturnsZero()
+    public function getMarkerIconAnchorPosYInitiallyReturnsZero(): void
     {
         self::assertSame(
             0,
@@ -1122,7 +1125,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setMarkerIconAnchorPosYSetsMarkerIconAnchorPosY()
+    public function setMarkerIconAnchorPosYSetsMarkerIconAnchorPosY(): void
     {
         $image = $this->prophesize(FileReference::class);
         $images = new ObjectStorage();
@@ -1140,7 +1143,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setMarkerIconAnchorPosYWillGetValueFromCategoryIfEmpty()
+    public function setMarkerIconAnchorPosYWillGetValueFromCategoryIfEmpty(): void
     {
         $fileReference = $this->prophesize(FileReference::class);
         $category = new Category();
@@ -1157,7 +1160,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setMarkerIconAnchorPosYWillGetValueFromCategoryIfImageIsEmpty()
+    public function setMarkerIconAnchorPosYWillGetValueFromCategoryIfImageIsEmpty(): void
     {
         $this->subject->setMarkerIconAnchorPosY(123456);
         $fileReference = $this->prophesize(FileReference::class);
@@ -1175,7 +1178,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setMarkerIconAnchorPosYWillGetValueFromExtConfIfEmpty()
+    public function setMarkerIconAnchorPosYWillGetValueFromExtConfIfEmpty(): void
     {
         $this->extConf->setMarkerIconAnchorPosY(123456);
 
@@ -1188,7 +1191,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setMarkerIconAnchorPosYWillGetValueFromExtConfIfImageIsEmpty()
+    public function setMarkerIconAnchorPosYWillGetValueFromExtConfIfImageIsEmpty(): void
     {
         $this->subject->setMarkerIconAnchorPosY(123456);
         $this->extConf->setMarkerIconAnchorPosY(654321);
@@ -1202,7 +1205,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setMarkerIconAnchorPosYWithStringResultsInInteger()
+    public function setMarkerIconAnchorPosYWithStringResultsInInteger(): void
     {
         $image = $this->prophesize(FileReference::class);
         $images = new ObjectStorage();
@@ -1220,7 +1223,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setMarkerIconAnchorPosYWithBooleanResultsInInteger()
+    public function setMarkerIconAnchorPosYWithBooleanResultsInInteger(): void
     {
         $image = $this->prophesize(FileReference::class);
         $images = new ObjectStorage();
@@ -1238,7 +1241,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getCategoriesInitiallyReturnsObjectStorage()
+    public function getCategoriesInitiallyReturnsObjectStorage(): void
     {
         self::assertEquals(
             new ObjectStorage(),
@@ -1249,7 +1252,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setCategoriesSetsCategories()
+    public function setCategoriesSetsCategories(): void
     {
         $object = new Category();
         $objectStorage = new ObjectStorage();
@@ -1265,7 +1268,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function addCategoryAddsOneCategory()
+    public function addCategoryAddsOneCategory(): void
     {
         $objectStorage = new ObjectStorage();
         $this->subject->setCategories($objectStorage);
@@ -1284,7 +1287,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function removeCategoryRemovesOneCategory()
+    public function removeCategoryRemovesOneCategory(): void
     {
         $object = new Category();
         $objectStorage = new ObjectStorage();
@@ -1303,7 +1306,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getDistanceInitiallyReturnsZero()
+    public function getDistanceInitiallyReturnsZero(): void
     {
         self::assertSame(
             0.0,
@@ -1314,7 +1317,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setDistanceSetsDistance()
+    public function setDistanceSetsDistance(): void
     {
         $this->subject->setDistance(1234.56);
 
@@ -1327,7 +1330,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getForeignRecordsInitiallyReturnsArray()
+    public function getForeignRecordsInitiallyReturnsArray(): void
     {
         self::assertSame(
             [],
@@ -1338,7 +1341,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setForeignRecordsSetsForeignRecords()
+    public function setForeignRecordsSetsForeignRecords(): void
     {
         $this->subject->setForeignRecords(
             [
@@ -1361,7 +1364,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function addForeignRecordAddsOneForeignRecord()
+    public function addForeignRecordAddsOneForeignRecord(): void
     {
         $this->subject->addForeignRecord(
             [
@@ -1382,7 +1385,7 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function removeForeignRecordRemovesOneForeignRecord()
+    public function removeForeignRecordRemovesOneForeignRecord(): void
     {
         $this->subject->setForeignRecords(
             [

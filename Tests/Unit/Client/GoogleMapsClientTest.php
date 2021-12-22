@@ -13,12 +13,15 @@ use JWeiland\Maps2\Client\GoogleMapsClient;
 use JWeiland\Maps2\Client\Request\GoogleMaps\GeocodeRequest;
 use JWeiland\Maps2\Helper\MessageHelper;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * Test Google Maps Client class
  */
 class GoogleMapsClientTest extends UnitTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var GeocodeRequest
      */
@@ -34,7 +37,7 @@ class GoogleMapsClientTest extends UnitTestCase
      */
     protected $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->geocodeRequestProphecy = $this->prophesize(GeocodeRequest::class);
         $this->messageHelperProphecy = $this->prophesize(MessageHelper::class);
@@ -44,7 +47,7 @@ class GoogleMapsClientTest extends UnitTestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset(
             $this->subject,
@@ -57,7 +60,7 @@ class GoogleMapsClientTest extends UnitTestCase
     /**
      * @test
      */
-    public function processRequestWithInvalidRequestAddsFlashMessage()
+    public function processRequestWithInvalidRequestAddsFlashMessage(): void
     {
         $this->geocodeRequestProphecy
             ->isValidRequest()

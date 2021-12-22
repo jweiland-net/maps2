@@ -15,6 +15,7 @@ use JWeiland\Maps2\Service\MapService;
 use JWeiland\Maps2\ViewHelpers\Widget\Controller\PoiCollectionController;
 use JWeiland\Maps2\ViewHelpers\Widget\PoiCollectionViewHelper;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
@@ -24,6 +25,8 @@ use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
  */
 class PoiCollectionViewHelperTest extends UnitTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var PoiCollectionViewHelper
      */
@@ -39,7 +42,7 @@ class PoiCollectionViewHelperTest extends UnitTestCase
      */
     protected $mapServiceProphecy;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $_SESSION['mapProviderRequestsAllowedForMaps2'] = false;
 
@@ -57,7 +60,7 @@ class PoiCollectionViewHelperTest extends UnitTestCase
         $this->subject->injectMapService($this->mapServiceProphecy->reveal());
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->extConf, $this->googleMapsService, $this->mapProviderRequestService, $this->subject);
         parent::tearDown();
@@ -66,7 +69,7 @@ class PoiCollectionViewHelperTest extends UnitTestCase
     /**
      * @test
      */
-    public function renderWillCallShowAllowMapFormWhenGoogleRequestsAreNotAllowed()
+    public function renderWillCallShowAllowMapFormWhenGoogleRequestsAreNotAllowed(): void
     {
         $this->mapServiceProphecy->showAllowMapForm()->shouldBeCalled()->willReturn('Please activate maps2');
 

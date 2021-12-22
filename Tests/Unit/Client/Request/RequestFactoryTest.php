@@ -14,6 +14,7 @@ use JWeiland\Maps2\Client\Request\RequestFactory;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Service\MapService;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -21,6 +22,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class RequestFactoryTest extends UnitTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var MapService
      */
@@ -31,7 +34,7 @@ class RequestFactoryTest extends UnitTestCase
      */
     protected $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mapServiceProphecy = $this->prophesize(MapService::class);
         GeneralUtility::addInstance(MapService::class, $this->mapServiceProphecy->reveal());
@@ -39,7 +42,7 @@ class RequestFactoryTest extends UnitTestCase
         $this->subject = new RequestFactory();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset(
             $this->subject,
@@ -51,7 +54,7 @@ class RequestFactoryTest extends UnitTestCase
     /**
      * @test
      */
-    public function createCreatesGoogleMapsGeocodeRequest()
+    public function createCreatesGoogleMapsGeocodeRequest(): void
     {
         $this->mapServiceProphecy
             ->getMapProvider()
@@ -67,7 +70,7 @@ class RequestFactoryTest extends UnitTestCase
     /**
      * @test
      */
-    public function createCreatesOpenStreetMapGeocodeRequest()
+    public function createCreatesOpenStreetMapGeocodeRequest(): void
     {
         $this->mapServiceProphecy
             ->getMapProvider()
@@ -83,7 +86,7 @@ class RequestFactoryTest extends UnitTestCase
     /**
      * @test
      */
-    public function createSanitizesFilenameWithExtension()
+    public function createSanitizesFilenameWithExtension(): void
     {
         $this->mapServiceProphecy
             ->getMapProvider()
@@ -99,7 +102,7 @@ class RequestFactoryTest extends UnitTestCase
     /**
      * @test
      */
-    public function createSanitizesFilenameWithLowerCamelCase()
+    public function createSanitizesFilenameWithLowerCamelCase(): void
     {
         $this->mapServiceProphecy
             ->getMapProvider()
@@ -114,15 +117,17 @@ class RequestFactoryTest extends UnitTestCase
 
     /**
      * @test
-     *
-     * @expectedException \Exception
      */
-    public function createWithNonExistingClassThrowsException()
+    public function createWithNonExistingClassThrowsException(): void
     {
         $this->mapServiceProphecy
             ->getMapProvider()
             ->shouldBeCalled()
             ->willReturn('gm');
+
+        $this->expectExceptionMessage(
+            'Class "JWeiland\Maps2\Client\Request\GoogleMaps\NonExistingClass" to create a new Request could not be found'
+        );
 
         $this->subject->create('NonExistingClass', new ExtConf([]));
     }

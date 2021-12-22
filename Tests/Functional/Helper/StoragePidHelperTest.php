@@ -13,6 +13,7 @@ use JWeiland\Maps2\Helper\MessageHelper;
 use JWeiland\Maps2\Helper\StoragePidHelper;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\VariableFrontend;
@@ -25,6 +26,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class StoragePidHelperTest extends FunctionalTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var StoragePidHelper
      */
@@ -43,7 +46,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         'typo3conf/ext/events2'
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -51,7 +54,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         $this->subject = new StoragePidHelper($this->messageHelperProphecy->reveal());
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset(
             $this->subject,
@@ -64,7 +67,7 @@ class StoragePidHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getStoragePidWithoutPidAndNoRegistryConfigurationWillAddFlashMessage()
+    public function getStoragePidWithoutPidAndNoRegistryConfigurationWillAddFlashMessage(): void
     {
         $this->messageHelperProphecy
             ->addFlashMessage(
@@ -88,7 +91,7 @@ class StoragePidHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getStoragePidWithPidInForeignRecordWillReturnStoragePid()
+    public function getStoragePidWithPidInForeignRecordWillReturnStoragePid(): void
     {
         /** @var VariableFrontend|ObjectProphecy $variableFrontend */
         $variableFrontend = $this->prophesize(VariableFrontend::class);
@@ -128,7 +131,7 @@ class StoragePidHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getStoragePidWithHardCodedMaps2RegistryWillReturnStoragePid()
+    public function getStoragePidWithHardCodedMaps2RegistryWillReturnStoragePid(): void
     {
         /** @var VariableFrontend|ObjectProphecy $variableFrontend */
         $variableFrontend = $this->prophesize(VariableFrontend::class);
@@ -170,7 +173,7 @@ class StoragePidHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getStoragePidWithHardCodedMaps2RegistryWillReturnUnifiedStoragePid()
+    public function getStoragePidWithHardCodedMaps2RegistryWillReturnUnifiedStoragePid(): void
     {
         /** @var VariableFrontend|ObjectProphecy $variableFrontend */
         $variableFrontend = $this->prophesize(VariableFrontend::class);
@@ -212,7 +215,7 @@ class StoragePidHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getStoragePidWithoutPidWillReturnPidFromExtensionManager()
+    public function getStoragePidWithoutPidWillReturnPidFromExtensionManager(): void
     {
         $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['foreign_ext'] = [
             'maps2Storage' => 385
@@ -246,7 +249,7 @@ class StoragePidHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getStoragePidWithPidWillReturnPidFromExtensionManager()
+    public function getStoragePidWithPidWillReturnPidFromExtensionManager(): void
     {
         /** @var VariableFrontend|ObjectProphecy $variableFrontend */
         $variableFrontend = $this->prophesize(VariableFrontend::class);
@@ -303,7 +306,7 @@ class StoragePidHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getStoragePidWithPidAndTypeWillReturnPidFromExtensionManager()
+    public function getStoragePidWithPidAndTypeWillReturnPidFromExtensionManager(): void
     {
         /** @var VariableFrontend|ObjectProphecy $variableFrontend */
         $variableFrontend = $this->prophesize(VariableFrontend::class);
@@ -361,7 +364,7 @@ class StoragePidHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getStoragePidWithPidWillReturnPidFromDefaultPageTsConfigPath()
+    public function getStoragePidWithPidWillReturnPidFromDefaultPageTsConfigPath(): void
     {
         /** @var VariableFrontend|ObjectProphecy $variableFrontend */
         $variableFrontend = $this->prophesize(VariableFrontend::class);
@@ -407,7 +410,7 @@ class StoragePidHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getStoragePidWithPidWillReturnPidFromConfiguredPageTsConfigPath()
+    public function getStoragePidWithPidWillReturnPidFromConfiguredPageTsConfigPath(): void
     {
         /** @var VariableFrontend|ObjectProphecy $variableFrontend */
         $variableFrontend = $this->prophesize(VariableFrontend::class);
@@ -459,7 +462,7 @@ class StoragePidHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getStoragePidWithPidWillOverridePidOfForeignExtWithPidOfDefaultPageTsConfig()
+    public function getStoragePidWithPidWillOverridePidOfForeignExtWithPidOfDefaultPageTsConfig(): void
     {
         /** @var VariableFrontend|ObjectProphecy $variableFrontend */
         $variableFrontend = $this->prophesize(VariableFrontend::class);
@@ -514,7 +517,7 @@ class StoragePidHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getStoragePidWithPidWillOverridePidOfExtensionManagerWithPidOfPageTsConfig()
+    public function getStoragePidWithPidWillOverridePidOfExtensionManagerWithPidOfPageTsConfig(): void
     {
         /** @var VariableFrontend|ObjectProphecy $variableFrontend */
         $variableFrontend = $this->prophesize(VariableFrontend::class);
@@ -562,7 +565,7 @@ class StoragePidHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getStoragePidWithPidWillProcessVariousRegistryConfiguration()
+    public function getStoragePidWithPidWillProcessVariousRegistryConfiguration(): void
     {
         /** @var VariableFrontend|ObjectProphecy $variableFrontend */
         $variableFrontend = $this->prophesize(VariableFrontend::class);
@@ -653,7 +656,7 @@ class StoragePidHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getStoragePidWithPidWillProcessTwoRegistryConfiguration()
+    public function getStoragePidWithPidWillProcessTwoRegistryConfiguration(): void
     {
         /** @var VariableFrontend|ObjectProphecy $variableFrontend */
         $variableFrontend = $this->prophesize(VariableFrontend::class);
@@ -740,7 +743,7 @@ class StoragePidHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getStoragePidWithPidWillOverrideForeignPidWithPidOfDefaultPageTsConfig()
+    public function getStoragePidWithPidWillOverrideForeignPidWithPidOfDefaultPageTsConfig(): void
     {
         /** @var VariableFrontend|ObjectProphecy $variableFrontend */
         $variableFrontend = $this->prophesize(VariableFrontend::class);

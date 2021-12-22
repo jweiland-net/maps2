@@ -11,23 +11,26 @@ namespace JWeiland\Maps2\Tests\Unit\Configuration;
 
 use JWeiland\Maps2\Configuration\ExtConf;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * Class ExtConfTest
  */
 class ExtConfTest extends UnitTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var ExtConf
      */
     protected $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->subject = new ExtConf([]);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->subject);
         parent::tearDown();
@@ -36,7 +39,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function getMapProviderInitiallyReturnsBothAsString()
+    public function getMapProviderInitiallyReturnsBothAsString(): void
     {
         self::assertSame(
             'both',
@@ -47,7 +50,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setMapProviderSetsMapProvider()
+    public function setMapProviderSetsMapProvider(): void
     {
         $this->subject->setMapProvider('foo bar');
 
@@ -60,7 +63,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setMapProviderWithIntegerResultsInString()
+    public function setMapProviderWithIntegerResultsInString(): void
     {
         $this->subject->setMapProvider(123);
         self::assertSame('123', $this->subject->getMapProvider());
@@ -69,7 +72,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setMapProviderWithBooleanResultsInString()
+    public function setMapProviderWithBooleanResultsInString(): void
     {
         $this->subject->setMapProvider(true);
         self::assertSame('1', $this->subject->getMapProvider());
@@ -78,7 +81,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function getDefaultMapProviderInitiallyReturnsGoogleMapsAsString()
+    public function getDefaultMapProviderInitiallyReturnsGoogleMapsAsString(): void
     {
         self::assertSame(
             'gm',
@@ -89,7 +92,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setDefaultMapProviderSetsDefaultMapProvider()
+    public function setDefaultMapProviderSetsDefaultMapProvider(): void
     {
         $this->subject->setDefaultMapProvider('foo bar');
 
@@ -102,7 +105,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setDefaultMapProviderWithIntegerResultsInString()
+    public function setDefaultMapProviderWithIntegerResultsInString(): void
     {
         $this->subject->setDefaultMapProvider(123);
         self::assertSame('123', $this->subject->getDefaultMapProvider());
@@ -111,7 +114,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setDefaultMapProviderWithBooleanResultsInString()
+    public function setDefaultMapProviderWithBooleanResultsInString(): void
     {
         $this->subject->setDefaultMapProvider(true);
         self::assertSame('1', $this->subject->getDefaultMapProvider());
@@ -120,7 +123,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function getDefaultCountryInitiallyReturnsEmptyString()
+    public function getDefaultCountryInitiallyReturnsEmptyString(): void
     {
         self::assertSame(
             '',
@@ -131,7 +134,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setDefaultCountrySetsDefaultCountry()
+    public function setDefaultCountrySetsDefaultCountry(): void
     {
         $this->subject->setDefaultCountry('foo bar');
 
@@ -144,7 +147,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setDefaultCountryWithIntegerResultsInString()
+    public function setDefaultCountryWithIntegerResultsInString(): void
     {
         $this->subject->setDefaultCountry(123);
         self::assertSame('123', $this->subject->getDefaultCountry());
@@ -153,7 +156,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setDefaultCountryWithBooleanResultsInString()
+    public function setDefaultCountryWithBooleanResultsInString(): void
     {
         $this->subject->setDefaultCountry(true);
         self::assertSame('1', $this->subject->getDefaultCountry());
@@ -162,7 +165,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function getDefaultLatitudeInitiallyReturnsZero()
+    public function getDefaultLatitudeInitiallyReturnsZero(): void
     {
         self::assertSame(
             0.0,
@@ -173,7 +176,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setDefaultLatitudeSetsDefaultLatitude()
+    public function setDefaultLatitudeSetsDefaultLatitude(): void
     {
         $this->subject->setDefaultLatitude(1234.56);
 
@@ -186,7 +189,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function getDefaultLongitudeInitiallyReturnsZero()
+    public function getDefaultLongitudeInitiallyReturnsZero(): void
     {
         self::assertSame(
             0.0,
@@ -197,7 +200,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setDefaultLongitudeSetsDefaultLongitude()
+    public function setDefaultLongitudeSetsDefaultLongitude(): void
     {
         $this->subject->setDefaultLongitude(1234.56);
 
@@ -210,7 +213,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function getDefaultRadiusInitiallyReturns250()
+    public function getDefaultRadiusInitiallyReturns250(): void
     {
         self::assertSame(
             250,
@@ -221,7 +224,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setDefaultRadiusSetsDefaultRadius()
+    public function setDefaultRadiusSetsDefaultRadius(): void
     {
         $this->subject->setDefaultRadius(123456);
 
@@ -234,7 +237,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setDefaultRadiusWithStringResultsInInteger()
+    public function setDefaultRadiusWithStringResultsInInteger(): void
     {
         $this->subject->setDefaultRadius('123Test');
 
@@ -247,7 +250,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setDefaultRadiusWithBooleanResultsInInteger()
+    public function setDefaultRadiusWithBooleanResultsInInteger(): void
     {
         $this->subject->setDefaultRadius(true);
 
@@ -260,7 +263,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function getExplicitAllowMapProviderRequestsInitiallyReturnsFalse()
+    public function getExplicitAllowMapProviderRequestsInitiallyReturnsFalse(): void
     {
         self::assertFalse(
             $this->subject->getExplicitAllowMapProviderRequests()
@@ -270,7 +273,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setExplicitAllowMapProviderRequestsSetsExplicitAllowGoogleMaps()
+    public function setExplicitAllowMapProviderRequestsSetsExplicitAllowGoogleMaps(): void
     {
         $this->subject->setExplicitAllowMapProviderRequests(true);
         self::assertTrue(
@@ -281,7 +284,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setExplicitAllowMapProviderRequestsWithStringReturnsTrue()
+    public function setExplicitAllowMapProviderRequestsWithStringReturnsTrue(): void
     {
         $this->subject->setExplicitAllowMapProviderRequests('foo bar');
         self::assertTrue($this->subject->getExplicitAllowMapProviderRequests());
@@ -290,7 +293,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setExplicitAllowMapProviderRequestsWithZeroReturnsFalse()
+    public function setExplicitAllowMapProviderRequestsWithZeroReturnsFalse(): void
     {
         $this->subject->setExplicitAllowMapProviderRequests(0);
         self::assertFalse($this->subject->getExplicitAllowMapProviderRequests());
@@ -299,7 +302,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function getExplicitAllowMapProviderRequestsBySessionOnlyInitiallyReturnsFalse()
+    public function getExplicitAllowMapProviderRequestsBySessionOnlyInitiallyReturnsFalse(): void
     {
         self::assertFalse(
             $this->subject->getExplicitAllowMapProviderRequestsBySessionOnly()
@@ -309,7 +312,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setExplicitAllowMapProviderRequestsBySessionOnlySetsExplicitAllowGoogleMapsBySessionOnly()
+    public function setExplicitAllowMapProviderRequestsBySessionOnlySetsExplicitAllowGoogleMapsBySessionOnly(): void
     {
         $this->subject->setExplicitAllowMapProviderRequestsBySessionOnly(true);
         self::assertTrue(
@@ -320,7 +323,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setExplicitAllowMapProviderRequestsBySessionOnlyWithStringReturnsTrue()
+    public function setExplicitAllowMapProviderRequestsBySessionOnlyWithStringReturnsTrue(): void
     {
         $this->subject->setExplicitAllowMapProviderRequestsBySessionOnly('foo bar');
         self::assertTrue(
@@ -331,7 +334,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setExplicitAllowMapProviderRequestsBySessionOnlyWithZeroReturnsFalse()
+    public function setExplicitAllowMapProviderRequestsBySessionOnlyWithZeroReturnsFalse(): void
     {
         $this->subject->setExplicitAllowMapProviderRequestsBySessionOnly(0);
         self::assertFalse(
@@ -342,7 +345,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function getInfoWindowContentTemplatePathInitiallyReturnsDefaultPath()
+    public function getInfoWindowContentTemplatePathInitiallyReturnsDefaultPath(): void
     {
         self::assertSame(
             'EXT:maps2/Resources/Private/Templates/InfoWindowContent.html',
@@ -353,7 +356,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setInfoWindowContentTemplatePathSetsInfoWindowContentTemplatePath()
+    public function setInfoWindowContentTemplatePathSetsInfoWindowContentTemplatePath(): void
     {
         $this->subject->setInfoWindowContentTemplatePath('foo bar');
 
@@ -366,7 +369,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setInfoWindowContentTemplatePathWithIntegerResultsInString()
+    public function setInfoWindowContentTemplatePathWithIntegerResultsInString(): void
     {
         $this->subject->setInfoWindowContentTemplatePath(123);
         self::assertSame('123', $this->subject->getInfoWindowContentTemplatePath());
@@ -375,7 +378,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setInfoWindowContentTemplatePathWithBooleanResultsInString()
+    public function setInfoWindowContentTemplatePathWithBooleanResultsInString(): void
     {
         $this->subject->setInfoWindowContentTemplatePath(true);
         self::assertSame(
@@ -387,7 +390,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function getAllowMapTemplatePathInitiallyReturnsEmptyString()
+    public function getAllowMapTemplatePathInitiallyReturnsEmptyString(): void
     {
         self::assertSame(
             'EXT:maps2/Resources/Private/Templates/AllowMapForm.html',
@@ -398,7 +401,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setAllowMapTemplatePathSetsAllowMapTemplatePath()
+    public function setAllowMapTemplatePathSetsAllowMapTemplatePath(): void
     {
         $this->subject->setAllowMapTemplatePath('foo bar');
 
@@ -411,7 +414,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setAllowMapTemplatePathWithIntegerResultsInString()
+    public function setAllowMapTemplatePathWithIntegerResultsInString(): void
     {
         $this->subject->setAllowMapTemplatePath(123);
         self::assertSame('123', $this->subject->getAllowMapTemplatePath());
@@ -420,7 +423,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setAllowMapTemplatePathWithBooleanResultsInString()
+    public function setAllowMapTemplatePathWithBooleanResultsInString(): void
     {
         $this->subject->setAllowMapTemplatePath(true);
         self::assertSame('1', $this->subject->getAllowMapTemplatePath());
@@ -429,7 +432,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function getGoogleMapsLibraryInitiallyReturnsEmptyString()
+    public function getGoogleMapsLibraryInitiallyReturnsEmptyString(): void
     {
         $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');
         self::assertSame(
@@ -441,7 +444,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setGoogleMapsLibraryWithNoPipeWillNotSetGoogleMapsLibrary()
+    public function setGoogleMapsLibraryWithNoPipeWillNotSetGoogleMapsLibrary(): void
     {
         $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');
         $this->subject->setGoogleMapsLibrary('foo bar');
@@ -455,7 +458,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setGoogleMapsLibraryWithNoHttpInFrontWillNotSetGoogleMapsLibrary()
+    public function setGoogleMapsLibraryWithNoHttpInFrontWillNotSetGoogleMapsLibrary(): void
     {
         $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');
         $this->subject->setGoogleMapsLibrary('www.domain.de/api=|&mobile=1');
@@ -469,7 +472,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setGoogleMapsLibraryWithPipeAndHttpWillSetGoogleMapsLibrary()
+    public function setGoogleMapsLibraryWithPipeAndHttpWillSetGoogleMapsLibrary(): void
     {
         $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');
         $this->subject->setGoogleMapsLibrary('http://www.domain.de/api=|&mobile=1');
@@ -483,7 +486,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setGoogleMapsLibraryWithPipeAndHttpsWillSetGoogleMapsLibrary()
+    public function setGoogleMapsLibraryWithPipeAndHttpsWillSetGoogleMapsLibrary(): void
     {
         $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');
         $this->subject->setGoogleMapsLibrary('https://www.domain.de/api=|&mobile=1');
@@ -497,7 +500,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setGoogleMapsLibraryWithHttpUriAndActivatedHttpsWillSetGoogleMapsLibrary()
+    public function setGoogleMapsLibraryWithHttpUriAndActivatedHttpsWillSetGoogleMapsLibrary(): void
     {
         $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');
         $this->subject->setGoogleMapsLibrary('http://www.domain.de/api=|&mobile=1');
@@ -511,7 +514,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setGoogleMapsLibraryWithIntegerResultsInEmptyString()
+    public function setGoogleMapsLibraryWithIntegerResultsInEmptyString(): void
     {
         $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');
         $this->subject->setGoogleMapsLibrary(123);
@@ -521,7 +524,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setGoogleMapsLibraryWithBooleanResultsInEmptyString()
+    public function setGoogleMapsLibraryWithBooleanResultsInEmptyString(): void
     {
         $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');
         $this->subject->setGoogleMapsLibrary(true);
@@ -531,7 +534,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function getGoogleMapsGeocodeUriInitiallyReturnsPreConfiguredUri()
+    public function getGoogleMapsGeocodeUriInitiallyReturnsPreConfiguredUri(): void
     {
         self::assertSame(
             'https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=%s',
@@ -542,7 +545,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setGoogleMapsGeocodeUriSetsGoogleMapsGeocodeUri()
+    public function setGoogleMapsGeocodeUriSetsGoogleMapsGeocodeUri(): void
     {
         $this->subject->setGoogleMapsGeocodeUri('foo bar');
 
@@ -555,7 +558,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setGoogleMapsGeocodeUriWithIntegerResultsInString()
+    public function setGoogleMapsGeocodeUriWithIntegerResultsInString(): void
     {
         $this->subject->setGoogleMapsGeocodeUri(123);
         self::assertSame('123', $this->subject->getGoogleMapsGeocodeUri());
@@ -564,7 +567,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setGoogleMapsGeocodeUriWithBooleanResultsInString()
+    public function setGoogleMapsGeocodeUriWithBooleanResultsInString(): void
     {
         $this->subject->setGoogleMapsGeocodeUri(true);
         self::assertSame('1', $this->subject->getGoogleMapsGeocodeUri());
@@ -573,7 +576,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setGoogleMapsJavaScriptApiKeySetsGoogleMapsJavaScriptApiKey()
+    public function setGoogleMapsJavaScriptApiKeySetsGoogleMapsJavaScriptApiKey(): void
     {
         $this->subject->setGoogleMapsJavaScriptApiKey('foo bar');
 
@@ -586,7 +589,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setGoogleMapsJavaScriptApiKeyWithIntegerResultsInString()
+    public function setGoogleMapsJavaScriptApiKeyWithIntegerResultsInString(): void
     {
         $this->subject->setGoogleMapsJavaScriptApiKey(123);
         self::assertSame('123', $this->subject->getGoogleMapsJavaScriptApiKey());
@@ -595,7 +598,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setGoogleMapsJavaScriptApiKeyWithBooleanResultsInString()
+    public function setGoogleMapsJavaScriptApiKeyWithBooleanResultsInString(): void
     {
         $this->subject->setGoogleMapsJavaScriptApiKey(true);
         self::assertSame('1', $this->subject->getGoogleMapsJavaScriptApiKey());
@@ -604,7 +607,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setGoogleMapsGeocodeApiKeySetsGoogleMapsGeocodeApiKey()
+    public function setGoogleMapsGeocodeApiKeySetsGoogleMapsGeocodeApiKey(): void
     {
         $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');
         $this->subject->setGoogleMapsGeocodeApiKey('foo bar');
@@ -618,7 +621,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setGoogleMapsGeocodeApiKeyWithIntegerResultsInString()
+    public function setGoogleMapsGeocodeApiKeyWithIntegerResultsInString(): void
     {
         $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');
         $this->subject->setGoogleMapsGeocodeApiKey(123);
@@ -628,7 +631,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setGoogleMapsGeocodeApiKeyWithBooleanResultsInString()
+    public function setGoogleMapsGeocodeApiKeyWithBooleanResultsInString(): void
     {
         $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');
         $this->subject->setGoogleMapsGeocodeApiKey(true);
@@ -638,7 +641,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function getOpenStreetMapGeocodeUriInitiallyReturnsPreConfiguredUri()
+    public function getOpenStreetMapGeocodeUriInitiallyReturnsPreConfiguredUri(): void
     {
         self::assertSame(
             'https://nominatim.openstreetmap.org/search/%s?format=json&addressdetails=1',
@@ -649,7 +652,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setOpenStreetMapGeocodeUriSetsOpenStreetMapGeocodeUri()
+    public function setOpenStreetMapGeocodeUriSetsOpenStreetMapGeocodeUri(): void
     {
         $this->subject->setOpenStreetMapGeocodeUri('foo bar');
 
@@ -662,7 +665,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setOpenStreetMapGeocodeUriWithIntegerResultsInString()
+    public function setOpenStreetMapGeocodeUriWithIntegerResultsInString(): void
     {
         $this->subject->setOpenStreetMapGeocodeUri(123);
         self::assertSame('123', $this->subject->getOpenStreetMapGeocodeUri());
@@ -671,7 +674,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setOpenStreetMapGeocodeUriWithBooleanResultsInString()
+    public function setOpenStreetMapGeocodeUriWithBooleanResultsInString(): void
     {
         $this->subject->setOpenStreetMapGeocodeUri(true);
         self::assertSame('1', $this->subject->getOpenStreetMapGeocodeUri());
@@ -680,7 +683,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function getStrokeColorInitiallyReturnsRedColor()
+    public function getStrokeColorInitiallyReturnsRedColor(): void
     {
         self::assertSame(
             '#FF0000',
@@ -691,7 +694,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setStrokeColorSetsStrokeColor()
+    public function setStrokeColorSetsStrokeColor(): void
     {
         $this->subject->setStrokeColor('foo bar');
 
@@ -704,7 +707,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setStrokeColorWithIntegerResultsInString()
+    public function setStrokeColorWithIntegerResultsInString(): void
     {
         $this->subject->setStrokeColor(123);
         self::assertSame('123', $this->subject->getStrokeColor());
@@ -713,7 +716,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setStrokeColorWithBooleanResultsInString()
+    public function setStrokeColorWithBooleanResultsInString(): void
     {
         $this->subject->setStrokeColor(true);
         self::assertSame('1', $this->subject->getStrokeColor());
@@ -722,7 +725,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function getStrokeOpacityInitiallyReturns0point8()
+    public function getStrokeOpacityInitiallyReturns0point8(): void
     {
         self::assertSame(
             0.8,
@@ -733,7 +736,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setStrokeOpacitySetsStrokeOpacity()
+    public function setStrokeOpacitySetsStrokeOpacity(): void
     {
         $this->subject->setStrokeOpacity(1234.56);
 
@@ -746,7 +749,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function getStrokeWeightInitiallyReturnsTwo()
+    public function getStrokeWeightInitiallyReturnsTwo(): void
     {
         self::assertSame(
             2,
@@ -757,7 +760,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setStrokeWeightSetsStrokeWeight()
+    public function setStrokeWeightSetsStrokeWeight(): void
     {
         $this->subject->setStrokeWeight(123456);
 
@@ -770,7 +773,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setStrokeWeightWithStringResultsInInteger()
+    public function setStrokeWeightWithStringResultsInInteger(): void
     {
         $this->subject->setStrokeWeight('123Test');
 
@@ -783,7 +786,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setStrokeWeightWithBooleanResultsInInteger()
+    public function setStrokeWeightWithBooleanResultsInInteger(): void
     {
         $this->subject->setStrokeWeight(true);
 
@@ -796,7 +799,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function getFillColorInitiallyReturnsRedColor()
+    public function getFillColorInitiallyReturnsRedColor(): void
     {
         self::assertSame(
             '#FF0000',
@@ -807,7 +810,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setFillColorSetsFillColor()
+    public function setFillColorSetsFillColor(): void
     {
         $this->subject->setFillColor('foo bar');
 
@@ -820,7 +823,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setFillColorWithIntegerResultsInString()
+    public function setFillColorWithIntegerResultsInString(): void
     {
         $this->subject->setFillColor(123);
         self::assertSame('123', $this->subject->getFillColor());
@@ -829,7 +832,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setFillColorWithBooleanResultsInString()
+    public function setFillColorWithBooleanResultsInString(): void
     {
         $this->subject->setFillColor(true);
         self::assertSame('1', $this->subject->getFillColor());
@@ -838,7 +841,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function getFillOpacityInitiallyReturns0point35()
+    public function getFillOpacityInitiallyReturns0point35(): void
     {
         self::assertSame(
             0.35,
@@ -849,7 +852,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setFillOpacitySetsFillOpacity()
+    public function setFillOpacitySetsFillOpacity(): void
     {
         $this->subject->setFillOpacity(1234.56);
 
@@ -862,7 +865,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function getMarkerIconWidthInitiallyReturnsZero()
+    public function getMarkerIconWidthInitiallyReturnsZero(): void
     {
         self::assertSame(
             0,
@@ -873,7 +876,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setMarkerIconWidthSetsMarkerIconWidth()
+    public function setMarkerIconWidthSetsMarkerIconWidth(): void
     {
         $this->subject->setMarkerIconWidth(123456);
 
@@ -886,7 +889,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setMarkerIconWidthWithStringResultsInInteger()
+    public function setMarkerIconWidthWithStringResultsInInteger(): void
     {
         $this->subject->setMarkerIconWidth('123Test');
 
@@ -899,7 +902,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setMarkerIconWidthWithBooleanResultsInInteger()
+    public function setMarkerIconWidthWithBooleanResultsInInteger(): void
     {
         $this->subject->setMarkerIconWidth(true);
 
@@ -912,7 +915,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function getMarkerIconHeightInitiallyReturnsZero()
+    public function getMarkerIconHeightInitiallyReturnsZero(): void
     {
         self::assertSame(
             0,
@@ -923,7 +926,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setMarkerIconHeightSetsMarkerIconHeight()
+    public function setMarkerIconHeightSetsMarkerIconHeight(): void
     {
         $this->subject->setMarkerIconHeight(123456);
 
@@ -936,7 +939,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setMarkerIconHeightWithStringResultsInInteger()
+    public function setMarkerIconHeightWithStringResultsInInteger(): void
     {
         $this->subject->setMarkerIconHeight('123Test');
 
@@ -949,7 +952,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setMarkerIconHeightWithBooleanResultsInInteger()
+    public function setMarkerIconHeightWithBooleanResultsInInteger(): void
     {
         $this->subject->setMarkerIconHeight(true);
 
@@ -962,7 +965,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function getMarkerIconAnchorPosXInitiallyReturnsZero()
+    public function getMarkerIconAnchorPosXInitiallyReturnsZero(): void
     {
         self::assertSame(
             0,
@@ -973,7 +976,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setMarkerIconAnchorPosXSetsMarkerIconAnchorPosX()
+    public function setMarkerIconAnchorPosXSetsMarkerIconAnchorPosX(): void
     {
         $this->subject->setMarkerIconAnchorPosX(123456);
 
@@ -986,7 +989,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setMarkerIconAnchorPosXWithStringResultsInInteger()
+    public function setMarkerIconAnchorPosXWithStringResultsInInteger(): void
     {
         $this->subject->setMarkerIconAnchorPosX('123Test');
 
@@ -999,7 +1002,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setMarkerIconAnchorPosXWithBooleanResultsInInteger()
+    public function setMarkerIconAnchorPosXWithBooleanResultsInInteger(): void
     {
         $this->subject->setMarkerIconAnchorPosX(true);
 
@@ -1012,7 +1015,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function getMarkerIconAnchorPosYInitiallyReturnsZero()
+    public function getMarkerIconAnchorPosYInitiallyReturnsZero(): void
     {
         self::assertSame(
             0,
@@ -1023,7 +1026,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setMarkerIconAnchorPosYSetsMarkerIconAnchorPosY()
+    public function setMarkerIconAnchorPosYSetsMarkerIconAnchorPosY(): void
     {
         $this->subject->setMarkerIconAnchorPosY(123456);
 
@@ -1036,7 +1039,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setMarkerIconAnchorPosYWithStringResultsInInteger()
+    public function setMarkerIconAnchorPosYWithStringResultsInInteger(): void
     {
         $this->subject->setMarkerIconAnchorPosY('123Test');
 
@@ -1049,7 +1052,7 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function setMarkerIconAnchorPosYWithBooleanResultsInInteger()
+    public function setMarkerIconAnchorPosYWithBooleanResultsInInteger(): void
     {
         $this->subject->setMarkerIconAnchorPosY(true);
 
