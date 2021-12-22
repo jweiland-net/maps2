@@ -42,10 +42,8 @@
 	"config": {
 		"vendor-dir": ".build/vendor",
 		"allow-plugins": {
-			"friendsofphp/php-cs-fixer": true,
-			"nimut/testing-framework": true,
-			"phpspec/prophecy-phpunit": true,
-			"typo3/class-alias-loader": true
+			"typo3/class-alias-loader": true,
+			"typo3/cms-composer-installers": true
 		}
 	},
 	"extra": {
