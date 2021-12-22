@@ -65,24 +65,6 @@ class SearchTest extends UnitTestCase
     /**
      * @test
      */
-    public function setAddressWithIntegerResultsInString(): void
-    {
-        $this->subject->setAddress(123);
-        self::assertSame('123', $this->subject->getAddress());
-    }
-
-    /**
-     * @test
-     */
-    public function setAddressWithBooleanResultsInString(): void
-    {
-        $this->subject->setAddress(true);
-        self::assertSame('1', $this->subject->getAddress());
-    }
-
-    /**
-     * @test
-     */
     public function getRadiusInitiallyReturnsZero(): void
     {
         self::assertSame(
@@ -100,32 +82,6 @@ class SearchTest extends UnitTestCase
 
         self::assertSame(
             123456,
-            $this->subject->getRadius()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function setRadiusWithStringResultsInInteger(): void
-    {
-        $this->subject->setRadius('123Test');
-
-        self::assertSame(
-            123,
-            $this->subject->getRadius()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function setRadiusWithBooleanResultsInInteger(): void
-    {
-        $this->subject->setRadius(true);
-
-        self::assertSame(
-            1,
             $this->subject->getRadius()
         );
     }
