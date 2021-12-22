@@ -40,7 +40,12 @@
 		}
 	},
 	"config": {
-		"vendor-dir": ".build/vendor"
+		"vendor-dir": ".build/vendor",
+		"allow-plugins": {
+			"friendsofphp/php-cs-fixer": true,
+			"nimut/testing-framework": true,
+			"phpspec/prophecy-phpunit": true
+		}
 	},
 	"extra": {
 		"typo3/cms": {
