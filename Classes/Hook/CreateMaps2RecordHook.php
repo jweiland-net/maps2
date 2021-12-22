@@ -22,6 +22,7 @@ use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
+use TYPO3\CMS\Core\DataHandling\Localization\DataMapProcessor;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
@@ -99,6 +100,10 @@ class CreateMaps2RecordHook
             }
 
             foreach ($recordsFromRequest as $uid => $recordFromRequest) {
+                if (!$this->isValidRecord($recordFromRequest, $foreignTableName)) {
+                    continue;
+                }
+
                 $foreignLocationRecord = $this->getForeignLocationRecord(
                     $foreignTableName,
                     $this->getRealUid($uid, $dataHandler)
@@ -154,6 +159,28 @@ class CreateMaps2RecordHook
                 }
             }
         }
+    }
+
+    /**
+     * TYPO3 adds parts of translated records to DataMap while saving a record in default language.
+     * See: DataMapProcessor::instance(x, y, z)->process(); in DataHandler::process_datamap().
+     *
+     * These translated records contains all columns configured with l10n_mode=exclude like "starttime" and "endtime".
+     * As these translated records are processed at last, they will override the title of your connected
+     * poiCollection records in default language with the title of the last processed translated record.
+     *
+     * This method prevents processing such records.
+     *
+     * @param array $recordFromRequest
+     * @param string $tableName
+     * @return bool
+     */
+    protected function isValidRecord(array $recordFromRequest, string $tableName): bool
+    {
+        return
+            isset($GLOBALS['TCA'][$tableName]['ctrl']['languageField'])
+            && ($languageField = $GLOBALS['TCA'][$tableName]['ctrl']['languageField'])
+            && array_key_exists($languageField, $recordFromRequest);
     }
 
     /**
