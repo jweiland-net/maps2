@@ -88,24 +88,6 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setCollectionTypeWithIntegerResultsInString(): void
-    {
-        $this->subject->setCollectionType(123);
-        self::assertSame('123', $this->subject->getCollectionType());
-    }
-
-    /**
-     * @test
-     */
-    public function setCollectionTypeWithBooleanResultsInString(): void
-    {
-        $this->subject->setCollectionType(true);
-        self::assertSame('1', $this->subject->getCollectionType());
-    }
-
-    /**
-     * @test
-     */
     public function getTitleInitiallyReturnsEmptyString(): void
     {
         self::assertSame(
@@ -130,24 +112,6 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setTitleWithIntegerResultsInString(): void
-    {
-        $this->subject->setTitle(123);
-        self::assertSame('123', $this->subject->getTitle());
-    }
-
-    /**
-     * @test
-     */
-    public function setTitleWithBooleanResultsInString(): void
-    {
-        $this->subject->setTitle(true);
-        self::assertSame('1', $this->subject->getTitle());
-    }
-
-    /**
-     * @test
-     */
     public function getAddressInitiallyReturnsEmptyString(): void
     {
         self::assertSame(
@@ -167,24 +131,6 @@ class PoiCollectionTest extends FunctionalTestCase
             'foo bar',
             $this->subject->getAddress()
         );
-    }
-
-    /**
-     * @test
-     */
-    public function setAddressWithIntegerResultsInString(): void
-    {
-        $this->subject->setAddress(123);
-        self::assertSame('123', $this->subject->getAddress());
-    }
-
-    /**
-     * @test
-     */
-    public function setAddressWithBooleanResultsInString(): void
-    {
-        $this->subject->setAddress(true);
-        self::assertSame('1', $this->subject->getAddress());
     }
 
     /**
@@ -255,32 +201,6 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             123456,
-            $this->subject->getRadius()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function setRadiusWithStringResultsInInteger(): void
-    {
-        $this->subject->setRadius('123Test');
-
-        self::assertSame(
-            123,
-            $this->subject->getRadius()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function setRadiusWithBooleanResultsInInteger(): void
-    {
-        $this->subject->setRadius(true);
-
-        self::assertSame(
-            1,
             $this->subject->getRadius()
         );
     }
@@ -377,24 +297,6 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setStrokeColorWithIntegerResultsInString(): void
-    {
-        $this->subject->setStrokeColor(123);
-        self::assertSame('123', $this->subject->getStrokeColor());
-    }
-
-    /**
-     * @test
-     */
-    public function setStrokeColorWithBooleanResultsInString(): void
-    {
-        $this->subject->setStrokeColor(true);
-        self::assertSame('1', $this->subject->getStrokeColor());
-    }
-
-    /**
-     * @test
-     */
     public function getStrokeOpacityInitiallyReturnsEmptyString(): void
     {
         self::assertSame(
@@ -414,24 +316,6 @@ class PoiCollectionTest extends FunctionalTestCase
             'foo bar',
             $this->subject->getStrokeOpacity()
         );
-    }
-
-    /**
-     * @test
-     */
-    public function setStrokeOpacityWithIntegerResultsInString(): void
-    {
-        $this->subject->setStrokeOpacity(123);
-        self::assertSame('123', $this->subject->getStrokeOpacity());
-    }
-
-    /**
-     * @test
-     */
-    public function setStrokeOpacityWithBooleanResultsInString(): void
-    {
-        $this->subject->setStrokeOpacity(true);
-        self::assertSame('1', $this->subject->getStrokeOpacity());
     }
 
     /**
@@ -461,24 +345,6 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setStrokeWeightWithIntegerResultsInString(): void
-    {
-        $this->subject->setStrokeWeight(123);
-        self::assertSame('123', $this->subject->getStrokeWeight());
-    }
-
-    /**
-     * @test
-     */
-    public function setStrokeWeightWithBooleanResultsInString(): void
-    {
-        $this->subject->setStrokeWeight(true);
-        self::assertSame('1', $this->subject->getStrokeWeight());
-    }
-
-    /**
-     * @test
-     */
     public function getFillColorInitiallyReturnsEmptyString(): void
     {
         self::assertSame(
@@ -498,24 +364,6 @@ class PoiCollectionTest extends FunctionalTestCase
             'foo bar',
             $this->subject->getFillColor()
         );
-    }
-
-    /**
-     * @test
-     */
-    public function setFillColorWithIntegerResultsInString(): void
-    {
-        $this->subject->setFillColor(123);
-        self::assertSame('123', $this->subject->getFillColor());
-    }
-
-    /**
-     * @test
-     */
-    public function setFillColorWithBooleanResultsInString(): void
-    {
-        $this->subject->setFillColor(true);
-        self::assertSame('1', $this->subject->getFillColor());
     }
 
     /**
@@ -545,24 +393,6 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setFillOpacityWithIntegerResultsInString(): void
-    {
-        $this->subject->setFillOpacity(123);
-        self::assertSame('123', $this->subject->getFillOpacity());
-    }
-
-    /**
-     * @test
-     */
-    public function setFillOpacityWithBooleanResultsInString(): void
-    {
-        $this->subject->setFillOpacity(true);
-        self::assertSame('1', $this->subject->getFillOpacity());
-    }
-
-    /**
-     * @test
-     */
     public function getInfoWindowContentInitiallyReturnsEmptyString(): void
     {
         self::assertSame(
@@ -582,24 +412,6 @@ class PoiCollectionTest extends FunctionalTestCase
             'foo bar',
             $this->subject->getInfoWindowContent()
         );
-    }
-
-    /**
-     * @test
-     */
-    public function setInfoWindowContentWithIntegerResultsInString(): void
-    {
-        $this->subject->setInfoWindowContent(123);
-        self::assertSame('123', $this->subject->getInfoWindowContent());
-    }
-
-    /**
-     * @test
-     */
-    public function setInfoWindowContentWithBooleanResultsInString(): void
-    {
-        $this->subject->setInfoWindowContent(true);
-        self::assertSame('1', $this->subject->getInfoWindowContent());
     }
 
     /**
@@ -826,42 +638,6 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setMarkerIconWidthWithStringResultsInInteger(): void
-    {
-        $image = $this->prophesize(FileReference::class);
-        $images = new ObjectStorage();
-        $images->attach($image->reveal());
-
-        $this->subject->setMarkerIcons($images);
-        $this->subject->setMarkerIconWidth('123Test');
-
-        self::assertSame(
-            123,
-            $this->subject->getMarkerIconWidth()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function setMarkerIconWidthWithBooleanResultsInInteger(): void
-    {
-        $image = $this->prophesize(FileReference::class);
-        $images = new ObjectStorage();
-        $images->attach($image->reveal());
-
-        $this->subject->setMarkerIcons($images);
-        $this->subject->setMarkerIconWidth(true);
-
-        self::assertSame(
-            1,
-            $this->subject->getMarkerIconWidth()
-        );
-    }
-
-    /**
-     * @test
-     */
     public function getMarkerIconHeightInitiallyReturnsZero(): void
     {
         self::assertSame(
@@ -932,42 +708,6 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             123456,
-            $this->subject->getMarkerIconHeight()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function setMarkerIconHeightWithStringResultsInInteger(): void
-    {
-        $image = $this->prophesize(FileReference::class);
-        $images = new ObjectStorage();
-        $images->attach($image->reveal());
-
-        $this->subject->setMarkerIcons($images);
-        $this->subject->setMarkerIconHeight('123Test');
-
-        self::assertSame(
-            123,
-            $this->subject->getMarkerIconHeight()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function setMarkerIconHeightWithBooleanResultsInInteger(): void
-    {
-        $image = $this->prophesize(FileReference::class);
-        $images = new ObjectStorage();
-        $images->attach($image->reveal());
-
-        $this->subject->setMarkerIcons($images);
-        $this->subject->setMarkerIconHeight(true);
-
-        self::assertSame(
-            1,
             $this->subject->getMarkerIconHeight()
         );
     }
@@ -1080,42 +820,6 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function setMarkerIconAnchorPosXWithStringResultsInInteger(): void
-    {
-        $image = $this->prophesize(FileReference::class);
-        $images = new ObjectStorage();
-        $images->attach($image->reveal());
-
-        $this->subject->setMarkerIcons($images);
-        $this->subject->setMarkerIconAnchorPosX('123Test');
-
-        self::assertSame(
-            123,
-            $this->subject->getMarkerIconAnchorPosX()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function setMarkerIconAnchorPosXWithBooleanResultsInInteger(): void
-    {
-        $image = $this->prophesize(FileReference::class);
-        $images = new ObjectStorage();
-        $images->attach($image->reveal());
-
-        $this->subject->setMarkerIcons($images);
-        $this->subject->setMarkerIconAnchorPosX(true);
-
-        self::assertSame(
-            1,
-            $this->subject->getMarkerIconAnchorPosX()
-        );
-    }
-
-    /**
-     * @test
-     */
     public function getMarkerIconAnchorPosYInitiallyReturnsZero(): void
     {
         self::assertSame(
@@ -1200,42 +904,6 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             654321,
-            $this->subject->getMarkerIconAnchorPosY()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function setMarkerIconAnchorPosYWithStringResultsInInteger(): void
-    {
-        $image = $this->prophesize(FileReference::class);
-        $images = new ObjectStorage();
-        $images->attach($image->reveal());
-
-        $this->subject->setMarkerIcons($images);
-        $this->subject->setMarkerIconAnchorPosY('123Test');
-
-        self::assertSame(
-            123,
-            $this->subject->getMarkerIconAnchorPosY()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function setMarkerIconAnchorPosYWithBooleanResultsInInteger(): void
-    {
-        $image = $this->prophesize(FileReference::class);
-        $images = new ObjectStorage();
-        $images->attach($image->reveal());
-
-        $this->subject->setMarkerIcons($images);
-        $this->subject->setMarkerIconAnchorPosY(true);
-
-        self::assertSame(
-            1,
             $this->subject->getMarkerIconAnchorPosY()
         );
     }
