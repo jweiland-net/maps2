@@ -21,6 +21,7 @@ use JWeiland\Maps2\Helper\StoragePidHelper;
 use JWeiland\Maps2\Service\GeoCodeService;
 use JWeiland\Maps2\Service\MapService;
 use JWeiland\Maps2\Tca\Maps2Registry;
+use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
 use TYPO3\CMS\Core\Database\ConnectionPool;
@@ -163,10 +164,15 @@ class CreateMaps2RecordHook
      */
     protected function isValidRecord(array $recordFromRequest, string $tableName): bool
     {
+        $isTableLocalizable = BackendUtility::isTableLocalizable($tableName);
+
         return
-            isset($GLOBALS['TCA'][$tableName]['ctrl']['languageField'])
-            && ($languageField = $GLOBALS['TCA'][$tableName]['ctrl']['languageField'])
-            && array_key_exists($languageField, $recordFromRequest);
+            !$isTableLocalizable
+            || (
+                $isTableLocalizable
+                && ($languageField = $GLOBALS['TCA'][$tableName]['ctrl']['languageField'])
+                && array_key_exists($languageField, $recordFromRequest)
+            );
     }
 
     /**
