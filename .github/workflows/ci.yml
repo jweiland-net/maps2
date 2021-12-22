@@ -63,7 +63,7 @@ jobs:
         run: composer ci:php:lint
 
       - name: Unit Tests
-        run: composer ci:tests:unit
+        run: php .build/vendor/bin/phpunit -c .build/vendor/nimut/testing-framework/res/Configuration/UnitTests.xml Tests/Unit
 
       - name: Functional Tests
         env:
@@ -73,4 +73,4 @@ jobs:
           typo3DatabaseHost: 127.0.0.1
           typo3DatabasePort: ${{ job.services.mysql.ports['3306'] }}
         run: |
-          composer ci:tests:functional
+          php .build/vendor/bin/phpunit -c .build/vendor/nimut/testing-framework/res/Configuration/FunctionalTests.xml Tests/Functional
