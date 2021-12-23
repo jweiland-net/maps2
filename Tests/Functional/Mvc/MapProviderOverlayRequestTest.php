@@ -24,6 +24,7 @@ use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Request;
 use TYPO3\CMS\Extbase\Mvc\Web\RequestBuilder;
+use TYPO3\CMS\Extbase\Service\EnvironmentService;
 
 /**
  * Class MapProviderOverlayRequest
@@ -119,6 +120,13 @@ class MapProviderOverlayRequestTest extends FunctionalTestCase
             ->getAttribute('applicationType')
             ->willReturn(2); // 2 = Backend
 
+        /** @var EnvironmentService|ObjectProphecy $environmentServiceProphecy */
+        $environmentServiceProphecy = $this->prophesize(EnvironmentService::class);
+        $environmentServiceProphecy
+            ->isEnvironmentInFrontendMode()
+            ->willReturn(false);
+        GeneralUtility::setSingletonInstance(EnvironmentService::class, $environmentServiceProphecy->reveal());
+
         self::assertFalse(
             $this->subject->canHandleRequest()
         );
@@ -132,6 +140,13 @@ class MapProviderOverlayRequestTest extends FunctionalTestCase
         $this->serverRequestProphecy
             ->getAttribute('applicationType')
             ->willReturn(1); // 1 = Frontend
+
+        /** @var EnvironmentService|ObjectProphecy $environmentServiceProphecy */
+        $environmentServiceProphecy = $this->prophesize(EnvironmentService::class);
+        $environmentServiceProphecy
+            ->isEnvironmentInFrontendMode()
+            ->willReturn(true);
+        GeneralUtility::setSingletonInstance(EnvironmentService::class, $environmentServiceProphecy->reveal());
 
         Environment::initialize(
             Environment::getContext(),
@@ -158,6 +173,13 @@ class MapProviderOverlayRequestTest extends FunctionalTestCase
         $this->serverRequestProphecy
             ->getAttribute('applicationType')
             ->willReturn(1); // 1 = Frontend
+
+        /** @var EnvironmentService|ObjectProphecy $environmentServiceProphecy */
+        $environmentServiceProphecy = $this->prophesize(EnvironmentService::class);
+        $environmentServiceProphecy
+            ->isEnvironmentInFrontendMode()
+            ->willReturn(true);
+        GeneralUtility::setSingletonInstance(EnvironmentService::class, $environmentServiceProphecy->reveal());
 
         Environment::initialize(
             Environment::getContext(),
@@ -194,6 +216,13 @@ class MapProviderOverlayRequestTest extends FunctionalTestCase
         $this->serverRequestProphecy
             ->getAttribute('applicationType')
             ->willReturn(1); // 1 = Frontend
+
+        /** @var EnvironmentService|ObjectProphecy $environmentServiceProphecy */
+        $environmentServiceProphecy = $this->prophesize(EnvironmentService::class);
+        $environmentServiceProphecy
+            ->isEnvironmentInFrontendMode()
+            ->willReturn(true);
+        GeneralUtility::setSingletonInstance(EnvironmentService::class, $environmentServiceProphecy->reveal());
 
         Environment::initialize(
             Environment::getContext(),
