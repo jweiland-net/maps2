@@ -117,7 +117,6 @@ class MapProviderOverlayRequestTest extends FunctionalTestCase
     {
         $this->serverRequestProphecy
             ->getAttribute('applicationType')
-            ->shouldBeCalled()
             ->willReturn(2); // 2 = Backend
 
         self::assertFalse(
@@ -132,7 +131,6 @@ class MapProviderOverlayRequestTest extends FunctionalTestCase
     {
         $this->serverRequestProphecy
             ->getAttribute('applicationType')
-            ->shouldBeCalled()
             ->willReturn(1); // 1 = Frontend
 
         Environment::initialize(
@@ -159,7 +157,6 @@ class MapProviderOverlayRequestTest extends FunctionalTestCase
     {
         $this->serverRequestProphecy
             ->getAttribute('applicationType')
-            ->shouldBeCalled()
             ->willReturn(1); // 1 = Frontend
 
         Environment::initialize(
@@ -196,7 +193,6 @@ class MapProviderOverlayRequestTest extends FunctionalTestCase
     {
         $this->serverRequestProphecy
             ->getAttribute('applicationType')
-            ->shouldBeCalled()
             ->willReturn(1); // 1 = Frontend
 
         Environment::initialize(
