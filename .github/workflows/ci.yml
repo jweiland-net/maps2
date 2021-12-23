@@ -40,6 +40,11 @@ jobs:
       - name: Validate composer.json and composer.lock
         run: composer validate
 
+      - name: Downgrade composer to 2.1 until problem with stream-wrapper is solved
+        # @see: https://github.com/composer/composer/issues/10387
+        # @see: https://github.com/sebastianbergmann/phpunit/pull/4846
+        run: composer self-update 2.1.14
+
       - name: Get composer cache directory
         id: composer-cache
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
