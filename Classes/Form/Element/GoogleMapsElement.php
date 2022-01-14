@@ -30,20 +30,11 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
  */
 class GoogleMapsElement extends AbstractFormElement
 {
-    /**
-     * @var ExtConf
-     */
-    protected $extConf;
+    protected ExtConf $extConf;
 
-    /**
-     * @var PageRenderer
-     */
-    protected $pageRenderer;
+    protected PageRenderer $pageRenderer;
 
-    /**
-     * @var MapHelper
-     */
-    protected $mapHelper;
+    protected MapHelper $mapHelper;
 
     /**
      * Default field information enabled for this element.
@@ -176,8 +167,11 @@ class GoogleMapsElement extends AbstractFormElement
     {
         $view = GeneralUtility::makeInstance(StandaloneView::class);
         $view->setTemplatePathAndFilename('EXT:maps2/Resources/Private/Templates/Tca/GoogleMaps.html');
-        $view->assign('record', json_encode($record));
-        $view->assign('extConf', json_encode(ObjectAccess::getGettableProperties($this->extConf)));
+        $view->assign('record', json_encode($record, JSON_THROW_ON_ERROR));
+        $view->assign('extConf', json_encode(
+            ObjectAccess::getGettableProperties($this->extConf),
+            JSON_THROW_ON_ERROR
+        ));
 
         return $view->render();
     }

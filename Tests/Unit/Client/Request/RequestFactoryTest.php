@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the package jweiland/maps2.
  *
@@ -51,7 +53,7 @@ class RequestFactoryTest extends UnitTestCase
     /**
      * @test
      */
-    public function createCreatesGoogleMapsGeocodeRequest()
+    public function createCreatesGoogleMapsGeocodeRequest(): void
     {
         $this->mapServiceProphecy
             ->getMapProvider()
@@ -67,7 +69,7 @@ class RequestFactoryTest extends UnitTestCase
     /**
      * @test
      */
-    public function createCreatesOpenStreetMapGeocodeRequest()
+    public function createCreatesOpenStreetMapGeocodeRequest(): void
     {
         $this->mapServiceProphecy
             ->getMapProvider()
@@ -83,7 +85,7 @@ class RequestFactoryTest extends UnitTestCase
     /**
      * @test
      */
-    public function createSanitizesFilenameWithExtension()
+    public function createSanitizesFilenameWithExtension(): void
     {
         $this->mapServiceProphecy
             ->getMapProvider()
@@ -99,7 +101,7 @@ class RequestFactoryTest extends UnitTestCase
     /**
      * @test
      */
-    public function createSanitizesFilenameWithLowerCamelCase()
+    public function createSanitizesFilenameWithLowerCamelCase(): void
     {
         $this->mapServiceProphecy
             ->getMapProvider()
@@ -117,7 +119,7 @@ class RequestFactoryTest extends UnitTestCase
      *
      * @expectedException \Exception
      */
-    public function createWithNonExistingClassThrowsException()
+    public function createWithNonExistingClassThrowsException(): void
     {
         $this->mapServiceProphecy
             ->getMapProvider()

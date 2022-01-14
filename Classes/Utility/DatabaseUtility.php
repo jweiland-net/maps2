@@ -24,7 +24,6 @@ class DatabaseUtility
     /**
      * maps2 internal we only need the array keys to filter out invalid columns.
      *
-     * @param string $tableName
      * @return array|Column[]
      */
     public static function getColumnsFromTable(string $tableName): array

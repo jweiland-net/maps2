@@ -32,7 +32,7 @@ class MessageHelper
         $this->flashMessageService = $flashMessageService ?? GeneralUtility::makeInstance(FlashMessageService::class);
     }
 
-    public function addFlashMessage(string $message, string $title = '', int $severity = FlashMessage::OK)
+    public function addFlashMessage(string $message, string $title = '', int $severity = FlashMessage::OK): void
     {
         // We activate storeInSession, so that messages can be displayed when click on Save&Close button.
         $flashMessage = GeneralUtility::makeInstance(
@@ -47,18 +47,18 @@ class MessageHelper
     }
 
     /**
-     * @param bool $flush
      * @return FlashMessage[]
      */
-    public function getAllFlashMessages($flush = true): array
+    public function getAllFlashMessages(bool $flush = true): array
     {
         if ($flush) {
             return $this->getFlashMessageQueue()->getAllMessagesAndFlush();
         }
+
         return $this->getFlashMessageQueue()->getAllMessages();
     }
 
-    public function hasMessages()
+    public function hasMessages(): bool
     {
         return !empty($this->getAllFlashMessages(false));
     }
@@ -81,24 +81,31 @@ class MessageHelper
         return $this->getFlashMessageQueue()->getAllMessagesAndFlush($severity);
     }
 
-    public function hasErrorMessages()
+    public function hasErrorMessages(): bool
     {
         return !empty($this->getErrorMessages(false));
     }
 
+    /**
+     * @return FlashMessage[]
+     */
     public function getErrorMessages(bool $flush = true): array
     {
         if ($flush) {
             return $this->getFlashMessagesBySeverityAndFlush(FlashMessage::ERROR);
         }
+
         return $this->getFlashMessagesBySeverity(FlashMessage::ERROR);
     }
 
-    public function hasWarningMessages()
+    public function hasWarningMessages(): bool
     {
         return !empty($this->getWarningMessages(false));
     }
 
+    /**
+     * @return FlashMessage[]
+     */
     public function getWarningMessages(bool $flush = true): array
     {
         if ($flush) {
@@ -107,11 +114,14 @@ class MessageHelper
         return $this->getFlashMessagesBySeverity(FlashMessage::WARNING);
     }
 
-    public function hasOkMessages()
+    public function hasOkMessages(): bool
     {
         return !empty($this->getOkMessages(false));
     }
 
+    /**
+     * @return FlashMessage[]
+     */
     public function getOkMessages(bool $flush = true): array
     {
         if ($flush) {
@@ -120,11 +130,14 @@ class MessageHelper
         return $this->getFlashMessagesBySeverity(FlashMessage::OK);
     }
 
-    public function hasInfoMessages()
+    public function hasInfoMessages(): bool
     {
         return !empty($this->getInfoMessages(false));
     }
 
+    /**
+     * @return FlashMessage[]
+     */
     public function getInfoMessages(bool $flush = true): array
     {
         if ($flush) {
@@ -133,11 +146,14 @@ class MessageHelper
         return $this->getFlashMessagesBySeverity(FlashMessage::INFO);
     }
 
-    public function hasNoticeMessages()
+    public function hasNoticeMessages(): bool
     {
         return !empty($this->getNoticeMessages(false));
     }
 
+    /**
+     * @return FlashMessage[]
+     */
     public function getNoticeMessages(bool $flush = true): array
     {
         if ($flush) {

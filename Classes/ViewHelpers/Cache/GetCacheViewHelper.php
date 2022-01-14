@@ -33,7 +33,7 @@ class GetCacheViewHelper extends AbstractViewHelper
      */
     protected $escapeOutput = false;
 
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         $this->registerArgument(
             'prefix',
@@ -53,14 +53,12 @@ class GetCacheViewHelper extends AbstractViewHelper
     /**
      * Returns cache entry by given cache identifier
      * Info: here is no check if cache entry exists. Please use maps:cache.hasCache instead/before
-     *
-     * @param array $arguments
-     * @param \Closure $renderChildrenClosure
-     * @param RenderingContextInterface $renderingContext
-     * @return string The formatted value
      */
-    public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
-    {
+    public static function renderStatic(
+        array $arguments,
+        \Closure $renderChildrenClosure,
+        RenderingContextInterface $renderingContext
+    ): string {
         $cacheService = GeneralUtility::makeInstance(CacheService::class);
         $poiCollection = $cacheService->preparePoiCollectionForCacheMethods($arguments['poiCollection']);
         $cache = GeneralUtility::makeInstance(CacheManager::class)->getCache('maps2_cachedhtml');

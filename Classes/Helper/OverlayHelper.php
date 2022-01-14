@@ -20,10 +20,7 @@ use TYPO3\CMS\Core\Database\Query\QueryBuilder;
  */
 class OverlayHelper
 {
-    /**
-     * @var Context
-     */
-    protected $context;
+    protected Context $context;
 
     public function __construct(Context $context)
     {
@@ -52,7 +49,6 @@ class OverlayHelper
     /**
      * Add WHERE clause to get records in requested language.
      *
-     * @param QueryBuilder $queryBuilder
      * @param string $tableName tablename to read the localization columns from TCA ctrl
      * @param string $tableAlias the table alias as configured in $queryBuilder->from(table, tableAlias)
      * @param bool $useLangStrict in case of a search like "letter=b" it does not make sense to search for "b" (bicycle) in default language, do an overlay and show "Fahrrad" in frontend. Activate for search queries. Else false.
@@ -70,7 +66,7 @@ class OverlayHelper
         // Column: l10n_parent
         $transOrigPointerField = $GLOBALS['TCA'][$tableName]['ctrl']['transOrigPointerField'] ?? '';
 
-        if ($useLangStrict === false && $this->getLanguageAspect()->doOverlays()) {
+        if (!$useLangStrict && $this->getLanguageAspect()->doOverlays()) {
             // Get record in default language (0)
             // sys_language_uid IN (0, -1) and l10n_parent = 0
             $queryBuilder->andWhere(
@@ -83,7 +79,7 @@ class OverlayHelper
                     0
                 )
             );
-        } elseif ($useLangStrict === true && $overrideLanguageUid >= 0) {
+        } elseif ($useLangStrict && $overrideLanguageUid >= 0) {
             // Strict mode for f.e. backend (TCEFORM)
             // sys_language_uid = {requestedLanguageUid}
             // Without check against all languages

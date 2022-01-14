@@ -26,6 +26,7 @@ class OpenStreetMapMapper implements MapperInterface
         foreach ($response as $data) {
             $objectStorage->attach($this->getPosition($data));
         }
+
         return $objectStorage;
     }
 
@@ -41,11 +42,8 @@ class OpenStreetMapMapper implements MapperInterface
 
     /**
      * Extract address parts from Response to build a formatted address
-     *
-     * @param array $data
-     * @return string
      */
-    protected function getFormattedAddress(array $data)
+    protected function getFormattedAddress(array $data): string
     {
         if (array_key_exists('address', $data)) {
             $data['address']['city'] = $this->getCityFromAddress($data['address']);
@@ -63,15 +61,13 @@ class OpenStreetMapMapper implements MapperInterface
             // We hope address key is set above to return a reduced formattedAddress
             $formattedAddress = $data['display_name'];
         }
+
         return trim($formattedAddress, ' ,\t\n\r\0\x0B');
     }
 
     /**
      * Open Street Map differs between small and big cities.
      * That's why we have to check each kind of city size to get the city name itself.
-     *
-     * @param array $address
-     * @return string
      */
     protected function getCityFromAddress(array $address): string
     {

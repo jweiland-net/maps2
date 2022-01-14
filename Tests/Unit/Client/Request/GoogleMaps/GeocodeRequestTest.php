@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the package jweiland/maps2.
  *
@@ -46,7 +48,7 @@ class GeocodeRequestTest extends UnitTestCase
     /**
      * @test
      */
-    public function setUriSetsUri()
+    public function setUriSetsUri(): void
     {
         $uri = 'https://www.jweiland.net';
         $this->subject->setUri($uri);
@@ -59,7 +61,7 @@ class GeocodeRequestTest extends UnitTestCase
     /**
      * @test
      */
-    public function setParametersSetsParameters()
+    public function setParametersSetsParameters(): void
     {
         $parameters = [
             'uri' => 'https://www.jweiland.net',
@@ -75,7 +77,7 @@ class GeocodeRequestTest extends UnitTestCase
     /**
      * @test
      */
-    public function addParameterSetsParameter()
+    public function addParameterSetsParameter(): void
     {
         $parameters = [
             'uri' => 'https://www.jweiland.net',
@@ -96,7 +98,7 @@ class GeocodeRequestTest extends UnitTestCase
     /**
      * @test
      */
-    public function hasParameterReturnsTrue()
+    public function hasParameterReturnsTrue(): void
     {
         $parameters = [
             'uri' => 'https://www.jweiland.net',
@@ -111,7 +113,7 @@ class GeocodeRequestTest extends UnitTestCase
     /**
      * @test
      */
-    public function hasParameterReturnsFalse()
+    public function hasParameterReturnsFalse(): void
     {
         $parameters = [
             'uri' => 'https://www.jweiland.net',
@@ -126,7 +128,7 @@ class GeocodeRequestTest extends UnitTestCase
     /**
      * @test
      */
-    public function isValidRequestWithEmptyUriReturnsFalse()
+    public function isValidRequestWithEmptyUriReturnsFalse(): void
     {
         $this->subject->setUri('  ');
         self::assertFalse(
@@ -137,7 +139,7 @@ class GeocodeRequestTest extends UnitTestCase
     /**
      * @test
      */
-    public function isValidRequestWithInvalidUriReturnsFalse()
+    public function isValidRequestWithInvalidUriReturnsFalse(): void
     {
         $this->subject->setUri('nice try');
         self::assertFalse(
@@ -148,7 +150,7 @@ class GeocodeRequestTest extends UnitTestCase
     /**
      * @test
      */
-    public function isValidRequestWithValidUriReturnsTrue()
+    public function isValidRequestWithValidUriReturnsTrue(): void
     {
         $this->subject->setUri('https://www.jweiland.net/%s/what/ever/%s.html');
         self::assertTrue(
@@ -160,7 +162,7 @@ class GeocodeRequestTest extends UnitTestCase
      * @test
      * @throws \Exception
      */
-    public function getUriWillAddAddressAndApiKeyToUri()
+    public function getUriWillAddAddressAndApiKeyToUri(): void
     {
         $this->extConf->setGoogleMapsGeocodeApiKey('MyApiKey');
         $this->subject->setUri('%s:%s');
@@ -175,7 +177,7 @@ class GeocodeRequestTest extends UnitTestCase
      * @test
      * @throws \Exception
      */
-    public function getUriAddsAddressAndApiKeyToUriButUriIsInvalid()
+    public function getUriAddsAddressAndApiKeyToUriButUriIsInvalid(): void
     {
         $this->extConf->setGoogleMapsGeocodeApiKey('MyApiKey');
         $this->subject->setUri('%s:%s');

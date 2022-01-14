@@ -26,9 +26,6 @@ class CacheService
      * In multilingual environments, where UID is always the same, we have to build a more unique
      * Cache Identifier.
      *
-     * @param string $prefix A prefix you can prepend to the generated CacheIdentifier
-     * @param array $poiCollection
-     * @return string
      * @throws \Exception
      */
     public function getCacheIdentifier(array $poiCollection, string $prefix = 'infoWindow'): string
@@ -56,9 +53,7 @@ class CacheService
      * Please do not use "infoWindowPid" and "infoWindowUid" as Cache-Tag-Prefix in your template,
      * as we will override them here.
      *
-     * @param array $poiCollection
-     * @param array $cacheTags
-     * @return array
+     * @return mixed[]
      */
     public function getCacheTags(array $poiCollection, array $cacheTags = []): array
     {
@@ -76,8 +71,7 @@ class CacheService
      * to getCacheIdentifier. But in case of ViewHelpers we have a PoiCollection object. You can use
      * this method to prepare/sanitize PoiCollection objects for use with getCacheIdentifier/getCacheTags.
      *
-     * @param PoiCollection $poiCollection
-     * @return array
+     * @return array<string, int>|array<string, null>|array<string, string>
      */
     public function preparePoiCollectionForCacheMethods(PoiCollection $poiCollection): array
     {
@@ -92,7 +86,6 @@ class CacheService
     /**
      * Returns the calculated (incl. fallback) sys_language_uid
      *
-     * @return int
      * @throws \Exception
      */
     protected function getLanguageUid(): int
@@ -101,13 +94,8 @@ class CacheService
             throw new \Exception('getLanguageId can only be called from FE, as we have to add the true language ID to PoiCollection');
         }
 
-        if (version_compare(TYPO3_branch, '9.4', '<')) {
-            $languageId = (int)$GLOBALS['TSFE']->sys_language_uid;
-        } else {
-            $context = GeneralUtility::makeInstance(Context::class);
-            $languageId = (int)$context->getPropertyFromAspect('language', 'id');
-        }
-        return $languageId;
+        $context = GeneralUtility::makeInstance(Context::class);
+        return (int)$context->getPropertyFromAspect('language', 'id');
     }
 
     protected function isFrontendEnvironment(): bool

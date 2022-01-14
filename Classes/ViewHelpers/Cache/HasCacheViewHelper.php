@@ -26,7 +26,7 @@ class HasCacheViewHelper extends AbstractViewHelper
 {
     use CompileWithRenderStatic;
 
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         $this->registerArgument(
             'prefix',
@@ -45,14 +45,12 @@ class HasCacheViewHelper extends AbstractViewHelper
 
     /**
      * Checks if caching framework has the requested cache entry
-     *
-     * @param array $arguments
-     * @param \Closure $renderChildrenClosure
-     * @param RenderingContextInterface $renderingContext
-     * @return bool
      */
-    public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
-    {
+    public static function renderStatic(
+        array $arguments,
+        \Closure $renderChildrenClosure,
+        RenderingContextInterface $renderingContext
+    ): bool {
         $cacheService = GeneralUtility::makeInstance(CacheService::class);
         $poiCollection = $cacheService->preparePoiCollectionForCacheMethods($arguments['poiCollection']);
         $cache = GeneralUtility::makeInstance(CacheManager::class)->getCache('maps2_cachedhtml');

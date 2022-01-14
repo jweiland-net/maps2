@@ -20,18 +20,12 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class MapperFactory
 {
-    /**
-     * @var array
-     */
-    protected $mapping = [
+    protected array $mapping = [
         'gm' => GoogleMapsMapper::class,
         'osm' => OpenStreetMapMapper::class
     ];
 
-    /**
-     * @var MapHelper
-     */
-    protected $mapHelper;
+    protected MapHelper $mapHelper;
 
     public function __construct(MapHelper $mapHelper)
     {

@@ -23,9 +23,6 @@ class MapHelper
 {
     /**
      * Get currently valid default map provider
-     *
-     * @param array $databaseRow If set, we will try to retrieve map provider from this row before.
-     * @return string Returns either "gm" or "osm"
      */
     public function getMapProvider(array $databaseRow = []): string
     {
@@ -80,12 +77,12 @@ class MapHelper
      * Use this method to convert the JSON back into an array.
      *
      * @param string $poisAsJson That's normally the content of column "configuration_map"
-     * @return array
+     * @return array<string, string>[]|bool[]
      */
     public function convertPoisAsJsonToArray(string $poisAsJson): array
     {
         $pois = [];
-        foreach (json_decode($poisAsJson, true) ?? [] as $poi) {
+        foreach (json_decode($poisAsJson, true, 512, JSON_THROW_ON_ERROR) ?? [] as $poi) {
             $pois[] = array_combine(
                 [
                     'latitude',
@@ -103,8 +100,6 @@ class MapHelper
      * It respects the settings from Extension Settings.
      * If false is returned, an overlay will be shown instead of the map and no JavaScript files
      * will be loaded for maps2.
-     *
-     * @return bool
      */
     public function isRequestToMapProviderAllowed(): bool
     {
@@ -113,11 +108,14 @@ class MapHelper
             if ($extConf->getExplicitAllowMapProviderRequestsBySessionOnly()) {
                 return (bool)$_SESSION['mapProviderRequestsAllowedForMaps2'];
             }
+
             if ($GLOBALS['TSFE'] instanceof TypoScriptFrontendController) {
                 return (bool)$GLOBALS['TSFE']->fe_user->getSessionData('mapProviderRequestsAllowedForMaps2');
             }
+
             return false;
         }
+
         return true;
     }
 }

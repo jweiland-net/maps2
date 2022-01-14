@@ -37,7 +37,7 @@ class RenderHiddenFieldsForGetViewHelper extends AbstractViewHelper
      */
     protected $escapeOutput = false;
 
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         $this->registerArgument('pageUid', 'int', 'The target page UID', false, null);
         $this->registerArgument('action', 'string', 'Target action', false, null);
@@ -46,14 +46,12 @@ class RenderHiddenFieldsForGetViewHelper extends AbstractViewHelper
 
     /**
      * Checks if caching framework has the requested cache entry
-     *
-     * @param array $arguments
-     * @param \Closure $renderChildrenClosure
-     * @param RenderingContextInterface $renderingContext
-     * @return bool
      */
-    public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
-    {
+    public static function renderStatic(
+        array $arguments,
+        \Closure $renderChildrenClosure,
+        RenderingContextInterface $renderingContext
+    ): string {
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $extensionService = $objectManager->get(ExtensionService::class);
         $cacheHashCalculator = $objectManager->get(CacheHashCalculator::class);

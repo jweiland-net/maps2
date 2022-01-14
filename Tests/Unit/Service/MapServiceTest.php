@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the package jweiland/maps2.
  *
@@ -80,7 +82,7 @@ class MapServiceTest extends UnitTestCase
     /**
      * @test
      */
-    public function showAllowMapFormWithMissingMapProviderWillCreateFlashMessage()
+    public function showAllowMapFormWithMissingMapProviderWillCreateFlashMessage(): void
     {
         $testString = 'testHtml';
 
@@ -178,7 +180,7 @@ class MapServiceTest extends UnitTestCase
     /**
      * @test
      */
-    public function showAllowMapFormWithEmptyMapProviderWillCreateFlashMessage()
+    public function showAllowMapFormWithEmptyMapProviderWillCreateFlashMessage(): void
     {
         $testString = 'testHtml';
 
@@ -277,7 +279,7 @@ class MapServiceTest extends UnitTestCase
     /**
      * @test
      */
-    public function showAllowMapFormWithMapProviderWillAssignVariablesToView()
+    public function showAllowMapFormWithMapProviderWillAssignVariablesToView(): void
     {
         $testString = 'testHtml';
 
@@ -355,7 +357,7 @@ class MapServiceTest extends UnitTestCase
     /**
      * @test
      */
-    public function getMapProviderWillReturnOsm()
+    public function getMapProviderWillReturnOsm(): void
     {
         $extConf = new ExtConf([]);
         $extConf->setMapProvider('osm');
@@ -374,7 +376,7 @@ class MapServiceTest extends UnitTestCase
     /**
      * @test
      */
-    public function getMapProviderWillReturnGm()
+    public function getMapProviderWillReturnGm(): void
     {
         $extConf = new ExtConf([]);
         $extConf->setMapProvider('gm');
@@ -393,7 +395,7 @@ class MapServiceTest extends UnitTestCase
     /**
      * @test
      */
-    public function getMapProviderWillReturnDefaultMapProvider()
+    public function getMapProviderWillReturnDefaultMapProvider(): void
     {
         $extConf = new ExtConf([]);
         $extConf->setMapProvider('both');
@@ -413,7 +415,7 @@ class MapServiceTest extends UnitTestCase
     /**
      * @test
      */
-    public function getMapProviderWillReturnMapProviderAsStringFromDatabase()
+    public function getMapProviderWillReturnMapProviderAsStringFromDatabase(): void
     {
         $extConf = new ExtConf([]);
         $extConf->setMapProvider('both');
@@ -435,7 +437,7 @@ class MapServiceTest extends UnitTestCase
     /**
      * @test
      */
-    public function getMapProviderWillReturnMapProviderAsArrayFromDatabase()
+    public function getMapProviderWillReturnMapProviderAsArrayFromDatabase(): void
     {
         $extConf = new ExtConf([]);
         $extConf->setMapProvider('both');
@@ -459,7 +461,7 @@ class MapServiceTest extends UnitTestCase
     /**
      * @test
      */
-    public function getMapProviderWillReturnDefaultMapProviderFromDatabaseIfEmpty()
+    public function getMapProviderWillReturnDefaultMapProviderFromDatabaseIfEmpty(): void
     {
         $extConf = new ExtConf([]);
         $extConf->setMapProvider('both');
@@ -481,7 +483,7 @@ class MapServiceTest extends UnitTestCase
     /**
      * @test
      */
-    public function getMapProviderWillReturnDefaultMapProviderFromDatabaseIfMissing()
+    public function getMapProviderWillReturnDefaultMapProviderFromDatabaseIfMissing(): void
     {
         $extConf = new ExtConf([]);
         $extConf->setMapProvider('both');

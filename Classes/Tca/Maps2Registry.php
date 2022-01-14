@@ -24,34 +24,19 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class Maps2Registry implements SingletonInterface
 {
-    /**
-     * @var array
-     */
-    protected $registry = [];
+    protected array $registry = [];
 
-    /**
-     * @var array
-     */
-    protected $extensions = [];
+    protected array $extensions = [];
 
-    /**
-     * @var array
-     */
-    protected $addedMaps2Tabs = [];
+    protected array $addedMaps2Tabs = [];
 
-    /**
-     * @var string
-     */
-    protected $configurationFile = '';
+    protected string $configurationFile = '';
 
-    /**
-     * @var string
-     */
-    protected $template = '';
+    protected string $template = '';
 
-    public static function getInstance(): self
+    public static function getInstance(): object
     {
-        return GeneralUtility::makeInstance(__CLASS__);
+        return GeneralUtility::makeInstance(self::class);
     }
 
     public function __construct()
@@ -61,10 +46,16 @@ class Maps2Registry implements SingletonInterface
             . '  %s int(11) unsigned DEFAULT \'0\' NOT NULL' . PHP_EOL . ');' . str_repeat(PHP_EOL, 3);
     }
 
-    protected function initialize()
+    protected function initialize(): void
     {
         if (@is_file($this->configurationFile)) {
-            $configuration = json_decode(file_get_contents($this->configurationFile), true);
+            $configuration = json_decode(
+                file_get_contents($this->configurationFile),
+                true,
+                512,
+                JSON_THROW_ON_ERROR
+            );
+
             if (
                 is_array($configuration) && count($configuration) === 2
                 && array_key_exists('registry', $configuration)
@@ -98,17 +89,22 @@ class Maps2Registry implements SingletonInterface
      *                                    -> foreignColumnName: column name of the foreign table. That's your table...of your extension
      *                                    -> poiColumnName: column name of local POI tables. That's ours...from maps2
      * @param bool $override If TRUE, any maps2 configuration for the same table / field is removed before the new configuration is added
-     * @return bool
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
      */
-    public function add(string $extensionKey, string $tableName, array $options = [], string $fieldName = 'tx_maps2_uid', bool $override = false)
-    {
+    public function add(
+        string $extensionKey,
+        string $tableName,
+        array $options = [],
+        string $fieldName = 'tx_maps2_uid',
+        bool $override = false
+    ): bool {
         $this->initialize();
         $didRegister = false;
         if (empty($tableName) || !is_string($tableName)) {
             throw new \InvalidArgumentException('No or invalid table name "' . $tableName . '" given.', 1369122038);
         }
+
         if (empty($extensionKey) || !is_string($extensionKey)) {
             throw new \InvalidArgumentException('No or invalid extension key "' . $extensionKey . '" given.', 1397836158);
         }
@@ -124,13 +120,10 @@ class Maps2Registry implements SingletonInterface
             $this->applyTcaForTableAndField($tableName, $fieldName);
             file_put_contents(
                 $this->configurationFile,
-                json_encode(
-                    [
-                        'registry' => $this->registry,
-                        'extensions' => $this->extensions
-                    ],
-                    JSON_PRETTY_PRINT
-                )
+                json_encode([
+                    'registry' => $this->registry,
+                    'extensions' => $this->extensions
+                ], JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT)
             );
             $didRegister = true;
         }
@@ -141,14 +134,20 @@ class Maps2Registry implements SingletonInterface
     /**
      * Reads, extract and returns Maps2 Column Configuration (Registry)
      *
-     * @return array
      * @api
+     * @return mixed[]
      */
     public function getColumnRegistry(): array
     {
         $columnRegistry = [];
         if (@is_file($this->configurationFile)) {
-            $configuration = json_decode(file_get_contents($this->configurationFile), true);
+            $configuration = json_decode(
+                file_get_contents($this->configurationFile),
+                true,
+                512,
+                JSON_THROW_ON_ERROR
+            );
+
             if (
                 is_array($configuration)
                 && array_key_exists('registry', $configuration)
@@ -161,11 +160,17 @@ class Maps2Registry implements SingletonInterface
         return $columnRegistry;
     }
 
+    /**
+     * @return int[]|string[]
+     */
     public function getExtensionKeys(): array
     {
         return array_keys($this->extensions);
     }
 
+    /**
+     * @return int[]|string[]
+     */
     public function getCategorizedTables(): array
     {
         return array_keys($this->registry);
@@ -182,14 +187,20 @@ class Maps2Registry implements SingletonInterface
         foreach ($this->getExtensionKeys() as $extensionKey) {
             $sql .= $this->getDatabaseTableDefinition($extensionKey);
         }
+
         return $sql;
     }
 
     public function getDatabaseTableDefinition(string $extensionKey): string
     {
-        if (!isset($this->extensions[$extensionKey]) || !is_array($this->extensions[$extensionKey])) {
+        if (!isset($this->extensions[$extensionKey])) {
             return '';
         }
+
+        if (!is_array($this->extensions[$extensionKey])) {
+            return '';
+        }
+
         $sql = '';
 
         foreach ($this->extensions[$extensionKey] as $tableName => $fields) {
@@ -197,10 +208,11 @@ class Maps2Registry implements SingletonInterface
                 $sql .= sprintf($this->template, $tableName, $fieldName);
             }
         }
+
         return $sql;
     }
 
-    protected function applyTcaForTableAndField(string $tableName, string $fieldName)
+    protected function applyTcaForTableAndField(string $tableName, string $fieldName): void
     {
         $this->addTcaColumn($tableName, $fieldName, $this->registry[$tableName][$fieldName]);
         $this->addToAllTCAtypes($tableName, $fieldName, $this->registry[$tableName][$fieldName]);
@@ -216,16 +228,12 @@ class Maps2Registry implements SingletonInterface
      *              + typesList: list of types that shall visualize the maps2 field
      *              + position: insert position of the maps2 field
      */
-    protected function addToAllTCAtypes(string $tableName, string $fieldName, array $options)
+    protected function addToAllTCAtypes(string $tableName, string $fieldName, array $options): void
     {
 
         // Makes sure to add more TCA to an existing structure
         if (isset($GLOBALS['TCA'][$tableName]['columns'])) {
-            if (empty($options['fieldList'])) {
-                $fieldList = $this->addMaps2Tab($tableName, $fieldName);
-            } else {
-                $fieldList = $options['fieldList'];
-            }
+            $fieldList = empty($options['fieldList']) ? $this->addMaps2Tab($tableName, $fieldName) : $options['fieldList'];
 
             $typesList = '';
             if (isset($options['typesList']) && $options['typesList'] !== '') {
@@ -249,8 +257,8 @@ class Maps2Registry implements SingletonInterface
             $fieldList .= '--div--;Maps2, ';
             $this->addedMaps2Tabs[$tableName] = $tableName;
         }
-        $fieldList .= $fieldName;
-        return $fieldList;
+
+        return $fieldList . $fieldName;
     }
 
     /**
@@ -265,7 +273,7 @@ class Maps2Registry implements SingletonInterface
      *              + l10n_mode
      *              + l10n_display
      */
-    protected function addTcaColumn(string $tableName, string $fieldName, array $options)
+    protected function addTcaColumn(string $tableName, string $fieldName, array $options): void
     {
         // Makes sure to add more TCA to an existing structure
         if (isset($GLOBALS['TCA'][$tableName]['columns'])) {
@@ -294,9 +302,11 @@ class Maps2Registry implements SingletonInterface
             if (isset($options['l10n_mode'])) {
                 $columns[$fieldName]['l10n_mode'] = $options['l10n_mode'];
             }
+
             if (isset($options['l10n_display'])) {
                 $columns[$fieldName]['l10n_display'] = $options['l10n_display'];
             }
+
             if (isset($options['displayCond'])) {
                 $columns[$fieldName]['displayCond'] = $options['displayCond'];
             }
@@ -321,7 +331,7 @@ class Maps2Registry implements SingletonInterface
      * This has to be taken care of manually!
      *
      * @param array $fieldConfigurationOverride Changes to the default configuration
-     * @return array
+     * @return mixed[]
      */
     public static function getTcaFieldConfiguration(array $fieldConfigurationOverride = []): array
     {
@@ -362,7 +372,7 @@ class Maps2Registry implements SingletonInterface
      *
      * @param array $sqlString
      * @param string $extensionKey
-     * @return array
+     * @return array<string, mixed[]>|array<string, string>
      */
     public function addMaps2DatabaseSchemaToTablesDefinition(array $sqlString, string $extensionKey): array
     {
@@ -392,7 +402,7 @@ class Maps2Registry implements SingletonInterface
      * @param string $tableName The name of the table for which the registration should be removed.
      * @param string $fieldName The name of the field for which the registration should be removed.
      */
-    protected function remove(string $tableName, string $fieldName)
+    protected function remove(string $tableName, string $fieldName): void
     {
         if (!$this->isRegistered($tableName, $fieldName)) {
             return;
@@ -410,8 +420,14 @@ class Maps2Registry implements SingletonInterface
         }
 
         // If no more fields are configured we unregister the maps2 tab.
-        if (empty($this->registry[$tableName]) && isset($this->addedMaps2Tabs[$tableName])) {
-            unset($this->addedMaps2Tabs[$tableName]);
+        if (!empty($this->registry[$tableName])) {
+            return;
         }
+
+        if (!isset($this->addedMaps2Tabs[$tableName])) {
+            return;
+        }
+
+        unset($this->addedMaps2Tabs[$tableName]);
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the package jweiland/maps2.
  *
@@ -36,7 +38,7 @@ class PositionTest extends UnitTestCase
     /**
      * @test
      */
-    public function getLatitudeInitiallyReturnsZero()
+    public function getLatitudeInitiallyReturnsZero(): void
     {
         self::assertSame(
             0.0,
@@ -47,7 +49,7 @@ class PositionTest extends UnitTestCase
     /**
      * @test
      */
-    public function setLatitudeSetsLatitude()
+    public function setLatitudeSetsLatitude(): void
     {
         $this->subject->setLatitude(1234.56);
 
@@ -60,7 +62,7 @@ class PositionTest extends UnitTestCase
     /**
      * @test
      */
-    public function getLongitudeInitiallyReturnsZero()
+    public function getLongitudeInitiallyReturnsZero(): void
     {
         self::assertSame(
             0.0,
@@ -71,7 +73,7 @@ class PositionTest extends UnitTestCase
     /**
      * @test
      */
-    public function setLongitudeSetsLongitude()
+    public function setLongitudeSetsLongitude(): void
     {
         $this->subject->setLongitude(1234.56);
 
@@ -84,7 +86,7 @@ class PositionTest extends UnitTestCase
     /**
      * @test
      */
-    public function getFormattedAddressInitiallyReturnsEmptyString()
+    public function getFormattedAddressInitiallyReturnsEmptyString(): void
     {
         self::assertSame(
             '',
@@ -95,7 +97,7 @@ class PositionTest extends UnitTestCase
     /**
      * @test
      */
-    public function setFormattedAddressSetsFormattedAddress()
+    public function setFormattedAddressSetsFormattedAddress(): void
     {
         $this->subject->setFormattedAddress('foo bar');
 
@@ -103,23 +105,5 @@ class PositionTest extends UnitTestCase
             'foo bar',
             $this->subject->getFormattedAddress()
         );
-    }
-
-    /**
-     * @test
-     */
-    public function setFormattedAddressWithIntegerResultsInString()
-    {
-        $this->subject->setFormattedAddress(123);
-        self::assertSame('123', $this->subject->getFormattedAddress());
-    }
-
-    /**
-     * @test
-     */
-    public function setFormattedAddressWithBooleanResultsInString()
-    {
-        $this->subject->setFormattedAddress(true);
-        self::assertSame('1', $this->subject->getFormattedAddress());
     }
 }

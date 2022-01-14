@@ -23,15 +23,9 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class MapProviderResolver implements NodeResolverInterface
 {
-    /**
-     * @var array
-     */
-    protected $data = [];
+    protected array $data = [];
 
-    /**
-     * @var MapHelper
-     */
-    protected $mapHelper;
+    protected MapHelper $mapHelper;
 
     public function __construct(NodeFactory $nodeFactory, array $data)
     {
@@ -49,16 +43,7 @@ class MapProviderResolver implements NodeResolverInterface
         if ($this->mapHelper->getMapProvider($this->data['databaseRow']) === 'osm') {
             return OpenStreetMapElement::class;
         }
-        return GoogleMapsElement::class;
-    }
 
-    protected function getCollectionType(array $databaseRow): string
-    {
-        if (is_array($databaseRow['collection_type'])) {
-            $collectionType = current($databaseRow['collection_type']);
-        } else {
-            $collectionType = 'Point';
-        }
-        return $collectionType;
+        return GoogleMapsElement::class;
     }
 }

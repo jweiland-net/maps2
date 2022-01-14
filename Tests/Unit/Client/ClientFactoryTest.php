@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the package jweiland/maps2.
  *
@@ -22,14 +24,14 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class ClientFactoryTest extends UnitTestCase
 {
     /**
-     * @var MapService
-     */
-    protected $mapServiceProphecy;
-
-    /**
      * @var ClientFactory
      */
     protected $subject;
+
+    /**
+     * @var MapService
+     */
+    protected $mapServiceProphecy;
 
     protected function setUp(): void
     {
@@ -43,15 +45,16 @@ class ClientFactoryTest extends UnitTestCase
     {
         unset(
             $this->subject,
-            $this->extConf
+            $this->mapServiceProphecy
         );
+
         parent::tearDown();
     }
 
     /**
      * @test
      */
-    public function createCreatesGoogleMapsClient()
+    public function createCreatesGoogleMapsClient(): void
     {
         $this->mapServiceProphecy
             ->getMapProvider()
@@ -67,7 +70,7 @@ class ClientFactoryTest extends UnitTestCase
     /**
      * @test
      */
-    public function createCreatesOpenStreetMapClient()
+    public function createCreatesOpenStreetMapClient(): void
     {
         $this->mapServiceProphecy
             ->getMapProvider()

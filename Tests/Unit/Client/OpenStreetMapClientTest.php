@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the package jweiland/maps2.
  *
@@ -57,7 +59,7 @@ class OpenStreetMapClientTest extends UnitTestCase
     /**
      * @test
      */
-    public function processRequestWithInvalidRequestAddsFlashMessage()
+    public function processRequestWithInvalidRequestAddsFlashMessage(): void
     {
         $this->geocodeRequestProphecy
             ->isValidRequest()

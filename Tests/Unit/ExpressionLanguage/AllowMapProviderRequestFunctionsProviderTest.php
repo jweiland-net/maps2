@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the package jweiland/maps2.
  *
@@ -50,7 +52,7 @@ class AllowMapProviderRequestFunctionsProviderTest extends UnitTestCase
     /**
      * @test
      */
-    public function getFunctionsWithDeactivatedSettingsWillReturnTrue()
+    public function getFunctionsWithDeactivatedSettingsWillReturnTrue(): void
     {
         $this->extConf->setExplicitAllowMapProviderRequests(0);
         $this->extConf->setExplicitAllowMapProviderRequestsBySessionOnly(0);
@@ -66,7 +68,7 @@ class AllowMapProviderRequestFunctionsProviderTest extends UnitTestCase
     /**
      * @test
      */
-    public function getFunctionsOnSessionUsageWillReturnFalse()
+    public function getFunctionsOnSessionUsageWillReturnFalse(): void
     {
         $this->extConf->setExplicitAllowMapProviderRequests(1);
         $this->extConf->setExplicitAllowMapProviderRequestsBySessionOnly(1);
@@ -82,7 +84,7 @@ class AllowMapProviderRequestFunctionsProviderTest extends UnitTestCase
     /**
      * @test
      */
-    public function getFunctionsOnSessionUsageWillReturnTrue()
+    public function getFunctionsOnSessionUsageWillReturnTrue(): void
     {
         $this->extConf->setExplicitAllowMapProviderRequests(1);
         $this->extConf->setExplicitAllowMapProviderRequestsBySessionOnly(1);
@@ -99,7 +101,7 @@ class AllowMapProviderRequestFunctionsProviderTest extends UnitTestCase
     /**
      * @test
      */
-    public function getFunctionsOnCookieUsageWillReturnFalseIfTsfeIsNotSet()
+    public function getFunctionsOnCookieUsageWillReturnFalseIfTsfeIsNotSet(): void
     {
         $this->extConf->setExplicitAllowMapProviderRequests(1);
         $this->extConf->setExplicitAllowMapProviderRequestsBySessionOnly(0);
@@ -115,7 +117,7 @@ class AllowMapProviderRequestFunctionsProviderTest extends UnitTestCase
     /**
      * @test
      */
-    public function getFunctionsOnCookieUsageWillReturnFalse()
+    public function getFunctionsOnCookieUsageWillReturnFalse(): void
     {
         $this->extConf->setExplicitAllowMapProviderRequests(1);
         $this->extConf->setExplicitAllowMapProviderRequestsBySessionOnly(0);
@@ -139,7 +141,7 @@ class AllowMapProviderRequestFunctionsProviderTest extends UnitTestCase
     /**
      * @test
      */
-    public function getFunctionsOnCookieUsageWillReturnTrue()
+    public function getFunctionsOnCookieUsageWillReturnTrue(): void
     {
         $this->extConf->setExplicitAllowMapProviderRequests(1);
         $this->extConf->setExplicitAllowMapProviderRequestsBySessionOnly(0);

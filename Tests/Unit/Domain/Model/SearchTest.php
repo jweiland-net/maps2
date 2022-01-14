@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the package jweiland/maps2.
  *
@@ -36,7 +38,7 @@ class SearchTest extends UnitTestCase
     /**
      * @test
      */
-    public function getAddressInitiallyReturnsEmptyString()
+    public function getAddressInitiallyReturnsEmptyString(): void
     {
         self::assertSame(
             '',
@@ -47,7 +49,7 @@ class SearchTest extends UnitTestCase
     /**
      * @test
      */
-    public function setAddressSetsAddress()
+    public function setAddressSetsAddress(): void
     {
         $this->subject->setAddress('foo bar');
 
@@ -60,25 +62,7 @@ class SearchTest extends UnitTestCase
     /**
      * @test
      */
-    public function setAddressWithIntegerResultsInString()
-    {
-        $this->subject->setAddress(123);
-        self::assertSame('123', $this->subject->getAddress());
-    }
-
-    /**
-     * @test
-     */
-    public function setAddressWithBooleanResultsInString()
-    {
-        $this->subject->setAddress(true);
-        self::assertSame('1', $this->subject->getAddress());
-    }
-
-    /**
-     * @test
-     */
-    public function getRadiusInitiallyReturnsZero()
+    public function getRadiusInitiallyReturnsZero(): void
     {
         self::assertSame(
             50,
@@ -89,38 +73,12 @@ class SearchTest extends UnitTestCase
     /**
      * @test
      */
-    public function setRadiusSetsRadius()
+    public function setRadiusSetsRadius(): void
     {
         $this->subject->setRadius(123456);
 
         self::assertSame(
             123456,
-            $this->subject->getRadius()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function setRadiusWithStringResultsInInteger()
-    {
-        $this->subject->setRadius('123Test');
-
-        self::assertSame(
-            123,
-            $this->subject->getRadius()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function setRadiusWithBooleanResultsInInteger()
-    {
-        $this->subject->setRadius(true);
-
-        self::assertSame(
-            1,
             $this->subject->getRadius()
         );
     }

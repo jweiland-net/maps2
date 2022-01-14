@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the package jweiland/maps2.
  *
@@ -143,7 +145,7 @@ class GoogleMapsElementTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function renderWillCleanUpCurrentRecord()
+    public function renderWillCleanUpCurrentRecord(): void
     {
         $this->poiCollectionRepository->findByUid(123)->shouldBeCalled()->willReturn(new PoiCollection());
 
@@ -174,7 +176,7 @@ class GoogleMapsElementTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function renderWillAddRadiusToConfigArray()
+    public function renderWillAddRadiusToConfigArray(): void
     {
         $poiCollection = new PoiCollection();
         $poiCollection->setCollectionType('Radius');
@@ -210,7 +212,7 @@ class GoogleMapsElementTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function renderWillAddLatAndLngToConfigArray()
+    public function renderWillAddLatAndLngToConfigArray(): void
     {
         $poiCollection = new PoiCollection();
         $poiCollection->setCollectionType('Point');
@@ -246,7 +248,7 @@ class GoogleMapsElementTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function renderWillAddRequireJsModule()
+    public function renderWillAddRequireJsModule(): void
     {
         $this->poiCollectionRepository->findByUid(123)->shouldBeCalled()->willReturn(new PoiCollection());
 

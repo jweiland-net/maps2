@@ -6,7 +6,6 @@ $EM_CONF[$_EXTKEY] = [
     'version' => '9.3.10',
     'category' => 'plugin',
     'state' => 'stable',
-    'uploadfolder' => false,
     'clearCacheOnLoad' => true,
     'author' => 'Stefan Froemken',
     'author_email' => 'projects@jweiland.net',

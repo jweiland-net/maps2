@@ -18,12 +18,6 @@ class IsRecordAllowedToCreatePoiCollectionSignal
 {
     /**
      * This SignalSlot disallows the creation of new PoiCollection
-     *
-     * @param array $foreignLocationRecord
-     * @param string $foreignTableName
-     * @param string $foreignColumnName
-     * @param array $options
-     * @param bool $isValid
      */
     public function invalidPoiCollection(
         array $foreignLocationRecord,

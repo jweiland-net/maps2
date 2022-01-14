@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the package jweiland/maps2.
  *
@@ -27,12 +29,13 @@ abstract class AbstractUnitTestCase extends UnitTestCase
      * Helper method for UnitTests
      * Let Database query return given $returnValue
      *
-     * @param string $tableName
      * @param mixed $returnValue
-     * @param array $expressions
      */
-    protected function buildAssertionForDatabaseWithReturnValue($tableName, $returnValue, array $expressions = [['expr' => 'eq', ['expr' => 'in']]])
-    {
+    protected function buildAssertionForDatabaseWithReturnValue(
+        string $tableName,
+        $returnValue,
+        array $expressions = [['expr' => 'eq', ['expr' => 'in']]]
+    ): void {
         /** @var Statement|ObjectProphecy $statement */
         $statement = $this->prophesize(Statement::class);
         /** @var ExpressionBuilder|ObjectProphecy $expressionBuilder */

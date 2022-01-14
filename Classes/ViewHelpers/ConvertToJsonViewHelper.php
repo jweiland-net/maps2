@@ -41,14 +41,12 @@ class ConvertToJsonViewHelper extends AbstractViewHelper
 
     /**
      * Convert all array and object types into a json string. Useful for data-Attributes
-     *
-     * @param array $arguments
-     * @param \Closure $renderChildrenClosure
-     * @param RenderingContextInterface $renderingContext
-     * @return string
      */
-    public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
-    {
+    public static function renderStatic(
+        array $arguments,
+        \Closure $renderChildrenClosure,
+        RenderingContextInterface $renderingContext
+    ): string {
         $poiCollections = $renderChildrenClosure();
 
         if ($poiCollections instanceof PoiCollection) {
@@ -58,7 +56,7 @@ class ConvertToJsonViewHelper extends AbstractViewHelper
         if (self::valueContainsPoiCollections($poiCollections)) {
             $json = self::getPoiCollectionsAsJson($poiCollections);
         } else {
-            $json = json_encode($poiCollections);
+            $json = json_encode($poiCollections, JSON_THROW_ON_ERROR);
         }
 
         return htmlspecialchars($json);
@@ -68,7 +66,6 @@ class ConvertToJsonViewHelper extends AbstractViewHelper
      * Convert poiCollections to array and pass them through json_encode
      *
      * @param array|QueryResultInterface|ObjectStorage|PoiCollection[] $poiCollections
-     * @return string
      */
     protected static function getPoiCollectionsAsJson($poiCollections): string
     {
@@ -85,16 +82,17 @@ class ConvertToJsonViewHelper extends AbstractViewHelper
                 unset($categoryProperties['parent']);
                 $poiCollectionAsArray['categories'][] = $categoryProperties;
             }
+
             $poiCollectionsAsArray[] = $poiCollectionAsArray;
         }
-        return json_encode($poiCollectionsAsArray);
+
+        return json_encode($poiCollectionsAsArray, JSON_THROW_ON_ERROR);
     }
 
     /**
      * Check, if value contains entries of type PoiCollection
      *
      * @param mixed $value
-     * @return bool
      */
     protected static function valueContainsPoiCollections($value): bool
     {

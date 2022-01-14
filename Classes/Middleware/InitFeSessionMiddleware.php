@@ -26,34 +26,26 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
  */
 class InitFeSessionMiddleware implements MiddlewareInterface
 {
-    /**
-     * @var ExtConf
-     */
-    protected $extConf;
+    protected ExtConf $extConf;
 
     public function __construct()
     {
         $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
 
-        // Start SESSION
-        // if not in CLI mode
-        // if explicitAllowMapProviderRequests in ExtConf is activated
-        // if session was not already started
-        if (
-            !Environment::isCli()
-            && $this->extConf->getExplicitAllowMapProviderRequestsBySessionOnly()
-            && session_status() === PHP_SESSION_NONE
-        ) {
-            session_start();
+        if (Environment::isCli()) {
+            return;
         }
+        if (!$this->extConf->getExplicitAllowMapProviderRequestsBySessionOnly()) {
+            return;
+        }
+        if (session_status() !== PHP_SESSION_NONE) {
+            return;
+        }
+        session_start();
     }
 
     /**
      * Check GET parameters and allow google requests in session if valid
-     *
-     * @param ServerRequestInterface $request
-     * @param RequestHandlerInterface $handler
-     * @return ResponseInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
@@ -72,18 +64,16 @@ class InitFeSessionMiddleware implements MiddlewareInterface
 
             if (
                 !$this->extConf->getExplicitAllowMapProviderRequestsBySessionOnly()
-                && (bool)$this->getTypoScriptFrontendController()->fe_user->getSessionData('mapProviderRequestsAllowedForMaps2') === false
+                && !$this->getTypoScriptFrontendController()->fe_user->getSessionData('mapProviderRequestsAllowedForMaps2')
             ) {
                 $this->getTypoScriptFrontendController()->fe_user->setAndSaveSessionData('mapProviderRequestsAllowedForMaps2', 1);
             }
         }
+
         return $handler->handle($request);
     }
 
-    /**
-     * @return TypoScriptFrontendController|null
-     */
-    protected function getTypoScriptFrontendController()
+    protected function getTypoScriptFrontendController(): ?TypoScriptFrontendController
     {
         return $GLOBALS['TSFE'];
     }

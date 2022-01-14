@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the package jweiland/maps2.
  *
@@ -64,7 +66,7 @@ class GeoCodeServiceTest extends AbstractUnitTestCase
     {
         unset(
             $this->subject,
-            $this->client
+            $this->clientProphecy
         );
         parent::tearDown();
     }
@@ -73,7 +75,7 @@ class GeoCodeServiceTest extends AbstractUnitTestCase
      * @test
      * @throws \Exception
      */
-    public function getPositionsByAddressWithEmptyAddressWillReturnEmptyObjectStorage()
+    public function getPositionsByAddressWithEmptyAddressWillReturnEmptyObjectStorage(): void
     {
         $objectStorage = new ObjectStorage();
         GeneralUtility::addInstance(ObjectStorage::class, $objectStorage);
@@ -88,7 +90,7 @@ class GeoCodeServiceTest extends AbstractUnitTestCase
      * @test
      * @throws \Exception
      */
-    public function getPositionsByAddressWithAddressFilledWithSpacesWillReturnEmptyObjectStorage()
+    public function getPositionsByAddressWithAddressFilledWithSpacesWillReturnEmptyObjectStorage(): void
     {
         $objectStorage = new ObjectStorage();
         GeneralUtility::addInstance(ObjectStorage::class, $objectStorage);
@@ -103,7 +105,7 @@ class GeoCodeServiceTest extends AbstractUnitTestCase
      * @test
      * @throws \Exception
      */
-    public function getPositionsByAddressWillReturnEmptyObjectStorage()
+    public function getPositionsByAddressWillReturnEmptyObjectStorage(): void
     {
         $objectStorage = new ObjectStorage();
         GeneralUtility::addInstance(ObjectStorage::class, $objectStorage);
@@ -134,7 +136,7 @@ class GeoCodeServiceTest extends AbstractUnitTestCase
      * @test
      * @throws \Exception
      */
-    public function getPositionsByAddressWillReturnFilledObjectStorage()
+    public function getPositionsByAddressWillReturnFilledObjectStorage(): void
     {
         $positions = new ObjectStorage();
         GeneralUtility::addInstance(ObjectStorage::class, $positions);
@@ -180,7 +182,7 @@ class GeoCodeServiceTest extends AbstractUnitTestCase
      * @test
      * @throws \Exception
      */
-    public function getFirstFoundPositionByAddressWithEmptyAddressWillReturnNull()
+    public function getFirstFoundPositionByAddressWithEmptyAddressWillReturnNull(): void
     {
         $objectStorage = new ObjectStorage();
         GeneralUtility::addInstance(ObjectStorage::class, $objectStorage);
@@ -194,7 +196,7 @@ class GeoCodeServiceTest extends AbstractUnitTestCase
      * @test
      * @throws \Exception
      */
-    public function getFirstFoundPositionByAddressWithAddressFilledWithSpacesWillReturnNull()
+    public function getFirstFoundPositionByAddressWithAddressFilledWithSpacesWillReturnNull(): void
     {
         $objectStorage = new ObjectStorage();
         GeneralUtility::addInstance(ObjectStorage::class, $objectStorage);
@@ -208,7 +210,7 @@ class GeoCodeServiceTest extends AbstractUnitTestCase
      * @test
      * @throws \Exception
      */
-    public function getFirstFoundPositionByAddressWithAddressWillReturnNull()
+    public function getFirstFoundPositionByAddressWithAddressWillReturnNull(): void
     {
         $objectStorage = new ObjectStorage();
         GeneralUtility::addInstance(ObjectStorage::class, $objectStorage);
@@ -238,7 +240,7 @@ class GeoCodeServiceTest extends AbstractUnitTestCase
      * @test
      * @throws \Exception
      */
-    public function getFirstFoundPositionByAddressWillReturnRadiusResult()
+    public function getFirstFoundPositionByAddressWillReturnRadiusResult(): void
     {
         $expectedPosition = new Position();
         $expectedPosition->setFormattedAddress('My street 123, 12345 somewhere');

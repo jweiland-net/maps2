@@ -29,25 +29,16 @@ use TYPO3\CMS\Install\Updates\UpgradeWizardInterface;
  */
 class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterface, ConfirmableInterface
 {
-    /**
-     * @return string
-     */
     public function getIdentifier(): string
     {
         return 'maps2MigratePoiRecord';
     }
 
-    /**
-     * @return string
-     */
     public function getTitle(): string
     {
         return '[maps2] Migrate all POI records as JSON into poicollection record';
     }
 
-    /**
-     * @return string
-     */
     public function getDescription(): string
     {
         return 'We have simplified the POI handling a lot and removed table tx_maps2_domain_model_poi. ' .
@@ -65,9 +56,6 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
         );
     }
 
-    /**
-     * @return bool
-     */
     public function updateNecessary(): bool
     {
         $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable('tx_maps2_domain_model_poicollection');
@@ -105,9 +93,6 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
             ->fetchColumn(0);
     }
 
-    /**
-     * @return bool
-     */
     public function executeUpdate(): bool
     {
         $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable('tx_maps2_domain_model_poicollection');
@@ -125,27 +110,25 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
             $connection->update(
                 'tx_maps2_domain_model_poicollection',
                 [
-                    'configuration_map' => json_encode($this->migratePoiRecords($poiCollectionRecord['uid']))
+                    'configuration_map' => json_encode(
+                        $this->migratePoiRecords(
+                            $poiCollectionRecord['uid']
+                        ),
+                        JSON_THROW_ON_ERROR
+                    )
                 ],
                 [
                     'uid' => (int)$poiCollectionRecord['uid']
                 ]
             );
-
-            /*$connection->delete(
-                'tx_maps2_domain_model_poi',
-                [
-                    'poicollection' => $poiCollectionRecord['uid']
-                ],
-                [
-                    \PDO::PARAM_INT
-                ]
-            );*/
         }
 
         return true;
     }
 
+    /**
+     * @return array<int|string, string>
+     */
     protected function migratePoiRecords(int $poiCollectionUid): array
     {
         $routes = [];
@@ -156,6 +139,9 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
         return $routes;
     }
 
+    /**
+     * @return mixed[]
+     */
     protected function getPoiRecords(int $poiCollectionUid): array
     {
         $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable('tx_maps2_domain_model_poi');
@@ -182,7 +168,7 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
     }
 
     /**
-     * @return string[]
+     * @return array<class-string<DatabaseUpdatedPrerequisite>>
      */
     public function getPrerequisites(): array
     {

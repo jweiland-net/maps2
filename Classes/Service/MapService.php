@@ -25,6 +25,7 @@ use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 use TYPO3\CMS\Extbase\Service\EnvironmentService;
 use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
 use TYPO3\CMS\Fluid\View\StandaloneView;
@@ -34,25 +35,13 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
  */
 class MapService
 {
-    /**
-     * @var ObjectManager
-     */
-    protected $objectManager;
+    protected ObjectManagerInterface $objectManager;
 
-    /**
-     * @var ConfigurationManagerInterface
-     */
-    protected $configurationManager;
+    protected ConfigurationManagerInterface $configurationManager;
 
-    /**
-     * @var array
-     */
-    protected $settings = [];
+    protected array $settings = [];
 
-    /**
-     * @var array
-     */
-    protected $columnRegistry = '';
+    protected array $columnRegistry = [];
 
     public function __construct()
     {
@@ -81,8 +70,6 @@ class MapService
 
     /**
      * Set info window for Poi Collection
-     *
-     * @param PoiCollection $poiCollection
      */
     public function setInfoWindow(PoiCollection $poiCollection): void
     {
@@ -98,9 +85,6 @@ class MapService
 
     /**
      * Render InfoWindow for marker
-     *
-     * @param PoiCollection $poiCollection
-     * @return string
      */
     public function renderInfoWindow(PoiCollection $poiCollection): string
     {
@@ -112,7 +96,8 @@ class MapService
                 $this->getInfoWindowContentTemplatePath()
             )
         );
-        return (string)$view->render();
+
+        return $view->render();
     }
 
     /**
@@ -124,17 +109,20 @@ class MapService
         $settings = $this->getSettings();
 
         // get default template path
-        $path = $extConf->getInfoWindowContentTemplatePath();
-        if (
-            isset($settings['infoWindowContentTemplatePath'])
-            && !empty($settings['infoWindowContentTemplatePath'])
-        ) {
-            $path = $settings['infoWindowContentTemplatePath'];
+        if (!isset($settings['infoWindowContentTemplatePath'])) {
+            return $extConf->getInfoWindowContentTemplatePath();
         }
 
-        return $path;
+        if (empty($settings['infoWindowContentTemplatePath'])) {
+            return $extConf->getInfoWindowContentTemplatePath();
+        }
+
+        return $settings['infoWindowContentTemplatePath'];
     }
 
+    /**
+     * @return mixed[]
+     */
     protected function getSettings(): array
     {
         $settings = [];
@@ -157,14 +145,11 @@ class MapService
      * Currently only 'Point' types are allowed. If you need type 'Radius' you can realize it with $overrideFieldValues.
      * If you need 'Area' or 'Route' it's up to you to implement that function within your own extension.
      *
-     * @param int $pid
-     * @param Position $position
-     * @param array $overrideFieldValues
      * @return int UID of the newly inserted record
      * @throws \Exception
      * @api
      */
-    public function createNewPoiCollection($pid, Position $position, array $overrideFieldValues = []): int
+    public function createNewPoiCollection(int $pid, Position $position, array $overrideFieldValues = []): int
     {
         if (empty($position->getLatitude()) || empty($position->getLongitude())) {
             $messageHelper = GeneralUtility::makeInstance(MessageHelper::class);
@@ -175,11 +160,12 @@ class MapService
             );
             return 0;
         }
+
         $latitude = $position->getLatitude();
         $longitude = $position->getLongitude();
 
         $fieldValues = [];
-        $fieldValues['pid'] = (int)$pid;
+        $fieldValues['pid'] = $pid;
         $fieldValues['tstamp'] = time();
         $fieldValues['crdate'] = time();
         $fieldValues['cruser_id'] = $GLOBALS['BE_USER']->user['uid'] ?? 0;
@@ -307,7 +293,7 @@ class MapService
     /**
      * Currently used by UnitTests, only.
      *
-     * @param array $columnRegistry
+     * @param mixed[] $columnRegistry
      */
     public function setColumnRegistry(array $columnRegistry): void
     {
@@ -316,12 +302,14 @@ class MapService
 
     /**
      * Adds the related foreign records of a PoiCollection to PoiCollection itself.
-     *
-     * @param PoiCollection $poiCollection
      */
     public function addForeignRecordsToPoiCollection(PoiCollection $poiCollection): void
     {
-        if (empty($this->columnRegistry) || $poiCollection->getUid() === 0) {
+        if (empty($this->columnRegistry)) {
+            return;
+        }
+
+        if ($poiCollection->getUid() === 0) {
             return;
         }
 
@@ -364,10 +352,6 @@ class MapService
     /**
      * Use this signal, if you want to modify the foreign record, before adding it to PoiCollection record.
      * If you set $foreignRecord to [] (empty) it will NOT be added to PoiCollection.
-     *
-     * @param array $foreignRecord
-     * @param string $tableName
-     * @param string $columnName
      */
     protected function emitPreAddForeignRecordToPoiCollectionSignal(
         array &$foreignRecord,

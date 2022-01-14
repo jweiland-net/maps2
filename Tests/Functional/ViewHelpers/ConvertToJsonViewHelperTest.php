@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the package jweiland/maps2.
  *
@@ -61,12 +63,10 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function renderWithStringWillJustCallJsonEncode()
+    public function renderWithStringWillJustCallJsonEncode(): void
     {
         $this->subject->setRenderChildrenClosure(
-            function () {
-                return 'simpleString';
-            }
+            fn(): string => 'simpleString'
         );
 
         self::assertSame(
@@ -78,12 +78,10 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function renderWithSimpleArrayWillJustCallJsonEncode()
+    public function renderWithSimpleArrayWillJustCallJsonEncode(): void
     {
         $this->subject->setRenderChildrenClosure(
-            function () {
-                return ['foo' => 'bar'];
-            }
+            fn(): array => ['foo' => 'bar']
         );
 
         self::assertSame(
@@ -95,12 +93,10 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function renderWithPoiCollectionWillSetItToArrayAndConvertItToJson()
+    public function renderWithPoiCollectionWillSetItToArrayAndConvertItToJson(): void
     {
         $this->subject->setRenderChildrenClosure(
-            function () {
-                return new PoiCollection();
-            }
+            fn(): PoiCollection => new PoiCollection()
         );
 
         GeneralUtility::setSingletonInstance(ExtConf::class, new ExtConf([]));
@@ -120,12 +116,10 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function renderWithPoiCollectionsWillConvertItToJson()
+    public function renderWithPoiCollectionsWillConvertItToJson(): void
     {
         $this->subject->setRenderChildrenClosure(
-            function () {
-                return [new PoiCollection()];
-            }
+            fn(): array => [new PoiCollection()]
         );
 
         $json = $this->subject->render();
@@ -143,15 +137,13 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function renderWithPoiCollectionsWillRemoveMaps2MarkerIconsFromCategories()
+    public function renderWithPoiCollectionsWillRemoveMaps2MarkerIconsFromCategories(): void
     {
         $poiCollection = new PoiCollection();
         $poiCollection->addCategory(new Category());
 
         $this->subject->setRenderChildrenClosure(
-            function () use ($poiCollection) {
-                return [$poiCollection];
-            }
+            fn(): array => [$poiCollection]
         );
 
         $json = $this->subject->render();
@@ -169,14 +161,12 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function renderWithPoiCollectionsWillRemoveMarkerIconsFromPoiCollection()
+    public function renderWithPoiCollectionsWillRemoveMarkerIconsFromPoiCollection(): void
     {
         $poiCollection = new PoiCollection();
 
         $this->subject->setRenderChildrenClosure(
-            function () use ($poiCollection) {
-                return [$poiCollection];
-            }
+            fn(): array => [$poiCollection]
         );
 
         $json = $this->subject->render();

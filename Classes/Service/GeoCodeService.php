@@ -29,20 +29,12 @@ class GeoCodeService implements SingletonInterface
 {
     /**
      * Client depends on mapProvider which is either gm or osm
-     *
-     * @var ClientInterface
      */
-    protected $client;
+    protected ClientInterface $client;
 
-    /**
-     * @var RequestFactory
-     */
-    protected $requestFactory;
+    protected RequestFactory $requestFactory;
 
-    /**
-     * @var MapperFactory
-     */
-    protected $mapperFactory;
+    protected MapperFactory $mapperFactory;
 
     public function __construct(
         ClientFactory $clientFactory,
@@ -55,7 +47,6 @@ class GeoCodeService implements SingletonInterface
     }
 
     /**
-     * @param string $address
      * @return ObjectStorage|Position[]
      */
     public function getPositionsByAddress(string $address): ObjectStorage
@@ -82,7 +73,7 @@ class GeoCodeService implements SingletonInterface
     {
         $position = null;
         $positions = $this->getPositionsByAddress($address);
-        if ($positions->count()) {
+        if ($positions->count() !== 0) {
             $positions->rewind();
             /** @var Position $position */
             $position = $positions->current();

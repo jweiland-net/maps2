@@ -33,7 +33,7 @@ class SetCacheViewHelper extends AbstractViewHelper
      */
     protected $escapeOutput = false;
 
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         $this->registerArgument(
             'prefix',
@@ -71,13 +71,12 @@ class SetCacheViewHelper extends AbstractViewHelper
 
     /**
      * Saves data in a cache file.
-     *
-     * @param array $arguments
-     * @param \Closure $renderChildrenClosure
-     * @param RenderingContextInterface $renderingContext
      */
-    public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
-    {
+    public static function renderStatic(
+        array $arguments,
+        \Closure $renderChildrenClosure,
+        RenderingContextInterface $renderingContext
+    ): void {
         $cacheService = GeneralUtility::makeInstance(CacheService::class);
         $poiCollection = $cacheService->preparePoiCollectionForCacheMethods($arguments['poiCollection']);
         $cache = GeneralUtility::makeInstance(CacheManager::class)->getCache('maps2_cachedhtml');

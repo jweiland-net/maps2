@@ -98,6 +98,7 @@ call_user_func(static function(): void {
             ['source' => 'EXT:maps2/Resources/Public/Icons/' . $fileName]
         );
     }
+
     $bmpIcons = [
         'ext-maps2-record-type-point' => 'RecordTypePoint.png',
         'ext-maps2-record-type-area' => 'RecordTypeArea.png',

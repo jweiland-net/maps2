@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the package jweiland/maps2.
  *
@@ -65,7 +67,7 @@ class PoiCollectionControllerTest extends UnitTestCase
      */
     protected $viewProphecy;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManagerProphecy = $this->prophesize(ObjectManager::class);
         $this->poiCollectionRepositoryProphecy = $this->prophesize(PoiCollectionRepository::class);
@@ -98,7 +100,7 @@ class PoiCollectionControllerTest extends UnitTestCase
     /**
      * @test
      */
-    public function showActionShowsPoiCollectionFromUri()
+    public function showActionShowsPoiCollectionFromUri(): void
     {
         $poiCollection = new PoiCollection();
         $this->viewProphecy
@@ -111,7 +113,7 @@ class PoiCollectionControllerTest extends UnitTestCase
     /**
      * @test
      */
-    public function showActionShowsPoiCollectionByItsIdentifier()
+    public function showActionShowsPoiCollectionByItsIdentifier(): void
     {
         $this->subject->_set(
             'settings',
@@ -135,7 +137,7 @@ class PoiCollectionControllerTest extends UnitTestCase
     /**
      * @test
      */
-    public function showActionWithCategoriesButWithoutPoiCollectionsAddsFlashMessage()
+    public function showActionWithCategoriesButWithoutPoiCollectionsAddsFlashMessage(): void
     {
         $this->subject->_set(
             'settings',
@@ -180,7 +182,7 @@ class PoiCollectionControllerTest extends UnitTestCase
     /**
      * @test
      */
-    public function showActionWithCategoriesWithPoiCollections()
+    public function showActionWithCategoriesWithPoiCollections(): void
     {
         $this->subject->_set(
             'settings',
@@ -210,7 +212,7 @@ class PoiCollectionControllerTest extends UnitTestCase
     /**
      * @test
      */
-    public function showActionWithStorageFoldersButWithoutPoiCollectionsAddsFlashMessage()
+    public function showActionWithStorageFoldersButWithoutPoiCollectionsAddsFlashMessage(): void
     {
         /** @var FlashMessage|ObjectProphecy $flashMessageProphecy */
         $flashMessageProphecy = $this->prophesize(FlashMessage::class);
@@ -248,7 +250,7 @@ class PoiCollectionControllerTest extends UnitTestCase
     /**
      * @test
      */
-    public function showActionWithStorageFoldersWithPoiCollections()
+    public function showActionWithStorageFoldersWithPoiCollections(): void
     {
         /** @var QueryResultInterface|ObjectProphecy $queryResultProphecy */
         $queryResultProphecy = $this->prophesize(QueryResultInterface::class);

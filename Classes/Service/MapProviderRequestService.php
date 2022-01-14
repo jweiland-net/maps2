@@ -21,10 +21,7 @@ use JWeiland\Maps2\Helper\MapHelper;
  */
 class MapProviderRequestService
 {
-    /**
-     * @var MapHelper
-     */
-    protected $mapHelper;
+    protected MapHelper $mapHelper;
 
     public function __construct(MapHelper $mapHelper)
     {
@@ -32,7 +29,6 @@ class MapProviderRequestService
     }
 
     /**
-     * @return bool
      * @deprecated
      */
     public function isRequestToMapProviderAllowed(): bool

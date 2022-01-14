@@ -23,10 +23,7 @@ use TYPO3\CMS\Core\Utility\MathUtility;
  */
 class AddressHelper
 {
-    /**
-     * @var MessageHelper
-     */
-    protected $messageHelper;
+    protected MessageHelper $messageHelper;
 
     public function __construct(MessageHelper $messageHelper = null)
     {
@@ -35,10 +32,6 @@ class AddressHelper
 
     /**
      * Get address for Map Providers GeoCode requests
-     *
-     * @param array $locationRecordToSave
-     * @param array $options
-     * @return string Prepared address for Map Provider requests
      */
     public function getAddress(array $locationRecordToSave, array $options): string
     {
@@ -63,11 +56,6 @@ class AddressHelper
 
     /**
      * Check, if a formatted address is still equal with the address parts of foreign location record.
-     *
-     * @param string $address
-     * @param array $foreignLocationRecord
-     * @param array $options
-     * @return bool
      */
     public function isSameAddress(string $address, array $foreignLocationRecord, array $options): bool
     {
@@ -76,7 +64,6 @@ class AddressHelper
             ' ',
             str_replace(',', '', strtolower($address))
         );
-        $isSameAddress = true;
         foreach ($options['addressColumns'] as $addressColumn) {
             if (in_array(
                 strtolower($foreignLocationRecord[$addressColumn]),
@@ -85,19 +72,16 @@ class AddressHelper
             )) {
                 continue;
             }
-            $isSameAddress = false;
-            break;
+
+            return false;
         }
-        return $isSameAddress;
+
+        return true;
     }
 
     /**
      * Try to get a country name from foreign extension record.
      * If we do not find a country name, we will try some fallbacks.
-     *
-     * @param array $record The record to search for country information
-     * @param array $options The options from maps2 registry
-     * @return string
      */
     protected function getCountryName(array $record, array $options): string
     {
@@ -115,9 +99,6 @@ class AddressHelper
     /**
      * If we can not get any country information of foreign extension,
      * we now try some fallbacks to get a country name.
-     *
-     * @param array $options The options from maps2 registry
-     * @return string
      */
     protected function getFallbackCountryName(array $options): string
     {
@@ -125,6 +106,7 @@ class AddressHelper
         if (array_key_exists('defaultCountry', $options) && !empty($options['defaultCountry'])) {
             return trim($options['defaultCountry']);
         }
+
         $this->messageHelper->addFlashMessage(
             'We can not find any country information within your extension. Either in Maps2 Registry nor in this record. Please check your configuration or update your extension.',
             'No country information found',
@@ -168,39 +150,40 @@ class AddressHelper
                 'Country not found in DB',
                 FlashMessage::WARNING
             );
+
             return '';
         }
+
         return $countryRecord['cn_short_en'];
     }
 
     /**
      * Check, if we can load country name from static_countries
-     *
-     * @param array $record
-     * @param string $countryColumn
-     * @return bool
      */
     protected function canCountryBeLoadedFromStaticCountry(array $record, string $countryColumn): bool
     {
-        return !empty($countryColumn)
-            && array_key_exists($countryColumn, $record)
-            && MathUtility::canBeInterpretedAsInteger($record[$countryColumn])
-            && ExtensionManagementUtility::isLoaded('static_info_tables');
+        if (empty($countryColumn)) {
+            return false;
+        }
+
+        if (!array_key_exists($countryColumn, $record)) {
+            return false;
+        }
+
+        if (!MathUtility::canBeInterpretedAsInteger($record[$countryColumn])) {
+            return false;
+        }
+
+        return ExtensionManagementUtility::isLoaded('static_info_tables');
     }
 
     /**
      * Unify option configuration
-     *
-     * @param array $options Options to unify
      */
-    protected function unifyOptionConfiguration(array &$options)
+    protected function unifyOptionConfiguration(array &$options): void
     {
         // unify addressColumns
-        if (is_string($options['addressColumns'])) {
-            $options['addressColumns'] = GeneralUtility::trimExplode(',', $options['addressColumns']);
-        } else {
-            array_map('trim', $options['addressColumns']);
-        }
+        $options['countryColumn'] = array_key_exists('countryColumn', $options) ? trim($options['countryColumn']) : '';
 
         // unify countryColumn
         if (!array_key_exists('countryColumn', $options)) {
@@ -220,9 +203,6 @@ class AddressHelper
 
     /**
      * Check, if configured options are valid
-     *
-     * @param array $options
-     * @return bool
      */
     protected function isValidOptionConfiguration(array $options): bool
     {

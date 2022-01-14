@@ -45,7 +45,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
         'typo3conf/ext/maps2'
     ];
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->setUpBackendUserFromFixture(1);
@@ -73,7 +73,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
         ];
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         parent::tearDown();
     }
@@ -81,7 +81,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function processDatamapClearsInfoWindowContentCacheIfTableIsPoiCollection()
+    public function processDatamapClearsInfoWindowContentCacheIfTableIsPoiCollection(): void
     {
         /** @var FrontendInterface|ObjectProphecy $cacheProphecy */
         $cacheProphecy = $this->prophesize(VariableFrontend::class);
@@ -127,7 +127,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function processDatamapWillGetForeignLocationRecord()
+    public function processDatamapWillGetForeignLocationRecord(): void
     {
         /** @var Dispatcher|ObjectProphecy $dispatcherProphecy */
         $dispatcherProphecy = $this->prophesize(Dispatcher::class);
@@ -185,7 +185,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function processDatamapInvalidForeignRecordBecausePidIsNotEqual()
+    public function processDatamapInvalidForeignRecordBecausePidIsNotEqual(): void
     {
         $maps2RegistryConfiguration = $this->maps2RegistryConfiguration;
         $maps2RegistryConfiguration['fe_users']['lastlogin']['columnMatch']['pid'] = 432;
@@ -237,9 +237,9 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
     /**
      * Provides various expression configuration
      *
-     * @return array
+     * @return array<string, array<array<string, array<string, string>>|bool>>
      */
-    public function dataProcessorForExpressions()
+    public function dataProcessorForExpressions(): array
     {
         return [
             'Record invalid if pid is 432' => [['pid' => ['expr' => 'eq', 'value' => '432']], false],
@@ -260,12 +260,13 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
     /**
      * @test
      *
-     * @param array $columnMatch
-     * @param bool $isValid
      * @dataProvider dataProcessorForExpressions
+     * @param array<string, mixed[]> $columnMatch
      */
-    public function processDatamapInvalidForeignRecordBecauseExpressionsAreNotEqual(array $columnMatch, bool $isValid)
-    {
+    public function processDatamapInvalidForeignRecordBecauseExpressionsAreNotEqual(
+        array $columnMatch,
+        bool $isValid
+    ): void {
         $maps2RegistryConfiguration = $this->maps2RegistryConfiguration;
         $maps2RegistryConfiguration['fe_users']['lastlogin']['columnMatch'] = $columnMatch;
 
@@ -316,7 +317,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function processDatamapCreatesNewPoiCollection()
+    public function processDatamapCreatesNewPoiCollection(): void
     {
         $dataHandler = new DataHandler();
         $dataHandler->datamap = [
@@ -389,7 +390,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function processDatamapDoesNotCreatesPoiCollectionBecauseOfHook()
+    public function processDatamapDoesNotCreatesPoiCollectionBecauseOfHook(): void
     {
         $dataHandler = new DataHandler();
         $dataHandler->datamap = [
