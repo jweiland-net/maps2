@@ -26,126 +26,70 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  */
 class PoiCollection extends AbstractEntity
 {
-    /**
-     * @var int
-     */
-    protected $sysLanguageUid = 0;
+    protected int $sysLanguageUid = 0;
+
+    protected int $l10nParent = 0;
+
+    protected string $collectionType = '';
 
     /**
-     * @var int
-     */
-    protected $l10nParent = 0;
-
-    /**
-     * @var string
-     */
-    protected $collectionType = '';
-
-    /**
-     * @var string
      * @Extbase\Validate("NotEmpty")
      */
-    protected $title = '';
+    protected string $title = '';
 
     /**
      * JSON string containing all POIs for Area and Route
-     *
-     * @var string
      */
-    protected $configurationMap = '';
+    protected string $configurationMap = '';
 
-    /**
-     * @var string
-     */
-    protected $address = '';
+    protected string $address = '';
 
-    /**
-     * @var float
-     */
-    protected $latitude = 0.0;
+    protected float $latitude = 0.0;
 
-    /**
-     * @var float
-     */
-    protected $longitude = 0.0;
+    protected float $longitude = 0.0;
 
-    /**
-     * @var int
-     */
-    protected $radius = 0;
+    protected int $radius = 0;
 
-    /**
-     * @var string
-     */
-    protected $strokeColor = '';
+    protected string $strokeColor = '';
 
-    /**
-     * @var string
-     */
-    protected $strokeOpacity = '';
+    protected string $strokeOpacity = '';
 
-    /**
-     * @var string
-     */
-    protected $strokeWeight = '';
+    protected string $strokeWeight = '';
 
-    /**
-     * @var string
-     */
-    protected $fillColor = '';
+    protected string $fillColor = '';
 
-    /**
-     * @var string
-     */
-    protected $fillOpacity = '';
+    protected string $fillOpacity = '';
 
-    /**
-     * @var string
-     */
-    protected $infoWindowContent = '';
+    protected string $infoWindowContent = '';
 
     /**
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
      */
-    protected $infoWindowImages;
+    protected ObjectStorage $infoWindowImages;
 
     /**
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
      */
-    protected $markerIcons;
+    protected ObjectStorage $markerIcons;
 
-    /**
-     * @var int
-     */
-    protected $markerIconWidth = 0;
+    protected int $markerIconWidth = 0;
 
-    /**
-     * @var int
-     */
-    protected $markerIconHeight = 0;
+    protected int $markerIconHeight = 0;
 
-    /**
-     * @var int
-     */
-    protected $markerIconAnchorPosX = 0;
+    protected int $markerIconAnchorPosX = 0;
 
-    /**
-     * @var int
-     */
-    protected $markerIconAnchorPosY = 0;
+    protected int $markerIconAnchorPosY = 0;
 
     /**
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\JWeiland\Maps2\Domain\Model\Category>
      */
-    protected $categories;
+    protected ObjectStorage $categories;
 
     /**
      * distance
      * this is a helper var. This is not part of the db
-     *
-     * @var float
      */
-    protected $distance = 0.0;
+    protected float $distance = 0.0;
 
     /**
      * As I don't know, if foreign record has a valid DomainModel, the foreign records are arrays.
@@ -153,7 +97,7 @@ class PoiCollection extends AbstractEntity
      *
      * @var array|null
      */
-    protected $foreignRecords;
+    protected ?array $foreignRecords = null;
 
     public function __construct()
     {

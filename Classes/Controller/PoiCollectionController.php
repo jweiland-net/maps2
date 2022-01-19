@@ -25,10 +25,7 @@ use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
  */
 class PoiCollectionController extends AbstractController
 {
-    /**
-     * @var PoiCollectionRepository
-     */
-    protected $poiCollectionRepository;
+    protected PoiCollectionRepository $poiCollectionRepository;
 
     public function __construct(ExtConf $extConf, PoiCollectionRepository $poiCollectionRepository)
     {
@@ -39,8 +36,6 @@ class PoiCollectionController extends AbstractController
 
     /**
      * This action will show the map of Google Maps or OpenStreetMap
-     *
-     * @param int $poiCollectionUid
      */
     public function showAction(int $poiCollectionUid = 0): void
     {
@@ -51,8 +46,6 @@ class PoiCollectionController extends AbstractController
 
     /**
      * This uncached action will show an overlay which the visitor has to confirm first.
-     *
-     * @param int $poiCollectionUid
      */
     public function overlayAction(int $poiCollectionUid = 0): void
     {
@@ -86,6 +79,7 @@ class PoiCollectionController extends AbstractController
                 $search->getRadius()
             );
         }
+
         $this->postProcessAndAssignFluidVariables([
             'poiCollections' => $poiCollections,
             'search' => $search

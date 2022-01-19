@@ -19,12 +19,9 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  */
 class OpenStreetMapClient extends AbstractClient
 {
-    /**
-     * @var string
-     */
-    protected $title = 'Open Street Map';
+    protected string $title = 'Open Street Map';
 
-    protected function checkResponseForErrors(?array $response)
+    protected function checkResponseForErrors(?array $response): void
     {
         if ($response === null) {
             $this->messageHelper->addFlashMessage(
@@ -32,7 +29,7 @@ class OpenStreetMapClient extends AbstractClient
                 'Invalid JSON response',
                 FlashMessage::ERROR
             );
-        } elseif (is_array($response) && empty($response)) {
+        } elseif ($response === []) {
             $this->messageHelper->addFlashMessage(
                 LocalizationUtility::translate(
                     'error.noPositionsFound.body',

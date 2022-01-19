@@ -79,7 +79,7 @@ class CreateMaps2RecordHook
                 continue;
             }
 
-            foreach ($recordsFromRequest as $uid => $recordFromRequest) {
+            foreach (array_keys($recordsFromRequest) as $uid) {
                 $foreignLocationRecord = $this->getForeignLocationRecord(
                     $foreignTableName,
                     $this->getRealUid($uid, $dataHandler)
@@ -235,6 +235,7 @@ class CreateMaps2RecordHook
             if (MathUtility::canBeInterpretedAsInteger($uid)) {
                 $this->clearHtmlCache((int)$uid);
             }
+
             // Clear InfoWindowContent Cache for original language of record
             $originalTranslationColumn = $GLOBALS['TCA']['tx_maps2_domain_model_poicollection']['ctrl']['transOrigPointerField'];
             if (isset($poiCollection[$originalTranslationColumn])) {
@@ -419,6 +420,7 @@ class CreateMaps2RecordHook
         if (GeneralUtility::isFirstPartOfStr($uid, 'NEW')) {
             $uid = $dataHandler->substNEWwithIDs[$uid];
         }
+
         return (int)$uid;
     }
 
@@ -490,6 +492,7 @@ class CreateMaps2RecordHook
                 'Missing registration keys',
                 FlashMessage::ERROR
             );
+
             return false;
         }
 
@@ -505,6 +508,7 @@ class CreateMaps2RecordHook
                 'Missing table/column in TCA',
                 FlashMessage::ERROR
             );
+
             return false;
         }
 

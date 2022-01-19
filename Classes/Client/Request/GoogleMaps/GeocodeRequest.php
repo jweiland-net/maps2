@@ -19,10 +19,7 @@ use JWeiland\Maps2\Configuration\ExtConf;
  */
 class GeocodeRequest extends AbstractRequest
 {
-    /**
-     * @var string
-     */
-    protected $uri = '';
+    protected string $uri = '';
 
     public function __construct(ExtConf $extConf = null)
     {
@@ -33,7 +30,6 @@ class GeocodeRequest extends AbstractRequest
     /**
      * Get URI for Geocode
      *
-     * @return string
      * @throws \Exception
      */
     public function getUri(): string

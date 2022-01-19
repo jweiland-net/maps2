@@ -19,20 +19,11 @@ use TYPO3\CMS\Core\Database\Query\QueryBuilder;
  */
 class ModifyQueryOfFindPoiCollectionsEvent
 {
-    /**
-     * @var QueryBuilder
-     */
-    protected $queryBuilder;
+    protected QueryBuilder $queryBuilder;
 
-    /**
-     * @var array
-     */
-    protected $settings;
+    protected array $settings;
 
-    /**
-     * @var int
-     */
-    protected $poiCollectionUid;
+    protected int $poiCollectionUid = 0;
 
     public function __construct(
         QueryBuilder $queryBuilder,

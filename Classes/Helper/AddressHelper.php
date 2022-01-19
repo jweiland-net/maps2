@@ -183,14 +183,14 @@ class AddressHelper
     protected function unifyOptionConfiguration(array &$options): void
     {
         // unify addressColumns
-        $options['countryColumn'] = array_key_exists('countryColumn', $options) ? trim($options['countryColumn']) : '';
+        if (is_string($options['addressColumns'])) {
+            $options['addressColumns'] = GeneralUtility::trimExplode(',', $options['addressColumns']);
+        } else {
+            array_map('trim', $options['addressColumns']);
+        }
 
         // unify countryColumn
-        if (!array_key_exists('countryColumn', $options)) {
-            $options['countryColumn'] = '';
-        } else {
-            $options['countryColumn'] = trim($options['countryColumn']);
-        }
+        $options['countryColumn'] = array_key_exists('countryColumn', $options) ? trim($options['countryColumn']) : '';
 
         // remove countryColumn from addressColumns
         if (!empty($options['countryColumn'])) {

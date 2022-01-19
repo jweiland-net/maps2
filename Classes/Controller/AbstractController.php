@@ -27,17 +27,14 @@ use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
  */
 class AbstractController extends ActionController
 {
-    /**
-     * @var ExtConf
-     */
-    protected $extConf;
+    protected ExtConf $extConf;
 
     public function __construct(ExtConf $extConf)
     {
         $this->extConf = $extConf;
     }
 
-    public function injectConfigurationManager(ConfigurationManagerInterface $configurationManager)
+    public function injectConfigurationManager(ConfigurationManagerInterface $configurationManager): void
     {
         $this->configurationManager = $configurationManager;
 
@@ -59,7 +56,7 @@ class AbstractController extends ActionController
         $this->settings = $originalSettings;
     }
 
-    public function initializeView(ViewInterface $view): void
+    protected function initializeView(ViewInterface $view): void
     {
         $contentRecord = $this->configurationManager->getContentObject()->data;
 
@@ -139,5 +136,4 @@ class AbstractController extends ActionController
 
         $this->view->assignMultiple($event->getFluidVariables());
     }
-
 }

@@ -58,9 +58,11 @@ class StoragePidHelper
         if (!array_key_exists('pid', $foreignLocationRecord)) {
             return;
         }
+
         if (!MathUtility::canBeInterpretedAsInteger($foreignLocationRecord['pid'])) {
             return;
         }
+
         $defaultStoragePid = (int)$foreignLocationRecord['pid'];
     }
 
@@ -253,6 +255,7 @@ class StoragePidHelper
                 return $pageTsConfig['ext.'][$extKey . '.'];
             }
         }
+
         return [];
     }
 }

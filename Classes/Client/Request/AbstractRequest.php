@@ -20,20 +20,11 @@ use TYPO3\CMS\Core\Utility\MathUtility;
  */
 abstract class AbstractRequest implements RequestInterface
 {
-    /**
-     * @var ExtConf
-     */
-    protected $extConf;
+    protected ExtConf $extConf;
 
-    /**
-     * @var string
-     */
-    protected $uri = '';
+    protected string $uri = '';
 
-    /**
-     * @var array
-     */
-    protected $parameters = [];
+    protected array $parameters = [];
 
     public function __construct(ExtConf $extConf = null)
     {
@@ -45,7 +36,7 @@ abstract class AbstractRequest implements RequestInterface
         return $this->uri;
     }
 
-    public function setUri(string $uri)
+    public function setUri(string $uri): void
     {
         $this->uri = trim($uri);
     }
@@ -55,22 +46,20 @@ abstract class AbstractRequest implements RequestInterface
         return $this->parameters;
     }
 
-    public function setParameters(array $parameters)
+    public function setParameters(array $parameters): void
     {
         $this->parameters = $parameters;
     }
 
     /**
-     * @param string $parameter
      * @param mixed $value
      */
-    public function addParameter(string $parameter, $value)
+    public function addParameter(string $parameter, $value): void
     {
         $this->parameters[$parameter] = $value;
     }
 
     /**
-     * @param string $parameter
      * @return mixed
      */
     public function getParameter(string $parameter)
@@ -86,9 +75,6 @@ abstract class AbstractRequest implements RequestInterface
     /**
      * Prepare address for an uri
      * Further it will add some additional information like country
-     *
-     * @param string $address The address to update
-     * @return string A prepared address which is valid for an uri
      */
     protected function updateAddressForUri(string $address): string
     {
@@ -105,16 +91,10 @@ abstract class AbstractRequest implements RequestInterface
 
     public function isValidRequest(): bool
     {
-        $isValid = true;
-
         if (empty($this->getUri())) {
-            $isValid = false;
+            return false;
         }
 
-        if (!filter_var($this->getUri(), FILTER_VALIDATE_URL)) {
-            $isValid = false;
-        }
-
-        return $isValid;
+        return (bool) filter_var($this->getUri(), FILTER_VALIDATE_URL);
     }
 }

@@ -19,12 +19,9 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  */
 class GoogleMapsClient extends AbstractClient
 {
-    /**
-     * @var string
-     */
-    protected $title = 'Google Maps';
+    protected string $title = 'Google Maps';
 
-    protected function checkResponseForErrors(?array $response)
+    protected function checkResponseForErrors(?array $response): void
     {
         if ($response === null) {
             $this->messageHelper->addFlashMessage(
@@ -33,29 +30,27 @@ class GoogleMapsClient extends AbstractClient
                 FlashMessage::ERROR
             );
         } elseif ($response['status'] !== 'OK') {
-            switch ($response['status']) {
-                case 'ZERO_RESULTS':
-                    $this->messageHelper->addFlashMessage(
-                        LocalizationUtility::translate(
-                            'error.noPositionsFound.body',
-                            'maps2',
-                            [
-                                0 => $this->title
-                            ]
-                        ),
-                        LocalizationUtility::translate(
-                            'error.noPositionsFound.title',
-                            'maps2'
-                        ),
-                        FlashMessage::ERROR
-                    );
-                    break;
-                default:
-                    $this->messageHelper->addFlashMessage(
-                        $response['error_message'],
-                        'Error',
-                        FlashMessage::ERROR
-                    );
+            if ($response['status'] === 'ZERO_RESULTS') {
+                $this->messageHelper->addFlashMessage(
+                    LocalizationUtility::translate(
+                        'error.noPositionsFound.body',
+                        'maps2',
+                        [
+                            0 => $this->title
+                        ]
+                    ),
+                    LocalizationUtility::translate(
+                        'error.noPositionsFound.title',
+                        'maps2'
+                    ),
+                    FlashMessage::ERROR
+                );
+            } else {
+                $this->messageHelper->addFlashMessage(
+                    $response['error_message'],
+                    'Error',
+                    FlashMessage::ERROR
+                );
             }
         }
     }

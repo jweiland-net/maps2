@@ -48,9 +48,6 @@ class MapHelper
 
     /**
      * Try to retrieve a default map provider from given database record
-     *
-     * @param array $databaseRow
-     * @return string
      */
     protected function getMapProviderFromDatabase(array $databaseRow): string
     {

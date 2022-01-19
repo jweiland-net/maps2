@@ -22,15 +22,12 @@ class ClientFactory
     /**
      * @var ClientInterface[]
      */
-    protected $mapping = [
+    protected array $mapping = [
         'gm' => GoogleMapsClient::class,
         'osm' => OpenStreetMapClient::class
     ];
 
-    /**
-     * @var MapHelper
-     */
-    protected $mapHelper;
+    protected MapHelper $mapHelper;
 
     public function __construct(MapHelper $mapHelper)
     {

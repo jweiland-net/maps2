@@ -21,10 +21,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 abstract class AbstractClient implements ClientInterface
 {
-    /**
-     * @var MessageHelper
-     */
-    protected $messageHelper;
+    protected MessageHelper $messageHelper;
 
     public function __construct(MessageHelper $messageHelper = null)
     {
@@ -44,10 +41,10 @@ abstract class AbstractClient implements ClientInterface
 
         $processedResponse = [];
         $clientReport = [];
-        $response = GeneralUtility::getUrl($request->getUri(), 0, null, $clientReport);
+        $response = GeneralUtility::getUrl($request->getUri());
         $this->checkClientReportForErrors($clientReport);
         if (!$this->hasErrors()) {
-            $processedResponse = json_decode($response, true);
+            $processedResponse = json_decode($response, true, 512, JSON_THROW_ON_ERROR);
             $this->checkResponseForErrors($processedResponse);
         }
 
@@ -73,10 +70,8 @@ abstract class AbstractClient implements ClientInterface
 
     /**
      * This method will only check the report of the client and not the result itself.
-     *
-     * @param array $clientReport
      */
-    protected function checkClientReportForErrors(array $clientReport)
+    protected function checkClientReportForErrors(array $clientReport): void
     {
         if (!empty($clientReport['message'])) {
             $this->messageHelper->addFlashMessage(
@@ -87,5 +82,5 @@ abstract class AbstractClient implements ClientInterface
         }
     }
 
-    abstract protected function checkResponseForErrors(?array $processedResponse);
+    abstract protected function checkResponseForErrors(?array $processedResponse): void;
 }

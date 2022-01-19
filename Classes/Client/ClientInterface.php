@@ -20,7 +20,6 @@ use TYPO3\CMS\Core\Messaging\FlashMessage;
 interface ClientInterface
 {
     /**
-     * @param RequestInterface $request
      * @return mixed
      * @throws \Exception
      */

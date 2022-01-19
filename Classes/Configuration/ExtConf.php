@@ -21,49 +21,56 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class ExtConf implements SingletonInterface
 {
     // general
-    protected $mapProvider = '';
-    protected $defaultMapProvider = '';
-    protected $defaultMapType = 'Empty';
-    protected $defaultCountry = '';
-    protected $defaultLatitude;
-    protected $defaultLongitude;
-    protected $defaultRadius = 0;
-    protected $explicitAllowMapProviderRequests = false;
-    protected $explicitAllowMapProviderRequestsBySessionOnly = false;
-    protected $infoWindowContentTemplatePath = '';
+    protected string $mapProvider = '';
+    protected string $defaultMapProvider = '';
+    protected string $defaultMapType = 'Empty';
+    protected string $defaultCountry = '';
+    protected float $defaultLatitude = 0.0;
+    protected float $defaultLongitude = 0.0;
+    protected int $defaultRadius = 0;
+    protected bool $explicitAllowMapProviderRequests = false;
+    protected bool $explicitAllowMapProviderRequestsBySessionOnly = false;
+    protected string $infoWindowContentTemplatePath = '';
 
     // Google Maps
-    protected $googleMapsLibrary = '';
-    protected $googleMapsGeocodeUri = '';
-    protected $googleMapsJavaScriptApiKey = '';
-    protected $googleMapsGeocodeApiKey = '';
+    protected string $googleMapsLibrary = '';
+    protected string $googleMapsGeocodeUri = '';
+    protected string $googleMapsJavaScriptApiKey = '';
+    protected string $googleMapsGeocodeApiKey = '';
 
     // Open Street Map
-    protected $openStreetMapGeocodeUri = '';
+    protected string $openStreetMapGeocodeUri = '';
 
     // Design/Color
-    protected $strokeColor = '';
-    protected $strokeOpacity;
-    protected $strokeWeight = 0;
-    protected $fillColor = '';
-    protected $fillOpacity;
-    protected $markerIconWidth = 0;
-    protected $markerIconHeight = 0;
-    protected $markerIconAnchorPosX = 0;
-    protected $markerIconAnchorPosY = 0;
+    protected string $strokeColor = '';
+    protected float $strokeOpacity = 0.0;
+    protected int $strokeWeight = 0;
+    protected string $fillColor = '';
+    protected float $fillOpacity = 0.0;
+    protected int $markerIconWidth = 0;
+    protected int $markerIconHeight = 0;
+    protected int $markerIconAnchorPosX = 0;
+    protected int $markerIconAnchorPosY = 0;
 
     public function __construct(array $extConf = null)
     {
         if (!isset($extConf)) {
             $extConf = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('maps2');
         }
-        if (is_array($extConf) && !empty($extConf)) {
-            // call setter method foreach configuration entry
-            foreach ($extConf as $key => $value) {
-                $methodName = 'set' . ucfirst($key);
-                if (method_exists($this, $methodName)) {
-                    $this->$methodName($value);
-                }
+
+        if (!is_array($extConf)) {
+            return;
+        }
+
+        if (empty($extConf)) {
+            return;
+        }
+
+        // call setter method foreach configuration entry
+        foreach ($extConf as $key => $value) {
+            $methodName = 'set' . ucfirst($key);
+            if (method_exists($this, $methodName)) {
+                $this->$methodName($value);
             }
         }
     }
@@ -125,6 +132,7 @@ class ExtConf implements SingletonInterface
         if (empty($this->defaultLatitude)) {
             return 0.00;
         }
+
         return $this->defaultLatitude;
     }
 
@@ -138,6 +146,7 @@ class ExtConf implements SingletonInterface
         if (empty($this->defaultLongitude)) {
             return 0.00;
         }
+
         return $this->defaultLongitude;
     }
 
@@ -151,6 +160,7 @@ class ExtConf implements SingletonInterface
         if (empty($this->defaultRadius)) {
             return 250;
         }
+
         return $this->defaultRadius;
     }
 
@@ -184,6 +194,7 @@ class ExtConf implements SingletonInterface
         if (empty($this->infoWindowContentTemplatePath)) {
             $this->infoWindowContentTemplatePath = 'EXT:maps2/Resources/Private/Templates/InfoWindowContent.html';
         }
+
         return $this->infoWindowContentTemplatePath;
     }
 
@@ -203,10 +214,11 @@ class ExtConf implements SingletonInterface
             // insert ApiKey
             $library = str_replace('|', $this->getGoogleMapsJavaScriptApiKey(), $library);
             // $parts: 0 = full string; 1 = s or empty; 2 = needed url
-            if (preg_match('|^http(s)?://(.*)$|i', $library, $parts)) {
+            if (preg_match('#^http(s)?://(.*)$#i', $library, $parts)) {
                 return 'https://' . $parts[2];
             }
         }
+
         return '';
     }
 
@@ -220,6 +232,7 @@ class ExtConf implements SingletonInterface
         if (empty($this->googleMapsGeocodeUri)) {
             $this->googleMapsGeocodeUri = 'https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=%s';
         }
+
         return $this->googleMapsGeocodeUri;
     }
 
@@ -253,6 +266,7 @@ class ExtConf implements SingletonInterface
         if (empty($this->openStreetMapGeocodeUri)) {
             $this->openStreetMapGeocodeUri = 'https://nominatim.openstreetmap.org/search/%s?format=json&addressdetails=1';
         }
+
         return $this->openStreetMapGeocodeUri;
     }
 
@@ -266,6 +280,7 @@ class ExtConf implements SingletonInterface
         if (empty($this->strokeColor)) {
             return '#FF0000';
         }
+
         return $this->strokeColor;
     }
 
@@ -279,6 +294,7 @@ class ExtConf implements SingletonInterface
         if (empty($this->strokeOpacity)) {
             return 0.8;
         }
+
         return $this->strokeOpacity;
     }
 
@@ -292,6 +308,7 @@ class ExtConf implements SingletonInterface
         if (empty($this->strokeWeight)) {
             return 2;
         }
+
         return $this->strokeWeight;
     }
 
@@ -305,6 +322,7 @@ class ExtConf implements SingletonInterface
         if (empty($this->fillColor)) {
             return '#FF0000';
         }
+
         return $this->fillColor;
     }
 
@@ -318,6 +336,7 @@ class ExtConf implements SingletonInterface
         if (empty($this->fillOpacity)) {
             return 0.35;
         }
+
         return $this->fillOpacity;
     }
 
@@ -328,6 +347,7 @@ class ExtConf implements SingletonInterface
 
     public function getMarkerIconWidth(): int
     {
+
         return $this->markerIconWidth;
     }
 

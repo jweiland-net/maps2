@@ -111,6 +111,7 @@ class MessageHelper
         if ($flush) {
             return $this->getFlashMessagesBySeverityAndFlush(FlashMessage::WARNING);
         }
+
         return $this->getFlashMessagesBySeverity(FlashMessage::WARNING);
     }
 
@@ -127,6 +128,7 @@ class MessageHelper
         if ($flush) {
             return $this->getFlashMessagesBySeverityAndFlush(FlashMessage::OK);
         }
+
         return $this->getFlashMessagesBySeverity(FlashMessage::OK);
     }
 
@@ -143,6 +145,7 @@ class MessageHelper
         if ($flush) {
             return $this->getFlashMessagesBySeverityAndFlush(FlashMessage::INFO);
         }
+
         return $this->getFlashMessagesBySeverity(FlashMessage::INFO);
     }
 
@@ -159,6 +162,7 @@ class MessageHelper
         if ($flush) {
             return $this->getFlashMessagesBySeverityAndFlush(FlashMessage::NOTICE);
         }
+
         return $this->getFlashMessagesBySeverity(FlashMessage::NOTICE);
     }
 

@@ -17,27 +17,18 @@ namespace JWeiland\Maps2\Domain\Model;
  */
 class Position
 {
-    /**
-     * @var string
-     */
-    protected $formattedAddress = '';
+    protected string $formattedAddress = '';
 
-    /**
-     * @var float
-     */
-    protected $latitude = 0.0;
+    protected float $latitude = 0.0;
 
-    /**
-     * @var float
-     */
-    protected $longitude = 0.0;
+    protected float $longitude = 0.0;
 
     public function getFormattedAddress(): string
     {
         return $this->formattedAddress;
     }
 
-    public function setFormattedAddress(string $formattedAddress)
+    public function setFormattedAddress(string $formattedAddress): void
     {
         $this->formattedAddress = $formattedAddress;
     }
@@ -47,7 +38,7 @@ class Position
         return $this->latitude;
     }
 
-    public function setLatitude(float $latitude)
+    public function setLatitude(float $latitude): void
     {
         $this->latitude = $latitude;
     }
@@ -57,7 +48,7 @@ class Position
         return $this->longitude;
     }
 
-    public function setLongitude(float $longitude)
+    public function setLongitude(float $longitude): void
     {
         $this->longitude = $longitude;
     }

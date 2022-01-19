@@ -22,7 +22,10 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class AllowMapProviderRequestFunctionsProvider implements ExpressionFunctionProviderInterface
 {
-    public function getFunctions()
+    /**
+     * @return ExpressionFunction[]
+     */
+    public function getFunctions(): array
     {
         return [
             $this->getIsRequestToMapProviderAllowed(),
@@ -33,7 +36,7 @@ class AllowMapProviderRequestFunctionsProvider implements ExpressionFunctionProv
     {
         return new ExpressionFunction(
             'isRequestToMapProviderAllowed',
-            static function () {},
+            static function (): void {},
             static function ($existingVariables) {
                 $mapHelper = GeneralUtility::makeInstance(MapHelper::class);
                 return $mapHelper->isRequestToMapProviderAllowed();

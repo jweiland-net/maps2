@@ -35,12 +35,15 @@ class InitFeSessionMiddleware implements MiddlewareInterface
         if (Environment::isCli()) {
             return;
         }
+
         if (!$this->extConf->getExplicitAllowMapProviderRequestsBySessionOnly()) {
             return;
         }
+
         if (session_status() !== PHP_SESSION_NONE) {
             return;
         }
+
         session_start();
     }
 

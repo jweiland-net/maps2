@@ -37,15 +37,9 @@ class PoiCollectionRepository extends Repository
         'title' => QueryInterface::ORDER_ASCENDING
     ];
 
-    /**
-     * @var EventDispatcher
-     */
-    protected $eventDispatcher;
+    protected EventDispatcher $eventDispatcher;
 
-    /**
-     * @var OverlayHelper
-     */
-    protected $overlayHelper;
+    protected OverlayHelper $overlayHelper;
 
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -64,7 +58,7 @@ class PoiCollectionRepository extends Repository
         $queryBuilder = $this->getQueryBuilderForTable('tx_maps2_domain_model_poicollection', 'pc');
         $queryBuilder->select('*');
 
-        if ($poiCollectionUid) {
+        if ($poiCollectionUid !== 0) {
             $queryBuilder->andWhere(
                 $queryBuilder->expr()->eq(
                     'pc.uid',
@@ -116,6 +110,7 @@ class PoiCollectionRepository extends Repository
         foreach (GeneralUtility::trimExplode(',', $categories) as $category) {
             $orConstraint[] = $query->contains('categories', $category);
         }
+
         return $query->matching(
             $query->logicalOr($orConstraint)
         )->execute();

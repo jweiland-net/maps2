@@ -22,18 +22,12 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class RequestFactory
 {
-    /**
-     * @var array
-     */
-    protected $mapping = [
+    protected array $mapping = [
         'gm' => 'JWeiland\\Maps2\\Client\\Request\\GoogleMaps',
         'osm' => 'JWeiland\\Maps2\\Client\\Request\\OpenStreetMap'
     ];
 
-    /**
-     * @var MapHelper
-     */
-    protected $mapHelper;
+    protected MapHelper $mapHelper;
 
     public function __construct(MapHelper $mapHelper)
     {
@@ -43,9 +37,6 @@ class RequestFactory
     /**
      * Create a new Request by its filename
      *
-     * @param string $filename Filename to build the Request object
-     * @param ExtConf $extConf
-     * @return RequestInterface
      * @throws \Exception
      */
     public function create(string $filename, ExtConf $extConf = null): RequestInterface
