@@ -34,7 +34,7 @@ class Maps2Registry implements SingletonInterface
 
     protected string $template = '';
 
-    public static function getInstance(): object
+    public static function getInstance(): self
     {
         return GeneralUtility::makeInstance(self::class);
     }
@@ -66,7 +66,7 @@ class Maps2Registry implements SingletonInterface
             }
         } else {
             GeneralUtility::mkdir_deep(dirname($this->configurationFile));
-            GeneralUtility::writeFile($this->configurationFile, '');
+            GeneralUtility::writeFile($this->configurationFile, '{}');
         }
     }
 
