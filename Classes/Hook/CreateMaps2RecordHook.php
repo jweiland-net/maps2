@@ -22,7 +22,7 @@ use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
-use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
@@ -111,8 +111,7 @@ class CreateMaps2RecordHook
                             $this->synchronizeColumnsFromForeignRecordWithPoiCollection($foreignLocationRecord, $foreignTableName, $foreignColumnName, $options);
                             $this->messageHelper->addFlashMessage(
                                 'While creating this record, we have automatically inserted a new maps2 record, too',
-                                'Maps2 record creation successful',
-                                FlashMessage::OK
+                                'Maps2 record creation successful'
                             );
                         }
                     } else {
@@ -120,8 +119,7 @@ class CreateMaps2RecordHook
                         $this->synchronizeColumnsFromForeignRecordWithPoiCollection($foreignLocationRecord, $foreignTableName, $foreignColumnName, $options);
                         $this->messageHelper->addFlashMessage(
                             'While updating this record, we have automatically updated the related maps2 record, too',
-                            'Maps2 record update successful',
-                            FlashMessage::OK
+                            'Maps2 record update successful'
                         );
                     }
 
@@ -369,7 +367,7 @@ class CreateMaps2RecordHook
         $this->messageHelper->addFlashMessage(
             'While saving this record, we tried to automatically create a new maps2 record, but Map Providers GeoCode API can not find your address: ' . $address,
             'Map Provider has not found your address',
-            FlashMessage::ERROR
+            AbstractMessage::ERROR
         );
 
         return false;
@@ -437,7 +435,7 @@ class CreateMaps2RecordHook
             $this->messageHelper->addFlashMessage(
                 'There are no synchronizationColumns configured in your maps2 registration, so we are using the address as maps2 title',
                 'Using address as record title',
-                FlashMessage::INFO
+                AbstractMessage::INFO
             );
 
             return false;
@@ -490,7 +488,7 @@ class CreateMaps2RecordHook
             $this->messageHelper->addFlashMessage(
                 'Please check your Maps registration. The keys foreignColumnName and poiCollectionColumnName have to be set.',
                 'Missing registration keys',
-                FlashMessage::ERROR
+                AbstractMessage::ERROR
             );
 
             return false;
@@ -506,7 +504,7 @@ class CreateMaps2RecordHook
             $this->messageHelper->addFlashMessage(
                 'Error while trying to synchronize columns of your record with maps2 record. It seems that "' . $foreignTableName . '" is not registered as table or "' . $foreignColumnName . '" is not a valid column in ' . $foreignTableName,
                 'Missing table/column in TCA',
-                FlashMessage::ERROR
+                AbstractMessage::ERROR
             );
 
             return false;

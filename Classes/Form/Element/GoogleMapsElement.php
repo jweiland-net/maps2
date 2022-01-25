@@ -154,7 +154,7 @@ class GoogleMapsElement extends AbstractFormElement
     {
         foreach ($record as $field => $value) {
             if ($field === 'configuration_map') {
-                $record[$field] = $this->mapHelper->convertPoisAsJsonToArray($record[$field]);
+                $record[$field] = $this->mapHelper->convertPoisAsJsonToArray($value);
             } else {
                 $record[$field] = is_array($value) ? $value[0] : $value;
             }

@@ -13,7 +13,7 @@ namespace JWeiland\Maps2\Helper;
 
 use JWeiland\Maps2\Configuration\ExtConf;
 use TYPO3\CMS\Core\Database\ConnectionPool;
-use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
@@ -110,7 +110,7 @@ class AddressHelper
         $this->messageHelper->addFlashMessage(
             'We can not find any country information within your extension. Either in Maps2 Registry nor in this record. Please check your configuration or update your extension.',
             'No country information found',
-            FlashMessage::WARNING
+            AbstractMessage::WARNING
         );
 
         // try to get default country of maps2 extConf
@@ -123,7 +123,7 @@ class AddressHelper
         $this->messageHelper->addFlashMessage(
             'Default country in maps2 of extension manager configuration is empty. Request to Google Maps GeoCode will start without any country information, which may lead to curious results.',
             'Default country of maps2 is not configured',
-            FlashMessage::WARNING
+            AbstractMessage::WARNING
         );
 
         return '';
@@ -148,7 +148,7 @@ class AddressHelper
             $this->messageHelper->addFlashMessage(
                 'Country with UID "' . $uid . '" could not be found in static_countries table. Please check your record for correct country field.',
                 'Country not found in DB',
-                FlashMessage::WARNING
+                AbstractMessage::WARNING
             );
 
             return '';
@@ -210,7 +210,7 @@ class AddressHelper
             $this->messageHelper->addFlashMessage(
                 'Array key "addressColumns" does not exist in your maps2 registration. This field must be filled to prevent creating empty GeoCode requests to google.',
                 'Key addressColumns is missing',
-                FlashMessage::ERROR
+                AbstractMessage::ERROR
             );
             return false;
         }
@@ -219,7 +219,7 @@ class AddressHelper
             $this->messageHelper->addFlashMessage(
                 'Array key "addressColumns" is a required field in maps2 registraton. Please fill it with column names of your table.',
                 'Key addressColumns is empty',
-                FlashMessage::ERROR
+                AbstractMessage::ERROR
             );
             return false;
         }

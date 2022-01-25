@@ -57,9 +57,7 @@ class PoiCollectionController extends AbstractController
 
     public function searchAction(Search $search = null): void
     {
-        if ($search === null) {
-            $search = GeneralUtility::makeInstance(Search::class);
-        }
+        $search ??= GeneralUtility::makeInstance(Search::class);
 
         $this->postProcessAndAssignFluidVariables([
             'search' => $search
@@ -88,7 +86,7 @@ class PoiCollectionController extends AbstractController
 
     protected function getRequestUri(): string
     {
-        $uriBuilder = $this->objectManager->get(UriBuilder::class);
+        $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
 
         return $uriBuilder->reset()
             ->setAddQueryString(true)

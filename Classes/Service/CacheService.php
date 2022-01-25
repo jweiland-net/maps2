@@ -100,6 +100,6 @@ class CacheService
 
     protected function isFrontendEnvironment(): bool
     {
-        return (defined('TYPO3_MODE') && TYPO3_MODE === 'FE') ?: false;
+        return defined('TYPO3_MODE') && TYPO3_MODE === 'FE';
     }
 }

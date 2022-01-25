@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Client;
 
-use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
@@ -27,7 +27,7 @@ class GoogleMapsClient extends AbstractClient
             $this->messageHelper->addFlashMessage(
                 'The response of Google Maps was not a valid JSON response.',
                 'Invalid JSON response',
-                FlashMessage::ERROR
+                AbstractMessage::ERROR
             );
         } elseif ($response['status'] !== 'OK') {
             if ($response['status'] === 'ZERO_RESULTS') {
@@ -43,13 +43,13 @@ class GoogleMapsClient extends AbstractClient
                         'error.noPositionsFound.title',
                         'maps2'
                     ),
-                    FlashMessage::ERROR
+                    AbstractMessage::ERROR
                 );
             } else {
                 $this->messageHelper->addFlashMessage(
                     $response['error_message'],
                     'Error',
-                    FlashMessage::ERROR
+                    AbstractMessage::ERROR
                 );
             }
         }

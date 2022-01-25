@@ -171,20 +171,20 @@ class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
             ->where(
                 $queryBuilder->expr()->eq(
                     'CType',
-                    $queryBuilder->createNamedParameter('list', \PDO::PARAM_STR)
+                    $queryBuilder->createNamedParameter('list')
                 ),
                 $queryBuilder->expr()->orX(
                     $queryBuilder->expr()->eq(
                         'list_type',
-                        $queryBuilder->createNamedParameter('maps2_citymap', \PDO::PARAM_STR)
+                        $queryBuilder->createNamedParameter('maps2_citymap')
                     ),
                     $queryBuilder->expr()->eq(
                         'list_type',
-                        $queryBuilder->createNamedParameter('maps2_maps2', \PDO::PARAM_STR)
+                        $queryBuilder->createNamedParameter('maps2_maps2')
                     ),
                     $queryBuilder->expr()->eq(
                         'list_type',
-                        $queryBuilder->createNamedParameter('maps2_searchwithinradius', \PDO::PARAM_STR)
+                        $queryBuilder->createNamedParameter('maps2_searchwithinradius')
                     )
                 )
             )

@@ -39,12 +39,12 @@ class AbstractController extends ActionController
         $this->configurationManager = $configurationManager;
 
         $tsSettings = $this->configurationManager->getConfiguration(
-            \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,
+            ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,
             'maps2',
             'invalid' // invalid plugin name, to get fresh unmerged settings
         );
         $originalSettings = $this->configurationManager->getConfiguration(
-            \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS
+            ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS
         );
 
         foreach ($originalSettings as $setting => $value) {

@@ -20,7 +20,7 @@ use JWeiland\Maps2\Tca\Maps2Registry;
 use JWeiland\Maps2\Utility\DatabaseUtility;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\FrontendRestrictionContainer;
-use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
@@ -156,7 +156,7 @@ class MapService
             $messageHelper->addFlashMessage(
                 'The is no latitude or longitude in Response of Map Provider.',
                 'Missing Lat or Lng',
-                FlashMessage::ERROR
+                AbstractMessage::ERROR
             );
             return 0;
         }
@@ -219,7 +219,7 @@ class MapService
             $messageHelper->addFlashMessage(
                 'PoiCollection UID can not be empty. Please check your values near method assignPoiCollectionToForeignRecord',
                 'PoiCollection empty',
-                FlashMessage::ERROR
+                AbstractMessage::ERROR
             );
         }
 
@@ -228,7 +228,7 @@ class MapService
             $messageHelper->addFlashMessage(
                 'Foreign record can not be empty. Please check your values near method assignPoiCollectionToForeignRecord',
                 'Foreign record empty',
-                FlashMessage::ERROR
+                AbstractMessage::ERROR
             );
         }
 
@@ -237,7 +237,7 @@ class MapService
             $messageHelper->addFlashMessage(
                 'Foreign record must have the array key "uid" which is currently not present. Please check your values near method assignPoiCollectionToForeignRecord',
                 'UID not filled',
-                FlashMessage::ERROR
+                AbstractMessage::ERROR
             );
         }
 
@@ -246,7 +246,7 @@ class MapService
             $messageHelper->addFlashMessage(
                 'Foreign table name is a must have value, which is currently not present. Please check your values near method assignPoiCollectionToForeignRecord',
                 'Foreign table name empty',
-                FlashMessage::ERROR
+                AbstractMessage::ERROR
             );
         }
 
@@ -255,7 +255,7 @@ class MapService
             $messageHelper->addFlashMessage(
                 'Foreign field name is a must have value, which is currently not present. Please check your values near method assignPoiCollectionToForeignRecord',
                 'Foreign field name empty',
-                FlashMessage::ERROR
+                AbstractMessage::ERROR
             );
         }
 
@@ -267,7 +267,7 @@ class MapService
             $messageHelper->addFlashMessage(
                 'Table "' . $foreignTableName . '" is not configured in TCA',
                 'Table not found',
-                FlashMessage::ERROR
+                AbstractMessage::ERROR
             );
             return;
         }
@@ -276,7 +276,7 @@ class MapService
             $messageHelper->addFlashMessage(
                 'Field "' . $foreignFieldName . '" is not configured in TCA',
                 'Field not found',
-                FlashMessage::ERROR
+                AbstractMessage::ERROR
             );
             return;
         }

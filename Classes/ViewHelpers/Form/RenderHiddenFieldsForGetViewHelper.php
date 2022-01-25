@@ -39,9 +39,9 @@ class RenderHiddenFieldsForGetViewHelper extends AbstractViewHelper
 
     public function initializeArguments(): void
     {
-        $this->registerArgument('pageUid', 'int', 'The target page UID', false, null);
-        $this->registerArgument('action', 'string', 'Target action', false, null);
-        $this->registerArgument('controller', 'string', 'Target controller. If null current controllerName is used', false, null);
+        $this->registerArgument('pageUid', 'int', 'The target page UID', false);
+        $this->registerArgument('action', 'string', 'Target action', false);
+        $this->registerArgument('controller', 'string', 'Target controller. If null current controllerName is used', false);
     }
 
     /**

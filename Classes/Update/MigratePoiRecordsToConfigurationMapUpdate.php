@@ -82,15 +82,15 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
             ->orWhere(
                 $queryBuilder->expr()->eq(
                     'collection_type',
-                    $queryBuilder->createNamedParameter('Area', \PDO::PARAM_STR)
+                    $queryBuilder->createNamedParameter('Area')
                 ),
                 $queryBuilder->expr()->eq(
                     'collection_type',
-                    $queryBuilder->createNamedParameter('Route', \PDO::PARAM_STR)
+                    $queryBuilder->createNamedParameter('Route')
                 )
             )
             ->execute()
-            ->fetchColumn(0);
+            ->fetchColumn();
     }
 
     public function executeUpdate(): bool

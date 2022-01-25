@@ -13,7 +13,7 @@ namespace JWeiland\Maps2\Client;
 
 use JWeiland\Maps2\Client\Request\RequestInterface;
 use JWeiland\Maps2\Helper\MessageHelper;
-use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -34,7 +34,7 @@ abstract class AbstractClient implements ClientInterface
             $this->messageHelper->addFlashMessage(
                 'URI is empty or contains invalid chars. URI: ' . $request->getUri(),
                 'Invalid request URI',
-                FlashMessage::ERROR
+                AbstractMessage::ERROR
             );
             return [];
         }
@@ -61,7 +61,7 @@ abstract class AbstractClient implements ClientInterface
     }
 
     /**
-     * @return FlashMessage[]
+     * @return AbstractMessage[]
      */
     public function getErrors(): array
     {
