@@ -24,7 +24,7 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
     /**
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
      */
-    protected ObjectStorage $maps2MarkerIcons;
+    protected ?ObjectStorage $maps2MarkerIcons = null;
 
     protected int $maps2MarkerIconWidth = 0;
 

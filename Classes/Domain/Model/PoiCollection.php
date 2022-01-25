@@ -65,12 +65,12 @@ class PoiCollection extends AbstractEntity
     /**
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
      */
-    protected ObjectStorage $infoWindowImages;
+    protected ?ObjectStorage $infoWindowImages = null;
 
     /**
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
      */
-    protected ObjectStorage $markerIcons;
+    protected ?ObjectStorage $markerIcons = null;
 
     protected int $markerIconWidth = 0;
 
@@ -83,7 +83,7 @@ class PoiCollection extends AbstractEntity
     /**
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\JWeiland\Maps2\Domain\Model\Category>
      */
-    protected ObjectStorage $categories;
+    protected ?ObjectStorage $categories = null;
 
     /**
      * distance
