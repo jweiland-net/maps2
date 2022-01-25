@@ -38,12 +38,4 @@ call_user_func(static function(): void {
             'before:configuration_map'
         );
     }
-
-    // Add column "categories" to tx_maps2_domain_model_poicollection table
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::makeCategorizable(
-        'maps2',
-        'tx_maps2_domain_model_poicollection',
-        'categories',
-        []
-    );
 });

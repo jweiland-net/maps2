@@ -101,14 +101,9 @@ class PoiCollection extends AbstractEntity
 
     public function __construct()
     {
-        $this->initStorageObjects();
-    }
-
-    protected function initStorageObjects(): void
-    {
-        $this->categories = new ObjectStorage();
         $this->infoWindowImages = new ObjectStorage();
         $this->markerIcons = new ObjectStorage();
+        $this->categories = new ObjectStorage();
     }
 
     public function getSysLanguageUid(): int
