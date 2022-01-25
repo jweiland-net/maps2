@@ -19,7 +19,6 @@ use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Database\Query\Restriction\FrontendRestrictionContainer;
 use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 use TYPO3\CMS\Extbase\Persistence\Generic\Query;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
@@ -30,9 +29,6 @@ use TYPO3\CMS\Extbase\Persistence\Repository;
  */
 class PoiCollectionRepository extends Repository
 {
-    /**
-     * @var array
-     */
     protected $defaultOrderings = [
         'title' => QueryInterface::ORDER_ASCENDING
     ];
@@ -41,14 +37,13 @@ class PoiCollectionRepository extends Repository
 
     protected OverlayHelper $overlayHelper;
 
-    public function __construct(
-        ObjectManagerInterface $objectManager,
-        OverlayHelper $overlayHelper,
-        EventDispatcher $eventDispatcher
-    ) {
-        parent::__construct($objectManager);
+    public function injectOverlayHelper(OverlayHelper $overlayHelper): void
+    {
+        $this->$overlayHelper = $overlayHelper;
+    }
 
-        $this->overlayHelper = $overlayHelper;
+    public function injectEventDispatcher(EventDispatcher $eventDispatcher): void
+    {
         $this->eventDispatcher = $eventDispatcher;
     }
 
