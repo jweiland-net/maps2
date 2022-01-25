@@ -20,8 +20,9 @@ page.includeJSFooterlibs.googleMapsForMaps2 >
     googleMapsForMaps2.disableCompression = 1
   }
 [ELSE]
-  # Do not cache maps2 output as long as user has not activated requests to Google Maps servers
+  # Requests to Google Maps are not allowed. Inform the user about cookies and request permissions for 3rd party.
   tt_content.list.20.maps2_maps2 = USER_INT
+  tt_content.list.20.maps2_maps2.pluginName = Overlay
 [END]
 
 plugin.tx_maps2 {
