@@ -22,6 +22,7 @@ CREATE TABLE tx_maps2_domain_model_poicollection (
 	marker_icon_height int(11) unsigned DEFAULT '0' NOT NULL,
 	marker_icon_anchor_pos_x int(11) unsigned DEFAULT '0' NOT NULL,
 	marker_icon_anchor_pos_y int(11) unsigned DEFAULT '0' NOT NULL,
+	categories int(11) DEFAULT '0' NOT NULL
 );
 
 #
