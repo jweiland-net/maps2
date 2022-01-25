@@ -26,9 +26,9 @@ abstract class AbstractRequest implements RequestInterface
 
     protected array $parameters = [];
 
-    public function __construct(ExtConf $extConf = null)
+    public function __construct(ExtConf $extConf)
     {
-        $this->extConf = $extConf ?? GeneralUtility::makeInstance(ExtConf::class);
+        $this->extConf = $extConf;
     }
 
     public function getUri(): string

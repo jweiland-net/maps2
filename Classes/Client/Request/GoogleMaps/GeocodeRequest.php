@@ -21,9 +21,10 @@ class GeocodeRequest extends AbstractRequest
 {
     protected string $uri = '';
 
-    public function __construct(ExtConf $extConf = null)
+    public function __construct(ExtConf $extConf)
     {
         parent::__construct($extConf);
+
         $this->uri = $this->extConf->getGoogleMapsGeocodeUri();
     }
 

@@ -39,7 +39,7 @@ class PoiCollectionRepository extends Repository
 
     public function injectOverlayHelper(OverlayHelper $overlayHelper): void
     {
-        $this->$overlayHelper = $overlayHelper;
+        $this->overlayHelper = $overlayHelper;
     }
 
     public function injectEventDispatcher(EventDispatcher $eventDispatcher): void

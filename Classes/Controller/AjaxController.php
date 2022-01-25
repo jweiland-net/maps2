@@ -82,7 +82,7 @@ class AjaxController extends ActionController
     {
         $infoWindowContent = '';
 
-        $signalSlotDispatcher = $this->objectManager->get(Dispatcher::class);
+        $signalSlotDispatcher = GeneralUtility::makeInstance(Dispatcher::class);
         $returnedArguments = $signalSlotDispatcher->dispatch(
             self::class,
             'renderInfoWindow',

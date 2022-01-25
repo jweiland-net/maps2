@@ -25,8 +25,6 @@ use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
-use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
 
 /**
@@ -34,8 +32,6 @@ use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
  */
 class CreateMaps2RecordHook
 {
-    protected ObjectManagerInterface $objectManager;
-
     protected GeoCodeService $geoCodeService;
 
     protected MessageHelper $messageHelper;
@@ -47,19 +43,16 @@ class CreateMaps2RecordHook
     protected array $columnRegistry = [];
 
     public function __construct(
-        GeoCodeService $geoCodeService = null,
-        MessageHelper $messageHelper = null,
-        Dispatcher $signalSlotDispatcher = null,
-        MapService $mapService = null,
-        Maps2Registry $maps2Registry = null
+        GeoCodeService $geoCodeService,
+        MessageHelper $messageHelper,
+        Dispatcher $signalSlotDispatcher,
+        MapService $mapService,
+        Maps2Registry $maps2Registry
     ) {
-        $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $this->geoCodeService = $geoCodeService ?? $this->objectManager->get(GeoCodeService::class);
-        $this->messageHelper = $messageHelper ?? GeneralUtility::makeInstance(MessageHelper::class);
-        $this->signalSlotDispatcher = $signalSlotDispatcher ?? GeneralUtility::makeInstance(Dispatcher::class);
-        $this->mapService = $mapService ?? GeneralUtility::makeInstance(MapService::class);
-
-        $maps2Registry ??= GeneralUtility::makeInstance(Maps2Registry::class);
+        $this->geoCodeService = $geoCodeService;
+        $this->messageHelper = $messageHelper;
+        $this->signalSlotDispatcher = $signalSlotDispatcher;
+        $this->mapService = $mapService;
         $this->columnRegistry = $maps2Registry->getColumnRegistry();
     }
 

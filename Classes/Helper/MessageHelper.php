@@ -28,9 +28,9 @@ class MessageHelper
      */
     protected $flashMessageService;
 
-    public function __construct(FlashMessageService $flashMessageService = null)
+    public function __construct(FlashMessageService $flashMessageService)
     {
-        $this->flashMessageService = $flashMessageService ?? GeneralUtility::makeInstance(FlashMessageService::class);
+        $this->flashMessageService = $flashMessageService;
     }
 
     public function addFlashMessage(string $message, string $title = '', int $severity = AbstractMessage::OK): void

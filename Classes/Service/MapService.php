@@ -24,8 +24,6 @@ use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
-use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 use TYPO3\CMS\Extbase\Service\EnvironmentService;
 use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
 use TYPO3\CMS\Fluid\View\StandaloneView;
@@ -35,20 +33,15 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
  */
 class MapService
 {
-    protected ObjectManagerInterface $objectManager;
-
     protected ConfigurationManagerInterface $configurationManager;
 
     protected array $settings = [];
 
     protected array $columnRegistry = [];
 
-    public function __construct()
+    public function __construct(ConfigurationManagerInterface $configurationManager, Maps2Registry $maps2Registry)
     {
-        $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $this->configurationManager = $this->objectManager->get(ConfigurationManagerInterface::class);
-
-        $maps2Registry = GeneralUtility::makeInstance(Maps2Registry::class);
+        $this->configurationManager = $configurationManager;
         $this->columnRegistry = $maps2Registry->getColumnRegistry();
     }
 
@@ -88,7 +81,7 @@ class MapService
      */
     public function renderInfoWindow(PoiCollection $poiCollection): string
     {
-        $view = $this->objectManager->get(StandaloneView::class);
+        $view = GeneralUtility::makeInstance(StandaloneView::class);
         $view->assign('settings', $this->getSettings());
         $view->assign('poiCollection', $poiCollection);
         $view->setTemplatePathAndFilename(
@@ -358,7 +351,7 @@ class MapService
         string $tableName,
         string $columnName
     ): void {
-        $signalSlotDispatcher = $this->objectManager->get(Dispatcher::class);
+        $signalSlotDispatcher = GeneralUtility::makeInstance(Dispatcher::class);
         $signalSlotDispatcher->dispatch(
             self::class,
             'preAddForeignRecordToPoiCollection',

@@ -12,7 +12,6 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\ViewHelpers\Form;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Service\ExtensionService;
 use TYPO3\CMS\Frontend\Page\CacheHashCalculator;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
@@ -52,9 +51,8 @@ class RenderHiddenFieldsForGetViewHelper extends AbstractViewHelper
         \Closure $renderChildrenClosure,
         RenderingContextInterface $renderingContext
     ): string {
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $extensionService = $objectManager->get(ExtensionService::class);
-        $cacheHashCalculator = $objectManager->get(CacheHashCalculator::class);
+        $extensionService = GeneralUtility::makeInstance(ExtensionService::class);
+        $cacheHashCalculator = GeneralUtility::makeInstance(CacheHashCalculator::class);
 
         $pluginNamespace = $extensionService->getPluginNamespace(
             $renderingContext->getControllerContext()->getRequest()->getControllerExtensionName(),

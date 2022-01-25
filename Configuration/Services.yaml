@@ -7,6 +7,22 @@ services:
   JWeiland\Maps2\:
     resource: '../Classes/*'
 
+  # Called by makeInstance of DataHandler process_datamap()
+  JWeiland\Maps2\Hook\CreateMaps2RecordHook:
+    public: true
+
+  # Called by makeInstance in PoiCollection model to add foreign records
+  JWeiland\Maps2\Service\MapService:
+    public: true
+
+  # Called by makeInstance in ClientFactory
+  JWeiland\Maps2\Client\GoogleMapsClient:
+    public: true
+
+  # Called by makeInstance in ClientFactory
+  JWeiland\Maps2\Client\OpenStreetMapClient:
+    public: true
+
   JWeiland\Maps2\Tca\Maps2Registry:
     tags:
       - name: event.listener

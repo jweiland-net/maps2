@@ -25,9 +25,9 @@ class AddressHelper
 {
     protected MessageHelper $messageHelper;
 
-    public function __construct(MessageHelper $messageHelper = null)
+    public function __construct(MessageHelper $messageHelper)
     {
-        $this->messageHelper = $messageHelper ?? GeneralUtility::makeInstance(MessageHelper::class);
+        $this->messageHelper = $messageHelper;
     }
 
     /**
