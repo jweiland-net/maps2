@@ -4,12 +4,13 @@ maps2AjaxResponse {
   typeNum = 1614075471
   headerData >
   config {
-    additionalHeaders = Cache-Control: no-cache, must-revalidate, max-age=0|Pragma: no-cache|Content-type:application/json
+    additionalHeaders.10.header = Cache-Control: no-cache, must-revalidate, max-age=0|Pragma: no-cache|Content-type:application/json
     admPanel = 0
     disableAllHeaderCode = 1
     no_cache = 1
     xhtml_cleaning = 0
   }
+
   10 = USER_INT
   10 {
     userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
