@@ -16,6 +16,7 @@ use JWeiland\Maps2\Client\Request\RequestFactory;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Service\MapService;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -23,6 +24,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class RequestFactoryTest extends UnitTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var MapService
      */

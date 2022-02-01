@@ -17,6 +17,7 @@ use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
 use JWeiland\Maps2\Service\MapService;
 use Nimut\TestingFramework\MockObject\AccessibleMockObjectInterface;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageQueue;
@@ -32,6 +33,8 @@ use TYPO3\CMS\Fluid\View\TemplateView;
  */
 class PoiCollectionControllerTest extends UnitTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var PoiCollectionController|\PHPUnit_Framework_MockObject_MockObject|AccessibleMockObjectInterface
      */

@@ -16,6 +16,7 @@ use JWeiland\Maps2\Domain\Model\Category;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\ViewHelpers\ConvertToJsonViewHelper;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
 
@@ -24,6 +25,8 @@ use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
  */
 class ConvertToJsonViewHelperTest extends FunctionalTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var RenderingContext|\Prophecy\Prophecy\ObjectProphecy
      */

@@ -15,12 +15,15 @@ use JWeiland\Maps2\Client\GoogleMapsClient;
 use JWeiland\Maps2\Client\Request\GoogleMaps\GeocodeRequest;
 use JWeiland\Maps2\Helper\MessageHelper;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * Test Google Maps Client class
  */
 class GoogleMapsClientTest extends UnitTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var GeocodeRequest
      */

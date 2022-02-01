@@ -15,12 +15,15 @@ use JWeiland\Maps2\Client\OpenStreetMapClient;
 use JWeiland\Maps2\Client\Request\OpenStreetMap\GeocodeRequest;
 use JWeiland\Maps2\Helper\MessageHelper;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * Test Open Street Map class
  */
 class OpenStreetMapClientTest extends UnitTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var GeocodeRequest
      */

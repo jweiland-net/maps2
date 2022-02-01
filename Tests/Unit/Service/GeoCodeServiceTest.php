@@ -20,6 +20,7 @@ use JWeiland\Maps2\Mapper\GoogleMapsMapper;
 use JWeiland\Maps2\Mapper\MapperFactory;
 use JWeiland\Maps2\Service\GeoCodeService;
 use JWeiland\Maps2\Tests\Unit\AbstractUnitTestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
@@ -29,6 +30,8 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  */
 class GeoCodeServiceTest extends AbstractUnitTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var ClientInterface|ObjectProphecy
      */

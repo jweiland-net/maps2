@@ -20,6 +20,7 @@ use JWeiland\Maps2\Tca\Maps2Registry;
 use JWeiland\Maps2\Tests\Functional\Fixtures\IsRecordAllowedToCreatePoiCollectionSignal;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
@@ -33,6 +34,8 @@ use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
  */
 class CreateMaps2RecordHookTest extends FunctionalTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var array
      */
