@@ -12,72 +12,78 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Middleware;
 
 use JWeiland\Maps2\Configuration\ExtConf;
+use JWeiland\Maps2\Helper\MapHelper;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use TYPO3\CMS\Core\Core\Environment;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
+use Symfony\Component\HttpFoundation\Cookie;
+use TYPO3\CMS\Core\Http\CookieHeaderTrait;
 
 /**
- * We have to save the permission to allow map provider requests before TS-Template rendering.
- * It's needed by our own TS Condition object
+ * Save consent in cookie, if requests to map providers was allowed by website visitor
  */
 class InitFeSessionMiddleware implements MiddlewareInterface
 {
+    use CookieHeaderTrait;
+
     protected ExtConf $extConf;
 
-    public function __construct()
+    protected MapHelper $mapHelper;
+
+    public function __construct(ExtConf $extConf, MapHelper $mapHelper)
     {
-        $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
-
-        if (Environment::isCli()) {
-            return;
-        }
-
-        if (!$this->extConf->getExplicitAllowMapProviderRequestsBySessionOnly()) {
-            return;
-        }
-
-        if (session_status() !== PHP_SESSION_NONE) {
-            return;
-        }
-
-        session_start();
+        $this->extConf = $extConf;
+        $this->mapHelper = $mapHelper;
     }
 
-    /**
-     * Check GET parameters and allow google requests in session if valid
-     */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $parameters = GeneralUtility::_GPmerged('tx_maps2_maps2');
-        if (
-            isset($parameters['mapProviderRequestsAllowedForMaps2'])
-            && (int)$parameters['mapProviderRequestsAllowedForMaps2'] === 1
-            && $this->extConf->getExplicitAllowMapProviderRequests()
-        ) {
-            if (
-                $this->extConf->getExplicitAllowMapProviderRequestsBySessionOnly()
-                && empty($_SESSION['mapProviderRequestsAllowedForMaps2'])
-            ) {
-                $_SESSION['mapProviderRequestsAllowedForMaps2'] = 1;
-            }
-
-            if (
-                !$this->extConf->getExplicitAllowMapProviderRequestsBySessionOnly()
-                && !$this->getTypoScriptFrontendController()->fe_user->getSessionData('mapProviderRequestsAllowedForMaps2')
-            ) {
-                $this->getTypoScriptFrontendController()->fe_user->setAndSaveSessionData('mapProviderRequestsAllowedForMaps2', 1);
-            }
+        $response = $handler->handle($request);
+        if ($this->mapHelper->isRequestToMapProviderAllowed()) {
+            $cookie = $this->createCookie($request);
+            $response = $response->withAddedHeader('Set-Cookie', $cookie->__toString());
         }
 
-        return $handler->handle($request);
+        return $response;
     }
 
-    protected function getTypoScriptFrontendController(): ?TypoScriptFrontendController
+    protected function createCookie(ServerRequestInterface $request): Cookie
     {
-        return $GLOBALS['TSFE'];
+        $normalizedParams = $request->getAttribute('normalizedParams');
+
+        // Store consent in COOKIE
+        $cookieSameSite = $this->sanitizeSameSiteCookieValue(
+            strtolower($GLOBALS['TYPO3_CONF_VARS']['BE']['cookieSameSite'] ?? Cookie::SAMESITE_STRICT)
+        );
+
+        // SameSite Cookie = None needs the secure option (only allowed on HTTPS)
+        $isSecure = $cookieSameSite === Cookie::SAMESITE_NONE || $normalizedParams->isHttps();
+
+        return new Cookie(
+            'mapProviderRequestsAllowedForMaps2',
+            '1',
+            $this->getCookieExpire(),
+            $normalizedParams->getSitePath(),
+            null,
+            $isSecure,
+            true,
+            false,
+            $cookieSameSite
+        );
+    }
+
+    protected function getCookieExpire(): int
+    {
+        // If COOKIE is activated, set expire to FE sessionDataLifetime which is 1 day by default
+        $maxSessionLifetime = $GLOBALS['TYPO3_CONF_VARS']['FE']['sessionDataLifetime'] ?? 60 * 60 * 24;
+        $expire = $GLOBALS['EXEC_TIME'] + $maxSessionLifetime;
+
+        // If session only is activated, $expire = 0 will delete our created COOKIE after closing the browser
+        if ($this->extConf->getExplicitAllowMapProviderRequestsBySessionOnly()) {
+            $expire = 0;
+        }
+
+        return (int)$expire;
     }
 }

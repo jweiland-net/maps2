@@ -95,22 +95,22 @@ class MapHelper
     /**
      * Check, if the current request is allowed to process/show the map in frontend.
      * It respects the settings from Extension Settings.
-     * If false is returned, an overlay will be shown instead of the map and no JavaScript files
+     * If false, an overlay will be shown instead of the map and no JavaScript files
      * will be loaded for maps2.
      */
     public function isRequestToMapProviderAllowed(): bool
     {
         $extConf = GeneralUtility::makeInstance(ExtConf::class);
         if ($extConf->getExplicitAllowMapProviderRequests()) {
-            if ($extConf->getExplicitAllowMapProviderRequestsBySessionOnly()) {
-                return (bool)$_SESSION['mapProviderRequestsAllowedForMaps2'];
+            // Check, if cookie with last consent was available
+            if (isset($_COOKIE['mapProviderRequestsAllowedForMaps2'])) {
+                return true;
             }
 
-            if ($GLOBALS['TSFE'] instanceof TypoScriptFrontendController) {
-                return (bool)$GLOBALS['TSFE']->fe_user->getSessionData('mapProviderRequestsAllowedForMaps2');
-            }
-
-            return false;
+            // Else, check GET parameter for consent
+            $parameters = GeneralUtility::_GPmerged('tx_maps2_maps2');
+            return isset($parameters['mapProviderRequestsAllowedForMaps2'])
+                && (int)$parameters['mapProviderRequestsAllowedForMaps2'] === 1;
         }
 
         return true;
