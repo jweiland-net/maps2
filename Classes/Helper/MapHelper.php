@@ -22,25 +22,34 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 class MapHelper
 {
     /**
+     * @var ExtConf
+     */
+    protected ExtConf $extConf;
+
+    public function __construct(ExtConf $extConf)
+    {
+        $this->extConf = $extConf;
+    }
+
+    /**
      * Get currently valid default map provider
      */
     public function getMapProvider(array $databaseRow = []): string
     {
         $mapProvider = '';
-        $extConf = GeneralUtility::makeInstance(ExtConf::class);
 
         // Only if both map providers are allowed, we can read map provider from Database
-        if ($extConf->getMapProvider() === 'both') {
+        if ($this->extConf->getMapProvider() === 'both') {
             if (!empty($databaseRow)) {
                 $mapProvider = $this->getMapProviderFromDatabase($databaseRow);
             }
 
             if (empty($mapProvider)) {
-                $mapProvider = $extConf->getDefaultMapProvider();
+                $mapProvider = $this->extConf->getDefaultMapProvider();
             }
         } else {
             // We have a strict map provider.
-            $mapProvider = $extConf->getMapProvider();
+            $mapProvider = $this->extConf->getMapProvider();
         }
 
         return $mapProvider;
@@ -100,8 +109,7 @@ class MapHelper
      */
     public function isRequestToMapProviderAllowed(): bool
     {
-        $extConf = GeneralUtility::makeInstance(ExtConf::class);
-        if ($extConf->getExplicitAllowMapProviderRequests()) {
+        if ($this->extConf->getExplicitAllowMapProviderRequests()) {
             // Check, if cookie with last consent was available
             if (isset($_COOKIE['mapProviderRequestsAllowedForMaps2'])) {
                 return true;

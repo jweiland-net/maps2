@@ -9,29 +9,35 @@ declare(strict_types=1);
  * LICENSE file that was distributed with this source code.
  */
 
-namespace JWeiland\Maps2\Tests\Unit\Configuration;
+namespace JWeiland\Maps2\Tests\Functional\Configuration;
 
 use JWeiland\Maps2\Configuration\ExtConf;
-use Nimut\TestingFramework\TestCase\UnitTestCase;
+use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 
 /**
  * Class ExtConfTest
  */
-class ExtConfTest extends UnitTestCase
+class ExtConfTest extends FunctionalTestCase
 {
-    /**
-     * @var ExtConf
-     */
-    protected $subject;
+    protected ExtConf $subject;
+
+    protected $testExtensionsToLoad = [
+        'typo3conf/ext/maps2'
+    ];
 
     protected function setUp(): void
     {
-        $this->subject = new ExtConf([]);
+        parent::setUp();
+
+        $this->subject = new ExtConf();
     }
 
     protected function tearDown(): void
     {
-        unset($this->subject);
+        unset(
+            $this->subject
+        );
+
         parent::tearDown();
     }
 
@@ -617,10 +623,10 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function getMarkerIconWidthInitiallyReturnsZero(): void
+    public function getMarkerIconWidthInitiallyReturns25(): void
     {
         self::assertSame(
-            0,
+            25,
             $this->subject->getMarkerIconWidth()
         );
     }
@@ -667,10 +673,10 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function getMarkerIconHeightInitiallyReturnsZero(): void
+    public function getMarkerIconHeightInitiallyReturns40(): void
     {
         self::assertSame(
-            0,
+            40,
             $this->subject->getMarkerIconHeight()
         );
     }
@@ -717,10 +723,10 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function getMarkerIconAnchorPosXInitiallyReturnsZero(): void
+    public function getMarkerIconAnchorPosXInitiallyReturns13(): void
     {
         self::assertSame(
-            0,
+            13,
             $this->subject->getMarkerIconAnchorPosX()
         );
     }
@@ -767,10 +773,10 @@ class ExtConfTest extends UnitTestCase
     /**
      * @test
      */
-    public function getMarkerIconAnchorPosYInitiallyReturnsZero(): void
+    public function getMarkerIconAnchorPosYInitiallyReturns40(): void
     {
         self::assertSame(
-            0,
+            40,
             $this->subject->getMarkerIconAnchorPosY()
         );
     }

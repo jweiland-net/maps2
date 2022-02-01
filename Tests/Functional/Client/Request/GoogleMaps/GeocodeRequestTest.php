@@ -9,31 +9,34 @@ declare(strict_types=1);
  * LICENSE file that was distributed with this source code.
  */
 
-namespace JWeiland\Maps2\Tests\Unit\Client\Request\GoogleMaps;
+namespace JWeiland\Maps2\Tests\Functional\Client\Request\GoogleMaps;
 
 use JWeiland\Maps2\Client\Request\GoogleMaps\GeocodeRequest;
 use JWeiland\Maps2\Configuration\ExtConf;
-use Nimut\TestingFramework\TestCase\UnitTestCase;
+use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 
 /**
  * Test Google Maps Geocode Request class
  */
-class GeocodeRequestTest extends UnitTestCase
+class GeocodeRequestTest extends FunctionalTestCase
 {
-    /**
-     * @var ExtConf
-     */
-    protected $extConf;
+    protected GeocodeRequest $subject;
 
-    /**
-     * @var GeocodeRequest
-     */
-    protected $subject;
+    protected ExtConf $extConf;
+
+    protected $testExtensionsToLoad = [
+        'typo3conf/ext/maps2'
+    ];
 
     protected function setUp(): void
     {
-        $this->extConf = new ExtConf([]);
-        $this->subject = new GeocodeRequest($this->extConf);
+        parent::setUp();
+
+        $this->extConf = new ExtConf();
+
+        $this->subject = new GeocodeRequest(
+            $this->extConf
+        );
     }
 
     protected function tearDown(): void
@@ -42,6 +45,7 @@ class GeocodeRequestTest extends UnitTestCase
             $this->subject,
             $this->extConf
         );
+
         parent::tearDown();
     }
 

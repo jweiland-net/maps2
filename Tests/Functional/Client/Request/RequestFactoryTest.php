@@ -9,46 +9,50 @@ declare(strict_types=1);
  * LICENSE file that was distributed with this source code.
  */
 
-namespace JWeiland\Maps2\Tests\Unit\Client\Request;
+namespace JWeiland\Maps2\Tests\Functional\Client\Request;
 
 use JWeiland\Maps2\Client\Request\GoogleMaps\GeocodeRequest;
 use JWeiland\Maps2\Client\Request\RequestFactory;
 use JWeiland\Maps2\Configuration\ExtConf;
+use JWeiland\Maps2\Helper\MapHelper;
 use JWeiland\Maps2\Service\MapService;
-use Nimut\TestingFramework\TestCase\UnitTestCase;
+use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Test Request Factory class
  */
-class RequestFactoryTest extends UnitTestCase
+class RequestFactoryTest extends FunctionalTestCase
 {
     use ProphecyTrait;
 
-    /**
-     * @var MapService
-     */
-    protected $mapServiceProphecy;
+    protected RequestFactory $subject;
 
-    /**
-     * @var RequestFactory
-     */
-    protected $subject;
+    protected ExtConf $extConf;
+
+    protected $testExtensionsToLoad = [
+        'typo3conf/ext/maps2'
+    ];
 
     protected function setUp(): void
     {
-        $this->mapServiceProphecy = $this->prophesize(MapService::class);
-        GeneralUtility::addInstance(MapService::class, $this->mapServiceProphecy->reveal());
+        parent::setUp();
 
-        $this->subject = new RequestFactory();
+        $this->extConf = new ExtConf();
+
+        $this->subject = new RequestFactory(
+            new MapHelper(
+                $this->extConf
+            )
+        );
     }
 
     protected function tearDown(): void
     {
         unset(
-            $this->subject,
-            $this->mapServiceProphecy
+            $this->subject
         );
         parent::tearDown();
     }
@@ -58,10 +62,8 @@ class RequestFactoryTest extends UnitTestCase
      */
     public function createCreatesGoogleMapsGeocodeRequest(): void
     {
-        $this->mapServiceProphecy
-            ->getMapProvider()
-            ->shouldBeCalled()
-            ->willReturn('gm');
+        $this->extConf->setMapProvider('both');
+        $this->extConf->setDefaultMapProvider('gm');
 
         self::assertInstanceOf(
             GeocodeRequest::class,
@@ -74,10 +76,8 @@ class RequestFactoryTest extends UnitTestCase
      */
     public function createCreatesOpenStreetMapGeocodeRequest(): void
     {
-        $this->mapServiceProphecy
-            ->getMapProvider()
-            ->shouldBeCalled()
-            ->willReturn('osm');
+        $this->extConf->setMapProvider('both');
+        $this->extConf->setDefaultMapProvider('osm');
 
         self::assertInstanceOf(
             \JWeiland\Maps2\Client\Request\OpenStreetMap\GeocodeRequest::class,
@@ -90,10 +90,8 @@ class RequestFactoryTest extends UnitTestCase
      */
     public function createSanitizesFilenameWithExtension(): void
     {
-        $this->mapServiceProphecy
-            ->getMapProvider()
-            ->shouldBeCalled()
-            ->willReturn('gm');
+        $this->extConf->setMapProvider('both');
+        $this->extConf->setDefaultMapProvider('gm');
 
         self::assertInstanceOf(
             GeocodeRequest::class,
@@ -106,10 +104,8 @@ class RequestFactoryTest extends UnitTestCase
      */
     public function createSanitizesFilenameWithLowerCamelCase(): void
     {
-        $this->mapServiceProphecy
-            ->getMapProvider()
-            ->shouldBeCalled()
-            ->willReturn('gm');
+        $this->extConf->setMapProvider('both');
+        $this->extConf->setDefaultMapProvider('gm');
 
         self::assertInstanceOf(
             GeocodeRequest::class,
@@ -119,15 +115,13 @@ class RequestFactoryTest extends UnitTestCase
 
     /**
      * @test
-     *
-     * @expectedException \Exception
      */
     public function createWithNonExistingClassThrowsException(): void
     {
-        $this->mapServiceProphecy
-            ->getMapProvider()
-            ->shouldBeCalled()
-            ->willReturn('gm');
+        $this->expectExceptionMessage('Class "JWeiland\\Maps2\\Client\\Request\\GoogleMaps\\NonExistingClass" to create a new Request could not be found');
+
+        $this->extConf->setMapProvider('both');
+        $this->extConf->setDefaultMapProvider('gm');
 
         $this->subject->create('NonExistingClass', new ExtConf([]));
     }

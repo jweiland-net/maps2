@@ -9,46 +9,50 @@ declare(strict_types=1);
  * LICENSE file that was distributed with this source code.
  */
 
-namespace JWeiland\Maps2\Tests\Unit\Client;
+namespace JWeiland\Maps2\Tests\Functional\Client;
 
 use JWeiland\Maps2\Client\ClientFactory;
 use JWeiland\Maps2\Client\GoogleMapsClient;
 use JWeiland\Maps2\Client\OpenStreetMapClient;
-use JWeiland\Maps2\Service\MapService;
-use Nimut\TestingFramework\TestCase\UnitTestCase;
+use JWeiland\Maps2\Configuration\ExtConf;
+use JWeiland\Maps2\Helper\MapHelper;
+use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Test Client Factory class
  */
-class ClientFactoryTest extends UnitTestCase
+class ClientFactoryTest extends FunctionalTestCase
 {
     use ProphecyTrait;
 
-    /**
-     * @var ClientFactory
-     */
-    protected $subject;
+    protected ClientFactory $subject;
 
-    /**
-     * @var MapService
-     */
-    protected $mapServiceProphecy;
+    protected ExtConf $extConf;
+
+    protected $testExtensionsToLoad = [
+        'typo3conf/ext/maps2'
+    ];
 
     protected function setUp(): void
     {
-        $this->mapServiceProphecy = $this->prophesize(MapService::class);
-        GeneralUtility::addInstance(MapService::class, $this->mapServiceProphecy->reveal());
+        parent::setUp();
 
-        $this->subject = new ClientFactory();
+        $this->extConf = new ExtConf();
+
+        $this->subject = new ClientFactory(
+            new MapHelper(
+                $this->extConf
+            )
+        );
     }
 
     protected function tearDown(): void
     {
         unset(
             $this->subject,
-            $this->mapServiceProphecy
+            $this->mapServiceProphecy,
+            $this->extConf
         );
 
         parent::tearDown();
@@ -59,10 +63,8 @@ class ClientFactoryTest extends UnitTestCase
      */
     public function createCreatesGoogleMapsClient(): void
     {
-        $this->mapServiceProphecy
-            ->getMapProvider()
-            ->shouldBeCalled()
-            ->willReturn('gm');
+        $this->extConf->setMapProvider('both');
+        $this->extConf->setDefaultMapProvider('gm');
 
         self::assertInstanceOf(
             GoogleMapsClient::class,
@@ -75,10 +77,8 @@ class ClientFactoryTest extends UnitTestCase
      */
     public function createCreatesOpenStreetMapClient(): void
     {
-        $this->mapServiceProphecy
-            ->getMapProvider()
-            ->shouldBeCalled()
-            ->willReturn('osm');
+        $this->extConf->setMapProvider('both');
+        $this->extConf->setDefaultMapProvider('osm');
 
         self::assertInstanceOf(
             OpenStreetMapClient::class,

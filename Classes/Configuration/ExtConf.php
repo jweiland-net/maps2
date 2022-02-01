@@ -52,11 +52,9 @@ class ExtConf implements SingletonInterface
     protected int $markerIconAnchorPosX = 0;
     protected int $markerIconAnchorPosY = 0;
 
-    public function __construct(array $extConf = null)
+    public function __construct()
     {
-        if (!isset($extConf)) {
-            $extConf = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('maps2');
-        }
+        $extConf = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('maps2');
 
         if (!is_array($extConf)) {
             return;
@@ -347,7 +345,6 @@ class ExtConf implements SingletonInterface
 
     public function getMarkerIconWidth(): int
     {
-
         return $this->markerIconWidth;
     }
 

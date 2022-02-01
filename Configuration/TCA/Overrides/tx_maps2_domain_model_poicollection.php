@@ -8,7 +8,8 @@ call_user_func(static function(): void {
         \JWeiland\Maps2\Configuration\ExtConf::class
     );
     $mapHelper = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-        \JWeiland\Maps2\Helper\MapHelper::class
+        \JWeiland\Maps2\Helper\MapHelper::class,
+        $extConf
     );
 
     // Set a default for column map_provider on save
