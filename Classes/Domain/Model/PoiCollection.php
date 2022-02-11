@@ -323,7 +323,11 @@ class PoiCollection extends AbstractEntity
             $markerIcon = $categoryWithIcon->getMaps2MarkerIcon();
         }
 
-        // override markerIcon, if we have a icon defined here in PoiCollection
+        if ($this->markerIcons->count() === 0) {
+            return '';
+        }
+
+        // override markerIcon, if we have an icon defined here in PoiCollection
         $this->markerIcons->rewind();
         // only one icon is allowed, so current() will give us the first icon
         $iconReference = $this->markerIcons->current();
@@ -337,6 +341,7 @@ class PoiCollection extends AbstractEntity
         }
 
         $siteUrl = GeneralUtility::getIndpEnv('TYPO3_SITE_URL');
+
         return $siteUrl . $falIconReference->getPublicUrl(false);
     }
 
@@ -358,17 +363,17 @@ class PoiCollection extends AbstractEntity
     public function getMarkerIconWidth(): int
     {
         // prevent using local markerIconWidth, if no markerIcon is set.
-        if (
-            empty($this->markerIconWidth)
-            || (!empty($this->markerIconWidth) && $this->getMarkerIcons()->count() === 0)
-        ) {
+        if (empty($this->markerIconWidth) || $this->getMarkerIcons()->count() === 0) {
             $categoryWithIcon = $this->getFirstFoundCategoryWithIcon();
             if ($categoryWithIcon instanceof Category) {
                 return $categoryWithIcon->getMaps2MarkerIconWidth();
             }
+
             $extConf = GeneralUtility::makeInstance(ExtConf::class);
+
             return $extConf->getMarkerIconWidth();
         }
+
         return $this->markerIconWidth;
     }
 
@@ -380,17 +385,17 @@ class PoiCollection extends AbstractEntity
     public function getMarkerIconHeight(): int
     {
         // prevent using local markerIconHeight, if no markerIcon is set.
-        if (
-            empty($this->markerIconHeight)
-            || (!empty($this->markerIconHeight) && $this->getMarkerIcons()->count() === 0)
-        ) {
+        if (empty($this->markerIconHeight) || $this->getMarkerIcons()->count() === 0) {
             $categoryWithIcon = $this->getFirstFoundCategoryWithIcon();
             if ($categoryWithIcon instanceof Category) {
                 return $categoryWithIcon->getMaps2MarkerIconHeight();
             }
+
             $extConf = GeneralUtility::makeInstance(ExtConf::class);
+
             return $extConf->getMarkerIconHeight();
         }
+
         return $this->markerIconHeight;
     }
 
@@ -402,17 +407,17 @@ class PoiCollection extends AbstractEntity
     public function getMarkerIconAnchorPosX(): int
     {
         // prevent using local markerIconAnchorPosX, if no markerIcon is set.
-        if (
-            empty($this->markerIconAnchorPosX)
-            || (!empty($this->markerIconAnchorPosX) && $this->getMarkerIcons()->count() === 0)
-        ) {
+        if (empty($this->markerIconAnchorPosX) || $this->getMarkerIcons()->count() === 0) {
             $categoryWithIcon = $this->getFirstFoundCategoryWithIcon();
             if ($categoryWithIcon instanceof Category) {
                 return $categoryWithIcon->getMaps2MarkerIconAnchorPosX();
             }
+
             $extConf = GeneralUtility::makeInstance(ExtConf::class);
+
             return $extConf->getMarkerIconAnchorPosX();
         }
+
         return $this->markerIconAnchorPosX;
     }
 
@@ -424,17 +429,17 @@ class PoiCollection extends AbstractEntity
     public function getMarkerIconAnchorPosY(): int
     {
         // prevent using local markerIconAnchorPosY, if no markerIcon is set.
-        if (
-            empty($this->markerIconAnchorPosY)
-            || (!empty($this->markerIconAnchorPosY) && $this->getMarkerIcons()->count() === 0)
-        ) {
+        if (empty($this->markerIconAnchorPosY) || $this->getMarkerIcons()->count() === 0) {
             $categoryWithIcon = $this->getFirstFoundCategoryWithIcon();
             if ($categoryWithIcon instanceof Category) {
                 return $categoryWithIcon->getMaps2MarkerIconAnchorPosY();
             }
+
             $extConf = GeneralUtility::makeInstance(ExtConf::class);
+
             return $extConf->getMarkerIconAnchorPosY();
         }
+
         return $this->markerIconAnchorPosY;
     }
 

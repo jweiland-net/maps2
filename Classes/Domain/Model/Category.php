@@ -48,6 +48,10 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
 
     public function getMaps2MarkerIcon(): string
     {
+        if ($this->maps2MarkerIcons->count() === 0) {
+            return '';
+        }
+
         $this->maps2MarkerIcons->rewind();
         // only one icon is allowed, so current() will give us the first icon
         $iconReference = $this->maps2MarkerIcons->current();
@@ -61,6 +65,7 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
         }
 
         $siteUrl = GeneralUtility::getIndpEnv('TYPO3_SITE_URL');
+
         return $siteUrl . $falIconReference->getPublicUrl(false);
     }
 
