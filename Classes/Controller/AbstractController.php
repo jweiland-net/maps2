@@ -48,7 +48,7 @@ class AbstractController extends ActionController
         );
 
         foreach ($originalSettings as $setting => $value) {
-            if (is_string($value) && $value === '') {
+            if ($value === '' && isset($tsSettings['settings'][$setting])) {
                 $originalSettings[$setting] = $tsSettings['settings'][$setting];
             }
         }
