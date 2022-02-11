@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Form\Resolver;
 
+use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Form\Element\GoogleMapsElement;
 use JWeiland\Maps2\Form\Element\OpenStreetMapElement;
 use JWeiland\Maps2\Helper\MapHelper;
@@ -23,14 +24,17 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class MapProviderResolver implements NodeResolverInterface
 {
+    protected ExtConf $extConf;
+
     protected array $data = [];
 
     protected MapHelper $mapHelper;
 
     public function __construct(NodeFactory $nodeFactory, array $data)
     {
+        $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
         $this->data = $data;
-        $this->mapHelper = GeneralUtility::makeInstance(MapHelper::class);
+        $this->mapHelper = GeneralUtility::makeInstance(MapHelper::class, $this->extConf);
     }
 
     /**

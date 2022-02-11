@@ -53,7 +53,7 @@ class OpenStreetMapElement extends AbstractFormElement
 
         $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
         $this->pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
-        $this->mapHelper = GeneralUtility::makeInstance(MapHelper::class);
+        $this->mapHelper = GeneralUtility::makeInstance(MapHelper::class, $this->extConf);
     }
 
     /**
