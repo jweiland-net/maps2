@@ -153,7 +153,7 @@ class GoogleMapsElement extends AbstractFormElement
     protected function cleanUpCurrentRecord(array $record): array
     {
         foreach ($record as $field => $value) {
-            if ($field === 'configuration_map') {
+            if ($field === 'configuration_map' && $value != '') {
                 $record[$field] = $this->mapHelper->convertPoisAsJsonToArray($value);
             } else {
                 $record[$field] = is_array($value) ? $value[0] : $value;
