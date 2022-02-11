@@ -88,14 +88,19 @@ class MapHelper
     public function convertPoisAsJsonToArray(string $poisAsJson): array
     {
         $pois = [];
-        foreach (json_decode($poisAsJson, true, 512, JSON_THROW_ON_ERROR) ?? [] as $poi) {
-            $pois[] = array_combine(
-                [
-                    'latitude',
-                    'longitude'
-                ],
-                GeneralUtility::trimExplode(',', $poi)
-            );
+
+        try {
+            foreach (json_decode($poisAsJson, true, 512, JSON_THROW_ON_ERROR) ?? [] as $poi) {
+                $pois[] = array_combine(
+                    [
+                        'latitude',
+                        'longitude'
+                    ],
+                    GeneralUtility::trimExplode(',', $poi)
+                );
+            }
+        } catch (\JsonException $jsonException) {
+            // Return empty POIs
         }
 
         return $pois;
