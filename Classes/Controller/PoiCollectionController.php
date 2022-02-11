@@ -27,10 +27,8 @@ class PoiCollectionController extends AbstractController
 {
     protected PoiCollectionRepository $poiCollectionRepository;
 
-    public function __construct(ExtConf $extConf, PoiCollectionRepository $poiCollectionRepository)
+    public function injectPoiCollectionRepository(PoiCollectionRepository $poiCollectionRepository): void
     {
-        parent::__construct($extConf);
-
         $this->poiCollectionRepository = $poiCollectionRepository;
     }
 

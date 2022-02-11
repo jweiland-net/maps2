@@ -29,7 +29,7 @@ class AbstractController extends ActionController
 {
     protected ExtConf $extConf;
 
-    public function __construct(ExtConf $extConf)
+    public function injectExtConf(ExtConf $extConf): void
     {
         $this->extConf = $extConf;
     }

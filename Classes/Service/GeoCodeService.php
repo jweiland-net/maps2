@@ -51,10 +51,10 @@ class GeoCodeService implements SingletonInterface
      */
     public function getPositionsByAddress(string $address): ObjectStorage
     {
-        $positions = GeneralUtility::makeInstance(ObjectStorage::class);
+        $positions = new ObjectStorage();
 
         // Prevent calls to Map Providers GeoCode API, if address is empty
-        if (empty(trim($address))) {
+        if (trim($address) === '') {
             return $positions;
         }
 
@@ -62,7 +62,7 @@ class GeoCodeService implements SingletonInterface
         $geocodeRequest->addParameter('address', $address);
 
         $response = $this->client->processRequest($geocodeRequest);
-        if (!empty($response)) {
+        if ($response !== []) {
             $positions = $this->mapperFactory->create()->map($response);
         }
 
