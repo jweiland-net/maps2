@@ -18,7 +18,19 @@ table `tx_maps2_domain_model_poicollection` now. Please execute UpgradeWizard to
 Extension Setting and TypoScript setting `allowMapTemplatePath` was completely removed. We have added a new
 ControllerAction called `OverlayAction`, so please overwrite FluidTemplate Overlay.html instead.
 
-All widget are removed, as TYPO3 11 does not support Widgets anymore.
+All widgets are removed, as TYPO3 11 does not support ViewHelper widgets anymore. We have moved the widget into its
+own Partial. Please add path to maps2 partial as follows:
+
+.. code-block:: typoscript
+
+   plugin.tx_myext {
+     view {
+       partialRootPaths {
+         ...
+         2 = EXT:maps2/Resources/Private/Partials/
+       }
+     }
+   }
 
 **Only valid for developers:**
 

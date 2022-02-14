@@ -26,25 +26,25 @@ This can be a directory in ``fileadmin`` or a custom extension. Multiple fallbac
 
 .. code-block:: typoscript
 
-  plugin.tx_maps2 {
-    view {
-      templateRootPaths >
-      templateRootPaths {
-        0 = EXT:maps2/Resources/Private/Templates/
-        1 = fileadmin/templates/ext/maps2/Templates/
-      }
-      partialRootPaths >
-      partialRootPaths {
-        0 = EXT:maps2/Resources/Private/Partials/
-        1 = fileadmin/templates/ext/maps2/Partials/
-      }
-      layoutRootPaths >
-      layoutRootPaths {
-        0 = EXT:maps2/Resources/Private/Layouts/
-        1 = fileadmin/templates/ext/maps2/Layouts/
-      }
-    }
-  }
+   plugin.tx_maps2 {
+     view {
+       templateRootPaths >
+       templateRootPaths {
+         0 = EXT:maps2/Resources/Private/Templates/
+         1 = fileadmin/templates/ext/maps2/Templates/
+       }
+       partialRootPaths >
+       partialRootPaths {
+         0 = EXT:maps2/Resources/Private/Partials/
+         1 = fileadmin/templates/ext/maps2/Partials/
+       }
+       layoutRootPaths >
+       layoutRootPaths {
+         0 = EXT:maps2/Resources/Private/Layouts/
+         1 = fileadmin/templates/ext/maps2/Layouts/
+       }
+     }
+   }
 
 Change the templates using TypoScript constants
 -----------------------------------------------
@@ -54,10 +54,10 @@ the paths
 
 .. code-block:: typoscript
 
-  plugin.tx_maps2 {
-    view {
-      templateRootPath = fileadmin/templates/ext/maps2/Templates/
-      partialRootPath = fileadmin/templates/ext/maps2/Partials/
-      layoutRootPath = fileadmin/templates/ext/maps2/Layouts/
-    }
-  }
+   plugin.tx_maps2 {
+     view {
+       templateRootPath = fileadmin/templates/ext/maps2/Templates/
+       partialRootPath = fileadmin/templates/ext/maps2/Partials/
+       layoutRootPath = fileadmin/templates/ext/maps2/Layouts/
+     }
+   }
