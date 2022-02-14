@@ -40,7 +40,9 @@ class AddressHelper
         }
 
         $this->unifyOptionConfiguration($options);
-        $locationRecordToSave = array_map('trim', $locationRecordToSave);
+        $locationRecordToSave = array_map(static function ($value) {
+            return is_string($value) ? trim($value) : $value;
+        }, $locationRecordToSave);
 
         $addressParts = [];
         foreach ($options['addressColumns'] as $addressColumn) {

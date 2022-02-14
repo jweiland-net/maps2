@@ -34,25 +34,34 @@ class CreateMaps2RecordHook
 {
     protected GeoCodeService $geoCodeService;
 
+    protected AddressHelper $addressHelper;
+
     protected MessageHelper $messageHelper;
 
-    protected Dispatcher $signalSlotDispatcher;
+    protected StoragePidHelper $storagePidHelper;
 
     protected MapService $mapService;
+
+    protected Dispatcher $signalSlotDispatcher;
 
     protected array $columnRegistry = [];
 
     public function __construct(
         GeoCodeService $geoCodeService,
+        AddressHelper $addressHelper,
         MessageHelper $messageHelper,
-        Dispatcher $signalSlotDispatcher,
+        StoragePidHelper $storagePidHelper,
         MapService $mapService,
-        Maps2Registry $maps2Registry
+        Maps2Registry $maps2Registry,
+        Dispatcher $signalSlotDispatcher
     ) {
         $this->geoCodeService = $geoCodeService;
+        $this->addressHelper = $addressHelper;
         $this->messageHelper = $messageHelper;
-        $this->signalSlotDispatcher = $signalSlotDispatcher;
+        $this->storagePidHelper = $storagePidHelper;
         $this->mapService = $mapService;
+        $this->signalSlotDispatcher = $signalSlotDispatcher;
+
         $this->columnRegistry = $maps2Registry->getColumnRegistry();
     }
 
@@ -257,10 +266,9 @@ class CreateMaps2RecordHook
         string $foreignColumnName,
         array $options
     ): void {
-        $addressHelper = GeneralUtility::makeInstance(AddressHelper::class);
         $poiCollection = $this->getPoiCollection((int)$foreignLocationRecord[$foreignColumnName]);
-        if (!$addressHelper->isSameAddress($poiCollection['address'], $foreignLocationRecord, $options)) {
-            $address = $addressHelper->getAddress($foreignLocationRecord, $options);
+        if (!$this->addressHelper->isSameAddress($poiCollection['address'], $foreignLocationRecord, $options)) {
+            $address = $this->addressHelper->getAddress($foreignLocationRecord, $options);
 
             $position = $this->geoCodeService->getFirstFoundPositionByAddress($address);
             if ($position instanceof Position) {
@@ -336,14 +344,15 @@ class CreateMaps2RecordHook
         string $foreignColumnName,
         array $options
     ): bool {
-        $storagePidHelper = GeneralUtility::makeInstance(StoragePidHelper::class);
-        $defaultStoragePid = $storagePidHelper->getDefaultStoragePidForNewPoiCollection($foreignLocationRecord, $options);
+        $defaultStoragePid = $this->storagePidHelper->getDefaultStoragePidForNewPoiCollection(
+            $foreignLocationRecord,
+            $options
+        );
         if (empty($defaultStoragePid)) {
             return false;
         }
 
-        $addressHelper = GeneralUtility::makeInstance(AddressHelper::class);
-        $address = $addressHelper->getAddress($foreignLocationRecord, $options);
+        $address = $this->addressHelper->getAddress($foreignLocationRecord, $options);
 
         $position = $this->geoCodeService->getFirstFoundPositionByAddress($address);
         if ($position instanceof Position) {

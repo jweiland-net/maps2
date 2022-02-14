@@ -13,7 +13,6 @@ namespace JWeiland\Maps2\Client\Request;
 
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Helper\MapHelper;
-use JWeiland\Maps2\Service\MapService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -39,7 +38,7 @@ class RequestFactory
      *
      * @throws \Exception
      */
-    public function create(string $filename, ExtConf $extConf = null): RequestInterface
+    public function create(string $filename): RequestInterface
     {
         $className = sprintf(
             '%s\\%s',
@@ -55,7 +54,7 @@ class RequestFactory
         }
 
         /** @var RequestInterface $request */
-        $request = GeneralUtility::makeInstance($className, $extConf);
+        $request = GeneralUtility::makeInstance($className);
 
         return $request;
     }

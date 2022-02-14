@@ -34,14 +34,20 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
 class MapService
 {
     protected ConfigurationManagerInterface $configurationManager;
+    protected MessageHelper $messageHelper;
 
     protected array $settings = [];
 
     protected array $columnRegistry = [];
 
-    public function __construct(ConfigurationManagerInterface $configurationManager, Maps2Registry $maps2Registry)
-    {
+    public function __construct(
+        ConfigurationManagerInterface $configurationManager,
+        MessageHelper $messageHelper,
+        Maps2Registry $maps2Registry
+    ) {
         $this->configurationManager = $configurationManager;
+        $this->messageHelper = $messageHelper;
+
         $this->columnRegistry = $maps2Registry->getColumnRegistry();
     }
 
@@ -63,6 +69,8 @@ class MapService
 
     /**
      * Set info window for Poi Collection
+     *
+     * @deprecated
      */
     public function setInfoWindow(PoiCollection $poiCollection): void
     {
@@ -205,11 +213,10 @@ class MapService
         string $foreignFieldName = 'tx_maps2_uid'
     ): void {
         $hasErrors = false;
-        $messageHelper = GeneralUtility::makeInstance(MessageHelper::class);
 
         if ($poiCollectionUid === 0) {
             $hasErrors = true;
-            $messageHelper->addFlashMessage(
+            $this->messageHelper->addFlashMessage(
                 'PoiCollection UID can not be empty. Please check your values near method assignPoiCollectionToForeignRecord',
                 'PoiCollection empty',
                 AbstractMessage::ERROR
@@ -218,7 +225,7 @@ class MapService
 
         if (empty($foreignRecord)) {
             $hasErrors = true;
-            $messageHelper->addFlashMessage(
+            $this->messageHelper->addFlashMessage(
                 'Foreign record can not be empty. Please check your values near method assignPoiCollectionToForeignRecord',
                 'Foreign record empty',
                 AbstractMessage::ERROR
@@ -227,7 +234,7 @@ class MapService
 
         if (!array_key_exists('uid', $foreignRecord)) {
             $hasErrors = true;
-            $messageHelper->addFlashMessage(
+            $this->messageHelper->addFlashMessage(
                 'Foreign record must have the array key "uid" which is currently not present. Please check your values near method assignPoiCollectionToForeignRecord',
                 'UID not filled',
                 AbstractMessage::ERROR
@@ -236,7 +243,7 @@ class MapService
 
         if (empty(trim($foreignTableName))) {
             $hasErrors = true;
-            $messageHelper->addFlashMessage(
+            $this->messageHelper->addFlashMessage(
                 'Foreign table name is a must have value, which is currently not present. Please check your values near method assignPoiCollectionToForeignRecord',
                 'Foreign table name empty',
                 AbstractMessage::ERROR
@@ -245,7 +252,7 @@ class MapService
 
         if (empty(trim($foreignFieldName))) {
             $hasErrors = true;
-            $messageHelper->addFlashMessage(
+            $this->messageHelper->addFlashMessage(
                 'Foreign field name is a must have value, which is currently not present. Please check your values near method assignPoiCollectionToForeignRecord',
                 'Foreign field name empty',
                 AbstractMessage::ERROR
@@ -257,7 +264,7 @@ class MapService
         }
 
         if (!array_key_exists($foreignTableName, $GLOBALS['TCA'])) {
-            $messageHelper->addFlashMessage(
+            $this->messageHelper->addFlashMessage(
                 'Table "' . $foreignTableName . '" is not configured in TCA',
                 'Table not found',
                 AbstractMessage::ERROR
@@ -266,7 +273,7 @@ class MapService
         }
 
         if (!array_key_exists($foreignFieldName, $GLOBALS['TCA'][$foreignTableName]['columns'])) {
-            $messageHelper->addFlashMessage(
+            $this->messageHelper->addFlashMessage(
                 'Field "' . $foreignFieldName . '" is not configured in TCA',
                 'Field not found',
                 AbstractMessage::ERROR
@@ -280,6 +287,7 @@ class MapService
             [$foreignFieldName => $poiCollectionUid],
             ['uid' => (int)$foreignRecord['uid']]
         );
+
         $foreignRecord[$foreignFieldName] = $poiCollectionUid;
     }
 
