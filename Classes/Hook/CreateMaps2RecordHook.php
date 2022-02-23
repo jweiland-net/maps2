@@ -12,6 +12,8 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Hook;
 
 use JWeiland\Maps2\Domain\Model\Position;
+use JWeiland\Maps2\Event\AllowCreationOfPoiCollectionEvent;
+use JWeiland\Maps2\Event\PostProcessPoiCollectionRecordEvent;
 use JWeiland\Maps2\Helper\AddressHelper;
 use JWeiland\Maps2\Helper\MessageHelper;
 use JWeiland\Maps2\Helper\StoragePidHelper;
@@ -22,10 +24,10 @@ use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
+use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
-use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
 
 /**
  * Create a POI collection record while a foreign table was saved
@@ -42,7 +44,7 @@ class CreateMaps2RecordHook
 
     protected MapService $mapService;
 
-    protected Dispatcher $signalSlotDispatcher;
+    protected EventDispatcher $eventDispatcher;
 
     protected array $columnRegistry = [];
 
@@ -53,14 +55,14 @@ class CreateMaps2RecordHook
         StoragePidHelper $storagePidHelper,
         MapService $mapService,
         Maps2Registry $maps2Registry,
-        Dispatcher $signalSlotDispatcher
+        EventDispatcher $eventDispatcher
     ) {
         $this->geoCodeService = $geoCodeService;
         $this->addressHelper = $addressHelper;
         $this->messageHelper = $messageHelper;
         $this->storagePidHelper = $storagePidHelper;
         $this->mapService = $mapService;
-        $this->signalSlotDispatcher = $signalSlotDispatcher;
+        $this->eventDispatcher = $eventDispatcher;
 
         $this->columnRegistry = $maps2Registry->getColumnRegistry();
     }
@@ -516,7 +518,7 @@ class CreateMaps2RecordHook
     }
 
     /**
-     * Use this signal, if you want to implement further modification to our POI collection record, while saving
+     * Use this event, if you want to implement further modification to our POI collection record, while saving
      * a foreign location record.
      */
     protected function emitPostUpdatePoiCollectionSignal(
@@ -526,15 +528,19 @@ class CreateMaps2RecordHook
         array $foreignLocationRecord,
         array $options
     ): void {
-        $this->signalSlotDispatcher->dispatch(
-            self::class,
-            'postUpdatePoiCollection',
-            [$poiCollectionTableName, $poiCollectionUid, $foreignTableName, $foreignLocationRecord, $options]
+        $this->eventDispatcher->dispatch(
+            new PostProcessPoiCollectionRecordEvent(
+                $poiCollectionTableName,
+                $poiCollectionUid,
+                $foreignTableName,
+                $foreignLocationRecord,
+                $options
+            ),
         );
     }
 
     /**
-     * Use this signal, if you want to check, if record is allowed to create PoiCollections on your own.
+     * Use this event, if you want to check, if record is allowed to create PoiCollections on your own.
      */
     protected function emitIsRecordAllowedToCreatePoiCollection(
         array $foreignLocationRecord,
@@ -543,11 +549,16 @@ class CreateMaps2RecordHook
         array $options,
         bool &$isValid
     ): void {
-        $this->signalSlotDispatcher->dispatch(
-            self::class,
-            'preIsRecordAllowedToCreatePoiCollection',
-            [$foreignLocationRecord, $foreignTableName, $foreignColumnName, $options, &$isValid]
+        $event = new AllowCreationOfPoiCollectionEvent(
+            $foreignLocationRecord,
+            $foreignTableName,
+            $foreignColumnName,
+            $options,
+            $isValid
         );
+        /** @var AllowCreationOfPoiCollectionEvent $event */
+        $event = $this->eventDispatcher->dispatch($event);
+        $isValid = $event->isValid();
     }
 
     protected function getConnectionPool(): ConnectionPool

@@ -13,6 +13,7 @@ namespace JWeiland\Maps2\Tests\Functional\Form\Element;
 
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Form\Element\GoogleMapsElement;
+use JWeiland\Maps2\Form\Element\OpenStreetMapElement;
 use JWeiland\Maps2\Helper\MapHelper;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Prophecy\Argument;
@@ -24,13 +25,13 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
- * Class GoogleMapsElementTest
+ * Class OpenStreetMapElementTest
  */
-class GoogleMapsElementTest extends FunctionalTestCase
+class OpenStreetMapElementTest extends FunctionalTestCase
 {
     use ProphecyTrait;
 
-    protected GoogleMapsElement $subject;
+    protected OpenStreetMapElement $subject;
 
     protected array $data = [];
 
@@ -86,7 +87,7 @@ class GoogleMapsElementTest extends FunctionalTestCase
         $this->viewProphecy = $this->prophesize(StandaloneView::class);
         GeneralUtility::addInstance(StandaloneView::class, $this->viewProphecy->reveal());
 
-        $this->subject = new GoogleMapsElement(
+        $this->subject = new OpenStreetMapElement(
             GeneralUtility::makeInstance(NodeFactory::class),
             $this->data
         );
@@ -118,7 +119,7 @@ class GoogleMapsElementTest extends FunctionalTestCase
 
         $this->viewProphecy
             ->setTemplatePathAndFilename(
-                Argument::containingString('Resources/Private/Templates/Tca/GoogleMaps.html')
+                Argument::containingString('Resources/Private/Templates/Tca/OpenStreetMap.html')
             )
             ->shouldBeCalled();
         $this->viewProphecy
@@ -142,7 +143,7 @@ class GoogleMapsElementTest extends FunctionalTestCase
     {
         $this->viewProphecy
             ->setTemplatePathAndFilename(
-                Argument::containingString('Resources/Private/Templates/Tca/GoogleMaps.html')
+                Argument::containingString('Resources/Private/Templates/Tca/OpenStreetMap.html')
             )
             ->shouldBeCalled();
         $this->viewProphecy
@@ -157,7 +158,7 @@ class GoogleMapsElementTest extends FunctionalTestCase
             ->willReturn('foo');
 
         self::assertSame(
-            ['TYPO3/CMS/Maps2/GoogleMapsModule'],
+            [['TYPO3/CMS/Maps2/OpenStreetMapModule' => 'function(OpenStreetMap){OpenStreetMap();}']],
             $this->subject->render()['requireJsModules']
         );
     }

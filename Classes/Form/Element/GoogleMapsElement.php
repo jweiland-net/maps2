@@ -47,13 +47,19 @@ class GoogleMapsElement extends AbstractFormElement
         ],
     ];
 
-    public function __construct(NodeFactory $nodeFactory, array $data)
+    public function injectExtConf(ExtConf $extConf): void
     {
-        parent::__construct($nodeFactory, $data);
+        $this->extConf = $extConf;
+    }
 
-        $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
-        $this->pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
-        $this->mapHelper = GeneralUtility::makeInstance(MapHelper::class);
+    public function injectPageRenderer(PageRenderer $pageRenderer): void
+    {
+        $this->pageRenderer = $pageRenderer;
+    }
+
+    public function injectMapHelper(MapHelper $mapHelper): void
+    {
+        $this->mapHelper = $mapHelper;
     }
 
     /**
@@ -165,14 +171,18 @@ class GoogleMapsElement extends AbstractFormElement
 
     protected function getMapHtml(array $record): string
     {
-        $view = GeneralUtility::makeInstance(StandaloneView::class);
-        $view->setTemplatePathAndFilename('EXT:maps2/Resources/Private/Templates/Tca/GoogleMaps.html');
-        $view->assign('record', json_encode($record, JSON_THROW_ON_ERROR));
-        $view->assign('extConf', json_encode(
-            ObjectAccess::getGettableProperties($this->extConf),
-            JSON_THROW_ON_ERROR
-        ));
+        try {
+            $view = GeneralUtility::makeInstance(StandaloneView::class);
+            $view->setTemplatePathAndFilename('EXT:maps2/Resources/Private/Templates/Tca/GoogleMaps.html');
+            $view->assign('record', json_encode($record, JSON_THROW_ON_ERROR));
+            $view->assign('extConf', json_encode(
+                ObjectAccess::getGettableProperties($this->extConf),
+                JSON_THROW_ON_ERROR
+            ));
 
-        return $view->render();
+            return $view->render();
+        } catch (\JsonException $jsonException) {
+            return '';
+        }
     }
 }

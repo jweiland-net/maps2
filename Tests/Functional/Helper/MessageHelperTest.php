@@ -21,10 +21,7 @@ use TYPO3\CMS\Core\Messaging\FlashMessageService;
  */
 class MessageHelperTest extends FunctionalTestCase
 {
-    /**
-     * @var MessageHelper
-     */
-    protected $subject;
+    protected MessageHelper $subject;
 
     /**
      * @var array

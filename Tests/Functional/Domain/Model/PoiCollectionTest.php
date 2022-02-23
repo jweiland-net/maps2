@@ -14,9 +14,9 @@ namespace JWeiland\Maps2\Tests\Functional\Domain\Model;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\Category;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
+use JWeiland\Maps2\Helper\MapHelper;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
@@ -27,15 +27,9 @@ class PoiCollectionTest extends FunctionalTestCase
 {
     use ProphecyTrait;
 
-    /**
-     * @var PoiCollection
-     */
-    protected $subject;
+    protected PoiCollection $subject;
 
-    /**
-     * @var ExtConf
-     */
-    protected $extConf;
+    protected ExtConf $extConf;
 
     /**
      * @var array
@@ -48,15 +42,20 @@ class PoiCollectionTest extends FunctionalTestCase
     {
         parent::setUp();
 
-        $this->extConf = new ExtConf([]);
-        GeneralUtility::setSingletonInstance(ExtConf::class, $this->extConf);
+        $this->extConf = new ExtConf();
+
         $this->subject = new PoiCollection();
+        $this->subject->injectExtConf($this->extConf);
+        $this->subject->injectMapHelper(new MapHelper($this->extConf));
     }
 
     protected function tearDown(): void
     {
-        unset($this->subject);
-        GeneralUtility::resetSingletonInstances([]);
+        unset(
+            $this->subject,
+            $this->extConf
+        );
+
         parent::tearDown();
     }
 
@@ -207,10 +206,10 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getPoisInitiallyReturnsObjectStorage(): void
+    public function getPoisInitiallyReturnsEmptyArray(): void
     {
-        self::assertEquals(
-            new ObjectStorage(),
+        self::assertSame(
+            [],
             $this->subject->getPois()
         );
     }
@@ -500,7 +499,7 @@ class PoiCollectionTest extends FunctionalTestCase
     public function getMarkerIconWidthInitiallyReturnsZero(): void
     {
         self::assertSame(
-            0,
+            25,
             $this->subject->getMarkerIconWidth()
         );
     }
@@ -595,7 +594,7 @@ class PoiCollectionTest extends FunctionalTestCase
     public function getMarkerIconHeightInitiallyReturnsZero(): void
     {
         self::assertSame(
-            0,
+            40,
             $this->subject->getMarkerIconHeight()
         );
     }
@@ -676,7 +675,7 @@ class PoiCollectionTest extends FunctionalTestCase
     public function getMarkerIconAnchorPosXInitiallyReturnsZero(): void
     {
         self::assertSame(
-            0,
+            13,
             $this->subject->getMarkerIconAnchorPosX()
         );
     }
@@ -786,7 +785,7 @@ class PoiCollectionTest extends FunctionalTestCase
     public function getMarkerIconAnchorPosYInitiallyReturnsZero(): void
     {
         self::assertSame(
-            0,
+            40,
             $this->subject->getMarkerIconAnchorPosY()
         );
     }

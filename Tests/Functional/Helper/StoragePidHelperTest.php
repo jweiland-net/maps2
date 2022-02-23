@@ -30,10 +30,7 @@ class StoragePidHelperTest extends FunctionalTestCase
 {
     use ProphecyTrait;
 
-    /**
-     * @var StoragePidHelper
-     */
-    protected $subject;
+    protected StoragePidHelper $subject;
 
     /**
      * @var MessageHelper|ObjectProphecy
@@ -53,6 +50,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         parent::setUp();
 
         $this->messageHelperProphecy = $this->prophesize(MessageHelper::class);
+
         $this->subject = new StoragePidHelper($this->messageHelperProphecy->reveal());
     }
 

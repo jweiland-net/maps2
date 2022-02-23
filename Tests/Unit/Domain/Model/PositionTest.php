@@ -19,10 +19,7 @@ use Nimut\TestingFramework\TestCase\UnitTestCase;
  */
 class PositionTest extends UnitTestCase
 {
-    /**
-     * @var Position
-     */
-    protected $subject;
+    protected Position $subject;
 
     protected function setUp(): void
     {
@@ -31,7 +28,10 @@ class PositionTest extends UnitTestCase
 
     protected function tearDown(): void
     {
-        unset($this->subject);
+        unset(
+            $this->subject
+        );
+
         parent::tearDown();
     }
 

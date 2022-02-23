@@ -22,6 +22,13 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class AllowMapProviderRequestFunctionsProvider implements ExpressionFunctionProviderInterface
 {
+    protected MapHelper $mapHelper;
+
+    public function __construct(MapHelper $mapHelper)
+    {
+        $this->mapHelper = $mapHelper;
+    }
+
     /**
      * @return ExpressionFunction[]
      */
@@ -34,11 +41,13 @@ class AllowMapProviderRequestFunctionsProvider implements ExpressionFunctionProv
 
     protected function getIsRequestToMapProviderAllowed(): ExpressionFunction
     {
+        // Need local variable for static callable
+        $mapHelper = $this->mapHelper;
+
         return new ExpressionFunction(
             'isRequestToMapProviderAllowed',
             static function (): void {},
-            static function ($existingVariables) {
-                $mapHelper = GeneralUtility::makeInstance(MapHelper::class);
+            static function ($existingVariables) use ($mapHelper) {
                 return $mapHelper->isRequestToMapProviderAllowed();
             }
         );

@@ -47,13 +47,19 @@ class OpenStreetMapElement extends AbstractFormElement
         ],
     ];
 
-    public function __construct(NodeFactory $nodeFactory, array $data)
+    public function injectExtConf(ExtConf $extConf): void
     {
-        parent::__construct($nodeFactory, $data);
+        $this->extConf = $extConf;
+    }
 
-        $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
-        $this->pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
-        $this->mapHelper = GeneralUtility::makeInstance(MapHelper::class);
+    public function injectPageRenderer(PageRenderer $pageRenderer): void
+    {
+        $this->pageRenderer = $pageRenderer;
+    }
+
+    public function injectMapHelper(MapHelper $mapHelper): void
+    {
+        $this->mapHelper = $mapHelper;
     }
 
     /**

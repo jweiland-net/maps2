@@ -30,10 +30,7 @@ class AddressHelperTest extends AbstractUnitTestCase
 {
     use ProphecyTrait;
 
-    /**
-     * @var AddressHelper
-     */
-    protected $subject;
+    protected AddressHelper $subject;
 
     /**
      * @var MessageHelper|ObjectProphecy
@@ -43,6 +40,7 @@ class AddressHelperTest extends AbstractUnitTestCase
     protected function setUp(): void
     {
         $this->messageHelperProphecy = $this->prophesize(MessageHelper::class);
+
         $this->subject = new AddressHelper($this->messageHelperProphecy->reveal());
     }
 
@@ -52,6 +50,7 @@ class AddressHelperTest extends AbstractUnitTestCase
             $this->subject,
             $this->messageHelperProphecy
         );
+
         parent::tearDown();
     }
 

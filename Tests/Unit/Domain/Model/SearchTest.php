@@ -19,10 +19,7 @@ use Nimut\TestingFramework\TestCase\UnitTestCase;
  */
 class SearchTest extends UnitTestCase
 {
-    /**
-     * @var Search
-     */
-    protected $subject;
+    protected Search $subject;
 
     protected function setUp(): void
     {
@@ -31,7 +28,10 @@ class SearchTest extends UnitTestCase
 
     protected function tearDown(): void
     {
-        unset($this->subject);
+        unset(
+            $this->subject
+        );
+
         parent::tearDown();
     }
 

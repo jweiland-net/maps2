@@ -21,6 +21,8 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  */
 class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
 {
+    protected ExtConf $extConf;
+
     /**
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
      */
@@ -39,6 +41,15 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
     public function __construct()
     {
         $this->maps2MarkerIcons = new ObjectStorage();
+    }
+
+    /**
+     * As constructor arguments will be removed while instantiation of domain models,
+     * we have to add extConf with help of an inject method
+     */
+    public function injectExtConf(ExtConf $extConf): void
+    {
+        $this->extConf = $extConf;
     }
 
     public function getMaps2MarkerIcons(): ObjectStorage
@@ -77,13 +88,10 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
     public function getMaps2MarkerIconWidth(): int
     {
         // prevent using local maps2MarkerIconWidth, if no markerIcon is set.
-        if (
-            empty($this->maps2MarkerIconWidth)
-            || (!empty($this->maps2MarkerIconWidth) && $this->getMaps2MarkerIcons()->count() === 0)
-        ) {
-            $extConf = GeneralUtility::makeInstance(ExtConf::class);
-            return $extConf->getMarkerIconWidth();
+        if ($this->maps2MarkerIconWidth === 0 || $this->getMaps2MarkerIcons()->count() === 0) {
+            return $this->extConf->getMarkerIconWidth();
         }
+
         return $this->maps2MarkerIconWidth;
     }
 
@@ -95,13 +103,10 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
     public function getMaps2MarkerIconHeight(): int
     {
         // prevent using local maps2MarkerIconHeight, if no markerIcon is set.
-        if (
-            empty($this->maps2MarkerIconHeight)
-            || (!empty($this->maps2MarkerIconHeight) && $this->getMaps2MarkerIcons()->count() === 0)
-        ) {
-            $extConf = GeneralUtility::makeInstance(ExtConf::class);
-            return $extConf->getMarkerIconHeight();
+        if ($this->maps2MarkerIconHeight === 0 || $this->getMaps2MarkerIcons()->count() === 0) {
+            return $this->extConf->getMarkerIconHeight();
         }
+
         return $this->maps2MarkerIconHeight;
     }
 
@@ -113,13 +118,10 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
     public function getMaps2MarkerIconAnchorPosX(): int
     {
         // prevent using local maps2MarkerIconAnchorPosX, if no markerIcon is set.
-        if (
-            empty($this->maps2MarkerIconAnchorPosX)
-            || (!empty($this->maps2MarkerIconAnchorPosX) && $this->getMaps2MarkerIcons()->count() === 0)
-        ) {
-            $extConf = GeneralUtility::makeInstance(ExtConf::class);
-            return $extConf->getMarkerIconAnchorPosX();
+        if ($this->maps2MarkerIconAnchorPosX === 0 || $this->getMaps2MarkerIcons()->count() === 0) {
+            return $this->extConf->getMarkerIconAnchorPosX();
         }
+
         return $this->maps2MarkerIconAnchorPosX;
     }
 
@@ -131,13 +133,10 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
     public function getMaps2MarkerIconAnchorPosY(): int
     {
         // prevent using local maps2MarkerIconAnchorPosY, if no markerIcon is set.
-        if (
-            empty($this->maps2MarkerIconAnchorPosY)
-            || (!empty($this->maps2MarkerIconAnchorPosY) && $this->getMaps2MarkerIcons()->count() === 0)
-        ) {
-            $extConf = GeneralUtility::makeInstance(ExtConf::class);
-            return $extConf->getMarkerIconAnchorPosY();
+        if ($this->maps2MarkerIconAnchorPosY === 0 || $this->getMaps2MarkerIcons()->count() === 0) {
+            return $this->extConf->getMarkerIconAnchorPosY();
         }
+
         return $this->maps2MarkerIconAnchorPosY;
     }
 

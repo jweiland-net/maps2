@@ -9,46 +9,52 @@ declare(strict_types=1);
  * LICENSE file that was distributed with this source code.
  */
 
-namespace JWeiland\Maps2\Tests\Unit\Domain\Model;
+namespace JWeiland\Maps2\Tests\Functional\Domain\Model;
 
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\Category;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
-use Nimut\TestingFramework\TestCase\UnitTestCase;
+use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use TYPO3\CMS\Core\Resource\File;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
  * Class CategoryTest
  */
-class CategoryTest extends UnitTestCase
+class CategoryTest extends FunctionalTestCase
 {
     use ProphecyTrait;
 
-    /**
-     * @var Category
-     */
-    protected $subject;
+    protected Category $subject;
+
+    protected ExtConf $extConf;
 
     /**
-     * @var ExtConf
+     * @var array
      */
-    protected $extConf;
+    protected $testExtensionsToLoad = [
+        'typo3conf/ext/maps2'
+    ];
 
     protected function setUp(): void
     {
-        $this->extConf = new ExtConf([]);
-        GeneralUtility::setSingletonInstance(ExtConf::class, $this->extConf);
+        parent::setUp();
+
+        $this->extConf = new ExtConf();
+
         $this->subject = new Category();
+        $this->subject->injectExtConf($this->extConf);
     }
 
     protected function tearDown(): void
     {
-        unset($this->subject);
-        GeneralUtility::resetSingletonInstances([]);
+        unset(
+            $this->subject,
+            $this->extConf
+        );
+
         parent::tearDown();
     }
 
@@ -124,14 +130,23 @@ class CategoryTest extends UnitTestCase
     public function getMaps2MarkerIconWillReturnIconPath(): void
     {
         $file = $this->prophesize(File::class);
-        $file->getUid()->shouldBeCalled()->willReturn(123);
+        $file
+            ->getUid()
+            ->shouldBeCalled()
+            ->willReturn(123);
+
         /** @var \TYPO3\CMS\Core\Resource\FileReference $coreFileReference */
         $coreFileReference = $this->prophesize(\TYPO3\CMS\Core\Resource\FileReference::class);
         $coreFileReference->getOriginalFile()->shouldBeCalled()->willReturn($file->reveal());
-        $coreFileReference->getPublicUrl(false)->shouldBeCalled()->willReturn('ImagePath');
+        $coreFileReference
+            ->getPublicUrl(false)
+            ->shouldBeCalled()
+            ->willReturn('ImagePath');
+
         $fileReference = new FileReference();
         $fileReference->setOriginalResource($coreFileReference->reveal());
         $this->subject->getMaps2MarkerIcons()->attach($fileReference);
+
         self::assertStringEndsWith(
             'ImagePath',
             $this->subject->getMaps2MarkerIcon()
@@ -141,10 +156,10 @@ class CategoryTest extends UnitTestCase
     /**
      * @test
      */
-    public function getMaps2MarkerIconWidthInitiallyReturnsZero(): void
+    public function getMaps2MarkerIconWidthInitiallyReturns25(): void
     {
         self::assertSame(
-            0,
+            25,
             $this->subject->getMaps2MarkerIconWidth()
         );
     }
@@ -160,6 +175,7 @@ class CategoryTest extends UnitTestCase
 
         $this->subject->setMaps2MarkerIcons($images);
         $this->extConf->setMarkerIconWidth(123);
+
         self::assertSame(
             123,
             $this->subject->getMaps2MarkerIconWidth()
@@ -202,7 +218,7 @@ class CategoryTest extends UnitTestCase
     public function getMaps2MarkerIconHeightInitiallyReturnsZero(): void
     {
         self::assertSame(
-            0,
+            40,
             $this->subject->getMaps2MarkerIconHeight()
         );
     }
@@ -260,7 +276,7 @@ class CategoryTest extends UnitTestCase
     public function getMaps2MarkerIconAnchorPosXInitiallyReturnsZero(): void
     {
         self::assertSame(
-            0,
+            13,
             $this->subject->getMaps2MarkerIconAnchorPosX()
         );
     }
@@ -318,7 +334,7 @@ class CategoryTest extends UnitTestCase
     public function getMaps2MarkerIconAnchorPosYInitiallyReturnsZero(): void
     {
         self::assertSame(
-            0,
+            40,
             $this->subject->getMaps2MarkerIconAnchorPosY()
         );
     }
