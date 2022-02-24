@@ -34,11 +34,12 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
 class MapService
 {
     protected ConfigurationManagerInterface $configurationManager;
+
     protected MessageHelper $messageHelper;
 
-    protected array $settings = [];
+    protected Maps2Registry $maps2Registry;
 
-    protected array $columnRegistry = [];
+    protected array $settings = [];
 
     public function __construct(
         ConfigurationManagerInterface $configurationManager,
@@ -47,8 +48,7 @@ class MapService
     ) {
         $this->configurationManager = $configurationManager;
         $this->messageHelper = $messageHelper;
-
-        $this->columnRegistry = $maps2Registry->getColumnRegistry();
+        $this->maps2Registry = $maps2Registry;
     }
 
     /**
@@ -139,6 +139,11 @@ class MapService
         }
 
         return $settings;
+    }
+
+    protected function getColumnRegistry(): array
+    {
+        return $this->maps2Registry->getColumnRegistry() ?? [];
     }
 
     /**
@@ -292,21 +297,12 @@ class MapService
     }
 
     /**
-     * Currently used by UnitTests, only.
-     *
-     * @param mixed[] $columnRegistry
-     */
-    public function setColumnRegistry(array $columnRegistry): void
-    {
-        $this->columnRegistry = $columnRegistry;
-    }
-
-    /**
      * Adds the related foreign records of a PoiCollection to PoiCollection itself.
      */
     public function addForeignRecordsToPoiCollection(PoiCollection $poiCollection): void
     {
-        if (empty($this->columnRegistry)) {
+        $columnRegistry = $this->getColumnRegistry();
+        if (empty($columnRegistry)) {
             return;
         }
 
@@ -315,7 +311,7 @@ class MapService
         }
 
         // Loop through all configured tables and columns and add the foreignRecord to PoiCollection
-        foreach ($this->columnRegistry as $tableName => $columns) {
+        foreach ($columnRegistry as $tableName => $columns) {
             foreach ($columns as $columnName => $configuration) {
                 $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable($tableName);
                 $queryBuilder->setRestrictions(

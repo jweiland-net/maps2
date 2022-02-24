@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Helper;
 
+use Doctrine\DBAL\DBALException;
 use JWeiland\Maps2\Configuration\ExtConf;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
@@ -134,17 +135,21 @@ class AddressHelper
     protected function getCountryNameFromStaticCountries(int $uid): string
     {
         $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable('static_countries');
-        $countryRecord = $queryBuilder
-            ->select('cn_short_en')
-            ->from('static_countries')
-            ->where(
-                $queryBuilder->expr()->eq(
-                    'uid',
-                    $queryBuilder->createNamedParameter($uid, \PDO::PARAM_INT)
+        try {
+            $countryRecord = $queryBuilder
+                ->select('cn_short_en')
+                ->from('static_countries')
+                ->where(
+                    $queryBuilder->expr()->eq(
+                        'uid',
+                        $queryBuilder->createNamedParameter($uid, \PDO::PARAM_INT)
+                    )
                 )
-            )
-            ->execute()
-            ->fetch();
+                ->execute()
+                ->fetch();
+        } catch (DBALException $DBALException) {
+            $countryRecord = [];
+        }
 
         if (empty($countryRecord)) {
             $this->messageHelper->addFlashMessage(

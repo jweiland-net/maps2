@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Hook;
 
+use Doctrine\DBAL\DBALException;
 use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Event\AllowCreationOfPoiCollectionEvent;
 use JWeiland\Maps2\Event\PostProcessPoiCollectionRecordEvent;
@@ -21,6 +22,7 @@ use JWeiland\Maps2\Service\GeoCodeService;
 use JWeiland\Maps2\Service\MapService;
 use JWeiland\Maps2\Tca\Maps2Registry;
 use TYPO3\CMS\Core\Cache\CacheManager;
+use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
@@ -44,6 +46,8 @@ class CreateMaps2RecordHook
 
     protected MapService $mapService;
 
+    protected Maps2Registry $maps2Registry;
+
     protected EventDispatcher $eventDispatcher;
 
     protected array $columnRegistry = [];
@@ -63,8 +67,7 @@ class CreateMaps2RecordHook
         $this->storagePidHelper = $storagePidHelper;
         $this->mapService = $mapService;
         $this->eventDispatcher = $eventDispatcher;
-
-        $this->columnRegistry = $maps2Registry->getColumnRegistry();
+        $this->maps2Registry = $maps2Registry;
     }
 
     /**
@@ -79,7 +82,7 @@ class CreateMaps2RecordHook
             }
 
             // process this hook only on registered tables
-            if (!array_key_exists($foreignTableName, $this->columnRegistry)) {
+            if (!array_key_exists($foreignTableName, $this->getColumnRegistry())) {
                 continue;
             }
 
@@ -92,7 +95,7 @@ class CreateMaps2RecordHook
                     continue;
                 }
 
-                foreach ($this->columnRegistry[$foreignTableName] as $foreignColumnName => $options) {
+                foreach ($this->getColumnRegistry()[$foreignTableName] as $foreignColumnName => $options) {
                     if (!array_key_exists($foreignColumnName, $foreignLocationRecord)) {
                         continue;
                     }
@@ -246,6 +249,11 @@ class CreateMaps2RecordHook
         }
     }
 
+    protected function getColumnRegistry(): array
+    {
+        return $this->maps2Registry->getColumnRegistry() ?? [];
+    }
+
     /**
      * After saving a PoiCollection the additional information RTE content may have changed.
      * As this content will be stored in our maps2_cachedhtml cache, we have to remove that entry after save.
@@ -254,8 +262,13 @@ class CreateMaps2RecordHook
      */
     protected function clearHtmlCache(int $poiCollectionUid): void
     {
-        $cache = GeneralUtility::makeInstance(CacheManager::class)->getCache('maps2_cachedhtml');
-        $cache->flushByTag('infoWindowUid' . $poiCollectionUid);
+        try {
+            GeneralUtility::makeInstance(CacheManager::class)
+                ->getCache('maps2_cachedhtml')
+                ->flushByTag('infoWindowUid' . $poiCollectionUid);
+        } catch (NoSuchCacheException $noSuchCacheException) {
+            // Do nothing
+        }
     }
 
     /**
@@ -306,28 +319,28 @@ class CreateMaps2RecordHook
         }
     }
 
-    /**
-     * Get PoiCollection
-     *
-     * @return mixed[]
-     */
     protected function getPoiCollection(int $poiCollectionUid, array $columnsToSelect = ['*']): array
     {
         $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable('tx_maps2_domain_model_poicollection');
         $queryBuilder->getRestrictions()->removeAll()->add(
             GeneralUtility::makeInstance(DeletedRestriction::class)
         );
-        $poiCollection = $queryBuilder
-            ->select(...$columnsToSelect)
-            ->from('tx_maps2_domain_model_poicollection')
-            ->where(
-                $queryBuilder->expr()->eq(
-                    'uid',
-                    $queryBuilder->createNamedParameter($poiCollectionUid, \PDO::PARAM_INT)
+
+        try {
+            $poiCollection = $queryBuilder
+                ->select(...$columnsToSelect)
+                ->from('tx_maps2_domain_model_poicollection')
+                ->where(
+                    $queryBuilder->expr()->eq(
+                        'uid',
+                        $queryBuilder->createNamedParameter($poiCollectionUid, \PDO::PARAM_INT)
+                    )
                 )
-            )
-            ->execute()
-            ->fetch();
+                ->execute()
+                ->fetch();
+        } catch (DBALException $DBALException) {
+            $poiCollection = false;
+        }
 
         if ($poiCollection === false) {
             $poiCollection = [];

@@ -135,18 +135,22 @@ class Maps2Registry implements SingletonInterface
      * Reads, extract and returns Maps2 Column Configuration (Registry)
      *
      * @api
-     * @return mixed[]
+     * @return array
      */
     public function getColumnRegistry(): array
     {
         $columnRegistry = [];
         if (@is_file($this->configurationFile)) {
-            $configuration = json_decode(
-                file_get_contents($this->configurationFile),
-                true,
-                512,
-                JSON_THROW_ON_ERROR
-            );
+            try {
+                $configuration = json_decode(
+                    file_get_contents($this->configurationFile),
+                    true,
+                    512,
+                    JSON_THROW_ON_ERROR
+                );
+            } catch (\JsonException $jsonException) {
+                $configuration = [];
+            }
 
             if (
                 is_array($configuration)
