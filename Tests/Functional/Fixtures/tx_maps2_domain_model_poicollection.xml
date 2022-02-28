@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+	<tx_maps2_domain_model_poicollection>
+		<uid>1</uid>
+		<pid>1</pid>
+		<hidden>0</hidden>
+		<deleted>0</deleted>
+		<map_provider>gm</map_provider>
+		<collection_type>Point</collection_type>
+		<title>Test 123</title>
+		<latitude>51.01827735</latitude>
+		<longitude>7.3854744963651</longitude>
+		<info_window_content>Hello all together</info_window_content>
+	</tx_maps2_domain_model_poicollection>
+</dataset>

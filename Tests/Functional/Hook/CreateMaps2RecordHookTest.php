@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Tests\Functional\Hook;
 
+use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Event\AllowCreationOfPoiCollectionEvent;
 use JWeiland\Maps2\Event\PostProcessPoiCollectionRecordEvent;
@@ -33,6 +34,7 @@ use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
 use TYPO3\CMS\Core\EventDispatcher\ListenerProvider;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
+use TYPO3\CMS\Extbase\Service\EnvironmentService;
 
 /**
  * Functional test for CreateMaps2RecordHook
@@ -124,7 +126,10 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
             new MapService(
                 $this->prophesize(ConfigurationManager::class)->reveal(),
                 $this->messageHelperProphecy->reveal(),
-                $this->maps2RegistryProphecy->reveal()
+                $this->maps2RegistryProphecy->reveal(),
+                new ExtConf(),
+                GeneralUtility::makeInstance(EventDispatcher::class),
+                new EnvironmentService()
             ),
             $this->maps2RegistryProphecy->reveal(),
             new EventDispatcher($this->listenerProviderProphecy->reveal())

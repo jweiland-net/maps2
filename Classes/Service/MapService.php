@@ -14,18 +14,19 @@ namespace JWeiland\Maps2\Service;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Domain\Model\Position;
+use JWeiland\Maps2\Event\PreAddForeignRecordEvent;
 use JWeiland\Maps2\Helper\MapHelper;
 use JWeiland\Maps2\Helper\MessageHelper;
 use JWeiland\Maps2\Tca\Maps2Registry;
 use JWeiland\Maps2\Utility\DatabaseUtility;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\FrontendRestrictionContainer;
+use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Service\EnvironmentService;
-use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
@@ -39,49 +40,28 @@ class MapService
 
     protected Maps2Registry $maps2Registry;
 
+    protected ExtConf $extConf;
+
+    protected EventDispatcher $eventDispatcher;
+
+    protected EnvironmentService $environmentService;
+
     protected array $settings = [];
 
     public function __construct(
         ConfigurationManagerInterface $configurationManager,
         MessageHelper $messageHelper,
-        Maps2Registry $maps2Registry
+        Maps2Registry $maps2Registry,
+        ExtConf $extConf,
+        EventDispatcher $eventDispatcher,
+        EnvironmentService $environmentService
     ) {
         $this->configurationManager = $configurationManager;
         $this->messageHelper = $messageHelper;
         $this->maps2Registry = $maps2Registry;
-    }
-
-    /**
-     * Get currently valid default map provider
-     *
-     * @param array $databaseRow If set, we will try to retrieve map provider from this row before.
-     * @return string Returns either "gm" or "osm"
-     * @deprecated
-     */
-    public function getMapProvider(array $databaseRow = []): string
-    {
-        trigger_error('Method MapService::getMapProvider is deprecated and has been moved to MapHelper::getMapProvider.', E_USER_DEPRECATED);
-
-        $mapHelper = GeneralUtility::makeInstance(MapHelper::class);
-
-        return $mapHelper->getMapProvider($databaseRow);
-    }
-
-    /**
-     * Set info window for Poi Collection
-     *
-     * @deprecated
-     */
-    public function setInfoWindow(PoiCollection $poiCollection): void
-    {
-        trigger_error(
-            'MapService::setInfoWindow is deprecated please use MapService::renderInfoWindow directly.',
-            E_USER_DEPRECATED
-        );
-
-        $poiCollection->setInfoWindowContent(
-            $this->renderInfoWindow($poiCollection)
-        );
+        $this->extConf = $extConf;
+        $this->eventDispatcher = $eventDispatcher;
+        $this->environmentService = $environmentService;
     }
 
     /**
@@ -89,7 +69,15 @@ class MapService
      */
     public function renderInfoWindow(PoiCollection $poiCollection): string
     {
+        $typoScriptConfiguration = $this->configurationManager->getConfiguration(
+            ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,
+            'Maps2',
+            'Maps2'
+        );
+
         $view = GeneralUtility::makeInstance(StandaloneView::class);
+        $view->setLayoutRootPaths($typoScriptConfiguration['view']['layoutRootPaths'] ?? []);
+        $view->setPartialRootPaths($typoScriptConfiguration['view']['partialRootPaths'] ?? []);
         $view->assign('settings', $this->getSettings());
         $view->assign('poiCollection', $poiCollection);
         $view->setTemplatePathAndFilename(
@@ -106,29 +94,26 @@ class MapService
      */
     protected function getInfoWindowContentTemplatePath(): string
     {
-        $extConf = GeneralUtility::makeInstance(ExtConf::class);
         $settings = $this->getSettings();
 
-        // get default template path
-        if (!isset($settings['infoWindowContentTemplatePath'])) {
-            return $extConf->getInfoWindowContentTemplatePath();
+        if (!array_key_exists('infoWindowContentTemplatePath', $settings)) {
+            return $this->extConf->getInfoWindowContentTemplatePath();
         }
 
-        if (empty($settings['infoWindowContentTemplatePath'])) {
-            return $extConf->getInfoWindowContentTemplatePath();
+        if (trim($settings['infoWindowContentTemplatePath']) === '') {
+            return $this->extConf->getInfoWindowContentTemplatePath();
         }
 
-        return $settings['infoWindowContentTemplatePath'];
+        return trim($settings['infoWindowContentTemplatePath']);
     }
 
     /**
-     * @return mixed[]
+     * @return array
      */
     protected function getSettings(): array
     {
         $settings = [];
-        $environmentService = GeneralUtility::makeInstance(EnvironmentService::class);
-        if ($environmentService->isEnvironmentInFrontendMode()) {
+        if ($this->environmentService->isEnvironmentInFrontendMode()) {
             // Keep ExtName and PluginName, else the extKey will not be added to return-value
             // in further getConfiguration calls.
             $settings = $this->configurationManager->getConfiguration(
@@ -158,8 +143,7 @@ class MapService
     public function createNewPoiCollection(int $pid, Position $position, array $overrideFieldValues = []): int
     {
         if (empty($position->getLatitude()) || empty($position->getLongitude())) {
-            $messageHelper = GeneralUtility::makeInstance(MessageHelper::class);
-            $messageHelper->addFlashMessage(
+            $this->messageHelper->addFlashMessage(
                 'The is no latitude or longitude in Response of Map Provider.',
                 'Missing Lat or Lng',
                 AbstractMessage::ERROR
@@ -228,7 +212,7 @@ class MapService
             );
         }
 
-        if (empty($foreignRecord)) {
+        if ($foreignRecord === []) {
             $hasErrors = true;
             $this->messageHelper->addFlashMessage(
                 'Foreign record can not be empty. Please check your values near method assignPoiCollectionToForeignRecord',
@@ -246,7 +230,7 @@ class MapService
             );
         }
 
-        if (empty(trim($foreignTableName))) {
+        if (trim($foreignTableName) === '') {
             $hasErrors = true;
             $this->messageHelper->addFlashMessage(
                 'Foreign table name is a must have value, which is currently not present. Please check your values near method assignPoiCollectionToForeignRecord',
@@ -255,7 +239,7 @@ class MapService
             );
         }
 
-        if (empty(trim($foreignFieldName))) {
+        if (trim($foreignFieldName) === '') {
             $hasErrors = true;
             $this->messageHelper->addFlashMessage(
                 'Foreign field name is a must have value, which is currently not present. Please check your values near method assignPoiCollectionToForeignRecord',
@@ -327,6 +311,7 @@ class MapService
                         )
                     )
                     ->execute();
+
                 while ($foreignRecord = $statement->fetch()) {
                     // Hopefully these keys are unique enough
                     // Very useful to f:groupedFor in Fluid Templates
@@ -334,7 +319,7 @@ class MapService
                     $foreignRecord['jwMaps2ColumnName'] = $columnName;
 
                     // Add or remove your own values
-                    $this->emitPreAddForeignRecordToPoiCollectionSignal(
+                    $foreignRecord = $this->emitPreAddForeignRecordToPoiCollectionSignal(
                         $foreignRecord,
                         $tableName,
                         $columnName
@@ -347,19 +332,54 @@ class MapService
     }
 
     /**
-     * Use this signal, if you want to modify the foreign record, before adding it to PoiCollection record.
-     * If you set $foreignRecord to [] (empty) it will NOT be added to PoiCollection.
+     * Use this EventListener, if you want to modify the foreign record, before adding it to PoiCollection record.
+     * If you set $foreignRecord to empty array it will NOT be added to PoiCollection.
      */
     protected function emitPreAddForeignRecordToPoiCollectionSignal(
-        array &$foreignRecord,
+        array $foreignRecord,
         string $tableName,
         string $columnName
-    ): void {
-        $signalSlotDispatcher = GeneralUtility::makeInstance(Dispatcher::class);
-        $signalSlotDispatcher->dispatch(
-            self::class,
-            'preAddForeignRecordToPoiCollection',
-            [&$foreignRecord, $tableName, $columnName]
+    ): array {
+        /** @var PreAddForeignRecordEvent $event */
+        $event = $this->eventDispatcher->dispatch(new PreAddForeignRecordEvent(
+            $foreignRecord,
+            $tableName,
+            $columnName
+        ));
+
+        return $event->getForeignRecord();
+    }
+
+    /**
+     * Get currently valid default map provider
+     *
+     * @param array $databaseRow If set, we will try to retrieve map provider from this row before.
+     * @return string Returns either "gm" or "osm"
+     * @deprecated
+     */
+    public function getMapProvider(array $databaseRow = []): string
+    {
+        trigger_error('Method MapService::getMapProvider is deprecated and has been moved to MapHelper::getMapProvider.', E_USER_DEPRECATED);
+
+        $mapHelper = GeneralUtility::makeInstance(MapHelper::class);
+
+        return $mapHelper->getMapProvider($databaseRow);
+    }
+
+    /**
+     * Set info window for Poi Collection
+     *
+     * @deprecated
+     */
+    public function setInfoWindow(PoiCollection $poiCollection): void
+    {
+        trigger_error(
+            'MapService::setInfoWindow is deprecated please use MapService::renderInfoWindow directly.',
+            E_USER_DEPRECATED
+        );
+
+        $poiCollection->setInfoWindowContent(
+            $this->renderInfoWindow($poiCollection)
         );
     }
 

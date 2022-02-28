@@ -9,43 +9,33 @@ declare(strict_types=1);
  * LICENSE file that was distributed with this source code.
  */
 
-namespace JWeiland\Maps2\Tests\Unit\Service;
+namespace JWeiland\Maps2\Tests\Functional\Service;
 
 use JWeiland\Maps2\Configuration\ExtConf;
+use JWeiland\Maps2\Domain\Model\PoiCollection;
+use JWeiland\Maps2\Domain\Model\Position;
+use JWeiland\Maps2\Event\PreAddForeignRecordEvent;
+use JWeiland\Maps2\Helper\MessageHelper;
 use JWeiland\Maps2\Service\MapService;
-use Nimut\TestingFramework\TestCase\UnitTestCase;
+use JWeiland\Maps2\Tca\Maps2Registry;
+use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
+use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
-use TYPO3\CMS\Core\Messaging\FlashMessage;
-use TYPO3\CMS\Core\Messaging\FlashMessageQueue;
-use TYPO3\CMS\Core\Messaging\FlashMessageService;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
-use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Service\EnvironmentService;
-use TYPO3\CMS\Fluid\View\StandaloneView;
-use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 /**
  * Test MapService
  */
-class MapServiceTest extends UnitTestCase
+class MapServiceTest extends FunctionalTestCase
 {
     use ProphecyTrait;
 
-    /**
-     * @var ObjectManager|ObjectProphecy
-     */
-    protected $objectManagerProphecy;
-
-    /**
-     * @var EnvironmentService|ObjectProphecy
-     */
-    protected $environmentServiceProphecy;
+    protected MapService $subject;
 
     /**
      * @var ConfigurationManagerInterface|ObjectProphecy
@@ -53,50 +43,114 @@ class MapServiceTest extends UnitTestCase
     protected $configurationManagerProphecy;
 
     /**
-     * @var array
+     * @var MessageHelper|ObjectProphecy
      */
-    protected $settings = [];
+    protected $messageHelperProphecy;
 
     /**
-     * @var MapService
+     * @var Maps2Registry|ObjectProphecy
      */
-    protected $subject;
+    protected $maps2RegistryProphecy;
+
+    /**
+     * @var ExtConf|ObjectProphecy
+     */
+    protected $extConfProphecy;
+
+    /**
+     * @var EventDispatcher|ObjectProphecy
+     */
+    protected $eventDispatcherProphecy;
+
+    /**
+     * @var EnvironmentService|ObjectProphecy
+     */
+    protected $environmentServiceProphecy;
+
+    /**
+     * @var string[]
+     */
+    protected $testExtensionsToLoad = [
+        'typo3conf/ext/events2',
+        'typo3conf/ext/maps2'
+    ];
 
     protected function setUp(): void
     {
-        $this->objectManagerProphecy = $this->prophesize(ObjectManager::class);
+        parent::setUp();
+
+        $this->importDataSet(__DIR__ . '/../Fixtures/tx_events2_domain_model_location.xml');
+
+        $this->messageHelperProphecy = $this->prophesize(MessageHelper::class);
+        $this->maps2RegistryProphecy = $this->prophesize(Maps2Registry::class);
+        $this->eventDispatcherProphecy = $this->prophesize(EventDispatcher::class);
+
+        // Override partials path to prevent using f:format.html VH. It checks against applicationType which is not present in TYPO3 10.
+        $this->configurationManagerProphecy = $this->prophesize(ConfigurationManager::class);
+        $this->configurationManagerProphecy
+            ->getConfiguration(
+                ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,
+                'Maps2',
+                'Maps2'
+            )
+            ->willReturn([
+                'view' => [
+                    'layoutRootPaths' => [],
+                    'partialRootPaths' => [
+                        'EXT:maps2/Tests/Functional/Fixtures/Partials'
+                    ],
+                ]
+            ]);
+        $this->configurationManagerProphecy
+            ->getConfiguration(
+                ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
+                'Maps2',
+                'Maps2'
+            )
+            ->willReturn([]);
+
+        // Replace default template to prevent calling cache VHs. They check against FE
+        $this->extConfProphecy = $this->prophesize(ExtConf::class);
+        $this->extConfProphecy
+            ->getInfoWindowContentTemplatePath()
+            ->willReturn('EXT:maps2/Resources/Private/Templates/InfoWindowContentNoCache.html');
+
+        // Set FE context to FE
         $this->environmentServiceProphecy = $this->prophesize(EnvironmentService::class);
         $this->environmentServiceProphecy
             ->isEnvironmentInFrontendMode()
             ->willReturn(true);
 
-        $this->configurationManagerProphecy = $this->prophesize(ConfigurationManager::class);
-        $this->objectManagerProphecy
-            ->get(ConfigurationManagerInterface::class)
-            ->willReturn($this->configurationManagerProphecy->reveal());
+        $this->subject = new MapService(
+            $this->configurationManagerProphecy->reveal(),
+            $this->messageHelperProphecy->reveal(),
+            $this->maps2RegistryProphecy->reveal(),
+            $this->extConfProphecy->reveal(),
+            $this->eventDispatcherProphecy->reveal(),
+            $this->environmentServiceProphecy->reveal()
+        );
     }
 
     protected function tearDown(): void
     {
-        unset($this->objectManagerProphecy, $this->configurationManagerProphecy, $this->subject);
+        unset(
+            $this->subject,
+            $this->configurationManagerProphecy,
+            $this->messageHelperProphecy,
+            $this->maps2RegistryProphecy,
+            $this->extConfProphecy,
+            $this->eventDispatcherProphecy,
+            $this->environmentServiceProphecy
+        );
+
         parent::tearDown();
     }
 
     /**
      * @test
      */
-    public function showAllowMapFormWithMissingMapProviderWillCreateFlashMessage(): void
+    public function renderInfoWindowWillLoadTemplatePathFromTypoScript(): void
     {
-        $testString = 'testHtml';
-
-        $contentObject = new ContentObjectRenderer();
-        $contentObject->data = [
-            'uid' => 123
-        ];
-
-        $extConf = new ExtConf([]);
-        GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
-
         $this->configurationManagerProphecy
             ->getConfiguration(
                 ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
@@ -104,404 +158,454 @@ class MapServiceTest extends UnitTestCase
                 'Maps2'
             )
             ->shouldBeCalled()
-            ->willReturn($this->settings);
-        $this->configurationManagerProphecy
-            ->getContentObject()
-            ->shouldBeCalled()
-            ->willReturn($contentObject);
+            ->willReturn([
+                'infoWindowContentTemplatePath' => 'EXT:maps2/Resources/Private/Templates/InfoWindowContentNoCache.html'
+            ]);
 
-        $this->objectManagerProphecy
-            ->get(ConfigurationManagerInterface::class)
-            ->willReturn($this->configurationManagerProphecy->reveal());
+        $this->extConfProphecy
+            ->getInfoWindowContentTemplatePath()
+            ->shouldNotBeCalled();
 
-        $flashMessage = new FlashMessage(
-            'You have forgotten...',
-            'Missing static template',
-            AbstractMessage::ERROR
+        $poiCollection = new PoiCollection();
+        $poiCollection->setTitle('Test 123');
+
+        self::assertStringContainsString(
+            'Test 123',
+            $this->subject->renderInfoWindow($poiCollection)
         );
-        GeneralUtility::addInstance(FlashMessage::class, $flashMessage);
+    }
 
-        /** @var FlashMessageQueue|ObjectProphecy $flashMessageQueueProphecy */
-        $flashMessageQueueProphecy = $this->prophesize(FlashMessageQueue::class);
-        $flashMessageQueueProphecy
-            ->enqueue($flashMessage)
+    /**
+     * @test
+     */
+    public function renderInfoWindowWillRenderPoiCollectionTitle(): void
+    {
+        $poiCollection = new PoiCollection();
+        $poiCollection->setTitle('Test 123');
+
+        self::assertStringContainsString(
+            'Test 123',
+            $this->subject->renderInfoWindow($poiCollection)
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function renderInfoWindowWillRenderPoiCollectionAddress(): void
+    {
+        $poiCollection = new PoiCollection();
+        $poiCollection->setTitle('jweiland.net');
+        $poiCollection->setAddress('Echterdinger Straße 57, Gebäude 9, 70794 Filderstadt, Germany');
+
+        $renderedContent = $this->subject->renderInfoWindow($poiCollection);
+
+        self::assertStringContainsString(
+            'Echterdinger Straße 57',
+            $renderedContent
+        );
+        self::assertStringContainsString(
+            'Gebäude 9',
+            $renderedContent
+        );
+        self::assertStringContainsString(
+            '70794 Filderstadt',
+            $renderedContent
+        );
+
+        self::assertStringNotContainsString(
+            'Germany',
+            $renderedContent
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function renderInfoWindowWillRenderPoiCollectionInfoWindowContent(): void
+    {
+        $poiCollection = new PoiCollection();
+        $poiCollection->setTitle('Test 123');
+        $poiCollection->setInfoWindowContent('Hello all together');
+
+        self::assertStringContainsString(
+            'Hello all together',
+            $this->subject->renderInfoWindow($poiCollection)
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function createNewPoiCollectionWithEmptyLatitudeReturnsZero(): void
+    {
+        self::assertSame(
+            0,
+            $this->subject->createNewPoiCollection(
+                1,
+                new Position()
+            )
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function createNewPoiCollectionWillCreateNewPoiCollectionRecord(): void
+    {
+        $position = new Position();
+        $position->setLatitude(51.4);
+        $position->setLongitude(7.4);
+        $position->setFormattedAddress('Echterdinger Straße 57, 70794 Filderstadt, Germany');
+
+        self::assertSame(
+            1,
+            $this->subject->createNewPoiCollection(
+                1,
+                $position
+            )
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function createNewPoiCollectionWithOverrideWillCreateNewPoiCollectionRecord(): void
+    {
+        $position = new Position();
+        $position->setLatitude(51.4);
+        $position->setLongitude(7.4);
+        $position->setFormattedAddress('Echterdinger Straße 57, 70794 Filderstadt, Germany');
+
+        $this->subject->createNewPoiCollection(
+            1,
+            $position,
+            [
+                'hidden' => 1,
+                'longitude' => 12.3
+            ]
+        );
+
+        $poiCollectionRecord = $this->getDatabaseConnection()->selectSingleRow(
+            '*',
+            'tx_maps2_domain_model_poicollection',
+            'uid=1'
+        );
+
+        $poiCollectionRecord = array_intersect_key(
+            $poiCollectionRecord,
+            ['uid' => 1, 'hidden' => 1, 'longitude' => 1]
+        );
+
+        self::assertSame(
+            [
+                'uid' => 1,
+                'hidden' => 1,
+                'longitude' => 12.3,
+            ],
+            $poiCollectionRecord
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function assignPoiCollectionToForeignRecordWithEmptyPoiCollectionUidAddsFlashMessage(): void
+    {
+        $this->messageHelperProphecy
+            ->addFlashMessage(
+                Argument::any(),
+                Argument::not('PoiCollection empty')
+            )
+            ->shouldNotBeCalled();
+
+        $this->messageHelperProphecy
+            ->addFlashMessage(
+                Argument::containingString('PoiCollection UID can not be empty'),
+                Argument::exact('PoiCollection empty'),
+                AbstractMessage::ERROR
+            )
             ->shouldBeCalled();
 
-        /** @var FlashMessageService|ObjectProphecy $flashMessageServiceProphecy */
-        $flashMessageServiceProphecy = $this->prophesize(FlashMessageService::class);
-        $flashMessageServiceProphecy
-            ->getMessageQueueByIdentifier('maps2.allowMap')
-            ->shouldBeCalled()
-            ->willReturn($flashMessageQueueProphecy->reveal());
-        GeneralUtility::setSingletonInstance(FlashMessageService::class, $flashMessageServiceProphecy->reveal());
+        $foreignRecord = [
+            'uid' => 1
+        ];
 
-        /** @var StandaloneView|ObjectProphecy $viewProphecy */
-        $viewProphecy = $this->prophesize(StandaloneView::class);
-        $viewProphecy->setTemplatePathAndFilename(Argument::any())->shouldBeCalled();
-        $viewProphecy->assign('data', $contentObject->data)->shouldBeCalled();
-        $viewProphecy->assign('settings', $this->settings)->shouldBeCalled();
-        $viewProphecy->assign('requestUri', 'MyCoolRequestUri')->shouldBeCalled();
-        $viewProphecy->render()->shouldBeCalled()->willReturn($testString);
-        GeneralUtility::addInstance(StandaloneView::class, $viewProphecy->reveal());
-
-        /** @var UriBuilder $uriBuilderProphecy */
-        $uriBuilderProphecy = $this->prophesize(UriBuilder::class);
-        $uriBuilderProphecy->reset()->shouldBeCalled()->willReturn($uriBuilderProphecy->reveal());
-        $uriBuilderProphecy->setAddQueryString(true)->shouldBeCalled()->willReturn($uriBuilderProphecy->reveal());
-        $uriBuilderProphecy->setAddQueryStringMethod('GET')->shouldBeCalled()->willReturn($uriBuilderProphecy->reveal());
-        $uriBuilderProphecy
-            ->setArguments([
-                'tx_maps2_maps2' => [
-                    'mapProviderRequestsAllowedForMaps2' => 1
-                ]
-            ])
-            ->shouldBeCalled()
-            ->willReturn($uriBuilderProphecy->reveal());
-        $uriBuilderProphecy
-            ->setArgumentsToBeExcludedFromQueryString(['cHash'])
-            ->shouldBeCalled()
-            ->willReturn($uriBuilderProphecy->reveal());
-        $uriBuilderProphecy
-            ->build()
-            ->shouldBeCalled()
-            ->willReturn('MyCoolRequestUri');
-        $this->objectManagerProphecy
-            ->get(UriBuilder::class)
-            ->shouldBeCalled()
-            ->willReturn($uriBuilderProphecy->reveal());
-
-        GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManagerProphecy->reveal());
-        GeneralUtility::setSingletonInstance(EnvironmentService::class, $this->environmentServiceProphecy->reveal());
-        $this->subject = new MapService();
-
-        self::assertSame(
-            $testString,
-            $this->subject->showAllowMapForm()
+        $this->subject->assignPoiCollectionToForeignRecord(
+            0,
+            $foreignRecord,
+            'tx_events2_domain_model_location'
         );
     }
 
     /**
      * @test
      */
-    public function showAllowMapFormWithEmptyMapProviderWillCreateFlashMessage(): void
+    public function assignPoiCollectionToForeignRecordWithEmptyForeignRecordAddsFlashMessages(): void
     {
-        $testString = 'testHtml';
-
-        $contentObject = new ContentObjectRenderer();
-        $contentObject->data = [
-            'uid' => 123
-        ];
-
-        $extConf = new ExtConf([]);
-        GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
-
-        $this->settings['mapProvider'] = '';
-        $this->configurationManagerProphecy
-            ->getConfiguration(
-                ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
-                'Maps2',
-                'Maps2'
+        $this->messageHelperProphecy
+            ->addFlashMessage(
+                Argument::containingString('Foreign record can not be empty'),
+                Argument::exact('Foreign record empty'),
+                AbstractMessage::ERROR
             )
-            ->shouldBeCalled()
-            ->willReturn($this->settings);
-        $this->configurationManagerProphecy
-            ->getContentObject()
-            ->shouldBeCalled()
-            ->willReturn($contentObject);
-
-        $this->objectManagerProphecy
-            ->get(ConfigurationManagerInterface::class)
-            ->willReturn($this->configurationManagerProphecy->reveal());
-
-        $flashMessage = new FlashMessage(
-            'You have forgotten...',
-            'Missing static template',
-            AbstractMessage::ERROR
-        );
-        GeneralUtility::addInstance(FlashMessage::class, $flashMessage);
-
-        /** @var FlashMessageQueue|ObjectProphecy $flashMessageQueueProphecy */
-        $flashMessageQueueProphecy = $this->prophesize(FlashMessageQueue::class);
-        $flashMessageQueueProphecy
-            ->enqueue($flashMessage)
             ->shouldBeCalled();
 
-        /** @var FlashMessageService|ObjectProphecy $flashMessageServiceProphecy */
-        $flashMessageServiceProphecy = $this->prophesize(FlashMessageService::class);
-        $flashMessageServiceProphecy
-            ->getMessageQueueByIdentifier('maps2.allowMap')
-            ->shouldBeCalled()
-            ->willReturn($flashMessageQueueProphecy->reveal());
-        GeneralUtility::setSingletonInstance(FlashMessageService::class, $flashMessageServiceProphecy->reveal());
+        $this->messageHelperProphecy
+            ->addFlashMessage(
+                Argument::containingString('Foreign record must have the array key "uid" which is currently not present'),
+                Argument::exact('UID not filled'),
+                AbstractMessage::ERROR
+            )
+            ->shouldBeCalled();
 
-        /** @var StandaloneView|ObjectProphecy $viewProphecy */
-        $viewProphecy = $this->prophesize(StandaloneView::class);
-        $viewProphecy->setTemplatePathAndFilename(Argument::any())->shouldBeCalled();
-        $viewProphecy->assign('data', $contentObject->data)->shouldBeCalled();
-        $viewProphecy->assign('settings', $this->settings)->shouldBeCalled();
-        $viewProphecy->assign('requestUri', 'MyCoolRequestUri')->shouldBeCalled();
-        $viewProphecy->render()->shouldBeCalled()->willReturn($testString);
-        GeneralUtility::addInstance(StandaloneView::class, $viewProphecy->reveal());
+        $foreignRecord = [];
 
-        /** @var UriBuilder $uriBuilderProphecy */
-        $uriBuilderProphecy = $this->prophesize(UriBuilder::class);
-        $uriBuilderProphecy->reset()->shouldBeCalled()->willReturn($uriBuilderProphecy->reveal());
-        $uriBuilderProphecy->setAddQueryString(true)->shouldBeCalled()->willReturn($uriBuilderProphecy->reveal());
-        $uriBuilderProphecy->setAddQueryStringMethod('GET')->shouldBeCalled()->willReturn($uriBuilderProphecy->reveal());
-        $uriBuilderProphecy
-            ->setArguments([
-                'tx_maps2_maps2' => [
-                    'mapProviderRequestsAllowedForMaps2' => 1
-                ]
-            ])
-            ->shouldBeCalled()
-            ->willReturn($uriBuilderProphecy->reveal());
-        $uriBuilderProphecy
-            ->setArgumentsToBeExcludedFromQueryString(['cHash'])
-            ->shouldBeCalled()
-            ->willReturn($uriBuilderProphecy->reveal());
-        $uriBuilderProphecy
-            ->build()
-            ->shouldBeCalled()
-            ->willReturn('MyCoolRequestUri');
-        $this->objectManagerProphecy
-            ->get(UriBuilder::class)
-            ->shouldBeCalled()
-            ->willReturn($uriBuilderProphecy->reveal());
-
-        GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManagerProphecy->reveal());
-        GeneralUtility::setSingletonInstance(EnvironmentService::class, $this->environmentServiceProphecy->reveal());
-        $this->subject = new MapService();
-
-        self::assertSame(
-            $testString,
-            $this->subject->showAllowMapForm()
+        $this->subject->assignPoiCollectionToForeignRecord(
+            1,
+            $foreignRecord,
+            'tx_events2_domain_model_location'
         );
     }
 
     /**
      * @test
      */
-    public function showAllowMapFormWithMapProviderWillAssignVariablesToView(): void
+    public function assignPoiCollectionToForeignRecordWithEmptyForeignTableNameAddsFlashMessage(): void
     {
-        $testString = 'testHtml';
+        $this->messageHelperProphecy
+            ->addFlashMessage(
+                Argument::any(),
+                Argument::not('Foreign table name empty')
+            )
+            ->shouldNotBeCalled();
 
-        $contentObject = new ContentObjectRenderer();
-        $contentObject->data = [
-            'uid' => 123
+        $this->messageHelperProphecy
+            ->addFlashMessage(
+                Argument::containingString('Foreign table name is a must have value'),
+                Argument::exact('Foreign table name empty'),
+                AbstractMessage::ERROR
+            )
+            ->shouldBeCalled();
+
+        $foreignRecord = [
+            'uid' => 1
         ];
 
-        $extConf = new ExtConf([]);
-        GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
+        $this->subject->assignPoiCollectionToForeignRecord(
+            1,
+            $foreignRecord,
+            ''
+        );
+    }
 
-        $this->settings['mapProvider'] = 'gm';
-        $this->configurationManagerProphecy
-            ->getConfiguration(
-                ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
-                'Maps2',
-                'Maps2'
+    /**
+     * @test
+     */
+    public function assignPoiCollectionToForeignRecordWithEmptyForeignFieldNameAddsFlashMessage(): void
+    {
+        $this->messageHelperProphecy
+            ->addFlashMessage(
+                Argument::any(),
+                Argument::not('Foreign field name empty')
             )
+            ->shouldNotBeCalled();
+
+        $this->messageHelperProphecy
+            ->addFlashMessage(
+                Argument::containingString('Foreign field name is a must have value'),
+                Argument::exact('Foreign field name empty'),
+                AbstractMessage::ERROR
+            )
+            ->shouldBeCalled();
+
+        $foreignRecord = [
+            'uid' => 1
+        ];
+
+        $this->subject->assignPoiCollectionToForeignRecord(
+            1,
+            $foreignRecord,
+            'tx_events2_domain_model_location',
+            '  '
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function assignPoiCollectionToForeignRecordWithInvalidTableNameAddsFlashMessage(): void
+    {
+        $this->messageHelperProphecy
+            ->addFlashMessage(
+                Argument::containingString('Table "invalidTable" is not configured in TCA'),
+                Argument::exact('Table not found'),
+                AbstractMessage::ERROR
+            )
+            ->shouldBeCalled();
+
+        $foreignRecord = [
+            'uid' => 1
+        ];
+
+        $this->subject->assignPoiCollectionToForeignRecord(
+            1,
+            $foreignRecord,
+            'invalidTable'
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function assignPoiCollectionToForeignRecordWithInvalidFieldNameAddsFlashMessage(): void
+    {
+        $this->messageHelperProphecy
+            ->addFlashMessage(
+                Argument::containingString('Field "invalidField" is not configured in TCA'),
+                Argument::exact('Field not found'),
+                AbstractMessage::ERROR
+            )
+            ->shouldBeCalled();
+
+        $foreignRecord = [
+            'uid' => 1
+        ];
+
+        $this->subject->assignPoiCollectionToForeignRecord(
+            1,
+            $foreignRecord,
+            'tx_events2_domain_model_location',
+            'invalidField'
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function assignPoiCollectionToForeignRecordWillUpdateForeignRecord(): void
+    {
+        $position = new Position();
+        $position->setLatitude(54.1);
+        $position->setLongitude(7.3);
+        $position->setFormattedAddress('Echterdinger Straße 57, 70794 Filderstadt');
+
+        $newUid = $this->subject->createNewPoiCollection(
+            12,
+            $position
+        );
+
+        $this->messageHelperProphecy
+            ->addFlashMessage(Argument::cetera())
+            ->shouldNotBeCalled();
+
+        $foreignRecord = [
+            'uid' => 1
+        ];
+
+        $this->subject->assignPoiCollectionToForeignRecord(
+            1,
+            $foreignRecord,
+            'tx_events2_domain_model_location'
+        );
+
+        self::assertSame(
+            $foreignRecord['tx_maps2_uid'],
+            $newUid
+        );
+
+        $locationRecord = $this->getDatabaseConnection()->selectSingleRow(
+            '*',
+            'tx_events2_domain_model_location',
+            'uid=1'
+        );
+
+        self::assertSame(
+            $locationRecord['tx_maps2_uid'],
+            $newUid
+        );
+    }
+
+    public function addForeignRecordsToPoiCollectionWithEmptyRegistryWillNotAddForeignRecords(): void
+    {
+        $this->maps2RegistryProphecy
+            ->getColumnRegistry()
             ->shouldBeCalled()
-            ->willReturn($this->settings);
-        $this->configurationManagerProphecy
-            ->getContentObject()
+            ->willReturn([]);
+
+        /** @var PoiCollection|ObjectProphecy $poiCollectionProphecy */
+        $poiCollectionProphecy = $this->prophesize(PoiCollection::class);
+        $poiCollectionProphecy
+            ->addForeignRecord(Argument::any())
+            ->shouldNotBeCalled();
+
+        $this->subject->addForeignRecordsToPoiCollection($poiCollectionProphecy->reveal());
+    }
+
+    public function addForeignRecordsToPoiCollectionWithEmptyPoiCollectionUidWillNotAddForeignRecords(): void
+    {
+        $this->maps2RegistryProphecy
+            ->getColumnRegistry()
             ->shouldBeCalled()
-            ->willReturn($contentObject);
+            ->willReturn(['foo' => 'bar']);
 
-        $this->objectManagerProphecy
-            ->get(ConfigurationManagerInterface::class)
-            ->willReturn($this->configurationManagerProphecy->reveal());
+        /** @var PoiCollection|ObjectProphecy $poiCollectionProphecy */
+        $poiCollectionProphecy = $this->prophesize(PoiCollection::class);
+        $poiCollectionProphecy
+            ->getUid()
+            ->shouldBeCalled()
+            ->willReturn(0);
+        $poiCollectionProphecy
+            ->addForeignRecord(Argument::any())
+            ->shouldNotBeCalled();
 
-        /** @var StandaloneView|ObjectProphecy $viewProphecy */
-        $viewProphecy = $this->prophesize(StandaloneView::class);
-        $viewProphecy->setTemplatePathAndFilename(Argument::any())->shouldBeCalled();
-        $viewProphecy->assign('data', $contentObject->data)->shouldBeCalled();
-        $viewProphecy->assign('settings', $this->settings)->shouldBeCalled();
-        $viewProphecy->assign('requestUri', 'MyCoolRequestUri')->shouldBeCalled();
-        $viewProphecy->render()->shouldBeCalled()->willReturn($testString);
-        GeneralUtility::addInstance(StandaloneView::class, $viewProphecy->reveal());
+        $this->subject->addForeignRecordsToPoiCollection($poiCollectionProphecy->reveal());
+    }
 
-        /** @var UriBuilder $uriBuilderProphecy */
-        $uriBuilderProphecy = $this->prophesize(UriBuilder::class);
-        $uriBuilderProphecy->reset()->shouldBeCalled()->willReturn($uriBuilderProphecy->reveal());
-        $uriBuilderProphecy->setAddQueryString(true)->shouldBeCalled()->willReturn($uriBuilderProphecy->reveal());
-        $uriBuilderProphecy->setAddQueryStringMethod('GET')->shouldBeCalled()->willReturn($uriBuilderProphecy->reveal());
-        $uriBuilderProphecy
-            ->setArguments([
-                'tx_maps2_maps2' => [
-                    'mapProviderRequestsAllowedForMaps2' => 1
+    public function addForeignRecordsToPoiCollectionWillAddForeignRecord(): void
+    {
+        $this->maps2RegistryProphecy
+            ->getColumnRegistry()
+            ->shouldBeCalled()
+            ->willReturn([
+                'tx_events2_domain_model_location' => [
+                    'tx_maps2_uid' => []
                 ]
-            ])
+            ]);
+
+        /** @var PoiCollection|ObjectProphecy $poiCollectionProphecy */
+        $poiCollectionProphecy = $this->prophesize(PoiCollection::class);
+        $poiCollectionProphecy
+            ->addForeignRecord(Argument::any())
+            ->shouldBeCalled();
+
+        $position = new Position();
+        $position->setLatitude(54.1);
+        $position->setLongitude(7.3);
+        $position->setFormattedAddress('Echterdinger Straße 57, 70794 Filderstadt');
+
+        $newUid = $this->subject->createNewPoiCollection(
+            12,
+            $position
+        );
+        $foreignRecord = ['uid' => 1];
+        $this->subject->assignPoiCollectionToForeignRecord(
+            $newUid,
+            $foreignRecord,
+            'tx_events2_domain_model_location'
+        );
+
+        $event = new PreAddForeignRecordEvent(
+            $foreignRecord,
+            'tx_events2_domain_model_location',
+            'tx_maps2_uid'
+        );
+
+        $this->eventDispatcherProphecy
+            ->dispatch(Argument::cetera())
             ->shouldBeCalled()
-            ->willReturn($uriBuilderProphecy->reveal());
-        $uriBuilderProphecy
-            ->setArgumentsToBeExcludedFromQueryString(['cHash'])
-            ->shouldBeCalled()
-            ->willReturn($uriBuilderProphecy->reveal());
-        $uriBuilderProphecy
-            ->build()
-            ->shouldBeCalled()
-            ->willReturn('MyCoolRequestUri');
-        $this->objectManagerProphecy
-            ->get(UriBuilder::class)
-            ->shouldBeCalled()
-            ->willReturn($uriBuilderProphecy->reveal());
+            ->willReturn($event);
 
-        GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManagerProphecy->reveal());
-        GeneralUtility::setSingletonInstance(EnvironmentService::class, $this->environmentServiceProphecy->reveal());
-        $this->subject = new MapService();
-
-        self::assertSame(
-            $testString,
-            $this->subject->showAllowMapForm()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function getMapProviderWillReturnOsm(): void
-    {
-        $extConf = new ExtConf([]);
-        $extConf->setMapProvider('osm');
-        GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
-
-        GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManagerProphecy->reveal());
-        GeneralUtility::setSingletonInstance(EnvironmentService::class, $this->environmentServiceProphecy->reveal());
-        $this->subject = new MapService();
-
-        self::assertSame(
-            'osm',
-            $this->subject->getMapProvider()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function getMapProviderWillReturnGm(): void
-    {
-        $extConf = new ExtConf([]);
-        $extConf->setMapProvider('gm');
-        GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
-
-        GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManagerProphecy->reveal());
-        GeneralUtility::setSingletonInstance(EnvironmentService::class, $this->environmentServiceProphecy->reveal());
-        $this->subject = new MapService();
-
-        self::assertSame(
-            'gm',
-            $this->subject->getMapProvider()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function getMapProviderWillReturnDefaultMapProvider(): void
-    {
-        $extConf = new ExtConf([]);
-        $extConf->setMapProvider('both');
-        $extConf->setDefaultMapProvider('osm');
-        GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
-
-        GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManagerProphecy->reveal());
-        GeneralUtility::setSingletonInstance(EnvironmentService::class, $this->environmentServiceProphecy->reveal());
-        $this->subject = new MapService();
-
-        self::assertSame(
-            'osm',
-            $this->subject->getMapProvider()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function getMapProviderWillReturnMapProviderAsStringFromDatabase(): void
-    {
-        $extConf = new ExtConf([]);
-        $extConf->setMapProvider('both');
-        $extConf->setDefaultMapProvider('osm');
-        GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
-
-        GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManagerProphecy->reveal());
-        GeneralUtility::setSingletonInstance(EnvironmentService::class, $this->environmentServiceProphecy->reveal());
-        $this->subject = new MapService();
-
-        self::assertSame(
-            'gm',
-            $this->subject->getMapProvider([
-                'map_provider' => 'gm'
-            ])
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function getMapProviderWillReturnMapProviderAsArrayFromDatabase(): void
-    {
-        $extConf = new ExtConf([]);
-        $extConf->setMapProvider('both');
-        $extConf->setDefaultMapProvider('osm');
-        GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
-
-        GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManagerProphecy->reveal());
-        GeneralUtility::setSingletonInstance(EnvironmentService::class, $this->environmentServiceProphecy->reveal());
-        $this->subject = new MapService();
-
-        self::assertSame(
-            'gm',
-            $this->subject->getMapProvider([
-                'map_provider' => [
-                    0 => 'gm'
-                ]
-            ])
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function getMapProviderWillReturnDefaultMapProviderFromDatabaseIfEmpty(): void
-    {
-        $extConf = new ExtConf([]);
-        $extConf->setMapProvider('both');
-        $extConf->setDefaultMapProvider('gm');
-        GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
-
-        GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManagerProphecy->reveal());
-        GeneralUtility::setSingletonInstance(EnvironmentService::class, $this->environmentServiceProphecy->reveal());
-        $this->subject = new MapService();
-
-        self::assertSame(
-            'gm',
-            $this->subject->getMapProvider([
-                'map_provider' => ''
-            ])
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function getMapProviderWillReturnDefaultMapProviderFromDatabaseIfMissing(): void
-    {
-        $extConf = new ExtConf([]);
-        $extConf->setMapProvider('both');
-        $extConf->setDefaultMapProvider('gm');
-        GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
-
-        GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManagerProphecy->reveal());
-        GeneralUtility::setSingletonInstance(EnvironmentService::class, $this->environmentServiceProphecy->reveal());
-        $this->subject = new MapService();
-
-        self::assertSame(
-            'gm',
-            $this->subject->getMapProvider([
-                'uid' => 123
-            ])
-        );
+        $this->subject->addForeignRecordsToPoiCollection($poiCollectionProphecy->reveal());
     }
 }

@@ -501,7 +501,7 @@ class PoiCollection extends AbstractEntity
 
     public function addForeignRecord(array $foreignRecord): void
     {
-        if (!empty($foreignRecord)) {
+        if ($foreignRecord !== []) {
             $this->foreignRecords[$foreignRecord['uid']] = $foreignRecord;
         }
     }

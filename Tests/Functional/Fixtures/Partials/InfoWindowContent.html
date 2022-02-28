@@ -1,0 +1,21 @@
+<html lang="en"
+			xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+			xmlns:m="http://typo3.org/ns/JWeiland/Maps2/ViewHelpers"
+			data-namespace-typo3-fluid="true">
+
+<div class="titleWrapper"><strong>{poiCollection.title}</strong></div>
+
+<div class="addressWrapper">
+	<f:for each="{poiCollection.address -> m:trimExplode()}" as="address" iteration="iterator">
+		<f:if condition="{iterator.isLast}">
+			<f:else>
+				<div>{address}</div>
+			</f:else>
+		</f:if>
+	</f:for>
+</div>
+
+<f:if condition="{poiCollection}">
+	<div class="infoWindowContent">{poiCollection.infoWindowContent}</div>
+</f:if>
+</html>
