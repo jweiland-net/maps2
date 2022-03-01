@@ -28,7 +28,7 @@
 		"nimut/testing-framework": "^6.0",
 		"phpunit/phpunit": "^9.5",
 		"phpspec/prophecy-phpunit": "^2.0",
-		"jweiland/events2": ">=6.1.0"
+		"jweiland/events2": "dev-typo3_11_compatibility"
 	},
 	"autoload": {
 		"psr-4": {
