@@ -102,7 +102,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
         parent::setUp();
         $this->setUpBackendUserFromFixture(1);
 
-        $this->importDataSet(__DIR__ . '/../Fixtures/static_countries.xml');
+        // $this->importDataSet(__DIR__ . '/../Fixtures/static_countries.xml');
         $this->importDataSet(__DIR__ . '/../Fixtures/tx_events2_domain_model_location.xml');
 
         $this->geoCodeServiceProphecy = $this->prophesize(GeoCodeService::class);
