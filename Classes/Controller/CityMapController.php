@@ -20,11 +20,11 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class CityMapController extends AbstractController
 {
-    public function showAction()
+    public function showAction(): void
     {
     }
 
-    public function searchAction(string $street)
+    public function searchAction(string $street): void
     {
         $geoCodeService = GeneralUtility::makeInstance(GeoCodeService::class);
         $position = $geoCodeService->getFirstFoundPositionByAddress(

@@ -12,19 +12,15 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Tests\Functional\Form\Element;
 
 use JWeiland\Maps2\Configuration\ExtConf;
-use JWeiland\Maps2\Domain\Model\PoiCollection;
-use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
 use JWeiland\Maps2\Form\Element\GoogleMapsElement;
-use JWeiland\Maps2\Helper\MessageHelper;
+use JWeiland\Maps2\Helper\MapHelper;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\CMS\Backend\Form\NodeFactory;
-use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
@@ -34,45 +30,26 @@ class GoogleMapsElementTest extends FunctionalTestCase
 {
     use ProphecyTrait;
 
-    /**
-     * @var GoogleMapsElement
-     */
-    protected $subject;
+    protected GoogleMapsElement $subject;
 
-    /**
-     * @var array
-     */
-    protected $data = [];
+    protected array $data = [];
 
-    /**
-     * @var ObjectManager|ObjectProphecy
-     */
-    protected $objectManager;
-
-    /**
-     * @var ExtConf
-     */
-    protected $extConf;
-
-    /**
-     * @var StandaloneView|ObjectProphecy
-     */
-    protected $view;
+    protected ExtConf $extConf;
 
     /**
      * @var PageRenderer|ObjectProphecy
      */
-    protected $pageRenderer;
+    protected $pageRendererProphecy;
 
     /**
-     * @var PoiCollectionRepository|ObjectProphecy
+     * @var MapHelper|ObjectProphecy
      */
-    protected $poiCollectionRepository;
+    protected $mapHelperProphecy;
 
     /**
-     * @var MessageHelper|ObjectProphecy
+     * @var StandaloneView|ObjectProphecy
      */
-    protected $messageHelper;
+    protected $viewProphecy;
 
     /**
      * @var array
@@ -93,37 +70,26 @@ class GoogleMapsElementTest extends FunctionalTestCase
                 'collection_type' => [
                     0 => 'Point'
                 ]
+            ],
+            'parameterArray' => [
+                'fieldConf' => [
+                    'config' => []
+                ],
+                'itemFormElValue' => 'renderedContent'
             ]
         ];
-        $this->poiCollectionRepository = $this->prophesize(PoiCollectionRepository::class);
-        GeneralUtility::setSingletonInstance(
-            PoiCollectionRepository::class,
-            $this->poiCollectionRepository->reveal()
-        );
 
-        $this->objectManager = $this->prophesize(ObjectManager::class);
-        $this->objectManager
-            ->get(PoiCollectionRepository::class)
-            ->shouldBeCalled()
-            ->willReturn($this->poiCollectionRepository->reveal());
-        GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManager->reveal());
-
-        $this->extConf = new ExtConf([]);
+        $this->extConf = new ExtConf();
         GeneralUtility::setSingletonInstance(ExtConf::class, $this->extConf);
-        $GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey'] = 'test@123';
 
-        $this->view = $this->prophesize(StandaloneView::class);
-        GeneralUtility::addInstance(StandaloneView::class, $this->view->reveal());
+        $this->pageRendererProphecy = $this->prophesize(PageRenderer::class);
+        GeneralUtility::setSingletonInstance(PageRenderer::class, $this->pageRendererProphecy->reveal());
 
-        $this->pageRenderer = $this->prophesize(PageRenderer::class);
-        GeneralUtility::setSingletonInstance(PageRenderer::class, $this->pageRenderer->reveal());
+        $this->mapHelperProphecy = $this->prophesize(MapHelper::class);
+        GeneralUtility::addInstance(MapHelper::class, $this->mapHelperProphecy->reveal());
 
-        $this->messageHelper = $this->prophesize(MessageHelper::class);
-        GeneralUtility::addInstance(MessageHelper::class, $this->messageHelper->reveal());
-
-        /** @var IconFactory|ObjectProphecy $iconFactoryProphecy */
-        $iconFactoryProphecy = $this->prophesize(IconFactory::class);
-        GeneralUtility::addInstance(IconFactory::class, $iconFactoryProphecy->reveal());
+        $this->viewProphecy = $this->prophesize(StandaloneView::class);
+        GeneralUtility::addInstance(StandaloneView::class, $this->viewProphecy->reveal());
 
         $this->subject = new GoogleMapsElement(
             GeneralUtility::makeInstance(NodeFactory::class),
@@ -135,11 +101,10 @@ class GoogleMapsElementTest extends FunctionalTestCase
     {
         unset(
             $this->subject,
-            $this->objectManager,
             $this->extConf,
-            $this->view,
-            $this->pageRenderer,
-            $this->poiCollectionRepository
+            $this->pageRendererProphecy,
+            $this->mapHelperProphecy,
+            $this->viewProphecy
         );
 
         parent::tearDown();
@@ -150,100 +115,24 @@ class GoogleMapsElementTest extends FunctionalTestCase
      */
     public function renderWillCleanUpCurrentRecord(): void
     {
-        $this->poiCollectionRepository->findByUid(123)->shouldBeCalled()->willReturn(new PoiCollection());
+        $record = $this->data['databaseRow'];
+        $record['collection_type'] = 'Point';
 
-        $config = [
-            'latitude' => 0,
-            'longitude' => 0,
-            'address' => 'Echterdinger Str. 57, 70794 Filderstadt',
-            'collectionType' => 'Point', // this value was an array before
-            'uid' => 123, // this value was string before
-            'hash' => '03134cbb9d4b445f6e0a99d7ed7bf267356efc47',
-        ];
-        $this->view
+        $this->viewProphecy
             ->setTemplatePathAndFilename(
                 Argument::containingString('Resources/Private/Templates/Tca/GoogleMaps.html')
             )
             ->shouldBeCalled();
-        $this->view
-            ->assign('config', json_encode($config))
+        $this->viewProphecy
+            ->assign('record', json_encode($record))
             ->shouldBeCalled();
-        $this->view
+        $this->viewProphecy
             ->assign('extConf', Argument::any())
             ->shouldBeCalled();
-        $this->view->render()->shouldBeCalled();
-
-        $this->subject->render();
-    }
-
-    /**
-     * @test
-     */
-    public function renderWillAddRadiusToConfigArray(): void
-    {
-        $poiCollection = new PoiCollection();
-        $poiCollection->setCollectionType('Radius');
-        $poiCollection->setRadius(250);
-
-        $this->poiCollectionRepository->findByUid(123)->shouldBeCalled()->willReturn($poiCollection);
-
-        $config = [
-            'latitude' => 0,
-            'longitude' => 0,
-            'radius' => 250,
-            'address' => 'Echterdinger Str. 57, 70794 Filderstadt',
-            'collectionType' => 'Point', // this value was an array before
-            'uid' => 123, // this value was string before
-            'hash' => '03134cbb9d4b445f6e0a99d7ed7bf267356efc47',
-        ];
-        $this->view
-            ->setTemplatePathAndFilename(
-                Argument::containingString('Resources/Private/Templates/Tca/GoogleMaps.html')
-            )
-            ->shouldBeCalled();
-        $this->view
-            ->assign('config', json_encode($config))
-            ->shouldBeCalled();
-        $this->view
-            ->assign('extConf', Argument::any())
-            ->shouldBeCalled();
-        $this->view->render()->shouldBeCalled();
-
-        $this->subject->render();
-    }
-
-    /**
-     * @test
-     */
-    public function renderWillAddLatAndLngToConfigArray(): void
-    {
-        $poiCollection = new PoiCollection();
-        $poiCollection->setCollectionType('Point');
-        $poiCollection->setLatitude(0.123);
-        $poiCollection->setLongitude(54.321);
-
-        $this->poiCollectionRepository->findByUid(123)->shouldBeCalled()->willReturn($poiCollection);
-
-        $config = [
-            'latitude' => 0.123,
-            'longitude' => 54.321,
-            'address' => 'Echterdinger Str. 57, 70794 Filderstadt',
-            'collectionType' => 'Point', // this value was an array before
-            'uid' => 123, // this value was string before
-            'hash' => '03134cbb9d4b445f6e0a99d7ed7bf267356efc47',
-        ];
-        $this->view
-            ->setTemplatePathAndFilename(
-                Argument::containingString('Resources/Private/Templates/Tca/GoogleMaps.html')
-            )
-            ->shouldBeCalled();
-        $this->view
-            ->assign('config', json_encode($config))
-            ->shouldBeCalled();
-        $this->view
-            ->assign('extConf', Argument::any())
-            ->shouldBeCalled();
-        $this->view->render()->shouldBeCalled();
+        $this->viewProphecy
+            ->render()
+            ->shouldBeCalled()
+            ->willReturn('foo');
 
         $this->subject->render();
     }
@@ -253,14 +142,25 @@ class GoogleMapsElementTest extends FunctionalTestCase
      */
     public function renderWillAddRequireJsModule(): void
     {
-        $this->poiCollectionRepository->findByUid(123)->shouldBeCalled()->willReturn(new PoiCollection());
+        $this->viewProphecy
+            ->setTemplatePathAndFilename(
+                Argument::containingString('Resources/Private/Templates/Tca/GoogleMaps.html')
+            )
+            ->shouldBeCalled();
+        $this->viewProphecy
+            ->assign('record', Argument::any())
+            ->shouldBeCalled();
+        $this->viewProphecy
+            ->assign('extConf', Argument::any())
+            ->shouldBeCalled();
+        $this->viewProphecy
+            ->render()
+            ->shouldBeCalled()
+            ->willReturn('foo');
 
-        $result = $this->subject->render();
         self::assertSame(
-            [
-                'TYPO3/CMS/Maps2/GoogleMapsModule'
-            ],
-            $result['requireJsModules']
+            ['TYPO3/CMS/Maps2/GoogleMapsModule'],
+            $this->subject->render()['requireJsModules']
         );
     }
 }

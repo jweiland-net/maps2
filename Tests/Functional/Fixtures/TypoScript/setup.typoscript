@@ -1,0 +1,65 @@
+config {
+  no_cache = 1
+  debug = 0
+  xhtml_cleaning = 0
+  admPanel = 0
+  disableAllHeaderCode = 1
+  sendCacheHeaders = 0
+  sys_language_uid = 0
+  sys_language_mode = ignore
+  sys_language_overlay = 1
+}
+
+tt_content = USER
+tt_content.userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
+tt_content.extensionName = Maps2
+tt_content.pluginName = Maps2
+
+plugin.tx_maps2 {
+  view {
+    templateRootPaths {
+      0 = EXT:maps2/Resources/Private/Templates/
+    }
+    partialRootPaths {
+      0 = EXT:maps2/Resources/Private/Partials/
+    }
+    layoutRootPaths {
+      0 = EXT:maps2/Resources/Private/Layouts/
+    }
+  }
+  persistence {
+    storagePid = 1
+  }
+  settings {
+    mapProvider = gm
+    mapTypeControl = 1
+    scaleControl = 1
+    streetViewControl = 1
+    fullscreenMapControl = 1
+    mapTypeId => google.maps.MapTypeId.ROADMAP
+    markerClusterer {
+      enable = 0
+      imagePath = EXT:maps2/Resources/Public/Icons/MarkerClusterer/m
+    }
+    zoom = 10
+    zoomControl = 1
+    infoWindowContentTemplatePath =
+    infoWindow {
+      image {
+        width = 150c
+        height = 150c
+      }
+    }
+  }
+}
+
+page = PAGE
+page {
+  typeNum = 0
+  10 = CONTENT
+  10.table = tt_content
+  10.select {
+    orderBy = sorting
+    where = {#colPos}=0
+  }
+}

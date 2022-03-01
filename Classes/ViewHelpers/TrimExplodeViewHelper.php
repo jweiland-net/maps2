@@ -23,7 +23,7 @@ class TrimExplodeViewHelper extends AbstractViewHelper
 {
     use CompileWithRenderStatic;
 
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         $this->registerArgument(
             'delimiter',
@@ -37,14 +37,13 @@ class TrimExplodeViewHelper extends AbstractViewHelper
     /**
      * Implements a ViewHelper to trim explode comma separated strings
      *
-     * @param array $arguments
-     * @param \Closure $renderChildrenClosure
-     * @param RenderingContextInterface $renderingContext
-     * @return array
+     * @return string[]
      */
-    public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
-    {
-        $value = $renderChildrenClosure();
-        return GeneralUtility::trimExplode($arguments['delimiter'], $value);
+    public static function renderStatic(
+        array $arguments,
+        \Closure $renderChildrenClosure,
+        RenderingContextInterface $renderingContext
+    ): array {
+        return GeneralUtility::trimExplode($arguments['delimiter'], $renderChildrenClosure());
     }
 }

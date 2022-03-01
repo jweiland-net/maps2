@@ -11,10 +11,9 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\ExpressionLanguage;
 
-use JWeiland\Maps2\Service\MapProviderRequestService;
+use JWeiland\Maps2\Helper\MapHelper;
 use Symfony\Component\ExpressionLanguage\ExpressionFunction;
 use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Check, if extension configuration is set
@@ -22,7 +21,17 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class AllowMapProviderRequestFunctionsProvider implements ExpressionFunctionProviderInterface
 {
-    public function getFunctions()
+    protected MapHelper $mapHelper;
+
+    public function __construct(MapHelper $mapHelper)
+    {
+        $this->mapHelper = $mapHelper;
+    }
+
+    /**
+     * @return ExpressionFunction[]
+     */
+    public function getFunctions(): array
     {
         return [
             $this->getIsRequestToMapProviderAllowed(),
@@ -31,12 +40,15 @@ class AllowMapProviderRequestFunctionsProvider implements ExpressionFunctionProv
 
     protected function getIsRequestToMapProviderAllowed(): ExpressionFunction
     {
-        $compiler = function () {
-        };
-        $evaluator = function ($existingVariables) {
-            $mapProviderRequestService = GeneralUtility::makeInstance(MapProviderRequestService::class);
-            return $mapProviderRequestService->isRequestToMapProviderAllowed();
-        };
-        return new ExpressionFunction('isRequestToMapProviderAllowed', $compiler, $evaluator);
+        // Need local variable for static callable
+        $mapHelper = $this->mapHelper;
+
+        return new ExpressionFunction(
+            'isRequestToMapProviderAllowed',
+            static function (): void {},
+            static function ($existingVariables) use ($mapHelper) {
+                return $mapHelper->isRequestToMapProviderAllowed();
+            }
+        );
     }
 }

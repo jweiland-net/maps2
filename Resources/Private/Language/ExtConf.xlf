@@ -12,6 +12,9 @@
 			<trans-unit id="defaultMapProvider" xml:space="preserve">
 				<source>Set default Map Provider: If you have chosen "Both" above you can define a default here. New map records will be created with this selected type of map provider.</source>
 			</trans-unit>
+			<trans-unit id="defaultMapType" xml:space="preserve">
+				<source>Default map type: If desired, you can specify a default map type for new POI records. With the default "Empty", the editor must first select a type when creating a new POI.</source>
+			</trans-unit>
 			<trans-unit id="defaultCountry" xml:space="preserve">
 				<source>Default Country: If someone searches for a postal code only, Google will search whole world for that postal code. If you want, you can assign a default country here to reduce that search to that country.</source>
 			</trans-unit>
@@ -25,16 +28,13 @@
 				<source>Default Radius (in meters): When using collection type "Radius" you should set a default radius. Else you just see one single point</source>
 			</trans-unit>
 			<trans-unit id="explicitAllowMapProviderRequests" xml:space="preserve">
-				<source>Explicit allow Map: While showing Google Maps in frontend the browser sends multiple requests to Google Servers. These requests contains the IP address of the website visitor which is a user internal information. In some countries the user has to explicit allow sending theses information to third party servers.</source>
+				<source>Explicitly allow requests to the map provider: By displaying the map material in the frontend, the website visitor sends requests to the map provider via JavaScript. Through these requests, the map providers receive the IP address of the website visitor. This IP is so-called "personal information" in some EU countries and may not be passed on to third parties without the visitor's consent. After activating this option, the website visitor must explicitly agree to this data transfer. The consent is stored in a cookie, so that the user does not have to agree to the consent again even after restarting the browser.</source>
 			</trans-unit>
 			<trans-unit id="explicitAllowMapProviderRequestsBySessionOnly" xml:space="preserve">
-				<source>Allow Google Maps by Session: See explicitAllowMapProviderRequests for explanation. Normally we save activation in a Cookie (normally 1 day (TYPO3 default)). So there is no need to activate google maps again after browser restart. If you enable this option we save activation in session and you have to activate google maps again after each browser restart.</source>
+				<source>Store consent of website visitor in session: Unlike "explicitAllowMapProviderRequests", with this option we do not store the consent in a COOKIE, but in the current PHP SESSION. After a browser restart, the consent that the "Personal Data" will be sent to third parties must be obtained again. If the browser can save the current PHP SESSION even after exiting the browser (e.g. Firefox), then this setting has no effect. The option "explicitAllowMapProviderRequests" must also be active for this option to take effect.</source>
 			</trans-unit>
 			<trans-unit id="infoWindowContentTemplatePath" xml:space="preserve">
 				<source>Template path for info window: If you click on a marker a little info window will appear. With this setting you can change that template to your own needs.</source>
-			</trans-unit>
-			<trans-unit id="allowMapTemplatePath" xml:space="preserve">
-				<source>Template path for Google Requests: Define a template which will be shown, if a user has to accept sending requests to Google Servers.</source>
 			</trans-unit>
 
 			<trans-unit id="googleMapsLibrary" xml:space="preserve">

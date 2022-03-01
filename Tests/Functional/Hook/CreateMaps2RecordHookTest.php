@@ -11,13 +11,17 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Tests\Functional\Hook;
 
+use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\Position;
+use JWeiland\Maps2\Event\AllowCreationOfPoiCollectionEvent;
+use JWeiland\Maps2\Event\PostProcessPoiCollectionRecordEvent;
+use JWeiland\Maps2\Helper\AddressHelper;
 use JWeiland\Maps2\Helper\MessageHelper;
+use JWeiland\Maps2\Helper\StoragePidHelper;
 use JWeiland\Maps2\Hook\CreateMaps2RecordHook;
 use JWeiland\Maps2\Service\GeoCodeService;
 use JWeiland\Maps2\Service\MapService;
 use JWeiland\Maps2\Tca\Maps2Registry;
-use JWeiland\Maps2\Tests\Functional\Fixtures\IsRecordAllowedToCreatePoiCollectionSignal;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -26,8 +30,11 @@ use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Cache\Frontend\VariableFrontend;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
+use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
+use TYPO3\CMS\Core\EventDispatcher\ListenerProvider;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
+use TYPO3\CMS\Extbase\Service\EnvironmentService;
 
 /**
  * Functional test for CreateMaps2RecordHook
@@ -36,15 +43,57 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
 {
     use ProphecyTrait;
 
+    protected CreateMaps2RecordHook $subject;
+
     /**
-     * @var array
+     * @var GeoCodeService|ObjectProphecy
      */
-    protected $maps2RegistryConfiguration = [];
+    protected $geoCodeServiceProphecy;
+
+    /**
+     * @var MessageHelper|ObjectProphecy
+     */
+    protected $messageHelperProphecy;
+
+    /**
+     * @var Maps2Registry|ObjectProphecy
+     */
+    protected $maps2RegistryProphecy;
+
+    /**
+     * @var ListenerProvider|ObjectProphecy
+     */
+    protected $listenerProviderProphecy;
+
+    protected array $columnRegistry = [
+        'tx_events2_domain_model_location' => [
+            'tx_maps2_uid' => [
+                'addressColumns' => ['street', 'house_number', 'zip', 'city'],
+                'countryColumn' => 'country',
+                'defaultStoragePid' => [
+                    'extKey' => 'events2',
+                    'property' => 'poiCollectionPid'
+                ],
+                'synchronizeColumns' => [
+                    [
+                        'foreignColumnName' => 'location',
+                        'poiCollectionColumnName' => 'title'
+                    ],
+                    [
+                        'foreignColumnName' => 'hidden',
+                        'poiCollectionColumnName' => 'hidden'
+                    ]
+                ]
+            ]
+        ]
+    ];
 
     /**
      * @var array
      */
     protected $testExtensionsToLoad = [
+        'typo3conf/ext/static_info_tables',
+        'typo3conf/ext/events2',
         'typo3conf/ext/maps2'
     ];
 
@@ -53,27 +102,73 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
         parent::setUp();
         $this->setUpBackendUserFromFixture(1);
 
-        $this->importDataSet(__DIR__ . '/../Fixtures/fe_groups.xml');
-        $this->importDataSet(__DIR__ . '/../Fixtures/fe_users.xml');
+        $this->importDataSet(__DIR__ . '/../Fixtures/tx_events2_domain_model_location.xml');
 
-        $this->maps2RegistryConfiguration = [
-            'fe_users' => [
-                'lastlogin' => [
-                    'addressColumns' => ['address', 'zip', 'city'],
-                    'countryColumn' => 'country',
-                    'columnMatch' => [
-                        'pid' => '12'
-                    ],
-                    'defaultStoragePid' => '21',
-                    'synchronizeColumns' => [
-                        [
-                            'foreignColumnName' => 'username',
-                            'poiCollectionColumnName' => 'title'
-                        ]
-                    ]
-                ]
-            ]
-        ];
+        // Seems that records of ext_tables_static+adt.sql will be included just once for all tests in this class.
+        // So, for all tests (except the first one), we have to add the record ourselves.
+        $country = $this->getDatabaseConnection()->selectSingleRow('*', 'static_countries', 'uid=54');
+        if ($country === false) {
+            $this->importDataSet(__DIR__ . '/../Fixtures/static_countries.xml');
+        }
+
+        $this->geoCodeServiceProphecy = $this->prophesize(GeoCodeService::class);
+        $this->messageHelperProphecy = $this->prophesize(MessageHelper::class);
+        $this->maps2RegistryProphecy = $this->prophesize(Maps2Registry::class);
+
+        $this->maps2RegistryProphecy
+            ->getColumnRegistry()
+            ->willReturn($this->columnRegistry);
+
+        $this->listenerProviderProphecy = $this->prophesize(ListenerProvider::class);
+        $this->listenerProviderProphecy
+            ->getListenersForEvent(Argument::any())
+            ->willReturn([]);
+
+        $this->subject = new CreateMaps2RecordHook(
+            $this->geoCodeServiceProphecy->reveal(),
+            new AddressHelper($this->messageHelperProphecy->reveal()),
+            $this->messageHelperProphecy->reveal(),
+            new StoragePidHelper($this->messageHelperProphecy->reveal()),
+            new MapService(
+                $this->prophesize(ConfigurationManager::class)->reveal(),
+                $this->messageHelperProphecy->reveal(),
+                $this->maps2RegistryProphecy->reveal(),
+                new ExtConf(),
+                GeneralUtility::makeInstance(EventDispatcher::class),
+                new EnvironmentService()
+            ),
+            $this->maps2RegistryProphecy->reveal(),
+            new EventDispatcher($this->listenerProviderProphecy->reveal())
+        );
+    }
+
+    protected function tearDown(): void
+    {
+        unset(
+            $this->subject,
+            $this->geoCodeServiceProphecy,
+            $this->messageHelperProphecy,
+            $this->mapService,
+            $this->eventDispatcher,
+            $this->maps2RegistryProphecy,
+            $this->listenerProviderProphecy
+        );
+
+        parent::tearDown();
+    }
+
+    /**
+     * @test
+     */
+    public function processDatamapWithInvalidTableNameWillNotStartRecordCreation(): void
+    {
+        $this->listenerProviderProphecy
+            ->getListenersForEvent(Argument::any())
+            ->shouldNotBeCalled();
+
+        $this->subject->processDatamap_afterAllOperations(
+            new DataHandler()
+        );
     }
 
     /**
@@ -110,74 +205,56 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
             ]
         ];
 
-        $mapService = new MapService();
-        $mapService->setColumnRegistry($this->maps2RegistryConfiguration);
-
-        $hook = new CreateMaps2RecordHook(
-            null,
-            null,
-            null,
-            $mapService
-        );
-        $hook->processDatamap_afterAllOperations($dataHandler);
+        $this->subject->processDatamap_afterAllOperations($dataHandler);
     }
 
     /**
      * @test
      */
-    public function processDatamapWillGetForeignLocationRecord(): void
+    public function processDatamapWillBreakIfPoiCollectionIsNotAllowedToBeCreated(): void
     {
-        /** @var Dispatcher|ObjectProphecy $dispatcherProphecy */
-        $dispatcherProphecy = $this->prophesize(Dispatcher::class);
-        $dispatcherProphecy
-            ->dispatch(
-                CreateMaps2RecordHook::class,
-                'preIsRecordAllowedToCreatePoiCollection',
-                Argument::allOf(
-                    Argument::withEntry(
-                        0,
-                        Argument::allOf(
-                            Argument::withEntry('uid', 1),
-                            Argument::withEntry('username', 'Stefan')
-                        )
-                    ),
-                    Argument::withEntry(4, true)
-                )
-            )
-            ->shouldBeCalled();
-        $dispatcherProphecy
-            ->dispatch(Argument::cetera())
-            ->shouldBeCalled();
+        $event = new AllowCreationOfPoiCollectionEvent(
+            $this->getDatabaseConnection()->selectSingleRow(
+                '*',
+                'tx_events2_domain_model_location',
+                'uid = 1'
+            ),
+            'tx_events2_domain_model_location',
+            'tx_maps2_uid',
+            $this->columnRegistry['tx_events2_domain_model_location']['tx_maps2_uid'],
+            true
+        );
+
+        $listenerWithInvalidFlag = static function (AllowCreationOfPoiCollectionEvent $event): void {
+            $event->setIsValid(false);
+        };
+
+        // First EventListener will be called with foreignLocationRecord and returns false to break further processing
+        $this->listenerProviderProphecy
+            ->getListenersForEvent($event)
+            ->shouldBeCalled()
+            ->willReturn([$listenerWithInvalidFlag]);
+
+        // Second EventListener should not be called. It's true, if break is working
+        $this->listenerProviderProphecy
+            ->getListenersForEvent(Argument::type(PostProcessPoiCollectionRecordEvent::class))
+            ->shouldNotBeCalled();
 
         $dataHandler = new DataHandler();
         $dataHandler->datamap = [
-            'fe_users' => [
+            'tx_events2_domain_model_location' => [
                 '1' => [
                     'uid' => '1',
                     'pid' => '12',
-                    'username' => 'Stefan',
-                    'lastlogin' => '0',
+                    'location' => 'Stefan',
+                    'sys_language_uid' => 0,
+                    'l10n_parent' => 0,
+                    'tx_maps2_uid' => 1
                 ]
             ]
         ];
 
-        $mapService = new MapService();
-
-        /** @var Maps2Registry|ObjectProphecy $maps2Registry */
-        $maps2Registry = $this->prophesize(Maps2Registry::class);
-        $maps2Registry
-            ->getColumnRegistry()
-            ->shouldBeCalled()
-            ->willReturn($this->maps2RegistryConfiguration);
-
-        $hook = new CreateMaps2RecordHook(
-            null,
-            $this->prophesize(MessageHelper::class)->reveal(),
-            $dispatcherProphecy->reveal(),
-            $mapService,
-            $maps2Registry->reveal()
-        );
-        $hook->processDatamap_afterAllOperations($dataHandler);
+        $this->subject->processDatamap_afterAllOperations($dataHandler);
     }
 
     /**
@@ -185,57 +262,40 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
      */
     public function processDatamapInvalidForeignRecordBecausePidIsNotEqual(): void
     {
-        $maps2RegistryConfiguration = $this->maps2RegistryConfiguration;
-        $maps2RegistryConfiguration['fe_users']['lastlogin']['columnMatch']['pid'] = 432;
+        $columnRegistry = $this->columnRegistry;
+        $columnRegistry['tx_events2_domain_model_location']['tx_maps2_uid']['columnMatch']['pid'] = 432;
 
-        /** @var Dispatcher|ObjectProphecy $dispatcherProphecy */
-        $dispatcherProphecy = $this->prophesize(Dispatcher::class);
-        $dispatcherProphecy
-            ->dispatch(
-                CreateMaps2RecordHook::class,
-                'preIsRecordAllowedToCreatePoiCollection',
-                Argument::withEntry(4, false)
-            )
-            ->shouldBeCalled();
-        $dispatcherProphecy
-            ->dispatch(Argument::cetera())
-            ->shouldBeCalled();
+        $this->maps2RegistryProphecy
+            ->getColumnRegistry()
+            ->shouldBeCalled()
+            ->willReturn($columnRegistry);
+
+        // If EventListener was not called, the columnMatch was invalid.
+        $this->listenerProviderProphecy
+            ->getListenersForEvent(Argument::type(PostProcessPoiCollectionRecordEvent::class))
+            ->shouldNotBeCalled();
 
         $dataHandler = new DataHandler();
         $dataHandler->datamap = [
-            'fe_users' => [
+            'tx_events2_domain_model_location' => [
                 '1' => [
                     'uid' => '1',
                     'pid' => '12',
-                    'username' => 'Stefan',
-                    'lastlogin' => '0',
+                    'location' => 'Stefan',
+                    'sys_language_uid' => 0,
+                    'l10n_parent' => 0,
+                    'tx_maps2_uid' => 1
                 ]
             ]
         ];
 
-        $mapService = new MapService();
-
-        /** @var Maps2Registry|ObjectProphecy $maps2Registry */
-        $maps2Registry = $this->prophesize(Maps2Registry::class);
-        $maps2Registry
-            ->getColumnRegistry()
-            ->shouldBeCalled()
-            ->willReturn($maps2RegistryConfiguration);
-
-        $hook = new CreateMaps2RecordHook(
-            null,
-            $this->prophesize(MessageHelper::class)->reveal(),
-            $dispatcherProphecy->reveal(),
-            $mapService,
-            $maps2Registry->reveal()
-        );
-        $hook->processDatamap_afterAllOperations($dataHandler);
+        $this->subject->processDatamap_afterAllOperations($dataHandler);
     }
 
     /**
      * Provides various expression configuration
      *
-     * @return array
+     * @return array<string, array<array<string, array<string, string>>|bool>>
      */
     public function dataProcessorForExpressions(): array
     {
@@ -258,59 +318,46 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
     /**
      * @test
      *
-     * @param array $columnMatch
-     * @param bool $isValid
      * @dataProvider dataProcessorForExpressions
      */
     public function processDatamapInvalidForeignRecordBecauseExpressionsAreNotEqual(
         array $columnMatch,
         bool $isValid
     ): void {
-        $maps2RegistryConfiguration = $this->maps2RegistryConfiguration;
-        $maps2RegistryConfiguration['fe_users']['lastlogin']['columnMatch'] = $columnMatch;
+        $columnRegistry = $this->columnRegistry;
+        $columnRegistry['tx_events2_domain_model_location']['tx_maps2_uid']['columnMatch'] = $columnMatch;
 
-        /** @var Dispatcher|ObjectProphecy $dispatcherProphecy */
-        $dispatcherProphecy = $this->prophesize(Dispatcher::class);
-        $dispatcherProphecy
-            ->dispatch(
-                CreateMaps2RecordHook::class,
-                'preIsRecordAllowedToCreatePoiCollection',
-                Argument::withEntry(4, $isValid)
-            )
-            ->shouldBeCalled();
-        $dispatcherProphecy
-            ->dispatch(Argument::cetera())
-            ->shouldBeCalled();
+        $this->maps2RegistryProphecy
+            ->getColumnRegistry()
+            ->shouldBeCalled()
+            ->willReturn($columnRegistry);
+
+        if ($isValid) {
+            $this->listenerProviderProphecy
+                ->getListenersForEvent(Argument::type(PostProcessPoiCollectionRecordEvent::class))
+                ->shouldBeCalled()
+                ->willReturn([]);
+        } else {
+            $this->listenerProviderProphecy
+                ->getListenersForEvent(Argument::type(PostProcessPoiCollectionRecordEvent::class))
+                ->shouldNotBeCalled();
+        }
 
         $dataHandler = new DataHandler();
         $dataHandler->datamap = [
-            'fe_users' => [
+            'tx_events2_domain_model_location' => [
                 '1' => [
                     'uid' => '1',
                     'pid' => '12',
-                    'username' => 'Stefan',
-                    'lastlogin' => '0',
+                    'location' => 'Stefan',
+                    'sys_language_uid' => 0,
+                    'l10n_parent' => 0,
+                    'tx_maps2_uid' => 1
                 ]
             ]
         ];
 
-        $mapService = new MapService();
-
-        /** @var Maps2Registry|ObjectProphecy $maps2Registry */
-        $maps2Registry = $this->prophesize(Maps2Registry::class);
-        $maps2Registry
-            ->getColumnRegistry()
-            ->shouldBeCalled()
-            ->willReturn($maps2RegistryConfiguration);
-
-        $hook = new CreateMaps2RecordHook(
-            null,
-            $this->prophesize(MessageHelper::class)->reveal(),
-            $dispatcherProphecy->reveal(),
-            $mapService,
-            $maps2Registry->reveal()
-        );
-        $hook->processDatamap_afterAllOperations($dataHandler);
+        $this->subject->processDatamap_afterAllOperations($dataHandler);
     }
 
     /**
@@ -320,12 +367,14 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
     {
         $dataHandler = new DataHandler();
         $dataHandler->datamap = [
-            'fe_users' => [
+            'tx_events2_domain_model_location' => [
                 '1' => [
                     'uid' => '1',
                     'pid' => '12',
-                    'username' => 'Stefan',
-                    'lastlogin' => '0',
+                    'location' => 'Stefan',
+                    'sys_language_uid' => 0,
+                    'l10n_parent' => 0,
+                    'tx_maps2_uid' => 1
                 ]
             ]
         ];
@@ -343,97 +392,13 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
         $positionProphecy
             ->getFormattedAddress()
             ->shouldBeCalled()
-            ->willReturn('Echterdinger Straße 57, 70794 Filderstadt, Deutschland');
-        /** @var GeoCodeService|ObjectProphecy $geoCodeServiceProphecy */
-        $geoCodeServiceProphecy = $this->prophesize(GeoCodeService::class);
-        $geoCodeServiceProphecy
-            ->getFirstFoundPositionByAddress('Echterdinger Straße 57 70794 Filderstadt Deutschland')
+            ->willReturn('Echterdinger Straße 57, 70794 Filderstadt, Germany');
+
+        $this->geoCodeServiceProphecy
+            ->getFirstFoundPositionByAddress('Echterdinger Straße 57 70794 Filderstadt Germany')
             ->shouldBeCalled()
             ->willReturn($positionProphecy->reveal());
 
-        /** @var Dispatcher|ObjectProphecy $dispatcherProphecy */
-        $dispatcherProphecy = $this->prophesize(Dispatcher::class);
-        $dispatcherProphecy
-            ->dispatch(
-                CreateMaps2RecordHook::class,
-                'postUpdatePoiCollection',
-                Argument::allOf(
-                    Argument::withEntry(1, 1),
-                    Argument::withEntry(3, Argument::withEntry('lastlogin', 1))
-                )
-            )
-            ->shouldBeCalled();
-        $dispatcherProphecy
-            ->dispatch(Argument::cetera())
-            ->shouldBeCalled();
-
-        $mapService = new MapService();
-
-        /** @var Maps2Registry|ObjectProphecy $maps2Registry */
-        $maps2Registry = $this->prophesize(Maps2Registry::class);
-        $maps2Registry
-            ->getColumnRegistry()
-            ->shouldBeCalled()
-            ->willReturn($this->maps2RegistryConfiguration);
-
-        $hook = new CreateMaps2RecordHook(
-            $geoCodeServiceProphecy->reveal(),
-            $this->prophesize(MessageHelper::class)->reveal(),
-            $dispatcherProphecy->reveal(),
-            $mapService,
-            $maps2Registry->reveal()
-        );
-        $hook->processDatamap_afterAllOperations($dataHandler);
-    }
-
-    /**
-     * @test
-     */
-    public function processDatamapDoesNotCreatesPoiCollectionBecauseOfHook(): void
-    {
-        $dataHandler = new DataHandler();
-        $dataHandler->datamap = [
-            'fe_users' => [
-                '1' => [
-                    'uid' => '1',
-                    'pid' => '12',
-                    'username' => 'Stefan',
-                    'lastlogin' => '0',
-                ]
-            ]
-        ];
-
-        /** @var GeoCodeService|ObjectProphecy $geoCodeServiceProphecy */
-        $geoCodeServiceProphecy = $this->prophesize(GeoCodeService::class);
-        $geoCodeServiceProphecy
-            ->getFirstFoundPositionByAddress('Echterdinger Straße 57 70794 Filderstadt Deutschland')
-            ->shouldNotBeCalled();
-
-        $signalSlotDispatcher = GeneralUtility::makeInstance(Dispatcher::class);
-        $signalSlotDispatcher
-            ->connect(
-                CreateMaps2RecordHook::class,
-                'preIsRecordAllowedToCreatePoiCollection',
-                IsRecordAllowedToCreatePoiCollectionSignal::class,
-                'invalidPoiCollection'
-            );
-
-        $mapService = new MapService();
-
-        /** @var Maps2Registry|ObjectProphecy $maps2Registry */
-        $maps2Registry = $this->prophesize(Maps2Registry::class);
-        $maps2Registry
-            ->getColumnRegistry()
-            ->shouldBeCalled()
-            ->willReturn($this->maps2RegistryConfiguration);
-
-        $hook = new CreateMaps2RecordHook(
-            $geoCodeServiceProphecy->reveal(),
-            $this->prophesize(MessageHelper::class)->reveal(),
-            null,
-            $mapService,
-            $maps2Registry->reveal()
-        );
-        $hook->processDatamap_afterAllOperations($dataHandler);
+        $this->subject->processDatamap_afterAllOperations($dataHandler);
     }
 }

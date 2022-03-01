@@ -1,9 +1,9 @@
 .. include:: ../Includes.txt
 
 
-
 .. _installation:
 
+============
 Installation
 ============
 

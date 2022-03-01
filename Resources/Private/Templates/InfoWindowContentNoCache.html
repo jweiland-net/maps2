@@ -1,0 +1,17 @@
+<html lang="en"
+			xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+			xmlns:m="http://typo3.org/ns/JWeiland/Maps2/ViewHelpers"
+			data-namespace-typo3-fluid="true">
+
+<f:comment><!--
+Same as InfoWindowContent.html except that no of our cache VHs will be used.
+Currently, we use it for Functional Tests, but feel free to use this template
+yourself, to reduce the amount of VH calls (m:cache*) a lot.
+--></f:comment>
+
+<f:variable name="content">
+	<f:render partial="InfoWindowContent" arguments="{poiCollection: poiCollection}" />
+</f:variable>
+
+{content -> f:format.raw()}
+</html>

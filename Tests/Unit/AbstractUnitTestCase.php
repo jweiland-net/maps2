@@ -32,12 +32,10 @@ abstract class AbstractUnitTestCase extends UnitTestCase
      * Helper method for UnitTests
      * Let Database query return given $returnValue
      *
-     * @param string $tableName
      * @param mixed $returnValue
-     * @param array $expressions
      */
     protected function buildAssertionForDatabaseWithReturnValue(
-        $tableName,
+        string $tableName,
         $returnValue,
         array $expressions = [['expr' => 'eq', ['expr' => 'in']]]
     ): void {

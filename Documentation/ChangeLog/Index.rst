@@ -3,8 +3,20 @@
 
 .. _changelog:
 
+=========
 ChangeLog
 =========
+
+**Version 10.0.0**
+
+- Remove TYPO3 9 compatibility
+- Add TYPO3 11 compatibility
+- Removed tx_maps2_domain_model_poi table (Please execute UpgradeWizard)
+- Update Documentation (Adopt TYPO3 Doc Styleguide)
+- Move MapService::getMapProvider to MapHelper:getMapProvider
+- Remove MapProviderOverlayRequestHandler
+- Implement new uncached ControllerAction to show Overlay
+- Remove PoiCollection and EditPoiCollection Widget
 
 **Version 9.3.10**
 

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+	<sys_category>
+		<uid>1</uid>
+		<pid>1</pid>
+		<title>jweiland.net</title>
+		<parent>0</parent>
+		<hidden>0</hidden>
+		<deleted>0</deleted>
+	</sys_category>
+	<sys_category>
+		<uid>2</uid>
+		<pid>1</pid>
+		<title>No Poi Collection relations</title>
+		<parent>0</parent>
+		<hidden>0</hidden>
+		<deleted>0</deleted>
+	</sys_category>
+</dataset>

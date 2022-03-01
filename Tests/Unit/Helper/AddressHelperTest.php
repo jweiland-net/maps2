@@ -30,10 +30,7 @@ class AddressHelperTest extends AbstractUnitTestCase
 {
     use ProphecyTrait;
 
-    /**
-     * @var AddressHelper
-     */
-    protected $subject;
+    protected AddressHelper $subject;
 
     /**
      * @var MessageHelper|ObjectProphecy
@@ -43,6 +40,7 @@ class AddressHelperTest extends AbstractUnitTestCase
     protected function setUp(): void
     {
         $this->messageHelperProphecy = $this->prophesize(MessageHelper::class);
+
         $this->subject = new AddressHelper($this->messageHelperProphecy->reveal());
     }
 
@@ -52,6 +50,7 @@ class AddressHelperTest extends AbstractUnitTestCase
             $this->subject,
             $this->messageHelperProphecy
         );
+
         parent::tearDown();
     }
 
@@ -393,6 +392,9 @@ class AddressHelperTest extends AbstractUnitTestCase
         );
     }
 
+    /**
+     * @return array<string, array<string>>
+     */
     public function addressDataProvider(): array
     {
         return [
@@ -407,7 +409,6 @@ class AddressHelperTest extends AbstractUnitTestCase
     /**
      * @test
      * @dataProvider addressDataProvider
-     * @param string $address
      */
     public function isSameAddressWithCommaAndSpacesWillReturnTrue(string $address): void
     {
@@ -427,6 +428,7 @@ class AddressHelperTest extends AbstractUnitTestCase
                 'city'
             ]
         ];
+
         self::assertTrue(
             $this->subject->isSameAddress($address, $foreignLocationRecord, $options)
         );

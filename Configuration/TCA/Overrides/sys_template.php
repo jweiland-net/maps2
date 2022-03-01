@@ -3,7 +3,7 @@ if (!defined('TYPO3_MODE')) {
     die('Access denied.');
 }
 
-call_user_func(function() {
+call_user_func(static function(): void {
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
         'maps2',
         'Configuration/TypoScript',
@@ -18,6 +18,7 @@ call_user_func(function() {
             'Maps2 for Google Maps'
         );
     }
+
     if ($extConf->getMapProvider() === 'both' || $extConf->getMapProvider() === 'osm') {
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
             'maps2',

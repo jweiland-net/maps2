@@ -9,7 +9,6 @@ let $maps2OpenStreetMaps = [];
  */
 function OpenStreetMaps2($element, environment) {
     this.categorizedMarkers = {};
-    this.pointMarkers = [];
     this.bounds = new L.LatLngBounds();
     this.$element = $element.css({
         height: environment.settings.mapHeight,
@@ -33,7 +32,19 @@ function OpenStreetMaps2($element, environment) {
         if (this.countObjectProperties(this.categorizedMarkers) > 1) {
             this.showSwitchableCategories(environment);
         }
-        if (this.poiCollections.length > 1 && environment.settings.forceZoom === false) {
+        if (
+            environment.settings.forceZoom === false
+            && (
+                this.poiCollections.length > 1
+                || (
+                    this.poiCollections.length === 1
+                    && (
+                        this.poiCollections[0].collectionType === "Area"
+                        || this.poiCollections[0].collectionType === "Route"
+                    )
+                )
+            )
+        ) {
             this.map.fitBounds(this.bounds);
         } else {
             this.map.panTo([this.poiCollections[0].latitude, this.poiCollections[0].longitude]);
@@ -109,9 +120,9 @@ OpenStreetMaps2.prototype.showSwitchableCategories = function (environment) {
         if (markers.hasOwnProperty(categoryUid)) {
             for (let i = 0; i < markers[categoryUid].length; i++) {
                 if (isChecked) {
-                    markers[categoryUid][i].setOpacity(1);
+                    map.addLayer(markers[categoryUid][i]);
                 } else {
-                    markers[categoryUid][i].setOpacity(0);
+                    map.removeLayer(markers[categoryUid][i]);
                 }
             }
         }
@@ -180,19 +191,30 @@ OpenStreetMaps2.prototype.createPointByCollectionType = function (environment) {
         if (this.poiCollections[i].fillOpacity === "") {
             this.poiCollections[i].fillOpacity = environment.extConf.fillOpacity;
         }
+
+        let marker;
         switch (this.poiCollections[i].collectionType) {
             case "Point":
-                this.createMarker(this.poiCollections[i], environment);
+                marker = this.createMarker(this.poiCollections[i], environment);
                 break;
             case "Area":
-             this.createArea(this.poiCollections[i], environment);
-             break;
-           case "Route":
-             this.createRoute(this.poiCollections[i], environment);
-             break;
-            case "Radius":
-                this.createRadius(this.poiCollections[i], environment);
+                marker = this.createArea(this.poiCollections[i], environment);
                 break;
+           case "Route":
+               marker = this.createRoute(this.poiCollections[i], environment);
+                break;
+            case "Radius":
+                marker = this.createRadius(this.poiCollections[i], environment);
+                break;
+        }
+
+        let categoryUid = 0;
+        for (let c = 0; c < this.poiCollections[i].categories.length; c++) {
+            categoryUid = this.poiCollections[i].categories[c].uid;
+            if (!this.categorizedMarkers.hasOwnProperty(categoryUid)) {
+                this.categorizedMarkers[categoryUid] = [];
+            }
+            this.categorizedMarkers[categoryUid].push(marker);
         }
     }
 };
@@ -204,22 +226,12 @@ OpenStreetMaps2.prototype.createPointByCollectionType = function (environment) {
  * @param environment
  */
 OpenStreetMaps2.prototype.createMarker = function (poiCollection, environment) {
-    let categoryUid = "0";
     let marker = L.marker(
         [poiCollection.latitude, poiCollection.longitude],
         {
             'draggable': this.editable
         }
     ).addTo(this.map);
-
-    for (let i = 0; i < poiCollection.categories.length; i++) {
-        categoryUid = poiCollection.categories[i].uid;
-        if (!this.categorizedMarkers.hasOwnProperty(categoryUid)) {
-            this.categorizedMarkers[categoryUid] = [];
-        }
-        this.categorizedMarkers[categoryUid].push(marker);
-        this.pointMarkers.push(marker);
-    }
 
     // assign first found marker icon, if available
     if (poiCollection.hasOwnProperty("markerIcon") && poiCollection.markerIcon !== "") {
@@ -238,6 +250,8 @@ OpenStreetMaps2.prototype.createMarker = function (poiCollection, environment) {
     } else {
         this.addInfoWindow(marker, poiCollection, environment);
     }
+
+    return marker;
 };
 
 /**
@@ -262,7 +276,10 @@ OpenStreetMaps2.prototype.createArea = function (poiCollection, environment) {
         fillOpacity: poiCollection.fillOpacity,
         radius: poiCollection.radius
     }).addTo(this.map);
+
     this.addInfoWindow(marker, poiCollection, environment);
+
+    return marker;
 };
 
 /**
@@ -287,7 +304,10 @@ OpenStreetMaps2.prototype.createRoute = function (poiCollection, environment) {
         fillOpacity: poiCollection.fillOpacity,
         radius: poiCollection.radius
     }).addTo(this.map);
+
     this.addInfoWindow(marker, poiCollection, environment);
+
+    return marker;
 };
 
 /**
@@ -307,7 +327,10 @@ OpenStreetMaps2.prototype.createRadius = function (poiCollection, environment) {
     }).addTo(this.map);
 
     this.bounds.extend(marker.getBounds());
+
     this.addInfoWindow(marker, poiCollection, environment);
+
+    return marker;
 };
 
 /**

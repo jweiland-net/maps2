@@ -11,13 +11,10 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Controller;
 
-use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Domain\Model\Search;
 use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
 use JWeiland\Maps2\Service\GeoCodeService;
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
-use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -25,70 +22,75 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class PoiCollectionController extends AbstractController
 {
-    public function showAction(PoiCollection $poiCollection = null): void
+    protected PoiCollectionRepository $poiCollectionRepository;
+
+    public function injectPoiCollectionRepository(PoiCollectionRepository $poiCollectionRepository): void
     {
-        $poiCollectionRepository = $this->objectManager->get(PoiCollectionRepository::class);
+        $this->poiCollectionRepository = $poiCollectionRepository;
+    }
 
-        // if uri is empty and a poiCollection is set in FlexForm
-        if ($poiCollection === null && !empty($this->settings['poiCollection'])) {
-            $poiCollection = $poiCollectionRepository->findByIdentifier((int)$this->settings['poiCollection']);
-        }
-        if ($poiCollection instanceof PoiCollection) {
-            $poiCollections = [$poiCollection];
-        } elseif (!empty($this->settings['categories'])) {
-            // if no poiCollection could be retrieved, but a category is set
-            $poiCollections = $poiCollectionRepository->findPoisByCategories($this->settings['categories']);
-            if ($poiCollections->count() === 0) {
-                $this->addFlashMessage(
-                    'You have configured one or more categories but we can\'t find any PoiCollections which are assigned to these categories.',
-                    'No PoiCollections found',
-                    FlashMessage::NOTICE
-                );
-            }
-        } else {
-            // show all PoiCollections of configured StorageFolder
-            $poiCollections = $poiCollectionRepository->findAll();
-            if ($poiCollections->count() === 0) {
-                $this->addFlashMessage(
-                    'You have configured one or more StorageFolders but we can\'t find any PoiCollections which are stored in this folder(s).',
-                    'No PoiCollections found',
-                    FlashMessage::NOTICE
-                );
-            }
-        }
+    /**
+     * This action will show the map of Google Maps or OpenStreetMap
+     */
+    public function showAction(int $poiCollectionUid = 0): void
+    {
+        $this->postProcessAndAssignFluidVariables([
+            'poiCollections' => $this->poiCollectionRepository->findPoiCollections($this->settings, $poiCollectionUid)
+        ]);
+    }
 
-        $this->view->assign('poiCollections', $poiCollections);
+    /**
+     * This uncached action will show an overlay which the visitor has to confirm first.
+     */
+    public function overlayAction(int $poiCollectionUid = 0): void
+    {
+        $this->postProcessAndAssignFluidVariables([
+            'poiCollections' => $this->poiCollectionRepository->findPoiCollections($this->settings, $poiCollectionUid),
+            'requestUri' => $this->getRequestUri()
+        ]);
     }
 
     public function searchAction(Search $search = null): void
     {
-        if ($search === null) {
-            $search = $this->objectManager->get(Search::class);
-        }
-        $this->view->assign('search', $search);
+        $search ??= GeneralUtility::makeInstance(Search::class);
+
+        $this->postProcessAndAssignFluidVariables([
+            'search' => $search
+        ]);
     }
 
     public function listRadiusAction(Search $search): void
     {
         $geoCodeService = GeneralUtility::makeInstance(GeoCodeService::class);
 
-        $this->view->assign('search', $search);
+        $poiCollections = new \SplObjectStorage();
         $position = $geoCodeService->getFirstFoundPositionByAddress($search->getAddress());
         if ($position instanceof Position) {
-            $poiCollectionRepository = $this->objectManager->get(PoiCollectionRepository::class);
-            $poiCollections = $poiCollectionRepository->searchWithinRadius(
+            $poiCollections = $this->poiCollectionRepository->searchWithinRadius(
                 $position->getLatitude(),
                 $position->getLongitude(),
                 $search->getRadius()
             );
-
-            $this->view->assign('poiCollections', $poiCollections);
-        } else {
-            $this->addFlashMessage(
-                'No position with this address found',
-                'Address not found',
-                AbstractMessage::ERROR
-            );
         }
+
+        $this->postProcessAndAssignFluidVariables([
+            'poiCollections' => $poiCollections,
+            'search' => $search
+        ]);
+    }
+
+    protected function getRequestUri(): string
+    {
+        return $this->uriBuilder
+            ->reset()
+            ->setAddQueryString(true)
+            ->setAddQueryStringMethod('GET')
+            ->setArguments([
+                'tx_maps2_maps2' => [
+                    'mapProviderRequestsAllowedForMaps2' => 1
+                ]
+            ])
+            ->setArgumentsToBeExcludedFromQueryString(['cHash'])
+            ->build();
     }
 }

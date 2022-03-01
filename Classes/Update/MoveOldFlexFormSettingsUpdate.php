@@ -25,45 +25,40 @@ use TYPO3\CMS\Install\Updates\UpgradeWizardInterface;
  */
 class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
 {
-    /**
-     * @return string
-     */
     public function getIdentifier(): string
     {
         return 'maps2MoveFlexFormFields';
     }
 
-    /**
-     * @return string
-     */
     public function getTitle(): string
     {
         return '[maps2] Move old FlexForm fields to new FlexForm sheet';
     }
 
-    /**
-     * @return string
-     */
     public function getDescription(): string
     {
         return 'It seems that some fields from FlexForm of one Map Provider was available for all Map Providers now. ' .
             'In that case we have to move these fields to another Sheet.';
     }
 
-    /**
-     * @return bool
-     */
     public function updateNecessary(): bool
     {
         $records = $this->getTtContentRecordsWithMaps2Plugin();
         foreach ($records as $record) {
             $valueFromDatabase = (string)$record['pi_flexform'] !== '' ? GeneralUtility::xml2array($record['pi_flexform']) : [];
-            if (
-                !is_array($valueFromDatabase)
-                || empty($valueFromDatabase)
-                || !isset($valueFromDatabase['data'])
-                || !is_array($valueFromDatabase['data'])
-            ) {
+            if (!is_array($valueFromDatabase)) {
+                continue;
+            }
+
+            if (empty($valueFromDatabase)) {
+                continue;
+            }
+
+            if (!isset($valueFromDatabase['data'])) {
+                continue;
+            }
+
+            if (!is_array($valueFromDatabase['data'])) {
                 continue;
             }
 
@@ -80,16 +75,15 @@ class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
                 ) {
                     return true;
                 }
-            } catch (MissingArrayPathException $e) {
-                // If value does not exists, check further requirements
-            } catch (\RuntimeException $e) {
-                // Some as above, but for TYPO3 8
+            } catch (MissingArrayPathException $missingArrayPathException) {
+                // If value does not exist, check further requirements
             }
 
-            if (
-                !isset($valueFromDatabase['data']['sMapOptions']['lDEF'])
-                || !is_array($valueFromDatabase['data']['sMapOptions']['lDEF'])
-            ) {
+            if (!isset($valueFromDatabase['data']['sMapOptions']['lDEF'])) {
+                continue;
+            }
+
+            if (!is_array($valueFromDatabase['data']['sMapOptions']['lDEF'])) {
                 continue;
             }
 
@@ -107,20 +101,23 @@ class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
                 }
             }
         }
+
         return false;
     }
 
-    /**
-     * @return bool
-     */
     public function executeUpdate(): bool
     {
         $records = $this->getTtContentRecordsWithMaps2Plugin();
         foreach ($records as $record) {
             $valueFromDatabase = (string)$record['pi_flexform'] !== '' ? GeneralUtility::xml2array($record['pi_flexform']) : [];
-            if (!is_array($valueFromDatabase) || empty($valueFromDatabase)) {
+            if (!is_array($valueFromDatabase)) {
                 continue;
             }
+
+            if (empty($valueFromDatabase)) {
+                continue;
+            }
+
             $this->moveSheetDefaultToDef($valueFromDatabase);
             $this->moveFieldFromOldToNewSheet($valueFromDatabase, 'settings.activateScrollWheel', 'sGoogleMapsOptions', 'sMapOptions');
             $this->moveFieldFromOldToNewSheet($valueFromDatabase, 'settings.mapTypeControl', 'sMapOptions', 'sGoogleMapsOptions');
@@ -149,7 +146,7 @@ class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
     }
 
     /**
-     * @return string[]
+     * @return array<class-string<DatabaseUpdatedPrerequisite>>
      */
     public function getPrerequisites(): array
     {
@@ -161,51 +158,50 @@ class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
     /**
      * Get all (incl. deleted/hidden) tt_content records with plugin maps2_maps2
      *
-     * @return array
+     * @return mixed[]
      */
     protected function getTtContentRecordsWithMaps2Plugin(): array
     {
         $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable('tt_content');
         $queryBuilder->getRestrictions()->removeAll();
-        $records = $queryBuilder
+
+        $statement = $queryBuilder
             ->select('uid', 'pi_flexform')
             ->from('tt_content')
             ->where(
                 $queryBuilder->expr()->eq(
                     'CType',
-                    $queryBuilder->createNamedParameter('list', \PDO::PARAM_STR)
+                    $queryBuilder->createNamedParameter('list')
                 ),
                 $queryBuilder->expr()->orX(
                     $queryBuilder->expr()->eq(
                         'list_type',
-                        $queryBuilder->createNamedParameter('maps2_citymap', \PDO::PARAM_STR)
+                        $queryBuilder->createNamedParameter('maps2_citymap')
                     ),
                     $queryBuilder->expr()->eq(
                         'list_type',
-                        $queryBuilder->createNamedParameter('maps2_maps2', \PDO::PARAM_STR)
+                        $queryBuilder->createNamedParameter('maps2_maps2')
                     ),
                     $queryBuilder->expr()->eq(
                         'list_type',
-                        $queryBuilder->createNamedParameter('maps2_searchwithinradius', \PDO::PARAM_STR)
+                        $queryBuilder->createNamedParameter('maps2_searchwithinradius')
                     )
                 )
             )
-            ->execute()
-            ->fetchAll();
+            ->execute();
 
-        if ($records === false) {
-            $records = [];
+        $records = [];
+        while ($record = $statement->fetch()) {
+            $records[] = $record;
         }
 
         return $records;
     }
 
     /**
-     * It's not a must have, but sDEF seems to be more default than sDEFAULT as first sheet name in TYPO3
-     *
-     * @param array $valueFromDatabase
+     * It's not a must-have, but sDEF seems to be more default than sDEFAULT as first sheet name in TYPO3
      */
-    protected function moveSheetDefaultToDef(array &$valueFromDatabase)
+    protected function moveSheetDefaultToDef(array &$valueFromDatabase): void
     {
         if (array_key_exists('sDEFAULT', $valueFromDatabase['data'])) {
             foreach ($valueFromDatabase['data']['sDEFAULT']['lDEF'] as $field => $value) {
@@ -219,14 +215,13 @@ class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
 
     /**
      * Move field from one sheet to another and remove field from old location
-     *
-     * @param array $valueFromDatabase
-     * @param string $field
-     * @param string $oldSheet
-     * @param string $newSheet
      */
-    protected function moveFieldFromOldToNewSheet(array &$valueFromDatabase, string $field, string $oldSheet, string $newSheet)
-    {
+    protected function moveFieldFromOldToNewSheet(
+        array &$valueFromDatabase,
+        string $field,
+        string $oldSheet,
+        string $newSheet
+    ): void {
         try {
             $value = ArrayUtility::getValueByPath(
                 $valueFromDatabase,
@@ -251,20 +246,15 @@ class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
 
             // Remove old reference
             unset($valueFromDatabase['data'][$oldSheet]['lDEF'][$field]);
-        } catch (MissingArrayPathException $e) {
+        } catch (MissingArrayPathException $missingArrayPathException) {
             // Path does not exist in Array. Do not update anything
-        } catch (\RuntimeException $e) {
-            // Some as above, but for TYPO3 8
         }
     }
 
     /**
      * Converts an array to FlexForm XML
-     *
-     * @param array $array Array with FlexForm data
-     * @return string Input array converted to XML
      */
-    public function checkValue_flexArray2Xml($array): string
+    public function checkValue_flexArray2Xml(array $array): string
     {
         $flexObj = GeneralUtility::makeInstance(FlexFormTools::class);
         return $flexObj->flexArray2Xml($array, true);

@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Client;
 
-use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
@@ -19,43 +19,38 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  */
 class GoogleMapsClient extends AbstractClient
 {
-    /**
-     * @var string
-     */
-    protected $title = 'Google Maps';
+    protected string $title = 'Google Maps';
 
-    protected function checkResponseForErrors(?array $response)
+    protected function checkResponseForErrors(?array $response): void
     {
         if ($response === null) {
             $this->messageHelper->addFlashMessage(
                 'The response of Google Maps was not a valid JSON response.',
                 'Invalid JSON response',
-                FlashMessage::ERROR
+                AbstractMessage::ERROR
             );
         } elseif ($response['status'] !== 'OK') {
-            switch ($response['status']) {
-                case 'ZERO_RESULTS':
-                    $this->messageHelper->addFlashMessage(
-                        LocalizationUtility::translate(
-                            'error.noPositionsFound.body',
-                            'maps2',
-                            [
-                                0 => $this->title
-                            ]
-                        ),
-                        LocalizationUtility::translate(
-                            'error.noPositionsFound.title',
-                            'maps2'
-                        ),
-                        FlashMessage::ERROR
-                    );
-                    break;
-                default:
-                    $this->messageHelper->addFlashMessage(
-                        $response['error_message'],
-                        'Error',
-                        FlashMessage::ERROR
-                    );
+            if ($response['status'] === 'ZERO_RESULTS') {
+                $this->messageHelper->addFlashMessage(
+                    LocalizationUtility::translate(
+                        'error.noPositionsFound.body',
+                        'maps2',
+                        [
+                            0 => $this->title
+                        ]
+                    ),
+                    LocalizationUtility::translate(
+                        'error.noPositionsFound.title',
+                        'maps2'
+                    ),
+                    AbstractMessage::ERROR
+                );
+            } else {
+                $this->messageHelper->addFlashMessage(
+                    $response['error_message'],
+                    'Error',
+                    AbstractMessage::ERROR
+                );
             }
         }
     }

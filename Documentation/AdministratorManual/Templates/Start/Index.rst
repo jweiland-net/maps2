@@ -1,5 +1,6 @@
 .. include:: ../../../Includes.txt
 
+============================
 Changing & editing templates
 ============================
 
@@ -15,7 +16,8 @@ Extbase-Fluid/dp/3897219654/>`_ or online, e.g. at
 other sites.
 
 Changing paths of the template
-------------------------------
+==============================
+
 You should never edit the original templates of an extension as those changes will vanish if you upgrade the extension.
 As any extbase based extension, you can find the templates in the directory ``Resources/Private/``.
 
@@ -24,64 +26,38 @@ This can be a directory in ``fileadmin`` or a custom extension. Multiple fallbac
 
 .. code-block:: typoscript
 
-  plugin.tx_maps2 {
-    view {
-      templateRootPaths >
-      templateRootPaths {
-        0 = EXT:maps2/Resources/Private/Templates/
-        1 = fileadmin/templates/ext/maps2/Templates/
-      }
-      partialRootPaths >
-      partialRootPaths {
-        0 = EXT:maps2/Resources/Private/Partials/
-        1 = fileadmin/templates/ext/maps2/Partials/
-      }
-      layoutRootPaths >
-      layoutRootPaths {
-        0 = EXT:maps2/Resources/Private/Layouts/
-        1 = fileadmin/templates/ext/maps2/Layouts/
-      }
-    }
-  }
+   plugin.tx_maps2 {
+     view {
+       templateRootPaths >
+       templateRootPaths {
+         0 = EXT:maps2/Resources/Private/Templates/
+         1 = fileadmin/templates/ext/maps2/Templates/
+       }
+       partialRootPaths >
+       partialRootPaths {
+         0 = EXT:maps2/Resources/Private/Partials/
+         1 = fileadmin/templates/ext/maps2/Partials/
+       }
+       layoutRootPaths >
+       layoutRootPaths {
+         0 = EXT:maps2/Resources/Private/Layouts/
+         1 = fileadmin/templates/ext/maps2/Layouts/
+       }
+     }
+   }
 
 Change the templates using TypoScript constants
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------------------------------
 
 You can use the following TypoScript in the  **constants** to change
 the paths
 
 .. code-block:: typoscript
 
-  plugin.tx_maps2 {
-    view {
-      templateRootPath = fileadmin/templates/ext/maps2/Templates/
-      partialRootPath = fileadmin/templates/ext/maps2/Partials/
-      layoutRootPath = fileadmin/templates/ext/maps2/Layouts/
-    }
-  }
-
-Change path of the poiCollection widget
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The path of the poiCollection widget can be changed by using a configuration like below.
-
-.. code-block:: typoscript
-
-  plugin.tx_maps2 {
-    view {
-      widget.JWeiland\Maps2\ViewHelpers\Widget\PoiCollectionViewHelper.templateRootPath = {$plugin.tx_maps2.view.templateRootPath}
-    }
-  }
-
-Change path of the editPoi widget
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The path of the editPoi widget can be changed by using a configuration like below.
-
-.. code-block:: typoscript
-
    plugin.tx_maps2 {
      view {
-       widget.JWeiland\Maps2\ViewHelpers\Widget\EditPoiViewHelper.templateRootPath = [PATH]
+       templateRootPath = fileadmin/templates/ext/maps2/Templates/
+       partialRootPath = fileadmin/templates/ext/maps2/Partials/
+       layoutRootPath = fileadmin/templates/ext/maps2/Layouts/
      }
    }

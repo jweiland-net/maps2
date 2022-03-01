@@ -19,21 +19,18 @@ use JWeiland\Maps2\Configuration\ExtConf;
  */
 class GeocodeRequest extends AbstractRequest
 {
-    /**
-     * @var string
-     */
-    protected $uri = '';
+    protected string $uri = '';
 
-    public function __construct(ExtConf $extConf = null)
+    public function __construct(ExtConf $extConf)
     {
         parent::__construct($extConf);
+
         $this->uri = $this->extConf->getGoogleMapsGeocodeUri();
     }
 
     /**
      * Get URI for Geocode
      *
-     * @return string
      * @throws \Exception
      */
     public function getUri(): string

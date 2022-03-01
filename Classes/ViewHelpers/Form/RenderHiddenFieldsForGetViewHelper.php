@@ -12,7 +12,6 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\ViewHelpers\Form;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Service\ExtensionService;
 use TYPO3\CMS\Frontend\Page\CacheHashCalculator;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
@@ -37,26 +36,23 @@ class RenderHiddenFieldsForGetViewHelper extends AbstractViewHelper
      */
     protected $escapeOutput = false;
 
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
-        $this->registerArgument('pageUid', 'int', 'The target page UID', false, null);
-        $this->registerArgument('action', 'string', 'Target action', false, null);
-        $this->registerArgument('controller', 'string', 'Target controller. If null current controllerName is used', false, null);
+        $this->registerArgument('pageUid', 'int', 'The target page UID', false);
+        $this->registerArgument('action', 'string', 'Target action', false);
+        $this->registerArgument('controller', 'string', 'Target controller. If null current controllerName is used', false);
     }
 
     /**
      * Checks if caching framework has the requested cache entry
-     *
-     * @param array $arguments
-     * @param \Closure $renderChildrenClosure
-     * @param RenderingContextInterface $renderingContext
-     * @return bool
      */
-    public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
-    {
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $extensionService = $objectManager->get(ExtensionService::class);
-        $cacheHashCalculator = $objectManager->get(CacheHashCalculator::class);
+    public static function renderStatic(
+        array $arguments,
+        \Closure $renderChildrenClosure,
+        RenderingContextInterface $renderingContext
+    ): string {
+        $extensionService = GeneralUtility::makeInstance(ExtensionService::class);
+        $cacheHashCalculator = GeneralUtility::makeInstance(CacheHashCalculator::class);
 
         $pluginNamespace = $extensionService->getPluginNamespace(
             $renderingContext->getControllerContext()->getRequest()->getControllerExtensionName(),

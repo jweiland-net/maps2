@@ -2,6 +2,7 @@
 
 .. _extensionManager:
 
+=================
 Extension Manager
 =================
 
@@ -28,7 +29,6 @@ The settings are divided into several tabs and described here in detail:
    explicitAllowMapProviderRequests_          basic    0
    explicitAllowMapProviderRequestsBySession_ basic    0
    infoWindowContentTemplatePath_             basic    EXT:maps2/Resources/Private/Templates/InfoWindowContent.html
-   allowMapTemplatePath_                      basic    EXT:maps2/Resources/Private/Templates/AllowMapForm.html
 
    googleMapsLibrary_                         gm       ``https://maps.googleapis.com/maps/api/js?key=|&libraries=places``
    googleMapsGeocodeUri_                      gm       ``https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=%s``
@@ -52,7 +52,7 @@ The settings are divided into several tabs and described here in detail:
 .. _extensionManager-mapProvider:
 
 mapProvider
------------
+===========
 
 Decide, if you want to use Google Maps or OpenStreetMap in your project. If you're unsure you can keep both
 active, but in that case you and/or your editor have the possibility to switch between Map Providers in
@@ -70,7 +70,7 @@ PoiCollection record.
 .. _extensionManager-defaultMapProvider:
 
 defaultMapProvider
-------------------
+==================
 
 This setting is only relevant if you have chosen ``both`` at mapProvider. c
 
@@ -79,10 +79,22 @@ This setting is only relevant if you have chosen ``both`` at mapProvider. c
    provider in your TS-template record. And yes, you can't show maps of both map providers on the same page.
 
 
+.. _extensionManager-defaultMapType:
+
+defaultMapType
+==============
+
+**Default**: Empty
+
+By default an editor has to choose which type of PoiCollection he wants to create. As an administror or integrator
+you have the possibility to reduce the allowed types. In that case it may make sense to set default type
+to another allowed value. Further the editor saves one further click.
+
+
 .. _extensionManager-defaultCountry:
 
 defaultCountry
---------------
+==============
 
 If a Google Maps Geocode Request will be requested with only a postal code,
 Google Maps will try to find that postal code somewhere all over the world.
@@ -94,7 +106,7 @@ POIs all over the world you should keep that field empty.
 .. _extensionManager-defaultLatitude:
 
 defaultLatitude
----------------
+===============
 
 Default latitude
 
@@ -102,7 +114,7 @@ Default latitude
 .. _extensionManager-defaultLongitude:
 
 defaultLongitude
-----------------
+================
 
 Default longitude
 
@@ -110,7 +122,7 @@ Default longitude
 .. _extensionManager-defaultRadius:
 
 defaultRadius
--------------
+=============
 
 Default radius
 
@@ -118,7 +130,7 @@ Default radius
 .. _extensionManager-explicitAllowMapProviderRequests:
 
 explicitAllowMapProviderRequests
---------------------------------
+================================
 
 If you use our maps2 extension your browser will send requests to Google Servers to retrieve the map images.
 These requests contains the IP address of the website visitors which is a user defined information in some countries.
@@ -129,7 +141,7 @@ Enable this option, if you need this explicit activation of Google Maps in Cooki
 .. _extensionManager-explicitAllowMapProviderRequestsBySession:
 
 explicitAllowMapProviderRequestsBySession
------------------------------------------
+=========================================
 
 If you use our maps2 extension your browser will send requests to Google Servers to retrieve the map images.
 These requests contains the IP address of the website visitors which is a user defined information in some countries.
@@ -144,27 +156,16 @@ Enable this option, if you need this explicit activation of Google Maps for curr
 .. _extensionManager-infoWindowContentTemplatePath::
 
 infoWindowContentTemplatePath
------------------------------
+=============================
 
 You can define your own default template for these little info window content when clicking on a marker.
 Further you can override this template path again with TypoScript at settings.infoWindowContentTemplatePath = [path]
 
 
-.. _extensionManager-allowMapTemplatePath::
-
-allowMapTemplatePath
---------------------
-
-This option is only valid if explicitAllowMapProviderRequests is activ.
-Define your own template which will be shown, as long as the visitor has not explicit allowed requests
-to Google Servers
-You can override this template path again with TypoScript at settings.allowMapTemplatePath = [path]
-
-
 .. _extensionManager-googleMapsLibrary:
 
 googleMapsLibrary
------------------
+=================
 
 This is the link to the current Google Maps JavaScript Api. It is configured as **wrap** so that you
 can decide where the ApiKey has to be inserted.
@@ -180,7 +181,7 @@ can decide where the ApiKey has to be inserted.
 .. _extensionManager-googleMapsGeocodeUri:
 
 googleMapsGeocodeUri
---------------------
+====================
 
 When you're searching for an address while creating PoiCollection records maps2 starts a Geocode request to
 Google Maps Geocode API. If needed you can change that URI here.
@@ -193,7 +194,7 @@ Google Maps Geocode API. If needed you can change that URI here.
 .. _extensionManager-googleMapsJavaScriptApiKey:
 
 googleMapsJavaScriptApiKey
---------------------------
+==========================
 
 Since 2018 Google Maps needs API keys to get their services to work. So with version 2.0.0 of maps2 you can and have
 to set an API key for JavaScript based requests to Google to show the map in TYPO3 backend. Yes, this
@@ -206,7 +207,7 @@ You can register API keys here: `Google Console<http://console.developers.google
 .. _extensionManager-googleMapsGeocodeApiKey:
 
 googleMapsGeocodeApiKey
------------------------
+=======================
 
 Since 2018 Google Maps needs API keys to get their services to work. So with version 2.0.0 of maps2 you can and have
 to set an API key for Geocoding requests to Google to allow searching for latitude/longitude by a given address in
@@ -218,7 +219,7 @@ You can register API keys here: `Google Console<http://console.developers.google
 .. _extensionManager-openStreetMapGeocodeUri:
 
 openStreetMapGeocodeUri
------------------------
+=======================
 
 When you're searching for an address while creating PoiCollection records maps2 starts a Geocode request to
 Open Street Map Geocode API. If needed you can change that URI here.
@@ -231,7 +232,7 @@ Open Street Map Geocode API. If needed you can change that URI here.
 .. _extensionManager-strokeColor::
 
 strokeColor
------------
+===========
 
 Stroke color
 
@@ -239,7 +240,7 @@ Stroke color
 .. _extensionManager-strokeOpacity:
 
 strokeOpacity
--------------
+=============
 
 Stroke opacity
 
@@ -247,7 +248,7 @@ Stroke opacity
 .. _extensionManager-strokeWeight:
 
 strokeWeight
-------------
+============
 
 Stroke weight
 
@@ -255,7 +256,7 @@ Stroke weight
 .. _extensionManager-fillColor:
 
 fillColor
----------
+=========
 
 Fill color
 
@@ -263,7 +264,7 @@ Fill color
 .. _extensionManager-fillOpacity:
 
 fillOpacity
------------
+===========
 
 Fill opacity
 
@@ -271,7 +272,7 @@ Fill opacity
 .. _extensionManager-markerIconWidth:
 
 markerIconWidth
----------------
+===============
 
 Define a default width for Marker Icons in pixel. You can override this value
 individually in sys_category and PoiCollection records.
@@ -280,7 +281,7 @@ individually in sys_category and PoiCollection records.
 .. _extensionManager-markerIconHeight:
 
 markerIconHeight
-----------------
+================
 
 Define a default height for Marker Icons in pixel. You can override this value
 individually in sys_category and PoiCollection records.
@@ -289,7 +290,7 @@ individually in sys_category and PoiCollection records.
 .. _extensionManager-markerIconAnchorPosX:
 
 markerIconAnchorPosX
---------------------
+====================
 
 Which horizontal pixel on the image points the position on the Google Maps.
 You can override this value individually in sys_category and PoiCollection records.
@@ -298,7 +299,7 @@ You can override this value individually in sys_category and PoiCollection recor
 .. _extensionManager-markerIconAnchorPosY:
 
 markerIconAnchorPosY
---------------------
+====================
 
 Which vertical pixel on the image points the position on the Google Maps.
 You can override this value individually in sys_category and PoiCollection records.

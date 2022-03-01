@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+	<tt_content>
+		<uid>1</uid>
+		<pid>1</pid>
+		<hidden>0</hidden>
+		<deleted>0</deleted>
+		<t3ver_oid>0</t3ver_oid>
+		<t3ver_wsid>0</t3ver_wsid>
+		<colPos>0</colPos>
+		<CType>list</CType>
+		<list_type>maps2_maps2</list_type>
+		<header>Maps2: Point</header>
+		<pages>1,12</pages>
+		<recursive>0</recursive>
+		<pi_flexform><![CDATA[<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+			<T3FlexForms>
+				<data>
+					<sheet index="sDEF">
+						<language index="lDEF">
+							<field index="settings.poiCollection">
+								<value index="vDEF"></value>
+							</field>
+							<field index="settings.categories">
+								<value index="vDEF"></value>
+							</field>
+							<field index="settings.mapWidth">
+								<value index="vDEF">100%</value>
+							</field>
+							<field index="settings.mapHeight">
+								<value index="vDEF">300</value>
+							</field>
+						</language>
+					</sheet>
+					<sheet index="sMapOptions">
+						<language index="lDEF">
+							<field index="settings.zoom">
+								<value index="vDEF">12</value>
+							</field>
+							<field index="settings.forceZoom">
+								<value index="vDEF">0</value>
+							</field>
+							<field index="settings.zoomControl">
+								<value index="vDEF">1</value>
+							</field>
+							<field index="settings.activateScrollWheel">
+								<value index="vDEF">1</value>
+							</field>
+							<field index="settings.fullScreenControl">
+								<value index="vDEF">1</value>
+							</field>
+						</language>
+					</sheet>
+					<sheet index="sGoogleMapsOptions">
+						<language index="lDEF">
+							<field index="settings.mapTypeId">
+								<value index="vDEF">google.maps.MapTypeId.ROADMAP</value>
+							</field>
+							<field index="settings.mapTypeControl">
+								<value index="vDEF">1</value>
+							</field>
+							<field index="settings.scaleControl">
+								<value index="vDEF">1</value>
+							</field>
+							<field index="settings.streetViewControl">
+								<value index="vDEF">1</value>
+							</field>
+							<field index="settings.styles">
+								<value index="vDEF"></value>
+							</field>
+						</language>
+					</sheet>
+					<sheet index="sOpenStreetMapOptions">
+						<language index="lDEF">
+							<field index="settings.mapTile">
+								<value index="vDEF"></value>
+							</field>
+							<field index="settings.mapTileAttribution">
+								<value index="vDEF"></value>
+							</field>
+						</language>
+					</sheet>
+				</data>
+			</T3FlexForms>]]></pi_flexform>
+	</tt_content>
+</dataset>

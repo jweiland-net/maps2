@@ -11,11 +11,10 @@ namespace JWeiland\Maps2\Tests\Functional\Domain\Model;
 
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\Category;
-use JWeiland\Maps2\Domain\Model\Poi;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
+use JWeiland\Maps2\Helper\MapHelper;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
@@ -26,15 +25,9 @@ class PoiCollectionTest extends FunctionalTestCase
 {
     use ProphecyTrait;
 
-    /**
-     * @var PoiCollection
-     */
-    protected $subject;
+    protected PoiCollection $subject;
 
-    /**
-     * @var ExtConf
-     */
-    protected $extConf;
+    protected ExtConf $extConf;
 
     /**
      * @var array
@@ -47,15 +40,20 @@ class PoiCollectionTest extends FunctionalTestCase
     {
         parent::setUp();
 
-        $this->extConf = new ExtConf([]);
-        GeneralUtility::setSingletonInstance(ExtConf::class, $this->extConf);
+        $this->extConf = new ExtConf();
+
         $this->subject = new PoiCollection();
+        $this->subject->injectExtConf($this->extConf);
+        $this->subject->injectMapHelper(new MapHelper($this->extConf));
     }
 
     protected function tearDown(): void
     {
-        unset($this->subject);
-        GeneralUtility::resetSingletonInstances([]);
+        unset(
+            $this->subject,
+            $this->extConf
+        );
+
         parent::tearDown();
     }
 
@@ -206,64 +204,10 @@ class PoiCollectionTest extends FunctionalTestCase
     /**
      * @test
      */
-    public function getPoisInitiallyReturnsObjectStorage(): void
+    public function getPoisInitiallyReturnsEmptyArray(): void
     {
-        self::assertEquals(
-            new ObjectStorage(),
-            $this->subject->getPois()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function setPoisSetsPois(): void
-    {
-        $object = new Poi();
-        $objectStorage = new ObjectStorage();
-        $objectStorage->attach($object);
-        $this->subject->setPois($objectStorage);
-
         self::assertSame(
-            $objectStorage,
-            $this->subject->getPois()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function addPoiAddsOnePoi(): void
-    {
-        $objectStorage = new ObjectStorage();
-        $this->subject->setPois($objectStorage);
-
-        $object = new Poi();
-        $this->subject->addPoi($object);
-
-        $objectStorage->attach($object);
-
-        self::assertSame(
-            $objectStorage,
-            $this->subject->getPois()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function removePoiRemovesOnePoi(): void
-    {
-        $object = new Poi();
-        $objectStorage = new ObjectStorage();
-        $objectStorage->attach($object);
-        $this->subject->setPois($objectStorage);
-
-        $this->subject->removePoi($object);
-        $objectStorage->detach($object);
-
-        self::assertSame(
-            $objectStorage,
+            [],
             $this->subject->getPois()
         );
     }
@@ -431,6 +375,7 @@ class PoiCollectionTest extends FunctionalTestCase
         $object = new FileReference();
         $objectStorage = new ObjectStorage();
         $objectStorage->attach($object);
+
         $this->subject->setInfoWindowImages($objectStorage);
 
         self::assertSame(
@@ -466,9 +411,10 @@ class PoiCollectionTest extends FunctionalTestCase
         $object = new FileReference();
         $objectStorage = new ObjectStorage();
         $objectStorage->attach($object);
-        $this->subject->setInfoWindowImages($objectStorage);
 
+        $this->subject->setInfoWindowImages($objectStorage);
         $this->subject->removeInfoWindowImage($object);
+
         $objectStorage->detach($object);
 
         self::assertSame(
@@ -496,6 +442,7 @@ class PoiCollectionTest extends FunctionalTestCase
         $object = new FileReference();
         $objectStorage = new ObjectStorage();
         $objectStorage->attach($object);
+
         $this->subject->setMarkerIcons($objectStorage);
 
         self::assertSame(
@@ -513,6 +460,7 @@ class PoiCollectionTest extends FunctionalTestCase
         $this->subject->setMarkerIcons($objectStorage);
 
         $object = new FileReference();
+
         $this->subject->addMarkerIcon($object);
 
         $objectStorage->attach($object);
@@ -531,9 +479,10 @@ class PoiCollectionTest extends FunctionalTestCase
         $object = new FileReference();
         $objectStorage = new ObjectStorage();
         $objectStorage->attach($object);
-        $this->subject->setMarkerIcons($objectStorage);
 
+        $this->subject->setMarkerIcons($objectStorage);
         $this->subject->removeMarkerIcon($object);
+
         $objectStorage->detach($object);
 
         self::assertSame(
@@ -548,7 +497,7 @@ class PoiCollectionTest extends FunctionalTestCase
     public function getMarkerIconWidthInitiallyReturnsZero(): void
     {
         self::assertSame(
-            0,
+            25,
             $this->subject->getMarkerIconWidth()
         );
     }
@@ -577,9 +526,11 @@ class PoiCollectionTest extends FunctionalTestCase
     public function setMarkerIconWidthWillGetValueFromCategoryIfEmpty(): void
     {
         $fileReference = $this->prophesize(FileReference::class);
+
         $category = new Category();
         $category->getMaps2MarkerIcons()->attach($fileReference);
         $category->setMaps2MarkerIconWidth(123456);
+
         $this->subject->getCategories()->attach($category);
 
         self::assertSame(
@@ -595,9 +546,11 @@ class PoiCollectionTest extends FunctionalTestCase
     {
         $this->subject->setMarkerIconWidth(123456);
         $fileReference = $this->prophesize(FileReference::class);
+
         $category = new Category();
         $category->getMaps2MarkerIcons()->attach($fileReference);
         $category->setMaps2MarkerIconWidth(654321);
+
         $this->subject->getCategories()->attach($category);
 
         self::assertSame(
@@ -639,7 +592,7 @@ class PoiCollectionTest extends FunctionalTestCase
     public function getMarkerIconHeightInitiallyReturnsZero(): void
     {
         self::assertSame(
-            0,
+            40,
             $this->subject->getMarkerIconHeight()
         );
     }
@@ -668,9 +621,11 @@ class PoiCollectionTest extends FunctionalTestCase
     public function setMarkerIconHeightWillGetValueFromCategoryIfEmpty(): void
     {
         $fileReference = $this->prophesize(FileReference::class);
+
         $category = new Category();
         $category->getMaps2MarkerIcons()->attach($fileReference);
         $category->setMaps2MarkerIconHeight(123456);
+
         $this->subject->getCategories()->attach($category);
 
         self::assertSame(
@@ -686,9 +641,11 @@ class PoiCollectionTest extends FunctionalTestCase
     {
         $this->subject->setMarkerIconHeight(123456);
         $fileReference = $this->prophesize(FileReference::class);
+
         $category = new Category();
         $category->getMaps2MarkerIcons()->attach($fileReference);
         $category->setMaps2MarkerIconHeight(654321);
+
         $this->subject->getCategories()->attach($category);
 
         self::assertSame(
@@ -716,7 +673,7 @@ class PoiCollectionTest extends FunctionalTestCase
     public function getMarkerIconAnchorPosXInitiallyReturnsZero(): void
     {
         self::assertSame(
-            0,
+            13,
             $this->subject->getMarkerIconAnchorPosX()
         );
     }
@@ -727,6 +684,7 @@ class PoiCollectionTest extends FunctionalTestCase
     public function setMarkerIconAnchorPosXSetsMarkerIconAnchorPosX(): void
     {
         $image = $this->prophesize(FileReference::class);
+
         $images = new ObjectStorage();
         $images->attach($image->reveal());
 
@@ -745,9 +703,11 @@ class PoiCollectionTest extends FunctionalTestCase
     public function setMarkerIconAnchorPosXWillGetValueFromCategoryIfEmpty(): void
     {
         $fileReference = $this->prophesize(FileReference::class);
+
         $category = new Category();
         $category->getMaps2MarkerIcons()->attach($fileReference);
         $category->setMaps2MarkerIconAnchorPosX(123456);
+
         $this->subject->getCategories()->attach($category);
 
         self::assertSame(
@@ -763,9 +723,11 @@ class PoiCollectionTest extends FunctionalTestCase
     {
         $this->subject->setMarkerIconAnchorPosX(123456);
         $fileReference = $this->prophesize(FileReference::class);
+
         $category = new Category();
         $category->getMaps2MarkerIcons()->attach($fileReference);
         $category->setMaps2MarkerIconAnchorPosX(654321);
+
         $this->subject->getCategories()->attach($category);
 
         self::assertSame(
@@ -821,7 +783,7 @@ class PoiCollectionTest extends FunctionalTestCase
     public function getMarkerIconAnchorPosYInitiallyReturnsZero(): void
     {
         self::assertSame(
-            0,
+            40,
             $this->subject->getMarkerIconAnchorPosY()
         );
     }
@@ -832,6 +794,7 @@ class PoiCollectionTest extends FunctionalTestCase
     public function setMarkerIconAnchorPosYSetsMarkerIconAnchorPosY(): void
     {
         $image = $this->prophesize(FileReference::class);
+
         $images = new ObjectStorage();
         $images->attach($image->reveal());
 
@@ -850,9 +813,11 @@ class PoiCollectionTest extends FunctionalTestCase
     public function setMarkerIconAnchorPosYWillGetValueFromCategoryIfEmpty(): void
     {
         $fileReference = $this->prophesize(FileReference::class);
+
         $category = new Category();
         $category->getMaps2MarkerIcons()->attach($fileReference);
         $category->setMaps2MarkerIconAnchorPosY(123456);
+
         $this->subject->getCategories()->attach($category);
 
         self::assertSame(
@@ -868,9 +833,11 @@ class PoiCollectionTest extends FunctionalTestCase
     {
         $this->subject->setMarkerIconAnchorPosY(123456);
         $fileReference = $this->prophesize(FileReference::class);
+
         $category = new Category();
         $category->getMaps2MarkerIcons()->attach($fileReference);
         $category->setMaps2MarkerIconAnchorPosY(654321);
+
         $this->subject->getCategories()->attach($category);
 
         self::assertSame(
@@ -925,6 +892,7 @@ class PoiCollectionTest extends FunctionalTestCase
         $object = new Category();
         $objectStorage = new ObjectStorage();
         $objectStorage->attach($object);
+
         $this->subject->setCategories($objectStorage);
 
         self::assertSame(
@@ -942,6 +910,7 @@ class PoiCollectionTest extends FunctionalTestCase
         $this->subject->setCategories($objectStorage);
 
         $object = new Category();
+
         $this->subject->addCategory($object);
 
         $objectStorage->attach($object);
@@ -960,9 +929,11 @@ class PoiCollectionTest extends FunctionalTestCase
         $object = new Category();
         $objectStorage = new ObjectStorage();
         $objectStorage->attach($object);
+
         $this->subject->setCategories($objectStorage);
 
         $this->subject->removeCategory($object);
+
         $objectStorage->detach($object);
 
         self::assertSame(

@@ -26,9 +26,6 @@ class CacheService
      * In multilingual environments, where UID is always the same, we have to build a more unique
      * Cache Identifier.
      *
-     * @param string $prefix A prefix you can prepend to the generated CacheIdentifier
-     * @param array $poiCollection
-     * @return string
      * @throws \Exception
      */
     public function getCacheIdentifier(array $poiCollection, string $prefix = 'infoWindow'): string
@@ -55,18 +52,14 @@ class CacheService
      * Add UID and PID of PoiCollection as Cache-Tags to Cache-Entry.
      * Please do not use "infoWindowPid" and "infoWindowUid" as Cache-Tag-Prefix in your template,
      * as we will override them here.
-     *
-     * @param array $poiCollection
-     * @param array $cacheTags
-     * @return array
      */
     public function getCacheTags(array $poiCollection, array $cacheTags = []): array
     {
         return array_merge(
             $cacheTags,
             [
-                'infoWindowPid' . $poiCollection['pid'] ?? 0,
-                'infoWindowUid' . $poiCollection['uid'] ?? 0,
+                'infoWindowPid' . ($poiCollection['pid'] ?? 0),
+                'infoWindowUid' . ($poiCollection['uid'] ?? 0),
             ]
         );
     }
@@ -75,9 +68,6 @@ class CacheService
      * In case of hooks where we have PoiCollection as array, we can assign PoiCollection directly
      * to getCacheIdentifier. But in case of ViewHelpers we have a PoiCollection object. You can use
      * this method to prepare/sanitize PoiCollection objects for use with getCacheIdentifier/getCacheTags.
-     *
-     * @param PoiCollection $poiCollection
-     * @return array
      */
     public function preparePoiCollectionForCacheMethods(PoiCollection $poiCollection): array
     {
@@ -92,7 +82,6 @@ class CacheService
     /**
      * Returns the calculated (incl. fallback) sys_language_uid
      *
-     * @return int
      * @throws \Exception
      */
     protected function getLanguageUid(): int
@@ -101,17 +90,12 @@ class CacheService
             throw new \Exception('getLanguageId can only be called from FE, as we have to add the true language ID to PoiCollection');
         }
 
-        if (version_compare(TYPO3_branch, '9.4', '<')) {
-            $languageId = (int)$GLOBALS['TSFE']->sys_language_uid;
-        } else {
-            $context = GeneralUtility::makeInstance(Context::class);
-            $languageId = (int)$context->getPropertyFromAspect('language', 'id');
-        }
-        return $languageId;
+        return (int)GeneralUtility::makeInstance(Context::class)
+            ->getPropertyFromAspect('language', 'id');
     }
 
     protected function isFrontendEnvironment(): bool
     {
-        return (defined('TYPO3_MODE') && TYPO3_MODE === 'FE') ?: false;
+        return defined('TYPO3_MODE') && TYPO3_MODE === 'FE';
     }
 }

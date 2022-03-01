@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Helper;
 
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageQueue;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
@@ -27,12 +28,12 @@ class MessageHelper
      */
     protected $flashMessageService;
 
-    public function __construct(FlashMessageService $flashMessageService = null)
+    public function __construct(FlashMessageService $flashMessageService)
     {
-        $this->flashMessageService = $flashMessageService ?? GeneralUtility::makeInstance(FlashMessageService::class);
+        $this->flashMessageService = $flashMessageService;
     }
 
-    public function addFlashMessage(string $message, string $title = '', int $severity = FlashMessage::OK)
+    public function addFlashMessage(string $message, string $title = '', int $severity = AbstractMessage::OK): void
     {
         // We activate storeInSession, so that messages can be displayed when click on Save&Close button.
         $flashMessage = GeneralUtility::makeInstance(
@@ -47,18 +48,18 @@ class MessageHelper
     }
 
     /**
-     * @param bool $flush
      * @return FlashMessage[]
      */
-    public function getAllFlashMessages($flush = true): array
+    public function getAllFlashMessages(bool $flush = true): array
     {
         if ($flush) {
             return $this->getFlashMessageQueue()->getAllMessagesAndFlush();
         }
+
         return $this->getFlashMessageQueue()->getAllMessages();
     }
 
-    public function hasMessages()
+    public function hasMessages(): bool
     {
         return !empty($this->getAllFlashMessages(false));
     }
@@ -81,69 +82,89 @@ class MessageHelper
         return $this->getFlashMessageQueue()->getAllMessagesAndFlush($severity);
     }
 
-    public function hasErrorMessages()
+    public function hasErrorMessages(): bool
     {
         return !empty($this->getErrorMessages(false));
     }
 
+    /**
+     * @return AbstractMessage[]
+     */
     public function getErrorMessages(bool $flush = true): array
     {
         if ($flush) {
-            return $this->getFlashMessagesBySeverityAndFlush(FlashMessage::ERROR);
+            return $this->getFlashMessagesBySeverityAndFlush(AbstractMessage::ERROR);
         }
-        return $this->getFlashMessagesBySeverity(FlashMessage::ERROR);
+
+        return $this->getFlashMessagesBySeverity(AbstractMessage::ERROR);
     }
 
-    public function hasWarningMessages()
+    public function hasWarningMessages(): bool
     {
         return !empty($this->getWarningMessages(false));
     }
 
+    /**
+     * @return AbstractMessage[]
+     */
     public function getWarningMessages(bool $flush = true): array
     {
         if ($flush) {
-            return $this->getFlashMessagesBySeverityAndFlush(FlashMessage::WARNING);
+            return $this->getFlashMessagesBySeverityAndFlush(AbstractMessage::WARNING);
         }
-        return $this->getFlashMessagesBySeverity(FlashMessage::WARNING);
+
+        return $this->getFlashMessagesBySeverity(AbstractMessage::WARNING);
     }
 
-    public function hasOkMessages()
+    public function hasOkMessages(): bool
     {
         return !empty($this->getOkMessages(false));
     }
 
+    /**
+     * @return AbstractMessage[]
+     */
     public function getOkMessages(bool $flush = true): array
     {
         if ($flush) {
-            return $this->getFlashMessagesBySeverityAndFlush(FlashMessage::OK);
+            return $this->getFlashMessagesBySeverityAndFlush(AbstractMessage::OK);
         }
-        return $this->getFlashMessagesBySeverity(FlashMessage::OK);
+
+        return $this->getFlashMessagesBySeverity(AbstractMessage::OK);
     }
 
-    public function hasInfoMessages()
+    public function hasInfoMessages(): bool
     {
         return !empty($this->getInfoMessages(false));
     }
 
+    /**
+     * @return AbstractMessage[]
+     */
     public function getInfoMessages(bool $flush = true): array
     {
         if ($flush) {
-            return $this->getFlashMessagesBySeverityAndFlush(FlashMessage::INFO);
+            return $this->getFlashMessagesBySeverityAndFlush(AbstractMessage::INFO);
         }
-        return $this->getFlashMessagesBySeverity(FlashMessage::INFO);
+
+        return $this->getFlashMessagesBySeverity(AbstractMessage::INFO);
     }
 
-    public function hasNoticeMessages()
+    public function hasNoticeMessages(): bool
     {
         return !empty($this->getNoticeMessages(false));
     }
 
+    /**
+     * @return AbstractMessage[]
+     */
     public function getNoticeMessages(bool $flush = true): array
     {
         if ($flush) {
-            return $this->getFlashMessagesBySeverityAndFlush(FlashMessage::NOTICE);
+            return $this->getFlashMessagesBySeverityAndFlush(AbstractMessage::NOTICE);
         }
-        return $this->getFlashMessagesBySeverity(FlashMessage::NOTICE);
+
+        return $this->getFlashMessagesBySeverity(AbstractMessage::NOTICE);
     }
 
     protected function getFlashMessageQueue(): FlashMessageQueue

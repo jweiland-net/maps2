@@ -13,7 +13,7 @@ namespace JWeiland\Maps2\Client;
 
 use JWeiland\Maps2\Client\Request\RequestInterface;
 use JWeiland\Maps2\Helper\MessageHelper;
-use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -21,14 +21,11 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 abstract class AbstractClient implements ClientInterface
 {
-    /**
-     * @var MessageHelper
-     */
-    protected $messageHelper;
+    protected MessageHelper $messageHelper;
 
-    public function __construct(MessageHelper $messageHelper = null)
+    public function __construct(MessageHelper $messageHelper)
     {
-        $this->messageHelper = $messageHelper ?? GeneralUtility::makeInstance(MessageHelper::class);
+        $this->messageHelper = $messageHelper;
     }
 
     public function processRequest(RequestInterface $request): array
@@ -37,17 +34,17 @@ abstract class AbstractClient implements ClientInterface
             $this->messageHelper->addFlashMessage(
                 'URI is empty or contains invalid chars. URI: ' . $request->getUri(),
                 'Invalid request URI',
-                FlashMessage::ERROR
+                AbstractMessage::ERROR
             );
             return [];
         }
 
         $processedResponse = [];
         $clientReport = [];
-        $response = GeneralUtility::getUrl($request->getUri(), 0, null, $clientReport);
+        $response = GeneralUtility::getUrl($request->getUri());
         $this->checkClientReportForErrors($clientReport);
         if (!$this->hasErrors()) {
-            $processedResponse = json_decode($response, true);
+            $processedResponse = json_decode($response, true, 512, JSON_THROW_ON_ERROR);
             $this->checkResponseForErrors($processedResponse);
         }
 
@@ -64,7 +61,7 @@ abstract class AbstractClient implements ClientInterface
     }
 
     /**
-     * @return FlashMessage[]
+     * @return AbstractMessage[]
      */
     public function getErrors(): array
     {
@@ -73,10 +70,8 @@ abstract class AbstractClient implements ClientInterface
 
     /**
      * This method will only check the report of the client and not the result itself.
-     *
-     * @param array $clientReport
      */
-    protected function checkClientReportForErrors(array $clientReport)
+    protected function checkClientReportForErrors(array $clientReport): void
     {
         if (!empty($clientReport['message'])) {
             $this->messageHelper->addFlashMessage(
@@ -87,5 +82,5 @@ abstract class AbstractClient implements ClientInterface
         }
     }
 
-    abstract protected function checkResponseForErrors(?array $processedResponse);
+    abstract protected function checkResponseForErrors(?array $processedResponse): void;
 }

@@ -1,8 +1,7 @@
-<html
-	xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-	xmlns:m="http://typo3.org/ns/JWeiland/Maps2/ViewHelpers"
-	data-namespace-typo3-fluid="true"
->
+<html lang="en"
+			xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+			xmlns:m="http://typo3.org/ns/JWeiland/Maps2/ViewHelpers"
+			data-namespace-typo3-fluid="true">
 
 <f:if condition="{m:cache.hasCache(poiCollection: poiCollection)}">
 	<f:then>
@@ -10,47 +9,10 @@
 	</f:then>
 	<f:else>
 		<f:variable name="content">
-			<f:render section="infoWindowContent" arguments="{poiCollection: poiCollection}" />
+			<f:render partial="InfoWindowContent" arguments="{poiCollection: poiCollection}" />
 		</f:variable>
 		<m:cache.setCache data="{content -> f:format.raw()}" poiCollection="{poiCollection}" />
 		{content -> f:format.raw()}
 	</f:else>
 </f:if>
-
-<f:section name="infoWindowContent">
-	<f:if condition="{poiCollection.infoWindowImages}">
-		<div class="imagesWrapper">
-			<f:for each="{poiCollection.infoWindowImages}" as="image">
-				<f:if condition="{image.originalResource}">
-					<f:if condition="{image.originalResource.originalFile}">
-						<f:image
-							image="{image.originalResource}"
-							width="{settings.infoWindow.image.width}"
-							height="{settings.infoWindow.image.height}"
-							alt="{image.originalResource.properties.alternative}"
-							title="{image.originalResource.properties.title}"
-						/>
-					</f:if>
-				</f:if>
-			</f:for>
-		</div>
-	</f:if>
-
-	<div class="titleWrapper"><strong>{poiCollection.title}</strong></div>
-
-	<div class="addressWrapper">
-		<f:for each="{poiCollection.address -> m:trimExplode()}" as="address" iteration="iterator">
-			<f:if condition="{iterator.isLast}">
-				<f:else>
-					<div>{address}</div>
-				</f:else>
-			</f:if>
-		</f:for>
-	</div>
-
-	<f:if condition="{poiCollection}">
-		<br />
-		<div class="infoWindowContent">{poiCollection.infoWindowContent -> f:format.html()}</div>
-	</f:if>
-</f:section>
 </html>

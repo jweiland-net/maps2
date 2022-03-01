@@ -5,11 +5,10 @@ CREATE TABLE tx_maps2_domain_model_poicollection (
 	map_provider varchar(25) DEFAULT '' NOT NULL,
 	collection_type varchar(255) DEFAULT '' NOT NULL,
 	title varchar(255) DEFAULT '' NOT NULL,
-	configuration_map varchar(255) DEFAULT '' NOT NULL,
+	configuration_map text,
 	latitude double(11,6) DEFAULT '0.000000' NOT NULL,
 	longitude double(11,6) DEFAULT '0.000000' NOT NULL,
 	radius int(11) unsigned DEFAULT '0' NOT NULL,
-	pois int(11) unsigned DEFAULT '0' NOT NULL,
 	stroke_color varchar(7) DEFAULT '' NOT NULL,
 	stroke_opacity varchar(5) DEFAULT '' NOT NULL,
 	stroke_weight varchar(5) DEFAULT '' NOT NULL,
@@ -23,17 +22,7 @@ CREATE TABLE tx_maps2_domain_model_poicollection (
 	marker_icon_height int(11) unsigned DEFAULT '0' NOT NULL,
 	marker_icon_anchor_pos_x int(11) unsigned DEFAULT '0' NOT NULL,
 	marker_icon_anchor_pos_y int(11) unsigned DEFAULT '0' NOT NULL,
-);
-
-#
-# Table structure for table 'tx_maps2_domain_model_poi'
-#
-CREATE TABLE tx_maps2_domain_model_poi (
-	poicollection int(11) unsigned DEFAULT '0' NOT NULL,
-
-	latitude double(11,6) DEFAULT '0.000000' NOT NULL,
-	longitude double(11,6) DEFAULT '0.000000' NOT NULL,
-	pos_index int(11) unsigned DEFAULT '0' NOT NULL,
+	categories int(11) DEFAULT '0' NOT NULL
 );
 
 #

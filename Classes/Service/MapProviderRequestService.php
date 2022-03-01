@@ -11,29 +11,30 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Service;
 
-use JWeiland\Maps2\Configuration\ExtConf;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
+use JWeiland\Maps2\Helper\MapHelper;
 
 /**
  * A non extbase orientated service which you can use from nearly everywhere,
  * to check, if a Map should be shown in FE or not.
+ *
+ * @deprecated
  */
 class MapProviderRequestService
 {
+    protected MapHelper $mapHelper;
+
+    public function __construct(MapHelper $mapHelper)
+    {
+        $this->mapHelper = $mapHelper;
+    }
+
+    /**
+     * @deprecated
+     */
     public function isRequestToMapProviderAllowed(): bool
     {
-        $extConf = GeneralUtility::makeInstance(ExtConf::class);
+        trigger_error('Method MapProviderRequestService::isRequestToMapProviderAllowed is deprecated and has been moved to MapHelper::isRequestToMapProviderAllowed.', E_USER_DEPRECATED);
 
-        if ($extConf->getExplicitAllowMapProviderRequests()) {
-            if ($extConf->getExplicitAllowMapProviderRequestsBySessionOnly()) {
-                return (bool)$_SESSION['mapProviderRequestsAllowedForMaps2'];
-            }
-            if ($GLOBALS['TSFE'] instanceof TypoScriptFrontendController) {
-                return (bool)$GLOBALS['TSFE']->fe_user->getSessionData('mapProviderRequestsAllowedForMaps2');
-            }
-            return false;
-        }
-        return true;
+        return $this->mapHelper->isRequestToMapProviderAllowed();
     }
 }

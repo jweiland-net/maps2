@@ -109,6 +109,7 @@
 							<label>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:forceZoom</label>
 							<config>
 								<type>check</type>
+								<renderType>checkboxToggle</renderType>
 								<default>0</default>
 							</config>
 						</TCEforms>
@@ -118,6 +119,7 @@
 							<label>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:zoomControl</label>
 							<config>
 								<type>check</type>
+								<renderType>checkboxToggle</renderType>
 								<default>1</default>
 							</config>
 						</TCEforms>
@@ -127,6 +129,7 @@
 							<label>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:activateScrollWheel</label>
 							<config>
 								<type>check</type>
+								<renderType>checkboxToggle</renderType>
 								<default>1</default>
 							</config>
 						</TCEforms>
@@ -136,6 +139,7 @@
 							<label>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:fullScreenControl</label>
 							<config>
 								<type>check</type>
+								<renderType>checkboxToggle</renderType>
 								<default>1</default>
 							</config>
 						</TCEforms>
@@ -182,6 +186,7 @@
 							<label>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:mapTypeControl</label>
 							<config>
 								<type>check</type>
+								<renderType>checkboxToggle</renderType>
 								<default>1</default>
 							</config>
 						</TCEforms>
@@ -191,6 +196,7 @@
 							<label>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:scaleControl</label>
 							<config>
 								<type>check</type>
+								<renderType>checkboxToggle</renderType>
 								<default>1</default>
 							</config>
 						</TCEforms>
@@ -200,6 +206,7 @@
 							<label>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:streetViewControl</label>
 							<config>
 								<type>check</type>
+								<renderType>checkboxToggle</renderType>
 								<default>1</default>
 							</config>
 						</TCEforms>

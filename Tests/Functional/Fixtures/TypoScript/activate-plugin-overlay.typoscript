@@ -1,0 +1,4 @@
+tt_content = USER_INT
+tt_content.userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
+tt_content.extensionName = Maps2
+tt_content.pluginName = Overlay

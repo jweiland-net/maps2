@@ -1,0 +1,16 @@
+<html lang="en"
+			xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+			xmlns:m="http://typo3.org/ns/JWeiland/Maps2/ViewHelpers"
+			data-namespace-typo3-fluid="true">
+
+<f:comment><!-- Use this section to show a map in the templates of your own extension. This is a replacement for old PoiCollection widget --></f:comment>
+<f:section name="showMap">
+	<m:getEnvironment>
+		<div id="maps2-{environment.contentRecord.uid}"
+				 class="maps2"
+				 data-override="{override -> m:convertToJson()}"
+				 data-environment="{environment -> m:convertToJson()}"
+				 data-pois="{poiCollections -> m:convertToJson()}"></div>
+	</m:getEnvironment>
+</f:section>
+</html>

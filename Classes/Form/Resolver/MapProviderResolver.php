@@ -13,7 +13,7 @@ namespace JWeiland\Maps2\Form\Resolver;
 
 use JWeiland\Maps2\Form\Element\GoogleMapsElement;
 use JWeiland\Maps2\Form\Element\OpenStreetMapElement;
-use JWeiland\Maps2\Service\MapService;
+use JWeiland\Maps2\Helper\MapHelper;
 use TYPO3\CMS\Backend\Form\NodeFactory;
 use TYPO3\CMS\Backend\Form\NodeResolverInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -23,43 +23,27 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class MapProviderResolver implements NodeResolverInterface
 {
-    /**
-     * Global options from NodeFactory
-     *
-     * @var array
-     */
-    protected $data = [];
+    protected array $data = [];
+
+    protected MapHelper $mapHelper;
 
     public function __construct(NodeFactory $nodeFactory, array $data)
     {
         $this->data = $data;
+        $this->mapHelper = GeneralUtility::makeInstance(MapHelper::class);
     }
 
     /**
      * Returns either a map based on Google Maps or Open Street Map
      *
-     * @return string|null New class name or void if this resolver does not change current class name.
+     * @return string New class name
      */
-    public function resolve()
+    public function resolve(): string
     {
-        $mapService = GeneralUtility::makeInstance(MapService::class);
-        if ($mapService->getMapProvider($this->data['databaseRow']) === 'osm') {
+        if ($this->mapHelper->getMapProvider($this->data['databaseRow']) === 'osm') {
             return OpenStreetMapElement::class;
         }
-        return GoogleMapsElement::class;
-    }
 
-    /**
-     * @param array $databaseRow
-     * @return string
-     */
-    protected function getCollectionType(array $databaseRow): string
-    {
-        if (is_array($databaseRow['collection_type'])) {
-            $collectionType = current($databaseRow['collection_type']);
-        } else {
-            $collectionType = 'Point';
-        }
-        return $collectionType;
+        return GoogleMapsElement::class;
     }
 }

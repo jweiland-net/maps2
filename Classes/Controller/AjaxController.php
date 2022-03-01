@@ -26,25 +26,15 @@ use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
  */
 class AjaxController extends ActionController
 {
-    /**
-     * @var array
-     */
-    public $errors = [];
+    public array $errors = [];
 
-    /**
-     * @var PoiCollectionRepository
-     */
-    public $poiCollectionRepository;
+    public PoiCollectionRepository $poiCollectionRepository;
 
     public function injectPoiCollectionRepository(PoiCollectionRepository $poiCollectionRepository): void
     {
         $this->poiCollectionRepository = $poiCollectionRepository;
     }
 
-    /**
-     * @param string $method
-     * @return string
-     */
     public function processAction(string $method): string
     {
         $response = [
@@ -59,7 +49,7 @@ class AjaxController extends ActionController
 
         $response['errors'] = $this->errors;
 
-        return \json_encode($response);
+        return \json_encode($response, JSON_THROW_ON_ERROR);
     }
 
     public function renderInfoWindowContentAction(int $poiCollectionUid): string
@@ -87,15 +77,12 @@ class AjaxController extends ActionController
      * For performance reasons we do not with PoiCollection object here, that's your work.
      * That way you can decide to use fast array by Doctrine or slow (but feature rich)
      * PoiCollection object.
-     *
-     * @param int $poiCollectionUid
-     * @return string
      */
     protected function emitRenderInfoWindowSignal(int $poiCollectionUid): string
     {
         $infoWindowContent = '';
 
-        $signalSlotDispatcher = $this->objectManager->get(Dispatcher::class);
+        $signalSlotDispatcher = GeneralUtility::makeInstance(Dispatcher::class);
         $returnedArguments = $signalSlotDispatcher->dispatch(
             self::class,
             'renderInfoWindow',

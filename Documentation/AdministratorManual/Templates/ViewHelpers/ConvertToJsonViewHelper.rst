@@ -1,5 +1,6 @@
 .. include:: ../../../Includes.txt
 
+=======================
 ConvertToJsonViewHelper
 =======================
 
@@ -8,10 +9,10 @@ This is a ViewHelper to convert an array into JSON format.
 **Type:** Basic
 
 Examples
---------
+========
 
 Basic example
-~~~~~~~~~~~~~
+-------------
 
 Code: ::
 

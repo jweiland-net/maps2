@@ -3,6 +3,7 @@
 
 .. _userManual:
 
+===========
 User manual
 ===========
 

@@ -10,8 +10,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        typo3: [^9.5, ^10.4]
+        typo3: [^10.4, ^11.5]
         php: ['7.4']
+        include:
+          - typo3: ^11.5
+            php: '8.0'
 
     services:
       mysql:
@@ -59,6 +62,8 @@ jobs:
       - name: Install dependencies with typo3/cms-core:${{ matrix.typo3 }}
         run: |
           composer require typo3/cms-core:${{ matrix.typo3 }} --no-progress
+          # EXT:extensionmanager is needed by static_info_tables for TYPO3 10
+          composer require typo3/cms-extensionmanager:${{ matrix.typo3 }} --no-progress
           git checkout composer.json
 
       - name: php-cs-fixer

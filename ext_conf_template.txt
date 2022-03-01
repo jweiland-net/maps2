@@ -2,6 +2,8 @@
 mapProvider = both
 # cat=basic; type=options[Google=gm,OpenStreetMap=osm]; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:defaultMapProvider
 defaultMapProvider = gm
+# cat=basic; type=options[Empty=Empty,Point=Point,Radius=Radius,Area=Area,Route=Route]; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:defaultMapType
+defaultMapType = Empty
 # cat=basic; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:defaultCountry
 defaultCountry =
 # cat=basic; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:defaultLatitude
@@ -16,8 +18,6 @@ explicitAllowMapProviderRequests = 0
 explicitAllowMapProviderRequestsBySessionOnly = 0
 # cat=basic; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:infoWindowContentTemplatePath
 infoWindowContentTemplatePath = EXT:maps2/Resources/Private/Templates/InfoWindowContent.html
-# cat=basic; type=string; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:allowMapTemplatePath
-allowMapTemplatePath = EXT:maps2/Resources/Private/Templates/AllowMapForm.html
 
 # cat=gm; type=wrap; label=LLL:EXT:maps2/Resources/Private/Language/ExtConf.xlf:googleMapsLibrary
 googleMapsLibrary = https://maps.googleapis.com/maps/api/js?key=|&libraries=places

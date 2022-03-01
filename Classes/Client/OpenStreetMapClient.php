@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Client;
 
-use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
@@ -19,20 +19,17 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  */
 class OpenStreetMapClient extends AbstractClient
 {
-    /**
-     * @var string
-     */
-    protected $title = 'Open Street Map';
+    protected string $title = 'Open Street Map';
 
-    protected function checkResponseForErrors(?array $response)
+    protected function checkResponseForErrors(?array $response): void
     {
         if ($response === null) {
             $this->messageHelper->addFlashMessage(
                 'The response of Open Street Map was not a valid JSON response.',
                 'Invalid JSON response',
-                FlashMessage::ERROR
+                AbstractMessage::ERROR
             );
-        } elseif (is_array($response) && empty($response)) {
+        } elseif ($response === []) {
             $this->messageHelper->addFlashMessage(
                 LocalizationUtility::translate(
                     'error.noPositionsFound.body',
@@ -45,7 +42,7 @@ class OpenStreetMapClient extends AbstractClient
                     'error.noPositionsFound.title',
                     'maps2'
                 ),
-                FlashMessage::ERROR
+                AbstractMessage::ERROR
             );
         }
     }

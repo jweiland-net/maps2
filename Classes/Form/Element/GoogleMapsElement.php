@@ -12,59 +12,28 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Form\Element;
 
 use JWeiland\Maps2\Configuration\ExtConf;
-use JWeiland\Maps2\Domain\Model\PoiCollection;
-use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
-use JWeiland\Maps2\Helper\MessageHelper;
+use JWeiland\Maps2\Helper\MapHelper;
 use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
-use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Core\Utility\StringUtility;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
-use TYPO3\CMS\Extbase\Security\Cryptography\HashService;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
-/**
- * Special backend FormEngine element to show Google Maps
+/*
+ * Special backend FormEngine element to show Google Maps.
+ * This is a very reduced InputTextElement. The textfield itself will not be displayed,
+ * but it contains the JSON for all the POIs.
  */
 class GoogleMapsElement extends AbstractFormElement
 {
-    /**
-     * @var ObjectManager
-     */
-    protected $objectManager;
+    protected ExtConf $extConf;
 
-    /**
-     * @var ExtConf
-     */
-    protected $extConf;
+    protected PageRenderer $pageRenderer;
 
-    /**
-     * @var HashService
-     */
-    protected $hashService;
-
-    /**
-     * @var StandaloneView
-     */
-    protected $view;
-
-    /**
-     * @var PageRenderer
-     */
-    protected $pageRenderer;
-
-    /**
-     * @var PoiCollectionRepository
-     */
-    protected $poiCollectionRepository;
-
-    /**
-     * @var MessageHelper
-     */
-    protected $messageHelper;
+    protected MapHelper $mapHelper;
 
     /**
      * Default field information enabled for this element.
@@ -77,54 +46,29 @@ class GoogleMapsElement extends AbstractFormElement
         ],
     ];
 
-    public function init()
-    {
-        $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
-        $this->hashService = GeneralUtility::makeInstance(HashService::class);
-        $this->view = GeneralUtility::makeInstance(StandaloneView::class);
-        $this->pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
-        $this->poiCollectionRepository = $this->objectManager->get(PoiCollectionRepository::class);
-        $this->messageHelper = GeneralUtility::makeInstance(MessageHelper::class);
-
-        $this->checkApiKeys();
-    }
-
-    /**
-     * Check configured API Keys
-     */
-    protected function checkApiKeys()
-    {
-        if (empty($this->extConf->getGoogleMapsJavaScriptApiKey())) {
-            $this->messageHelper->addFlashMessage(
-                'You have forgotten to set Google Maps JavaScript ApiKey in Extensionmanager.',
-                'Missing JS API Key',
-                FlashMessage::ERROR
-            );
-        }
-
-        if (empty($this->extConf->getGoogleMapsGeocodeApiKey())) {
-            $this->messageHelper->addFlashMessage(
-                'You have forgotten to set Google Maps Geocode ApiKey in Extensionmanager.',
-                'Missing GeoCode API Key',
-                FlashMessage::ERROR
-            );
-        }
-    }
-
     /**
      * This will render Google Maps within PoiCollection records with a marker you can drag and drop
      *
      * @return array As defined in initializeResultArray() of AbstractNode
      * @throws \Exception
      */
-    public function render()
+    public function render(): array
     {
-        $this->init();
+        $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
+        $this->pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
+        $this->mapHelper = GeneralUtility::makeInstance(MapHelper::class);
+
+        $parameterArray = $this->data['parameterArray'];
         $resultArray = $this->initializeResultArray();
-        $currentRecord = $this->cleanUpCurrentRecord($this->data['databaseRow']);
-        $publicResourcesPath =
-            PathUtility::getAbsoluteWebPath(ExtensionManagementUtility::extPath('maps2')) . 'Resources/Public/';
+
+        $itemValue = $parameterArray['itemFormElValue'];
+        $config = $parameterArray['fieldConf']['config'];
+        $evalList = GeneralUtility::trimExplode(',', $config['eval'] ?? '', true);
+
+        $publicResourcesPath = sprintf(
+            '%sResources/Public/',
+            PathUtility::getAbsoluteWebPath(ExtensionManagementUtility::extPath('maps2'))
+        );
 
         // loadRequireJsModule has to be loaded before configuring additional paths, else all ext paths will not be initialized
         $this->pageRenderer->addRequireJsConfiguration([
@@ -150,12 +94,44 @@ class GoogleMapsElement extends AbstractFormElement
         $resultArray['requireJsModules'][] = 'TYPO3/CMS/Maps2/GoogleMapsModule';
 
         $fieldInformationResult = $this->renderFieldInformation();
+        $fieldInformationHtml = $fieldInformationResult['html'];
+
+        $attributes = [
+            'value' => '',
+            'id' => StringUtility::getUniqueId('formengine-input-'),
+            'class' => implode(' ', [
+                'form-control',
+                't3js-clearable',
+                'hasDefaultValue',
+            ]),
+            'data-formengine-validation-rules' => $this->getValidationDataAsJsonString($config),
+            'data-formengine-input-params' => (string)json_encode([
+                'field' => $parameterArray['itemFormElName'],
+                'evalList' => implode(',', $evalList),
+                'is_in' => ''
+            ]),
+            'data-formengine-input-name' => (string)$parameterArray['itemFormElName'],
+        ];
+
+        // SF: We can not set this field to type="hidden" as FormEngine.getFieldElement
+        // will not find it. That's why I work with display: none;
+        $attributes['style'] = 'display: none;';
+
+        $html = [];
+        $html[] = '<div class="form-control-wrap">';
+        $html[] =     '<div class="form-wizards-wrap">';
+        $html[] =         '<div class="form-wizards-element">';
+        $html[] =             $this->getMapHtml($this->cleanUpCurrentRecord($this->data['databaseRow']));
+        $html[] =             '<input type="text" ' . GeneralUtility::implodeAttributes($attributes, true) . ' />';
+        $html[] =             '<input type="hidden" name="' . $parameterArray['itemFormElName'] . '" value="' . htmlspecialchars($itemValue) . '" />';
+        $html[] =         '</div>';
+        $html[] =     '</div>';
+        $html[] = '</div>';
+
         $resultArray['html'] = sprintf(
-            '%s%s%s%s',
-            '<div class="formengine-field-item t3js-formengine-field-item">',
-            $fieldInformationResult['html'],
-            $this->getMapHtml($this->getConfiguration($currentRecord)),
-            '</div>'
+            '<div class="formengine-field-item t3js-formengine-field-item">%s%s</div>',
+            $fieldInformationHtml,
+            implode(LF, $html)
         );
 
         return $resultArray;
@@ -165,80 +141,36 @@ class GoogleMapsElement extends AbstractFormElement
      * Since TYPO3 7.5 $this->data['databaseRow'] consists of arrays where TCA was configured as type "select"
      * Convert these types back to strings/int
      *
-     * @param array $currentRecord
+     * @param array $record
      * @return array
      */
-    protected function cleanUpCurrentRecord(array $currentRecord)
+    protected function cleanUpCurrentRecord(array $record): array
     {
-        foreach ($currentRecord as $field => $value) {
-            $currentRecord[$field] = is_array($value) ? $value[0] : $value;
-        }
-        return $currentRecord;
-    }
-
-    /**
-     * Get configuration array from PA array
-     *
-     * @param array $currentRecord
-     * @return array
-     * @throws \Exception
-     */
-    protected function getConfiguration(array $currentRecord)
-    {
-        $config = [];
-
-        // get poi collection model
-        $uid = (int)$currentRecord['uid'];
-        $poiCollection = $this->poiCollectionRepository->findByUid($uid);
-        if ($poiCollection instanceof PoiCollection) {
-            // set map center
-            $config['latitude'] = $poiCollection->getLatitude();
-            $config['longitude'] = $poiCollection->getLongitude();
-            switch ($poiCollection->getCollectionType()) {
-                case 'Route':
-                case 'Area':
-                    // set pois
-                    foreach ($poiCollection->getPois() as $poi) {
-                        $latLng['latitude'] = $poi->getLatitude();
-                        $latLng['longitude'] = $poi->getLongitude();
-                        $config['pois'][] = $latLng;
-                    }
-                    if (!isset($config['pois'])) {
-                        $config['pois'] = [];
-                    }
-                    break;
-                case 'Radius':
-                    $config['radius'] = $poiCollection->getRadius() ?: $this->extConf->getDefaultRadius();
-                    break;
-                default:
-                    break;
+        foreach ($record as $field => $value) {
+            if ($field === 'configuration_map') {
+                $record[$field] = $this->mapHelper->convertPoisAsJsonToArray($value);
+            } else {
+                $record[$field] = is_array($value) && array_key_exists(0, $value) ? $value[0] : $value;
             }
-
-            $config['address'] =  $currentRecord['address'];
-            $config['collectionType'] = is_array($currentRecord['collection_type']) ? $currentRecord['collection_type'][0] : $currentRecord['collection_type'];
-            $config['uid'] =  $uid;
-
-            $hashArray['uid'] = $uid;
-            $hashArray['collectionType'] = $currentRecord['collection_type'];
-            $config['hash'] = $this->hashService->generateHmac(serialize($hashArray));
         }
-        return $config;
+
+        return $record;
     }
 
-    /**
-     * get parsed content from template
-     *
-     * @param array $config
-     *
-     * @return string
-     */
-    protected function getMapHtml(array $config)
+    protected function getMapHtml(array $record): string
     {
-        $extPath = ExtensionManagementUtility::extPath('maps2');
-        $this->view->setTemplatePathAndFilename($extPath . 'Resources/Private/Templates/Tca/GoogleMaps.html');
-        $this->view->assign('config', json_encode($config));
-        $this->view->assign('extConf', json_encode(ObjectAccess::getGettableProperties($this->extConf)));
+        try {
+            $view = GeneralUtility::makeInstance(StandaloneView::class);
+            $view->setTemplatePathAndFilename('EXT:maps2/Resources/Private/Templates/Tca/GoogleMaps.html');
+            $view->assign('record', json_encode($record, JSON_THROW_ON_ERROR));
+            $view->assign('extConf', json_encode(
+                ObjectAccess::getGettableProperties($this->extConf),
+                JSON_THROW_ON_ERROR
+            ));
 
-        return $this->view->render();
+            return $view->render();
+        } catch (\JsonException $jsonException) {
+            return '';
+        }
     }
 }

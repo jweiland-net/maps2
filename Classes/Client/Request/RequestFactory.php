@@ -11,8 +11,7 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Client\Request;
 
-use JWeiland\Maps2\Configuration\ExtConf;
-use JWeiland\Maps2\Service\MapService;
+use JWeiland\Maps2\Helper\MapHelper;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -21,28 +20,28 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class RequestFactory
 {
-    /**
-     * @var array
-     */
-    protected $mapping = [
+    protected array $mapping = [
         'gm' => 'JWeiland\\Maps2\\Client\\Request\\GoogleMaps',
         'osm' => 'JWeiland\\Maps2\\Client\\Request\\OpenStreetMap'
     ];
 
+    protected MapHelper $mapHelper;
+
+    public function __construct(MapHelper $mapHelper)
+    {
+        $this->mapHelper = $mapHelper;
+    }
+
     /**
      * Create a new Request by its filename
      *
-     * @param string $filename Filename to build the Request object
-     * @param ExtConf $extConf
-     * @return RequestInterface
      * @throws \Exception
      */
-    public function create(string $filename, ExtConf $extConf = null): RequestInterface
+    public function create(string $filename): RequestInterface
     {
-        $mapService = GeneralUtility::makeInstance(MapService::class);
         $className = sprintf(
             '%s\\%s',
-            $this->mapping[$mapService->getMapProvider()],
+            $this->mapping[$this->mapHelper->getMapProvider()],
             $this->sanitizeFilename($filename)
         );
 
@@ -54,7 +53,7 @@ class RequestFactory
         }
 
         /** @var RequestInterface $request */
-        $request = GeneralUtility::makeInstance($className, $extConf);
+        $request = GeneralUtility::makeInstance($className);
 
         return $request;
     }

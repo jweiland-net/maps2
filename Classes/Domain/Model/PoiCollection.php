@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Domain\Model;
 
 use JWeiland\Maps2\Configuration\ExtConf;
+use JWeiland\Maps2\Helper\MapHelper;
 use JWeiland\Maps2\Service\MapService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Annotation as Extbase;
@@ -25,146 +26,106 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  */
 class PoiCollection extends AbstractEntity
 {
-    /**
-     * @var int
-     */
-    protected $sysLanguageUid = 0;
+    protected ExtConf $extConf;
+
+    protected MapHelper $mapHelper;
+
+    protected int $sysLanguageUid = 0;
+
+    protected int $l10nParent = 0;
+
+    protected string $collectionType = '';
 
     /**
-     * @var int
-     */
-    protected $l10nParent = 0;
-
-    /**
-     * @var string
-     */
-    protected $collectionType = '';
-
-    /**
-     * @var string
      * @Extbase\Validate("NotEmpty")
      */
-    protected $title = '';
+    protected string $title = '';
 
     /**
-     * @var string
+     * JSON string containing all POIs for Area and Route
      */
-    protected $address = '';
+    protected string $configurationMap = '';
 
-    /**
-     * @var float
-     */
-    protected $latitude = 0.0;
+    protected string $address = '';
 
-    /**
-     * @var float
-     */
-    protected $longitude = 0.0;
+    protected float $latitude = 0.0;
 
-    /**
-     * @var int
-     */
-    protected $radius = 0;
+    protected float $longitude = 0.0;
 
-    /**
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\JWeiland\Maps2\Domain\Model\Poi>
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Cascade("remove")
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
-     */
-    protected $pois;
+    protected int $radius = 0;
 
-    /**
-     * @var string
-     */
-    protected $strokeColor = '';
+    protected string $strokeColor = '';
 
-    /**
-     * @var string
-     */
-    protected $strokeOpacity = '';
+    protected string $strokeOpacity = '';
 
-    /**
-     * @var string
-     */
-    protected $strokeWeight = '';
+    protected string $strokeWeight = '';
 
-    /**
-     * @var string
-     */
-    protected $fillColor = '';
+    protected string $fillColor = '';
 
-    /**
-     * @var string
-     */
-    protected $fillOpacity = '';
+    protected string $fillOpacity = '';
 
-    /**
-     * @var string
-     */
-    protected $infoWindowContent = '';
+    protected string $infoWindowContent = '';
 
     /**
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
      */
-    protected $infoWindowImages;
+    protected ?ObjectStorage $infoWindowImages = null;
 
     /**
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
      */
-    protected $markerIcons;
+    protected ?ObjectStorage $markerIcons = null;
 
-    /**
-     * @var int
-     */
-    protected $markerIconWidth = 0;
+    protected int $markerIconWidth = 0;
 
-    /**
-     * @var int
-     */
-    protected $markerIconHeight = 0;
+    protected int $markerIconHeight = 0;
 
-    /**
-     * @var int
-     */
-    protected $markerIconAnchorPosX = 0;
+    protected int $markerIconAnchorPosX = 0;
 
-    /**
-     * @var int
-     */
-    protected $markerIconAnchorPosY = 0;
+    protected int $markerIconAnchorPosY = 0;
 
     /**
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\JWeiland\Maps2\Domain\Model\Category>
      */
-    protected $categories;
+    protected ?ObjectStorage $categories = null;
 
     /**
      * distance
      * this is a helper var. This is not part of the db
-     *
-     * @var float
      */
-    protected $distance = 0.0;
+    protected float $distance = 0.0;
 
     /**
-     * As I don't know, if foreign record has a valid DomainModel, the foreign records are arrays.
+     * As I don't know if foreign record has a valid Domain Model, the foreign records are arrays.
      * "null" marks this property as uninitialized.
      *
      * @var array|null
      */
-    protected $foreignRecords;
+    protected ?array $foreignRecords = null;
 
     public function __construct()
     {
-        $this->initStorageObjects();
-    }
-
-    protected function initStorageObjects(): void
-    {
-        $this->pois = new ObjectStorage();
-        $this->categories = new ObjectStorage();
         $this->infoWindowImages = new ObjectStorage();
         $this->markerIcons = new ObjectStorage();
+        $this->categories = new ObjectStorage();
+    }
+
+    /**
+     * As constructor arguments will be removed while instantiation of domain models,
+     * we have to add extConf with help of an inject method
+     */
+    public function injectExtConf(ExtConf $extConf): void
+    {
+        $this->extConf = $extConf;
+    }
+
+    /**
+     * As constructor arguments will be removed while instantiation of domain models,
+     * we have to add mapHelper with help of an inject method
+     */
+    public function injectMapHelper(MapHelper $mapHelper): void
+    {
+        $this->mapHelper = $mapHelper;
     }
 
     public function getSysLanguageUid(): int
@@ -207,6 +168,16 @@ class PoiCollection extends AbstractEntity
         $this->title = $title;
     }
 
+    public function getConfigurationMap(): string
+    {
+        return $this->configurationMap;
+    }
+
+    public function setConfigurationMap(string $configurationMap): void
+    {
+        $this->configurationMap = $configurationMap;
+    }
+
     public function getAddress(): string
     {
         return $this->address;
@@ -245,29 +216,6 @@ class PoiCollection extends AbstractEntity
     public function setRadius(int $radius): void
     {
         $this->radius = $radius;
-    }
-
-    public function addPoi(Poi $poi): void
-    {
-        $this->pois->attach($poi);
-    }
-
-    public function removePoi(Poi $poiToRemove): void
-    {
-        $this->pois->detach($poiToRemove);
-    }
-
-    /**
-     * @return ObjectStorage|Poi[]
-     */
-    public function getPois(): ObjectStorage
-    {
-        return $this->pois;
-    }
-
-    public function setPois(ObjectStorage $pois): void
-    {
-        $this->pois = $pois;
     }
 
     public function getStrokeColor(): string
@@ -397,7 +345,11 @@ class PoiCollection extends AbstractEntity
             $markerIcon = $categoryWithIcon->getMaps2MarkerIcon();
         }
 
-        // override markerIcon, if we have a icon defined here in PoiCollection
+        if ($this->markerIcons->count() === 0) {
+            return '';
+        }
+
+        // override markerIcon, if we have an icon defined here in PoiCollection
         $this->markerIcons->rewind();
         // only one icon is allowed, so current() will give us the first icon
         $iconReference = $this->markerIcons->current();
@@ -411,6 +363,7 @@ class PoiCollection extends AbstractEntity
         }
 
         $siteUrl = GeneralUtility::getIndpEnv('TYPO3_SITE_URL');
+
         return $siteUrl . $falIconReference->getPublicUrl(false);
     }
 
@@ -432,17 +385,15 @@ class PoiCollection extends AbstractEntity
     public function getMarkerIconWidth(): int
     {
         // prevent using local markerIconWidth, if no markerIcon is set.
-        if (
-            empty($this->markerIconWidth)
-            || (!empty($this->markerIconWidth) && $this->getMarkerIcons()->count() === 0)
-        ) {
+        if ($this->markerIconWidth === 0 || $this->getMarkerIcons()->count() === 0) {
             $categoryWithIcon = $this->getFirstFoundCategoryWithIcon();
             if ($categoryWithIcon instanceof Category) {
                 return $categoryWithIcon->getMaps2MarkerIconWidth();
             }
-            $extConf = GeneralUtility::makeInstance(ExtConf::class);
-            return $extConf->getMarkerIconWidth();
+
+            return $this->extConf->getMarkerIconWidth();
         }
+
         return $this->markerIconWidth;
     }
 
@@ -454,17 +405,15 @@ class PoiCollection extends AbstractEntity
     public function getMarkerIconHeight(): int
     {
         // prevent using local markerIconHeight, if no markerIcon is set.
-        if (
-            empty($this->markerIconHeight)
-            || (!empty($this->markerIconHeight) && $this->getMarkerIcons()->count() === 0)
-        ) {
+        if ($this->markerIconHeight === 0 || $this->getMarkerIcons()->count() === 0) {
             $categoryWithIcon = $this->getFirstFoundCategoryWithIcon();
             if ($categoryWithIcon instanceof Category) {
                 return $categoryWithIcon->getMaps2MarkerIconHeight();
             }
-            $extConf = GeneralUtility::makeInstance(ExtConf::class);
-            return $extConf->getMarkerIconHeight();
+
+            return $this->extConf->getMarkerIconHeight();
         }
+
         return $this->markerIconHeight;
     }
 
@@ -476,17 +425,15 @@ class PoiCollection extends AbstractEntity
     public function getMarkerIconAnchorPosX(): int
     {
         // prevent using local markerIconAnchorPosX, if no markerIcon is set.
-        if (
-            empty($this->markerIconAnchorPosX)
-            || (!empty($this->markerIconAnchorPosX) && $this->getMarkerIcons()->count() === 0)
-        ) {
+        if ($this->markerIconAnchorPosX === 0 || $this->getMarkerIcons()->count() === 0) {
             $categoryWithIcon = $this->getFirstFoundCategoryWithIcon();
             if ($categoryWithIcon instanceof Category) {
                 return $categoryWithIcon->getMaps2MarkerIconAnchorPosX();
             }
-            $extConf = GeneralUtility::makeInstance(ExtConf::class);
-            return $extConf->getMarkerIconAnchorPosX();
+
+            return $this->extConf->getMarkerIconAnchorPosX();
         }
+
         return $this->markerIconAnchorPosX;
     }
 
@@ -498,23 +445,31 @@ class PoiCollection extends AbstractEntity
     public function getMarkerIconAnchorPosY(): int
     {
         // prevent using local markerIconAnchorPosY, if no markerIcon is set.
-        if (
-            empty($this->markerIconAnchorPosY)
-            || (!empty($this->markerIconAnchorPosY) && $this->getMarkerIcons()->count() === 0)
-        ) {
+        if ($this->markerIconAnchorPosY === 0 || $this->getMarkerIcons()->count() === 0) {
             $categoryWithIcon = $this->getFirstFoundCategoryWithIcon();
             if ($categoryWithIcon instanceof Category) {
                 return $categoryWithIcon->getMaps2MarkerIconAnchorPosY();
             }
-            $extConf = GeneralUtility::makeInstance(ExtConf::class);
-            return $extConf->getMarkerIconAnchorPosY();
+
+            return $this->extConf->getMarkerIconAnchorPosY();
         }
+
         return $this->markerIconAnchorPosY;
     }
 
     public function setMarkerIconAnchorPosY(int $markerIconAnchorPosY): void
     {
         $this->markerIconAnchorPosY = $markerIconAnchorPosY;
+    }
+
+    public function getPois(): array
+    {
+        $configurationMap = $this->getConfigurationMap();
+        if ($configurationMap === '' || $configurationMap === null) {
+            $configurationMap = '[]';
+        }
+
+        return $this->mapHelper->convertPoisAsJsonToArray($configurationMap);
     }
 
     public function getDistance(): float
@@ -546,7 +501,7 @@ class PoiCollection extends AbstractEntity
 
     public function addForeignRecord(array $foreignRecord): void
     {
-        if (!empty($foreignRecord)) {
+        if ($foreignRecord !== []) {
             $this->foreignRecords[$foreignRecord['uid']] = $foreignRecord;
         }
     }

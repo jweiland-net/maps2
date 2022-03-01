@@ -13,7 +13,6 @@ namespace JWeiland\Maps2\Tests\Functional\Helper;
 
 use JWeiland\Maps2\Helper\MessageHelper;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 
@@ -22,12 +21,7 @@ use TYPO3\CMS\Core\Messaging\FlashMessageService;
  */
 class MessageHelperTest extends FunctionalTestCase
 {
-    use ProphecyTrait;
-
-    /**
-     * @var MessageHelper
-     */
-    protected $subject;
+    protected MessageHelper $subject;
 
     /**
      * @var array
@@ -49,9 +43,9 @@ class MessageHelperTest extends FunctionalTestCase
     protected function tearDown(): void
     {
         unset(
-            $this->subject,
-            $this->flashMessageServiceProphecy
+            $this->subject
         );
+
         parent::tearDown();
     }
 

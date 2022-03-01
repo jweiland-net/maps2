@@ -19,7 +19,8 @@
 	},
 	"require": {
 		"ext-json": "*",
-		"typo3/cms-core": "^9.5.17 || ^10.4.2"
+		"php": "^7.4 || ^8.0",
+		"typo3/cms-core": "^10.4.19 || ^11.5"
 	},
 	"require-dev": {
 		"roave/security-advisories": "dev-latest",
@@ -27,7 +28,7 @@
 		"nimut/testing-framework": "^6.0",
 		"phpunit/phpunit": "^9.5",
 		"phpspec/prophecy-phpunit": "^2.0",
-		"jweiland/events2": ">=6.1.0"
+		"jweiland/events2": "dev-typo3_11_compatibility"
 	},
 	"autoload": {
 		"psr-4": {

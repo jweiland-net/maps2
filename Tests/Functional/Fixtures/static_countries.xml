@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+	<static_countries>
+		<uid>54</uid>
+		<pid>0</pid>
+		<deleted>0</deleted>
+		<cn_iso_2>DE</cn_iso_2>
+		<cn_iso_3>DEU</cn_iso_3>
+		<cn_iso_nr>276</cn_iso_nr>
+		<cn_parent_territory_uid>13</cn_parent_territory_uid>
+		<cn_parent_tr_iso_nr>155</cn_parent_tr_iso_nr>
+		<cn_official_name_local>Bundesrepublik Deutschland</cn_official_name_local>
+		<cn_official_name_en>Federal Republic of Germany</cn_official_name_en>
+		<cn_capital>Berlin</cn_capital>
+		<cn_tldomain>de</cn_tldomain>
+		<cn_currency_uid>49</cn_currency_uid>
+		<cn_currency_iso_3>EUR</cn_currency_iso_3>
+		<cn_currency_iso_nr>978</cn_currency_iso_nr>
+		<cn_phone>49</cn_phone>
+		<cn_eu_member>1</cn_eu_member>
+		<cn_uno_member>1</cn_uno_member>
+		<cn_address_format>1</cn_address_format>
+		<cn_zone_flag>0</cn_zone_flag>
+		<cn_short_local>Deutschland</cn_short_local>
+		<cn_short_en>Germany</cn_short_en>
+		<cn_country_zones>16</cn_country_zones>
+	</static_countries>
+</dataset>

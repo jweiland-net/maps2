@@ -1,5 +1,6 @@
 .. include:: ../../../Includes.txt
 
+========================
 ViewHelpers of EXT:maps2
 ========================
 
@@ -53,7 +54,7 @@ and call the ViewHelper like
    <e:nameOfTheViewHelper />
 
 All ViewHelpers
----------------
+===============
 
 .. toctree::
    :maxdepth: 2
@@ -66,6 +67,3 @@ All ViewHelpers
    Cache/GetCacheViewHelper
    Cache/HasCacheViewHelper
    Cache/SetCacheViewHelper
-
-   Widget/PoiCollectionViewHelper
-   Widget/EditPoiViewHelper

@@ -1,8 +1,8 @@
 /**
- * Module: TYPO3/CMS/Maps2/GoogleMapsModule
+ * Module: TYPO3/CMS/Maps2/OpenStreetMapModule
  */
 define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDragPath", "leafletEditable"], function($, L) {
-    let initialize = function(element, config, extConf) {
+    let initialize = function(element, record, extConf) {
         let marker = {};
         let map = {};
 
@@ -22,12 +22,9 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDrag
 
         createMap();
 
-        /**
-         * Create Marker
-         */
         let createMarker = function() {
             marker = L.marker(
-                [config.latitude, config.longitude],
+                [record.latitude, record.longitude],
                 {
                     'draggable': true
                 }
@@ -53,9 +50,6 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDrag
             });
         };
 
-        /**
-         * Create Area
-         */
         let createArea = function() {
             let area = {};
             let coordinatesArray = [];
@@ -67,9 +61,12 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDrag
                 fillOpacity: extConf.fillOpacity
             };
 
-            if (typeof config.pois !== 'undefined') {
-                for (let i = 0; i < config.pois.length; i++) {
-                    coordinatesArray.push([config.pois[i].latitude, config.pois[i].longitude]);
+            if (record.configuration_map) {
+                for (let i = 0; i < record.configuration_map.length; i++) {
+                    coordinatesArray.push([
+                        record.configuration_map[i].latitude,
+                        record.configuration_map[i].longitude]
+                    );
                 }
             }
 
@@ -88,19 +85,16 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDrag
                 );
             });
             map.on("editable:vertex:new", function(event) {
-                insertRouteToDb(area.getLatLngs()[0]);
+                storeRouteAsJson(area.getLatLngs()[0]);
             });
             map.on("editable:vertex:deleted", function(event) {
-                insertRouteToDb(area.getLatLngs()[0]);
+                storeRouteAsJson(area.getLatLngs()[0]);
             });
             map.on("editable:vertex:dragend", function(event) {
-                insertRouteToDb(area.getLatLngs()[0]);
+                storeRouteAsJson(area.getLatLngs()[0]);
             });
         };
 
-        /**
-         * Create Route
-         */
         let createRoute = function() {
             let route = {};
             let coordinatesArray = [];
@@ -110,9 +104,12 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDrag
                 opacity: extConf.strokeOpacity
             };
 
-            if (typeof config.pois !== 'undefined') {
-                for (let i = 0; i < config.pois.length; i++) {
-                    coordinatesArray.push([config.pois[i].latitude, config.pois[i].longitude]);
+            if (record.configuration_map) {
+                for (let i = 0; i < record.configuration_map.length; i++) {
+                    coordinatesArray.push([
+                        record.configuration_map[i].latitude,
+                        record.configuration_map[i].longitude]
+                    );
                 }
             }
 
@@ -131,29 +128,26 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDrag
                 );
             });
             map.on("editable:vertex:new", function(event) {
-                insertRouteToDb(route.getLatLngs());
+                storeRouteAsJson(route.getLatLngs());
             });
             map.on("editable:vertex:deleted", function(event) {
-                insertRouteToDb(route.getLatLngs());
+                storeRouteAsJson(route.getLatLngs());
             });
             map.on("editable:vertex:dragend", function(event) {
-                insertRouteToDb(route.getLatLngs());
+                storeRouteAsJson(route.getLatLngs());
             });
         };
 
-        /**
-         * Create Radius
-         */
         let createRadius = function() {
             marker = L.circle(
-                [config.latitude, config.longitude],
+                [record.latitude, record.longitude],
                 {
                     color: extConf.strokeColor,
                     opacity: extConf.strokeOpacity,
                     weight: extConf.strokeWeight,
                     fillColor: extConf.fillColor,
                     fillOpacity: extConf.fillOpacity,
-                    radius: config.radius ? config.radius : extConf.defaultRadius
+                    radius: record.radius ? record.radius : extConf.defaultRadius
                 }
             ).addTo(map);
             marker.enableEdit();
@@ -179,17 +173,13 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDrag
         let setLatLngFields = function(lat, lng, rad, address) {
             setFieldValue("latitude", lat);
             setFieldValue("longitude", lng);
-            TBE_EDITOR.fieldChanged("tx_maps2_domain_model_poicollection", config.uid, "latitude", createFieldName("latitude", false));
-            TBE_EDITOR.fieldChanged("tx_maps2_domain_model_poicollection", config.uid, "longitude", createFieldName("longitude", false));
 
             if (typeof rad !== "undefined" && rad > 0) {
                 setFieldValue("radius", parseInt(rad));
-                TBE_EDITOR.fieldChanged("tx_maps2_domain_model_poicollection", config.uid, "radius", createFieldName("radius", false));
             }
 
             if (typeof address !== "undefined") {
                 setFieldValue("address", address);
-                TBE_EDITOR.fieldChanged("tx_maps2_domain_model_poicollection", config.uid, "address", createFieldName("address", false));
             }
         };
 
@@ -207,17 +197,24 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDrag
         };
 
         /**
-         * Create field value
+         * Return FieldElement from TCEFORM by fieldName
          *
          * @param field
-         * @param hiddenRecord
+         * @returns {*|HTMLElement} jQuery object. FormEngine works with $ selectors
+         */
+        let getFieldElement = function(field) {
+            // Return the FieldElement which is visible to the editor
+            return TYPO3.FormEngine.getFieldElement(buildFieldName(field), '_list');
+        };
+
+        /**
+         * Build fieldName like 'data[tx_maps2_domain_model_poicollection][1][latitude]'
+         *
+         * @param field
          * @returns {string}
          */
-        let createFieldName = function(field, hiddenRecord) {
-            if (hiddenRecord === true) {
-                return 'data[tx_maps2_domain_model_poicollection][' + config.uid + '][' + field + ']_hr';
-            }
-            return 'data[tx_maps2_domain_model_poicollection][' + config.uid + '][' + field + ']';
+        let buildFieldName = function(field) {
+            return 'data[tx_maps2_domain_model_poicollection][' + record.uid + '][' + field + ']';
         };
 
         /**
@@ -227,45 +224,27 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDrag
          * @param value
          */
         let setFieldValue = function(field, value) {
-            let fieldName = createFieldName(field, true);
-            // set the old (< TYPO3 7.5) hidden record fields "*_hr"
-            if (typeof document[TBE_EDITOR.formname][fieldName] !== 'undefined') {
-                document[TBE_EDITOR.formname][fieldName].value = value;
+            let $fieldElement = getFieldElement(field);
+            if ($fieldElement && $fieldElement.length) {
+                $fieldElement.val(value);
+                $fieldElement.triggerHandler("change");
             }
-            // set the new (>= TYPO3 7.5) data fields "data-formengine-input-name"
-            fieldName = createFieldName(field, false);
-            let $humanReadableField = $('[data-formengine-input-name="' + fieldName + '"]');
-            if ($humanReadableField.length) {
-                $humanReadableField.val(value);
-            }
-            // set the form field which contains the data, which will be send by POST
-            document[TBE_EDITOR.formname][fieldName].value = value;
         };
 
         /**
-         * Save coordinated to DB
+         * Store route/area path into configuration_map as JSON
          *
          * @param coordinates
          */
-        let insertRouteToDb = function(coordinates) {
-            $.ajax({
-                type: "POST",
-                url: TYPO3.settings.ajaxUrls["maps2Ajax"],
-                data: {
-                    tx_maps2_maps2: {
-                        objectName: "InsertRoute",
-                        hash: config.hash,
-                        arguments: {
-                            uid: config.uid,
-                            route: getUriForCoordinates(coordinates)
-                        }
-                    }
-                }
-            });
+        let storeRouteAsJson = function(coordinates) {
+            setFieldValue(
+                "configuration_map",
+                JSON.stringify(getUriForCoordinates(coordinates))
+            );
         };
 
         /**
-         * read address, send it to Google and move map/marker to new location
+         * read address, send it to OpenStreetMap and move map/marker to new location
          */
         let findAddress = function() {
             let $pacSearch = $(document.getElementById("pac-search"));
@@ -287,7 +266,7 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDrag
                                 let address = data[0].address;
                                 let formattedAddress = getFormattedAddress(address);
 
-                                switch (config.collectionType) {
+                                switch (record.collection_type) {
                                     case 'Point':
                                         marker.setLatLng([lat, lng]);
                                         setLatLngFields(lat, lng, 0, formattedAddress);
@@ -354,7 +333,7 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDrag
             return formattedAddress;
         };
 
-        switch (config.collectionType) {
+        switch (record.collection_type) {
             case "Point":
                 createMarker();
                 break;
@@ -371,8 +350,8 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDrag
 
         findAddress();
 
-        if (config.latitude && config.longitude) {
-            map.panTo([config.latitude, config.longitude]);
+        if (record.latitude && record.longitude) {
+            map.panTo([record.latitude, record.longitude]);
         } else {
             // Fallback
             map.panTo([extConf.defaultLatitude, extConf.defaultLongitude]);
@@ -381,8 +360,8 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDrag
         // if maps2 was inserted in (bootstrap) tabs, we have to re-render the map
         $("ul.t3js-tabs a[data-toggle='tab']:eq(1)").on("shown.bs.tab", function() {
             map.invalidateSize();
-            if (config.latitude && config.longitude) {
-                map.panTo([config.latitude, config.longitude]);
+            if (record.latitude && record.longitude) {
+                map.panTo([record.latitude, record.longitude]);
             } else {
                 // Fallback
                 map.panTo([extConf.defaultLatitude, extConf.defaultLongitude]);
@@ -398,7 +377,7 @@ define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDrag
         $element = $("#maps2ConfigurationMap");
         initialize(
             $element.get(0),
-            $element.data("config"),
+            $element.data("record"),
             $element.data("extconf")
         );
     };

@@ -1,13 +1,13 @@
 /**
  * Module: TYPO3/CMS/Maps2/GoogleMapsModule
  */
-define(["jquery", "gmaps"], function($, gmaps) {
+define(["jquery", "gmaps", "TYPO3/CMS/Backend/Notification"], function($, gmaps, Notification) {
     /**
      * GoogleMaps object
      */
     let GoogleMaps = {
         selector: '#maps2ConfigurationMap',
-        config: [],
+        record: [],
         extConf: [],
         marker: {},
         map: {},
@@ -22,10 +22,10 @@ define(["jquery", "gmaps"], function($, gmaps) {
         };
     };
 
-    GoogleMaps.createCircleOptions = function(map, config, extConf) {
+    GoogleMaps.createCircleOptions = function(map, record, extConf) {
         let circleOptions = {
             map: map,
-            center: new gmaps.LatLng(config.latitude, config.longitude),
+            center: new gmaps.LatLng(record.latitude, record.longitude),
             strokeColor: extConf.strokeColor,
             strokeOpacity: extConf.strokeOpacity,
             strokeWeight: extConf.strokeWeight,
@@ -33,10 +33,10 @@ define(["jquery", "gmaps"], function($, gmaps) {
             fillOpacity: extConf.fillOpacity,
             editable: true
         };
-        if (config.radius === 0) {
+        if (record.radius === 0) {
             circleOptions.radius = extConf.defaultRadius;
         } else {
-            circleOptions.radius = config.radius;
+            circleOptions.radius = record.radius;
         }
         return circleOptions;
     };
@@ -70,9 +70,9 @@ define(["jquery", "gmaps"], function($, gmaps) {
         );
     };
 
-    GoogleMaps.createMarker = function() {
+    GoogleMaps.createMarker = function(record) {
         GoogleMaps.marker = new gmaps.Marker({
-            position: new gmaps.LatLng(GoogleMaps.config.latitude, GoogleMaps.config.longitude),
+            position: new gmaps.LatLng(record.latitude, record.longitude),
             map: GoogleMaps.map,
             draggable: true
         });
@@ -104,15 +104,15 @@ define(["jquery", "gmaps"], function($, gmaps) {
         });
     };
 
-    GoogleMaps.createArea = function() {
+    GoogleMaps.createArea = function(record) {
         let coordinatesArray = [];
 
-        if (typeof GoogleMaps.config.pois !== 'undefined') {
-            for (let i = 0; i < GoogleMaps.config.pois.length; i++) {
+        if (record.configuration_map) {
+            for (let i = 0; i < record.configuration_map.length; i++) {
                 coordinatesArray.push(
                     new gmaps.LatLng(
-                        GoogleMaps.config.pois[i].latitude,
-                        GoogleMaps.config.pois[i].longitude
+                        record.configuration_map[i].latitude,
+                        record.configuration_map[i].longitude
                     )
                 );
             }
@@ -121,8 +121,8 @@ define(["jquery", "gmaps"], function($, gmaps) {
         if (coordinatesArray.length === 0) {
             coordinatesArray.push(
                 new gmaps.LatLng(
-                    GoogleMaps.config.latitude,
-                    GoogleMaps.config.longitude
+                    record.latitude,
+                    record.longitude
                 )
             );
         }
@@ -136,16 +136,16 @@ define(["jquery", "gmaps"], function($, gmaps) {
 
         // Listener which will be called, if a vertex was moved to a new location
         gmaps.event.addListener(path, 'set_at', function() {
-            GoogleMaps.insertRouteToDb(area);
+            GoogleMaps.storeRouteAsJson(area);
         });
         // Listener to add new vertex in between a route
         gmaps.event.addListener(path, 'insert_at', function() {
-            GoogleMaps.insertRouteToDb(area);
+            GoogleMaps.storeRouteAsJson(area);
         });
         // Listener to remove a vertex
         gmaps.event.addListener(area, 'rightclick', function(event) {
             area.getPath().removeAt(event.vertex);
-            GoogleMaps.insertRouteToDb(area);
+            GoogleMaps.storeRouteAsJson(area);
         });
         // Listener to add a new vertex. Will not be called, while inserting a vertex in between
         gmaps.event.addListener(GoogleMaps.map, 'click', function(event) {
@@ -161,17 +161,27 @@ define(["jquery", "gmaps"], function($, gmaps) {
         });
     };
 
-    GoogleMaps.createRoute = function() {
+    GoogleMaps.createRoute = function(record) {
         let coordinatesArray = [];
 
-        if (typeof GoogleMaps.config.pois !== 'undefined') {
-            for (let i = 0; i < GoogleMaps.config.pois.length; i++) {
-                coordinatesArray.push(new gmaps.LatLng(GoogleMaps.config.pois[i].latitude, GoogleMaps.config.pois[i].longitude));
+        if (record.configuration_map) {
+            for (let i = 0; i < record.configuration_map.length; i++) {
+                coordinatesArray.push(
+                    new gmaps.LatLng(
+                        record.configuration_map[i].latitude,
+                        record.configuration_map[i].longitude
+                    )
+                );
             }
         }
 
         if (coordinatesArray.length === 0) {
-            coordinatesArray.push(new gmaps.LatLng(GoogleMaps.config.latitude, GoogleMaps.config.longitude));
+            coordinatesArray.push(
+                new gmaps.LatLng(
+                    record.latitude,
+                    record.longitude
+                )
+            );
         }
 
         /* create route overlay */
@@ -184,16 +194,16 @@ define(["jquery", "gmaps"], function($, gmaps) {
 
         // Listener which will be called, if a vertex was moved to a new location
         gmaps.event.addListener(path, 'set_at', function() {
-            GoogleMaps.insertRouteToDb(route);
+            GoogleMaps.storeRouteAsJson(route);
         });
         // Listener to add new vertex in between a route
         gmaps.event.addListener(path, 'insert_at', function() {
-            GoogleMaps.insertRouteToDb(route);
+            GoogleMaps.storeRouteAsJson(route);
         });
         // Listener to remove a vertex
         gmaps.event.addListener(route, 'rightclick', function(event) {
             route.getPath().removeAt(event.vertex);
-            GoogleMaps.insertRouteToDb(route);
+            GoogleMaps.storeRouteAsJson(route);
         });
         // Listener to add a new vertex. Will not be called, while inserting a vertex in between
         gmaps.event.addListener(GoogleMaps.map, 'click', function(event) {
@@ -209,9 +219,9 @@ define(["jquery", "gmaps"], function($, gmaps) {
         });
     };
 
-    GoogleMaps.createRadius = function() {
+    GoogleMaps.createRadius = function(record) {
         GoogleMaps.marker = new gmaps.Circle(
-            GoogleMaps.createCircleOptions(GoogleMaps.map, GoogleMaps.config, GoogleMaps.extConf)
+            GoogleMaps.createCircleOptions(GoogleMaps.map, record, GoogleMaps.extConf)
         );
 
         // update fields and marker while dragging
@@ -242,11 +252,7 @@ define(["jquery", "gmaps"], function($, gmaps) {
             );
         });
 
-        GoogleMaps.setLatLngFields(
-            GoogleMaps.config.latitude,
-            GoogleMaps.config.longitude,
-            GoogleMaps.config.radius
-        );
+        GoogleMaps.setLatLngFields(record.latitude, record.longitude, record.radius);
     };
 
     /**
@@ -260,37 +266,13 @@ define(["jquery", "gmaps"], function($, gmaps) {
     GoogleMaps.setLatLngFields = function(lat, lng, rad, address) {
         GoogleMaps.setFieldValue("latitude", lat);
         GoogleMaps.setFieldValue("longitude", lng);
-        TBE_EDITOR.fieldChanged(
-            "tx_maps2_domain_model_poicollection",
-            GoogleMaps.config.uid,
-            "latitude",
-            GoogleMaps.createFieldName("latitude", false)
-        );
-        TBE_EDITOR.fieldChanged(
-            "tx_maps2_domain_model_poicollection",
-            GoogleMaps.config.uid,
-            "longitude",
-            GoogleMaps.createFieldName("longitude", false)
-        );
 
         if (typeof rad !== "undefined" && rad > 0) {
             GoogleMaps.setFieldValue("radius", parseInt(rad));
-            TBE_EDITOR.fieldChanged(
-                "tx_maps2_domain_model_poicollection",
-                GoogleMaps.config.uid,
-                "radius",
-                GoogleMaps.createFieldName("radius", false)
-            );
         }
 
         if (typeof address !== "undefined") {
             GoogleMaps.setFieldValue("address", address);
-            TBE_EDITOR.fieldChanged(
-                "tx_maps2_domain_model_poicollection",
-                GoogleMaps.config.uid,
-                "address",
-                GoogleMaps.createFieldName("address", false)
-            );
         }
     };
 
@@ -308,17 +290,24 @@ define(["jquery", "gmaps"], function($, gmaps) {
     };
 
     /**
-     * Create field value
+     * Return FieldElement from TCEFORM by fieldName
      *
      * @param field
-     * @param hiddenRecord
+     * @returns {*|HTMLElement} jQuery object. FormEngine works with $ selectors
+     */
+    GoogleMaps.getFieldElement = function(field) {
+        // Return the FieldElement which is visible to the editor
+        return TYPO3.FormEngine.getFieldElement(GoogleMaps.buildFieldName(field), '_list');
+    };
+
+    /**
+     * Build fieldName like 'data[tx_maps2_domain_model_poicollection][1][latitude]'
+     *
+     * @param field
      * @returns {string}
      */
-    GoogleMaps.createFieldName = function(field, hiddenRecord) {
-        if (hiddenRecord === true) {
-            return 'data[tx_maps2_domain_model_poicollection][' + GoogleMaps.config.uid + '][' + field + ']_hr';
-        }
-        return 'data[tx_maps2_domain_model_poicollection][' + GoogleMaps.config.uid + '][' + field + ']';
+    GoogleMaps.buildFieldName = function(field) {
+        return 'data[tx_maps2_domain_model_poicollection][' + GoogleMaps.record.uid + '][' + field + ']';
     };
 
     /**
@@ -328,41 +317,23 @@ define(["jquery", "gmaps"], function($, gmaps) {
      * @param value
      */
     GoogleMaps.setFieldValue = function(field, value) {
-        let fieldName = GoogleMaps.createFieldName(field, true);
-        // set the old (< TYPO3 7.5) hidden record fields "*_hr"
-        if (typeof document[TBE_EDITOR.formname][fieldName] !== 'undefined') {
-            document[TBE_EDITOR.formname][fieldName].value = value;
+        let $fieldElement = GoogleMaps.getFieldElement(field);
+        if ($fieldElement && $fieldElement.length) {
+            $fieldElement.val(value);
+            $fieldElement.triggerHandler("change");
         }
-        // set the new (>= TYPO3 7.5) data fields "data-formengine-input-name"
-        fieldName = GoogleMaps.createFieldName(field, false);
-        let $humanReadableField = $('[data-formengine-input-name="' + fieldName + '"]');
-        if ($humanReadableField.length) {
-            $humanReadableField.val(value);
-        }
-        // set the form field which contains the data, which will be send by POST
-        document[TBE_EDITOR.formname][fieldName].value = value;
     };
 
     /**
-     * Save coordinated to DB
+     * Store route/area path into configuration_map as JSON
      *
      * @param route
      */
-    GoogleMaps.insertRouteToDb = function(route) {
-        $.ajax({
-            type: "POST",
-            url: TYPO3.settings.ajaxUrls["maps2Ajax"],
-            data: {
-                tx_maps2_maps2: {
-                    objectName: "InsertRoute",
-                    hash: GoogleMaps.config.hash,
-                    arguments: {
-                        uid: GoogleMaps.config.uid,
-                        route: GoogleMaps.getUriForRoute(route)
-                    }
-                }
-            }
-        });
+    GoogleMaps.storeRouteAsJson = function(route) {
+        GoogleMaps.setFieldValue(
+            "configuration_map",
+            JSON.stringify(GoogleMaps.getUriForRoute(route))
+        );
     };
 
     /**
@@ -377,7 +348,7 @@ define(["jquery", "gmaps"], function($, gmaps) {
         GoogleMaps.map.controls[gmaps.ControlPosition.TOP_LEFT].push(input);
 
         // Prevent submitting the BE form on enter, while selecting entry from AutoSuggest
-        $(input).keydown(function (e) {
+        $(input).keydown(function(e) {
             if (e.which === 13 && $(".pac-container:visible").length) return false;
         });
 
@@ -397,7 +368,7 @@ define(["jquery", "gmaps"], function($, gmaps) {
                 let lat = results[0].geometry.location.lat().toFixed(6);
                 let lng = results[0].geometry.location.lng().toFixed(6);
 
-                switch (GoogleMaps.config.collectionType) {
+                switch (GoogleMaps.record.collection_type) {
                     case 'Point':
                         //GoogleMaps.marker.setPlace(); // setPlace works, but it resets previous marker settings like draggable, ...
                         GoogleMaps.marker.setPosition(results[0].geometry.location);
@@ -425,32 +396,48 @@ define(["jquery", "gmaps"], function($, gmaps) {
         });
     };
 
-    GoogleMaps.initialize = function(element, config, extConf) {
-        GoogleMaps.config = config;
+    GoogleMaps.initialize = function(element, record, extConf) {
+        GoogleMaps.record = record;
         GoogleMaps.extConf = extConf;
         GoogleMaps.infoWindow = new gmaps.InfoWindow();
         GoogleMaps.infoWindowContent = document.getElementById("infowindow-content");
         GoogleMaps.map = GoogleMaps.createMap(element);
 
-        switch (config.collectionType) {
+        if (extConf.googleMapsJavaScriptApiKey === "") {
+            Notification.warning(
+                'Missing JS API Key',
+                'You have forgotten to set Google Maps JavaScript ApiKey in Extension Settings.',
+                15
+            );
+        }
+
+        if (extConf.googleMapsGeocodeApiKey === "") {
+            Notification.warning(
+                'Missing GeoCode API Key',
+                'You have forgotten to set Google Maps Geocode ApiKey in Extension Settings.',
+                15
+            );
+        }
+
+        switch (record.collection_type) {
             case "Point":
-                GoogleMaps.createMarker();
+                GoogleMaps.createMarker(record);
                 break;
             case "Area":
-                GoogleMaps.createArea();
+                GoogleMaps.createArea(record);
                 break;
             case "Route":
-                GoogleMaps.createRoute();
+                GoogleMaps.createRoute(record);
                 break;
             case "Radius":
-                GoogleMaps.createRadius();
+                GoogleMaps.createRadius(record);
                 break;
         }
 
         GoogleMaps.findAddress();
 
-        if (config.latitude && config.longitude) {
-            GoogleMaps.map.setCenter(new gmaps.LatLng(config.latitude, config.longitude));
+        if (record.latitude && record.longitude) {
+            GoogleMaps.map.setCenter(new gmaps.LatLng(record.latitude, record.longitude));
         } else {
             // Fallback
             GoogleMaps.map.setCenter(new gmaps.LatLng(extConf.defaultLatitude, extConf.defaultLongitude));
@@ -459,8 +446,8 @@ define(["jquery", "gmaps"], function($, gmaps) {
         // if maps2 was inserted in (bootstrap) tabs, we have to re-render the map
         $("ul.t3js-tabs a[data-toggle='tab']:eq(1)").on("shown.bs.tab", function() {
             google.maps.event.trigger(GoogleMaps.map, "resize");
-            if (config.latitude && config.longitude) {
-                GoogleMaps.map.setCenter(new gmaps.LatLng(config.latitude, config.longitude));
+            if (record.latitude && record.longitude) {
+                GoogleMaps.map.setCenter(new gmaps.LatLng(record.latitude, record.longitude));
             } else {
                 GoogleMaps.map.setCenter(new gmaps.LatLng(extConf.defaultLatitude, extConf.defaultLongitude));
             }
@@ -473,7 +460,7 @@ define(["jquery", "gmaps"], function($, gmaps) {
         if ($googleMaps.length > 0) {
             GoogleMaps.initialize(
                 $googleMaps.get(0),
-                $googleMaps.data("config"),
+                $googleMaps.data("record"),
                 $googleMaps.data("extconf")
             );
         }

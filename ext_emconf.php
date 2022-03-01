@@ -6,14 +6,14 @@ $EM_CONF[$_EXTKEY] = [
     'version' => '9.3.10',
     'category' => 'plugin',
     'state' => 'stable',
-    'uploadfolder' => false,
     'clearCacheOnLoad' => true,
     'author' => 'Stefan Froemken',
     'author_email' => 'projects@jweiland.net',
     'author_company' => 'jweiland.net',
     'constraints' => [
         'depends' => [
-            'typo3' => '9.5.17-10.4.99',
+            'php' => '7.4.0-8.99.99',
+            'typo3' => '10.4.19-11.5.99',
         ],
         'conflicts' => [
         ],

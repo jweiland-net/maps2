@@ -18,7 +18,6 @@ use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Mapper\MapperFactory;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\SingletonInterface;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
@@ -29,37 +28,41 @@ class GeoCodeService implements SingletonInterface
 {
     /**
      * Client depends on mapProvider which is either gm or osm
-     *
-     * @var ClientInterface
      */
-    protected $client;
+    protected ClientInterface $client;
 
-    public function __construct(ClientInterface $client = null)
-    {
-        $this->client = $client ?? GeneralUtility::makeInstance(ClientFactory::class)->create();
+    protected RequestFactory $requestFactory;
+
+    protected MapperFactory $mapperFactory;
+
+    public function __construct(
+        ClientFactory $clientFactory,
+        RequestFactory $requestFactory,
+        MapperFactory $mapperFactory
+    ) {
+        $this->client = $clientFactory->create();
+        $this->requestFactory = $requestFactory;
+        $this->mapperFactory = $mapperFactory;
     }
 
     /**
-     * @param string $address
      * @return ObjectStorage|Position[]
      */
     public function getPositionsByAddress(string $address): ObjectStorage
     {
-        $positions = GeneralUtility::makeInstance(ObjectStorage::class);
+        $positions = new ObjectStorage();
 
         // Prevent calls to Map Providers GeoCode API, if address is empty
-        if (empty(trim($address))) {
+        if (trim($address) === '') {
             return $positions;
         }
 
-        $requestFactory = GeneralUtility::makeInstance(RequestFactory::class);
-        $geocodeRequest = $requestFactory->create('GeocodeRequest');
-        $geocodeRequest->addParameter('address', (string)$address);
+        $geocodeRequest = $this->requestFactory->create('GeocodeRequest');
+        $geocodeRequest->addParameter('address', $address);
 
         $response = $this->client->processRequest($geocodeRequest);
-        if (!empty($response)) {
-            $mapperFactory = GeneralUtility::makeInstance(MapperFactory::class);
-            $positions = $mapperFactory->create()->map($response);
+        if ($response !== []) {
+            $positions = $this->mapperFactory->create()->map($response);
         }
 
         return $positions;
@@ -69,7 +72,7 @@ class GeoCodeService implements SingletonInterface
     {
         $position = null;
         $positions = $this->getPositionsByAddress($address);
-        if ($positions->count()) {
+        if ($positions->count() !== 0) {
             $positions->rewind();
             /** @var Position $position */
             $position = $positions->current();

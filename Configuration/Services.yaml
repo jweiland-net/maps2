@@ -6,3 +6,41 @@ services:
 
   JWeiland\Maps2\:
     resource: '../Classes/*'
+
+  # Called by makeInstance in our RequestFactory
+  JWeiland\Maps2\Client\Request\GoogleMaps\GeocodeRequest:
+    public: true
+
+  # Called by makeInstance in our RequestFactory
+  JWeiland\Maps2\Client\Request\OpenStreetMap\GeocodeRequest:
+    public: true
+
+  # Called by makeInstance in our ClientFactory
+  JWeiland\Maps2\Client\GoogleMapsClient:
+    public: true
+
+  # Called by makeInstance in our ClientFactory
+  JWeiland\Maps2\Client\OpenStreetMapClient:
+    public: true
+
+  # Called by makeInstance in TYPO3's AbstractConditionMatcher
+  JWeiland\Maps2\ExpressionLanguage\AllowMapProviderRequestFunctionsProvider:
+    public: true
+
+  # Called by makeInstance in our PoiCollection
+  JWeiland\Maps2\Helper\MapHelper:
+    public: true
+
+  # Called by makeInstance in TYPO3's DataHandler
+  JWeiland\Maps2\Hook\CreateMaps2RecordHook:
+    public: true
+
+  # Called by makeInstance in PoiCollection model to add foreign records
+  JWeiland\Maps2\Service\MapService:
+    public: true
+
+  JWeiland\Maps2\Tca\Maps2Registry:
+    tags:
+      - name: event.listener
+        method: 'addMaps2DatabaseSchemasToTablesDefinition'
+        event: TYPO3\CMS\Core\Database\Event\AlterTableDefinitionStatementsEvent

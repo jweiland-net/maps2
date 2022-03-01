@@ -1,7 +1,8 @@
 .. include:: ../../Includes.txt
 
+=========
 Templates
----------
+=========
 
 .. only:: html
 

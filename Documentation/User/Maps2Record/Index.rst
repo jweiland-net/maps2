@@ -2,13 +2,14 @@
 
 .. _maps2Record:
 
+============
 Maps2 record
 ============
 
 The maps2 record is the most important record in this extension.
 
 Global fields
--------------
+=============
 
 .. t3-field-list-table::
  :header-rows: 1
@@ -48,7 +49,7 @@ Global fields
                   that marker icon assigned. A marker icon defined in your marker itself has always a higher priority.
 
 Additional fields for Point
----------------------------
+===========================
 
 .. t3-field-list-table::
  :header-rows: 1
@@ -80,7 +81,7 @@ Additional fields for Point
 
 
 Additional fields for Area
---------------------------
+==========================
 
 .. t3-field-list-table::
  :header-rows: 1
@@ -109,7 +110,7 @@ Additional fields for Area
 
 
 Additional fields for Route
----------------------------
+===========================
 
 .. t3-field-list-table::
  :header-rows: 1
@@ -131,7 +132,7 @@ Additional fields for Route
 
 
 Additional fields for Radius
-----------------------------
+============================
 
 .. t3-field-list-table::
  :header-rows: 1
@@ -162,14 +163,14 @@ Additional fields for Radius
 
 
 Working with type "Point"
--------------------------
+=========================
 
 First of all search for an address.
 
 To fine tune the position you can click somewhere on the map or drag'n drop the marker to your preferred location.
 
 Working with type "Area"
-------------------------
+========================
 
 First of all search for an address.
 
@@ -178,7 +179,7 @@ You need at least 3 clicks to see the fill color of the area.
 Use right click to remove a point.
 
 Route
------
+=====
 
 First of all search for an address.
 
@@ -186,7 +187,7 @@ With left click somewhere on the map you can create new points on the map.
 Use right click to remove a point.
 
 Radius
-------
+======
 
 First of all search for an address.
 

@@ -1,18 +1,15 @@
 <?php
-namespace JWeiland\Maps2;
+
+declare(strict_types=1);
 
 /*
- * This file is part of the maps2 project.
- *
- * It is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
+ * This file is part of the package jweiland/maps2.
  *
  * For the full copyright and license information, please read the
- * LICENSE.txt file that was distributed with this source code.
- *
- * The TYPO3 project - inspiring people to share!
+ * LICENSE file that was distributed with this source code.
  */
+
+namespace JWeiland\Maps2;
 
 use JWeiland\Maps2\Utility\DatabaseUtility;
 use TYPO3\CMS\Core\Database\ConnectionPool;
@@ -20,9 +17,7 @@ use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageRendererResolver;
-use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\FileInterface;
-use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Configuration\FlexForm\FlexFormTools;
 
@@ -45,10 +40,8 @@ class ext_update
 
     /**
      * Main update function called by the extension manager.
-     *
-     * @return string
      */
-    public function main()
+    public function main(): string
     {
         $this->processUpdates();
         return $this->generateOutput();
@@ -57,10 +50,8 @@ class ext_update
     /**
      * Called by the extension manager to determine if the update menu entry
      * should by showed.
-     *
-     * @return bool
      */
-    public function access()
+    public function access(): bool
     {
         $showAccess = false;
 
@@ -105,16 +96,18 @@ class ext_update
                 ->execute()
                 ->fetchColumn(0);
         }
-        if ((bool)$amountOfRecords) {
+
+        if ($amountOfRecords) {
             $showAccess = true;
         }
+
         return $showAccess;
     }
 
     /**
      * The actual update function. Add your update task in here.
      */
-    protected function processUpdates()
+    protected function processUpdates(): void
     {
         $this->removeSCAFromTtContentRecords();
         $this->migrateMarkerIconToFal();
@@ -123,10 +116,10 @@ class ext_update
     /**
      * Remove SwitchableControllerActions from tt_content records as they are not needed anymore
      */
-    protected function removeSCAFromTtContentRecords()
+    protected function removeSCAFromTtContentRecords(): void
     {
         $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable('tt_content');
-        $rows = $amountOfRecords = $queryBuilder
+        $rows = $queryBuilder
             ->select('uid', 'pi_flexform')
             ->from('tt_content')
             ->where(
@@ -149,6 +142,7 @@ class ext_update
                 if (isset($flexFormFields['data']['sDEFAULT']['lDEF']['switchableControllerActions'])) {
                     unset($flexFormFields['data']['sDEFAULT']['lDEF']['switchableControllerActions']);
                 }
+
                 $connection = $this->getConnectionPool()->getConnectionForTable('tt_content');
                 $affectedRows += $connection->update(
                     'tt_content',
@@ -160,12 +154,13 @@ class ext_update
                     ]
                 );
             }
+
             $this->messageArray[] = [
                 FlashMessage::OK,
                 'Update records successful',
                 sprintf(
                     'We have updated %d of %d tt_content records',
-                    (int)$affectedRows,
+                    $affectedRows,
                     count($rows)
                 )
             ];
@@ -181,7 +176,7 @@ class ext_update
     /**
      * Migrate old marker icon of sys_category to FAL
      */
-    protected function migrateMarkerIconToFal()
+    protected function migrateMarkerIconToFal(): void
     {
         // check for old marker_icon column in sys_category first
         $fields = DatabaseUtility::getColumnsFromTable('sys_category');
@@ -204,8 +199,10 @@ class ext_update
             if (is_array($sysCategories)) {
                 foreach ($sysCategories as $sysCategory) {
                     try {
-                        /** @var File $file */
-                        $file = ResourceFactory::getInstance()->retrieveFileOrFolderObject($sysCategory['marker_icon']);
+                        $file = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                            \TYPO3\CMS\Core\Resource\ResourceFactory::class
+                        )->retrieveFileOrFolderObject($sysCategory['marker_icon']);
+
                         if ($file instanceof FileInterface) {
                             // Assemble DataHandler data
                             $newId = 'NEW1234';
@@ -222,14 +219,14 @@ class ext_update
                                 'maps2_marker_icons' => $newId
                             ];
                             // Get an instance of the DataHandler and process the data
-                            /** @var DataHandler $dataHandler */
                             $dataHandler = GeneralUtility::makeInstance(DataHandler::class);
                             $dataHandler->start($data, []);
                             $dataHandler->process_datamap();
                         }
-                    } catch (\Exception $e) {
-                        // file does not exists or whatever
+                    } catch (\Exception $exception) {
+                        // file does not exist or whatever
                     }
+
                     // remove old icon
                     $connection = $this->getConnectionPool()->getConnectionForTable('sys_category');
                     $connection->update(
@@ -242,6 +239,7 @@ class ext_update
                         ]
                     );
                 }
+
                 $this->messageArray[] = [
                     FlashMessage::OK,
                     'Migration successful',
@@ -256,10 +254,8 @@ class ext_update
 
     /**
      * Generates output by using flash messages
-     *
-     * @return string
      */
-    protected function generateOutput()
+    protected function generateOutput(): string
     {
         $output = '';
         foreach ($this->messageArray as $messageItem) {
@@ -270,39 +266,25 @@ class ext_update
                 $messageItem[1],
                 $messageItem[0]);
 
-            if (version_compare(TYPO3_branch, '8.6') >= 0) {
-                $output .= GeneralUtility::makeInstance(FlashMessageRendererResolver::class)
-                    ->resolve()
-                    ->render([$flashMessage]);
-            } elseif (version_compare(TYPO3_branch, '8.0') >= 0) {
-                $output .= $flashMessage->getMessageAsMarkup();
-            } else {
-                $output .= $flashMessage->render();
-            }
+            $output .= GeneralUtility::makeInstance(FlashMessageRendererResolver::class)
+                ->resolve()
+                ->render([$flashMessage]);
         }
+
         return $output;
     }
 
-    /**
-     * Get TYPO3s Connection Pool
-     *
-     * @return ConnectionPool
-     */
-    protected function getConnectionPool()
+    protected function getConnectionPool(): ConnectionPool
     {
         return GeneralUtility::makeInstance(ConnectionPool::class);
     }
 
-    /**
-     * Get TYPO3s FlexFormTools
-     *
-     * @return FlexFormTools
-     */
-    protected function getFlexFormTools()
+    protected function getFlexFormTools(): FlexFormTools
     {
         if (!$this->flexFormTools instanceof FlexFormTools) {
             $this->flexFormTools = GeneralUtility::makeInstance(FlexFormTools::class);
         }
+
         return $this->flexFormTools;
     }
 }
