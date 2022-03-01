@@ -62,7 +62,7 @@ jobs:
       - name: Install dependencies with typo3/cms-core:${{ matrix.typo3 }}
         run: |
           composer require typo3/cms-core:${{ matrix.typo3 }} --no-progress
-          // EXT:extensionmanager is needed by static_info_tables for TYPO3 10
+          # EXT:extensionmanager is needed by static_info_tables for TYPO3 10
           composer require typo3/cms-extensionmanager:${{ matrix.typo3 }} --no-progress
           git checkout composer.json
 
