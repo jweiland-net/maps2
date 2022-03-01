@@ -35,6 +35,10 @@ class OpenStreetMapClientTest extends FunctionalTestCase
      */
     protected $messageHelperProphecy;
 
+    protected $testExtensionsToLoad = [
+        'typo3conf/ext/maps2'
+    ];
+
     protected function setUp(): void
     {
         parent::setUp();
