@@ -53,6 +53,7 @@ class PoiCollectionRepository extends Repository
         $queryBuilder = $this->getQueryBuilderForTable('tx_maps2_domain_model_poicollection', 'pc');
         $queryBuilder->select('*');
 
+        $poiCollectionUid = $poiCollectionUid ?: (int)$settings['poiCollection'];
         if ($poiCollectionUid !== 0) {
             $queryBuilder->andWhere(
                 $queryBuilder->expr()->eq(
@@ -60,7 +61,7 @@ class PoiCollectionRepository extends Repository
                     $queryBuilder->createNamedParameter($poiCollectionUid, \PDO::PARAM_INT)
                 )
             );
-        } elseif (isset($settings['categories']) && is_string($settings['categories'])) {
+        } elseif (array_key_exists('categories', $settings) && $settings['categories'] !== '') {
             $this->addConstraintForCategories(
                 $queryBuilder,
                 GeneralUtility::intExplode(',', $settings['categories'], true)
@@ -74,6 +75,8 @@ class PoiCollectionRepository extends Repository
                 $poiCollectionUid
             )
         );
+
+        var_dump($queryBuilder->getParameters());
 
         return $extbaseQuery->statement($queryBuilder)->execute();
     }

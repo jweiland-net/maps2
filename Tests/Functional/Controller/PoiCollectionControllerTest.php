@@ -9,245 +9,121 @@ declare(strict_types=1);
  * LICENSE file that was distributed with this source code.
  */
 
-namespace JWeiland\Maps2\Tests\Unit\Controller;
+namespace JWeiland\Maps2\Tests\Functional\Controller;
 
 use JWeiland\Maps2\Controller\PoiCollectionController;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
-use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
-use JWeiland\Maps2\Service\MapService;
-use Nimut\TestingFramework\MockObject\AccessibleMockObjectInterface;
-use Nimut\TestingFramework\TestCase\UnitTestCase;
+use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageQueue;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
-use TYPO3\CMS\Extbase\Mvc\Controller\ControllerContext;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
-use TYPO3\CMS\Fluid\View\TemplateView;
 
 /**
  * Class PoiCollectionControllerTest
  */
-class PoiCollectionControllerTest extends UnitTestCase
+class PoiCollectionControllerTest extends FunctionalTestCase
 {
     use ProphecyTrait;
 
-    /**
-     * @var PoiCollectionController|\PHPUnit_Framework_MockObject_MockObject|AccessibleMockObjectInterface
-     */
-    protected $subject;
+    protected PoiCollectionController $subject;
 
     /**
-     * @var ObjectManager|ObjectProphecy
+     * @var array
      */
-    protected $objectManagerProphecy;
-
-    /**
-     * @var PoiCollectionRepository|ObjectProphecy
-     */
-    protected $poiCollectionRepositoryProphecy;
-
-    /**
-     * @var MapService|ObjectProphecy
-     */
-    protected $mapServiceProphecy;
-
-    /**
-     * @var ConfigurationManager|ObjectProphecy
-     */
-    protected $configurationManagerProphecy;
-
-    /**
-     * @var ControllerContext|ObjectProphecy
-     */
-    protected $controllerContextProphecy;
-
-    /**
-     * @var TemplateView|ObjectProphecy
-     */
-    protected $viewProphecy;
+    protected $testExtensionsToLoad = [
+        'typo3conf/ext/maps2'
+    ];
 
     protected function setUp(): void
     {
-        $this->objectManagerProphecy = $this->prophesize(ObjectManager::class);
-        $this->poiCollectionRepositoryProphecy = $this->prophesize(PoiCollectionRepository::class);
-        $this->mapServiceProphecy = $this->prophesize(MapService::class);
-        $this->viewProphecy = $this->prophesize(TemplateView::class);
-        $this->configurationManagerProphecy = $this->prophesize(ConfigurationManager::class);
-        $this->controllerContextProphecy = $this->prophesize(ControllerContext::class);
+        parent::setUp();
 
-        $this->objectManagerProphecy
-            ->get(PoiCollectionRepository::class)
-            ->shouldBeCalled()
-            ->willReturn($this->poiCollectionRepositoryProphecy->reveal());
-
-        GeneralUtility::addInstance(MapService::class, $this->mapServiceProphecy->reveal());
-
-        $this->subject = $this->getAccessibleMock(PoiCollectionController::class, ['dummy']);
-        $this->subject->_set('settings', []);
-        $this->subject->_set('objectManager', $this->objectManagerProphecy->reveal());
-        $this->subject->_set('view', $this->viewProphecy->reveal());
-        $this->subject->_set('configurationManager', $this->configurationManagerProphecy->reveal());
-        $this->subject->_set('controllerContext', $this->controllerContextProphecy->reveal());
+        $this->importDataSet('ntf://Database/pages.xml');
+        $this->importDataSet(__DIR__ . '/../Fixtures/sys_category_record_mm.xml');
+        $this->importDataSet(__DIR__ . '/../Fixtures/sys_category.xml');
+        $this->importDataSet(__DIR__ . '/../Fixtures/tx_maps2_domain_model_poicollection.xml');
+        $this->setUpFrontendRootPage(1, [__DIR__ . '/../Fixtures/TypoScript/setup.typoscript']);
     }
 
     protected function tearDown(): void
     {
-        unset($this->subject);
+        unset(
+            $this->subject
+        );
+
         parent::tearDown();
     }
 
     /**
      * @test
      */
-    public function showActionShowsPoiCollectionFromUri(): void
+    public function showActionWillShowPoiCollectionDefinedInPlugin(): void
     {
-        $poiCollection = new PoiCollection();
-        $this->viewProphecy
-            ->assign('poiCollections', [$poiCollection])
-            ->shouldBeCalled();
+        $this->importDataSet(__DIR__ . '/../Fixtures/tt_content-with-poicollection.xml');
 
-        $this->subject->showAction($poiCollection);
-    }
+        $response = $this->getFrontendResponse(1);
 
-    /**
-     * @test
-     */
-    public function showActionShowsPoiCollectionByItsIdentifier(): void
-    {
-        $this->subject->_set(
-            'settings',
-            [
-                'poiCollection' => 123
-            ]
+        $this->assertSame('success', $response->getStatus());
+
+        $content = $response->getContent();
+
+        self::assertStringContainsString(
+            '&quot;title&quot;:&quot;Jochen&quot;',
+            $content
         );
 
-        $poiCollection = new PoiCollection();
-        $this->poiCollectionRepositoryProphecy
-            ->findByIdentifier(123)
-            ->shouldBeCalled()
-            ->willReturn($poiCollection);
-        $this->viewProphecy
-            ->assign('poiCollections', [$poiCollection])
-            ->shouldBeCalled();
-
-        $this->subject->showAction();
+        self::assertStringNotContainsString(
+            'data-pois="{}"',
+            $content
+        );
     }
 
     /**
      * @test
      */
-    public function showActionWithCategoriesButWithoutPoiCollectionsAddsFlashMessage(): void
+    public function showActionWithCategoriesButWithoutPoiCollectionsAddsEmptyPois(): void
     {
-        $this->subject->_set(
-            'settings',
-            [
-                'categories' => '12,13'
-            ]
+        $this->importDataSet(__DIR__ . '/../Fixtures/tt_content-with-empty-category.xml');
+
+        $response = $this->getFrontendResponse(1);
+
+        $this->assertSame('success', $response->getStatus());
+
+        $content = $response->getContent();
+
+        self::assertStringContainsString(
+            'data-pois="{}"',
+            $content
+        );
+    }
+
+    /**
+     * Will show only ONE PoiCollection, because the other PoiCollection is in pid 12 (not 1 (TS))
+     *
+     * @test
+     */
+    public function showActionWithCategoriesWillShowPoiCollection(): void
+    {
+        $this->importDataSet(__DIR__ . '/../Fixtures/tt_content-with-category.xml');
+
+        $response = $this->getFrontendResponse(1);
+
+        $this->assertSame('success', $response->getStatus());
+
+        $content = $response->getContent();
+
+        self::assertStringContainsString(
+            '&quot;title&quot;:&quot;Jochen&quot;',
+            $content
         );
 
-        /** @var FlashMessage|ObjectProphecy $flashMessageProphecy */
-        $flashMessageProphecy = $this->prophesize(FlashMessage::class);
-        GeneralUtility::addInstance(FlashMessage::class, $flashMessageProphecy->reveal());
-
-        /** @var FlashMessageQueue|ObjectProphecy $flashMessageQueueProphecy */
-        $flashMessageQueueProphecy = $this->prophesize(FlashMessageQueue::class);
-        $flashMessageQueueProphecy
-            ->enqueue($flashMessageProphecy->reveal())
-            ->shouldBeCalled($flashMessageProphecy->reveal());
-
-        $this->controllerContextProphecy
-            ->getFlashMessageQueue()
-            ->shouldBeCalled()
-            ->willReturn($flashMessageQueueProphecy->reveal());
-
-        /** @var QueryResultInterface|ObjectProphecy $queryResultProphecy */
-        $queryResultProphecy = $this->prophesize(QueryResultInterface::class);
-        $queryResultProphecy
-            ->count()
-            ->shouldBeCalled()
-            ->willReturn(0);
-
-        $this->poiCollectionRepositoryProphecy
-            ->findPoisByCategories('12,13')
-            ->shouldBeCalled()
-            ->willReturn($queryResultProphecy->reveal());
-        $this->viewProphecy
-            ->assign('poiCollections', $queryResultProphecy->reveal())
-            ->shouldBeCalled();
-
-        $this->subject->showAction();
-    }
-
-    /**
-     * @test
-     */
-    public function showActionWithCategoriesWithPoiCollections(): void
-    {
-        $this->subject->_set(
-            'settings',
-            [
-                'categories' => '12,13'
-            ]
+        self::assertStringNotContainsString(
+            'data-pois="{}"',
+            $content
         );
-
-        /** @var QueryResultInterface|ObjectProphecy $queryResultProphecy */
-        $queryResultProphecy = $this->prophesize(QueryResultInterface::class);
-        $queryResultProphecy
-            ->count()
-            ->shouldBeCalled()
-            ->willReturn(2);
-
-        $this->poiCollectionRepositoryProphecy
-            ->findPoisByCategories('12,13')
-            ->shouldBeCalled()
-            ->willReturn($queryResultProphecy->reveal());
-        $this->viewProphecy
-            ->assign('poiCollections', $queryResultProphecy->reveal())
-            ->shouldBeCalled();
-
-        $this->subject->showAction();
-    }
-
-    /**
-     * @test
-     */
-    public function showActionWithStorageFoldersButWithoutPoiCollectionsAddsFlashMessage(): void
-    {
-        /** @var FlashMessage|ObjectProphecy $flashMessageProphecy */
-        $flashMessageProphecy = $this->prophesize(FlashMessage::class);
-        GeneralUtility::addInstance(FlashMessage::class, $flashMessageProphecy->reveal());
-
-        /** @var FlashMessageQueue|ObjectProphecy $flashMessageQueueProphecy */
-        $flashMessageQueueProphecy = $this->prophesize(FlashMessageQueue::class);
-        $flashMessageQueueProphecy
-            ->enqueue($flashMessageProphecy->reveal())
-            ->shouldBeCalled($flashMessageProphecy->reveal());
-
-        $this->controllerContextProphecy
-            ->getFlashMessageQueue()
-            ->shouldBeCalled()
-            ->willReturn($flashMessageQueueProphecy->reveal());
-
-        /** @var QueryResultInterface|ObjectProphecy $queryResultProphecy */
-        $queryResultProphecy = $this->prophesize(QueryResultInterface::class);
-        $queryResultProphecy
-            ->count()
-            ->shouldBeCalled()
-            ->willReturn(0);
-
-        $this->poiCollectionRepositoryProphecy
-            ->findAll()
-            ->shouldBeCalled()
-            ->willReturn($queryResultProphecy->reveal());
-        $this->viewProphecy
-            ->assign('poiCollections', $queryResultProphecy->reveal())
-            ->shouldBeCalled();
-
-        $this->subject->showAction();
     }
 
     /**
@@ -255,21 +131,26 @@ class PoiCollectionControllerTest extends UnitTestCase
      */
     public function showActionWithStorageFoldersWithPoiCollections(): void
     {
-        /** @var QueryResultInterface|ObjectProphecy $queryResultProphecy */
-        $queryResultProphecy = $this->prophesize(QueryResultInterface::class);
-        $queryResultProphecy
-            ->count()
-            ->shouldBeCalled()
-            ->willReturn(2);
+        $this->importDataSet(__DIR__ . '/../Fixtures/tt_content-with-pages.xml');
 
-        $this->poiCollectionRepositoryProphecy
-            ->findAll()
-            ->shouldBeCalled()
-            ->willReturn($queryResultProphecy->reveal());
-        $this->viewProphecy
-            ->assign('poiCollections', $queryResultProphecy->reveal())
-            ->shouldBeCalled();
+        $response = $this->getFrontendResponse(1);
 
-        $this->subject->showAction();
+        $this->assertSame('success', $response->getStatus());
+
+        $content = $response->getContent();
+
+        self::assertStringContainsString(
+            '&quot;title&quot;:&quot;Jochen&quot;',
+            $content
+        );
+        self::assertStringContainsString(
+            '&quot;title&quot;:&quot;Stefan&quot;',
+            $content
+        );
+
+        self::assertStringNotContainsString(
+            'data-pois="{}"',
+            $content
+        );
     }
 }

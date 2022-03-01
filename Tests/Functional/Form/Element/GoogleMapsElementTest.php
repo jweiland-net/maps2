@@ -80,8 +80,13 @@ class GoogleMapsElementTest extends FunctionalTestCase
         ];
 
         $this->extConf = new ExtConf();
+        GeneralUtility::setSingletonInstance(ExtConf::class, $this->extConf);
+
         $this->pageRendererProphecy = $this->prophesize(PageRenderer::class);
+        GeneralUtility::setSingletonInstance(PageRenderer::class, $this->pageRendererProphecy->reveal());
+
         $this->mapHelperProphecy = $this->prophesize(MapHelper::class);
+        GeneralUtility::addInstance(MapHelper::class, $this->mapHelperProphecy->reveal());
 
         $this->viewProphecy = $this->prophesize(StandaloneView::class);
         GeneralUtility::addInstance(StandaloneView::class, $this->viewProphecy->reveal());
@@ -90,9 +95,6 @@ class GoogleMapsElementTest extends FunctionalTestCase
             GeneralUtility::makeInstance(NodeFactory::class),
             $this->data
         );
-        $this->subject->injectExtConf($this->extConf);
-        $this->subject->injectPageRenderer($this->pageRendererProphecy->reveal());
-        $this->subject->injectMapHelper($this->mapHelperProphecy->reveal());
     }
 
     protected function tearDown(): void

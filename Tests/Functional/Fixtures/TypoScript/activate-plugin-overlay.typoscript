@@ -1,7 +1,4 @@
-config {
-  watcher {
-    tableFields {
-      tx_maps2_domain_model_poicollection = uid,_ORIG_uid,_LOCALIZED_UID,pid,sorting,sys_language_uid,title,categories
-    }
-  }
-}
+tt_content = USER_INT
+tt_content.userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
+tt_content.extensionName = Maps2
+tt_content.pluginName = Overlay

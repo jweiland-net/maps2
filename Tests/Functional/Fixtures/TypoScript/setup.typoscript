@@ -10,10 +10,10 @@ config {
   sys_language_overlay = 1
 }
 
-tt_content = USER_INT
+tt_content = USER
 tt_content.userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
 tt_content.extensionName = Maps2
-tt_content.pluginName = Overlay
+tt_content.pluginName = Maps2
 
 plugin.tx_maps2 {
   view {
@@ -26,6 +26,9 @@ plugin.tx_maps2 {
     layoutRootPaths {
       0 = EXT:maps2/Resources/Private/Layouts/
     }
+  }
+  persistence {
+    storagePid = 1
   }
   settings {
     mapProvider = gm

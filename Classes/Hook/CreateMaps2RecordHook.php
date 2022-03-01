@@ -157,10 +157,6 @@ class CreateMaps2RecordHook
      * poiCollection records in default language with the title of the last processed translated record.
      *
      * This method prevents processing such records.
-     *
-     * @param array $recordFromRequest
-     * @param string $tableName
-     * @return bool
      */
     protected function isValidRecord(array $recordFromRequest, string $tableName): bool
     {

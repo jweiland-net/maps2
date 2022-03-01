@@ -208,7 +208,11 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
     public function processDatamapWillBreakIfPoiCollectionIsNotAllowedToBeCreated(): void
     {
         $event = new AllowCreationOfPoiCollectionEvent(
-            $this->getDatabaseConnection()->selectSingleRow('*', 'tx_events2_domain_model_location', 'uid = 1'),
+            $this->getDatabaseConnection()->selectSingleRow(
+                '*',
+                'tx_events2_domain_model_location',
+                'uid = 1'
+            ),
             'tx_events2_domain_model_location',
             'tx_maps2_uid',
             $this->columnRegistry['tx_events2_domain_model_location']['tx_maps2_uid'],
@@ -237,6 +241,8 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
                     'uid' => '1',
                     'pid' => '12',
                     'location' => 'Stefan',
+                    'sys_language_uid' => 0,
+                    'l10n_parent' => 0,
                     'tx_maps2_uid' => 1
                 ]
             ]
@@ -270,6 +276,8 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
                     'uid' => '1',
                     'pid' => '12',
                     'location' => 'Stefan',
+                    'sys_language_uid' => 0,
+                    'l10n_parent' => 0,
                     'tx_maps2_uid' => 1
                 ]
             ]
@@ -336,6 +344,8 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
                     'uid' => '1',
                     'pid' => '12',
                     'location' => 'Stefan',
+                    'sys_language_uid' => 0,
+                    'l10n_parent' => 0,
                     'tx_maps2_uid' => 1
                 ]
             ]
@@ -356,6 +366,8 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
                     'uid' => '1',
                     'pid' => '12',
                     'location' => 'Stefan',
+                    'sys_language_uid' => 0,
+                    'l10n_parent' => 0,
                     'tx_maps2_uid' => 1
                 ]
             ]

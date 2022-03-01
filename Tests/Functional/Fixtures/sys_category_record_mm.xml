@@ -1,29 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <dataset>
-	<tx_maps2_domain_model_poicollection>
-		<uid>1</uid>
-		<pid>1</pid>
-		<hidden>0</hidden>
-		<deleted>0</deleted>
-		<map_provider>gm</map_provider>
-		<collection_type>Point</collection_type>
-		<title>Jochen</title>
-		<latitude>51.01827735</latitude>
-		<longitude>7.3854744963651</longitude>
-		<info_window_content>Cat: 1</info_window_content>
-		<categories>1</categories>
-	</tx_maps2_domain_model_poicollection>
-	<tx_maps2_domain_model_poicollection>
-		<uid>2</uid>
-		<pid>1</pid>
-		<hidden>0</hidden>
-		<deleted>0</deleted>
-		<map_provider>gm</map_provider>
-		<collection_type>Point</collection_type>
-		<title>Stefan</title>
-		<latitude>46.01827735</latitude>
-		<longitude>3.3854744963651</longitude>
-		<info_window_content>Cat: 1</info_window_content>
-		<categories>1</categories>
-	</tx_maps2_domain_model_poicollection>
+	<sys_category_record_mm>
+		<uid_local>1</uid_local>
+		<uid_foreign>1</uid_foreign>
+		<tablenames>tx_maps2_domain_model_poicollection</tablenames>
+		<fieldname>categories</fieldname>
+		<sorting>0</sorting>
+		<sorting_foreign>1</sorting_foreign>
+	</sys_category_record_mm>
+	<sys_category_record_mm>
+		<uid_local>1</uid_local>
+		<uid_foreign>2</uid_foreign>
+		<tablenames>tx_maps2_domain_model_poicollection</tablenames>
+		<fieldname>categories</fieldname>
+		<sorting>0</sorting>
+		<sorting_foreign>2</sorting_foreign>
+	</sys_category_record_mm>
 </dataset>

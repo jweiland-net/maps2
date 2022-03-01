@@ -33,12 +33,13 @@ class OverlayTest extends FunctionalTestCase
         parent::setUp();
 
         $this->importDataSet('ntf://Database/pages.xml');
-        $this->importDataSet(__DIR__ . '/Fixtures/tt_content.xml');
+        $this->importDataSet(__DIR__ . '/Fixtures/tt_content-with-poicollection.xml');
         $this->importDataSet(__DIR__ . '/Fixtures/tx_maps2_domain_model_poicollection.xml');
         $this->setUpFrontendRootPage(
             1,
             [
-                __DIR__ . '/Fixtures/TypoScript/setup.typoscript'
+                __DIR__ . '/Fixtures/TypoScript/setup.typoscript',
+                __DIR__ . '/Fixtures/TypoScript/activate-plugin-overlay.typoscript'
             ]
         );
     }
