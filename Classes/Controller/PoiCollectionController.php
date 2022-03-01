@@ -16,7 +16,6 @@ use JWeiland\Maps2\Domain\Model\Search;
 use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
 use JWeiland\Maps2\Service\GeoCodeService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 
 /**
  * The main controller to show various kinds of markers on Maps
@@ -82,9 +81,8 @@ class PoiCollectionController extends AbstractController
 
     protected function getRequestUri(): string
     {
-        $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
-
-        return $uriBuilder->reset()
+        return $this->uriBuilder
+            ->reset()
             ->setAddQueryString(true)
             ->setAddQueryStringMethod('GET')
             ->setArguments([
