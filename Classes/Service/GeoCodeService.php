@@ -18,7 +18,6 @@ use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Mapper\MapperFactory;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\SingletonInterface;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
