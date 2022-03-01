@@ -1,0 +1,7 @@
+config {
+  watcher {
+    tableFields {
+      tx_maps2_domain_model_poicollection = uid,_ORIG_uid,_LOCALIZED_UID,pid,sorting,sys_language_uid,title,categories
+    }
+  }
+}

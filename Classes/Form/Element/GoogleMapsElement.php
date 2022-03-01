@@ -47,21 +47,6 @@ class GoogleMapsElement extends AbstractFormElement
         ],
     ];
 
-    public function injectExtConf(ExtConf $extConf): void
-    {
-        $this->extConf = $extConf;
-    }
-
-    public function injectPageRenderer(PageRenderer $pageRenderer): void
-    {
-        $this->pageRenderer = $pageRenderer;
-    }
-
-    public function injectMapHelper(MapHelper $mapHelper): void
-    {
-        $this->mapHelper = $mapHelper;
-    }
-
     /**
      * This will render Google Maps within PoiCollection records with a marker you can drag and drop
      *
@@ -70,6 +55,10 @@ class GoogleMapsElement extends AbstractFormElement
      */
     public function render(): array
     {
+        $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
+        $this->pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
+        $this->mapHelper = GeneralUtility::makeInstance(MapHelper::class);
+
         $parameterArray = $this->data['parameterArray'];
         $resultArray = $this->initializeResultArray();
 
