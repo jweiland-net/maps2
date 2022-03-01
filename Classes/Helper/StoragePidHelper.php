@@ -71,7 +71,8 @@ class StoragePidHelper
      */
     protected function updateStoragePidFromMaps2Registry(
         int &$defaultStoragePid,
-        array $options, $foreignLocationRecord
+        array $options,
+        array $foreignLocationRecord
     ): void {
         if (array_key_exists('defaultStoragePid', $options)) {
             $storagePid = $this->getHardCodedStoragePidFromMaps2Registry($options);

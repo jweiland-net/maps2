@@ -100,7 +100,6 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
 
         $contentWithJson = $view->render();
 
-
         self::assertStringContainsString(
             '{&quot;foo&quot;:&quot;bar&quot;}',
             $contentWithJson

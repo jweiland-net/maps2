@@ -52,7 +52,7 @@ class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
 
             if (empty($valueFromDatabase)) {
                 continue;
-           }
+            }
 
             if (!isset($valueFromDatabase['data'])) {
                 continue;

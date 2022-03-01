@@ -13,7 +13,6 @@ namespace JWeiland\Maps2\Helper;
 
 use JWeiland\Maps2\Configuration\ExtConf;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
  * Little helper with a very reduced set of dependencies like Extbase. Useful, if you need f.e. the configured

@@ -14,7 +14,6 @@ namespace JWeiland\Maps2\Form\Element;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Helper\MapHelper;
 use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
-use TYPO3\CMS\Backend\Form\NodeFactory;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;

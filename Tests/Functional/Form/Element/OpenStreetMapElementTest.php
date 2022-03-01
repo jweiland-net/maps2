@@ -12,7 +12,6 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Tests\Functional\Form\Element;
 
 use JWeiland\Maps2\Configuration\ExtConf;
-use JWeiland\Maps2\Form\Element\GoogleMapsElement;
 use JWeiland\Maps2\Form\Element\OpenStreetMapElement;
 use JWeiland\Maps2\Helper\MapHelper;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;

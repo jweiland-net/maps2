@@ -15,11 +15,8 @@ use JWeiland\Maps2\Client\Request\GoogleMaps\GeocodeRequest;
 use JWeiland\Maps2\Client\Request\RequestFactory;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Helper\MapHelper;
-use JWeiland\Maps2\Service\MapService;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Test Request Factory class

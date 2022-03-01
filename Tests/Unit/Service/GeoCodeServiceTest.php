@@ -136,7 +136,8 @@ class GeoCodeServiceTest extends UnitTestCase
      *
      * @datProvider dataProviderForGeocodeRequests
      */
-    public function getPositionsByAddressWithEmptyResponseWillReturnEmptyObjectStorage(): void {
+    public function getPositionsByAddressWithEmptyResponseWillReturnEmptyObjectStorage(): void
+    {
         $address = 'test street 123, 12345 city';
         $objectStorage = new ObjectStorage();
 

@@ -12,7 +12,6 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Client\Request;
 
 use JWeiland\Maps2\Configuration\ExtConf;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
 
 /**
@@ -95,6 +94,6 @@ abstract class AbstractRequest implements RequestInterface
             return false;
         }
 
-        return (bool) filter_var($this->getUri(), FILTER_VALIDATE_URL);
+        return (bool)filter_var($this->getUri(), FILTER_VALIDATE_URL);
     }
 }

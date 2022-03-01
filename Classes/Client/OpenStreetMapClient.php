@@ -12,7 +12,6 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Client;
 
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
-use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**

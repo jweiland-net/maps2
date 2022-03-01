@@ -11,12 +11,10 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Controller;
 
-use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Domain\Model\Search;
 use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
 use JWeiland\Maps2\Service\GeoCodeService;
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 

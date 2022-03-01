@@ -12,7 +12,6 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Mapper;
 
 use JWeiland\Maps2\Helper\MapHelper;
-use JWeiland\Maps2\Service\MapService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**

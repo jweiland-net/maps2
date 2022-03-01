@@ -14,7 +14,6 @@ namespace JWeiland\Maps2\ExpressionLanguage;
 use JWeiland\Maps2\Helper\MapHelper;
 use Symfony\Component\ExpressionLanguage\ExpressionFunction;
 use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Check, if extension configuration is set

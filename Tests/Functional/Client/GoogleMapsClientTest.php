@@ -16,7 +16,6 @@ use JWeiland\Maps2\Client\Request\GoogleMaps\GeocodeRequest;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Helper\MessageHelper;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
-use Nimut\TestingFramework\TestCase\UnitTestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 

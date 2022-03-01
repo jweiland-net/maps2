@@ -12,14 +12,8 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Tests\Functional\Controller;
 
 use JWeiland\Maps2\Controller\PoiCollectionController;
-use JWeiland\Maps2\Domain\Model\PoiCollection;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
-use TYPO3\CMS\Core\Messaging\FlashMessage;
-use TYPO3\CMS\Core\Messaging\FlashMessageQueue;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 /**
  * Class PoiCollectionControllerTest
@@ -66,7 +60,7 @@ class PoiCollectionControllerTest extends FunctionalTestCase
 
         $response = $this->getFrontendResponse(1);
 
-        $this->assertSame('success', $response->getStatus());
+        self::assertSame('success', $response->getStatus());
 
         $content = $response->getContent();
 
@@ -90,7 +84,7 @@ class PoiCollectionControllerTest extends FunctionalTestCase
 
         $response = $this->getFrontendResponse(1);
 
-        $this->assertSame('success', $response->getStatus());
+        self::assertSame('success', $response->getStatus());
 
         $content = $response->getContent();
 
@@ -111,7 +105,7 @@ class PoiCollectionControllerTest extends FunctionalTestCase
 
         $response = $this->getFrontendResponse(1);
 
-        $this->assertSame('success', $response->getStatus());
+        self::assertSame('success', $response->getStatus());
 
         $content = $response->getContent();
 
@@ -135,7 +129,7 @@ class PoiCollectionControllerTest extends FunctionalTestCase
 
         $response = $this->getFrontendResponse(1);
 
-        $this->assertSame('success', $response->getStatus());
+        self::assertSame('success', $response->getStatus());
 
         $content = $response->getContent();
 

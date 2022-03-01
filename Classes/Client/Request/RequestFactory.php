@@ -11,7 +11,6 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Client\Request;
 
-use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Helper\MapHelper;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
