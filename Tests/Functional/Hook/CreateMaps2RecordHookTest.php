@@ -102,8 +102,14 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
         parent::setUp();
         $this->setUpBackendUserFromFixture(1);
 
-        // $this->importDataSet(__DIR__ . '/../Fixtures/static_countries.xml');
         $this->importDataSet(__DIR__ . '/../Fixtures/tx_events2_domain_model_location.xml');
+
+        // Seems that records of ext_tables_static+adt.sql will be included just once for all tests in this class.
+        // So, for all tests (except the first one), we have to add the record ourselves.
+        $country = $this->getDatabaseConnection()->selectSingleRow('*', 'static_countries', 'uid=54');
+        if ($country === false) {
+            $this->importDataSet(__DIR__ . '/../Fixtures/static_countries.xml');
+        }
 
         $this->geoCodeServiceProphecy = $this->prophesize(GeoCodeService::class);
         $this->messageHelperProphecy = $this->prophesize(MessageHelper::class);
