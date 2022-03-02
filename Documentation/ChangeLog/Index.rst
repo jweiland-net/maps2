@@ -19,6 +19,7 @@ ChangeLog
 - Replace PoiCollection and EditPoiCollection Widget
 - Add new setting: overlay.link.addSection
 - Category selection in FE works for area, route and radius, too.
+- Add SettingsHelper to get streamlined settings
 
 **Version 9.3.10**
 

@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\ViewHelpers;
 
 use JWeiland\Maps2\Configuration\ExtConf;
+use JWeiland\Maps2\Helper\SettingsHelper;
 use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -47,7 +48,7 @@ class GetEnvironmentViewHelper extends AbstractViewHelper
         $templateVariableContainer->add(
             'environment',
             [
-                'settings' => self::getMaps2TypoScriptSettings(),
+                'settings' => self::getSettingsHelper()->getPrepareSettings(),
                 'extConf' => ObjectAccess::getGettableProperties(GeneralUtility::makeInstance(ExtConf::class)),
                 'id' => $GLOBALS['TSFE']->id,
                 'contentRecord' => self::getConfigurationManager()->getContentObject()->data
@@ -61,24 +62,13 @@ class GetEnvironmentViewHelper extends AbstractViewHelper
         return $content;
     }
 
-    protected static function getMaps2TypoScriptSettings(): array
-    {
-        $fullTypoScript = self::getConfigurationManager()->getConfiguration(
-            ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT
-        );
-
-        if (ArrayUtility::isValidPath($fullTypoScript, 'plugin./tx_maps2./settings.')) {
-            $typoScriptService = GeneralUtility::makeInstance(TypoScriptService::class);
-            $settings = ArrayUtility::getValueByPath($fullTypoScript, 'plugin./tx_maps2./settings.');
-
-            return $typoScriptService->convertTypoScriptArrayToPlainArray($settings);
-        }
-
-        return [];
-    }
-
     protected static function getConfigurationManager(): ConfigurationManagerInterface
     {
         return GeneralUtility::makeInstance(ConfigurationManagerInterface::class);
+    }
+
+    protected static function getSettingsHelper(): SettingsHelper
+    {
+        return GeneralUtility::makeInstance(SettingsHelper::class);
     }
 }

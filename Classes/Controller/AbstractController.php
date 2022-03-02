@@ -13,10 +13,10 @@ namespace JWeiland\Maps2\Controller;
 
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Event\PostProcessFluidVariablesEvent;
+use JWeiland\Maps2\Helper\SettingsHelper;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
@@ -29,9 +29,16 @@ class AbstractController extends ActionController
 {
     protected ExtConf $extConf;
 
+    protected SettingsHelper $settingsHelper;
+
     public function injectExtConf(ExtConf $extConf): void
     {
         $this->extConf = $extConf;
+    }
+
+    public function injectSettingsHelper(SettingsHelper $settingsHelper): void
+    {
+        $this->settingsHelper = $settingsHelper;
     }
 
     public function injectConfigurationManager(ConfigurationManagerInterface $configurationManager): void
@@ -69,17 +76,16 @@ class AbstractController extends ActionController
             $contentRecord['l18n_diffsource']
         );
 
-        $this->prepareSettings();
         $view->assign('data', $contentRecord);
         $view->assign('environment', [
-            'settings' => $this->settings,
+            'settings' => $this->getPreparedSettings(),
             'extConf' => ObjectAccess::getGettableProperties($this->extConf),
             'id' => $GLOBALS['TSFE']->id,
             'contentRecord' => $contentRecord
         ]);
     }
 
-    protected function prepareSettings(): void
+    protected function getPreparedSettings(): array
     {
         if (array_key_exists('infoWindowContentTemplatePath', $this->settings)) {
             $this->settings['infoWindowContentTemplatePath'] = trim($this->settings['infoWindowContentTemplatePath']);
@@ -87,9 +93,7 @@ class AbstractController extends ActionController
             $this->addFlashMessage('Dear Admin: Please add default static template of maps2 into your TS-Template.');
         }
 
-        $this->settings['forceZoom'] = (bool)($this->settings['forceZoom'] ?? false);
-
-        if (empty($this->settings['mapProvider'])) {
+        if (empty($settings['mapProvider'] ?? '')) {
             $this->controllerContext
                 ->getFlashMessageQueue()
                 ->enqueue(GeneralUtility::makeInstance(
@@ -100,30 +104,7 @@ class AbstractController extends ActionController
                 ));
         }
 
-        // https://wiki.openstreetmap.org/wiki/Tile_servers tolds to use ${x} placeholders, but they don't work.
-        if (!empty($this->settings['mapTile'])) {
-            $this->settings['mapTile'] = str_replace(
-                ['${s}', '${x}', '${y}', '${z}'],
-                ['{s}', '{x}', '{y}', '{z}'],
-                $this->settings['mapTile']
-            );
-        }
-
-        if (
-            isset(
-                $this->settings['markerClusterer']['enable'],
-                $this->settings['markerClusterer']['imagePath']
-            )
-            && !empty($this->settings['markerClusterer']['enable'])
-            && !empty($this->settings['markerClusterer']['imagePath'])
-        ) {
-            $this->settings['markerClusterer']['enable'] = 1;
-            $this->settings['markerClusterer']['imagePath'] = PathUtility::getAbsoluteWebPath(
-                GeneralUtility::getFileAbsFileName(
-                    $this->settings['markerClusterer']['imagePath']
-                )
-            );
-        }
+        return $this->settingsHelper->getPrepareSettings($this->settings);
     }
 
     protected function postProcessAndAssignFluidVariables(array $variables = []): void

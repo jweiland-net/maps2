@@ -18,15 +18,12 @@ use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
- * Contains methods to create FlashMessage.
+ * Contains methods to create FlashMessages.
  * Further we will implement a central position for Logging
  */
 class MessageHelper
 {
-    /**
-     * @var FlashMessageService
-     */
-    protected $flashMessageService;
+    protected FlashMessageService $flashMessageService;
 
     public function __construct(FlashMessageService $flashMessageService)
     {

@@ -31,6 +31,10 @@ services:
   JWeiland\Maps2\Helper\MapHelper:
     public: true
 
+  # Called by makeInstance in our GetEnvironmentViewHelper
+  JWeiland\Maps2\Helper\SettingsHelper:
+    public: true
+
   # Called by makeInstance in TYPO3's DataHandler
   JWeiland\Maps2\Hook\CreateMaps2RecordHook:
     public: true
