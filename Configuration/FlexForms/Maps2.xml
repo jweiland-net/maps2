@@ -35,11 +35,11 @@
 								<type>select</type>
 								<renderType>selectTree</renderType>
 								<foreign_table>sys_category</foreign_table>
-								<foreign_table_where>('0' = '###PAGE_TSCONFIG_IDLIST###' OR sys_category.pid IN (###PAGE_TSCONFIG_IDLIST###))</foreign_table_where>
+								<foreign_table_where>('0' = '###PAGE_TSCONFIG_IDLIST###' OR sys_category.pid IN (###PAGE_TSCONFIG_IDLIST###)) AND (sys_category.sys_language_uid = 0 OR sys_category.l10n_parent = 0) ORDER BY sys_category.sorting</foreign_table_where>
 								<treeConfig>
 									<parentField>parent</parentField>
-									<rootUid>0</rootUid>
 									<appearance>
+										<maxLevels>99</maxLevels>
 										<showHeader>TRUE</showHeader>
 										<expandAll>FALSE</expandAll>
 									</appearance>
