@@ -76,8 +76,6 @@ class PoiCollectionRepository extends Repository
             )
         );
 
-        var_dump($queryBuilder->getParameters());
-
         return $extbaseQuery->statement($queryBuilder)->execute();
     }
 
