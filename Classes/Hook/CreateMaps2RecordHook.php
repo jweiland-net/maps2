@@ -135,13 +135,14 @@ class CreateMaps2RecordHook
                         );
                     }
 
-                    $this->emitPostUpdatePoiCollectionSignal(
+                    $this->emitPostUpdatePoiCollectionEvent(
                         'tx_maps2_domain_model_poicollection',
                         (int)$foreignLocationRecord[$foreignColumnName],
                         $foreignTableName,
                         $foreignLocationRecord,
                         $options
                     );
+
                     $this->clearHtmlCache((int)$foreignLocationRecord[$foreignColumnName]);
                 }
             }
@@ -246,7 +247,7 @@ class CreateMaps2RecordHook
             }
         }
 
-        // You need JOINs or more complex matches? Please register SignalSlot.
+        // You need JOINs or more complex matches? Please register an Event.
         $this->emitIsRecordAllowedToCreatePoiCollection(
             $foreignLocationRecord,
             $foreignTableName,
@@ -562,7 +563,7 @@ class CreateMaps2RecordHook
      * Use this event, if you want to implement further modification to our POI collection record, while saving
      * a foreign location record.
      */
-    protected function emitPostUpdatePoiCollectionSignal(
+    protected function emitPostUpdatePoiCollectionEvent(
         string $poiCollectionTableName,
         int $poiCollectionUid,
         string $foreignTableName,

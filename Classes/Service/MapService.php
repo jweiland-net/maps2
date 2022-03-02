@@ -319,7 +319,7 @@ class MapService
                     $foreignRecord['jwMaps2ColumnName'] = $columnName;
 
                     // Add or remove your own values
-                    $foreignRecord = $this->emitPreAddForeignRecordToPoiCollectionSignal(
+                    $foreignRecord = $this->emitPreAddForeignRecordToPoiCollectionEvent(
                         $foreignRecord,
                         $tableName,
                         $columnName
@@ -335,7 +335,7 @@ class MapService
      * Use this EventListener, if you want to modify the foreign record, before adding it to PoiCollection record.
      * If you set $foreignRecord to empty array it will NOT be added to PoiCollection.
      */
-    protected function emitPreAddForeignRecordToPoiCollectionSignal(
+    protected function emitPreAddForeignRecordToPoiCollectionEvent(
         array $foreignRecord,
         string $tableName,
         string $columnName

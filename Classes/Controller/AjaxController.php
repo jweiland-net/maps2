@@ -13,14 +13,14 @@ namespace JWeiland\Maps2\Controller;
 
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
+use JWeiland\Maps2\Event\RenderInfoWindowContentEvent;
 use JWeiland\Maps2\Service\MapService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
 
 /**
  * Handle Ajax requests.
- * Currently it is used to render the infoWindowContent of POIs.
+ * Currently, it is used to render the infoWindowContent of POIs.
  * This controller is not connected to the extbase environment and is reachable
  * over typeNum 1614075471
  */
@@ -54,7 +54,7 @@ class AjaxController extends ActionController
 
     public function renderInfoWindowContentAction(int $poiCollectionUid): string
     {
-        $infoWindowContent = $this->emitRenderInfoWindowSignal($poiCollectionUid);
+        $infoWindowContent = $this->emitRenderInfoWindowEvent($poiCollectionUid);
 
         if ($infoWindowContent === '') {
             $poiCollection = $this->poiCollectionRepository->findByIdentifier($poiCollectionUid);
@@ -73,26 +73,22 @@ class AjaxController extends ActionController
     }
 
     /**
-     * With this SignalSlot you can render the info window content on your own way.
-     * For performance reasons we do not with PoiCollection object here, that's your work.
+     * With this EventListener you can render the info window content on your own way.
+     * For performance reasons we do not work with PoiCollection object here, that's your work.
      * That way you can decide to use fast array by Doctrine or slow (but feature rich)
      * PoiCollection object.
      */
-    protected function emitRenderInfoWindowSignal(int $poiCollectionUid): string
+    protected function emitRenderInfoWindowEvent(int $poiCollectionUid): string
     {
-        $infoWindowContent = '';
-
-        $signalSlotDispatcher = GeneralUtility::makeInstance(Dispatcher::class);
-        $returnedArguments = $signalSlotDispatcher->dispatch(
-            self::class,
-            'renderInfoWindow',
-            [
+        /** @var RenderInfoWindowContentEvent $event */
+        $event = $this->eventDispatcher->dispatch(
+            new RenderInfoWindowContentEvent(
                 $poiCollectionUid,
-                $infoWindowContent,
+                '',
                 $this->configurationManager->getContentObject()
-            ]
+            )
         );
 
-        return (string)$returnedArguments[1];
+        return $event->getInfoWindowContent();
     }
 }
