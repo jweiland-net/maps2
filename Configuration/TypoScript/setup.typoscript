@@ -28,6 +28,11 @@ plugin.tx_maps2 {
   settings {
     zoom = 10
     zoomControl = 1
+    overlay {
+      link {
+        addSection = 1
+      }
+    }
     infoWindowContentTemplatePath =
     infoWindow {
       image {

@@ -16,7 +16,8 @@ ChangeLog
 - Move MapService::getMapProvider to MapHelper:getMapProvider
 - Remove MapProviderOverlayRequestHandler
 - Implement new uncached ControllerAction to show Overlay
-- Remove PoiCollection and EditPoiCollection Widget
+- Replace PoiCollection and EditPoiCollection Widget
+- Add new setting: overlay.link.addSection
 
 **Version 9.3.10**
 

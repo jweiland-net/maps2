@@ -37,6 +37,7 @@ Update these properties in TypoScript Constant Editor:
        }
    }
 
+
 .. _configuration-typoscript:
 
 TypoScript Setup Reference
@@ -49,10 +50,11 @@ In this section we describe the TS properties of `plugin.tx_maps2.setting.*`
    =============================== ========== ============================
    Property                        Data type  Default
    =============================== ========== ============================
-   infoWindowContentTemplatePath_  String     EXT:maps2/...
+   infoWindowContentTemplatePath_  String     EXT:maps2/...(cropped)
    infoWindow_                     Array
    mapProvider_                    String     template related (gm or osm)
    markerClusterer_                Array      template related
+   overlay_                        Array      Settings for overlay
    =============================== ========== ============================
 
 
@@ -125,6 +127,25 @@ If you have many POIs at a small range, it may help to activate markerClusterer 
 way you will not see all thousands of POIs anymore, but maybe 5 groups, showing the amount of contained POIs. If you
 zoom into the map, new groups, with a smaller collection will be build. If the collection reduces to 1 you will see
 the original POI again.
+
+
+.. _overlay:
+
+overlay
+-------
+
+Example:
+
+plugin.tx_maps2.settings.overlay.link.addSection = 0
+
+Within this array you will find settings to configure elements on the overlay template.
+The overlay template will be shown, if you have activated one of these
+`explicitAllowMapProviderRequests` options in extension settings to request user consent.
+
+With maps2 10.0.0 we have added a new setting to add the link section (or hash) to the end
+of the URI which will navigate the user directly to the correct content element on the page.
+
+As it is activated by default, you can disable that feature with this setting.
 
 
 Plugin settings

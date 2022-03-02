@@ -16,6 +16,7 @@ use JWeiland\Maps2\Domain\Model\Search;
 use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
 use JWeiland\Maps2\Service\GeoCodeService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 /**
  * The main controller to show various kinds of markers on Maps
@@ -82,7 +83,7 @@ class PoiCollectionController extends AbstractController
     protected function getRequestUri(): string
     {
         // Method setAddQueryStringMethod is deprecated with TYPO3 11. Remove while removing TYPO3 10 compatibility
-        return $this->uriBuilder
+        $uriBuilder = $this->uriBuilder
             ->reset()
             ->setAddQueryString(true)
             ->setAddQueryStringMethod('GET')
@@ -91,7 +92,19 @@ class PoiCollectionController extends AbstractController
                     'mapProviderRequestsAllowedForMaps2' => 1
                 ]
             ])
-            ->setArgumentsToBeExcludedFromQueryString(['cHash'])
-            ->build();
+            ->setArgumentsToBeExcludedFromQueryString(['cHash']);
+
+        if (($this->settings['overlay']['link']['addSection'] ?? '') === '1') {
+            $contentObject = $this->configurationManager->getContentObject();
+            if (
+                $contentObject instanceof ContentObjectRenderer
+                && isset($contentObject->data['uid'])
+                && $contentObject->data['uid']
+            ) {
+                $uriBuilder->setSection('c' . $contentObject->data['uid']);
+            }
+        }
+
+        return $uriBuilder->build();
     }
 }
