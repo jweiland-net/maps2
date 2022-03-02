@@ -395,7 +395,6 @@ return [
                     ],
                     'appearance' => [
                         'showPossibleLocalizationRecords' => true,
-                        'showRemovedLocalizationRecords' => true,
                         'showAllLocalizationLink' => true,
                         'showSynchronizationLink' => true
                     ],
@@ -434,7 +433,6 @@ return [
                     ],
                     'appearance' => [
                         'showPossibleLocalizationRecords' => true,
-                        'showRemovedLocalizationRecords' => true,
                         'showAllLocalizationLink' => true,
                         'showSynchronizationLink' => true
                     ],

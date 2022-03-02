@@ -25,7 +25,6 @@ call_user_func(static function(): void {
                     ],
                     'appearance' => [
                         'showPossibleLocalizationRecords' => true,
-                        'showRemovedLocalizationRecords' => true,
                         'showAllLocalizationLink' => true,
                         'showSynchronizationLink' => true
                     ],
