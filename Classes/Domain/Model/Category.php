@@ -77,6 +77,7 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
 
         $siteUrl = GeneralUtility::getIndpEnv('TYPO3_SITE_URL');
 
+        // Argument deprecated with TYPO3 11.3. Remove while removing TYPO3 10 compatibility
         return $siteUrl . $falIconReference->getPublicUrl(false);
     }
 

@@ -56,6 +56,9 @@ class AbstractController extends ActionController
         $this->settings = $originalSettings;
     }
 
+    /**
+     * ViewInterface is deprecated since TYPO3 11.5. Remove/Change while remove TYPO3 10 compatibility
+     */
     protected function initializeView(ViewInterface $view): void
     {
         $contentRecord = $this->configurationManager->getContentObject()->data;

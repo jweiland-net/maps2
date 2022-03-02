@@ -81,6 +81,7 @@ class PoiCollectionController extends AbstractController
 
     protected function getRequestUri(): string
     {
+        // Method setAddQueryStringMethod is deprecated with TYPO3 11. Remove while removing TYPO3 10 compatibility
         return $this->uriBuilder
             ->reset()
             ->setAddQueryString(true)
