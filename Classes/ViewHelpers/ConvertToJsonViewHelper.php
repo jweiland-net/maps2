@@ -95,6 +95,12 @@ class ConvertToJsonViewHelper extends AbstractViewHelper
      */
     protected static function valueContainsPoiCollections($value): bool
     {
+        // With PHP 8.1 reset() and current() should not be used with objects anymore.
+        // Extract the values as simple array to be compatible in the future.
+        if ($value instanceof \ArrayObject) {
+            $value = $value->getArrayCopy();
+        }
+
         $containsPoiCollections = false;
         if (is_array($value)) {
             reset($value);
