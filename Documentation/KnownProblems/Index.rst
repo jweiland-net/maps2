@@ -3,10 +3,10 @@
 
 .. _known-problems:
 
-==============
-Known Problems
-==============
+================
+DB compatibility
+================
 
-It's our first time working with OpenStreetMap API. We have tested it in various environments, but
-there still may some problems. Please create an issue at Github if you have still found an error.
-Thank you.
+In most cases EXT:maps2 uses the QueryBuilder to query data, but in case of Plugin `maps2_searchwithinradius`
+we need to execute a native MySQL query without QueryBuilder to find the related POIs. In that special case
+MySQL/MariaDB is mandatory.
