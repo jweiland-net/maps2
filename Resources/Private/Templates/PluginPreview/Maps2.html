@@ -13,18 +13,30 @@
 	<tbody>
 	<tr>
 		<td><strong>Plugin</strong></td>
-		<td>Maps2 (Show map)</td>
+		<td>{pluginName}</td>
 	</tr>
-	<f:if condition="{pi_flexform_transformed.settings.poiCollection}">
+	<f:if condition="{poiCollectionRecord}">
 		<tr>
 			<td><strong>POI collection</strong></td>
-			<td>{pi_flexform_transformed.settings.poiCollection}</td>
+			<td>{poiCollectionRecord.title} ({poiCollectionRecord.uid})</td>
 		</tr>
 	</f:if>
 	<f:if condition="{pi_flexform_transformed.settings.categories}">
 		<tr>
 			<td><strong>Categories</strong></td>
 			<td>{pi_flexform_transformed.settings.categories}</td>
+		</tr>
+	</f:if>
+	<f:if condition="{pi_flexform_transformed.settings.mapWidth}">
+		<tr>
+			<td><strong>Size</strong></td>
+			<td>{pi_flexform_transformed.settings.mapWidth} * {pi_flexform_transformed.settings.mapHeight}</td>
+		</tr>
+	</f:if>
+	<f:if condition="{pi_flexform_transformed.settings.zoom}">
+		<tr>
+			<td><strong>Zoom</strong></td>
+			<td>{pi_flexform_transformed.settings.zoom}</td>
 		</tr>
 	</f:if>
 	<f:if condition="{pages}">
