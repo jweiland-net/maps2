@@ -17,6 +17,10 @@ MySQL/MariaDB is mandatory.
 Consent Tools
 =============
 
+If you want to use external consent tools you should deactivate both options
+`explicitAllowMapProviderRequests` and `explicitAllowMapProviderRequestsBySessionOnly` in
+extension manager.
+
 Klaro
 -----
 
