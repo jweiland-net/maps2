@@ -38,7 +38,7 @@ SitePackage extension. Add `data-name` attribute to existing div-tag.
 
 In this example the `data-name` is `maps2`, so we have to create a service with name `maps2`:
 
-.. code-block:: json
+.. code-block:: javascript
 
    {
        name: 'maps2',
