@@ -93,7 +93,7 @@ class AbstractController extends ActionController
             $this->addFlashMessage('Dear Admin: Please add default static template of maps2 into your TS-Template.');
         }
 
-        if (empty($settings['mapProvider'] ?? '')) {
+        if (!array_key_exists('mapProvider', $this->settings)) {
             $this->controllerContext
                 ->getFlashMessageQueue()
                 ->enqueue(GeneralUtility::makeInstance(
