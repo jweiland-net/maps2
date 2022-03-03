@@ -124,7 +124,6 @@ function GoogleMaps2($element, environment) {
         if (lat && lng) {
             this.createMarkerByLatLng(lat, lng);
             this.map.setCenter(new google.maps.LatLng(lat, lng));
-            this.map.setZoom(15);
         } else {
             // Fallback
             this.map.setCenter(new google.maps.LatLng(environment.extConf.defaultLatitude, environment.extConf.defaultLongitude));

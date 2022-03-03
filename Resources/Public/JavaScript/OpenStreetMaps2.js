@@ -25,7 +25,6 @@ function OpenStreetMaps2($element, environment) {
         let lng = this.$element.data("longitude");
         if (lat && lng) {
             this.createMarkerByLatLng(lat, lng);
-            this.map.fitBounds(this.bounds);
         }
     } else {
         this.createPointByCollectionType(environment);
