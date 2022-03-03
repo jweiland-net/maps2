@@ -58,6 +58,6 @@ Maps2
    User/Index
    AdministratorManual/Index
    DeveloperManual/Index
-   KnownProblems/Index
+   FAQ/Index
    ToDoList/Index
    ChangeLog/Index

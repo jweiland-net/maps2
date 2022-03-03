@@ -63,7 +63,7 @@ class InitFeSessionMiddleware implements MiddlewareInterface
             $normalizedParams->getSitePath(),
             null,
             $isSecure,
-            true,
+            false, // Should be false to allow JS based consent tools to delete this cookie
             false,
             $cookieSameSite
         );
