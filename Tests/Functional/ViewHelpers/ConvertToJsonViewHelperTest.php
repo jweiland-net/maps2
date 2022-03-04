@@ -17,6 +17,7 @@ use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Helper\MapHelper;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
@@ -41,12 +42,14 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
     {
         parent::setUp();
 
+        $extConf = new ExtConf();
+        GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
+
+        $mapHelper = new MapHelper($extConf);
+        GeneralUtility::addInstance(MapHelper::class, $mapHelper);
         $this->poiCollection = new PoiCollection();
-        $this->poiCollection->injectExtConf(new ExtConf());
-        $this->poiCollection->injectMapHelper(new MapHelper(new ExtConf()));
 
         $this->category = new Category();
-        $this->category->injectExtConf(new ExtConf());
     }
 
     protected function tearDown(): void
