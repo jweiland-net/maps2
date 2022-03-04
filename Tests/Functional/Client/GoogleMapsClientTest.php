@@ -18,6 +18,7 @@ use JWeiland\Maps2\Helper\MessageHelper;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
+use TYPO3\CMS\Core\Http\RequestFactory;
 
 /**
  * Test Google Maps Client class
@@ -35,6 +36,11 @@ class GoogleMapsClientTest extends FunctionalTestCase
      */
     protected $messageHelperProphecy;
 
+    /**
+     * @var RequestFactory|ObjectProphecy
+     */
+    protected $requestFactoryProphecy;
+
     protected $testExtensionsToLoad = [
         'typo3conf/ext/maps2'
     ];
@@ -45,9 +51,11 @@ class GoogleMapsClientTest extends FunctionalTestCase
 
         $this->extConf = new ExtConf();
         $this->messageHelperProphecy = $this->prophesize(MessageHelper::class);
+        $this->requestFactoryProphecy = $this->prophesize(RequestFactory::class);
 
         $this->subject = new GoogleMapsClient(
-            $this->messageHelperProphecy->reveal()
+            $this->messageHelperProphecy->reveal(),
+            $this->requestFactoryProphecy->reveal()
         );
     }
 

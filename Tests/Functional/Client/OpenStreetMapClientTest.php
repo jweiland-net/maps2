@@ -18,6 +18,7 @@ use JWeiland\Maps2\Helper\MessageHelper;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
+use TYPO3\CMS\Core\Http\RequestFactory;
 
 /**
  * Test Open Street Map class
@@ -28,12 +29,19 @@ class OpenStreetMapClientTest extends FunctionalTestCase
 
     protected OpenStreetMapClient $subject;
 
+    protected RequestFactory $requestFactory;
+
     protected ExtConf $extConf;
 
     /**
      * @var MessageHelper|ObjectProphecy
      */
     protected $messageHelperProphecy;
+
+    /**
+     * @var RequestFactory|ObjectProphecy
+     */
+    protected $requestFactoryProphecy;
 
     protected $testExtensionsToLoad = [
         'typo3conf/ext/maps2'
@@ -45,9 +53,11 @@ class OpenStreetMapClientTest extends FunctionalTestCase
 
         $this->extConf = new ExtConf();
         $this->messageHelperProphecy = $this->prophesize(MessageHelper::class);
+        $this->requestFactoryProphecy = $this->prophesize(RequestFactory::class);
 
         $this->subject = new OpenStreetMapClient(
-            $this->messageHelperProphecy->reveal()
+            $this->messageHelperProphecy->reveal(),
+            $this->requestFactoryProphecy->reveal()
         );
     }
 
