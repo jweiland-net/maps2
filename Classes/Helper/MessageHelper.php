@@ -166,6 +166,6 @@ class MessageHelper
 
     protected function getFlashMessageQueue(): FlashMessageQueue
     {
-        return $this->flashMessageService->getMessageQueueByIdentifier();
+        return $this->flashMessageService->getMessageQueueByIdentifier('extbase.flashmessages.maps2');
     }
 }

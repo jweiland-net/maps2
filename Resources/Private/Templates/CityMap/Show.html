@@ -6,6 +6,9 @@
 <f:layout name="Default" />
 
 <f:section name="main">
+	<f:flashMessages />
+	<f:flashMessages queueIdentifier="extbase.flashmessages.maps2" />
+
 	<form action="/index.php" method="get">
 		<maps2:form.renderHiddenFieldsForGet action="search" controller="CityMap" />
 		<div class="form-group">

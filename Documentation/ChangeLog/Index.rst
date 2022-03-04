@@ -20,6 +20,7 @@ ChangeLog
 - Add new setting: overlay.link.addSection
 - Category selection in FE works for area, route and radius, too.
 - Add SettingsHelper to get streamlined settings
+- Add extbase.flashmessages.maps2 queue identifier for non-controller FlashMessages
 
 **Version 9.3.10**
 

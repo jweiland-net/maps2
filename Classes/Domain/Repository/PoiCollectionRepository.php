@@ -17,6 +17,7 @@ use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Database\Query\Restriction\FrontendRestrictionContainer;
+use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Query;
@@ -85,6 +86,9 @@ class PoiCollectionRepository extends Repository
 
         /** @var Query $query */
         $query = $this->createQuery();
+
+        // Can't use QueryBuilder here, as Extbase deleted full select for COUNT(*) which results
+        // in an error because HAVING does not found "distance" then.
         $sql = '
             SELECT *, ACOS(SIN(RADIANS(?)) * SIN(RADIANS(latitude)) + COS(RADIANS(?)) * COS(RADIANS(latitude)) * COS(RADIANS(?) - RADIANS(longitude))) * ? AS distance
             FROM tx_maps2_domain_model_poicollection
@@ -172,6 +176,11 @@ class PoiCollectionRepository extends Repository
         $this->overlayHelper->addWhereForOverlay($queryBuilder, $table, $alias, $useLangStrict);
 
         return $queryBuilder;
+    }
+
+    protected function getPageRepository(): PageRepository
+    {
+        return GeneralUtility::makeInstance(PageRepository::class);
     }
 
     protected function getConnectionPool(): ConnectionPool
