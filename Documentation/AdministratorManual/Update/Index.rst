@@ -27,7 +27,7 @@ own Partial. Please add path to maps2 partial as follows:
      view {
        partialRootPaths {
          ...
-         2 = EXT:maps2/Resources/Private/Partials/
+         5 = EXT:maps2/Resources/Private/Partials/
        }
      }
    }

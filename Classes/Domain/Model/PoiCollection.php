@@ -105,27 +105,16 @@ class PoiCollection extends AbstractEntity
 
     public function __construct()
     {
+        $this->initializeObject();
+    }
+
+    public function initializeObject(): void{
+        $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
+        $this->mapHelper = GeneralUtility::makeInstance(MapHelper::class);
+
         $this->infoWindowImages = new ObjectStorage();
         $this->markerIcons = new ObjectStorage();
         $this->categories = new ObjectStorage();
-    }
-
-    /**
-     * As constructor arguments will be removed while instantiation of domain models,
-     * we have to add extConf with help of an inject method
-     */
-    public function injectExtConf(ExtConf $extConf): void
-    {
-        $this->extConf = $extConf;
-    }
-
-    /**
-     * As constructor arguments will be removed while instantiation of domain models,
-     * we have to add mapHelper with help of an inject method
-     */
-    public function injectMapHelper(MapHelper $mapHelper): void
-    {
-        $this->mapHelper = $mapHelper;
     }
 
     public function getSysLanguageUid(): int

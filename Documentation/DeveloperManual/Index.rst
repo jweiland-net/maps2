@@ -14,3 +14,4 @@ This chapter describes how to manage the extension from a developer point of vie
 
    Api/Index
    Maps2Registry/Index
+   Template/Index
