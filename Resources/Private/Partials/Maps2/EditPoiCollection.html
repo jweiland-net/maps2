@@ -1,0 +1,20 @@
+<html lang="en"
+			xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+			xmlns:maps2="http://typo3.org/ns/JWeiland/Maps2/ViewHelpers"
+			data-namespace-typo3-fluid="true">
+
+<f:comment><!-- Use this section to show a map in the templates of your own extension. This is a replacement for old PoiCollection widget --></f:comment>
+<f:section name="editMap">
+	<maps2:getEnvironment>
+		<f:variable name="ttContentUid">{environment.contentRecord.uid}</f:variable>
+		<maps2:form.hidden class="title-{ttContentUid}" property="{property}.title" value="{title}" />
+		<maps2:form.hidden class="latitude-{ttContentUid}" property="{property}.latitude" value="{poiCollection.latitude}" />
+		<maps2:form.hidden class="longitude-{ttContentUid}" property="{property}.longitude" value="{poiCollection.longitude}" />
+
+		<div class="maps2 maps2-{data.uid} editMarker"
+				 data-override="{override -> maps2:convertToJson()}"
+				 data-environment="{environment -> maps2:convertToJson()}"
+				 data-pois="{poiCollection -> maps2:convertToJson()}"></div>
+	</maps2:getEnvironment>
+</f:section>
+</html>

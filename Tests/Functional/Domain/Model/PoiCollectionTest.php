@@ -15,6 +15,7 @@ use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Helper\MapHelper;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
@@ -29,6 +30,8 @@ class PoiCollectionTest extends FunctionalTestCase
 
     protected ExtConf $extConf;
 
+    protected MapHelper $mapHelper;
+
     /**
      * @var array
      */
@@ -41,10 +44,12 @@ class PoiCollectionTest extends FunctionalTestCase
         parent::setUp();
 
         $this->extConf = new ExtConf();
+        GeneralUtility::setSingletonInstance(ExtConf::class, $this->extConf);
+
+        $this->mapHelper = new MapHelper($this->extConf);
+        GeneralUtility::addInstance(MapHelper::class, $this->mapHelper);
 
         $this->subject = new PoiCollection();
-        $this->subject->injectExtConf($this->extConf);
-        $this->subject->injectMapHelper(new MapHelper($this->extConf));
     }
 
     protected function tearDown(): void

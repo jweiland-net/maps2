@@ -17,6 +17,7 @@ use JWeiland\Maps2\Domain\Model\PoiCollection;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use TYPO3\CMS\Core\Resource\File;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
@@ -43,9 +44,9 @@ class CategoryTest extends FunctionalTestCase
         parent::setUp();
 
         $this->extConf = new ExtConf();
+        GeneralUtility::setSingletonInstance(ExtConf::class, $this->extConf);
 
         $this->subject = new Category();
-        $this->subject->injectExtConf($this->extConf);
     }
 
     protected function tearDown(): void
