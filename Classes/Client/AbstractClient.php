@@ -13,10 +13,8 @@ namespace JWeiland\Maps2\Client;
 
 use JWeiland\Maps2\Client\Request\RequestInterface;
 use JWeiland\Maps2\Helper\MessageHelper;
-use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Abstract client to send Requests to Map Providers
