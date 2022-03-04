@@ -1,13 +1,20 @@
-{namespace maps2=JWeiland\Maps2\ViewHelpers}
+<html lang="en"
+			xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+			xmlns:maps2="http://typo3.org/ns/JWeiland/Maps2/ViewHelpers"
+			data-namespace-typo3-fluid="true">
 
 <f:layout name="Default" />
 
 <f:section name="main">
 	<f:flashMessages />
+	<f:flashMessages queueIdentifier="extbase.flashmessages.maps2" />
 
 	<f:if condition="{poiCollections}">
 		<f:then>
-			<div id="maps2-{data.uid}" class="maps2" data-environment="{environment->maps2:convertToJson()}" data-pois="{poiCollections->maps2:convertToJson()}"></div>
+			<div id="maps2-{data.uid}"
+					 class="maps2"
+					 data-environment="{environment->maps2:convertToJson()}"
+					 data-pois="{poiCollections->maps2:convertToJson()}"></div>
 		</f:then>
 		<f:else>
 			<div class="noPositionFound">Sorry, there are no results within your given radius</div>

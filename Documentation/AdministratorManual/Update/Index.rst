@@ -32,6 +32,15 @@ own Partial. Please add path to maps2 partial as follows:
      }
    }
 
+We have added a new FlashMessage queue identifier `extbase.flashmessages.maps2` for non-controller
+FlashMessages like in GeoCodeService. Please update your fluid templates and add both ViewHelpers:
+
+.. code-block:: typoscript
+
+   <f:flashMessages />
+   <f:flashMessages queueIdentifier="extbase.flashmessages.maps2" />
+
+
 **Only valid for developers:**
 
 As we have loaded Extbase ConfigurationManager within Middleware before TSFE it may switch to the
