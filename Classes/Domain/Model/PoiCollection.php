@@ -108,7 +108,8 @@ class PoiCollection extends AbstractEntity
         $this->initializeObject();
     }
 
-    public function initializeObject(): void{
+    public function initializeObject(): void
+    {
         $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
         $this->mapHelper = GeneralUtility::makeInstance(MapHelper::class);
 

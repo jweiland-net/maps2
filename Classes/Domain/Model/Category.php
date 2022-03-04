@@ -43,7 +43,8 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
         $this->initializeObject();
     }
 
-    public function initializeObject(): void{
+    public function initializeObject(): void
+    {
         $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
 
         $this->maps2MarkerIcons = new ObjectStorage();
