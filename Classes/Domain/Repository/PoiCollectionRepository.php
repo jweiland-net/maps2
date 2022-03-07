@@ -103,19 +103,6 @@ class PoiCollectionRepository extends Repository
         )->execute();
     }
 
-    public function findPoisByCategories($categories): QueryResultInterface
-    {
-        $query = $this->createQuery();
-        $orConstraint = [];
-        foreach (GeneralUtility::trimExplode(',', $categories) as $category) {
-            $orConstraint[] = $query->contains('categories', $category);
-        }
-
-        return $query->matching(
-            $query->logicalOr($orConstraint)
-        )->execute();
-    }
-
     protected function addConstraintForCategories(
         QueryBuilder $queryBuilder,
         array $categories
@@ -153,6 +140,8 @@ class PoiCollectionRepository extends Repository
                 )
             )
         );
+
+        $queryBuilder->addGroupBy('category_mm.uid_foreign');
     }
 
     protected function getQueryBuilderForTable(string $table, string $alias, bool $useLangStrict = false): QueryBuilder
