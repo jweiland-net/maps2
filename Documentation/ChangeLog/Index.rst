@@ -22,6 +22,7 @@ ChangeLog
 - Add SettingsHelper to get streamlined settings
 - Add extbase.flashmessages.maps2 queue identifier for non-controller FlashMessages
 - Rename sDEFAULT to sDEF in FlexForm
+- Change frontend behaviour for multiple categories
 
 **Version 9.3.10**
 
