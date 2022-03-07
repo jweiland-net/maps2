@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Domain\Repository;
 
+use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use JWeiland\Maps2\Event\ModifyQueryOfFindPoiCollectionsEvent;
 use JWeiland\Maps2\Helper\OverlayHelper;
 use TYPO3\CMS\Core\Database\Connection;
@@ -52,7 +53,7 @@ class PoiCollectionRepository extends Repository
     {
         $extbaseQuery = $this->createQuery();
         $queryBuilder = $this->getQueryBuilderForTable('tx_maps2_domain_model_poicollection', 'pc');
-        $queryBuilder->select('*');
+        $queryBuilder->select(...$this->getColumnsForPoiCollectionTable());
 
         $poiCollectionUid = $poiCollectionUid ?: (int)$settings['poiCollection'];
         if ($poiCollectionUid !== 0) {
@@ -141,7 +142,7 @@ class PoiCollectionRepository extends Repository
             )
         );
 
-        $queryBuilder->addGroupBy('pc.uid');
+        $queryBuilder->addGroupBy(...$this->getColumnsForPoiCollectionTable());
     }
 
     protected function getQueryBuilderForTable(string $table, string $alias, bool $useLangStrict = false): QueryBuilder
@@ -165,6 +166,28 @@ class PoiCollectionRepository extends Repository
         $this->overlayHelper->addWhereForOverlay($queryBuilder, $table, $alias, $useLangStrict);
 
         return $queryBuilder;
+    }
+
+    /**
+     * ->select() and ->groupBy() has to be the same in DB configuration
+     * where only_full_group_by is activated.
+     *
+     * @return array
+     */
+    protected function getColumnsForPoiCollectionTable(): array
+    {
+        $columns = [];
+        $connection = $this->getConnectionPool()->getConnectionForTable('tx_maps2_domain_model_poicollection');
+        if ($connection->getSchemaManager() instanceof AbstractSchemaManager) {
+            $columns = array_map(
+                static fn($column): string => 'pc.' . $column,
+                array_keys(
+                    $connection->getSchemaManager()->listTableColumns('tx_maps2_domain_model_poicollection') ?? []
+                )
+            );
+        }
+
+        return $columns;
     }
 
     protected function getPageRepository(): PageRepository
