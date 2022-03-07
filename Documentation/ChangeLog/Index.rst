@@ -6,6 +6,10 @@
 ChangeLog
 =========
 
+**Version 9.3.11**
+
+- BUGFIX: Rename sheet sDEFAULT to sDEF in FlexForm
+
 **Version 9.3.10**
 
 - BUGFIX: Show InfoWindowContent in translated language
