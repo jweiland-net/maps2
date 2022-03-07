@@ -141,7 +141,7 @@ class PoiCollectionRepository extends Repository
             )
         );
 
-        $queryBuilder->addGroupBy('category_mm.uid_foreign');
+        $queryBuilder->addGroupBy('pc.uid');
     }
 
     protected function getQueryBuilderForTable(string $table, string $alias, bool $useLangStrict = false): QueryBuilder
