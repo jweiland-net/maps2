@@ -46,7 +46,7 @@ class GetEnvironmentViewHelper extends AbstractViewHelper
         $templateVariableContainer->add(
             'environment',
             [
-                'settings' => self::getSettingsHelper()->getPrepareSettings(),
+                'settings' => self::getSettingsHelper()->getPreparedSettings(),
                 'extConf' => ObjectAccess::getGettableProperties(GeneralUtility::makeInstance(ExtConf::class)),
                 'id' => $GLOBALS['TSFE']->id,
                 'contentRecord' => self::getConfigurationManager()->getContentObject()->data

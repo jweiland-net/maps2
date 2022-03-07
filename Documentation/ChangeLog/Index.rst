@@ -21,6 +21,7 @@ ChangeLog
 - Category selection in FE works for area, route and radius, too.
 - Add SettingsHelper to get streamlined settings
 - Add extbase.flashmessages.maps2 queue identifier for non-controller FlashMessages
+- Rename sDEFAULT to sDEF in FlexForm
 
 **Version 9.3.10**
 
