@@ -1,13 +1,13 @@
 .. include:: ../../Includes.txt
 
-========
-Updating
-========
+=======
+Upgrade
+=======
 
-If you update EXT:maps2 to a newer version, please read this section carefully!
+If you upgrade EXT:maps2 to a newer version, please read this section carefully!
 
-Update to Version 10.0.0
-========================
+Upgrade to Version 10.0.0
+=========================
 
 We have added a new Option `defaultMapType` to Extension Settings of `maps2`. Please check, if this value
 matches your needs and can be found in `LocalConfiguration.php`.
@@ -40,6 +40,9 @@ FlashMessages like in GeoCodeService. Please update your fluid templates and add
    <f:flashMessages />
    <f:flashMessages queueIdentifier="extbase.flashmessages.maps2" />
 
+We have changed FlexForm sheet `sDEFAULT` for Plugins `searchwithinradius` and `citymap` to `sDEF`. Please
+execute UpgradeWizard to move related values to new sheet and remove duplicates.
+
 
 **Only valid for developers:**
 
@@ -55,8 +58,8 @@ We have moved all constructor arguments into inject-methods in MapProviderReques
 We have moved all constructor arguments into inject-methods in AjaxController.
 So please clear all cache after update. Please use "Flush Cache" in Installtool for TYPO3 10.* to update DI cache.
 
-Update to Version 9.0.0
-=======================
+Upgrade to Version 9.0.0
+========================
 
 As Maps2 is TYPO3 10 compatible now we have removed TYPO3 8 compatibility. Please install an old version of maps2,
 if you still need TYPO3 8 compatibility. On GitHub we have created a new Branch called `TYPO3_8-7`.
@@ -69,8 +72,8 @@ As a normal user you only need to clear the caches.
 If you make use of the Maps2Registry API, please check, if the new json configuration file was created. Further
 it would be good to check, if the tx_maps2_uid columns still exists in DB.
 
-Update to Version 8.0.0
-=======================
+Upgrade to Version 8.0.0
+========================
 
 As a normal user you can update to this version without any problems.
 
@@ -81,8 +84,8 @@ anything.
 There is no Debug Output of Map Provider response in Backend anymore, if request fails. We have added more detailed
 error messages instead. As a Dev, you can access all Messages of Client and GeoCodeService directly.
 
-Update to Version 7.0.0
-=======================
+Upgrade to Version 7.0.0
+========================
 
 As a normal user you can update to this version without any problems.
 
@@ -106,8 +109,8 @@ Update to Version 6.1.0
 As mouseScrollWheelZoom is not available for all map providers you have to execute the Update Wizard
 to move this Option in FlexForm from Google Maps sheet to MapOptions sheet.
 
-Update to Version 6.0.0
-=======================
+Upgrade to Version 6.0.0
+========================
 
 The current CacheIdentifier for InfoWindowContent is not save for multilingual environments.
 That way we have removed cacheIdentifier property from all Cache ViewHelpers and added the new property poiCollection.
@@ -130,8 +133,8 @@ check your maps2 output and/or individual JS, if our Widget VHs are still workin
 
 If you don't make use of our Widget ViewHelpers there should be no problem with this update.
 
-Update to Version 5.0.0
-=======================
+Upgrade to Version 5.0.0
+========================
 
 We have added an Open Street Map Implementation.
 To differ between them we have added two new static templates. One for Google Maps and one for Open Street Map. You
@@ -152,8 +155,8 @@ in MapService and GeoCodeService instead.
 `getPositionsByAddress` returns an ObjectStorage containing Position objects instead of RadiusResult objects now.
 `getFirstFoundPositionByAddress` return an object of type Position now.
 
-Update to Version 4.0.0
-=======================
+Upgrade to Version 4.0.0
+========================
 
 We have added some new fields to maps2. So please go into Extensionmanager
 and open the configuration. Please check, if everything matches your needs and safe
@@ -172,8 +175,8 @@ All methods of MapService have been migrated into GoogleMapsService.
 GeocodeUtility have been deleted. Please use getPositionsByAddress or getFirstFoundPositionByAddress
 of GoogleMapsService.
 
-Update to Version 3.0.0
-=======================
+Upgrade to Version 3.0.0
+========================
 
 We have removed TYPO3 6.2 compatibility completely.
 
@@ -196,8 +199,8 @@ in extension manager and activate it again.
 
    It does not help to rename these tables only.
 
-Update to Version 2.0.0
-=======================
+Upgrade to Version 2.0.0
+========================
 
 Version 2.0.0 needs a Google Maps JavaScript ApiKey which has to be inserted in
 maps2 configuration of Extensionmanager (for BE usage) and in constants section
