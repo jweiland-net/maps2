@@ -180,7 +180,7 @@ class PoiCollectionRepository extends Repository
         $connection = $this->getConnectionPool()->getConnectionForTable('tx_maps2_domain_model_poicollection');
         if ($connection->getSchemaManager() instanceof AbstractSchemaManager) {
             $columns = array_map(
-                static fn($column): string => 'pc.' . $column,
+                static fn ($column): string => 'pc.' . $column,
                 array_keys(
                     $connection->getSchemaManager()->listTableColumns('tx_maps2_domain_model_poicollection') ?? []
                 )
