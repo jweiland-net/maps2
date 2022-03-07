@@ -45,22 +45,7 @@ class AbstractController extends ActionController
     {
         $this->configurationManager = $configurationManager;
 
-        $tsSettings = $this->configurationManager->getConfiguration(
-            ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,
-            'maps2',
-            'invalid' // invalid plugin name, to get fresh unmerged settings
-        );
-        $originalSettings = $this->configurationManager->getConfiguration(
-            ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS
-        );
-
-        foreach ($originalSettings as $setting => $value) {
-            if ($value === '' && isset($tsSettings['settings'][$setting])) {
-                $originalSettings[$setting] = $tsSettings['settings'][$setting];
-            }
-        }
-
-        $this->settings = $originalSettings;
+        $this->settings = $this->settingsHelper->getMergedSettings();
     }
 
     /**
@@ -104,7 +89,7 @@ class AbstractController extends ActionController
                 ));
         }
 
-        return $this->settingsHelper->getPrepareSettings($this->settings);
+        return $this->settingsHelper->getPreparedSettings($this->settings);
     }
 
     protected function postProcessAndAssignFluidVariables(array $variables = []): void

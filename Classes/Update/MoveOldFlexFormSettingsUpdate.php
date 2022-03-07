@@ -22,6 +22,9 @@ use TYPO3\CMS\Install\Updates\UpgradeWizardInterface;
 /**
  * With maps2 5.0.0 we have moved some FlexForm Settings to another sheet.
  * To prevent duplicates in DB, this update wizard removes old settings from FlexForm.
+ *
+ * With maps2 10.0.0 we have renamed sDEFAULT of CityMap and SearchWithinRadius to sDEF.
+ * To prevent duplicates in DB, this update wizard removes old settings from FlexForm.
  */
 class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
 {

@@ -28,11 +28,40 @@ class SettingsHelper
     }
 
     /**
+     * This method will merge TypoScript and FlexForm settings of EXT:maps2 and should be called
+     * by maps2 only.
+     * Be careful using this method from within foreign extensions. The context may differ. It may happen
+     * that FlexForm settings of your plugin will be merged with TypoScript settings of maps2. This can
+     * lead to unforeseen miss-configuration.
+     */
+    public function getMergedSettings(): array
+    {
+        $typoScriptSettings = $this->configurationManager->getConfiguration(
+            ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,
+            'maps2',
+            'invalid' // invalid plugin name, to get fresh unmerged settings
+        );
+
+        // In context of a maps2 plugin this will return the merged (TS and FlexForm) settings
+        $mergedSettings = $this->configurationManager->getConfiguration(
+            ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS
+        );
+
+        foreach ($mergedSettings as $setting => $value) {
+            if ($value === '' && isset($typoScriptSettings['settings'][$setting])) {
+                $mergedSettings[$setting] = $typoScriptSettings['settings'][$setting];
+            }
+        }
+
+        return $mergedSettings;
+    }
+
+    /**
      * If possible you should always set $settings. In context of controllers $settings contains a merged version
      * of TS settings and FlexForm settings. If you don't have any settings by hand, leave empty, and we will
      * try to get settings from TypoScript (no FlexForm settings!!!)
      */
-    public function getPrepareSettings(array $settings = []): array
+    public function getPreparedSettings(array $settings = []): array
     {
         $settings = $settings ?: $this->getTypoScriptSettings();
 

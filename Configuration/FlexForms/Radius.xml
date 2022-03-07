@@ -3,7 +3,7 @@
 		<langDisable>1</langDisable>
 	</meta>
 	<sheets>
-		<sDEFAULT>
+		<sDEF>
 			<ROOT>
 				<TCEforms>
 					<sheetTitle>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:sheetGeneral</sheetTitle>
@@ -34,7 +34,7 @@
 					</settings.mapHeight>
 				</el>
 			</ROOT>
-		</sDEFAULT>
+		</sDEF>
 		<sMapOptions>
 			<ROOT>
 				<TCEforms>
