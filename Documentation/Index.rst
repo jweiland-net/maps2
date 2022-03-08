@@ -22,7 +22,10 @@ Maps2
       en
 
    :Description:
-      Manual covering TYPO3 extension maps2
+      This TYPO3 extension supports the rendering of a map based on Google Maps or
+      OpenStreetMap. The map can be additionally enriched with markers, routes,
+      area and radius overlays and these overlays can be grouped into categories
+      for easy and recurring assignment.
 
    :Keywords:
       typo3,TYPO3 CMS,google maps,osm,open street map,openstreetmap,maps2
