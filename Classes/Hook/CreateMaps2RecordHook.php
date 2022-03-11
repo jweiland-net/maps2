@@ -428,6 +428,10 @@ class CreateMaps2RecordHook
      */
     protected function getForeignLocationRecord(string $foreignTableName, int $uid): array
     {
+        if ($uid === 0) {
+            return [];
+        }
+
         $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable($foreignTableName);
         $queryBuilder->getRestrictions()->removeAll()->add(
             GeneralUtility::makeInstance(DeletedRestriction::class)
@@ -462,7 +466,7 @@ class CreateMaps2RecordHook
     protected function getRealUid($uid, DataHandler $dataHandler): int
     {
         if (GeneralUtility::isFirstPartOfStr($uid, 'NEW')) {
-            $uid = $dataHandler->substNEWwithIDs[$uid];
+            $uid = $dataHandler->substNEWwithIDs[$uid] ?? 0;
         }
 
         return (int)$uid;

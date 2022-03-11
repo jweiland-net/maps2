@@ -7,6 +7,10 @@
 ChangeLog
 =========
 
+**Version 10.0.2**
+
+- Apply isset to $dataHandler->substNEWwithIDs[$uid] before accessing record UID
+
 **Version 10.0.1**
 
 - Check for existence of poi table before loading UpgradeWizard
