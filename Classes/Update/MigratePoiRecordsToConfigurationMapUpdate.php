@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Update;
 
+use Doctrine\DBAL\Exception;
+use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -54,6 +56,24 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
 
     public function updateNecessary(): bool
     {
+        // Something with DB was gone totally wrong. Skip Upgrade. Repair your DB first.
+        try {
+            $connection = $this
+                ->getConnectionPool()
+                ->getConnectionByName(ConnectionPool::DEFAULT_CONNECTION_NAME);
+        } catch (Exception $exception) {
+            return false;
+        }
+
+        // If table "tx_maps2_domain_model_poi" was already removed, skip this upgrade
+        $schemaManager = $connection->getSchemaManager();
+        if (
+            $schemaManager instanceof AbstractSchemaManager
+            && !$schemaManager->tablesExist(['tx_maps2_domain_model_poi'])
+        ) {
+            return false;
+        }
+
         $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable('tx_maps2_domain_model_poicollection');
         $queryBuilder->getRestrictions()->removeAll();
         $queryBuilder->getRestrictions()->add(GeneralUtility::makeInstance(DeletedRestriction::class));

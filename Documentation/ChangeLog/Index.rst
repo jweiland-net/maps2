@@ -7,6 +7,10 @@
 ChangeLog
 =========
 
+**Version 10.0.1**
+
+- Check for existence of poi table before loading UpgradeWizard
+
 **Version 10.0.0**
 
 - Remove TYPO3 9 compatibility
