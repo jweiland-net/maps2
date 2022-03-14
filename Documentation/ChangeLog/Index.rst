@@ -7,6 +7,10 @@
 ChangeLog
 =========
 
+**Version 10.0.3**
+
+- BUGFIX: Better implementation for category selector
+
 **Version 10.0.2**
 
 - Apply isset to $dataHandler->substNEWwithIDs[$uid] before accessing record UID

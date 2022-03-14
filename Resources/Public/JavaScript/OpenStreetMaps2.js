@@ -98,7 +98,7 @@ function OpenStreetMap2($element, environment) {
                         markerCategoryHasCheckboxWithStatus = true;
                     }
                 }
-                if (markerCategoryHasCheckboxWithStatus === false) {
+                if (markerCategoryHasCheckboxWithStatus === isChecked) {
                     break;
                 }
             }
