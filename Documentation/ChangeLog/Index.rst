@@ -7,6 +7,10 @@
 ChangeLog
 =========
 
+**Version 10.0.4**
+
+- BUGFIX: A reload bypasses consent
+
 **Version 10.0.3**
 
 - BUGFIX: Better implementation for category selector
