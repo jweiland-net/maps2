@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Middleware;
 
 use JWeiland\Maps2\Configuration\ExtConf;
+use JWeiland\Maps2\Helper\MapHelper;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -28,15 +29,21 @@ class InitFeSessionMiddleware implements MiddlewareInterface
 
     protected ExtConf $extConf;
 
-    public function __construct(ExtConf $extConf)
+    protected MapHelper $mapHelper;
+
+    public function __construct(ExtConf $extConf, MapHelper $mapHelper)
     {
         $this->extConf = $extConf;
+        $this->mapHelper = $mapHelper;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $response = $handler->handle($request);
-        if ($this->extConf->getExplicitAllowMapProviderRequests()) {
+        if (
+            $this->extConf->getExplicitAllowMapProviderRequests()
+            && $this->mapHelper->isRequestToMapProviderAllowed()
+        ) {
             $cookie = $this->createCookie($request);
             $response = $response->withAddedHeader('Set-Cookie', $cookie->__toString());
         }
