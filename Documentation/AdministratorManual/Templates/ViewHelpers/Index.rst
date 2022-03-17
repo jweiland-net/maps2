@@ -62,6 +62,8 @@ All ViewHelpers
    :glob:
 
    ConvertToJsonViewHelper
+   IsRequestToMapProviderAllowedViewHelper
+   RequestUriForOverlayViewHelper
    TrimExplodeViewHelper
 
    Cache/GetCacheViewHelper

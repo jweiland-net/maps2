@@ -43,6 +43,6 @@ Examples
 Basic example
 -------------
 
-Code: ::
+.. code-block:: html
 
   {maps2:cache.getCache(poiCollection: poiCollection)}

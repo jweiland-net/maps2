@@ -7,6 +7,15 @@
 ChangeLog
 =========
 
+**Version 10.0.5**
+
+- BUGFIX: Create new Overlay Partial, so it can be used from foreign extensions
+- TASK: Deprecate getRequestUri() in PoiCollectionController
+- FEATURE: Add new RequestUriForOverlay ViewHelper
+- FEATURE: Add new IsRequestToMapProviderAllowed ViewHelper
+- TASK: Add FETCH_ASSOC to all fetch() methods to prevent deprecation logs
+- BUGFIX: Catch JsonException if Maps2Registry config is empty
+
 **Version 10.0.4**
 
 - BUGFIX: A reload bypasses consent

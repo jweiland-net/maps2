@@ -14,6 +14,6 @@ Examples
 Basic example
 -------------
 
-Code: ::
+.. code-block:: html
 
   <div id="maps2" data-override="{override -> maps2:convertToJson()}"></div>

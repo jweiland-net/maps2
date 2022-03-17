@@ -35,7 +35,7 @@ Examples
 Basic example
 -------------
 
-Code: ::
+.. code-block:: html
 
   <f:for each="{poiCollection.address -> maps2:trimExplode()}" as="address" iteration="iterator">
     ..do something with {address}

@@ -1,11 +1,10 @@
 .. include:: ../../../Includes.txt
 
-=======================================
-IsRequestToMapProviderAllowedViewHelper
-=======================================
+==============================
+RequestUriForOverlayViewHelper
+==============================
 
-Use this ViewHelper to check user consent, if requests to map providers like Google Maps or OpenStreetMap
-are allowed or not.
+This ViewHelper creates an URI with a special parameter which allows the map to be visible for the user.
 
 
 Examples
@@ -14,13 +13,22 @@ Examples
 Basic example
 -------------
 
-Code: ::
+.. code-block:: html
 
-   <f:if condition="{m:isRequestToMapProviderAllowed()}">
-       <f:then>
-           ...do something to show the map or what ever you want...
-       </f:then>
-       <f:else>
-           ...show overlay or add a message what user should do to see the map...
-       </f:else>
-   </f:if>
+   <a href="{m:requestUriForOverlay()}">
+       Link to current page. Map will be shown somewhere on that page.
+   </a>
+
+
+Scroll to content element
+-------------------------
+
+If you add `ttContentUid` to ViewHelper it will add a link section (#174)
+to the end of the URI. If all of your content elements contain an `id` attribute like `c174`
+the target page will scroll to this specific content element directly.
+
+.. code-block:: html
+
+   <a href="{m:requestUriForOverlay(ttContentUid: ttContentUid)}">
+       Link to current page and scroll to content element with map.
+   </a>
