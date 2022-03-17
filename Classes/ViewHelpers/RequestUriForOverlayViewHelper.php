@@ -14,7 +14,7 @@ namespace JWeiland\Maps2\ViewHelpers;
 use JWeiland\Maps2\Helper\SettingsHelper;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
-use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
@@ -49,7 +49,7 @@ class RequestUriForOverlayViewHelper extends AbstractViewHelper
         // Method setAddQueryStringMethod is deprecated with TYPO3 11. Remove while removing TYPO3 10 compatibility
         // UriBuilder needs to be loaded by ObjectManager in TYPO3 10.
         // @ToDo: Use GeneralUtility while removing TYPO3 10 compatibility
-        $uriBuilder = GeneralUtility::makeInstance(ObjectManagerInterface::class)
+        $uriBuilder = GeneralUtility::makeInstance(ObjectManager::class)
             ->get(UriBuilder::class)
             ->reset()
             ->setAddQueryString(true)
