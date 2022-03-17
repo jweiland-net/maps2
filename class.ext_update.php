@@ -71,7 +71,7 @@ class ext_update
                 )
             )
             ->execute()
-            ->fetchColumn(0);
+            ->fetchColumn();
 
         if ((bool)$amountOfRecords) {
             $showAccess = true;
@@ -94,7 +94,7 @@ class ext_update
                     )
                 )
                 ->execute()
-                ->fetchColumn(0);
+                ->fetchColumn();
         }
 
         if ($amountOfRecords) {
@@ -133,7 +133,7 @@ class ext_update
                 )
             )
             ->execute()
-            ->fetchAll();
+            ->fetchAll(\PDO::FETCH_ASSOC);
 
         if (is_array($rows)) {
             $affectedRows = 0;
@@ -195,7 +195,7 @@ class ext_update
                     )
                 )
                 ->execute()
-                ->fetchAll();
+                ->fetchAll(\PDO::FETCH_ASSOC);
             if (is_array($sysCategories)) {
                 foreach ($sysCategories as $sysCategory) {
                     try {

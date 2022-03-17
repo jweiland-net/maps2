@@ -312,7 +312,7 @@ class MapService
                     )
                     ->execute();
 
-                while ($foreignRecord = $statement->fetch()) {
+                while ($foreignRecord = $statement->fetch(\PDO::FETCH_ASSOC)) {
                     // Hopefully these keys are unique enough
                     // Very useful to f:groupedFor in Fluid Templates
                     $foreignRecord['jwMaps2TableName'] = $tableName;

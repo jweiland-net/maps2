@@ -194,7 +194,7 @@ class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
             ->execute();
 
         $records = [];
-        while ($record = $statement->fetch()) {
+        while ($record = $statement->fetch(\PDO::FETCH_ASSOC)) {
             $records[] = $record;
         }
 

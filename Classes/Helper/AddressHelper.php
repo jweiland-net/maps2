@@ -146,7 +146,7 @@ class AddressHelper
                     )
                 )
                 ->execute()
-                ->fetch();
+                ->fetch(\PDO::FETCH_ASSOC);
         } catch (DBALException $DBALException) {
             $countryRecord = [];
         }

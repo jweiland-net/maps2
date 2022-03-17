@@ -366,7 +366,7 @@ class CreateMaps2RecordHook
                     )
                 )
                 ->execute()
-                ->fetch();
+                ->fetch(\PDO::FETCH_ASSOC);
         } catch (DBALException $DBALException) {
             $poiCollection = false;
         }
@@ -447,7 +447,7 @@ class CreateMaps2RecordHook
                 )
             )
             ->execute()
-            ->fetch();
+            ->fetch(\PDO::FETCH_ASSOC);
 
         if (empty($foreignLocationRecord)) {
             $foreignLocationRecord = [];
