@@ -43,7 +43,7 @@ Examples
 Basic example
 -------------
 
-Code: ::
+.. code-block:: html
 
   <f:if condition="{maps2:cache.hasCache(poiCollection: poiCollection)}">
     <f:then>

@@ -5,13 +5,7 @@
 <f:flashMessages />
 
 <f:variable name="mapProvider">{settings.mapProvider}</f:variable>
+<f:variable name="ttContentUid">{data.uid}</f:variable>
 
-<div id="maps2-{data.uid}">
-	<h3>{f:translate(key: '{mapProvider}.map')}</h3>
-	<p>
-		{f:translate(key: '{mapProvider}.protectData')}<br />
-		{f:translate(key: '{mapProvider}.explainActivation')}
-	</p>
-	<p><a href="{requestUri}">{f:translate(key: '{mapProvider}.activate')}</a></p>
-</div>
+<f:render partial="Maps2/Overlay" arguments="{_all}" />
 </html>

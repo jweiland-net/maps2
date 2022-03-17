@@ -69,6 +69,6 @@ Examples
 Basic example
 -------------
 
-Code: ::
+.. code-block:: html
 
   {maps2:cache.setCache(poiCollection: poiCollection, data: '{content->f:format.raw()}')}
