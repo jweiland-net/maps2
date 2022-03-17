@@ -49,20 +49,26 @@ class Maps2Registry implements SingletonInterface
     protected function initialize(): void
     {
         if (@is_file($this->configurationFile)) {
-            $configuration = json_decode(
-                file_get_contents($this->configurationFile),
-                true,
-                512,
-                JSON_THROW_ON_ERROR
-            );
+            try {
+                $configuration = json_decode(
+                    file_get_contents($this->configurationFile),
+                    true,
+                    512,
+                    JSON_THROW_ON_ERROR
+                );
 
-            if (
-                is_array($configuration) && count($configuration) === 2
-                && array_key_exists('registry', $configuration)
-                && array_key_exists('extensions', $configuration)
-            ) {
-                $this->registry = $configuration['registry'];
-                $this->extensions = $configuration['extensions'];
+                if (
+                    is_array($configuration)
+                    && array_key_exists('registry', $configuration)
+                    && array_key_exists('extensions', $configuration)
+                ) {
+                    $this->registry = $configuration['registry'];
+                    $this->extensions = $configuration['extensions'];
+                }
+            } catch (\JsonException $jsonException) {
+                // File exists, but empty or other error
+                $this->registry = [];
+                $this->extensions = [];
             }
         } else {
             GeneralUtility::mkdir_deep(dirname($this->configurationFile));
