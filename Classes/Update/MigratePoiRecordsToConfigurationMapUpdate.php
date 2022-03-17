@@ -120,7 +120,7 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
             ->from('tx_maps2_domain_model_poicollection')
             ->execute();
 
-        while ($poiCollectionRecord = $statement->fetch()) {
+        while ($poiCollectionRecord = $statement->fetch(\PDO::FETCH_ASSOC)) {
             $connection = $this->getConnectionPool()->getConnectionForTable('tx_maps2_domain_model_poi');
 
             $connection->update(
@@ -176,7 +176,7 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
             ->execute();
 
         $poiRecords = [];
-        while ($poiRecord = $statement->fetch()) {
+        while ($poiRecord = $statement->fetch(\PDO::FETCH_ASSOC)) {
             $poiRecords[] = $poiRecord;
         }
 
