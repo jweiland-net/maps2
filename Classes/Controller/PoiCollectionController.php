@@ -80,8 +80,13 @@ class PoiCollectionController extends AbstractController
         ]);
     }
 
+    /**
+     * @deprecated
+     */
     protected function getRequestUri(): string
     {
+        trigger_error('Method PoiCollectionController::getRequestUri is deprecated. Use RequestUriForOverlayViewHelper instead.', E_USER_DEPRECATED);
+
         // Method setAddQueryStringMethod is deprecated with TYPO3 11. Remove while removing TYPO3 10 compatibility
         $uriBuilder = $this->uriBuilder
             ->reset()
