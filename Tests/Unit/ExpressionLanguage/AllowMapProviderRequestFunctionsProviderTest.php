@@ -33,7 +33,7 @@ class AllowMapProviderRequestFunctionsProviderTest extends UnitTestCase
      */
     protected $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->extConf = new ExtConf([]);
         GeneralUtility::setSingletonInstance(ExtConf::class, $this->extConf);
@@ -41,7 +41,7 @@ class AllowMapProviderRequestFunctionsProviderTest extends UnitTestCase
         $this->subject = new AllowMapProviderRequestFunctionsProvider();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->extConf, $this->subject);
         parent::tearDown();

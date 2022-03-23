@@ -31,7 +31,7 @@ class MessageHelperTest extends FunctionalTestCase
         'typo3conf/ext/maps2'
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         parent::setUpBackendUserFromFixture(1);
@@ -41,7 +41,7 @@ class MessageHelperTest extends FunctionalTestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset(
             $this->subject,

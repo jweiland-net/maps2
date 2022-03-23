@@ -40,7 +40,7 @@ class PoiCollectionTest extends FunctionalTestCase
         'typo3conf/ext/maps2'
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -49,7 +49,7 @@ class PoiCollectionTest extends FunctionalTestCase
         $this->subject = new PoiCollection();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->subject);
         GeneralUtility::resetSingletonInstances([]);

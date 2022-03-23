@@ -89,7 +89,7 @@ class PoiCollectionControllerTest extends UnitTestCase
         $this->subject->_set('controllerContext', $this->controllerContextProphecy->reveal());
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->subject);
         parent::tearDown();

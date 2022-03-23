@@ -34,7 +34,7 @@ class GoogleMapsClientTest extends UnitTestCase
      */
     protected $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->geocodeRequestProphecy = $this->prophesize(GeocodeRequest::class);
         $this->messageHelperProphecy = $this->prophesize(MessageHelper::class);
@@ -44,7 +44,7 @@ class GoogleMapsClientTest extends UnitTestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset(
             $this->subject,

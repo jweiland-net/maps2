@@ -57,7 +57,7 @@ class MapServiceTest extends UnitTestCase
      */
     protected $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerProphecy = $this->prophesize(ObjectManager::class);
         $this->environmentServiceProphecy = $this->prophesize(EnvironmentService::class);
@@ -71,7 +71,7 @@ class MapServiceTest extends UnitTestCase
             ->willReturn($this->configurationManagerProphecy->reveal());
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->objectManagerProphecy, $this->configurationManagerProphecy, $this->subject);
         parent::tearDown();
