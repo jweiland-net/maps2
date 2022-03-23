@@ -11,6 +11,7 @@ namespace JWeiland\Maps2\Tests\Functional\Helper;
 
 use JWeiland\Maps2\Helper\MessageHelper;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 
@@ -19,6 +20,8 @@ use TYPO3\CMS\Core\Messaging\FlashMessageService;
  */
 class MessageHelperTest extends FunctionalTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var MessageHelper
      */
@@ -31,7 +34,7 @@ class MessageHelperTest extends FunctionalTestCase
         'typo3conf/ext/maps2'
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         parent::setUpBackendUserFromFixture(1);
@@ -41,7 +44,7 @@ class MessageHelperTest extends FunctionalTestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset(
             $this->subject,

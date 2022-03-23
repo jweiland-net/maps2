@@ -14,6 +14,7 @@ use JWeiland\Maps2\Client\GoogleMapsClient;
 use JWeiland\Maps2\Client\OpenStreetMapClient;
 use JWeiland\Maps2\Service\MapService;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -21,6 +22,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class ClientFactoryTest extends UnitTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var MapService
      */
@@ -31,7 +34,7 @@ class ClientFactoryTest extends UnitTestCase
      */
     protected $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mapServiceProphecy = $this->prophesize(MapService::class);
         GeneralUtility::addInstance(MapService::class, $this->mapServiceProphecy->reveal());
@@ -39,7 +42,7 @@ class ClientFactoryTest extends UnitTestCase
         $this->subject = new ClientFactory();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset(
             $this->subject,

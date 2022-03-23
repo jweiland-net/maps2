@@ -14,6 +14,7 @@ use JWeiland\Maps2\Domain\Model\Category;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\ViewHelpers\ConvertToJsonViewHelper;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
 
@@ -22,6 +23,8 @@ use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
  */
 class ConvertToJsonViewHelperTest extends FunctionalTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var RenderingContext|\Prophecy\Prophecy\ObjectProphecy
      */
@@ -39,7 +42,7 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
         'typo3conf/ext/maps2'
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -49,7 +52,7 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
         $this->subject->setRenderingContext($this->renderingContext->reveal());
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset(
             $this->subject
@@ -108,7 +111,7 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
         $json = $this->subject->render();
 
         // a property of PoiCollection should be found in string
-        self::assertContains(
+        self::assertStringContainsString(
             'address',
             $json
         );
@@ -131,7 +134,7 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
         $json = $this->subject->render();
 
         // a property of PoiCollection should be found in string
-        self::assertContains(
+        self::assertStringContainsString(
             'address',
             $json
         );
@@ -156,11 +159,11 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
 
         $json = $this->subject->render();
 
-        self::assertNotContains(
+        self::assertStringNotContainsString(
             'maps2MarkerIcons',
             $json
         );
-        self::assertNotContains(
+        self::assertStringNotContainsString(
             'parent',
             $json
         );
@@ -181,7 +184,7 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
 
         $json = $this->subject->render();
 
-        self::assertNotContains(
+        self::assertStringNotContainsString(
             'markerIcons',
             $json
         );

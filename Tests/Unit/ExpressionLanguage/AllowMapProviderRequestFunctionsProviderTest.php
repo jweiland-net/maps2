@@ -12,6 +12,7 @@ namespace JWeiland\Maps2\Tests\Unit\ExpressionLanguage;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\ExpressionLanguage\AllowMapProviderRequestFunctionsProvider;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\ExpressionLanguage\ExpressionFunction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -23,6 +24,8 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
  */
 class AllowMapProviderRequestFunctionsProviderTest extends UnitTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var ExtConf
      */
@@ -33,7 +36,7 @@ class AllowMapProviderRequestFunctionsProviderTest extends UnitTestCase
      */
     protected $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->extConf = new ExtConf([]);
         GeneralUtility::setSingletonInstance(ExtConf::class, $this->extConf);
@@ -41,7 +44,7 @@ class AllowMapProviderRequestFunctionsProviderTest extends UnitTestCase
         $this->subject = new AllowMapProviderRequestFunctionsProvider();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->extConf, $this->subject);
         parent::tearDown();

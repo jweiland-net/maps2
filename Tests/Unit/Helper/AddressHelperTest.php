@@ -14,6 +14,7 @@ use JWeiland\Maps2\Helper\AddressHelper;
 use JWeiland\Maps2\Helper\MessageHelper;
 use JWeiland\Maps2\Tests\Unit\AbstractUnitTestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Package\PackageManager;
@@ -25,6 +26,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class AddressHelperTest extends AbstractUnitTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var AddressHelper
      */
@@ -35,13 +38,13 @@ class AddressHelperTest extends AbstractUnitTestCase
      */
     protected $messageHelperProphecy;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->messageHelperProphecy = $this->prophesize(MessageHelper::class);
         $this->subject = new AddressHelper($this->messageHelperProphecy->reveal());
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset(
             $this->subject,

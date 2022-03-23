@@ -6,6 +6,10 @@
 ChangeLog
 =========
 
+**Version 9.3.12**
+
+- BUGFIX: Class ApplicationType not found. Repair TYPO3 9 compatibility.
+
 **Version 9.3.11**
 
 - BUGFIX: Rename sheet sDEFAULT to sDEF in FlexForm

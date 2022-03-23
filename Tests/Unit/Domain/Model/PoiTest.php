@@ -11,23 +11,26 @@ namespace JWeiland\Maps2\Tests\Unit\Domain\Model;
 
 use JWeiland\Maps2\Domain\Model\Poi;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * Class PoiTest
  */
 class PoiTest extends UnitTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var Poi
      */
     protected $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->subject = new Poi();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->subject);
         parent::tearDown();

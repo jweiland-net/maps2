@@ -15,6 +15,7 @@ use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
 use JWeiland\Maps2\Service\MapService;
 use Nimut\TestingFramework\MockObject\AccessibleMockObjectInterface;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageQueue;
@@ -30,6 +31,8 @@ use TYPO3\CMS\Fluid\View\TemplateView;
  */
 class PoiCollectionControllerTest extends UnitTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var PoiCollectionController|\PHPUnit_Framework_MockObject_MockObject|AccessibleMockObjectInterface
      */
@@ -65,7 +68,7 @@ class PoiCollectionControllerTest extends UnitTestCase
      */
     protected $viewProphecy;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerProphecy = $this->prophesize(ObjectManager::class);
         $this->poiCollectionRepositoryProphecy = $this->prophesize(PoiCollectionRepository::class);
@@ -89,7 +92,7 @@ class PoiCollectionControllerTest extends UnitTestCase
         $this->subject->_set('controllerContext', $this->controllerContextProphecy->reveal());
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->subject);
         parent::tearDown();

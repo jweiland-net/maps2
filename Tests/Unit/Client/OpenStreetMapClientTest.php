@@ -13,12 +13,15 @@ use JWeiland\Maps2\Client\OpenStreetMapClient;
 use JWeiland\Maps2\Client\Request\OpenStreetMap\GeocodeRequest;
 use JWeiland\Maps2\Helper\MessageHelper;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * Test Open Street Map class
  */
 class OpenStreetMapClientTest extends UnitTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var GeocodeRequest
      */
@@ -34,7 +37,7 @@ class OpenStreetMapClientTest extends UnitTestCase
      */
     protected $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->geocodeRequestProphecy = $this->prophesize(GeocodeRequest::class);
         $this->messageHelperProphecy = $this->prophesize(MessageHelper::class);
@@ -44,7 +47,7 @@ class OpenStreetMapClientTest extends UnitTestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset(
             $this->subject,

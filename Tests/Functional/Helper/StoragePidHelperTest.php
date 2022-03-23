@@ -13,6 +13,7 @@ use JWeiland\Maps2\Helper\MessageHelper;
 use JWeiland\Maps2\Helper\StoragePidHelper;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\VariableFrontend;
@@ -25,6 +26,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class StoragePidHelperTest extends FunctionalTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var StoragePidHelper
      */
@@ -43,7 +46,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         'typo3conf/ext/events2'
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -51,7 +54,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         $this->subject = new StoragePidHelper($this->messageHelperProphecy->reveal());
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset(
             $this->subject,
