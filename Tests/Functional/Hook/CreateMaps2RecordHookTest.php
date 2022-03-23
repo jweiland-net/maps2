@@ -45,7 +45,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
         'typo3conf/ext/maps2'
     ];
 
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->setUpBackendUserFromFixture(1);
@@ -73,7 +73,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
         ];
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
     }
