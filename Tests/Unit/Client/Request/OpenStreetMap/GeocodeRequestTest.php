@@ -12,12 +12,15 @@ namespace JWeiland\Maps2\Tests\Unit\Client\Request\OpenStreetMap;
 use JWeiland\Maps2\Client\Request\OpenStreetMap\GeocodeRequest;
 use JWeiland\Maps2\Configuration\ExtConf;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * Test Open Street Map Geocode Request class
  */
 class GeocodeRequestTest extends UnitTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var ExtConf
      */

@@ -12,12 +12,15 @@ namespace JWeiland\Maps2\Tests\Unit\Client\Request\GoogleMaps;
 use JWeiland\Maps2\Client\Request\GoogleMaps\GeocodeRequest;
 use JWeiland\Maps2\Configuration\ExtConf;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * Test Google Maps Geocode Request class
  */
 class GeocodeRequestTest extends UnitTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var ExtConf
      */

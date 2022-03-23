@@ -11,12 +11,15 @@ namespace JWeiland\Maps2\Tests\Unit\Domain\Model;
 
 use JWeiland\Maps2\Domain\Model\Position;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * Class PositionTest
  */
 class PositionTest extends UnitTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var Position
      */

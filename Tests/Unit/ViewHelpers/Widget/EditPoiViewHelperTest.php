@@ -15,6 +15,7 @@ use JWeiland\Maps2\Service\MapService;
 use JWeiland\Maps2\ViewHelpers\Widget\Controller\EditPoiController;
 use JWeiland\Maps2\ViewHelpers\Widget\EditPoiViewHelper;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
@@ -24,6 +25,8 @@ use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
  */
 class EditPoiViewHelperTest extends UnitTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var EditPoiViewHelper
      */

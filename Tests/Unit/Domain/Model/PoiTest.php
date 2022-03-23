@@ -11,12 +11,15 @@ namespace JWeiland\Maps2\Tests\Unit\Domain\Model;
 
 use JWeiland\Maps2\Domain\Model\Poi;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * Class PoiTest
  */
 class PoiTest extends UnitTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var Poi
      */

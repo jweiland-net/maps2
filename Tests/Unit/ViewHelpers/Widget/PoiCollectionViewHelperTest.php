@@ -15,6 +15,7 @@ use JWeiland\Maps2\Service\MapService;
 use JWeiland\Maps2\ViewHelpers\Widget\Controller\PoiCollectionController;
 use JWeiland\Maps2\ViewHelpers\Widget\PoiCollectionViewHelper;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
@@ -24,6 +25,8 @@ use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
  */
 class PoiCollectionViewHelperTest extends UnitTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var PoiCollectionViewHelper
      */

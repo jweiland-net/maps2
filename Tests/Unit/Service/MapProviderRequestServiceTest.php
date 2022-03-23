@@ -12,6 +12,7 @@ namespace JWeiland\Maps2\Tests\Unit\Service;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Service\MapProviderRequestService;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
@@ -22,6 +23,8 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
  */
 class MapProviderRequestServiceTest extends UnitTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var ExtConf
      */

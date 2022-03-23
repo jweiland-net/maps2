@@ -14,6 +14,7 @@ use JWeiland\Maps2\Domain\Model\Category;
 use JWeiland\Maps2\Domain\Model\Poi;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
@@ -23,6 +24,8 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  */
 class PoiCollectionTest extends FunctionalTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var PoiCollection
      */

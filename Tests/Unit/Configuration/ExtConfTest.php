@@ -11,12 +11,15 @@ namespace JWeiland\Maps2\Tests\Unit\Configuration;
 
 use JWeiland\Maps2\Configuration\ExtConf;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
  * Class ExtConfTest
  */
 class ExtConfTest extends UnitTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var ExtConf
      */
