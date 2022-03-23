@@ -25,6 +25,7 @@
 		"roave/security-advisories": "dev-latest",
 		"friendsofphp/php-cs-fixer": "^2.16",
 		"nimut/testing-framework": "^5.1",
+		"phpspec/prophecy-phpunit": "^2.0",
 		"jweiland/events2": ">=6.1.0"
 	},
 	"autoload": {

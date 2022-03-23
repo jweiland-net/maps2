@@ -98,6 +98,7 @@ class MapProviderOverlayRequestHandler implements RequestHandlerInterface
             $environmentService = GeneralUtility::makeInstance(EnvironmentService::class);
             return $environmentService->isEnvironmentInFrontendMode();
         }
+
         // Frontend mode stays false if backend or cli without request object
         return ($GLOBALS['TYPO3_REQUEST'] ?? null) instanceof ServerRequestInterface
             && ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend();
