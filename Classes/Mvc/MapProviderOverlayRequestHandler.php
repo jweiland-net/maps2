@@ -21,6 +21,7 @@ use TYPO3\CMS\Extbase\Mvc\RequestHandlerInterface;
 use TYPO3\CMS\Extbase\Mvc\Response;
 use TYPO3\CMS\Extbase\Mvc\ResponseInterface;
 use TYPO3\CMS\Extbase\Mvc\Web\RequestBuilder;
+use TYPO3\CMS\Extbase\Service\EnvironmentService;
 
 /**
  * This RequestHandler will be used to show an overlay for maps2 output
@@ -93,6 +94,10 @@ class MapProviderOverlayRequestHandler implements RequestHandlerInterface
      */
     protected function isEnvironmentInFrontendMode(): bool
     {
+        if (version_compare(TYPO3_branch, '10.4', '<')) {
+            $environmentService = GeneralUtility::makeInstance(EnvironmentService::class);
+            return $environmentService->isEnvironmentInFrontendMode();
+        }
         // Frontend mode stays false if backend or cli without request object
         return ($GLOBALS['TYPO3_REQUEST'] ?? null) instanceof ServerRequestInterface
             && ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend();
