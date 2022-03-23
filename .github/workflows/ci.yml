@@ -10,7 +10,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        typo3: [^9.5, ^10.4]
+        typo3: [^10.4]
         php: ['7.2', '7.3', '7.4']
 
     services:
@@ -54,9 +54,6 @@ jobs:
       - name: Install dependencies with typo3/cms-core:${{ matrix.typo3 }}
         run: |
           composer require typo3/cms-core:${{ matrix.typo3 }} --no-progress
-          # SF: Remove next line, if version 2.13.2 was released
-          # Issue: https://github.com/Nimut/testing-framework/issues/136
-          composer require doctrine/dbal:2.10.4 doctrine/cache:^1.0 --no-progress
           git checkout composer.json
 
       - name: php-cs-fixer
