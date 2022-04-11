@@ -1,6 +1,11 @@
-# TYPO3 Extension `maps2`
-
+[![Latest Stable Version](https://poser.pugx.org/jweiland/maps2/v/stable.svg)](https://extensions.typo3.org/extension/maps2/)
+[![TYPO3 11](https://img.shields.io/badge/TYPO3-11-orange.svg?style=flat-square)](https://get.typo3.org/version/11)
+[![TYPO3 10](https://img.shields.io/badge/TYPO3-10-orange.svg?style=flat-square)](https://get.typo3.org/version/10)
+[![Total Downloads](https://poser.pugx.org/jweiland/maps2/d/total.svg)](https://packagist.org/packages/jweiland/maps2)
+[![Monthly Downloads](https://poser.pugx.org/jweiland/maps2/d/monthly)](https://packagist.org/packages/jweiland/maps2)
 ![Build Status](https://github.com/jweiland-net/maps2/workflows/CI/badge.svg)
+
+# TYPO3 Extension `maps2`
 
 This TYPO3 extension supports the rendering of a map based on Google Maps or
 OpenStreetMap. The map can be additionally enriched with markers, routes,
