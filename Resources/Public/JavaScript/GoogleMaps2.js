@@ -567,7 +567,7 @@ function GoogleMaps2($element, environment) {
             typeof environment.settings.markerClusterer !== 'undefined'
             && environment.settings.markerClusterer.enable === 1
         ) {
-            new me.MarkerClusterer(
+            new MarkerClusterer(
                 me.map,
                 me.pointMarkers,
                 {imagePath: environment.settings.markerClusterer.imagePath}
