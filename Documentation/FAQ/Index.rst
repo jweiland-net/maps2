@@ -148,7 +148,7 @@ mindshape_cookie_consent
 
    .. code-block:: typoscript
 
-   page.includeJSFooterlibs.maps2 >
-   page.includeJSFooterlibs.googleMapsForMaps2 >
+      page.includeJSFooterlibs.maps2 >
+      page.includeJSFooterlibs.googleMapsForMaps2 >
 
 8. You're done
