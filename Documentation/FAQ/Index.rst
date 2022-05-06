@@ -85,7 +85,7 @@ mindshape_cookie_consent
 
 2. Copy Show.html to SitePackage
 
-   Copy file `EXT:site_package/Resources/Private/Extensions/maps2/Templates/PoiCollection/Show.html` to a
+   Copy file `EXT:maps2/Resources/Private/Extensions/maps2/Templates/PoiCollection/Show.html` to a
    directory in your SitePackage extension. For example:
 
    `typo3conf/ext/site_package/Resources/Private/Extensions/maps2/Templates/PoiCollection/Show.html`
