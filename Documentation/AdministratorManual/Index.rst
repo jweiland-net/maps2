@@ -14,7 +14,6 @@ Administrator manual
    :maxdepth: 2
    :titlesonly:
 
-  ExtensionManager/Index
   GoogleApiKeys/Index
   Update/Index
   Templates/Index
