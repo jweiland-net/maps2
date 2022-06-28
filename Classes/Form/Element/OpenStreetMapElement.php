@@ -65,8 +65,14 @@ class OpenStreetMapElement extends AbstractFormElement
         $config = $parameterArray['fieldConf']['config'];
         $evalList = GeneralUtility::trimExplode(',', $config['eval'] ?? '', true);
 
-        $publicResourcesPath =
-            PathUtility::getAbsoluteWebPath(ExtensionManagementUtility::extPath('maps2')) . 'Resources/Public/';
+        if (method_exists(PathUtility::class, 'getPublicResourceWebPath')) {
+            $publicResourcesPath = PathUtility::getPublicResourceWebPath('EXT:maps2/Resources/Public/');
+        } else {
+            $publicResourcesPath = sprintf(
+                '%sResources/Public/',
+                PathUtility::getAbsoluteWebPath(ExtensionManagementUtility::extPath('maps2'))
+            );
+        }
 
         $this->pageRenderer->addRequireJsConfiguration([
             'paths' => [

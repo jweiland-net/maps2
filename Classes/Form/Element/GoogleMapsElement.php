@@ -65,10 +65,14 @@ class GoogleMapsElement extends AbstractFormElement
         $config = $parameterArray['fieldConf']['config'];
         $evalList = GeneralUtility::trimExplode(',', $config['eval'] ?? '', true);
 
-        $publicResourcesPath = sprintf(
-            '%sResources/Public/',
-            PathUtility::getAbsoluteWebPath(ExtensionManagementUtility::extPath('maps2'))
-        );
+        if (method_exists(PathUtility::class, 'getPublicResourceWebPath')) {
+            $publicResourcesPath = PathUtility::getPublicResourceWebPath('EXT:maps2/Resources/Public/');
+        } else {
+            $publicResourcesPath = sprintf(
+                '%sResources/Public/',
+                PathUtility::getAbsoluteWebPath(ExtensionManagementUtility::extPath('maps2'))
+            );
+        }
 
         // loadRequireJsModule has to be loaded before configuring additional paths, else all ext paths will not be initialized
         $this->pageRenderer->addRequireJsConfiguration([
