@@ -68,8 +68,8 @@ class PoiCollection extends AbstractEntity
 
     /**
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\JWeiland\Maps2\Domain\Model\Poi>
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Cascade("remove")
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
+     * @Extbase\ORM\Cascade("remove")
+     * @Extbase\ORM\Lazy
      */
     protected $pois;
 
@@ -105,11 +105,13 @@ class PoiCollection extends AbstractEntity
 
     /**
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
+     * @Extbase\ORM\Lazy
      */
     protected $infoWindowImages;
 
     /**
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
+     * @Extbase\ORM\Lazy
      */
     protected $markerIcons;
 
@@ -135,6 +137,7 @@ class PoiCollection extends AbstractEntity
 
     /**
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\JWeiland\Maps2\Domain\Model\Category>
+     * @Extbase\ORM\Lazy
      */
     protected $categories;
 
