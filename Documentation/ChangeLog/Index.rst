@@ -7,6 +7,10 @@
 ChangeLog
 =========
 
+**Version 10.0.8**
+
+- BUGFIX: To allow h* tags in info_window_content we have moved preview as fieldWizard below RTE
+
 **Version 10.0.5**
 
 - BUGFIX: Create new Overlay Partial, so it can be used from foreign extensions

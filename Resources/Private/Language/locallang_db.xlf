@@ -146,6 +146,9 @@
 			<trans-unit id="tx_maps2_uid" xml:space="preserve">
 				<source>Connect this record to Google Maps record</source>
 			</trans-unit>
+			<trans-unit id="info_window_content.preview" xml:space="preserve">
+				<source>Preview</source>
+			</trans-unit>
 
 			<trans-unit id="tab.maps2" xml:space="preserve">
 				<source>Google Maps (maps2)</source>

@@ -71,10 +71,10 @@ class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
 
             try {
                 if (
-                ArrayUtility::getValueByPath(
-                    $valueFromDatabase,
-                    'data/sGoogleMapsOptions/lDEF/settings.activateScrollWheel'
-                )
+                    ArrayUtility::getValueByPath(
+                        $valueFromDatabase,
+                        'data/sGoogleMapsOptions/lDEF/settings.activateScrollWheel'
+                    )
                 ) {
                     return true;
                 }
