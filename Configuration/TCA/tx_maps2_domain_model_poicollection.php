@@ -370,7 +370,7 @@ return [
                 'rows' => 15,
                 'softref' => 'typolink_tag,images,email[subst],url',
                 'enableRichtext' => true,
-                'fieldInformation' => [
+                'fieldWizard' => [
                     'showInfoWindowContentAbove' => [
                         'renderType' => 'maps2InfoWindowContent'
                     ]

@@ -30,6 +30,7 @@ class InfoWindowContent extends AbstractNode
         $address = GeneralUtility::trimExplode(',', $this->data['databaseRow']['address']);
 
         $html = [];
+        $html[] = '<h3>' . $this->getLanguageService()->sL('LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:info_window_content.preview') . '</h3>';
         $html[] = '<div class="callout callout-info">';
         $html[] =   '<div class="media">';
         $html[] =     '<div class="media-body">';
