@@ -240,7 +240,6 @@ class Maps2Registry implements SingletonInterface
      */
     protected function addToAllTCAtypes(string $tableName, string $fieldName, array $options): void
     {
-
         // Makes sure to add more TCA to an existing structure
         if (isset($GLOBALS['TCA'][$tableName]['columns'])) {
             $fieldList = empty($options['fieldList']) ? $this->addMaps2Tab($tableName, $fieldName) : $options['fieldList'];
