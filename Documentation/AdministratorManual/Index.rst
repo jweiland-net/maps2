@@ -15,5 +15,5 @@ Administrator manual
    :titlesonly:
 
   GoogleApiKeys/Index
-  Update/Index
+  Upgrade/Index
   Templates/Index
