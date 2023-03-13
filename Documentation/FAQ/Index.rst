@@ -109,8 +109,8 @@ mindshape_cookie_consent
       <ms:consent identifier="google_maps"
                   scripts="{
                       0: '//maps.googleapis.com/maps/api/js?key={settings.googleMapsJavaScriptApiKey}&libraries=places',
-                      1: '/typo3conf/ext/maps2/Resources/Public/JavaScript/GoogleMaps2.js',
-                      2: '/typo3conf/ext/site_package/Resources/Public/JavaScript/GoogleMaps.js'
+                      1: '{f:uri.resource(path:\'EXT:/maps2/Resources/Public/JavaScript/GoogleMaps2.js\')',
+                      2: '{f:uri.resource(path:\'EXT:site_package/Resources/Public/JavaScript/GoogleMaps.js\')}'
                   }">
       </ms:consent>
 
