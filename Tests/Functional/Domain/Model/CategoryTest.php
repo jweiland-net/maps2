@@ -43,7 +43,7 @@ class CategoryTest extends FunctionalTestCase
     {
         parent::setUp();
 
-        $this->extConf = new ExtConf();
+        $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
         GeneralUtility::setSingletonInstance(ExtConf::class, $this->extConf);
 
         $this->subject = new Category();

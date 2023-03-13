@@ -72,12 +72,12 @@ class OpenStreetMapElement extends AbstractFormElement
             'paths' => [
                 'leaflet' => $publicResourcesPath . 'JavaScript/Leaflet',
                 'leafletDragPath' => $publicResourcesPath . 'JavaScript/Leaflet.Drag.Path',
-                'leafletEditable' => $publicResourcesPath . 'JavaScript/Leaflet.Editable'
+                'leafletEditable' => $publicResourcesPath . 'JavaScript/Leaflet.Editable',
             ],
             'shim' => [
                 'leaflet' => [
                     'deps' => ['jquery'],
-                    'exports' => 'L'
+                    'exports' => 'L',
                 ],
                 'leafletDragPath' => [
                     'deps' => ['leaflet'],
@@ -85,12 +85,12 @@ class OpenStreetMapElement extends AbstractFormElement
                 'leafletEditable' => [
                     'deps' => ['leafletDragPath'],
                 ],
-            ]
+            ],
         ]);
 
         $resultArray['stylesheetFiles'][] = $publicResourcesPath . 'Css/Leaflet/Leaflet.css';
         $resultArray['requireJsModules'][] = [
-            'TYPO3/CMS/Maps2/OpenStreetMapModule' => 'function(OpenStreetMap){OpenStreetMap();}'
+            'TYPO3/CMS/Maps2/OpenStreetMapModule' => 'function(OpenStreetMap){OpenStreetMap();}',
         ];
 
         $fieldInformationResult = $this->renderFieldInformation();
@@ -108,7 +108,7 @@ class OpenStreetMapElement extends AbstractFormElement
             'data-formengine-input-params' => (string)json_encode([
                 'field' => $parameterArray['itemFormElName'],
                 'evalList' => implode(',', $evalList),
-                'is_in' => ''
+                'is_in' => '',
             ]),
             'data-formengine-input-name' => (string)$parameterArray['itemFormElName'],
         ];

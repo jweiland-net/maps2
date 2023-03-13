@@ -42,17 +42,17 @@ class SettingsHelperTest extends FunctionalTestCase
             'zoomControl' => '1',
             'overlay' => [
                 'link' => [
-                    'addSection' => '1'
-                ]
+                    'addSection' => '1',
+                ],
             ],
             'infoWindowContentTemplatePath' => '',
             'infoWindow' => [
                 'image' => [
                     'width' => '150c',
                     'height' => '150c',
-                ]
-            ]
-        ]
+                ],
+            ],
+        ],
     ];
 
     protected array $mergedScriptSettings = [
@@ -70,23 +70,23 @@ class SettingsHelperTest extends FunctionalTestCase
         'fullScreenControl' => '1',
         'overlay' => [
             'link' => [
-                'addSection' => '1'
-            ]
+                'addSection' => '1',
+            ],
         ],
         'infoWindowContentTemplatePath' => '',
         'infoWindow' => [
             'image' => [
                 'width' => '150c',
                 'height' => '150c',
-            ]
-        ]
+            ],
+        ],
     ];
 
     /**
      * @var array
      */
     protected $testExtensionsToLoad = [
-        'typo3conf/ext/maps2'
+        'typo3conf/ext/maps2',
     ];
 
     protected function setUp(): void

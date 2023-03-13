@@ -14,7 +14,6 @@ namespace JWeiland\Maps2\ViewHelpers;
 use JWeiland\Maps2\Helper\SettingsHelper;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
@@ -47,17 +46,14 @@ class RequestUriForOverlayViewHelper extends AbstractViewHelper
         RenderingContextInterface $renderingContext
     ): string {
         // Method setAddQueryStringMethod is deprecated with TYPO3 11. Remove while removing TYPO3 10 compatibility
-        // UriBuilder needs to be loaded by ObjectManager in TYPO3 10.
-        // @ToDo: Use GeneralUtility while removing TYPO3 10 compatibility
-        $uriBuilder = GeneralUtility::makeInstance(ObjectManager::class)
-            ->get(UriBuilder::class)
+        $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class)
             ->reset()
             ->setAddQueryString(true)
             ->setAddQueryStringMethod('GET')
             ->setArguments([
                 'tx_maps2_maps2' => [
-                    'mapProviderRequestsAllowedForMaps2' => 1
-                ]
+                    'mapProviderRequestsAllowedForMaps2' => 1,
+                ],
             ])
             ->setArgumentsToBeExcludedFromQueryString(['cHash']);
 

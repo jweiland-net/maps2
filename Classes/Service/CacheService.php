@@ -31,7 +31,7 @@ class CacheService
     public function getCacheIdentifier(array $poiCollection, string $prefix = 'infoWindow'): string
     {
         if (!$this->isFrontendEnvironment()) {
-            throw new \Exception('getCacheIdentifier can only be called from FE, as we have to add the true language ID to PoiCollection');
+            throw new \RuntimeException('getCacheIdentifier can only be called from FE, as we have to add the true language ID to PoiCollection');
         }
 
         // We do not add the original sys_language_uid of PoiCollection, as it can be the same for different languages.
@@ -75,7 +75,7 @@ class CacheService
             'uid' => $poiCollection->getUid(),
             'pid' => $poiCollection->getUid(),
             'title' => $poiCollection->getTitle(),
-            'address' => $poiCollection->getAddress()
+            'address' => $poiCollection->getAddress(),
         ];
     }
 
@@ -87,7 +87,7 @@ class CacheService
     protected function getLanguageUid(): int
     {
         if (!$this->isFrontendEnvironment()) {
-            throw new \Exception('getLanguageId can only be called from FE, as we have to add the true language ID to PoiCollection');
+            throw new \RuntimeException('getLanguageId can only be called from FE, as we have to add the true language ID to PoiCollection');
         }
 
         return (int)GeneralUtility::makeInstance(Context::class)

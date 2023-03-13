@@ -38,7 +38,7 @@ class AjaxController extends ActionController
     public function processAction(string $method): string
     {
         $response = [
-            'content' => ''
+            'content' => '',
         ];
 
         if ($method === 'renderInfoWindowContent') {

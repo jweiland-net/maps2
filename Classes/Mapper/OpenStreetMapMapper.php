@@ -34,8 +34,8 @@ class OpenStreetMapMapper implements MapperInterface
     {
         $position = GeneralUtility::makeInstance(Position::class);
         $position->setFormattedAddress($this->getFormattedAddress($data));
-        $position->setLatitude((float)$data['lat'] ?? 0.0);
-        $position->setLongitude((float)$data['lon'] ?? 0.0);
+        $position->setLatitude((float)($data['lat'] ?? 0.0));
+        $position->setLongitude((float)($data['lon'] ?? 0.0));
 
         return $position;
     }

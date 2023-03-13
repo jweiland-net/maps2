@@ -322,10 +322,10 @@ class CreateMaps2RecordHook
                     [
                         'latitude' => $position->getLatitude(),
                         'longitude' => $position->getLongitude(),
-                        'address' => $position->getFormattedAddress()
+                        'address' => $position->getFormattedAddress(),
                     ],
                     [
-                        'uid' => (int)$foreignLocationRecord[$foreignColumnName]
+                        'uid' => (int)$foreignLocationRecord[$foreignColumnName],
                     ]
                 );
             }
@@ -461,11 +461,10 @@ class CreateMaps2RecordHook
      * This method returns the real uid as int.
      *
      * @param int|string $uid If new, $uid can start with NEW.
-     * @param DataHandler $dataHandler
      */
     protected function getRealUid($uid, DataHandler $dataHandler): int
     {
-        if (GeneralUtility::isFirstPartOfStr($uid, 'NEW')) {
+        if (str_starts_with($uid, 'NEW')) {
             $uid = $dataHandler->substNEWwithIDs[$uid] ?? 0;
         }
 

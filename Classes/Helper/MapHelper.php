@@ -93,7 +93,7 @@ class MapHelper
                 $pois[] = array_combine(
                     [
                         'latitude',
-                        'longitude'
+                        'longitude',
                     ],
                     GeneralUtility::trimExplode(',', $poi)
                 );

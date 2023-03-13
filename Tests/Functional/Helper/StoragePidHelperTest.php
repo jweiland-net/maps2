@@ -42,7 +42,7 @@ class StoragePidHelperTest extends FunctionalTestCase
      */
     protected $testExtensionsToLoad = [
         'typo3conf/ext/maps2',
-        'typo3conf/ext/events2'
+        'typo3conf/ext/events2',
     ];
 
     protected function setUp(): void
@@ -78,7 +78,7 @@ class StoragePidHelperTest extends FunctionalTestCase
 
         $recordWithoutPid = [
             'uid' => 100,
-            'title' => 'Market'
+            'title' => 'Market',
         ];
         $options = [];
 
@@ -118,7 +118,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         $record = [
             'uid' => 100,
             'pid' => 200,
-            'title' => 'Market'
+            'title' => 'Market',
         ];
         $options = [];
 
@@ -158,10 +158,10 @@ class StoragePidHelperTest extends FunctionalTestCase
         $record = [
             'uid' => 100,
             'pid' => 200,
-            'title' => 'Market'
+            'title' => 'Market',
         ];
         $options = [
-            'defaultStoragePid' => 428
+            'defaultStoragePid' => 428,
         ];
 
         self::assertSame(
@@ -200,10 +200,10 @@ class StoragePidHelperTest extends FunctionalTestCase
         $record = [
             'uid' => 100,
             'pid' => 200,
-            'title' => 'Market'
+            'title' => 'Market',
         ];
         $options = [
-            'defaultStoragePid' => '428'
+            'defaultStoragePid' => '428',
         ];
 
         self::assertSame(
@@ -218,7 +218,7 @@ class StoragePidHelperTest extends FunctionalTestCase
     public function getStoragePidWithoutPidWillReturnPidFromExtensionManager(): void
     {
         $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['foreign_ext'] = [
-            'maps2Storage' => 385
+            'maps2Storage' => 385,
         ];
 
         /** @var PackageManager|ObjectProphecy $packageManagerProphecy */
@@ -231,13 +231,13 @@ class StoragePidHelperTest extends FunctionalTestCase
 
         $recordWithoutPid = [
             'uid' => 100,
-            'title' => 'Market'
+            'title' => 'Market',
         ];
         $options = [
             'defaultStoragePid' => [
                 'extKey' => 'foreign_ext',
-                'property' => 'maps2Storage'
-            ]
+                'property' => 'maps2Storage',
+            ],
         ];
 
         self::assertSame(
@@ -274,7 +274,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerProphecy->reveal());
 
         $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['foreign_ext'] = [
-            'maps2Storage' => 197
+            'maps2Storage' => 197,
         ];
 
         /** @var PackageManager|ObjectProphecy $packageManagerProphecy */
@@ -288,13 +288,13 @@ class StoragePidHelperTest extends FunctionalTestCase
         $record = [
             'uid' => 100,
             'pid' => 200,
-            'title' => 'Market'
+            'title' => 'Market',
         ];
         $options = [
             'defaultStoragePid' => [
                 'extKey' => 'foreign_ext',
-                'property' => 'maps2Storage'
-            ]
+                'property' => 'maps2Storage',
+            ],
         ];
 
         self::assertSame(
@@ -331,7 +331,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerProphecy->reveal());
 
         $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['foreign_ext'] = [
-            'maps2Storage' => 197
+            'maps2Storage' => 197,
         ];
 
         /** @var PackageManager|ObjectProphecy $packageManagerProphecy */
@@ -345,14 +345,14 @@ class StoragePidHelperTest extends FunctionalTestCase
         $record = [
             'uid' => 100,
             'pid' => 200,
-            'title' => 'Market'
+            'title' => 'Market',
         ];
         $options = [
             'defaultStoragePid' => [
                 'extKey' => 'foreign_ext',
                 'property' => 'maps2Storage',
-                'type' => 'ExtensionManager'
-            ]
+                'type' => 'ExtensionManager',
+            ],
         ];
 
         self::assertSame(
@@ -381,9 +381,9 @@ class StoragePidHelperTest extends FunctionalTestCase
             ->willReturn([
                 'ext.' => [
                     'maps2.' => [
-                        'defaultStoragePid' => 582
-                    ]
-                ]
+                        'defaultStoragePid' => 582,
+                    ],
+                ],
             ]);
 
         /** @var CacheManager|ObjectProphecy $cacheManagerProphecy */
@@ -397,7 +397,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         $record = [
             'uid' => 100,
             'pid' => 5438,
-            'title' => 'Market'
+            'title' => 'Market',
         ];
         $options = [];
 
@@ -427,9 +427,9 @@ class StoragePidHelperTest extends FunctionalTestCase
             ->willReturn([
                 'ext.' => [
                     'foreign_ext.' => [
-                        'maps2Storage' => 582
-                    ]
-                ]
+                        'maps2Storage' => 582,
+                    ],
+                ],
             ]);
 
         /** @var CacheManager|ObjectProphecy $cacheManagerProphecy */
@@ -443,14 +443,14 @@ class StoragePidHelperTest extends FunctionalTestCase
         $record = [
             'uid' => 100,
             'pid' => 5438,
-            'title' => 'Market'
+            'title' => 'Market',
         ];
         $options = [
             'defaultStoragePid' => [
                 'extKey' => 'foreign_ext',
                 'property' => 'maps2Storage',
-                'type' => 'pageTSconfig'
-            ]
+                'type' => 'pageTSconfig',
+            ],
         ];
 
         self::assertSame(
@@ -479,12 +479,12 @@ class StoragePidHelperTest extends FunctionalTestCase
             ->willReturn([
                 'ext.' => [
                     'foreign_ext.' => [
-                        'maps2Storage' => 491
+                        'maps2Storage' => 491,
                     ],
                     'maps2.' => [
-                        'defaultStoragePid' => 927
-                    ]
-                ]
+                        'defaultStoragePid' => 927,
+                    ],
+                ],
             ]);
 
         /** @var CacheManager|ObjectProphecy $cacheManagerProphecy */
@@ -498,14 +498,14 @@ class StoragePidHelperTest extends FunctionalTestCase
         $record = [
             'uid' => 100,
             'pid' => 5438,
-            'title' => 'Market'
+            'title' => 'Market',
         ];
         $options = [
             'defaultStoragePid' => [
                 'extKey' => 'foreign_ext',
                 'property' => 'maps2Storage',
-                'type' => 'pageTSconfig'
-            ]
+                'type' => 'pageTSconfig',
+            ],
         ];
 
         self::assertSame(
@@ -534,9 +534,9 @@ class StoragePidHelperTest extends FunctionalTestCase
             ->willReturn([
                 'ext.' => [
                     'maps2.' => [
-                        'defaultStoragePid' => 582
-                    ]
-                ]
+                        'defaultStoragePid' => 582,
+                    ],
+                ],
             ]);
 
         /** @var CacheManager|ObjectProphecy $cacheManagerProphecy */
@@ -550,10 +550,10 @@ class StoragePidHelperTest extends FunctionalTestCase
         $record = [
             'uid' => 100,
             'pid' => 5438,
-            'title' => 'Market'
+            'title' => 'Market',
         ];
         $options = [
-            'defaultStoragePid' => 428
+            'defaultStoragePid' => 428,
         ];
 
         self::assertSame(
@@ -582,9 +582,9 @@ class StoragePidHelperTest extends FunctionalTestCase
             ->willReturn([
                 'ext.' => [
                     'foreign_ext.' => [
-                        'maps2Pid' => 4297
-                    ]
-                ]
+                        'maps2Pid' => 4297,
+                    ],
+                ],
             ]);
 
         /** @var CacheManager|ObjectProphecy $cacheManagerProphecy */
@@ -612,23 +612,23 @@ class StoragePidHelperTest extends FunctionalTestCase
         ExtensionManagementUtility::setPackageManager($packageManagerProphecy->reveal());
 
         $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['foreign_ext'] = [
-            'maps2Storage' => 0
+            'maps2Storage' => 0,
         ];
         $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['events2'] = [
-            'defaultLocationPid' => 0
+            'defaultLocationPid' => 0,
         ];
 
         $record = [
             'uid' => 100,
             'pid' => 5438,
-            'title' => 'Market'
+            'title' => 'Market',
         ];
         $options = [
             'defaultStoragePid' => [
                 0 => [
                     'extKey' => 'foreign_ext',
                     'property' => 'maps2Storage',
-                    'type' => 'extensionmanager'
+                    'type' => 'extensionmanager',
                 ],
                 1 => [
                     'extKey' => 'events2',
@@ -637,14 +637,14 @@ class StoragePidHelperTest extends FunctionalTestCase
                 2 => [
                     'extKey' => 'news',
                     'property' => 'location',
-                    'type' => 'pageTSconfig'
+                    'type' => 'pageTSconfig',
                 ],
                 3 => [
                     'extKey' => 'foreign_ext',
                     'property' => 'maps2Pid',
-                    'type' => 'pagetsconfig'
+                    'type' => 'pagetsconfig',
                 ],
-            ]
+            ],
         ];
 
         self::assertSame(
@@ -673,9 +673,9 @@ class StoragePidHelperTest extends FunctionalTestCase
             ->willReturn([
                 'ext.' => [
                     'foreign_ext.' => [
-                        'maps2Pid' => 4297
-                    ]
-                ]
+                        'maps2Pid' => 4297,
+                    ],
+                ],
             ]);
 
         /** @var CacheManager|ObjectProphecy $cacheManagerProphecy */
@@ -687,10 +687,10 @@ class StoragePidHelperTest extends FunctionalTestCase
         GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerProphecy->reveal());
 
         $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['foreign_ext'] = [
-            'invalidPidKey' => 3985
+            'invalidPidKey' => 3985,
         ];
         $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['events2'] = [
-            'defaultLocationPid' => 4867
+            'defaultLocationPid' => 4867,
         ];
 
         /** @var PackageManager|ObjectProphecy $packageManagerProphecy */
@@ -708,14 +708,14 @@ class StoragePidHelperTest extends FunctionalTestCase
         $record = [
             'uid' => 100,
             'pid' => 5438,
-            'title' => 'Market'
+            'title' => 'Market',
         ];
         $options = [
             'defaultStoragePid' => [
                 0 => [
                     'extKey' => 'foreign_ext',
                     'property' => 'maps2Storage',
-                    'type' => 'extensionmanager'
+                    'type' => 'extensionmanager',
                 ],
                 1 => [
                     'extKey' => 'events2',
@@ -724,14 +724,14 @@ class StoragePidHelperTest extends FunctionalTestCase
                 2 => [
                     'extKey' => 'news',
                     'property' => 'location',
-                    'type' => 'pageTSconfig'
+                    'type' => 'pageTSconfig',
                 ],
                 3 => [
                     'extKey' => 'foreign_ext',
                     'property' => 'maps2Pid',
-                    'type' => 'pagetsconfig'
+                    'type' => 'pagetsconfig',
                 ],
-            ]
+            ],
         ];
 
         self::assertSame(
@@ -760,12 +760,12 @@ class StoragePidHelperTest extends FunctionalTestCase
             ->willReturn([
                 'ext.' => [
                     'foreign_ext.' => [
-                        'maps2Pid' => 4297
+                        'maps2Pid' => 4297,
                     ],
                     'maps2.' => [
-                        'defaultStoragePid' => 5837
+                        'defaultStoragePid' => 5837,
                     ],
-                ]
+                ],
             ]);
 
         /** @var CacheManager|ObjectProphecy $cacheManagerProphecy */
@@ -793,23 +793,23 @@ class StoragePidHelperTest extends FunctionalTestCase
         ExtensionManagementUtility::setPackageManager($packageManagerProphecy->reveal());
 
         $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['foreign_ext'] = [
-            'invalidPidKey' => 0
+            'invalidPidKey' => 0,
         ];
         $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['events2'] = [
-            'defaultLocationPid' => 0
+            'defaultLocationPid' => 0,
         ];
 
         $record = [
             'uid' => 100,
             'pid' => 5438,
-            'title' => 'Market'
+            'title' => 'Market',
         ];
         $options = [
             'defaultStoragePid' => [
                 0 => [
                     'extKey' => 'foreign_ext',
                     'property' => 'maps2Storage',
-                    'type' => 'extensionmanager'
+                    'type' => 'extensionmanager',
                 ],
                 1 => [
                     'extKey' => 'events2',
@@ -818,14 +818,14 @@ class StoragePidHelperTest extends FunctionalTestCase
                 2 => [
                     'extKey' => 'news',
                     'property' => 'location',
-                    'type' => 'pageTSconfig'
+                    'type' => 'pageTSconfig',
                 ],
                 3 => [
                     'extKey' => 'foreign_ext',
                     'property' => 'maps2Pid',
-                    'type' => 'pagetsconfig'
+                    'type' => 'pagetsconfig',
                 ],
-            ]
+            ],
         ];
 
         self::assertSame(

@@ -22,7 +22,7 @@ class RequestFactory
 {
     protected array $mapping = [
         'gm' => 'JWeiland\\Maps2\\Client\\Request\\GoogleMaps',
-        'osm' => 'JWeiland\\Maps2\\Client\\Request\\OpenStreetMap'
+        'osm' => 'JWeiland\\Maps2\\Client\\Request\\OpenStreetMap',
     ];
 
     protected MapHelper $mapHelper;
@@ -46,7 +46,7 @@ class RequestFactory
         );
 
         if (!class_exists($className)) {
-            throw new \Exception(sprintf(
+            throw new \RuntimeException(sprintf(
                 'Class "%s" to create a new Request could not be found',
                 $className
             ));

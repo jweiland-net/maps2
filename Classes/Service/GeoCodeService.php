@@ -47,6 +47,7 @@ class GeoCodeService implements SingletonInterface
 
     /**
      * @return ObjectStorage|Position[]
+     * @throws \Exception
      */
     public function getPositionsByAddress(string $address): ObjectStorage
     {

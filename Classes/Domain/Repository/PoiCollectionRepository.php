@@ -32,7 +32,7 @@ use TYPO3\CMS\Extbase\Persistence\Repository;
 class PoiCollectionRepository extends Repository
 {
     protected $defaultOrderings = [
-        'title' => QueryInterface::ORDER_ASCENDING
+        'title' => QueryInterface::ORDER_ASCENDING,
     ];
 
     protected EventDispatcher $eventDispatcher;

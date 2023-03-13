@@ -1,9 +1,10 @@
 <?php
+
 if (!defined('TYPO3_MODE')) {
     die('Access denied.');
 }
 
-call_user_func(static function(): void {
+call_user_func(static function (): void {
     $extConf = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
         \JWeiland\Maps2\Configuration\ExtConf::class
     );

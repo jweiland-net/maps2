@@ -36,7 +36,7 @@ class PoiCollectionController extends AbstractController
     public function showAction(int $poiCollectionUid = 0): void
     {
         $this->postProcessAndAssignFluidVariables([
-            'poiCollections' => $this->poiCollectionRepository->findPoiCollections($this->settings, $poiCollectionUid)
+            'poiCollections' => $this->poiCollectionRepository->findPoiCollections($this->settings, $poiCollectionUid),
         ]);
     }
 
@@ -47,7 +47,7 @@ class PoiCollectionController extends AbstractController
     {
         $this->postProcessAndAssignFluidVariables([
             'poiCollections' => $this->poiCollectionRepository->findPoiCollections($this->settings, $poiCollectionUid),
-            'requestUri' => $this->getRequestUri()
+            'requestUri' => $this->getRequestUri(),
         ]);
     }
 
@@ -56,7 +56,7 @@ class PoiCollectionController extends AbstractController
         $search ??= GeneralUtility::makeInstance(Search::class);
 
         $this->postProcessAndAssignFluidVariables([
-            'search' => $search
+            'search' => $search,
         ]);
     }
 
@@ -76,7 +76,7 @@ class PoiCollectionController extends AbstractController
 
         $this->postProcessAndAssignFluidVariables([
             'poiCollections' => $poiCollections,
-            'search' => $search
+            'search' => $search,
         ]);
     }
 
@@ -94,8 +94,8 @@ class PoiCollectionController extends AbstractController
             ->setAddQueryStringMethod('GET')
             ->setArguments([
                 'tx_maps2_maps2' => [
-                    'mapProviderRequestsAllowedForMaps2' => 1
-                ]
+                    'mapProviderRequestsAllowedForMaps2' => 1,
+                ],
             ])
             ->setArgumentsToBeExcludedFromQueryString(['cHash']);
 

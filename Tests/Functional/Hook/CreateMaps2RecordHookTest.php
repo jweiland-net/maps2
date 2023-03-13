@@ -72,20 +72,20 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
                 'countryColumn' => 'country',
                 'defaultStoragePid' => [
                     'extKey' => 'events2',
-                    'property' => 'poiCollectionPid'
+                    'property' => 'poiCollectionPid',
                 ],
                 'synchronizeColumns' => [
                     [
                         'foreignColumnName' => 'location',
-                        'poiCollectionColumnName' => 'title'
+                        'poiCollectionColumnName' => 'title',
                     ],
                     [
                         'foreignColumnName' => 'hidden',
-                        'poiCollectionColumnName' => 'hidden'
-                    ]
-                ]
-            ]
-        ]
+                        'poiCollectionColumnName' => 'hidden',
+                    ],
+                ],
+            ],
+        ],
     ];
 
     /**
@@ -94,7 +94,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
     protected $testExtensionsToLoad = [
         'typo3conf/ext/static_info_tables',
         'typo3conf/ext/events2',
-        'typo3conf/ext/maps2'
+        'typo3conf/ext/maps2',
     ];
 
     protected function setUp(): void
@@ -133,7 +133,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
                 $this->prophesize(ConfigurationManager::class)->reveal(),
                 $this->messageHelperProphecy->reveal(),
                 $this->maps2RegistryProphecy->reveal(),
-                new ExtConf(),
+                GeneralUtility::makeInstance(ExtConf::class),
                 GeneralUtility::makeInstance(EventDispatcher::class),
                 new EnvironmentService()
             ),
@@ -201,8 +201,8 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
                     'pid' => '12',
                     'title' => 'Test',
                     'l10n_parent' => '234',
-                ]
-            ]
+                ],
+            ],
         ];
 
         $this->subject->processDatamap_afterAllOperations($dataHandler);
@@ -249,9 +249,9 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
                     'location' => 'Stefan',
                     'sys_language_uid' => 0,
                     'l10n_parent' => 0,
-                    'tx_maps2_uid' => 1
-                ]
-            ]
+                    'tx_maps2_uid' => 1,
+                ],
+            ],
         ];
 
         $this->subject->processDatamap_afterAllOperations($dataHandler);
@@ -284,9 +284,9 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
                     'location' => 'Stefan',
                     'sys_language_uid' => 0,
                     'l10n_parent' => 0,
-                    'tx_maps2_uid' => 1
-                ]
-            ]
+                    'tx_maps2_uid' => 1,
+                ],
+            ],
         ];
 
         $this->subject->processDatamap_afterAllOperations($dataHandler);
@@ -352,9 +352,9 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
                     'location' => 'Stefan',
                     'sys_language_uid' => 0,
                     'l10n_parent' => 0,
-                    'tx_maps2_uid' => 1
-                ]
-            ]
+                    'tx_maps2_uid' => 1,
+                ],
+            ],
         ];
 
         $this->subject->processDatamap_afterAllOperations($dataHandler);
@@ -374,9 +374,9 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
                     'location' => 'Stefan',
                     'sys_language_uid' => 0,
                     'l10n_parent' => 0,
-                    'tx_maps2_uid' => 1
-                ]
-            ]
+                    'tx_maps2_uid' => 1,
+                ],
+            ],
         ];
 
         /** @var Position|ObjectProphecy $positionProphecy */

@@ -49,7 +49,7 @@ class GetEnvironmentViewHelper extends AbstractViewHelper
                 'settings' => self::getSettingsHelper()->getPreparedSettings(),
                 'extConf' => ObjectAccess::getGettableProperties(GeneralUtility::makeInstance(ExtConf::class)),
                 'id' => $GLOBALS['TSFE']->id,
-                'contentRecord' => self::getConfigurationManager()->getContentObject()->data
+                'contentRecord' => self::getConfigurationManager()->getContentObject()->data,
             ]
         );
 

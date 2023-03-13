@@ -67,12 +67,12 @@ class PoiCollection extends AbstractEntity
     protected string $infoWindowContent = '';
 
     /**
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
+     * @var ObjectStorage<FileReference>
      */
     protected ?ObjectStorage $infoWindowImages = null;
 
     /**
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
+     * @var ObjectStorage<FileReference>
      */
     protected ?ObjectStorage $markerIcons = null;
 
@@ -85,7 +85,7 @@ class PoiCollection extends AbstractEntity
     protected int $markerIconAnchorPosY = 0;
 
     /**
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\JWeiland\Maps2\Domain\Model\Category>
+     * @var ObjectStorage<Category>
      */
     protected ?ObjectStorage $categories = null;
 
@@ -105,17 +105,25 @@ class PoiCollection extends AbstractEntity
 
     public function __construct()
     {
-        $this->initializeObject();
-    }
-
-    public function initializeObject(): void
-    {
         $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
         $this->mapHelper = GeneralUtility::makeInstance(MapHelper::class);
 
         $this->infoWindowImages = new ObjectStorage();
         $this->markerIcons = new ObjectStorage();
         $this->categories = new ObjectStorage();
+    }
+
+    /**
+     * Called again with initialize object, as fetching an entity from the DB does not use the constructor
+     */
+    public function initializeObject(): void
+    {
+        $this->extConf = $this->extConf ?? GeneralUtility::makeInstance(ExtConf::class);
+        $this->mapHelper = $this->mapHelper ?? GeneralUtility::makeInstance(MapHelper::class);
+
+        $this->infoWindowImages = $this->infoWindowImages ?? new ObjectStorage();
+        $this->markerIcons = $this->markerIcons ?? new ObjectStorage();
+        $this->categories = $this->categories ?? new ObjectStorage();
     }
 
     public function getSysLanguageUid(): int

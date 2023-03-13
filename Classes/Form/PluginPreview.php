@@ -119,7 +119,7 @@ class PluginPreview
                 ['*'],
                 'tx_maps2_domain_model_poicollection',
                 [
-                    'uid' => (int)$piFlexformData['settings']['poiCollection']
+                    'uid' => (int)$piFlexformData['settings']['poiCollection'],
                 ]
             );
             $poiCollectionRecord = $statement->fetch(\PDO::FETCH_ASSOC) ?: [];

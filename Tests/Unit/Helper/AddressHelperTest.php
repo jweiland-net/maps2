@@ -69,7 +69,7 @@ class AddressHelperTest extends AbstractUnitTestCase
 
         $record = [
             'uid' => 100,
-            'title' => 'Market'
+            'title' => 'Market',
         ];
         $options = [];
 
@@ -94,10 +94,10 @@ class AddressHelperTest extends AbstractUnitTestCase
 
         $record = [
             'uid' => 100,
-            'title' => 'Market'
+            'title' => 'Market',
         ];
         $options = [
-            'addressColumns' => []
+            'addressColumns' => [],
         ];
 
         self::assertSame(
@@ -143,7 +143,7 @@ class AddressHelperTest extends AbstractUnitTestCase
         ];
         $options = [
             'addressColumns' => ['street', 'zip', 'city'],
-            'countryColumn' => 'country'
+            'countryColumn' => 'country',
         ];
 
         self::assertSame(
@@ -182,7 +182,7 @@ class AddressHelperTest extends AbstractUnitTestCase
         ];
         $options = [
             'addressColumns' => ['street', 'zip', 'city'],
-            'countryColumn' => 'country'
+            'countryColumn' => 'country',
         ];
 
         self::assertSame(
@@ -212,7 +212,7 @@ class AddressHelperTest extends AbstractUnitTestCase
         ];
         $options = [
             'addressColumns' => ['street', 'zip', 'city'],
-            'defaultCountry' => 'France'
+            'defaultCountry' => 'France',
         ];
 
         self::assertSame(
@@ -237,14 +237,14 @@ class AddressHelperTest extends AbstractUnitTestCase
         $this->buildAssertionForDatabaseWithReturnValue(
             'static_countries',
             [
-                'cn_short_en' => 'Poland'
+                'cn_short_en' => 'Poland',
             ],
             [
                 [
                     'expr' => 'eq',
                     'field' => 'uid',
-                    'value' => 328
-                ]
+                    'value' => 328,
+                ],
             ]
         );
 
@@ -254,11 +254,11 @@ class AddressHelperTest extends AbstractUnitTestCase
             'street' => 'Mainstreet 17',
             'zip' => '23145',
             'city' => 'Warschau',
-            'country' => '328'
+            'country' => '328',
         ];
         $options = [
             'addressColumns' => ['street', 'zip', 'city'],
-            'countryColumn' => 'country'
+            'countryColumn' => 'country',
         ];
 
         self::assertSame(
@@ -287,8 +287,8 @@ class AddressHelperTest extends AbstractUnitTestCase
                 [
                     'expr' => 'eq',
                     'field' => 'uid',
-                    'value' => 328
-                ]
+                    'value' => 328,
+                ],
             ]
         );
 
@@ -306,11 +306,11 @@ class AddressHelperTest extends AbstractUnitTestCase
             'street' => 'Mainstreet 17',
             'zip' => '23145',
             'city' => 'Warschau',
-            'country' => '328'
+            'country' => '328',
         ];
         $options = [
             'addressColumns' => ['street', 'zip', 'city'],
-            'countryColumn' => 'country'
+            'countryColumn' => 'country',
         ];
 
         self::assertSame(
@@ -334,7 +334,7 @@ class AddressHelperTest extends AbstractUnitTestCase
         ];
         $options = [
             'addressColumns' => ['street', 'zip', 'city'],
-            'countryColumn' => '    country   '
+            'countryColumn' => '    country   ',
         ];
 
         self::assertSame(
@@ -358,7 +358,7 @@ class AddressHelperTest extends AbstractUnitTestCase
         ];
         $options = [
             'addressColumns' => ['street', 'zip', 'city', 'country'],
-            'countryColumn' => '    country   '
+            'countryColumn' => '    country   ',
         ];
 
         self::assertSame(
@@ -383,7 +383,7 @@ class AddressHelperTest extends AbstractUnitTestCase
         ];
         $options = [
             'addressColumns' => 'street, house_number, zip, city',
-            'countryColumn' => 'country'
+            'countryColumn' => 'country',
         ];
 
         self::assertSame(
@@ -418,15 +418,15 @@ class AddressHelperTest extends AbstractUnitTestCase
             'street' => 'Mainstreet',
             'zip' => '51324',
             'house_number' => '15',
-            'city' => 'Cologne'
+            'city' => 'Cologne',
         ];
         $options = [
             'addressColumns' => [
                 'street',
                 'house_number',
                 'zip',
-                'city'
-            ]
+                'city',
+            ],
         ];
 
         self::assertTrue(

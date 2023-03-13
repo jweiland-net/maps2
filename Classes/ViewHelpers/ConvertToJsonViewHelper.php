@@ -77,8 +77,7 @@ class ConvertToJsonViewHelper extends AbstractViewHelper
             /** @var Category $category */
             foreach ($poiCollection->getCategories() as $category) {
                 $categoryProperties = ObjectAccess::getGettableProperties($category);
-                unset($categoryProperties['maps2MarkerIcons']);
-                unset($categoryProperties['parent']);
+                unset($categoryProperties['maps2MarkerIcons'], $categoryProperties['parent']);
                 $poiCollectionAsArray['categories'][] = $categoryProperties;
             }
 

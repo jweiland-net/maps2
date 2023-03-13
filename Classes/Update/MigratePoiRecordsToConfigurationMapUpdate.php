@@ -131,10 +131,10 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
                             $poiCollectionRecord['uid']
                         ),
                         JSON_THROW_ON_ERROR
-                    )
+                    ),
                 ],
                 [
-                    'uid' => (int)$poiCollectionRecord['uid']
+                    'uid' => (int)$poiCollectionRecord['uid'],
                 ]
             );
         }
@@ -189,7 +189,7 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
     public function getPrerequisites(): array
     {
         return [
-            DatabaseUpdatedPrerequisite::class
+            DatabaseUpdatedPrerequisite::class,
         ];
     }
 

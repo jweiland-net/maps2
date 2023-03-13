@@ -94,7 +94,7 @@ class ReadOnlyInputTextElement extends AbstractFormElement
                     $evalObj = GeneralUtility::makeInstance($func);
                     if (method_exists($evalObj, 'deevaluateFieldValue')) {
                         $_params = [
-                            'value' => $itemValue
+                            'value' => $itemValue,
                         ];
                         $itemValue = $evalObj->deevaluateFieldValue($_params);
                     }
@@ -121,7 +121,7 @@ class ReadOnlyInputTextElement extends AbstractFormElement
             'data-formengine-input-params' => (string)json_encode([
                 'field' => $parameterArray['itemFormElName'],
                 'evalList' => implode(',', $evalList),
-                'is_in' => trim($config['is_in'] ?? '')
+                'is_in' => trim($config['is_in'] ?? ''),
             ]),
             'data-formengine-input-name' => (string)$parameterArray['itemFormElName'],
         ];
@@ -141,7 +141,7 @@ class ReadOnlyInputTextElement extends AbstractFormElement
         if (isset($config['valuePicker']['items']) && is_array($config['valuePicker']['items'])) {
             $valuePickerConfiguration = [
                 'mode' => $config['valuePicker']['mode'] ?? 'replace',
-                'linked-field' => '[data-formengine-input-name="' . $parameterArray['itemFormElName'] . '"]'
+                'linked-field' => '[data-formengine-input-name="' . $parameterArray['itemFormElName'] . '"]',
             ];
             $valuePickerAttributes = [
                 'class' => 'form-select form-control-adapt',

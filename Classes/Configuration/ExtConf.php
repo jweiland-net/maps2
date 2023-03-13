@@ -11,9 +11,10 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Configuration;
 
+use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
+use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\SingletonInterface;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * This class will streamline the values from extension manager configuration
@@ -52,24 +53,26 @@ class ExtConf implements SingletonInterface
     protected int $markerIconAnchorPosX = 0;
     protected int $markerIconAnchorPosY = 0;
 
-    public function __construct()
+    public function __construct(ExtensionConfiguration $extensionConfiguration)
     {
-        $extConf = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('maps2');
-
-        if (!is_array($extConf)) {
-            return;
-        }
-
-        if (empty($extConf)) {
-            return;
-        }
-
-        // call setter method foreach configuration entry
-        foreach ($extConf as $key => $value) {
-            $methodName = 'set' . ucfirst($key);
-            if (method_exists($this, $methodName)) {
-                $this->$methodName($value);
+        try {
+            $extConf = $extensionConfiguration->get('maps2');
+            if (!is_array($extConf)) {
+                return;
             }
+
+            if (empty($extConf)) {
+                return;
+            }
+
+            // call setter method foreach configuration entry
+            foreach ($extConf as $key => $value) {
+                $methodName = 'set' . ucfirst($key);
+                if (method_exists($this, $methodName)) {
+                    $this->$methodName($value);
+                }
+            }
+        } catch (ExtensionConfigurationExtensionNotConfiguredException | ExtensionConfigurationPathDoesNotExistException $e) {
         }
     }
 
