@@ -21,7 +21,7 @@ class MapperFactory
 {
     protected array $mapping = [
         'gm' => GoogleMapsMapper::class,
-        'osm' => OpenStreetMapMapper::class
+        'osm' => OpenStreetMapMapper::class,
     ];
 
     protected MapHelper $mapHelper;

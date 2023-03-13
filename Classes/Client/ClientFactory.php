@@ -24,7 +24,7 @@ class ClientFactory
      */
     protected array $mapping = [
         'gm' => GoogleMapsClient::class,
-        'osm' => OpenStreetMapClient::class
+        'osm' => OpenStreetMapClient::class,
     ];
 
     protected MapHelper $mapHelper;

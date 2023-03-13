@@ -25,7 +25,7 @@ class OverlayTest extends FunctionalTestCase
      * @var string[]
      */
     protected $testExtensionsToLoad = [
-        'typo3conf/ext/maps2'
+        'typo3conf/ext/maps2',
     ];
 
     protected function setUp(): void
@@ -39,7 +39,7 @@ class OverlayTest extends FunctionalTestCase
             1,
             [
                 __DIR__ . '/Fixtures/TypoScript/setup.typoscript',
-                __DIR__ . '/Fixtures/TypoScript/activate-plugin-overlay.typoscript'
+                __DIR__ . '/Fixtures/TypoScript/activate-plugin-overlay.typoscript',
             ]
         );
     }

@@ -47,7 +47,7 @@ class ReadOnlyInputTextElement extends AbstractFormElement
         'otherLanguageContent' => [
             'renderType' => 'otherLanguageContent',
             'after' => [
-                'localizationStateSelector'
+                'localizationStateSelector',
             ],
         ],
         'defaultLanguageDifferences' => [
@@ -163,8 +163,9 @@ class ReadOnlyInputTextElement extends AbstractFormElement
         $valueSliderHtml = [];
         if (isset($config['slider']) && is_array($config['slider'])) {
             $id = 'slider-' . $fieldId;
-            $resultArray['requireJsModules'][] = ['TYPO3/CMS/Backend/FormEngine/FieldWizard/ValueSlider' =>
-                'function(ValueSlider) { new ValueSlider(' . GeneralUtility::quoteJSvalue($id) . '); }'
+            $resultArray['requireJsModules'][] = [
+                'TYPO3/CMS/Backend/FormEngine/FieldWizard/ValueSlider' =>
+                    'function(ValueSlider) { new ValueSlider(' . GeneralUtility::quoteJSvalue($id) . '); }',
             ];
             $min = $config['range']['lower'] ?? 0;
             $max = $config['range']['upper'] ?? 10000;
@@ -176,7 +177,7 @@ class ReadOnlyInputTextElement extends AbstractFormElement
                 $itemValue = (int)$itemValue;
             } elseif (in_array('double2', $evalList, true)) {
                 $valueType = 'double';
-                $itemValue = (double)$itemValue;
+                $itemValue = (float)$itemValue;
             }
             $rangeAttributes = [
                 'id' => $id,

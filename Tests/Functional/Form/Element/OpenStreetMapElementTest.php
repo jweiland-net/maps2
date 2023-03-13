@@ -55,7 +55,7 @@ class OpenStreetMapElementTest extends FunctionalTestCase
      * @var array
      */
     protected $testExtensionsToLoad = [
-        'typo3conf/ext/maps2'
+        'typo3conf/ext/maps2',
     ];
 
     protected function setUp(): void
@@ -68,15 +68,15 @@ class OpenStreetMapElementTest extends FunctionalTestCase
                 'pid' => '321',
                 'address' => 'Echterdinger Str. 57, 70794 Filderstadt',
                 'collection_type' => [
-                    0 => 'Point'
-                ]
+                    0 => 'Point',
+                ],
             ],
             'parameterArray' => [
                 'fieldConf' => [
-                    'config' => []
+                    'config' => [],
                 ],
-                'itemFormElValue' => 'renderedContent'
-            ]
+                'itemFormElValue' => 'renderedContent',
+            ],
         ];
 
         $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
