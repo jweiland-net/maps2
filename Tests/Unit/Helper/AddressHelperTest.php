@@ -18,7 +18,7 @@ use JWeiland\Maps2\Tests\Unit\AbstractUnitTestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
-use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -63,7 +63,7 @@ class AddressHelperTest extends AbstractUnitTestCase
             ->addFlashMessage(
                 Argument::containingString('addressColumns'),
                 'Key addressColumns is missing',
-                FlashMessage::ERROR
+                AbstractMessage::ERROR
             )
             ->shouldBeCalled();
 
@@ -88,7 +88,7 @@ class AddressHelperTest extends AbstractUnitTestCase
             ->addFlashMessage(
                 Argument::containingString('required field'),
                 'Key addressColumns is empty',
-                FlashMessage::ERROR
+                AbstractMessage::ERROR
             )
             ->shouldBeCalled();
 
@@ -115,14 +115,14 @@ class AddressHelperTest extends AbstractUnitTestCase
             ->addFlashMessage(
                 Argument::containingString('We can not find any country information within your extension'),
                 'No country information found',
-                FlashMessage::WARNING
+                AbstractMessage::WARNING
             )
             ->shouldBeCalled();
         $this->messageHelperProphecy
             ->addFlashMessage(
                 Argument::containingString('extension manager configuration'),
                 'Default country of maps2 is not configured',
-                FlashMessage::WARNING
+                AbstractMessage::WARNING
             )
             ->shouldBeCalled();
 
@@ -161,7 +161,7 @@ class AddressHelperTest extends AbstractUnitTestCase
             ->addFlashMessage(
                 Argument::containingString('We can not find any country information within your extension'),
                 'No country information found',
-                FlashMessage::WARNING
+                AbstractMessage::WARNING
             )
             ->shouldBeCalled();
 
@@ -296,7 +296,7 @@ class AddressHelperTest extends AbstractUnitTestCase
             ->addFlashMessage(
                 Argument::containingString('static_countries table'),
                 'Country not found in DB',
-                FlashMessage::WARNING
+                AbstractMessage::WARNING
             )
             ->shouldBeCalled();
 
