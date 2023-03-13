@@ -36,14 +36,14 @@ class PoiCollectionTest extends FunctionalTestCase
      * @var array
      */
     protected $testExtensionsToLoad = [
-        'typo3conf/ext/maps2'
+        'typo3conf/ext/maps2',
     ];
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->extConf = new ExtConf();
+        $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
         GeneralUtility::setSingletonInstance(ExtConf::class, $this->extConf);
 
         $this->mapHelper = new MapHelper($this->extConf);
@@ -990,16 +990,16 @@ class PoiCollectionTest extends FunctionalTestCase
         $this->subject->setForeignRecords(
             [
                 [
-                    'uid' => 12
-                ]
+                    'uid' => 12,
+                ],
             ]
         );
 
         self::assertSame(
             [
                 12 => [
-                    'uid' => 12
-                ]
+                    'uid' => 12,
+                ],
             ],
             $this->subject->getForeignRecords()
         );
@@ -1012,15 +1012,15 @@ class PoiCollectionTest extends FunctionalTestCase
     {
         $this->subject->addForeignRecord(
             [
-                'uid' => 12
+                'uid' => 12,
             ]
         );
 
         self::assertSame(
             [
                 12 => [
-                    'uid' => 12
-                ]
+                    'uid' => 12,
+                ],
             ],
             $this->subject->getForeignRecords()
         );
@@ -1034,14 +1034,14 @@ class PoiCollectionTest extends FunctionalTestCase
         $this->subject->setForeignRecords(
             [
                 [
-                    'uid' => 12
-                ]
+                    'uid' => 12,
+                ],
             ]
         );
 
         $this->subject->removeForeignRecord(
             [
-                'uid' => 12
+                'uid' => 12,
             ]
         );
 

@@ -73,8 +73,8 @@ class GoogleMapsElement extends AbstractFormElement
         // loadRequireJsModule has to be loaded before configuring additional paths, else all ext paths will not be initialized
         $this->pageRenderer->addRequireJsConfiguration([
             'paths' => [
-                'async' => $publicResourcesPath . 'JavaScript/async'
-            ]
+                'async' => $publicResourcesPath . 'JavaScript/async',
+            ],
         ]);
         // make Google Maps2 available as dependency for all RequireJS modules
         $this->pageRenderer->addJsInlineCode(
@@ -108,7 +108,7 @@ class GoogleMapsElement extends AbstractFormElement
             'data-formengine-input-params' => (string)json_encode([
                 'field' => $parameterArray['itemFormElName'],
                 'evalList' => implode(',', $evalList),
-                'is_in' => ''
+                'is_in' => '',
             ]),
             'data-formengine-input-name' => (string)$parameterArray['itemFormElName'],
         ];

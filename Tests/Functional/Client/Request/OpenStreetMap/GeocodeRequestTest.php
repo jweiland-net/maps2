@@ -14,6 +14,7 @@ namespace JWeiland\Maps2\Tests\Functional\Client\Request\OpenStreetMap;
 use JWeiland\Maps2\Client\Request\OpenStreetMap\GeocodeRequest;
 use JWeiland\Maps2\Configuration\ExtConf;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Test Open Street Map Geocode Request class
@@ -25,14 +26,14 @@ class GeocodeRequestTest extends FunctionalTestCase
     protected ExtConf $extConf;
 
     protected $testExtensionsToLoad = [
-        'typo3conf/ext/maps2'
+        'typo3conf/ext/maps2',
     ];
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->extConf = new ExtConf();
+        $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
 
         $this->subject = new GeocodeRequest(
             $this->extConf
@@ -68,7 +69,7 @@ class GeocodeRequestTest extends FunctionalTestCase
     {
         $parameters = [
             'uri' => 'https://www.jweiland.net',
-            'address' => 'Echterdinger Straße 57'
+            'address' => 'Echterdinger Straße 57',
         ];
         $this->subject->setParameters($parameters);
         self::assertSame(
@@ -84,7 +85,7 @@ class GeocodeRequestTest extends FunctionalTestCase
     {
         $parameters = [
             'uri' => 'https://www.jweiland.net',
-            'address' => 'Echterdinger Straße 57'
+            'address' => 'Echterdinger Straße 57',
         ];
         $this->subject->setParameters($parameters);
         $this->subject->addParameter('city', 'Filderstadt');
@@ -105,7 +106,7 @@ class GeocodeRequestTest extends FunctionalTestCase
     {
         $parameters = [
             'uri' => 'https://www.jweiland.net',
-            'address' => 'Echterdinger Straße 57'
+            'address' => 'Echterdinger Straße 57',
         ];
         $this->subject->setParameters($parameters);
         self::assertTrue(
@@ -120,7 +121,7 @@ class GeocodeRequestTest extends FunctionalTestCase
     {
         $parameters = [
             'uri' => 'https://www.jweiland.net',
-            'address' => 'Echterdinger Straße 57'
+            'address' => 'Echterdinger Straße 57',
         ];
         $this->subject->setParameters($parameters);
         self::assertFalse(

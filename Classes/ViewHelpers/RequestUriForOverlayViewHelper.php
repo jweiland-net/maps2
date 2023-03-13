@@ -56,8 +56,8 @@ class RequestUriForOverlayViewHelper extends AbstractViewHelper
             ->setAddQueryStringMethod('GET')
             ->setArguments([
                 'tx_maps2_maps2' => [
-                    'mapProviderRequestsAllowedForMaps2' => 1
-                ]
+                    'mapProviderRequestsAllowedForMaps2' => 1,
+                ],
             ])
             ->setArgumentsToBeExcludedFromQueryString(['cHash']);
 

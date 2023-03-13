@@ -18,6 +18,7 @@ use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Helper\MapHelper;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Test Client Factory class
@@ -31,14 +32,14 @@ class ClientFactoryTest extends FunctionalTestCase
     protected ExtConf $extConf;
 
     protected $testExtensionsToLoad = [
-        'typo3conf/ext/maps2'
+        'typo3conf/ext/maps2',
     ];
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->extConf = new ExtConf();
+        $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
 
         $this->subject = new ClientFactory(
             new MapHelper(

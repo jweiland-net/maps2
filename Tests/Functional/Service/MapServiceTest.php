@@ -72,7 +72,7 @@ class MapServiceTest extends FunctionalTestCase
      */
     protected $testExtensionsToLoad = [
         'typo3conf/ext/events2',
-        'typo3conf/ext/maps2'
+        'typo3conf/ext/maps2',
     ];
 
     protected function setUp(): void
@@ -97,9 +97,9 @@ class MapServiceTest extends FunctionalTestCase
                 'view' => [
                     'layoutRootPaths' => [],
                     'partialRootPaths' => [
-                        'EXT:maps2/Tests/Functional/Fixtures/Partials'
+                        'EXT:maps2/Tests/Functional/Fixtures/Partials',
                     ],
-                ]
+                ],
             ]);
         $this->configurationManagerProphecy
             ->getConfiguration(
@@ -159,7 +159,7 @@ class MapServiceTest extends FunctionalTestCase
             )
             ->shouldBeCalled()
             ->willReturn([
-                'infoWindowContentTemplatePath' => 'EXT:maps2/Resources/Private/Templates/InfoWindowContentNoCache.html'
+                'infoWindowContentTemplatePath' => 'EXT:maps2/Resources/Private/Templates/InfoWindowContentNoCache.html',
             ]);
 
         $this->extConfProphecy
@@ -282,7 +282,7 @@ class MapServiceTest extends FunctionalTestCase
             $position,
             [
                 'hidden' => 1,
-                'longitude' => 12.3
+                'longitude' => 12.3,
             ]
         );
 
@@ -328,7 +328,7 @@ class MapServiceTest extends FunctionalTestCase
             ->shouldBeCalled();
 
         $foreignRecord = [
-            'uid' => 1
+            'uid' => 1,
         ];
 
         $this->subject->assignPoiCollectionToForeignRecord(
@@ -389,7 +389,7 @@ class MapServiceTest extends FunctionalTestCase
             ->shouldBeCalled();
 
         $foreignRecord = [
-            'uid' => 1
+            'uid' => 1,
         ];
 
         $this->subject->assignPoiCollectionToForeignRecord(
@@ -420,7 +420,7 @@ class MapServiceTest extends FunctionalTestCase
             ->shouldBeCalled();
 
         $foreignRecord = [
-            'uid' => 1
+            'uid' => 1,
         ];
 
         $this->subject->assignPoiCollectionToForeignRecord(
@@ -445,7 +445,7 @@ class MapServiceTest extends FunctionalTestCase
             ->shouldBeCalled();
 
         $foreignRecord = [
-            'uid' => 1
+            'uid' => 1,
         ];
 
         $this->subject->assignPoiCollectionToForeignRecord(
@@ -469,7 +469,7 @@ class MapServiceTest extends FunctionalTestCase
             ->shouldBeCalled();
 
         $foreignRecord = [
-            'uid' => 1
+            'uid' => 1,
         ];
 
         $this->subject->assignPoiCollectionToForeignRecord(
@@ -500,7 +500,7 @@ class MapServiceTest extends FunctionalTestCase
             ->shouldNotBeCalled();
 
         $foreignRecord = [
-            'uid' => 1
+            'uid' => 1,
         ];
 
         $this->subject->assignPoiCollectionToForeignRecord(
@@ -569,8 +569,8 @@ class MapServiceTest extends FunctionalTestCase
             ->shouldBeCalled()
             ->willReturn([
                 'tx_events2_domain_model_location' => [
-                    'tx_maps2_uid' => []
-                ]
+                    'tx_maps2_uid' => [],
+                ],
             ]);
 
         /** @var PoiCollection|ObjectProphecy $poiCollectionProphecy */

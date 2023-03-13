@@ -7,8 +7,8 @@ return [
                 'typo3/cms-frontend/tsfe',
             ],
             'before' => [
-                'typo3/cms-frontend/prepare-tsfe-rendering'
-            ]
-        ]
-    ]
+                'typo3/cms-frontend/prepare-tsfe-rendering',
+            ],
+        ],
+    ],
 ];

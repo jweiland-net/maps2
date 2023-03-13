@@ -1,18 +1,18 @@
 <html lang="en"
-			xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-			xmlns:m="http://typo3.org/ns/JWeiland/Maps2/ViewHelpers"
-			data-namespace-typo3-fluid="true">
+      xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      xmlns:m="http://typo3.org/ns/JWeiland/Maps2/ViewHelpers"
+      data-namespace-typo3-fluid="true">
 
 <f:if condition="{m:cache.hasCache(poiCollection: poiCollection)}">
-	<f:then>
-		{m:cache.getCache(poiCollection: poiCollection)}
-	</f:then>
-	<f:else>
-		<f:variable name="content">
-			<f:render partial="InfoWindowContent" arguments="{poiCollection: poiCollection}" />
-		</f:variable>
-		<m:cache.setCache data="{content -> f:format.raw()}" poiCollection="{poiCollection}" />
-		{content -> f:format.raw()}
-	</f:else>
+    <f:then>
+        {m:cache.getCache(poiCollection: poiCollection)}
+    </f:then>
+    <f:else>
+        <f:variable name="content">
+            <f:render partial="InfoWindowContent" arguments="{poiCollection: poiCollection}"/>
+        </f:variable>
+        <m:cache.setCache data="{content -> f:format.raw()}" poiCollection="{poiCollection}"/>
+        {content -> f:format.raw()}
+    </f:else>
 </f:if>
 </html>

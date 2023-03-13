@@ -21,21 +21,21 @@ class OpenStreetMapClient extends AbstractClient
 {
     protected string $title = 'Open Street Map';
 
-    protected function checkResponseForErrors(?array $response): void
+    protected function checkResponseForErrors(?array $processedResponse): void
     {
-        if ($response === null) {
+        if ($processedResponse === null) {
             $this->messageHelper->addFlashMessage(
                 'The response of Open Street Map was not a valid JSON response.',
                 'Invalid JSON response',
                 AbstractMessage::ERROR
             );
-        } elseif ($response === []) {
+        } elseif ($processedResponse === []) {
             $this->messageHelper->addFlashMessage(
                 LocalizationUtility::translate(
                     'error.noPositionsFound.body',
                     'maps2',
                     [
-                        0 => $this->title
+                        0 => $this->title,
                     ]
                 ),
                 LocalizationUtility::translate(

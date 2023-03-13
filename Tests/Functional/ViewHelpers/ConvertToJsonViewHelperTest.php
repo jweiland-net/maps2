@@ -35,14 +35,14 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
      * @var array
      */
     protected $testExtensionsToLoad = [
-        'typo3conf/ext/maps2'
+        'typo3conf/ext/maps2',
     ];
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $extConf = new ExtConf();
+        $extConf = GeneralUtility::makeInstance(ExtConf::class);
         GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
 
         $mapHelper = new MapHelper($extConf);

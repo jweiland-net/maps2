@@ -15,6 +15,7 @@ use JWeiland\Maps2\Utility\DatabaseUtility;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageRendererResolver;
 use TYPO3\CMS\Core\Resource\FileInterface;
@@ -125,11 +126,11 @@ class ext_update
             ->where(
                 $queryBuilder->expr()->eq(
                     'list_type',
-                    $queryBuilder->createNamedParameter('maps2_maps2', \PDO::PARAM_STR)
+                    $queryBuilder->createNamedParameter('maps2_maps2')
                 ),
                 $queryBuilder->expr()->like(
                     'pi_flexform',
-                    $queryBuilder->createNamedParameter('%switchableControllerActions%', \PDO::PARAM_STR)
+                    $queryBuilder->createNamedParameter('%switchableControllerActions%')
                 )
             )
             ->execute()
@@ -147,28 +148,28 @@ class ext_update
                 $affectedRows += $connection->update(
                     'tt_content',
                     [
-                        'pi_flexform' => $this->getFlexFormTools()->flexArray2Xml($flexFormFields)
+                        'pi_flexform' => $this->getFlexFormTools()->flexArray2Xml($flexFormFields),
                     ],
                     [
-                        'uid' => (int)$row['uid']
+                        'uid' => (int)$row['uid'],
                     ]
                 );
             }
 
             $this->messageArray[] = [
-                FlashMessage::OK,
+                AbstractMessage::OK,
                 'Update records successful',
                 sprintf(
                     'We have updated %d of %d tt_content records',
                     $affectedRows,
                     count($rows)
-                )
+                ),
             ];
         } else {
             $this->messageArray[] = [
-                FlashMessage::ERROR,
+                AbstractMessage::ERROR,
                 'Error while selecting tt_content records',
-                'SQL-Error'
+                'SQL-Error',
             ];
         }
     }
@@ -191,7 +192,7 @@ class ext_update
                 ->where(
                     $queryBuilder->expr()->neq(
                         'marker_icon',
-                        $queryBuilder->createNamedParameter('', \PDO::PARAM_STR)
+                        $queryBuilder->createNamedParameter('')
                     )
                 )
                 ->execute()
@@ -213,10 +214,10 @@ class ext_update
                                 'tablenames' => 'sys_category',
                                 'uid_foreign' => $sysCategory['uid'],
                                 'fieldname' => 'maps2_marker_icons',
-                                'pid' => $sysCategory['pid']
+                                'pid' => $sysCategory['pid'],
                             ];
                             $data['sys_category'][$sysCategory['uid']] = [
-                                'maps2_marker_icons' => $newId
+                                'maps2_marker_icons' => $newId,
                             ];
                             // Get an instance of the DataHandler and process the data
                             $dataHandler = GeneralUtility::makeInstance(DataHandler::class);
@@ -232,21 +233,21 @@ class ext_update
                     $connection->update(
                         'sys_category',
                         [
-                            'marker_icon' => ''
+                            'marker_icon' => '',
                         ],
                         [
-                            'uid' => (int)$sysCategory['uid']
+                            'uid' => (int)$sysCategory['uid'],
                         ]
                     );
                 }
 
                 $this->messageArray[] = [
-                    FlashMessage::OK,
+                    AbstractMessage::OK,
                     'Migration successful',
                     sprintf(
                         'We have magrated %d sys_category records to FAL',
                         count($sysCategories)
-                    )
+                    ),
                 ];
             }
         }
@@ -259,12 +260,12 @@ class ext_update
     {
         $output = '';
         foreach ($this->messageArray as $messageItem) {
-            /** @var \TYPO3\CMS\Core\Messaging\FlashMessage $flashMessage */
             $flashMessage = GeneralUtility::makeInstance(
                 FlashMessage::class,
                 $messageItem[2],
                 $messageItem[1],
-                $messageItem[0]);
+                $messageItem[0]
+            );
 
             $output .= GeneralUtility::makeInstance(FlashMessageRendererResolver::class)
                 ->resolve()

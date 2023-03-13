@@ -66,7 +66,7 @@ class AbstractController extends ActionController
             'settings' => $this->getPreparedSettings(),
             'extConf' => ObjectAccess::getGettableProperties($this->extConf),
             'id' => $GLOBALS['TSFE']->id,
-            'contentRecord' => $contentRecord
+            'contentRecord' => $contentRecord,
         ]);
     }
 

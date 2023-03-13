@@ -21,22 +21,22 @@ class GoogleMapsClient extends AbstractClient
 {
     protected string $title = 'Google Maps';
 
-    protected function checkResponseForErrors(?array $response): void
+    protected function checkResponseForErrors(?array $processedResponse): void
     {
-        if ($response === null) {
+        if ($processedResponse === null) {
             $this->messageHelper->addFlashMessage(
                 'The response of Google Maps was not a valid JSON response.',
                 'Invalid JSON response',
                 AbstractMessage::ERROR
             );
-        } elseif ($response['status'] !== 'OK') {
-            if ($response['status'] === 'ZERO_RESULTS') {
+        } elseif ($processedResponse['status'] !== 'OK') {
+            if ($processedResponse['status'] === 'ZERO_RESULTS') {
                 $this->messageHelper->addFlashMessage(
                     LocalizationUtility::translate(
                         'error.noPositionsFound.body',
                         'maps2',
                         [
-                            0 => $this->title
+                            0 => $this->title,
                         ]
                     ),
                     LocalizationUtility::translate(
@@ -47,7 +47,7 @@ class GoogleMapsClient extends AbstractClient
                 );
             } else {
                 $this->messageHelper->addFlashMessage(
-                    $response['error_message'],
+                    $processedResponse['error_message'],
                     'Error',
                     AbstractMessage::ERROR
                 );

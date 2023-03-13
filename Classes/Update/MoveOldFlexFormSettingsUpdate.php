@@ -95,7 +95,7 @@ class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
                 'mapTypeId',
                 'scaleControl',
                 'streetViewControl',
-                'styles'
+                'styles',
             ];
 
             foreach ($oldFieldNames as $oldFieldName) {
@@ -134,13 +134,13 @@ class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
             $connection->update(
                 'tt_content',
                 [
-                    'pi_flexform' => $this->checkValue_flexArray2Xml($valueFromDatabase)
+                    'pi_flexform' => $this->checkValue_flexArray2Xml($valueFromDatabase),
                 ],
                 [
-                    'uid' => (int)$record['uid']
+                    'uid' => (int)$record['uid'],
                 ],
                 [
-                    'pi_flexform' => \PDO::PARAM_STR
+                    'pi_flexform' => \PDO::PARAM_STR,
                 ]
             );
         }
@@ -154,7 +154,7 @@ class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
     public function getPrerequisites(): array
     {
         return [
-            DatabaseUpdatedPrerequisite::class
+            DatabaseUpdatedPrerequisite::class,
         ];
     }
 
@@ -238,7 +238,7 @@ class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
             // Create base sheet, if not exist
             if (!array_key_exists($newSheet, $valueFromDatabase['data'])) {
                 $valueFromDatabase['data'][$newSheet] = [
-                    'lDEF' => []
+                    'lDEF' => [],
                 ];
             }
 

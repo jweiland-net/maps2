@@ -24,7 +24,7 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
     protected ExtConf $extConf;
 
     /**
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
+     * @var ObjectStorage<FileReference>
      */
     protected ?ObjectStorage $maps2MarkerIcons = null;
 
@@ -40,14 +40,19 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
 
     public function __construct()
     {
-        $this->initializeObject();
-    }
-
-    public function initializeObject(): void
-    {
         $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
 
         $this->maps2MarkerIcons = new ObjectStorage();
+    }
+
+    /**
+     * Called again with initialize object, as fetching an entity from the DB does not use the constructor
+     */
+    public function initializeObject(): void
+    {
+        $this->extConf = $this->extConf ?? GeneralUtility::makeInstance(ExtConf::class);
+
+        $this->maps2MarkerIcons = $this->maps2MarkerIcons ?? new ObjectStorage();
     }
 
     public function getMaps2MarkerIcons(): ObjectStorage
@@ -76,7 +81,7 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
         $siteUrl = GeneralUtility::getIndpEnv('TYPO3_SITE_URL');
 
         // Argument deprecated with TYPO3 11.3. Remove while removing TYPO3 10 compatibility
-        return $siteUrl . $falIconReference->getPublicUrl(false);
+        return $siteUrl . $falIconReference->getPublicUrl();
     }
 
     public function setMaps2MarkerIcons(ObjectStorage $maps2MarkerIcons): void

@@ -4,7 +4,7 @@ if (!defined('TYPO3_MODE')) {
     die('Access denied.');
 }
 
-call_user_func(static function(): void {
+call_user_func(static function (): void {
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
         'maps2',
         'Maps2',
@@ -53,7 +53,7 @@ call_user_func(static function(): void {
     // Activate caching for info window content
     if (!isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['maps2_cachedhtml'])) {
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['maps2_cachedhtml'] = [
-            'groups' => ['pages', 'all']
+            'groups' => ['pages', 'all'],
         ];
     }
 
@@ -63,7 +63,7 @@ call_user_func(static function(): void {
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass']['createMaps2Record']
         = \JWeiland\Maps2\Hook\CreateMaps2RecordHook::class;
 
-    # Add plugin preview for maps2_maps2
+    // Add plugin preview for maps2_maps2
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms/layout/class.tx_cms_layout.php']['list_type_Info']['maps2_maps2'][]
         = \JWeiland\Maps2\Form\PluginPreview::class . '->render';
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms/layout/class.tx_cms_layout.php']['list_type_Info']['maps2_citymap'][]

@@ -128,7 +128,7 @@ class Maps2Registry implements SingletonInterface
                 $this->configurationFile,
                 json_encode([
                     'registry' => $this->registry,
-                    'extensions' => $this->extensions
+                    'extensions' => $this->extensions,
                 ], JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT)
             );
             $didRegister = true;

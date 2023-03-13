@@ -1,18 +1,18 @@
 <html lang="en"
-			xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-			xmlns:m="http://typo3.org/ns/JWeiland/Maps2/ViewHelpers"
-			data-namespace-typo3-fluid="true">
+      xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      xmlns:m="http://typo3.org/ns/JWeiland/Maps2/ViewHelpers"
+      data-namespace-typo3-fluid="true">
 
 <div id="maps2-{ttContentUid}">
-	<h3>{f:translate(key: 'LLL:EXT:maps2/Resources/Private/Language/locallang.xlf:{mapProvider}.map')}</h3>
-	<p>
-		{f:translate(key: 'LLL:EXT:maps2/Resources/Private/Language/locallang.xlf:{mapProvider}.protectData')}<br />
-		{f:translate(key: 'LLL:EXT:maps2/Resources/Private/Language/locallang.xlf:{mapProvider}.explainActivation')}
-	</p>
-	<p>
-		<a href="{m:requestUriForOverlay(ttContentUid: ttContentUid)}">
-			{f:translate(key: 'LLL:EXT:maps2/Resources/Private/Language/locallang.xlf:{mapProvider}.activate')}
-		</a>
-	</p>
+    <h3>{f:translate(key: 'LLL:EXT:maps2/Resources/Private/Language/locallang.xlf:{mapProvider}.map')}</h3>
+    <p>
+        {f:translate(key: 'LLL:EXT:maps2/Resources/Private/Language/locallang.xlf:{mapProvider}.protectData')}<br/>
+        {f:translate(key: 'LLL:EXT:maps2/Resources/Private/Language/locallang.xlf:{mapProvider}.explainActivation')}
+    </p>
+    <p>
+        <a href="{m:requestUriForOverlay(ttContentUid: ttContentUid)}">
+            {f:translate(key: 'LLL:EXT:maps2/Resources/Private/Language/locallang.xlf:{mapProvider}.activate')}
+        </a>
+    </p>
 </div>
 </html>

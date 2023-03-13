@@ -19,6 +19,7 @@ use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use TYPO3\CMS\Core\Http\RequestFactory;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Test Google Maps Client class
@@ -42,14 +43,14 @@ class GoogleMapsClientTest extends FunctionalTestCase
     protected $requestFactoryProphecy;
 
     protected $testExtensionsToLoad = [
-        'typo3conf/ext/maps2'
+        'typo3conf/ext/maps2',
     ];
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->extConf = new ExtConf();
+        $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
         $this->messageHelperProphecy = $this->prophesize(MessageHelper::class);
         $this->requestFactoryProphecy = $this->prophesize(RequestFactory::class);
 

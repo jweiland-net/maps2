@@ -180,9 +180,9 @@ class GeoCodeServiceTest extends UnitTestCase
         $response = [
             'results' => [
                 0 => [
-                    'formatted_address' => 'My street 123, 12345 somewhere'
-                ]
-            ]
+                    'formatted_address' => 'My street 123, 12345 somewhere',
+                ],
+            ],
         ];
 
         $this->gmGeocodeRequestProphecy
@@ -283,9 +283,9 @@ class GeoCodeServiceTest extends UnitTestCase
         $response = [
             'results' => [
                 0 => [
-                    'formatted_address' => 'My street 123, 12345 somewhere'
-                ]
-            ]
+                    'formatted_address' => 'My street 123, 12345 somewhere',
+                ],
+            ],
         ];
 
         $this->gmGeocodeRequestProphecy

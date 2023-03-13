@@ -36,14 +36,14 @@ class CategoryTest extends FunctionalTestCase
      * @var array
      */
     protected $testExtensionsToLoad = [
-        'typo3conf/ext/maps2'
+        'typo3conf/ext/maps2',
     ];
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->extConf = new ExtConf();
+        $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
         GeneralUtility::setSingletonInstance(ExtConf::class, $this->extConf);
 
         $this->subject = new Category();
@@ -140,7 +140,7 @@ class CategoryTest extends FunctionalTestCase
         $coreFileReference = $this->prophesize(\TYPO3\CMS\Core\Resource\FileReference::class);
         $coreFileReference->getOriginalFile()->shouldBeCalled()->willReturn($file->reveal());
         $coreFileReference
-            ->getPublicUrl(false)
+            ->getPublicUrl()
             ->shouldBeCalled()
             ->willReturn('ImagePath');
 

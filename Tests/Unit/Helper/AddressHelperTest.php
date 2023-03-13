@@ -18,7 +18,7 @@ use JWeiland\Maps2\Tests\Unit\AbstractUnitTestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
-use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -63,13 +63,13 @@ class AddressHelperTest extends AbstractUnitTestCase
             ->addFlashMessage(
                 Argument::containingString('addressColumns'),
                 'Key addressColumns is missing',
-                FlashMessage::ERROR
+                AbstractMessage::ERROR
             )
             ->shouldBeCalled();
 
         $record = [
             'uid' => 100,
-            'title' => 'Market'
+            'title' => 'Market',
         ];
         $options = [];
 
@@ -88,16 +88,16 @@ class AddressHelperTest extends AbstractUnitTestCase
             ->addFlashMessage(
                 Argument::containingString('required field'),
                 'Key addressColumns is empty',
-                FlashMessage::ERROR
+                AbstractMessage::ERROR
             )
             ->shouldBeCalled();
 
         $record = [
             'uid' => 100,
-            'title' => 'Market'
+            'title' => 'Market',
         ];
         $options = [
-            'addressColumns' => []
+            'addressColumns' => [],
         ];
 
         self::assertSame(
@@ -115,14 +115,14 @@ class AddressHelperTest extends AbstractUnitTestCase
             ->addFlashMessage(
                 Argument::containingString('We can not find any country information within your extension'),
                 'No country information found',
-                FlashMessage::WARNING
+                AbstractMessage::WARNING
             )
             ->shouldBeCalled();
         $this->messageHelperProphecy
             ->addFlashMessage(
                 Argument::containingString('extension manager configuration'),
                 'Default country of maps2 is not configured',
-                FlashMessage::WARNING
+                AbstractMessage::WARNING
             )
             ->shouldBeCalled();
 
@@ -143,7 +143,7 @@ class AddressHelperTest extends AbstractUnitTestCase
         ];
         $options = [
             'addressColumns' => ['street', 'zip', 'city'],
-            'countryColumn' => 'country'
+            'countryColumn' => 'country',
         ];
 
         self::assertSame(
@@ -161,7 +161,7 @@ class AddressHelperTest extends AbstractUnitTestCase
             ->addFlashMessage(
                 Argument::containingString('We can not find any country information within your extension'),
                 'No country information found',
-                FlashMessage::WARNING
+                AbstractMessage::WARNING
             )
             ->shouldBeCalled();
 
@@ -182,7 +182,7 @@ class AddressHelperTest extends AbstractUnitTestCase
         ];
         $options = [
             'addressColumns' => ['street', 'zip', 'city'],
-            'countryColumn' => 'country'
+            'countryColumn' => 'country',
         ];
 
         self::assertSame(
@@ -212,7 +212,7 @@ class AddressHelperTest extends AbstractUnitTestCase
         ];
         $options = [
             'addressColumns' => ['street', 'zip', 'city'],
-            'defaultCountry' => 'France'
+            'defaultCountry' => 'France',
         ];
 
         self::assertSame(
@@ -237,14 +237,14 @@ class AddressHelperTest extends AbstractUnitTestCase
         $this->buildAssertionForDatabaseWithReturnValue(
             'static_countries',
             [
-                'cn_short_en' => 'Poland'
+                'cn_short_en' => 'Poland',
             ],
             [
                 [
                     'expr' => 'eq',
                     'field' => 'uid',
-                    'value' => 328
-                ]
+                    'value' => 328,
+                ],
             ]
         );
 
@@ -254,11 +254,11 @@ class AddressHelperTest extends AbstractUnitTestCase
             'street' => 'Mainstreet 17',
             'zip' => '23145',
             'city' => 'Warschau',
-            'country' => '328'
+            'country' => '328',
         ];
         $options = [
             'addressColumns' => ['street', 'zip', 'city'],
-            'countryColumn' => 'country'
+            'countryColumn' => 'country',
         ];
 
         self::assertSame(
@@ -287,8 +287,8 @@ class AddressHelperTest extends AbstractUnitTestCase
                 [
                     'expr' => 'eq',
                     'field' => 'uid',
-                    'value' => 328
-                ]
+                    'value' => 328,
+                ],
             ]
         );
 
@@ -296,7 +296,7 @@ class AddressHelperTest extends AbstractUnitTestCase
             ->addFlashMessage(
                 Argument::containingString('static_countries table'),
                 'Country not found in DB',
-                FlashMessage::WARNING
+                AbstractMessage::WARNING
             )
             ->shouldBeCalled();
 
@@ -306,11 +306,11 @@ class AddressHelperTest extends AbstractUnitTestCase
             'street' => 'Mainstreet 17',
             'zip' => '23145',
             'city' => 'Warschau',
-            'country' => '328'
+            'country' => '328',
         ];
         $options = [
             'addressColumns' => ['street', 'zip', 'city'],
-            'countryColumn' => 'country'
+            'countryColumn' => 'country',
         ];
 
         self::assertSame(
@@ -334,7 +334,7 @@ class AddressHelperTest extends AbstractUnitTestCase
         ];
         $options = [
             'addressColumns' => ['street', 'zip', 'city'],
-            'countryColumn' => '    country   '
+            'countryColumn' => '    country   ',
         ];
 
         self::assertSame(
@@ -358,7 +358,7 @@ class AddressHelperTest extends AbstractUnitTestCase
         ];
         $options = [
             'addressColumns' => ['street', 'zip', 'city', 'country'],
-            'countryColumn' => '    country   '
+            'countryColumn' => '    country   ',
         ];
 
         self::assertSame(
@@ -383,7 +383,7 @@ class AddressHelperTest extends AbstractUnitTestCase
         ];
         $options = [
             'addressColumns' => 'street, house_number, zip, city',
-            'countryColumn' => 'country'
+            'countryColumn' => 'country',
         ];
 
         self::assertSame(
@@ -418,15 +418,15 @@ class AddressHelperTest extends AbstractUnitTestCase
             'street' => 'Mainstreet',
             'zip' => '51324',
             'house_number' => '15',
-            'city' => 'Cologne'
+            'city' => 'Cologne',
         ];
         $options = [
             'addressColumns' => [
                 'street',
                 'house_number',
                 'zip',
-                'city'
-            ]
+                'city',
+            ],
         ];
 
         self::assertTrue(
