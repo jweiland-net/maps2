@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Helper;
 
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
@@ -85,11 +86,15 @@ class SettingsHelper
             && !empty($settings['markerClusterer']['imagePath'])
         ) {
             $settings['markerClusterer']['enable'] = 1;
-            $settings['markerClusterer']['imagePath'] = PathUtility::getAbsoluteWebPath(
-                GeneralUtility::getFileAbsFileName(
-                    $settings['markerClusterer']['imagePath']
-                )
-            );
+            if (method_exists(PathUtility::class, 'getPublicResourceWebPath')) {
+                $settings['markerClusterer']['imagePath'] = PathUtility::getPublicResourceWebPath($settings['markerClusterer']['imagePath']);
+            } else {
+                $settings['markerClusterer']['imagePath'] = PathUtility::getAbsoluteWebPath(
+                    GeneralUtility::getFileAbsFileName(
+                        $settings['markerClusterer']['imagePath']
+                    )
+                );
+            }
         }
 
         return $settings;
