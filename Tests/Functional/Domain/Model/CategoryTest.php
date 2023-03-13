@@ -140,7 +140,7 @@ class CategoryTest extends FunctionalTestCase
         $coreFileReference = $this->prophesize(\TYPO3\CMS\Core\Resource\FileReference::class);
         $coreFileReference->getOriginalFile()->shouldBeCalled()->willReturn($file->reveal());
         $coreFileReference
-            ->getPublicUrl(false)
+            ->getPublicUrl()
             ->shouldBeCalled()
             ->willReturn('ImagePath');
 

@@ -464,7 +464,7 @@ class CreateMaps2RecordHook
      */
     protected function getRealUid($uid, DataHandler $dataHandler): int
     {
-        if (str_starts_with($uid, 'NEW')) {
+        if (str_starts_with((string)$uid, 'NEW')) {
             $uid = $dataHandler->substNEWwithIDs[$uid] ?? 0;
         }
 
