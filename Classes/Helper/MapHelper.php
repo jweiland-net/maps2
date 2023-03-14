@@ -31,7 +31,11 @@ class MapHelper
     }
 
     /**
-     * Get currently valid default map provider
+     * Returns the map provider.
+     *
+     * @param array $databaseRow If set, we first try to extract a default map provider from there
+     *
+     * @return string Only "gm" or "osm". If "both" is configured, it returns the value from default map provider
      */
     public function getMapProvider(array $databaseRow = []): string
     {
