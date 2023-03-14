@@ -18,6 +18,7 @@ page.includeJSFooterlibs.googleMapsForMaps2 >
     googleMapsForMaps2 = https://maps.googleapis.com/maps/api/js?key={$plugin.tx_maps2.view.googleMapsJavaScriptApiKey}&libraries=places&callback=initMap
     googleMapsForMaps2.external = 1
     googleMapsForMaps2.disableCompression = 1
+    googleMapsForMaps2.excludeFromConcatenation = 1
   }
 [ELSE]
   # Requests to Google Maps are not allowed. Inform the user about cookies and request permissions for 3rd party.
