@@ -39,11 +39,11 @@ class MapHelper
 
         // Only if both map providers are allowed, we can read map provider from Database
         if ($this->extConf->getMapProvider() === 'both') {
-            if (!empty($databaseRow)) {
+            if ($databaseRow !== []) {
                 $mapProvider = $this->getMapProviderFromDatabase($databaseRow);
             }
 
-            if (empty($mapProvider)) {
+            if ($mapProvider === '') {
                 $mapProvider = $this->extConf->getDefaultMapProvider();
             }
         } else {
