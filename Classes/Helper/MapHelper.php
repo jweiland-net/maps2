@@ -31,7 +31,11 @@ class MapHelper
     }
 
     /**
-     * Get currently valid default map provider
+     * Returns the map provider.
+     *
+     * @param array $databaseRow If set, we first try to extract a default map provider from there
+     *
+     * @return string Only "gm" or "osm". If "both" is configured, it returns the value from default map provider
      */
     public function getMapProvider(array $databaseRow = []): string
     {
@@ -39,11 +43,11 @@ class MapHelper
 
         // Only if both map providers are allowed, we can read map provider from Database
         if ($this->extConf->getMapProvider() === 'both') {
-            if (!empty($databaseRow)) {
+            if ($databaseRow !== []) {
                 $mapProvider = $this->getMapProviderFromDatabase($databaseRow);
             }
 
-            if (empty($mapProvider)) {
+            if ($mapProvider === '') {
                 $mapProvider = $this->extConf->getDefaultMapProvider();
             }
         } else {

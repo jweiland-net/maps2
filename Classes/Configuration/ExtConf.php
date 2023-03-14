@@ -78,7 +78,7 @@ class ExtConf implements SingletonInterface
 
     public function getMapProvider(): string
     {
-        if (empty($this->mapProvider)) {
+        if ($this->mapProvider === '') {
             $this->mapProvider = 'both';
         }
 
@@ -92,7 +92,7 @@ class ExtConf implements SingletonInterface
 
     public function getDefaultMapProvider(): string
     {
-        if (empty($this->defaultMapProvider)) {
+        if ($this->defaultMapProvider === '') {
             $this->defaultMapProvider = 'gm';
         }
 
@@ -106,7 +106,7 @@ class ExtConf implements SingletonInterface
 
     public function getDefaultMapType(): string
     {
-        if (empty($this->defaultMapType)) {
+        if ($this->defaultMapType === '') {
             $this->defaultMapType = 'Empty';
         }
 
@@ -192,7 +192,7 @@ class ExtConf implements SingletonInterface
 
     public function getInfoWindowContentTemplatePath(): string
     {
-        if (empty($this->infoWindowContentTemplatePath)) {
+        if ($this->infoWindowContentTemplatePath === '') {
             $this->infoWindowContentTemplatePath = 'EXT:maps2/Resources/Private/Templates/InfoWindowContent.html';
         }
 
@@ -211,7 +211,7 @@ class ExtConf implements SingletonInterface
             $library = 'https://maps.googleapis.com/maps/api/js?key=|&libraries=places';
         }
 
-        if (!empty($library)) {
+        if ($library !== '') {
             // insert ApiKey
             $library = str_replace('|', $this->getGoogleMapsJavaScriptApiKey(), $library);
             // $parts: 0 = full string; 1 = s or empty; 2 = needed url
@@ -230,7 +230,7 @@ class ExtConf implements SingletonInterface
 
     public function getGoogleMapsGeocodeUri(): string
     {
-        if (empty($this->googleMapsGeocodeUri)) {
+        if ($this->googleMapsGeocodeUri === '') {
             $this->googleMapsGeocodeUri = 'https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=%s';
         }
 
@@ -264,7 +264,7 @@ class ExtConf implements SingletonInterface
 
     public function getOpenStreetMapGeocodeUri(): string
     {
-        if (empty($this->openStreetMapGeocodeUri)) {
+        if ($this->openStreetMapGeocodeUri === '') {
             $this->openStreetMapGeocodeUri = 'https://nominatim.openstreetmap.org/search/%s?format=json&addressdetails=1';
         }
 
@@ -278,7 +278,7 @@ class ExtConf implements SingletonInterface
 
     public function getStrokeColor(): string
     {
-        if (empty($this->strokeColor)) {
+        if ($this->strokeColor === '') {
             return '#FF0000';
         }
 
@@ -306,7 +306,7 @@ class ExtConf implements SingletonInterface
 
     public function getStrokeWeight(): int
     {
-        if (empty($this->strokeWeight)) {
+        if ($this->strokeWeight === 0) {
             return 2;
         }
 
@@ -320,7 +320,7 @@ class ExtConf implements SingletonInterface
 
     public function getFillColor(): string
     {
-        if (empty($this->fillColor)) {
+        if ($this->fillColor === '') {
             return '#FF0000';
         }
 
