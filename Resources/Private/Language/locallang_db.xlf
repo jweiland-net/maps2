@@ -151,7 +151,13 @@
 			</trans-unit>
 
 			<trans-unit id="tab.maps2" xml:space="preserve">
+				<source>Not needed. Will be removed in future</source>
+			</trans-unit>
+			<trans-unit id="tab.maps2.gm" xml:space="preserve">
 				<source>Google Maps (maps2)</source>
+			</trans-unit>
+			<trans-unit id="tab.maps2.osm" xml:space="preserve">
+				<source>Open Street Map (maps2)</source>
 			</trans-unit>
 			<trans-unit id="palette.language_hidden" xml:space="preserve">
 				<source>Visibility and Language</source>
@@ -172,19 +178,79 @@
 				<source>Fill settings</source>
 			</trans-unit>
 			<trans-unit id="sys_category.maps2_marker_icons" xml:space="preserve">
-				<source>Marker icon for Google Maps (maps2)</source>
+				<source>Not needed. Will be removed in future</source>
+			</trans-unit>
+			<trans-unit id="sys_category.maps2_marker_icons.gm" xml:space="preserve">
+				<source>Marker icon</source>
+			</trans-unit>
+			<trans-unit id="sys_category.maps2_marker_icons.gm.description" xml:space="preserve">
+				<source>Here you can define your own marker icon for Google Maps. We prefer a svg file.</source>
+			</trans-unit>
+			<trans-unit id="sys_category.maps2_marker_icons.osm" xml:space="preserve">
+				<source>Marker icon</source>
+			</trans-unit>
+			<trans-unit id="sys_category.maps2_marker_icons.osm.description" xml:space="preserve">
+				<source>Here you can define your own marker icon for Open Street Map. We prefer a svg file.</source>
 			</trans-unit>
 			<trans-unit id="sys_category.maps2_marker_icon_width" xml:space="preserve">
-				<source>Define a default width for Marker Icons in pixel. You can override this value individually in PoiCollection records.</source>
+				<source>Not needed. Will be removed in future</source>
+			</trans-unit>
+			<trans-unit id="sys_category.maps2_marker_icon_width.gm" xml:space="preserve">
+				<source>Width of your marker icon</source>
+			</trans-unit>
+			<trans-unit id="sys_category.maps2_marker_icon_width.gm.description" xml:space="preserve">
+				<source>Define width in pixels for your Google Maps marker icon. You can override this value individually in PoiCollection records.</source>
+			</trans-unit>
+			<trans-unit id="sys_category.maps2_marker_icon_width.osm" xml:space="preserve">
+				<source>Width of your marker icon</source>
+			</trans-unit>
+			<trans-unit id="sys_category.maps2_marker_icon_width.osm.description" xml:space="preserve">
+				<source>Define width in pixels for your Open Street Map marker icon. You can override this value individually in PoiCollection records.</source>
 			</trans-unit>
 			<trans-unit id="sys_category.maps2_marker_icon_height" xml:space="preserve">
-				<source>Define a default height for Marker Icons in pixel. You can override this value individually in PoiCollection records.</source>
+				<source>Not needed. Will be removed in future</source>
+			</trans-unit>
+			<trans-unit id="sys_category.maps2_marker_icon_height.gm" xml:space="preserve">
+				<source>Height of your marker icon</source>
+			</trans-unit>
+			<trans-unit id="sys_category.maps2_marker_icon_height.gm.description" xml:space="preserve">
+				<source>Define height in pixels for your Google Maps marker icon. You can override this value individually in PoiCollection records.</source>
+			</trans-unit>
+			<trans-unit id="sys_category.maps2_marker_icon_height.osm" xml:space="preserve">
+				<source>Height of your marker icon</source>
+			</trans-unit>
+			<trans-unit id="sys_category.maps2_marker_icon_height.osm.description" xml:space="preserve">
+				<source>Define height in pixels for your Open Street Map marker icon. You can override this value individually in PoiCollection records.</source>
 			</trans-unit>
 			<trans-unit id="sys_category.maps2_marker_icon_anchor_pos_x" xml:space="preserve">
-				<source>Which horizontal pixel on the image points the position on the Google Maps. You can override this value individually in PoiCollection records.</source>
+				<source>Not needed. Will be removed in future</source>
+			</trans-unit>
+			<trans-unit id="sys_category.maps2_marker_icon_anchor_pos_x.gm" xml:space="preserve">
+				<source>Horizontal pixel for location</source>
+			</trans-unit>
+			<trans-unit id="sys_category.maps2_marker_icon_anchor_pos_x.gm.description" xml:space="preserve">
+				<source>Which horizontal pixel on the marker icon points to the position on Google Maps. You can override this value individually in PoiCollection records.</source>
+			</trans-unit>
+			<trans-unit id="sys_category.maps2_marker_icon_anchor_pos_x.osm" xml:space="preserve">
+				<source>Horizontal pixel for location</source>
+			</trans-unit>
+			<trans-unit id="sys_category.maps2_marker_icon_anchor_pos_x.osm.description" xml:space="preserve">
+				<source>Which horizontal pixel on the marker icon points to the position on Open Street Map. You can override this value individually in PoiCollection records.</source>
 			</trans-unit>
 			<trans-unit id="sys_category.maps2_marker_icon_anchor_pos_y" xml:space="preserve">
-				<source>Which vertical pixel on the image points the position on the Google Maps. You can override this value individually and PoiCollection records.</source>
+				<source>Not needed. Will be removed in future</source>
+			</trans-unit>
+			<trans-unit id="sys_category.maps2_marker_icon_anchor_pos_y.gm" xml:space="preserve">
+				<source>Vertical pixel for location</source>
+			</trans-unit>
+			<trans-unit id="sys_category.maps2_marker_icon_anchor_pos_y.gm.description" xml:space="preserve">
+				<source>Which vertical pixel on the marker icon points to the position on Google Maps. You can override this value individually in PoiCollection records.</source>
+			</trans-unit>
+			<trans-unit id="sys_category.maps2_marker_icon_anchor_pos_y.osm" xml:space="preserve">
+				<source>Vertical pixel for location</source>
+			</trans-unit>
+			<trans-unit id="sys_category.maps2_marker_icon_anchor_pos_y.osm.description" xml:space="preserve">
+				<source>Which vertical pixel on the marker icon points to the position on Open Street Map. You can override this value individually in PoiCollection records.</source>
 			</trans-unit>
 		</body>
 	</file>
