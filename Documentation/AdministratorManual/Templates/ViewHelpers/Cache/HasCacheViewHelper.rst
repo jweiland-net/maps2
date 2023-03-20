@@ -1,4 +1,5 @@
-.. include:: ../../../../Includes.txt
+.. include:: /Includes.rst.txt
+
 
 ==========================
 Cache / HasCacheViewHelper
@@ -11,16 +12,16 @@ This is a ViewHelper to check, if a cache entry exists.
 General properties
 ==================
 
-.. container:: ts-properties
+..  container:: ts-properties
 
-   =============== ============== ============
-   Property        Data type      Default
-   =============== ============== ============
-   prefix_         String         infoWindow
-   poiCollection_  PoiCollection
-   =============== ============== ============
+    =============== ============== ============
+    Property        Data type      Default
+    =============== ============== ============
+    prefix_         String         infoWindow
+    poiCollection_  PoiCollection
+    =============== ============== ============
 
-.. _prefix:
+..  _prefix:
 
 prefix
 ------
@@ -28,7 +29,7 @@ prefix
 If you want you can define a prefix for the generated CacheIdentifier. Leave this
 value empty to use "infoWindow" as default value
 
-.. _poiCollection:
+..  _poiCollection:
 
 poiCollection
 -------------
@@ -43,12 +44,11 @@ Examples
 Basic example
 -------------
 
-.. code-block:: html
+..  code-block:: html
 
-  <f:if condition="{maps2:cache.hasCache(poiCollection: poiCollection)}">
-    <f:then>
-    </f:then>
-    <f:else>
-    </f:else>
-  </f:if>
-
+    <f:if condition="{maps2:cache.hasCache(poiCollection: poiCollection)}">
+      <f:then>
+      </f:then>
+      <f:else>
+      </f:else>
+    </f:if>

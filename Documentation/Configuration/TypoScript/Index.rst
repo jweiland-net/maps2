@@ -1,6 +1,7 @@
-.. include:: ../../Includes.txt
+.. include:: /Includes.rst.txt
 
-.. _typoScript:
+
+..  _typoScript:
 
 ==========
 TypoScript
@@ -51,20 +52,20 @@ Example: `plugin.tx_maps2.persistence.storagePid = 12,32,48`
 
 Set this value to a Storage Folder where you have stored the event records.
 
-.. important::
+..  important::
 
-   If you have stored Organizers and Locations in another Storage Folder, you have to add theses
-   PIDs here, too.
+    If you have stored Organizers and Locations in another Storage Folder, you have to add theses
+    PIDs here, too.
 
-.. tip::
+..  tip::
 
-   If you use creation of events over frontend plugin, new records will be stored in first PID found
-   in storagePid. To store record in other storage PIDs you need following configuration
+    If you use creation of events over frontend plugin, new records will be stored in first PID found
+    in storagePid. To store record in other storage PIDs you need following configuration
 
-   .. code-block:: typoscript
+    ..  code-block:: typoscript
 
-      plugin.tx_maps2.persistence.classes.JWeiland\maps2\Domain\Model\Event.newRecordStoragePid = 34
-      plugin.tx_maps2.persistence.classes.JWeiland\maps2\Domain\Model\Location.newRecordStoragePid = 543
+        plugin.tx_maps2.persistence.classes.JWeiland\maps2\Domain\Model\Event.newRecordStoragePid = 34
+        plugin.tx_maps2.persistence.classes.JWeiland\maps2\Domain\Model\Location.newRecordStoragePid = 543
 
 settings
 ========
@@ -96,16 +97,16 @@ Use: `<f:for each="{poiCollection.foreignRecords}" as="foreignRecord">...</f:for
 As such a PoiCollection can be assigned to multiple different tables like tt_address, news, what ever, you can differ
 between the foreign records with f.e.:
 
-.. code-block:: html
+..  code-block:: html
 
-   <f:groupedFor each="{poiCollection.foreignRecords}" as="groupedForeignRecords" groupBy="jwMaps2TableName" groupKey="tableName">
-     <div>Table: {tableName}</div>
-     <ul>
-       <f:for each="{groupedForeignRecords}" as="foreignRecord">
-         <li>PoiCollection URL: {foreignRecord.url}</li>
-       </f:for>
-     </ul>
-   </f:groupedFor>
+    <f:groupedFor each="{poiCollection.foreignRecords}" as="groupedForeignRecords" groupBy="jwMaps2TableName" groupKey="tableName">
+      <div>Table: {tableName}</div>
+      <ul>
+        <f:for each="{groupedForeignRecords}" as="foreignRecord">
+          <li>PoiCollection URL: {foreignRecord.url}</li>
+        </f:for>
+      </ul>
+    </f:groupedFor>
 
 `jwMaps2TableName` and `jwMaps2ColumnName` are two special keys we have added to each foreign record.
 

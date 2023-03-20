@@ -1,6 +1,7 @@
-.. include:: ../../Includes.txt
+.. include:: /Includes.rst.txt
 
-.. _developer-maps2registry:
+
+..  _developer-maps2registry:
 
 ==============
 Maps2 Registry
@@ -19,9 +20,9 @@ Create a new file in [yourExt]/Configuration/TCA/Overrides/[yourTableName].php
 and add the individually needed lines of code. Following is a slightly example for events2 with all possible
 properties:
 
-.. code-block:: php
+..  code-block:: php
 
-   \JWeiland\Maps2\Tca\Maps2Registry::getInstance()->add(
+    \JWeiland\Maps2\Tca\Maps2Registry::getInstance()->add(
         'events2', // Extension key of your extension
         'tx_events2_domain_model_location', // tablename of your location table
         [
@@ -161,7 +162,8 @@ properties:
         ]
     );
 
-.. important::
+..  important::
+
     After adding these lines of code you have to de- and reactivate your extension in ExtensionManager to execute
     the SQL queries in behind. Alternatively you can go into InstallTool and execute Database Compare to insert
     the new configured field.
@@ -170,28 +172,28 @@ properties:
 Example for tt_address
 ======================
 
-.. code-block:: php
+..  code-block:: php
 
-   <?php
-   if (!defined('TYPO3_MODE')) {
-       die('Access denied.');
-   }
+    <?php
+    if (!defined('TYPO3_MODE')) {
+        die('Access denied.');
+    }
 
-   call_user_func(function() {
-       if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('maps2')) {
-           \JWeiland\Maps2\Tca\Maps2Registry::getInstance()->add(
-               'tt_address',
-               'tt_address',
-               [
-                   'addressColumns' => ['address', 'zip', 'city'],
-                   'countryColumn' => 'country',
-                   'synchronizeColumns' => [
-                       [
-                           'foreignColumnName' => 'name',
-                           'poiCollectionColumnName' => 'title'
-                       ]
-                   ]
-               ]
-           );
-       }
-   });
+    call_user_func(function() {
+        if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('maps2')) {
+            \JWeiland\Maps2\Tca\Maps2Registry::getInstance()->add(
+                'tt_address',
+                'tt_address',
+                [
+                    'addressColumns' => ['address', 'zip', 'city'],
+                    'countryColumn' => 'country',
+                    'synchronizeColumns' => [
+                        [
+                            'foreignColumnName' => 'name',
+                            'poiCollectionColumnName' => 'title'
+                        ]
+                    ]
+                ]
+            );
+        }
+    });

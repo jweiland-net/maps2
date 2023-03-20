@@ -1,21 +1,21 @@
-.. include:: ../Includes.txt
+.. include:: /Includes.rst.txt
 
 
-.. _userManual:
+..  _userManual:
 
 ===========
 User manual
 ===========
 
-.. only:: html
+..  only:: html
 
-   This chapter describes how to use the extension from a user point of view.
+    This chapter describes how to use the extension from a user point of view.
 
-   The section "*Maps2Record*" lists all the fields of the record and "*HowToStart*" describes all available plugins.
+    The section "*Maps2Record*" lists all the fields of the record and "*HowToStart*" describes all available plugins.
 
-.. toctree::
-   :maxdepth: 2
-   :titlesonly:
+..  toctree::
+    :maxdepth: 2
+    :titlesonly:
 
-   HowToStart/Index
-   Maps2Record/Index
+    HowToStart/Index
+    Maps2Record/Index

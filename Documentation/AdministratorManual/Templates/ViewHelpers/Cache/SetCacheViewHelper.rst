@@ -1,4 +1,5 @@
-.. include:: ../../../../Includes.txt
+.. include:: /Includes.rst.txt
+
 
 ==========================
 Cache / SetCacheViewHelper
@@ -11,19 +12,19 @@ This is a ViewHelper to set a new cache entry.
 General properties
 ==================
 
-.. container:: ts-properties
+..  container:: ts-properties
 
-   =============== ============== ============
-   Property        Data type      Default
-   =============== ============== ============
-   prefix_         String         infoWindow
-   poiCollection_  PoiCollection
-   data_           String
-   tags_           Array          Empty Array
-   lifetime_       Integer        NULL
-   =============== ============== ============
+    =============== ============== ============
+    Property        Data type      Default
+    =============== ============== ============
+    prefix_         String         infoWindow
+    poiCollection_  PoiCollection
+    data_           String
+    tags_           Array          Empty Array
+    lifetime_       Integer        NULL
+    =============== ============== ============
 
-.. _prefix:
+..  _prefix:
 
 prefix
 ------
@@ -31,7 +32,7 @@ prefix
 If you want you can define a prefix for the generated CacheIdentifier. Leave this
 value empty to use "infoWindow" as default value
 
-.. _poiCollection:
+..  _poiCollection:
 
 poiCollection
 -------------
@@ -40,14 +41,14 @@ You must assign the PoiCollection object to this ViewHelper. We extract some dat
 PoiCollection to build a more unique CacheIdentifier which can differ Caches in
 multilingual environment.
 
-.. _data:
+..  _data:
 
 data
 ----
 
 The data as string which has to be stored.
 
-.. _tags:
+..  _tags:
 
 tags
 ----
@@ -55,7 +56,7 @@ tags
 You can define some additional CacheEntryTags if you want. By default we add two additional
 Cache Tags named "infoWindowUid{PoiCollectionUid}" and "infoWindowPid{PoiCollectionPid}"
 
-.. _lifetime:
+..  _lifetime:
 
 lifetime
 --------
@@ -69,6 +70,6 @@ Examples
 Basic example
 -------------
 
-.. code-block:: html
+..  code-block:: html
 
-  {maps2:cache.setCache(poiCollection: poiCollection, data: '{content->f:format.raw()}')}
+    {maps2:cache.setCache(poiCollection: poiCollection, data: '{content->f:format.raw()}')}

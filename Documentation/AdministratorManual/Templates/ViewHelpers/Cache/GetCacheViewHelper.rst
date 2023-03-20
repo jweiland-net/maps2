@@ -1,4 +1,5 @@
-.. include:: ../../../../Includes.txt
+.. include:: /Includes.rst.txt
+
 
 ==========================
 Cache / GetCacheViewHelper
@@ -11,16 +12,16 @@ This is a ViewHelper to retrieve a cache entry.
 General properties
 ==================
 
-.. container:: ts-properties
+..  container:: ts-properties
 
-   =============== ============== ============
-   Property        Data type      Default
-   =============== ============== ============
-   prefix_         String         infoWindow
-   poiCollection_  PoiCollection
-   =============== ============== ============
+    =============== ============== ============
+    Property        Data type      Default
+    =============== ============== ============
+    prefix_         String         infoWindow
+    poiCollection_  PoiCollection
+    =============== ============== ============
 
-.. _prefix:
+..  _prefix:
 
 prefix
 ------
@@ -28,7 +29,7 @@ prefix
 If you want you can define a prefix for the generated CacheIdentifier. Leave this
 value empty to use "infoWindow" as default value
 
-.. _poiCollection:
+..  _poiCollection:
 
 poiCollection
 -------------
@@ -43,6 +44,6 @@ Examples
 Basic example
 -------------
 
-.. code-block:: html
+..  code-block:: html
 
-  {maps2:cache.getCache(poiCollection: poiCollection)}
+    {maps2:cache.getCache(poiCollection: poiCollection)}

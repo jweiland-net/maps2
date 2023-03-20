@@ -1,4 +1,5 @@
-﻿.. include:: ../../Includes.txt
+﻿.. include:: /Includes.rst.txt
+
 
 .. _extensionSettings:
 
@@ -22,15 +23,15 @@ Decide, if you want to use `Google Maps` or `OpenStreetMap` in your project. If 
 active, but in that case you and/or your editor have the possibility to switch between Map Providers in
 PoiCollection record.
 
-.. important::
+..  important::
 
-   If you keep `both` active you have multiple static extension templates available. You have to decide for one map
-   provider in your TS-template record. And yes, you can't show maps of both map providers on the same page.
+    If you keep `both` active you have multiple static extension templates available. You have to decide for one map
+    provider in your TS-template record. And yes, you can't show maps of both map providers on the same page.
 
-.. important::
+..  important::
 
-   If you change from one Map Provider to another we remove the static extension template of the prior Map
-   Provider from selection of your TS-template record.
+    If you change from one Map Provider to another we remove the static extension template of the prior Map
+    Provider from selection of your TS-template record.
 
 defaultMapProvider
 ------------------
@@ -40,10 +41,10 @@ Default: `gm`
 This setting is only relevant if you have chosen `both` at mapProvider. Select a default map provider to be
 preselected for new poi collection records.
 
-.. important::
+..  important::
 
-   If you keep `both` active you have multiple static extension templates available. You have to decide for one map
-   provider in your TS-template record. And yes, you can't show maps of both map providers on the same page.
+    If you keep `both` active you have multiple static extension templates available. You have to decide for one map
+    provider in your TS-template record. And yes, you can't show maps of both map providers on the same page.
 
 defaultMapType
 --------------
@@ -108,10 +109,10 @@ These requests contains the IP address of the website visitors which is a user d
 User defined information which will be sent to third party servers needs to be explicit allowed by the visitor.
 Enable this option, if you need this explicit activation of Google Maps for current browser session.
 
-.. important::
+..  important::
 
-   Firefox stores the browser SESSION on exit by default. So this feature will not work for Firefox browsers except you
-   configure your firefox explicit to destroy session vars on close.
+    Firefox stores the browser SESSION on exit by default. So this feature will not work for Firefox browsers except you
+    configure your firefox explicit to destroy session vars on close.
 
 infoWindowContentTemplatePath
 -----------------------------
@@ -121,9 +122,9 @@ Default: `EXT:maps2/Resources/Private/Templates/InfoWindowContent.html`
 You can define your own default template for the info window content when clicking on a marker.
 Further you can override this template path again with TypoScript:
 
-.. code-block:: typoscript
+..  code-block:: typoscript
 
-   settings.infoWindowContentTemplatePath = EXT:my_ext/Resources/Private/Extensions/Maps2/InfoWindowContent.html
+    settings.infoWindowContentTemplatePath = EXT:my_ext/Resources/Private/Extensions/Maps2/InfoWindowContent.html
 
 
 Tab: Gm
@@ -137,14 +138,14 @@ Default: `https://maps.googleapis.com/maps/api/js?key=|&libraries=places`
 This is the link to the current Google Maps JavaScript Api. It is configured as **wrap** so that you
 can decide where the ApiKey has to be inserted.
 
-.. important::
+..  important::
 
-   This configuration is only for Google Maps which are used in list module of TYPO3 Backend.
+    This configuration is only for Google Maps which are used in list module of TYPO3 Backend.
 
-.. important::
+..  important::
 
-   Please keep **places** API information in link, as it is need for address search while PoiCollection
-   record creation.
+    Please keep **places** API information in link, as it is need for address search while PoiCollection
+    record creation.
 
 googleMapsGeocodeUri
 --------------------
@@ -154,10 +155,10 @@ Default: `https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=%s`
 When you're searching for an address while creating PoiCollection records maps2 starts a Geocode request to
 Google Maps Geocode API. If needed you can change that URI here.
 
-.. important::
+..  important::
 
-   There are two %s placeholders in URI. We replace them with sprintf(), so, if you change that URI the new URI
-   must have these two placeholders, too.
+    There are two %s placeholders in URI. We replace them with sprintf(), so, if you change that URI the new URI
+    must have these two placeholders, too.
 
 googleMapsJavaScriptApiKey
 --------------------------
@@ -193,10 +194,10 @@ Default: `https://nominatim.openstreetmap.org/search/%s?format=json&addressdetai
 When you're searching for an address while creating PoiCollection records maps2 starts a Geocode request to
 Open Street Map Geocode API. If needed you can change that URI here.
 
-.. important::
+..  important::
 
-   There is one %s placeholder in URI for address. We replace it with sprintf(), so, if you change that URI the new URI
-   must have this placeholder, too.
+    There is one %s placeholder in URI for address. We replace it with sprintf(), so, if you change that URI the new URI
+    must have this placeholder, too.
 
 Tab: Design
 ===========

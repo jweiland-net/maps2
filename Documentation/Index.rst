@@ -1,10 +1,10 @@
-.. include:: Includes.txt
+.. include:: /Includes.rst.txt
 
 
-.. Every manual should have a start label for cross-referencing to
-.. start page. Do not remove this!
+..  Every manual should have a start label for cross-referencing to
+..  start page. Do not remove this!
 
-.. _start:
+..  _start:
 
 =====
 Maps2

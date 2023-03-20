@@ -1,6 +1,7 @@
-.. include:: ../../Includes.txt
+.. include:: /Includes.rst.txt
 
-.. _plugins:
+
+..  _plugins:
 
 ========
 Plugins
@@ -85,10 +86,10 @@ Map Provider: Google Maps only
 
 Choose one of the four map views:
 
-* Hybrid
-* Road Map (default)
-* Satellite
-* Terrain
+*   Hybrid
+*   Road Map (default)
+*   Satellite
+*   Terrain
 
 mapTypeControl
 ---------
@@ -202,10 +203,10 @@ Map Provider: Google Maps only
 
 Choose one of the four map views:
 
-* Hybrid
-* Road Map (default)
-* Satellite
-* Terrain
+*   Hybrid
+*   Road Map (default)
+*   Satellite
+*   Terrain
 
 mapTypeControl
 ---------
@@ -326,10 +327,10 @@ Map Provider: Google Maps only
 
 Choose one of the four map views:
 
-* Hybrid
-* Road Map (default)
-* Satellite
-* Terrain
+*   Hybrid
+*   Road Map (default)
+*   Satellite
+*   Terrain
 
 mapTypeControl
 ---------

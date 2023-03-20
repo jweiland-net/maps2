@@ -1,6 +1,7 @@
-.. include:: ../../Includes.txt
+.. include:: /Includes.rst.txt
 
-.. _maps2Record:
+
+..  _maps2Record:
 
 ============
 Maps2 record
@@ -11,8 +12,8 @@ The maps2 record is the most important record in this extension.
 Global fields
 =============
 
-.. t3-field-list-table::
- :header-rows: 1
+..  t3-field-list-table::
+    :header-rows: 1
 
  - :Field:        Field
    :Description:  Description

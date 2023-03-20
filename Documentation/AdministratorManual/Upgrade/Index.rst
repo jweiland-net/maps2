@@ -1,4 +1,5 @@
-.. include:: ../../Includes.txt
+.. include:: /Includes.rst.txt
+
 
 =======
 Upgrade
@@ -21,24 +22,24 @@ ControllerAction called `OverlayAction`, so please overwrite FluidTemplate Overl
 All widgets are removed, as TYPO3 11 does not support ViewHelper widgets anymore. We have moved the widget into its
 own Partial. Please add path to maps2 partial as follows:
 
-.. code-block:: typoscript
+..  code-block:: typoscript
 
-   plugin.tx_myext {
-     view {
-       partialRootPaths {
-         ...
-         5 = EXT:maps2/Resources/Private/Partials/
-       }
-     }
-   }
+    plugin.tx_myext {
+      view {
+        partialRootPaths {
+          ...
+          5 = EXT:maps2/Resources/Private/Partials/
+        }
+      }
+    }
 
 We have added a new FlashMessage queue identifier `extbase.flashmessages.maps2` for non-controller
 FlashMessages like in GeoCodeService. Please update your fluid templates and add both ViewHelpers:
 
-.. code-block:: typoscript
+..  code-block:: typoscript
 
-   <f:flashMessages />
-   <f:flashMessages queueIdentifier="extbase.flashmessages.maps2" />
+    <f:flashMessages />
+    <f:flashMessages queueIdentifier="extbase.flashmessages.maps2" />
 
 We have changed FlexForm sheet `sDEFAULT` for Plugins `searchwithinradius` and `citymap` to `sDEF`. Please
 execute UpgradeWizard to move related values to new sheet and remove duplicates.
@@ -209,9 +210,9 @@ It was renamed from cf_maps2_cachedHtml to cf_maps2_cachedhtml. Please delete
 the old tables cf_maps2_cachedHtml and cf_maps2_cachedHtml_tags, deactivate maps2
 in extension manager and activate it again.
 
-.. important::
+..  important::
 
-   It does not help to rename these tables only.
+    It does not help to rename these tables only.
 
 
 Upgrade to Version 2.0.0
@@ -227,7 +228,6 @@ SwitchableControllerActions. With version 2.1.2 we have added an Update-Wizard
 in Extensionmanager which can do that job for you. In prior versions you have to
 remove that setting of each plugin in tt_content record field pi_flexform on your own.
 
-.. important::
+..  important::
 
-   It does not help to open and save the record in backend!
-
+    It does not help to open and save the record in backend!
