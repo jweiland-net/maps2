@@ -1,4 +1,5 @@
-﻿.. include:: ../../Includes.txt
+﻿.. include:: /Includes.rst.txt
+
 
 .. _developer-api:
 
@@ -18,33 +19,33 @@ already done in root page.
 
 In case of `Maps2 for Google Maps (maps2)`please check, if following TS constant is set:
 
-.. code-block:: typoscript
+..  code-block:: typoscript
 
-   plugin.tx_maps2.view.googleMapsJavaScriptApiKey
+    plugin.tx_maps2.view.googleMapsJavaScriptApiKey
 
 Add a further entry for `maps2` to `partialRootPaths` configuration of your extension, so that fluid can find our
 new partials:
 
-.. code-block:: typoscript
+..  code-block:: typoscript
 
-plugin.tx_myext.view.partialRootPaths {
-   0 = EXT:my_ext/Resources/Private/Partials/
-   1 = EXT:maps2/Resources/Private/Partials/
-}
+    plugin.tx_myext.view.partialRootPaths {
+        0 = EXT:my_ext/Resources/Private/Partials/
+        1 = EXT:maps2/Resources/Private/Partials/
+    }
 
 Replace old `maps2:widget.poiCollection` ViewHelper in templates of your extension:
 
-.. code-block:: html
+..  code-block:: html
 
-   <maps2:widget.poiCollection poiCollection="{location.txMaps2Uid}" override="{settings: {mapWidth: '100%', mapHeight: '300', zoom: '14'}}" />
+    <maps2:widget.poiCollection poiCollection="{location.txMaps2Uid}" override="{settings: {mapWidth: '100%', mapHeight: '300', zoom: '14'}}" />
 
 with following html:
 
-.. code-block:: html
+..  code-block:: html
 
-   <f:render partial="Maps2/PoiCollection"
-             section="showMap"
-             arguments="{poiCollection: location.txMaps2Uid, override: {settings: {mapWidth: '100%', mapHeight: '300', zoom: '14'}}}" />
+    <f:render partial="Maps2/PoiCollection"
+              section="showMap"
+              arguments="{poiCollection: location.txMaps2Uid, override: {settings: {mapWidth: '100%', mapHeight: '300', zoom: '14'}}}" />
 
 
 EditPoiCollection
@@ -56,34 +57,33 @@ already done in root page.
 
 In case of `Maps2 for Google Maps (maps2)`please check, if following TS constant is set:
 
-.. code-block:: typoscript
+..  code-block:: typoscript
 
-   plugin.tx_maps2.view.googleMapsJavaScriptApiKey
+    plugin.tx_maps2.view.googleMapsJavaScriptApiKey
 
 Add a further entry for `maps2` to `partialRootPaths` configuration of your extension, so that fluid can find our
 new partials:
 
-.. code-block:: typoscript
+..  code-block:: typoscript
 
-plugin.tx_myext.view.partialRootPaths {
-   0 = EXT:my_ext/Resources/Private/Partials/
-   1 = EXT:maps2/Resources/Private/Partials/
-}
+    plugin.tx_myext.view.partialRootPaths {
+        0 = EXT:my_ext/Resources/Private/Partials/
+        1 = EXT:maps2/Resources/Private/Partials/
+    }
 
 Replace old `maps2:widget.editPoiCollection` ViewHelper in templates of your extension:
 
-.. code-block:: html
+..  code-block:: html
 
-   <maps2:widget.editPoi property="txMaps2Uid"
-                         title="{company.company}"
-                         poiCollection="{company.txMaps2Uid}"
-                         override="{settings: {mapWidth: '100%', mapHeight: '300'}}" />
+    <maps2:widget.editPoi property="txMaps2Uid"
+                          title="{company.company}"
+                          poiCollection="{company.txMaps2Uid}"
+                          override="{settings: {mapWidth: '100%', mapHeight: '300'}}" />
 
 with following html:
 
-.. code-block:: html
+..  code-block:: html
 
-   <f:render partial="Maps2/EditPoiCollection"
-             section="editMap"
-             arguments="{poiCollection: company.txMaps2Uid, property: 'txMaps2Uid', title: company.company, override: {settings: {mapWidth: '100%', mapHeight: '300', zoom: '14'}}}" />
-
+    <f:render partial="Maps2/EditPoiCollection"
+              section="editMap"
+              arguments="{poiCollection: company.txMaps2Uid, property: 'txMaps2Uid', title: company.company, override: {settings: {mapWidth: '100%', mapHeight: '300', zoom: '14'}}}" />

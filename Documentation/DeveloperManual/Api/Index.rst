@@ -1,6 +1,7 @@
-﻿.. include:: ../../Includes.txt
+﻿.. include:: /Includes.rst.txt
 
-.. _developer-api:
+
+..  _developer-api:
 
 =========
 Maps2 API
@@ -28,7 +29,8 @@ getPositionsByAddress
 Give it an address (string) as first argument and you will get all found results from Google Geocode as
 RadiusResult in an ObjectStorage.
 
-.. important::
+..  important::
+
     Within the last years Google Geocode has changed something. It will always return exactly ONE result.
     So, in that case it may not make sense to call that method and switch to
     :ref:`getFirstFoundPositionByAddress <getFirstFoundPositionByAddress>` above.
@@ -113,7 +115,7 @@ Example
 
 Here we have a working example out of our extension events2:
 
-.. code-block:: php
+..  code-block:: php
 
     // create new map-record and set it in relation
     $position = $this->googleMapsService->getFirstFoundPositionByAddress($this->getAddress($eventLocation));

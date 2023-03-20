@@ -1,4 +1,5 @@
-.. include:: ../../../Includes.txt
+.. include:: /Includes.rst.txt
+
 
 ============================
 Changing & editing templates
@@ -17,27 +18,27 @@ If you want to change a template, copy the desired files to the directory where 
 be a directory in your SitePackage extension. Multiple fallbacks can be defined which makes it far easier to customize
 the templates.
 
-.. code-block:: typoscript
+..  code-block:: typoscript
 
-   plugin.tx_maps2 {
-     view {
-       templateRootPaths >
-       templateRootPaths {
-         0 = EXT:maps2/Resources/Private/Templates/
-         1 = EXT:site_package/Resources/Private/Extensions/Maps2/Templates/
-       }
-       partialRootPaths >
-       partialRootPaths {
-         0 = EXT:maps2/Resources/Private/Partials/
-         1 = EXT:site_package/Resources/Private/Extensions/Maps2/Partials/
-       }
-       layoutRootPaths >
-       layoutRootPaths {
-         0 = EXT:maps2/Resources/Private/Layouts/
-         1 = EXT:site_package/Resources/Private/Extensions/Maps2/Templates/Layouts/
-       }
-     }
-   }
+    plugin.tx_maps2 {
+      view {
+        templateRootPaths >
+        templateRootPaths {
+          0 = EXT:maps2/Resources/Private/Templates/
+          1 = EXT:site_package/Resources/Private/Extensions/Maps2/Templates/
+        }
+        partialRootPaths >
+        partialRootPaths {
+          0 = EXT:maps2/Resources/Private/Partials/
+          1 = EXT:site_package/Resources/Private/Extensions/Maps2/Partials/
+        }
+        layoutRootPaths >
+        layoutRootPaths {
+          0 = EXT:maps2/Resources/Private/Layouts/
+          1 = EXT:site_package/Resources/Private/Extensions/Maps2/Templates/Layouts/
+        }
+      }
+    }
 
 Change the templates using TypoScript constants
 -----------------------------------------------
@@ -45,12 +46,12 @@ Change the templates using TypoScript constants
 You can use the following TypoScript in the  **constants** to change
 the paths
 
-.. code-block:: typoscript
+..  code-block:: typoscript
 
-   plugin.tx_maps2 {
-     view {
-       templateRootPath = EXT:site_package/Resources/Private/Extensions/Maps2/Templates/
-       partialRootPath = EXT:site_package/Resources/Private/Extensions/Maps2/Partials/
-       layoutRootPath = EXT:site_package/Resources/Private/Extensions/Maps2/Layouts/
-     }
-   }
+    plugin.tx_maps2 {
+      view {
+        templateRootPath = EXT:site_package/Resources/Private/Extensions/Maps2/Templates/
+        partialRootPath = EXT:site_package/Resources/Private/Extensions/Maps2/Partials/
+        layoutRootPath = EXT:site_package/Resources/Private/Extensions/Maps2/Layouts/
+      }
+    }
