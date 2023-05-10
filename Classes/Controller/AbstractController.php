@@ -75,8 +75,7 @@ class AbstractController extends ActionController
         }
 
         if (!array_key_exists('mapProvider', $this->settings)) {
-            $this->controllerContext
-                ->getFlashMessageQueue()
+            $this->getFlashMessageQueue()
                 ->enqueue(GeneralUtility::makeInstance(
                     FlashMessage::class,
                     'You have forgotten to add maps2 static template for either Google Maps or OpenStreetMap',

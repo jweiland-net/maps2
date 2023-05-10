@@ -55,8 +55,8 @@ class RenderHiddenFieldsForGetViewHelper extends AbstractViewHelper
         $cacheHashCalculator = GeneralUtility::makeInstance(CacheHashCalculator::class);
 
         $pluginNamespace = $extensionService->getPluginNamespace(
-            $renderingContext->getControllerContext()->getRequest()->getControllerExtensionName(),
-            $renderingContext->getControllerContext()->getRequest()->getPluginName()
+            $renderingContext->getRequest()->getControllerExtensionName(),
+            $renderingContext->getRequest()->getPluginName()
         );
 
         // get pageUid
