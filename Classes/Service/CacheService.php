@@ -41,10 +41,8 @@ class CacheService
         return sprintf(
             '%s%s',
             $prefix,
-            GeneralUtility::stdAuthCode(
-                $poiCollection,
-                'uid, pid, language, title, address',
-                24
+            GeneralUtility::hmac(
+                \json_encode(array_diff_key($poiCollection, ['uid', 'pid', 'language', 'title', 'address'])),
             )
         );
     }
