@@ -15,6 +15,7 @@ use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
 use JWeiland\Maps2\Event\RenderInfoWindowContentEvent;
 use JWeiland\Maps2\Service\MapService;
+use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 
@@ -35,7 +36,7 @@ class AjaxController extends ActionController
         $this->poiCollectionRepository = $poiCollectionRepository;
     }
 
-    public function processAction(string $method): string
+    public function processAction(string $method): ResponseInterface
     {
         $response = [
             'content' => '',
@@ -49,10 +50,10 @@ class AjaxController extends ActionController
 
         $response['errors'] = $this->errors;
 
-        return \json_encode($response, JSON_THROW_ON_ERROR);
+        return $this->jsonResponse(\json_encode($response, JSON_THROW_ON_ERROR));
     }
 
-    public function renderInfoWindowContentAction(int $poiCollectionUid): string
+    public function renderInfoWindowContentAction(int $poiCollectionUid): ResponseInterface
     {
         $infoWindowContent = $this->emitRenderInfoWindowEvent($poiCollectionUid);
 
@@ -69,7 +70,7 @@ class AjaxController extends ActionController
             }
         }
 
-        return $infoWindowContent;
+        return $this->htmlResponse($infoWindowContent);
     }
 
     /**

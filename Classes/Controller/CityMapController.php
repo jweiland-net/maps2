@@ -13,6 +13,7 @@ namespace JWeiland\Maps2\Controller;
 
 use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Service\GeoCodeService;
+use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -20,11 +21,12 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class CityMapController extends AbstractController
 {
-    public function showAction(): void
+    public function showAction(): ResponseInterface
     {
+        return $this->htmlResponse();
     }
 
-    public function searchAction(string $street): void
+    public function searchAction(string $street): ResponseInterface
     {
         $geoCodeService = GeneralUtility::makeInstance(GeoCodeService::class);
         $position = $geoCodeService->getFirstFoundPositionByAddress(
@@ -36,5 +38,7 @@ class CityMapController extends AbstractController
             $this->view->assign('longitude', $position->getLongitude());
             $this->view->assign('address', rawurldecode($street));
         }
+
+        return $this->htmlResponse();
     }
 }

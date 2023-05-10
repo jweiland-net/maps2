@@ -15,6 +15,7 @@ use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Domain\Model\Search;
 use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
 use JWeiland\Maps2\Service\GeoCodeService;
+use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
@@ -33,34 +34,40 @@ class PoiCollectionController extends AbstractController
     /**
      * This action will show the map of Google Maps or OpenStreetMap
      */
-    public function showAction(int $poiCollectionUid = 0): void
+    public function showAction(int $poiCollectionUid = 0): ResponseInterface
     {
         $this->postProcessAndAssignFluidVariables([
             'poiCollections' => $this->poiCollectionRepository->findPoiCollections($this->settings, $poiCollectionUid),
         ]);
+
+        return $this->htmlResponse();
     }
 
     /**
      * This uncached action will show an overlay which the visitor has to confirm first.
      */
-    public function overlayAction(int $poiCollectionUid = 0): void
+    public function overlayAction(int $poiCollectionUid = 0): ResponseInterface
     {
         $this->postProcessAndAssignFluidVariables([
             'poiCollections' => $this->poiCollectionRepository->findPoiCollections($this->settings, $poiCollectionUid),
             'requestUri' => $this->getRequestUri(),
         ]);
+
+        return $this->htmlResponse();
     }
 
-    public function searchAction(Search $search = null): void
+    public function searchAction(Search $search = null): ResponseInterface
     {
         $search ??= GeneralUtility::makeInstance(Search::class);
 
         $this->postProcessAndAssignFluidVariables([
             'search' => $search,
         ]);
+
+        return $this->htmlResponse();
     }
 
-    public function listRadiusAction(Search $search): void
+    public function listRadiusAction(Search $search): ResponseInterface
     {
         $geoCodeService = GeneralUtility::makeInstance(GeoCodeService::class);
 
@@ -78,6 +85,8 @@ class PoiCollectionController extends AbstractController
             'poiCollections' => $poiCollections,
             'search' => $search,
         ]);
+
+        return $this->htmlResponse();
     }
 
     /**
@@ -91,7 +100,6 @@ class PoiCollectionController extends AbstractController
         $uriBuilder = $this->uriBuilder
             ->reset()
             ->setAddQueryString(true)
-            ->setAddQueryStringMethod('GET')
             ->setArguments([
                 'tx_maps2_maps2' => [
                     'mapProviderRequestsAllowedForMaps2' => 1,

@@ -22,11 +22,11 @@ use JWeiland\Maps2\Utility\DatabaseUtility;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\FrontendRestrictionContainer;
 use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
+use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
-use TYPO3\CMS\Extbase\Service\EnvironmentService;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
@@ -44,8 +44,6 @@ class MapService
 
     protected EventDispatcher $eventDispatcher;
 
-    protected EnvironmentService $environmentService;
-
     protected array $settings = [];
 
     public function __construct(
@@ -53,15 +51,13 @@ class MapService
         MessageHelper $messageHelper,
         Maps2Registry $maps2Registry,
         ExtConf $extConf,
-        EventDispatcher $eventDispatcher,
-        EnvironmentService $environmentService
+        EventDispatcher $eventDispatcher
     ) {
         $this->configurationManager = $configurationManager;
         $this->messageHelper = $messageHelper;
         $this->maps2Registry = $maps2Registry;
         $this->extConf = $extConf;
         $this->eventDispatcher = $eventDispatcher;
-        $this->environmentService = $environmentService;
     }
 
     /**
@@ -113,7 +109,7 @@ class MapService
     protected function getSettings(): array
     {
         $settings = [];
-        if ($this->environmentService->isEnvironmentInFrontendMode()) {
+        if (ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend()) {
             // Keep ExtName and PluginName, else the extKey will not be added to return-value
             // in further getConfiguration calls.
             $settings = $this->configurationManager->getConfiguration(
