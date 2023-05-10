@@ -50,7 +50,6 @@ class PoiCollectionController extends AbstractController
     {
         $this->postProcessAndAssignFluidVariables([
             'poiCollections' => $this->poiCollectionRepository->findPoiCollections($this->settings, $poiCollectionUid),
-            'requestUri' => $this->getRequestUri(),
         ]);
 
         return $this->htmlResponse();
@@ -87,37 +86,5 @@ class PoiCollectionController extends AbstractController
         ]);
 
         return $this->htmlResponse();
-    }
-
-    /**
-     * @deprecated
-     */
-    protected function getRequestUri(): string
-    {
-        trigger_error('Method PoiCollectionController::getRequestUri is deprecated. Use RequestUriForOverlayViewHelper instead.', E_USER_DEPRECATED);
-
-        // Method setAddQueryStringMethod is deprecated with TYPO3 11. Remove while removing TYPO3 10 compatibility
-        $uriBuilder = $this->uriBuilder
-            ->reset()
-            ->setAddQueryString(true)
-            ->setArguments([
-                'tx_maps2_maps2' => [
-                    'mapProviderRequestsAllowedForMaps2' => 1,
-                ],
-            ])
-            ->setArgumentsToBeExcludedFromQueryString(['cHash']);
-
-        if (($this->settings['overlay']['link']['addSection'] ?? '') === '1') {
-            $contentObject = $this->configurationManager->getContentObject();
-            if (
-                $contentObject instanceof ContentObjectRenderer
-                && isset($contentObject->data['uid'])
-                && $contentObject->data['uid']
-            ) {
-                $uriBuilder->setSection('c' . $contentObject->data['uid']);
-            }
-        }
-
-        return $uriBuilder->build();
     }
 }
