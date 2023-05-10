@@ -6,7 +6,7 @@ if (!defined('TYPO3')) {
 
 call_user_func(static function (): void {
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-        'maps2',
+        'Maps2',
         'Maps2',
         [
             \JWeiland\Maps2\Controller\PoiCollectionController::class => 'show',
@@ -15,7 +15,7 @@ call_user_func(static function (): void {
     );
 
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-        'maps2',
+        'Maps2',
         'Overlay',
         [
             \JWeiland\Maps2\Controller\PoiCollectionController::class => 'overlay',
@@ -27,7 +27,7 @@ call_user_func(static function (): void {
     );
 
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-        'maps2',
+        'Maps2',
         'SearchWithinRadius',
         [
             \JWeiland\Maps2\Controller\PoiCollectionController::class => 'search, listRadius',
@@ -39,7 +39,7 @@ call_user_func(static function (): void {
     );
 
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-        'maps2',
+        'Maps2',
         'CityMap',
         [
             \JWeiland\Maps2\Controller\CityMapController::class => 'show, search',
