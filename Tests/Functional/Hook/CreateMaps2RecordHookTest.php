@@ -34,7 +34,6 @@ use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
 use TYPO3\CMS\Core\EventDispatcher\ListenerProvider;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
-use TYPO3\CMS\Extbase\Service\EnvironmentService;
 
 /**
  * Functional test for CreateMaps2RecordHook
@@ -134,8 +133,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
                 $this->messageHelperProphecy->reveal(),
                 $this->maps2RegistryProphecy->reveal(),
                 GeneralUtility::makeInstance(ExtConf::class),
-                GeneralUtility::makeInstance(EventDispatcher::class),
-                new EnvironmentService()
+                GeneralUtility::makeInstance(EventDispatcher::class)
             ),
             $this->maps2RegistryProphecy->reveal(),
             new EventDispatcher($this->listenerProviderProphecy->reveal())
