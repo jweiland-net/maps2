@@ -185,7 +185,7 @@ class MapService
      * Assign PoiCollection UID to foreign record
      *
      * @param int $poiCollectionUid This must be the UID of the newly created POI collection record
-     * @param array $foreignRecord This is the record of the foreign extensions. It must be an already saved record and it MUST HAVE an UID assigned
+     * @param array $foreignRecord This is the record of the foreign extensions. It must be an already saved record, and it MUST HAVE an UID assigned
      * @param string $foreignTableName This is your (foreign) location table name, from where you get the $foreignRecord
      * @param string $foreignFieldName This is our column name (mostly tx_maps2_uid) in your/foreign location table.
      * @throws \Exception

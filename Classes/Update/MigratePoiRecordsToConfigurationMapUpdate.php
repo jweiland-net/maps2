@@ -155,9 +155,6 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
         return $routes;
     }
 
-    /**
-     * @return mixed[]
-     */
     protected function getPoiRecords(int $poiCollectionUid): array
     {
         $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable('tx_maps2_domain_model_poi');

@@ -464,7 +464,7 @@ class PoiCollection extends AbstractEntity
     public function getPois(): array
     {
         $configurationMap = $this->getConfigurationMap();
-        if ($configurationMap === '' || $configurationMap === null) {
+        if ($configurationMap === '') {
             $configurationMap = '[]';
         }
 

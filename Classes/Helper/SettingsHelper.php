@@ -77,11 +77,7 @@ class SettingsHelper
         }
 
         if (
-            isset(
-                $settings['markerClusterer']['enable'],
-                $settings['markerClusterer']['imagePath']
-            )
-            && !empty($settings['markerClusterer']['enable'])
+            !empty($settings['markerClusterer']['enable'])
             && !empty($settings['markerClusterer']['imagePath'])
         ) {
             $settings['markerClusterer']['enable'] = 1;

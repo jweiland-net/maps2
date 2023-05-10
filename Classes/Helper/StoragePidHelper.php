@@ -238,7 +238,6 @@ class StoragePidHelper
      * Get pageTSconfig for given extension key (ext.ext_key.*)
      *
      * @throws \Exception
-     * @return mixed[]
      */
     public function getTsConfig(array $locationRecord, string $extKey = 'maps2'): array
     {

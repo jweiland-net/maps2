@@ -166,8 +166,7 @@ class CreateMaps2RecordHook
         return
             !$isTableLocalizable
             || (
-                $isTableLocalizable
-                && ($languageField = $GLOBALS['TCA'][$tableName]['ctrl']['languageField'])
+                ($languageField = $GLOBALS['TCA'][$tableName]['ctrl']['languageField'])
                 && array_key_exists($languageField, $recordFromRequest)
             );
     }
@@ -423,8 +422,6 @@ class CreateMaps2RecordHook
      * Get location record of foreign extension, where our maps2 column (tx_maps2_uid) exists.
      * The record we try to fetch, is the record which the user has just saved. So this method should always find
      * this record.
-     *
-     * @return mixed[]
      */
     protected function getForeignLocationRecord(string $foreignTableName, int $uid): array
     {

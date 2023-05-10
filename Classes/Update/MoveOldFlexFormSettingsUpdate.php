@@ -160,8 +160,6 @@ class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
 
     /**
      * Get all (incl. deleted/hidden) tt_content records with plugin maps2_maps2
-     *
-     * @return mixed[]
      */
     protected function getTtContentRecordsWithMaps2Plugin(): array
     {
