@@ -26,7 +26,6 @@ use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
-use TYPO3\CMS\Extbase\Service\EnvironmentService;
 
 /**
  * Test MapService
@@ -115,19 +114,12 @@ class MapServiceTest extends FunctionalTestCase
             ->getInfoWindowContentTemplatePath()
             ->willReturn('EXT:maps2/Resources/Private/Templates/InfoWindowContentNoCache.html');
 
-        // Set FE context to FE
-        $this->environmentServiceProphecy = $this->prophesize(EnvironmentService::class);
-        $this->environmentServiceProphecy
-            ->isEnvironmentInFrontendMode()
-            ->willReturn(true);
-
         $this->subject = new MapService(
             $this->configurationManagerProphecy->reveal(),
             $this->messageHelperProphecy->reveal(),
             $this->maps2RegistryProphecy->reveal(),
             $this->extConfProphecy->reveal(),
-            $this->eventDispatcherProphecy->reveal(),
-            $this->environmentServiceProphecy->reveal()
+            $this->eventDispatcherProphecy->reveal()
         );
     }
 
