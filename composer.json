@@ -21,7 +21,7 @@
 	"require": {
 		"ext-json": "*",
 		"php": "^7.4 || ^8.0",
-		"typo3/cms-core": "^10.4.19 || ^11.5"
+		"typo3/cms-core": "^11.5.23 || ^12.4.0"
 	},
 	"require-dev": {
 		"roave/security-advisories": "dev-latest",
