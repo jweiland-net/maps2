@@ -13,6 +13,7 @@ namespace JWeiland\Maps2\Service;
 
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -96,6 +97,6 @@ class CacheService
 
     protected function isFrontendEnvironment(): bool
     {
-        return defined('TYPO3_MODE') && TYPO3_MODE === 'FE';
+        return defined('TYPO3') && ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend();
     }
 }
