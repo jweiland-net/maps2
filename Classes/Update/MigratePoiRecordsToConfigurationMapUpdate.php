@@ -184,7 +184,7 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
                 ->executeQuery();
 
             $poiRecords = [];
-            while ($poiRecord = $statement->fetch(\PDO::FETCH_ASSOC)) {
+            while ($poiRecord = $statement->fetchAssociative()) {
                 $poiRecords[] = $poiRecord;
             }
         } catch (DBALException $exception) {

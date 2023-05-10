@@ -122,7 +122,7 @@ class PluginPreview
                     'uid' => (int)$piFlexformData['settings']['poiCollection'],
                 ]
             );
-            $poiCollectionRecord = $statement->fetch(\PDO::FETCH_ASSOC) ?: [];
+            $poiCollectionRecord = $statement->fetchAssociative() ?: [];
             if ($poiCollectionRecord !== []) {
                 $view->assign('poiCollectionRecord', $poiCollectionRecord);
             }

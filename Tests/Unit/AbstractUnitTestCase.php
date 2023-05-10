@@ -48,7 +48,7 @@ abstract class AbstractUnitTestCase extends UnitTestCase
         /** @var ConnectionPool|ObjectProphecy $connectionPool */
         $connectionPool = $this->prophesize(ConnectionPool::class);
 
-        $statement->fetch(\PDO::FETCH_ASSOC)->willReturn($returnValue);
+        $statement->fetchAssociative()->willReturn($returnValue);
         $statement->fetchColumn()->willReturn($returnValue);
 
         foreach ($expressions as $expression) {
