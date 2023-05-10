@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Service;
 
+use Doctrine\DBAL\Driver\Exception as DBALException;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Domain\Model\Position;
@@ -297,31 +298,36 @@ class MapService
                 $queryBuilder->setRestrictions(
                     GeneralUtility::makeInstance(FrontendRestrictionContainer::class)
                 );
-                $statement = $queryBuilder
-                    ->select('*')
-                    ->from($tableName)
-                    ->where(
-                        $queryBuilder->expr()->eq(
-                            $columnName,
-                            $queryBuilder->createNamedParameter($poiCollection->getUid(), \PDO::PARAM_INT)
+
+                try {
+                    $statement = $queryBuilder
+                        ->select('*')
+                        ->from($tableName)
+                        ->where(
+                            $queryBuilder->expr()->eq(
+                                $columnName,
+                                $queryBuilder->createNamedParameter($poiCollection->getUid(), \PDO::PARAM_INT)
+                            )
                         )
-                    )
-                    ->execute();
+                        ->executeQuery();
 
-                while ($foreignRecord = $statement->fetch(\PDO::FETCH_ASSOC)) {
-                    // Hopefully these keys are unique enough
-                    // Very useful to f:groupedFor in Fluid Templates
-                    $foreignRecord['jwMaps2TableName'] = $tableName;
-                    $foreignRecord['jwMaps2ColumnName'] = $columnName;
+                    while ($foreignRecord = $statement->fetchAssociative()) {
+                        // Hopefully these keys are unique enough
+                        // Very useful to f:groupedFor in Fluid Templates
+                        $foreignRecord['jwMaps2TableName'] = $tableName;
+                        $foreignRecord['jwMaps2ColumnName'] = $columnName;
 
-                    // Add or remove your own values
-                    $foreignRecord = $this->emitPreAddForeignRecordToPoiCollectionEvent(
-                        $foreignRecord,
-                        $tableName,
-                        $columnName
-                    );
+                        // Add or remove your own values
+                        $foreignRecord = $this->emitPreAddForeignRecordToPoiCollectionEvent(
+                            $foreignRecord,
+                            $tableName,
+                            $columnName
+                        );
 
-                    $poiCollection->addForeignRecord($foreignRecord);
+                        $poiCollection->addForeignRecord($foreignRecord);
+                    }
+                } catch (DBALException $exception) {
+                    continue;
                 }
             }
         }

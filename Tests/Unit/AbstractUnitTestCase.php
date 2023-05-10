@@ -74,7 +74,7 @@ abstract class AbstractUnitTestCase extends UnitTestCase
         $queryBuilder->from(Argument::cetera())->willReturn($queryBuilder->reveal());
         $queryBuilder->where(Argument::cetera())->willReturn($queryBuilder->reveal());
         $queryBuilder->expr(Argument::cetera())->willReturn($expressionBuilder->reveal());
-        $queryBuilder->execute(Argument::cetera())->willReturn($statement->reveal());
+        $queryBuilder->executeQuery(Argument::cetera())->willReturn($statement->reveal());
 
         $connectionPool->getQueryBuilderForTable($tableName)->shouldBeCalled()->willReturn($queryBuilder);
 

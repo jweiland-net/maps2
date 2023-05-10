@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Update;
 
-use Doctrine\DBAL\Exception;
+use Doctrine\DBAL\Driver\Exception as DBALException;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
@@ -78,35 +78,41 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
         $queryBuilder->getRestrictions()->removeAll();
         $queryBuilder->getRestrictions()->add(GeneralUtility::makeInstance(DeletedRestriction::class));
 
-        return (bool)$queryBuilder
-            ->select('*')
-            ->from('tx_maps2_domain_model_poicollection', 'pc')
-            ->leftJoin(
-                'pc',
-                'tx_maps2_domain_model_poi',
-                'p',
-                $queryBuilder->expr()->eq(
-                    'pc.uid',
-                    $queryBuilder->quoteIdentifier('p.poicollection')
+        try {
+            $amountOfRows = (bool)$queryBuilder
+                ->count('*')
+                ->from('tx_maps2_domain_model_poicollection', 'pc')
+                ->leftJoin(
+                    'pc',
+                    'tx_maps2_domain_model_poi',
+                    'p',
+                    $queryBuilder->expr()->eq(
+                        'pc.uid',
+                        $queryBuilder->quoteIdentifier('p.poicollection')
+                    )
                 )
-            )
-            ->where(
-                $queryBuilder->expr()->isNotNull(
-                    'p.pid'
+                ->where(
+                    $queryBuilder->expr()->isNotNull(
+                        'p.pid'
+                    )
                 )
-            )
-            ->orWhere(
-                $queryBuilder->expr()->eq(
-                    'collection_type',
-                    $queryBuilder->createNamedParameter('Area')
-                ),
-                $queryBuilder->expr()->eq(
-                    'collection_type',
-                    $queryBuilder->createNamedParameter('Route')
+                ->orWhere(
+                    $queryBuilder->expr()->eq(
+                        'collection_type',
+                        $queryBuilder->createNamedParameter('Area')
+                    ),
+                    $queryBuilder->expr()->eq(
+                        'collection_type',
+                        $queryBuilder->createNamedParameter('Route')
+                    )
                 )
-            )
-            ->execute()
-            ->fetchColumn();
+                ->executeQuery()
+                ->fetchOne();
+        } catch (DBALException $exception) {
+            $amountOfRows = 0;
+        }
+
+        return (bool)$amountOfRows;
     }
 
     public function executeUpdate(): bool
@@ -115,28 +121,32 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
         $queryBuilder->getRestrictions()->removeAll();
         $queryBuilder->getRestrictions()->add(GeneralUtility::makeInstance(DeletedRestriction::class));
 
-        $statement = $queryBuilder
-            ->select('uid')
-            ->from('tx_maps2_domain_model_poicollection')
-            ->execute();
+        try {
+            $statement = $queryBuilder
+                ->select('uid')
+                ->from('tx_maps2_domain_model_poicollection')
+                ->executeQuery();
 
-        while ($poiCollectionRecord = $statement->fetch(\PDO::FETCH_ASSOC)) {
-            $connection = $this->getConnectionPool()->getConnectionForTable('tx_maps2_domain_model_poi');
+            while ($poiCollectionRecord = $statement->fetchAssociative()) {
+                $connection = $this->getConnectionPool()->getConnectionForTable('tx_maps2_domain_model_poi');
 
-            $connection->update(
-                'tx_maps2_domain_model_poicollection',
-                [
-                    'configuration_map' => json_encode(
-                        $this->migratePoiRecords(
-                            $poiCollectionRecord['uid']
+                $connection->update(
+                    'tx_maps2_domain_model_poicollection',
+                    [
+                        'configuration_map' => json_encode(
+                            $this->migratePoiRecords(
+                                $poiCollectionRecord['uid']
+                            ),
+                            JSON_THROW_ON_ERROR
                         ),
-                        JSON_THROW_ON_ERROR
-                    ),
-                ],
-                [
-                    'uid' => (int)$poiCollectionRecord['uid'],
-                ]
-            );
+                    ],
+                    [
+                        'uid' => (int)$poiCollectionRecord['uid'],
+                    ]
+                );
+            }
+        } catch (DBALException $exception) {
+            return false;
         }
 
         return true;
@@ -161,20 +171,24 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
         $queryBuilder->getRestrictions()->removeAll();
         $queryBuilder->getRestrictions()->add(GeneralUtility::makeInstance(DeletedRestriction::class));
 
-        $statement = $queryBuilder
-            ->select('uid', 'pos_index', 'latitude', 'longitude')
-            ->from('tx_maps2_domain_model_poi')
-            ->where(
-                $queryBuilder->expr()->eq(
-                    'poicollection',
-                    $queryBuilder->createNamedParameter($poiCollectionUid, \PDO::PARAM_INT)
+        try {
+            $statement = $queryBuilder
+                ->select('uid', 'pos_index', 'latitude', 'longitude')
+                ->from('tx_maps2_domain_model_poi')
+                ->where(
+                    $queryBuilder->expr()->eq(
+                        'poicollection',
+                        $queryBuilder->createNamedParameter($poiCollectionUid, \PDO::PARAM_INT)
+                    )
                 )
-            )
-            ->execute();
+                ->executeQuery();
 
-        $poiRecords = [];
-        while ($poiRecord = $statement->fetch(\PDO::FETCH_ASSOC)) {
-            $poiRecords[] = $poiRecord;
+            $poiRecords = [];
+            while ($poiRecord = $statement->fetch(\PDO::FETCH_ASSOC)) {
+                $poiRecords[] = $poiRecord;
+            }
+        } catch (DBALException $exception) {
+            $poiRecords = [];
         }
 
         return $poiRecords;

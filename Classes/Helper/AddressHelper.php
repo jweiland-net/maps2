@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Helper;
 
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Driver\Exception as DBALException;
 use JWeiland\Maps2\Configuration\ExtConf;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
@@ -145,9 +145,9 @@ class AddressHelper
                         $queryBuilder->createNamedParameter($uid, \PDO::PARAM_INT)
                     )
                 )
-                ->execute()
-                ->fetch(\PDO::FETCH_ASSOC);
-        } catch (DBALException $DBALException) {
+                ->executeQuery()
+                ->fetchAssociative();
+        } catch (DBALException $exception) {
             $countryRecord = [];
         }
 

@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Hook;
 
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Driver\Exception as DBALException;
 use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Event\AllowCreationOfPoiCollectionEvent;
 use JWeiland\Maps2\Event\PostProcessPoiCollectionRecordEvent;
@@ -364,9 +364,9 @@ class CreateMaps2RecordHook
                         $queryBuilder->createNamedParameter($poiCollectionUid, \PDO::PARAM_INT)
                     )
                 )
-                ->execute()
-                ->fetch(\PDO::FETCH_ASSOC);
-        } catch (DBALException $DBALException) {
+                ->executeQuery()
+                ->fetchAssociative();
+        } catch (DBALException $exception) {
             $poiCollection = false;
         }
 
@@ -434,17 +434,21 @@ class CreateMaps2RecordHook
             GeneralUtility::makeInstance(DeletedRestriction::class)
         );
 
-        $foreignLocationRecord = $queryBuilder
-            ->select('*')
-            ->from($foreignTableName)
-            ->where(
-                $queryBuilder->expr()->eq(
-                    'uid',
-                    $queryBuilder->createNamedParameter($uid, \PDO::PARAM_INT)
+        try {
+            $foreignLocationRecord = $queryBuilder
+                ->select('*')
+                ->from($foreignTableName)
+                ->where(
+                    $queryBuilder->expr()->eq(
+                        'uid',
+                        $queryBuilder->createNamedParameter($uid, \PDO::PARAM_INT)
+                    )
                 )
-            )
-            ->execute()
-            ->fetch(\PDO::FETCH_ASSOC);
+                ->executeQuery()
+                ->fetchAssociative();
+        } catch (DBALException $exception) {
+            $foreignLocationRecord = [];
+        }
 
         if (empty($foreignLocationRecord)) {
             $foreignLocationRecord = [];
@@ -513,7 +517,10 @@ class CreateMaps2RecordHook
 
         // Only execute query, if there are columns to update
         if ($tableNeedsUpdate) {
-            $queryBuilder->execute();
+            try {
+                $queryBuilder->executeQuery();
+            } catch (DBALException $exception) {
+            }
         }
 
         return true;
