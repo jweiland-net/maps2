@@ -19,7 +19,6 @@ use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 
 /**
@@ -48,10 +47,7 @@ class AbstractController extends ActionController
         $this->settings = $this->settingsHelper->getMergedSettings();
     }
 
-    /**
-     * ViewInterface is deprecated since TYPO3 11.5. Remove/Change while remove TYPO3 10 compatibility
-     */
-    protected function initializeView(ViewInterface $view): void
+    protected function initializeView($view): void
     {
         $contentRecord = $this->configurationManager->getContentObject()->data;
 
