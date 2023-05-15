@@ -11,8 +11,8 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Controller;
 
+use JWeiland\Maps2\Controller\Traits\InjectPoiCollectionRepositoryTrait;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
-use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
 use JWeiland\Maps2\Event\RenderInfoWindowContentEvent;
 use JWeiland\Maps2\Service\MapService;
 use Psr\Http\Message\ResponseInterface;
@@ -27,14 +27,9 @@ use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
  */
 class AjaxController extends ActionController
 {
+    use InjectPoiCollectionRepositoryTrait;
+
     public array $errors = [];
-
-    public PoiCollectionRepository $poiCollectionRepository;
-
-    public function injectPoiCollectionRepository(PoiCollectionRepository $poiCollectionRepository): void
-    {
-        $this->poiCollectionRepository = $poiCollectionRepository;
-    }
 
     public function processAction(string $method): ResponseInterface
     {

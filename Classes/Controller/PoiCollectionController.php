@@ -11,25 +11,19 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Controller;
 
+use JWeiland\Maps2\Controller\Traits\InjectPoiCollectionRepositoryTrait;
 use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Domain\Model\Search;
-use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
 use JWeiland\Maps2\Service\GeoCodeService;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 /**
  * The main controller to show various kinds of markers on Maps
  */
 class PoiCollectionController extends AbstractController
 {
-    protected PoiCollectionRepository $poiCollectionRepository;
-
-    public function injectPoiCollectionRepository(PoiCollectionRepository $poiCollectionRepository): void
-    {
-        $this->poiCollectionRepository = $poiCollectionRepository;
-    }
+    use InjectPoiCollectionRepositoryTrait;
 
     /**
      * This action will show the map of Google Maps or OpenStreetMap
