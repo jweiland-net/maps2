@@ -11,19 +11,73 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Controller;
 
+use JWeiland\Maps2\Controller\Traits\InjectExtConfTrait;
 use JWeiland\Maps2\Controller\Traits\InjectPoiCollectionRepositoryTrait;
+use JWeiland\Maps2\Controller\Traits\InjectSettingsHelperTrait;
 use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Domain\Model\Search;
+use JWeiland\Maps2\Event\PostProcessFluidVariablesEvent;
 use JWeiland\Maps2\Service\GeoCodeService;
 use Psr\Http\Message\ResponseInterface;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 
 /**
  * The main controller to show various kinds of markers on Maps
  */
-class PoiCollectionController extends AbstractController
+class PoiCollectionController extends ActionController
 {
+    use InjectExtConfTrait;
+    use InjectSettingsHelperTrait;
     use InjectPoiCollectionRepositoryTrait;
+
+    public function initializeObject(): void
+    {
+        $this->settings = $this->settingsHelper->getMergedSettings();
+    }
+
+    protected function initializeView($view): void
+    {
+        $contentRecord = $this->configurationManager->getContentObject()->data;
+
+        // Remove unneeded columns from tt_content array
+        unset(
+            $contentRecord['pi_flexform'],
+            $contentRecord['l18n_diffsource']
+        );
+
+        $view->assign('data', $contentRecord);
+        $view->assign('environment', [
+            'settings' => $this->getPreparedSettings(),
+            'extConf' => ObjectAccess::getGettableProperties($this->extConf),
+            'id' => $GLOBALS['TSFE']->id,
+            'contentRecord' => $contentRecord,
+        ]);
+    }
+
+    protected function getPreparedSettings(): array
+    {
+        if (array_key_exists('infoWindowContentTemplatePath', $this->settings)) {
+            $this->settings['infoWindowContentTemplatePath'] = trim($this->settings['infoWindowContentTemplatePath']);
+        } else {
+            $this->addFlashMessage('Dear Admin: Please add default static template of maps2 into your TS-Template.');
+        }
+
+        if (!array_key_exists('mapProvider', $this->settings)) {
+            $this->getFlashMessageQueue()
+                ->enqueue(GeneralUtility::makeInstance(
+                    FlashMessage::class,
+                    'You have forgotten to add maps2 static template for either Google Maps or OpenStreetMap',
+                    'Missing static template',
+                    AbstractMessage::ERROR
+                ));
+        }
+
+        return $this->settingsHelper->getPreparedSettings($this->settings);
+    }
 
     /**
      * This action will show the map of Google Maps or OpenStreetMap
@@ -80,5 +134,19 @@ class PoiCollectionController extends AbstractController
         ]);
 
         return $this->htmlResponse();
+    }
+
+    protected function postProcessAndAssignFluidVariables(array $variables = []): void
+    {
+        /** @var PostProcessFluidVariablesEvent $event */
+        $event = $this->eventDispatcher->dispatch(
+            new PostProcessFluidVariablesEvent(
+                $this->request,
+                $this->settings,
+                $variables
+            )
+        );
+
+        $this->view->assignMultiple($event->getFluidVariables());
     }
 }
