@@ -40,10 +40,8 @@ class AbstractController extends ActionController
         $this->settingsHelper = $settingsHelper;
     }
 
-    public function injectConfigurationManager(ConfigurationManagerInterface $configurationManager): void
+    public function initializeObject(): void
     {
-        $this->configurationManager = $configurationManager;
-
         $this->settings = $this->settingsHelper->getMergedSettings();
     }
 

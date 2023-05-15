@@ -14,6 +14,7 @@ namespace JWeiland\Maps2\Form\Element;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Helper\MapHelper;
 use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
+use TYPO3\CMS\Core\Page\JavaScriptModuleInstruction;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -95,7 +96,9 @@ class GoogleMapsElement extends AbstractFormElement
             false
         );
         $resultArray['stylesheetFiles'][] = $publicResourcesPath . 'Css/GoogleMapsModule.css';
-        $resultArray['requireJsModules'][] = 'TYPO3/CMS/Maps2/GoogleMapsModule';
+        $resultArray['requireJsModules'][] = JavaScriptModuleInstruction::forRequireJS(
+            'TYPO3/CMS/Maps2/GoogleMapsModule'
+        );
 
         $fieldInformationResult = $this->renderFieldInformation();
         $fieldInformationHtml = $fieldInformationResult['html'];

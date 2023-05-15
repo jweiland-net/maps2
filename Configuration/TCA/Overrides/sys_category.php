@@ -28,7 +28,6 @@ call_user_func(static function (): void {
                     'foreign_match_fields' => [
                         'fieldname' => 'maps2_marker_icons',
                         'tablenames' => 'sys_category',
-                        'table_local' => 'sys_file',
                     ],
                     'behaviour' => [
                         'allowLanguageSynchronization' => true,

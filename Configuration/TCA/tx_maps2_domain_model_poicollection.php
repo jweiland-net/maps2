@@ -378,7 +378,6 @@ return [
                     'foreign_match_fields' => [
                         'fieldname' => 'info_window_images',
                         'tablenames' => 'tx_maps2_domain_model_poicollection',
-                        'table_local' => 'sys_file',
                     ],
                     'behaviour' => [
                         'allowLanguageSynchronization' => true,
@@ -416,7 +415,6 @@ return [
                     'foreign_match_fields' => [
                         'fieldname' => 'marker_icons',
                         'tablenames' => 'tx_maps2_domain_model_poicollection',
-                        'table_local' => 'sys_file',
                     ],
                     'behaviour' => [
                         'allowLanguageSynchronization' => true,
