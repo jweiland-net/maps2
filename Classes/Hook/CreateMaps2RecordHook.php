@@ -518,7 +518,7 @@ class CreateMaps2RecordHook
         // Only execute query, if there are columns to update
         if ($tableNeedsUpdate) {
             try {
-                $queryBuilder->executeQuery();
+                $queryBuilder->executeStatement();
             } catch (DBALException $exception) {
             }
         }
