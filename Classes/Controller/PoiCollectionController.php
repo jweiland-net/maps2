@@ -41,7 +41,8 @@ class PoiCollectionController extends ActionController
 
     protected function initializeView($view): void
     {
-        $contentRecord = $this->configurationManager->getContentObject()->data;
+        $cObj = $this->configurationManager->getContentObject();
+        $contentRecord = $cObj->data;
 
         // Remove unneeded columns from tt_content array
         unset(
@@ -53,7 +54,11 @@ class PoiCollectionController extends ActionController
         $view->assign('environment', [
             'settings' => $this->getPreparedSettings(),
             'extConf' => ObjectAccess::getGettableProperties($this->extConf),
-            'id' => $GLOBALS['TSFE']->id,
+            'ajaxUrl' => $cObj->typoLink_URL([
+                'additionalParams' => '&tx_maps2_maps2[controller]=Ajax&tx_maps2_maps2[action]=process&tx_maps2_maps2[method]=renderInfoWindowContent',
+                'forceAbsoluteUrl' => '1',
+                'parameter' => 't3://page?uid=' . $GLOBALS['TSFE']->id . '&type=1614075471',
+            ]),
             'contentRecord' => $contentRecord,
         ]);
     }

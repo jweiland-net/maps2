@@ -16,5 +16,6 @@ Administrator manual
     :titlesonly:
 
     GoogleApiKeys/Index
+    Routing/Index
     Upgrade/Index
     Templates/Index

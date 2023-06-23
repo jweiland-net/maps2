@@ -20,10 +20,9 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 
 /**
- * Handle Ajax requests.
+ * Handle Ajax requests of EXT:maps2.
  * Currently, it is used to render the infoWindowContent of POIs.
- * This controller is not connected to the extbase environment and is reachable
- * over typeNum 1614075471
+ * This controller is called by typeNum 1614075471
  */
 class AjaxController extends ActionController
 {
@@ -48,7 +47,7 @@ class AjaxController extends ActionController
         return $this->jsonResponse(\json_encode($response, JSON_THROW_ON_ERROR));
     }
 
-    public function renderInfoWindowContentAction(int $poiCollectionUid): ResponseInterface
+    public function renderInfoWindowContentAction(int $poiCollectionUid): string
     {
         $infoWindowContent = $this->emitRenderInfoWindowEvent($poiCollectionUid);
 
@@ -65,7 +64,7 @@ class AjaxController extends ActionController
             }
         }
 
-        return $this->htmlResponse($infoWindowContent);
+        return $infoWindowContent;
     }
 
     /**

@@ -7,7 +7,7 @@ maps2AjaxResponse {
     additionalHeaders.10.header = Cache-Control: no-cache, must-revalidate, max-age=0|Pragma: no-cache|Content-type:application/json
     admPanel = 0
     disableAllHeaderCode = 1
-    no_cache = 1
+    no_cache = 0
     xhtml_cleaning = 0
   }
 
