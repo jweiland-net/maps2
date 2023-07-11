@@ -113,11 +113,11 @@ class GoogleMapsElement extends AbstractFormElement
             ]),
             'data-formengine-validation-rules' => $this->getValidationDataAsJsonString($config),
             'data-formengine-input-params' => (string)json_encode([
-                'field' => $parameterArray['itemFormElName'],
+                'field' => $parameterArray['itemFormElName'] ?? '',
                 'evalList' => implode(',', $evalList),
                 'is_in' => '',
             ]),
-            'data-formengine-input-name' => (string)$parameterArray['itemFormElName'],
+            'data-formengine-input-name' => (string)($parameterArray['itemFormElName'] ?? ''),
         ];
 
         // SF: We can not set this field to type="hidden" as FormEngine.getFieldElement
@@ -130,7 +130,7 @@ class GoogleMapsElement extends AbstractFormElement
         $html[] =         '<div class="form-wizards-element">';
         $html[] =             $this->getMapHtml($this->cleanUpCurrentRecord($this->data['databaseRow']));
         $html[] =             '<input type="text" ' . GeneralUtility::implodeAttributes($attributes, true) . ' />';
-        $html[] =             '<input type="hidden" name="' . $parameterArray['itemFormElName'] . '" value="' . htmlspecialchars($itemValue) . '" />';
+        $html[] =             '<input type="hidden" name="' . ($parameterArray['itemFormElName'] ?? '') . '" value="' . htmlspecialchars($itemValue) . '" />';
         $html[] =         '</div>';
         $html[] =     '</div>';
         $html[] = '</div>';

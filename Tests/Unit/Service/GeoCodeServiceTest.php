@@ -17,8 +17,7 @@ use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Mapper\GoogleMapsMapper;
 use JWeiland\Maps2\Mapper\MapperFactory;
 use JWeiland\Maps2\Service\GeoCodeService;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
+use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
@@ -28,52 +27,50 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
  */
 class GeoCodeServiceTest extends UnitTestCase
 {
-    use ProphecyTrait;
+    /**
+     * @var Client\ClientFactory|MockObject
+     */
+    protected $clientFactoryMock;
 
     /**
-     * @var Client\ClientFactory|ObjectProphecy
+     * @var Client\GoogleMapsClient|MockObject
      */
-    protected $clientFactoryProphecy;
+    protected $googleMapsClientMock;
 
     /**
-     * @var Client\GoogleMapsClient|ObjectProphecy
+     * @var Request\RequestFactory|MockObject
      */
-    protected $googleMapsClientProphecy;
+    protected $requestFactoryMock;
 
     /**
-     * @var Request\RequestFactory|ObjectProphecy
+     * @var MapperFactory|MockObject
      */
-    protected $requestFactoryProphecy;
+    protected $mapperFactoryMock;
 
     /**
-     * @var MapperFactory|ObjectProphecy
+     * @var Request\GoogleMaps\GeocodeRequest|MockObject
      */
-    protected $mapperFactoryProphecy;
-
-    /**
-     * @var Request\GoogleMaps\GeocodeRequest|ObjectProphecy
-     */
-    protected $gmGeocodeRequestProphecy;
+    protected $gmGeocodeRequestMock;
 
     protected GeoCodeService $subject;
 
     protected function setUp(): void
     {
-        $this->clientFactoryProphecy = $this->prophesize(Client\ClientFactory::class);
-        $this->googleMapsClientProphecy = $this->prophesize(Client\GoogleMapsClient::class);
-        $this->requestFactoryProphecy = $this->prophesize(Request\RequestFactory::class);
-        $this->mapperFactoryProphecy = $this->prophesize(MapperFactory::class);
-        $this->gmGeocodeRequestProphecy = $this->prophesize(Request\GoogleMaps\GeocodeRequest::class);
+        $this->clientFactoryMock = $this->createMock(Client\ClientFactory::class);
+        $this->googleMapsClientMock = $this->createMock(Client\GoogleMapsClient::class);
+        $this->requestFactoryMock = $this->createMock(Request\RequestFactory::class);
+        $this->mapperFactoryMock = $this->createMock(MapperFactory::class);
+        $this->gmGeocodeRequestMock = $this->createMock(Request\GoogleMaps\GeocodeRequest::class);
 
-        $this->clientFactoryProphecy
-            ->create()
-            ->shouldBeCalled()
-            ->willReturn($this->googleMapsClientProphecy->reveal());
+        $this->clientFactoryMock
+            ->expects(self::atLeastOnce())
+            ->method('create')
+            ->willReturn($this->googleMapsClientMock);
 
         $this->subject = new GeoCodeService(
-            $this->clientFactoryProphecy->reveal(),
-            $this->requestFactoryProphecy->reveal(),
-            $this->mapperFactoryProphecy->reveal()
+            $this->clientFactoryMock,
+            $this->requestFactoryMock,
+            $this->mapperFactoryMock
         );
     }
 
@@ -81,11 +78,11 @@ class GeoCodeServiceTest extends UnitTestCase
     {
         unset(
             $this->subject,
-            $this->clientFactoryProphecy,
-            $this->googleMapsClientProphecy,
-            $this->requestFactoryProphecy,
-            $this->mapperFactoryProphecy,
-            $this->gmGeocodeRequestProphecy
+            $this->clientFactoryMock,
+            $this->googleMapsClientMock,
+            $this->requestFactoryMock,
+            $this->mapperFactoryMock,
+            $this->gmGeocodeRequestMock
         );
 
         parent::tearDown();
@@ -141,18 +138,24 @@ class GeoCodeServiceTest extends UnitTestCase
         $address = 'test street 123, 12345 city';
         $objectStorage = new ObjectStorage();
 
-        $this->gmGeocodeRequestProphecy
-            ->addParameter('address', $address)
-            ->shouldBeCalled();
+        $this->gmGeocodeRequestMock
+            ->expects(self::atLeastOnce())
+            ->method('addParameter')
+            ->with(
+                'address',
+                $address
+            );
 
-        $this->requestFactoryProphecy
-            ->create('GeocodeRequest')
-            ->shouldBeCalled()
-            ->willReturn($this->gmGeocodeRequestProphecy);
+        $this->requestFactoryMock
+            ->expects(self::atLeastOnce())
+            ->method('create')
+            ->with('GeocodeRequest')
+            ->willReturn($this->gmGeocodeRequestMock);
 
-        $this->googleMapsClientProphecy
-            ->processRequest($this->gmGeocodeRequestProphecy->reveal())
-            ->shouldBeCalled()
+        $this->googleMapsClientMock
+            ->expects(self::atLeastOnce())
+            ->method('processRequest')
+            ->with($this->gmGeocodeRequestMock)
             ->willReturn([]);
 
         $positions = $this->subject->getPositionsByAddress($address);
@@ -185,25 +188,31 @@ class GeoCodeServiceTest extends UnitTestCase
             ],
         ];
 
-        $this->gmGeocodeRequestProphecy
-            ->addParameter('address', 'My private address')
-            ->shouldBeCalled();
+        $this->gmGeocodeRequestMock
+            ->expects(self::atLeastOnce())
+            ->method('addParameter')
+            ->with(
+                'address',
+                'My private address'
+            );
 
-        $this->requestFactoryProphecy
-            ->create('GeocodeRequest')
-            ->shouldBeCalled()
-            ->willReturn($this->gmGeocodeRequestProphecy->reveal());
+        $this->requestFactoryMock
+            ->expects(self::atLeastOnce())
+            ->method('create')
+            ->with('GeocodeRequest')
+            ->willReturn($this->gmGeocodeRequestMock);
 
-        $this->googleMapsClientProphecy
-            ->processRequest($this->gmGeocodeRequestProphecy->reveal())
-            ->shouldBeCalled()
+        $this->googleMapsClientMock
+            ->expects(self::atLeastOnce())
+            ->method('processRequest')
+            ->with($this->gmGeocodeRequestMock)
             ->willReturn($response);
 
         $googleMapsMapper = new GoogleMapsMapper();
 
-        $this->mapperFactoryProphecy
-            ->create()
-            ->shouldBeCalled()
+        $this->mapperFactoryMock
+            ->expects(self::atLeastOnce())
+            ->method('create')
             ->willReturn($googleMapsMapper);
 
         self::assertCount(
@@ -249,18 +258,24 @@ class GeoCodeServiceTest extends UnitTestCase
         $objectStorage = new ObjectStorage();
         GeneralUtility::addInstance(ObjectStorage::class, $objectStorage);
 
-        $this->gmGeocodeRequestProphecy
-            ->addParameter('address', 'My private address')
-            ->shouldBeCalled();
+        $this->gmGeocodeRequestMock
+            ->expects(self::atLeastOnce())
+            ->method('addParameter')
+            ->with(
+                'address',
+                'My private address'
+            );
 
-        $this->requestFactoryProphecy
-            ->create('GeocodeRequest')
-            ->shouldBeCalled()
-            ->willReturn($this->gmGeocodeRequestProphecy->reveal());
+        $this->requestFactoryMock
+            ->expects(self::atLeastOnce())
+            ->method('create')
+            ->with('GeocodeRequest')
+            ->willReturn($this->gmGeocodeRequestMock);
 
-        $this->googleMapsClientProphecy
-            ->processRequest($this->gmGeocodeRequestProphecy->reveal())
-            ->shouldBeCalled()
+        $this->googleMapsClientMock
+            ->expects(self::atLeastOnce())
+            ->method('processRequest')
+            ->with($this->gmGeocodeRequestMock)
             ->willReturn([]);
 
         self::assertNull(
@@ -288,25 +303,31 @@ class GeoCodeServiceTest extends UnitTestCase
             ],
         ];
 
-        $this->gmGeocodeRequestProphecy
-            ->addParameter('address', 'My private address')
-            ->shouldBeCalled();
+        $this->gmGeocodeRequestMock
+            ->expects(self::atLeastOnce())
+            ->method('addParameter')
+            ->with(
+                'address',
+                'My private address'
+            );
 
-        $this->requestFactoryProphecy
-            ->create('GeocodeRequest')
-            ->shouldBeCalled()
-            ->willReturn($this->gmGeocodeRequestProphecy->reveal());
+        $this->requestFactoryMock
+            ->expects(self::atLeastOnce())
+            ->method('create')
+            ->with('GeocodeRequest')
+            ->willReturn($this->gmGeocodeRequestMock);
 
-        $this->googleMapsClientProphecy
-            ->processRequest($this->gmGeocodeRequestProphecy->reveal())
-            ->shouldBeCalled()
+        $this->googleMapsClientMock
+            ->expects(self::atLeastOnce())
+            ->method('processRequest')
+            ->with($this->gmGeocodeRequestMock)
             ->willReturn($response);
 
         $googleMapsMapper = new GoogleMapsMapper();
 
-        $this->mapperFactoryProphecy
-            ->create()
-            ->shouldBeCalled()
+        $this->mapperFactoryMock
+            ->expects(self::atLeastOnce())
+            ->method('create')
             ->willReturn($googleMapsMapper);
 
         self::assertEquals(

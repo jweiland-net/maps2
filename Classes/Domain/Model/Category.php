@@ -74,7 +74,7 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
         $markerIconWidth = $this->getExtConf()->getMarkerIconWidth();
 
         // Only use icon width of this model, if model has marker icons
-        if ($this->maps2MarkerIconWidth > 0 && $this->getMaps2MarkerIcons()) {
+        if ($this->maps2MarkerIconWidth > 0 && $this->getMaps2MarkerIcons()->count() !== 0) {
             $markerIconWidth = $this->maps2MarkerIconWidth;
         }
 
@@ -91,7 +91,7 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
         $markerIconHeight = $this->getExtConf()->getMarkerIconHeight();
 
         // Only use icon height of this model, if model has marker icons
-        if ($this->maps2MarkerIconHeight > 0 && $this->getMaps2MarkerIcons()) {
+        if ($this->maps2MarkerIconHeight > 0 && $this->getMaps2MarkerIcons()->count() !== 0) {
             $markerIconHeight = $this->maps2MarkerIconHeight;
         }
 
@@ -108,7 +108,7 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
         $markerIconAnchorPosX = $this->getExtConf()->getMarkerIconAnchorPosX();
 
         // Only use icon anchor pos X of this model, if model has marker icons
-        if ($this->maps2MarkerIconAnchorPosX > 0 && $this->getMaps2MarkerIcons()) {
+        if ($this->maps2MarkerIconAnchorPosX > 0 && $this->getMaps2MarkerIcons()->count() !== 0) {
             $markerIconAnchorPosX = $this->maps2MarkerIconAnchorPosX;
         }
 
@@ -125,7 +125,7 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
         $markerIconAnchorPosY = $this->getExtConf()->getMarkerIconAnchorPosY();
 
         // Only use icon anchor pos Y of this model, if model has marker icons
-        if ($this->maps2MarkerIconAnchorPosY > 0 && $this->getMaps2MarkerIcons()) {
+        if ($this->maps2MarkerIconAnchorPosY > 0 && $this->getMaps2MarkerIcons()->count() !== 0) {
             $markerIconAnchorPosY = $this->maps2MarkerIconAnchorPosY;
         }
 

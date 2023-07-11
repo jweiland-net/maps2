@@ -13,9 +13,7 @@ namespace JWeiland\Maps2\Tests\Functional\Helper;
 
 use JWeiland\Maps2\Helper\MessageHelper;
 use JWeiland\Maps2\Helper\StoragePidHelper;
-use Prophecy\Argument;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
+use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\VariableFrontend;
 use TYPO3\CMS\Core\Package\PackageManager;
@@ -28,37 +26,32 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
  */
 class StoragePidHelperTest extends FunctionalTestCase
 {
-    use ProphecyTrait;
-
     protected StoragePidHelper $subject;
 
     /**
-     * @var MessageHelper|ObjectProphecy
+     * @var MessageHelper|MockObject
      */
-    protected $messageHelperProphecy;
+    protected $messageHelperMock;
 
-    /**
-     * @var array
-     */
-    protected $testExtensionsToLoad = [
-        'typo3conf/ext/maps2',
-        'typo3conf/ext/events2',
+    protected array $testExtensionsToLoad = [
+        'jweiland/maps2',
+        'jweiland/events2',
     ];
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->messageHelperProphecy = $this->prophesize(MessageHelper::class);
+        $this->messageHelperMock = $this->createMock(MessageHelper::class);
 
-        $this->subject = new StoragePidHelper($this->messageHelperProphecy->reveal());
+        $this->subject = new StoragePidHelper($this->messageHelperMock);
     }
 
     protected function tearDown(): void
     {
         unset(
             $this->subject,
-            $this->messageHelperProphecy
+            $this->messageHelperMock
         );
 
         parent::tearDown();
@@ -69,12 +62,13 @@ class StoragePidHelperTest extends FunctionalTestCase
      */
     public function getStoragePidWithoutPidAndNoRegistryConfigurationWillAddFlashMessage(): void
     {
-        $this->messageHelperProphecy
-            ->addFlashMessage(
-                Argument::containingString('Please check various places'),
+        $this->messageHelperMock
+            ->expects(self::atLeastOnce())
+            ->method('addFlashMessage')
+            ->with(
+                self::stringContains('Please check various places'),
                 'Can not find a valid PID to store EXT:maps2 records'
-            )
-            ->shouldBeCalled();
+            );
 
         $recordWithoutPid = [
             'uid' => 100,
@@ -93,27 +87,29 @@ class StoragePidHelperTest extends FunctionalTestCase
      */
     public function getStoragePidWithPidInForeignRecordWillReturnStoragePid(): void
     {
-        /** @var VariableFrontend|ObjectProphecy $variableFrontend */
-        $variableFrontend = $this->prophesize(VariableFrontend::class);
-        $variableFrontend
-            ->has('pagesTsConfigIdToHash200')
+        /** @var VariableFrontend|MockObject $variableFrontendMock */
+        $variableFrontendMock = $this->createMock(VariableFrontend::class);
+        $variableFrontendMock
+            ->expects(self::atLeastOnce())
+            ->method('has')
+            ->with('pagesTsConfigIdToHash200')
             ->willReturn(true);
-        $variableFrontend
-            ->get('pagesTsConfigIdToHash200')
-            ->shouldBeCalled()
-            ->willReturn('Blub');
-        $variableFrontend
-            ->get('pagesTsConfigHashToContentBlub')
-            ->shouldBeCalled()
-            ->willReturn([]);
+        $variableFrontendMock
+            ->expects(self::atLeastOnce())
+            ->method('get')
+            ->willReturnMap([
+                'pagesTsConfigIdToHash200', 'Blub',
+                'pagesTsConfigHashToContentBlub', [],
+            ]);
 
-        /** @var CacheManager|ObjectProphecy $cacheManagerProphecy */
-        $cacheManagerProphecy = $this->prophesize(CacheManager::class);
-        $cacheManagerProphecy
-            ->getCache(Argument::containingString('runtime'))
-            ->shouldBeCalled()
-            ->willReturn($variableFrontend->reveal());
-        GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerProphecy->reveal());
+        /** @var CacheManager|MockObject $cacheManagerMock */
+        $cacheManagerMock = $this->createMock(CacheManager::class);
+        $cacheManagerMock
+            ->expects(self::atLeastOnce())
+            ->method('getCache')
+            ->with(self::stringContains('runtime'))
+            ->willReturn($variableFrontendMock);
+        GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerMock);
 
         $record = [
             'uid' => 100,
@@ -133,27 +129,29 @@ class StoragePidHelperTest extends FunctionalTestCase
      */
     public function getStoragePidWithHardCodedMaps2RegistryWillReturnStoragePid(): void
     {
-        /** @var VariableFrontend|ObjectProphecy $variableFrontend */
-        $variableFrontend = $this->prophesize(VariableFrontend::class);
-        $variableFrontend
-            ->has('pagesTsConfigIdToHash200')
+        /** @var VariableFrontend|MockObject $variableFrontendMock */
+        $variableFrontendMock = $this->createMock(VariableFrontend::class);
+        $variableFrontendMock
+            ->expects(self::atLeastOnce())
+            ->method('has')
+            ->with('pagesTsConfigIdToHash200')
             ->willReturn(true);
-        $variableFrontend
-            ->get('pagesTsConfigIdToHash200')
-            ->shouldBeCalled()
-            ->willReturn('Blub');
-        $variableFrontend
-            ->get('pagesTsConfigHashToContentBlub')
-            ->shouldBeCalled()
-            ->willReturn([]);
+        $variableFrontendMock
+            ->expects(self::atLeastOnce())
+            ->method('get')
+            ->willReturnMap([
+                'pagesTsConfigIdToHash200', 'Blub',
+                'pagesTsConfigHashToContentBlub', [],
+            ]);
 
-        /** @var CacheManager|ObjectProphecy $cacheManagerProphecy */
-        $cacheManagerProphecy = $this->prophesize(CacheManager::class);
-        $cacheManagerProphecy
-            ->getCache(Argument::containingString('runtime'))
-            ->shouldBeCalled()
-            ->willReturn($variableFrontend->reveal());
-        GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerProphecy->reveal());
+        /** @var CacheManager|MockObject $cacheManagerMock */
+        $cacheManagerMock = $this->createMock(CacheManager::class);
+        $cacheManagerMock
+            ->expects(self::atLeastOnce())
+            ->method('getCache')
+            ->with(self::stringContains('runtime'))
+            ->willReturn($variableFrontendMock);
+        GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerMock);
 
         $record = [
             'uid' => 100,
@@ -175,27 +173,29 @@ class StoragePidHelperTest extends FunctionalTestCase
      */
     public function getStoragePidWithHardCodedMaps2RegistryWillReturnUnifiedStoragePid(): void
     {
-        /** @var VariableFrontend|ObjectProphecy $variableFrontend */
-        $variableFrontend = $this->prophesize(VariableFrontend::class);
-        $variableFrontend
-            ->has('pagesTsConfigIdToHash200')
+        /** @var VariableFrontend|MockObject $variableFrontendMock */
+        $variableFrontendMock = $this->createMock(VariableFrontend::class);
+        $variableFrontendMock
+            ->expects(self::atLeastOnce())
+            ->method('has')
+            ->with('pagesTsConfigIdToHash200')
             ->willReturn(true);
-        $variableFrontend
-            ->get('pagesTsConfigIdToHash200')
-            ->shouldBeCalled()
-            ->willReturn('Blub');
-        $variableFrontend
-            ->get('pagesTsConfigHashToContentBlub')
-            ->shouldBeCalled()
-            ->willReturn([]);
+        $variableFrontendMock
+            ->expects(self::atLeastOnce())
+            ->method('get')
+            ->willReturnMap([
+                'pagesTsConfigIdToHash200', 'Blub',
+                'pagesTsConfigHashToContentBlub', [],
+            ]);
 
-        /** @var CacheManager|ObjectProphecy $cacheManagerProphecy */
-        $cacheManagerProphecy = $this->prophesize(CacheManager::class);
-        $cacheManagerProphecy
-            ->getCache(Argument::containingString('runtime'))
-            ->shouldBeCalled()
-            ->willReturn($variableFrontend->reveal());
-        GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerProphecy->reveal());
+        /** @var CacheManager|MockObject $cacheManagerMock */
+        $cacheManagerMock = $this->createMock(CacheManager::class);
+        $cacheManagerMock
+            ->expects(self::atLeastOnce())
+            ->method('getCache')
+            ->with(self::stringContains('runtime'))
+            ->willReturn($variableFrontendMock);
+        GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerMock);
 
         $record = [
             'uid' => 100,
@@ -221,13 +221,14 @@ class StoragePidHelperTest extends FunctionalTestCase
             'maps2Storage' => 385,
         ];
 
-        /** @var PackageManager|ObjectProphecy $packageManagerProphecy */
-        $packageManagerProphecy = $this->prophesize(PackageManager::class);
-        $packageManagerProphecy
-            ->isPackageActive('foreign_ext')
-            ->shouldBeCalled()
+        /** @var PackageManager|MockObject $packageManagerMock */
+        $packageManagerMock = $this->createMock(PackageManager::class);
+        $packageManagerMock
+            ->expects(self::atLeastOnce())
+            ->method('isPackageActive')
+            ->with('foreign_ext')
             ->willReturn(true);
-        ExtensionManagementUtility::setPackageManager($packageManagerProphecy->reveal());
+        ExtensionManagementUtility::setPackageManager($packageManagerMock);
 
         $recordWithoutPid = [
             'uid' => 100,
@@ -251,39 +252,42 @@ class StoragePidHelperTest extends FunctionalTestCase
      */
     public function getStoragePidWithPidWillReturnPidFromExtensionManager(): void
     {
-        /** @var VariableFrontend|ObjectProphecy $variableFrontend */
-        $variableFrontend = $this->prophesize(VariableFrontend::class);
-        $variableFrontend
-            ->has('pagesTsConfigIdToHash200')
+        /** @var VariableFrontend|MockObject $variableFrontendMock */
+        $variableFrontendMock = $this->createMock(VariableFrontend::class);
+        $variableFrontendMock
+            ->expects(self::atLeastOnce())
+            ->method('has')
+            ->with('pagesTsConfigIdToHash200')
             ->willReturn(true);
-        $variableFrontend
-            ->get('pagesTsConfigIdToHash200')
-            ->shouldBeCalled()
-            ->willReturn('Blub');
-        $variableFrontend
-            ->get('pagesTsConfigHashToContentBlub')
-            ->shouldBeCalled()
-            ->willReturn([]);
+        $variableFrontendMock
+            ->expects(self::atLeastOnce())
+            ->method('get')
+            ->willReturnMap([
+                'pagesTsConfigIdToHash200', 'Blub',
+                'pagesTsConfigHashToContentBlub', [],
+            ]);
 
-        /** @var CacheManager|ObjectProphecy $cacheManagerProphecy */
-        $cacheManagerProphecy = $this->prophesize(CacheManager::class);
-        $cacheManagerProphecy
-            ->getCache(Argument::containingString('runtime'))
-            ->shouldBeCalled()
-            ->willReturn($variableFrontend->reveal());
-        GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerProphecy->reveal());
+        /** @var CacheManager|MockObject $cacheManagerMock */
+        $cacheManagerMock = $this->createMock(CacheManager::class);
+        $cacheManagerMock
+            ->expects(self::atLeastOnce())
+            ->method('getCache')
+            ->with(self::stringContains('runtime'))
+            ->willReturn($variableFrontendMock);
+        GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerMock);
 
         $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['foreign_ext'] = [
             'maps2Storage' => 197,
         ];
 
-        /** @var PackageManager|ObjectProphecy $packageManagerProphecy */
-        $packageManagerProphecy = $this->prophesize(PackageManager::class);
-        $packageManagerProphecy
-            ->isPackageActive('foreign_ext')
-            ->shouldBeCalled()
+        /** @var PackageManager|MockObject $packageManagerMock */
+        $packageManagerMock = $this->createMock(PackageManager::class);
+        $packageManagerMock
+            ->expects(self::atLeastOnce())
+            ->method('isPackageActive')
+            ->with('foreign_ext')
             ->willReturn(true);
-        ExtensionManagementUtility::setPackageManager($packageManagerProphecy->reveal());
+        ExtensionManagementUtility::setPackageManager($packageManagerMock);
 
         $record = [
             'uid' => 100,
@@ -308,39 +312,42 @@ class StoragePidHelperTest extends FunctionalTestCase
      */
     public function getStoragePidWithPidAndTypeWillReturnPidFromExtensionManager(): void
     {
-        /** @var VariableFrontend|ObjectProphecy $variableFrontend */
-        $variableFrontend = $this->prophesize(VariableFrontend::class);
-        $variableFrontend
-            ->has('pagesTsConfigIdToHash200')
+        /** @var VariableFrontend|MockObject $variableFrontendMock */
+        $variableFrontendMock = $this->createMock(VariableFrontend::class);
+        $variableFrontendMock
+            ->expects(self::atLeastOnce())
+            ->method('has')
+            ->with('pagesTsConfigIdToHash200')
             ->willReturn(true);
-        $variableFrontend
-            ->get('pagesTsConfigIdToHash200')
-            ->shouldBeCalled()
-            ->willReturn('Blub');
-        $variableFrontend
-            ->get('pagesTsConfigHashToContentBlub')
-            ->shouldBeCalled()
-            ->willReturn([]);
+        $variableFrontendMock
+            ->expects(self::atLeastOnce())
+            ->method('get')
+            ->willReturnMap([
+                'pagesTsConfigIdToHash200', 'Blub',
+                'pagesTsConfigHashToContentBlub', [],
+            ]);
 
-        /** @var CacheManager|ObjectProphecy $cacheManagerProphecy */
-        $cacheManagerProphecy = $this->prophesize(CacheManager::class);
-        $cacheManagerProphecy
-            ->getCache(Argument::containingString('runtime'))
-            ->shouldBeCalled()
-            ->willReturn($variableFrontend->reveal());
-        GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerProphecy->reveal());
+        /** @var CacheManager|MockObject $cacheManagerMock */
+        $cacheManagerMock = $this->createMock(CacheManager::class);
+        $cacheManagerMock
+            ->expects(self::atLeastOnce())
+            ->method('getCache')
+            ->with(self::stringContains('runtime'))
+            ->willReturn($variableFrontendMock);
+        GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerMock);
 
         $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['foreign_ext'] = [
             'maps2Storage' => 197,
         ];
 
-        /** @var PackageManager|ObjectProphecy $packageManagerProphecy */
-        $packageManagerProphecy = $this->prophesize(PackageManager::class);
-        $packageManagerProphecy
-            ->isPackageActive('foreign_ext')
-            ->shouldBeCalled()
+        /** @var PackageManager|MockObject $packageManagerMock */
+        $packageManagerMock = $this->createMock(PackageManager::class);
+        $packageManagerMock
+            ->expects(self::atLeastOnce())
+            ->method('isPackageActive')
+            ->with('foreign_ext')
             ->willReturn(true);
-        ExtensionManagementUtility::setPackageManager($packageManagerProphecy->reveal());
+        ExtensionManagementUtility::setPackageManager($packageManagerMock);
 
         $record = [
             'uid' => 100,
@@ -366,33 +373,35 @@ class StoragePidHelperTest extends FunctionalTestCase
      */
     public function getStoragePidWithPidWillReturnPidFromDefaultPageTsConfigPath(): void
     {
-        /** @var VariableFrontend|ObjectProphecy $variableFrontend */
-        $variableFrontend = $this->prophesize(VariableFrontend::class);
-        $variableFrontend
-            ->has('pagesTsConfigIdToHash5438')
+        /** @var VariableFrontend|MockObject $variableFrontendMock */
+        $variableFrontendMock = $this->createMock(VariableFrontend::class);
+        $variableFrontendMock
+            ->expects(self::atLeastOnce())
+            ->method('has')
+            ->with('pagesTsConfigIdToHash200')
             ->willReturn(true);
-        $variableFrontend
-            ->get('pagesTsConfigIdToHash5438')
-            ->shouldBeCalled()
-            ->willReturn('Blub');
-        $variableFrontend
-            ->get('pagesTsConfigHashToContentBlub')
-            ->shouldBeCalled()
-            ->willReturn([
-                'ext.' => [
-                    'maps2.' => [
-                        'defaultStoragePid' => 582,
+        $variableFrontendMock
+            ->expects(self::atLeastOnce())
+            ->method('get')
+            ->willReturnMap([
+                'pagesTsConfigIdToHash200', 'Blub',
+                'pagesTsConfigHashToContentBlub', [
+                    'ext.' => [
+                        'maps2.' => [
+                            'defaultStoragePid' => 582,
+                        ],
                     ],
                 ],
             ]);
 
-        /** @var CacheManager|ObjectProphecy $cacheManagerProphecy */
-        $cacheManagerProphecy = $this->prophesize(CacheManager::class);
-        $cacheManagerProphecy
-            ->getCache(Argument::containingString('runtime'))
-            ->shouldBeCalled()
-            ->willReturn($variableFrontend->reveal());
-        GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerProphecy->reveal());
+        /** @var CacheManager|MockObject $cacheManagerMock */
+        $cacheManagerMock = $this->createMock(CacheManager::class);
+        $cacheManagerMock
+            ->expects(self::atLeastOnce())
+            ->method('getCache')
+            ->with(self::stringContains('runtime'))
+            ->willReturn($variableFrontendMock);
+        GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerMock);
 
         $record = [
             'uid' => 100,
@@ -412,33 +421,35 @@ class StoragePidHelperTest extends FunctionalTestCase
      */
     public function getStoragePidWithPidWillReturnPidFromConfiguredPageTsConfigPath(): void
     {
-        /** @var VariableFrontend|ObjectProphecy $variableFrontend */
-        $variableFrontend = $this->prophesize(VariableFrontend::class);
-        $variableFrontend
-            ->has('pagesTsConfigIdToHash5438')
+        /** @var VariableFrontend|MockObject $variableFrontendMock */
+        $variableFrontendMock = $this->createMock(VariableFrontend::class);
+        $variableFrontendMock
+            ->expects(self::atLeastOnce())
+            ->method('has')
+            ->with('pagesTsConfigIdToHash200')
             ->willReturn(true);
-        $variableFrontend
-            ->get('pagesTsConfigIdToHash5438')
-            ->shouldBeCalled()
-            ->willReturn('Blub');
-        $variableFrontend
-            ->get('pagesTsConfigHashToContentBlub')
-            ->shouldBeCalled()
-            ->willReturn([
-                'ext.' => [
-                    'foreign_ext.' => [
-                        'maps2Storage' => 582,
+        $variableFrontendMock
+            ->expects(self::atLeastOnce())
+            ->method('get')
+            ->willReturnMap([
+                'pagesTsConfigIdToHash200', 'Blub',
+                'pagesTsConfigHashToContentBlub', [
+                    'ext.' => [
+                        'foreign_ext.' => [
+                            'maps2Storage' => 582,
+                        ],
                     ],
                 ],
             ]);
 
-        /** @var CacheManager|ObjectProphecy $cacheManagerProphecy */
-        $cacheManagerProphecy = $this->prophesize(CacheManager::class);
-        $cacheManagerProphecy
-            ->getCache(Argument::containingString('runtime'))
-            ->shouldBeCalled()
-            ->willReturn($variableFrontend->reveal());
-        GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerProphecy->reveal());
+        /** @var CacheManager|MockObject $cacheManagerMock */
+        $cacheManagerMock = $this->createMock(CacheManager::class);
+        $cacheManagerMock
+            ->expects(self::atLeastOnce())
+            ->method('getCache')
+            ->with(self::stringContains('runtime'))
+            ->willReturn($variableFrontendMock);
+        GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerMock);
 
         $record = [
             'uid' => 100,
@@ -464,36 +475,38 @@ class StoragePidHelperTest extends FunctionalTestCase
      */
     public function getStoragePidWithPidWillOverridePidOfForeignExtWithPidOfDefaultPageTsConfig(): void
     {
-        /** @var VariableFrontend|ObjectProphecy $variableFrontend */
-        $variableFrontend = $this->prophesize(VariableFrontend::class);
-        $variableFrontend
-            ->has('pagesTsConfigIdToHash5438')
+        /** @var VariableFrontend|MockObject $variableFrontendMock */
+        $variableFrontendMock = $this->createMock(VariableFrontend::class);
+        $variableFrontendMock
+            ->expects(self::atLeastOnce())
+            ->method('has')
+            ->with('pagesTsConfigIdToHash200')
             ->willReturn(true);
-        $variableFrontend
-            ->get('pagesTsConfigIdToHash5438')
-            ->shouldBeCalled()
-            ->willReturn('Blub');
-        $variableFrontend
-            ->get('pagesTsConfigHashToContentBlub')
-            ->shouldBeCalled()
-            ->willReturn([
-                'ext.' => [
-                    'foreign_ext.' => [
-                        'maps2Storage' => 491,
-                    ],
-                    'maps2.' => [
-                        'defaultStoragePid' => 927,
+        $variableFrontendMock
+            ->expects(self::atLeastOnce())
+            ->method('get')
+            ->willReturnMap([
+                'pagesTsConfigIdToHash200', 'Blub',
+                'pagesTsConfigHashToContentBlub', [
+                    'ext.' => [
+                        'foreign_ext.' => [
+                            'maps2Storage' => 491,
+                        ],
+                        'maps2.' => [
+                            'defaultStoragePid' => 927,
+                        ],
                     ],
                 ],
             ]);
 
-        /** @var CacheManager|ObjectProphecy $cacheManagerProphecy */
-        $cacheManagerProphecy = $this->prophesize(CacheManager::class);
-        $cacheManagerProphecy
-            ->getCache(Argument::containingString('runtime'))
-            ->shouldBeCalled()
-            ->willReturn($variableFrontend->reveal());
-        GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerProphecy->reveal());
+        /** @var CacheManager|MockObject $cacheManagerMock */
+        $cacheManagerMock = $this->createMock(CacheManager::class);
+        $cacheManagerMock
+            ->expects(self::atLeastOnce())
+            ->method('getCache')
+            ->with(self::stringContains('runtime'))
+            ->willReturn($variableFrontendMock);
+        GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerMock);
 
         $record = [
             'uid' => 100,
@@ -519,33 +532,35 @@ class StoragePidHelperTest extends FunctionalTestCase
      */
     public function getStoragePidWithPidWillOverridePidOfExtensionManagerWithPidOfPageTsConfig(): void
     {
-        /** @var VariableFrontend|ObjectProphecy $variableFrontend */
-        $variableFrontend = $this->prophesize(VariableFrontend::class);
-        $variableFrontend
-            ->has('pagesTsConfigIdToHash5438')
+        /** @var VariableFrontend|MockObject $variableFrontendMock */
+        $variableFrontendMock = $this->createMock(VariableFrontend::class);
+        $variableFrontendMock
+            ->expects(self::atLeastOnce())
+            ->method('has')
+            ->with('pagesTsConfigIdToHash200')
             ->willReturn(true);
-        $variableFrontend
-            ->get('pagesTsConfigIdToHash5438')
-            ->shouldBeCalled()
-            ->willReturn('Blub');
-        $variableFrontend
-            ->get('pagesTsConfigHashToContentBlub')
-            ->shouldBeCalled()
-            ->willReturn([
-                'ext.' => [
-                    'maps2.' => [
-                        'defaultStoragePid' => 582,
+        $variableFrontendMock
+            ->expects(self::atLeastOnce())
+            ->method('get')
+            ->willReturnMap([
+                'pagesTsConfigIdToHash200', 'Blub',
+                'pagesTsConfigHashToContentBlub', [
+                    'ext.' => [
+                        'maps2.' => [
+                            'defaultStoragePid' => 582,
+                        ],
                     ],
                 ],
             ]);
 
-        /** @var CacheManager|ObjectProphecy $cacheManagerProphecy */
-        $cacheManagerProphecy = $this->prophesize(CacheManager::class);
-        $cacheManagerProphecy
-            ->getCache(Argument::containingString('runtime'))
-            ->shouldBeCalled()
-            ->willReturn($variableFrontend->reveal());
-        GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerProphecy->reveal());
+        /** @var CacheManager|MockObject $cacheManagerMock */
+        $cacheManagerMock = $this->createMock(CacheManager::class);
+        $cacheManagerMock
+            ->expects(self::atLeastOnce())
+            ->method('getCache')
+            ->with(self::stringContains('runtime'))
+            ->willReturn($variableFrontendMock);
+        GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerMock);
 
         $record = [
             'uid' => 100,
@@ -567,49 +582,47 @@ class StoragePidHelperTest extends FunctionalTestCase
      */
     public function getStoragePidWithPidWillProcessVariousRegistryConfiguration(): void
     {
-        /** @var VariableFrontend|ObjectProphecy $variableFrontend */
-        $variableFrontend = $this->prophesize(VariableFrontend::class);
-        $variableFrontend
-            ->has('pagesTsConfigIdToHash5438')
+        /** @var VariableFrontend|MockObject $variableFrontendMock */
+        $variableFrontendMock = $this->createMock(VariableFrontend::class);
+        $variableFrontendMock
+            ->expects(self::atLeastOnce())
+            ->method('has')
+            ->with('pagesTsConfigIdToHash200')
             ->willReturn(true);
-        $variableFrontend
-            ->get('pagesTsConfigIdToHash5438')
-            ->shouldBeCalled()
-            ->willReturn('Blub');
-        $variableFrontend
-            ->get('pagesTsConfigHashToContentBlub')
-            ->shouldBeCalled()
-            ->willReturn([
-                'ext.' => [
-                    'foreign_ext.' => [
-                        'maps2Pid' => 4297,
+        $variableFrontendMock
+            ->expects(self::atLeastOnce())
+            ->method('get')
+            ->willReturnMap([
+                'pagesTsConfigIdToHash200', 'Blub',
+                'pagesTsConfigHashToContentBlub', [
+                    'ext.' => [
+                        'foreign_ext.' => [
+                            'maps2Pid' => 4297,
+                        ],
                     ],
                 ],
             ]);
 
-        /** @var CacheManager|ObjectProphecy $cacheManagerProphecy */
-        $cacheManagerProphecy = $this->prophesize(CacheManager::class);
-        $cacheManagerProphecy
-            ->getCache(Argument::containingString('runtime'))
-            ->shouldBeCalled()
-            ->willReturn($variableFrontend->reveal());
-        GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerProphecy->reveal());
+        /** @var CacheManager|MockObject $cacheManagerMock */
+        $cacheManagerMock = $this->createMock(CacheManager::class);
+        $cacheManagerMock
+            ->expects(self::atLeastOnce())
+            ->method('getCache')
+            ->with(self::stringContains('runtime'))
+            ->willReturn($variableFrontendMock);
+        GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerMock);
 
-        /** @var PackageManager|ObjectProphecy $packageManagerProphecy */
-        $packageManagerProphecy = $this->prophesize(PackageManager::class);
-        $packageManagerProphecy
-            ->isPackageActive('foreign_ext')
-            ->shouldBeCalled()
-            ->willReturn(true);
-        $packageManagerProphecy
-            ->isPackageActive('events2')
-            ->shouldBeCalled()
-            ->willReturn(true);
-        $packageManagerProphecy
-            ->isPackageActive(Argument::any())
-            ->shouldBeCalled()
-            ->willReturn(false);
-        ExtensionManagementUtility::setPackageManager($packageManagerProphecy->reveal());
+        /** @var PackageManager|MockObject $packageManagerMock */
+        $packageManagerMock = $this->createMock(PackageManager::class);
+        $packageManagerMock
+            ->expects(self::atLeastOnce())
+            ->method('isPackageActive')
+            ->willReturnMap([
+                'foreign_ext', true,
+                'events2', true,
+                self::any(), false,
+            ]);
+        ExtensionManagementUtility::setPackageManager($packageManagerMock);
 
         $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['foreign_ext'] = [
             'maps2Storage' => 0,
@@ -658,33 +671,35 @@ class StoragePidHelperTest extends FunctionalTestCase
      */
     public function getStoragePidWithPidWillProcessTwoRegistryConfiguration(): void
     {
-        /** @var VariableFrontend|ObjectProphecy $variableFrontend */
-        $variableFrontend = $this->prophesize(VariableFrontend::class);
-        $variableFrontend
-            ->has('pagesTsConfigIdToHash5438')
+        /** @var VariableFrontend|MockObject $variableFrontendMock */
+        $variableFrontendMock = $this->createMock(VariableFrontend::class);
+        $variableFrontendMock
+            ->expects(self::atLeastOnce())
+            ->method('has')
+            ->with('pagesTsConfigIdToHash200')
             ->willReturn(true);
-        $variableFrontend
-            ->get('pagesTsConfigIdToHash5438')
-            ->shouldBeCalled()
-            ->willReturn('Blub');
-        $variableFrontend
-            ->get('pagesTsConfigHashToContentBlub')
-            ->shouldBeCalled()
-            ->willReturn([
-                'ext.' => [
-                    'foreign_ext.' => [
-                        'maps2Pid' => 4297,
+        $variableFrontendMock
+            ->expects(self::atLeastOnce())
+            ->method('get')
+            ->willReturnMap([
+                'pagesTsConfigIdToHash200', 'Blub',
+                'pagesTsConfigHashToContentBlub', [
+                    'ext.' => [
+                        'foreign_ext.' => [
+                            'maps2Pid' => 4297,
+                        ],
                     ],
                 ],
             ]);
 
-        /** @var CacheManager|ObjectProphecy $cacheManagerProphecy */
-        $cacheManagerProphecy = $this->prophesize(CacheManager::class);
-        $cacheManagerProphecy
-            ->getCache(Argument::containingString('runtime'))
-            ->shouldBeCalled()
-            ->willReturn($variableFrontend->reveal());
-        GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerProphecy->reveal());
+        /** @var CacheManager|MockObject $cacheManagerMock */
+        $cacheManagerMock = $this->createMock(CacheManager::class);
+        $cacheManagerMock
+            ->expects(self::atLeastOnce())
+            ->method('getCache')
+            ->with(self::stringContains('runtime'))
+            ->willReturn($variableFrontendMock);
+        GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerMock);
 
         $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['foreign_ext'] = [
             'invalidPidKey' => 3985,
@@ -693,17 +708,17 @@ class StoragePidHelperTest extends FunctionalTestCase
             'defaultLocationPid' => 4867,
         ];
 
-        /** @var PackageManager|ObjectProphecy $packageManagerProphecy */
-        $packageManagerProphecy = $this->prophesize(PackageManager::class);
-        $packageManagerProphecy
-            ->isPackageActive('foreign_ext')
-            ->shouldBeCalled()
-            ->willReturn(true);
-        $packageManagerProphecy
-            ->isPackageActive('events2')
-            ->shouldBeCalled()
-            ->willReturn(true);
-        ExtensionManagementUtility::setPackageManager($packageManagerProphecy->reveal());
+        /** @var PackageManager|MockObject $packageManagerMock */
+        $packageManagerMock = $this->createMock(PackageManager::class);
+        $packageManagerMock
+            ->expects(self::atLeastOnce())
+            ->method('isPackageActive')
+            ->willReturnMap([
+                'foreign_ext', true,
+                'events2', true,
+                self::any(), false,
+            ]);
+        ExtensionManagementUtility::setPackageManager($packageManagerMock);
 
         $record = [
             'uid' => 100,
@@ -745,52 +760,50 @@ class StoragePidHelperTest extends FunctionalTestCase
      */
     public function getStoragePidWithPidWillOverrideForeignPidWithPidOfDefaultPageTsConfig(): void
     {
-        /** @var VariableFrontend|ObjectProphecy $variableFrontend */
-        $variableFrontend = $this->prophesize(VariableFrontend::class);
-        $variableFrontend
-            ->has('pagesTsConfigIdToHash5438')
+        /** @var VariableFrontend|MockObject $variableFrontendMock */
+        $variableFrontendMock = $this->createMock(VariableFrontend::class);
+        $variableFrontendMock
+            ->expects(self::atLeastOnce())
+            ->method('has')
+            ->with('pagesTsConfigIdToHash200')
             ->willReturn(true);
-        $variableFrontend
-            ->get('pagesTsConfigIdToHash5438')
-            ->shouldBeCalled()
-            ->willReturn('Blub');
-        $variableFrontend
-            ->get('pagesTsConfigHashToContentBlub')
-            ->shouldBeCalled()
-            ->willReturn([
-                'ext.' => [
-                    'foreign_ext.' => [
-                        'maps2Pid' => 4297,
-                    ],
-                    'maps2.' => [
-                        'defaultStoragePid' => 5837,
+        $variableFrontendMock
+            ->expects(self::atLeastOnce())
+            ->method('get')
+            ->willReturnMap([
+                'pagesTsConfigIdToHash200', 'Blub',
+                'pagesTsConfigHashToContentBlub', [
+                    'ext.' => [
+                        'foreign_ext.' => [
+                            'maps2Pid' => 4297,
+                        ],
+                        'maps2.' => [
+                            'defaultStoragePid' => 5837,
+                        ],
                     ],
                 ],
             ]);
 
-        /** @var CacheManager|ObjectProphecy $cacheManagerProphecy */
-        $cacheManagerProphecy = $this->prophesize(CacheManager::class);
-        $cacheManagerProphecy
-            ->getCache(Argument::containingString('runtime'))
-            ->shouldBeCalled()
-            ->willReturn($variableFrontend->reveal());
-        GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerProphecy->reveal());
+        /** @var CacheManager|MockObject $cacheManagerMock */
+        $cacheManagerMock = $this->createMock(CacheManager::class);
+        $cacheManagerMock
+            ->expects(self::atLeastOnce())
+            ->method('getCache')
+            ->with(self::stringContains('runtime'))
+            ->willReturn($variableFrontendMock);
+        GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerMock);
 
-        /** @var PackageManager|ObjectProphecy $packageManagerProphecy */
-        $packageManagerProphecy = $this->prophesize(PackageManager::class);
-        $packageManagerProphecy
-            ->isPackageActive('foreign_ext')
-            ->shouldBeCalled()
-            ->willReturn(true);
-        $packageManagerProphecy
-            ->isPackageActive('events2')
-            ->shouldBeCalled()
-            ->willReturn(true);
-        $packageManagerProphecy
-            ->isPackageActive(Argument::any())
-            ->shouldBeCalled()
-            ->willReturn(false);
-        ExtensionManagementUtility::setPackageManager($packageManagerProphecy->reveal());
+        /** @var PackageManager|MockObject $packageManagerMock */
+        $packageManagerMock = $this->createMock(PackageManager::class);
+        $packageManagerMock
+            ->expects(self::atLeastOnce())
+            ->method('isPackageActive')
+            ->willReturnMap([
+                'foreign_ext', true,
+                'events2', true,
+                self::any(), false,
+            ]);
+        ExtensionManagementUtility::setPackageManager($packageManagerMock);
 
         $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['foreign_ext'] = [
             'invalidPidKey' => 0,

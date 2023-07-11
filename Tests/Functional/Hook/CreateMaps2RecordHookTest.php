@@ -22,9 +22,7 @@ use JWeiland\Maps2\Hook\CreateMaps2RecordHook;
 use JWeiland\Maps2\Service\GeoCodeService;
 use JWeiland\Maps2\Service\MapService;
 use JWeiland\Maps2\Tca\Maps2Registry;
-use Prophecy\Argument;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
+use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Cache\Frontend\VariableFrontend;
@@ -40,29 +38,27 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
  */
 class CreateMaps2RecordHookTest extends FunctionalTestCase
 {
-    use ProphecyTrait;
-
     protected CreateMaps2RecordHook $subject;
 
     /**
-     * @var GeoCodeService|ObjectProphecy
+     * @var GeoCodeService|MockObject
      */
-    protected $geoCodeServiceProphecy;
+    protected $geoCodeServiceMock;
 
     /**
-     * @var MessageHelper|ObjectProphecy
+     * @var MessageHelper|MockObject
      */
-    protected $messageHelperProphecy;
+    protected $messageHelperMock;
 
     /**
-     * @var Maps2Registry|ObjectProphecy
+     * @var Maps2Registry|MockObject
      */
-    protected $maps2RegistryProphecy;
+    protected $maps2RegistryMock;
 
     /**
-     * @var ListenerProvider|ObjectProphecy
+     * @var ListenerProvider|MockObject
      */
-    protected $listenerProviderProphecy;
+    protected $listenerProviderMock;
 
     protected array $columnRegistry = [
         'tx_events2_domain_model_location' => [
@@ -87,13 +83,10 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
         ],
     ];
 
-    /**
-     * @var array
-     */
-    protected $testExtensionsToLoad = [
-        'typo3conf/ext/static_info_tables',
-        'typo3conf/ext/events2',
-        'typo3conf/ext/maps2',
+    protected array $testExtensionsToLoad = [
+        'sjbr/static-info-tables',
+        'jweiland/events2',
+        'jweiland/maps2',
     ];
 
     protected function setUp(): void
@@ -101,42 +94,47 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
         parent::setUp();
         $this->setUpBackendUserFromFixture(1);
 
-        $this->importDataSet(__DIR__ . '/../Fixtures/tx_events2_domain_model_location.xml');
+        $this->importCSVDataSet(__DIR__ . '/../Fixtures/tx_events2_domain_model_location.csv');
 
         // Seems that records of ext_tables_static+adt.sql will be included just once for all tests in this class.
         // So, for all tests (except the first one), we have to add the record ourselves.
-        $country = $this->getDatabaseConnection()->selectSingleRow('*', 'static_countries', 'uid=54');
+        $country = $this->getConnectionPool()
+            ->getConnectionForTable('static_countries')
+            ->select(['*'], 'static_countries', ['uid' =>54])
+            ->fetchAssociative();
         if ($country === false) {
-            $this->importDataSet(__DIR__ . '/../Fixtures/static_countries.xml');
+            $this->importCSVDataSet(__DIR__ . '/../Fixtures/static_countries.csv');
         }
 
-        $this->geoCodeServiceProphecy = $this->prophesize(GeoCodeService::class);
-        $this->messageHelperProphecy = $this->prophesize(MessageHelper::class);
-        $this->maps2RegistryProphecy = $this->prophesize(Maps2Registry::class);
+        $this->geoCodeServiceMock = $this->createMock(GeoCodeService::class);
+        $this->messageHelperMock = $this->createMock(MessageHelper::class);
+        $this->maps2RegistryMock = $this->createMock(Maps2Registry::class);
 
-        $this->maps2RegistryProphecy
-            ->getColumnRegistry()
+        $this->maps2RegistryMock
+            ->expects(self::atLeastOnce())
+            ->method('getColumnRegistry')
             ->willReturn($this->columnRegistry);
 
-        $this->listenerProviderProphecy = $this->prophesize(ListenerProvider::class);
-        $this->listenerProviderProphecy
-            ->getListenersForEvent(Argument::any())
+        $this->listenerProviderMock = $this->createMock(ListenerProvider::class);
+        $this->listenerProviderMock
+            ->expects(self::atLeastOnce())
+            ->method('getListenersForEvent')
             ->willReturn([]);
 
         $this->subject = new CreateMaps2RecordHook(
-            $this->geoCodeServiceProphecy->reveal(),
-            new AddressHelper($this->messageHelperProphecy->reveal()),
-            $this->messageHelperProphecy->reveal(),
-            new StoragePidHelper($this->messageHelperProphecy->reveal()),
+            $this->geoCodeServiceMock,
+            new AddressHelper($this->messageHelperMock, GeneralUtility::makeInstance(ExtConf::class)),
+            $this->messageHelperMock,
+            new StoragePidHelper($this->messageHelperMock),
             new MapService(
-                $this->prophesize(ConfigurationManager::class)->reveal(),
-                $this->messageHelperProphecy->reveal(),
-                $this->maps2RegistryProphecy->reveal(),
+                $this->createMock(ConfigurationManager::class),
+                $this->messageHelperMock,
+                $this->maps2RegistryMock,
                 GeneralUtility::makeInstance(ExtConf::class),
                 GeneralUtility::makeInstance(EventDispatcher::class)
             ),
-            $this->maps2RegistryProphecy->reveal(),
-            new EventDispatcher($this->listenerProviderProphecy->reveal())
+            $this->maps2RegistryMock,
+            new EventDispatcher($this->listenerProviderMock)
         );
     }
 
@@ -144,12 +142,12 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
     {
         unset(
             $this->subject,
-            $this->geoCodeServiceProphecy,
-            $this->messageHelperProphecy,
+            $this->geoCodeServiceMock,
+            $this->messageHelperMock,
             $this->mapService,
             $this->eventDispatcher,
-            $this->maps2RegistryProphecy,
-            $this->listenerProviderProphecy
+            $this->maps2RegistryMock,
+            $this->listenerProviderMock
         );
 
         parent::tearDown();
@@ -160,9 +158,9 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
      */
     public function processDatamapWithInvalidTableNameWillNotStartRecordCreation(): void
     {
-        $this->listenerProviderProphecy
-            ->getListenersForEvent(Argument::any())
-            ->shouldNotBeCalled();
+        $this->listenerProviderMock
+            ->expects(self::atLeastOnce())
+            ->method('getListenersForEvent');
 
         $this->subject->processDatamap_afterAllOperations(
             new DataHandler()
@@ -174,22 +172,27 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
      */
     public function processDatamapClearsInfoWindowContentCacheIfTableIsPoiCollection(): void
     {
-        /** @var FrontendInterface|ObjectProphecy $cacheProphecy */
-        $cacheProphecy = $this->prophesize(VariableFrontend::class);
-        $cacheProphecy
-            ->flushByTag('infoWindowUid123')
-            ->shouldBeCalled();
-        $cacheProphecy
-            ->flushByTag('infoWindowUid234')
-            ->shouldBeCalled();
+        /** @var FrontendInterface|MockObject $cacheMock */
+        $cacheMock = $this->createMock(VariableFrontend::class);
+        $cacheMock
+            ->expects(self::atLeastOnce())
+            ->method('flushByTag')
+            ->with('infoWindowUid123');
+        $cacheMock
+            ->expects(self::atLeastOnce())
+            ->method('flushByTag')
+            ->with('infoWindowUid234');
 
-        $cacheManagerProphecy = $this->prophesize(CacheManager::class);
-        $cacheManagerProphecy
-            ->getCache('maps2_cachedhtml')
-            ->shouldBeCalled()
-            ->willReturn($cacheProphecy->reveal());
-        $cacheManagerProphecy->getCache(Argument::any())->shouldBeCalled();
-        GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerProphecy->reveal());
+        $cacheManagerMock = $this->createMock(CacheManager::class);
+        $cacheManagerMock
+            ->expects(self::atLeastOnce())
+            ->method('getCache')
+            ->with('maps2_cachedhtml')
+            ->willReturn($cacheMock);
+        $cacheManagerMock
+            ->expects(self::atLeastOnce())
+            ->method('getCache');
+        GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerMock);
 
         $dataHandler = new DataHandler();
         $dataHandler->datamap = [
@@ -212,11 +215,10 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
     public function processDatamapWillBreakIfPoiCollectionIsNotAllowedToBeCreated(): void
     {
         $event = new AllowCreationOfPoiCollectionEvent(
-            $this->getDatabaseConnection()->selectSingleRow(
-                '*',
-                'tx_events2_domain_model_location',
-                'uid = 1'
-            ),
+            $this->getConnectionPool()
+                ->getConnectionForTable('tx_events2_domain_model_location')
+                ->select(['*'], 'tx_events2_domain_model_location', ['uid' => 1])
+                ->fetchAssociative(),
             'tx_events2_domain_model_location',
             'tx_maps2_uid',
             $this->columnRegistry['tx_events2_domain_model_location']['tx_maps2_uid'],
@@ -228,15 +230,17 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
         };
 
         // First EventListener will be called with foreignLocationRecord and returns false to break further processing
-        $this->listenerProviderProphecy
-            ->getListenersForEvent($event)
-            ->shouldBeCalled()
+        $this->listenerProviderMock
+            ->expects(self::atLeastOnce())
+            ->method('getListenersForEvent')
+            ->with($event)
             ->willReturn([$listenerWithInvalidFlag]);
 
         // Second EventListener should not be called. It's true, if break is working
-        $this->listenerProviderProphecy
-            ->getListenersForEvent(Argument::type(PostProcessPoiCollectionRecordEvent::class))
-            ->shouldNotBeCalled();
+        $this->listenerProviderMock
+            ->expects(self::never())
+            ->method('getListenersForEvent')
+            ->with(self::isInstanceOf(PostProcessPoiCollectionRecordEvent::class));
 
         $dataHandler = new DataHandler();
         $dataHandler->datamap = [
@@ -263,15 +267,16 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
         $columnRegistry = $this->columnRegistry;
         $columnRegistry['tx_events2_domain_model_location']['tx_maps2_uid']['columnMatch']['pid'] = 432;
 
-        $this->maps2RegistryProphecy
-            ->getColumnRegistry()
-            ->shouldBeCalled()
+        $this->maps2RegistryMock
+            ->expects(self::atLeastOnce())
+            ->method('getColumnRegistry')
             ->willReturn($columnRegistry);
 
         // If EventListener was not called, the columnMatch was invalid.
-        $this->listenerProviderProphecy
-            ->getListenersForEvent(Argument::type(PostProcessPoiCollectionRecordEvent::class))
-            ->shouldNotBeCalled();
+        $this->listenerProviderMock
+            ->expects(self::never())
+            ->method('getListenersForEvent')
+            ->with(self::isInstanceOf(PostProcessPoiCollectionRecordEvent::class));
 
         $dataHandler = new DataHandler();
         $dataHandler->datamap = [
@@ -325,20 +330,22 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
         $columnRegistry = $this->columnRegistry;
         $columnRegistry['tx_events2_domain_model_location']['tx_maps2_uid']['columnMatch'] = $columnMatch;
 
-        $this->maps2RegistryProphecy
-            ->getColumnRegistry()
-            ->shouldBeCalled()
+        $this->maps2RegistryMock
+            ->expects(self::atLeastOnce())
+            ->method('getColumnRegistry')
             ->willReturn($columnRegistry);
 
         if ($isValid) {
-            $this->listenerProviderProphecy
-                ->getListenersForEvent(Argument::type(PostProcessPoiCollectionRecordEvent::class))
-                ->shouldBeCalled()
+            $this->listenerProviderMock
+                ->expects(self::atLeastOnce())
+                ->method('getListenersForEvent')
+                ->with(self::isInstanceOf(PostProcessPoiCollectionRecordEvent::class))
                 ->willReturn([]);
         } else {
-            $this->listenerProviderProphecy
-                ->getListenersForEvent(Argument::type(PostProcessPoiCollectionRecordEvent::class))
-                ->shouldNotBeCalled();
+            $this->listenerProviderMock
+                ->expects(self::never())
+                ->method('getListenersForEvent')
+                ->with(self::isInstanceOf(PostProcessPoiCollectionRecordEvent::class));
         }
 
         $dataHandler = new DataHandler();
@@ -377,25 +384,26 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
             ],
         ];
 
-        /** @var Position|ObjectProphecy $positionProphecy */
-        $positionProphecy = $this->prophesize(Position::class);
-        $positionProphecy
-            ->getLatitude()
-            ->shouldBeCalled()
+        /** @var Position|MockObject $positionMock */
+        $positionMock = $this->createMock(Position::class);
+        $positionMock
+            ->expects(self::atLeastOnce())
+            ->method('getLatitude')
             ->willReturn(12.34);
-        $positionProphecy
-            ->getLongitude()
-            ->shouldBeCalled()
+        $positionMock
+            ->expects(self::atLeastOnce())
+            ->method('getLongitude')
             ->willReturn(56.78);
-        $positionProphecy
-            ->getFormattedAddress()
-            ->shouldBeCalled()
+        $positionMock
+            ->expects(self::atLeastOnce())
+            ->method('getFormattedAddress')
             ->willReturn('Echterdinger Straße 57, 70794 Filderstadt, Germany');
 
-        $this->geoCodeServiceProphecy
-            ->getFirstFoundPositionByAddress('Echterdinger Straße 57 70794 Filderstadt Germany')
-            ->shouldBeCalled()
-            ->willReturn($positionProphecy->reveal());
+        $this->geoCodeServiceMock
+            ->expects(self::atLeastOnce())
+            ->method('getFirstFoundPositionByAddress')
+            ->with('Echterdinger Straße 57 70794 Filderstadt Germany')
+            ->willReturn($positionMock);
 
         $this->subject->processDatamap_afterAllOperations($dataHandler);
     }

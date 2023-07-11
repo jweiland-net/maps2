@@ -35,6 +35,14 @@ class GeocodeRequest extends AbstractRequest
      */
     public function getUri(): string
     {
+        if ($this->uri === '') {
+            return '';
+        }
+
+        if (!$this->hasParameter('address')) {
+            return $this->uri;
+        }
+
         return sprintf(
             $this->uri,
             $this->updateAddressForUri(

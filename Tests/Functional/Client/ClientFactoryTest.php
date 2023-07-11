@@ -16,7 +16,6 @@ use JWeiland\Maps2\Client\GoogleMapsClient;
 use JWeiland\Maps2\Client\OpenStreetMapClient;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Helper\MapHelper;
-use Prophecy\PhpUnit\ProphecyTrait;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
@@ -25,14 +24,12 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
  */
 class ClientFactoryTest extends FunctionalTestCase
 {
-    use ProphecyTrait;
-
     protected ClientFactory $subject;
 
     protected ExtConf $extConf;
 
-    protected $testExtensionsToLoad = [
-        'typo3conf/ext/maps2',
+    protected array $testExtensionsToLoad = [
+        'jweiland/maps2',
     ];
 
     protected function setUp(): void
@@ -52,7 +49,6 @@ class ClientFactoryTest extends FunctionalTestCase
     {
         unset(
             $this->subject,
-            $this->mapServiceProphecy,
             $this->extConf
         );
 

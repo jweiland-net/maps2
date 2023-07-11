@@ -55,7 +55,7 @@ class PoiCollectionRepository extends Repository
         $queryBuilder = $this->getQueryBuilderForTable('tx_maps2_domain_model_poicollection', 'pc');
         $queryBuilder->select(...$this->getColumnsForPoiCollectionTable());
 
-        $poiCollectionUid = $poiCollectionUid ?: (int)$settings['poiCollection'];
+        $poiCollectionUid = $poiCollectionUid ?: (int)($settings['poiCollection'] ?? 0);
         if ($poiCollectionUid !== 0) {
             $queryBuilder->andWhere(
                 $queryBuilder->expr()->eq(

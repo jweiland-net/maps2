@@ -14,41 +14,53 @@ namespace JWeiland\Maps2\Tests\Unit\Helper;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Helper\AddressHelper;
 use JWeiland\Maps2\Helper\MessageHelper;
-use JWeiland\Maps2\Tests\Unit\AbstractUnitTestCase;
-use Prophecy\Argument;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
+use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 /**
  * Test AddressHelper
  */
-class AddressHelperTest extends AbstractUnitTestCase
+class AddressHelperTest extends FunctionalTestCase
 {
-    use ProphecyTrait;
-
     protected AddressHelper $subject;
 
     /**
-     * @var MessageHelper|ObjectProphecy
+     * @var MessageHelper|MockObject
      */
-    protected $messageHelperProphecy;
+    protected $messageHelperMock;
+
+    /**
+     * @var ExtConf
+     */
+    protected $extConf;
+
+    protected array $testExtensionsToLoad = [
+        'jweiland/maps2',
+    ];
 
     protected function setUp(): void
     {
-        $this->messageHelperProphecy = $this->prophesize(MessageHelper::class);
+        parent::setUp();
 
-        $this->subject = new AddressHelper($this->messageHelperProphecy->reveal());
+        $this->messageHelperMock = $this->createMock(MessageHelper::class);
+        $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
+
+        $this->subject = new AddressHelper(
+            $this->messageHelperMock,
+            $this->extConf
+        );
     }
 
     protected function tearDown(): void
     {
         unset(
             $this->subject,
-            $this->messageHelperProphecy
+            $this->messageHelperMock,
+            $this->extConf
         );
 
         parent::tearDown();
@@ -59,13 +71,14 @@ class AddressHelperTest extends AbstractUnitTestCase
      */
     public function getAddressWithMissingAddressColumnsKeyAddsFlashMessage(): void
     {
-        $this->messageHelperProphecy
-            ->addFlashMessage(
-                Argument::containingString('addressColumns'),
+        $this->messageHelperMock
+            ->expects(self::atLeastOnce())
+            ->method('addFlashMessage')
+            ->with(
+                self::stringContains('addressColumns'),
                 'Key addressColumns is missing',
                 AbstractMessage::ERROR
-            )
-            ->shouldBeCalled();
+            );
 
         $record = [
             'uid' => 100,
@@ -84,13 +97,14 @@ class AddressHelperTest extends AbstractUnitTestCase
      */
     public function getAddressWithEmptyAddressColumnsAddsFlashMessage(): void
     {
-        $this->messageHelperProphecy
-            ->addFlashMessage(
-                Argument::containingString('required field'),
+        $this->messageHelperMock
+            ->expects(self::atLeastOnce())
+            ->method('addFlashMessage')
+            ->with(
+                self::stringContains('required field'),
                 'Key addressColumns is empty',
                 AbstractMessage::ERROR
-            )
-            ->shouldBeCalled();
+            );
 
         $record = [
             'uid' => 100,
@@ -111,28 +125,23 @@ class AddressHelperTest extends AbstractUnitTestCase
      */
     public function getAddressWithoutCountryAndNoFallbackGeneratesTwoFlashMessages(): void
     {
-        $this->messageHelperProphecy
-            ->addFlashMessage(
-                Argument::containingString('We can not find any country information within your extension'),
+        $this->messageHelperMock
+            ->expects(self::atLeastOnce())
+            ->method('addFlashMessage')
+            ->with(
+                self::stringContains('We can not find any country information within your extension'),
                 'No country information found',
                 AbstractMessage::WARNING
-            )
-            ->shouldBeCalled();
-        $this->messageHelperProphecy
-            ->addFlashMessage(
-                Argument::containingString('extension manager configuration'),
+            );
+
+        $this->messageHelperMock
+            ->expects(self::atLeastOnce())
+            ->method('addFlashMessage')
+            ->with(
+                self::stringContains('extension manager configuration'),
                 'Default country of maps2 is not configured',
                 AbstractMessage::WARNING
-            )
-            ->shouldBeCalled();
-
-        /** @var ExtConf|ObjectProphecy $extConfProphecy */
-        $extConfProphecy = $this->prophesize(ExtConf::class);
-        $extConfProphecy
-            ->getDefaultCountry()
-            ->shouldBeCalled()
-            ->willReturn('');
-        GeneralUtility::setSingletonInstance(ExtConf::class, $extConfProphecy->reveal());
+            );
 
         $record = [
             'uid' => 100,
@@ -157,21 +166,16 @@ class AddressHelperTest extends AbstractUnitTestCase
      */
     public function getAddressWithoutCountryButWithMaps2FallbackGeneratesOneFlashMessages(): void
     {
-        $this->messageHelperProphecy
-            ->addFlashMessage(
-                Argument::containingString('We can not find any country information within your extension'),
+        $this->messageHelperMock
+            ->expects(self::atLeastOnce())
+            ->method('addFlashMessage')
+            ->with(
+                self::stringContains('We can not find any country information within your extension'),
                 'No country information found',
                 AbstractMessage::WARNING
-            )
-            ->shouldBeCalled();
+            );
 
-        /** @var ExtConf|ObjectProphecy $extConfProphecy */
-        $extConfProphecy = $this->prophesize(ExtConf::class);
-        $extConfProphecy
-            ->getDefaultCountry()
-            ->shouldBeCalled()
-            ->willReturn('Germany');
-        GeneralUtility::setSingletonInstance(ExtConf::class, $extConfProphecy->reveal());
+        $this->extConf->setDefaultCountry('Germany');
 
         $record = [
             'uid' => 100,
@@ -196,13 +200,6 @@ class AddressHelperTest extends AbstractUnitTestCase
      */
     public function getAddressWithoutCountryButWithMaps2RegistryFallbackGeneratesNoFlashMessage(): void
     {
-        /** @var ExtConf|ObjectProphecy $extConfProphecy */
-        $extConfProphecy = $this->prophesize(ExtConf::class);
-        $extConfProphecy
-            ->getDefaultCountry()
-            ->shouldNotBeCalled();
-        GeneralUtility::setSingletonInstance(ExtConf::class, $extConfProphecy->reveal());
-
         $record = [
             'uid' => 100,
             'title' => 'Market',
@@ -226,13 +223,24 @@ class AddressHelperTest extends AbstractUnitTestCase
      */
     public function getAddressWithCountryUidWillGetCountryNameFromStaticCountries(): void
     {
-        /** @var PackageManager|ObjectProphecy $packageManagerProphecy */
-        $packageManagerProphecy = $this->prophesize(PackageManager::class);
-        $packageManagerProphecy
-            ->isPackageActive('static_info_tables')
-            ->shouldBeCalled()
+        $this->messageHelperMock
+            ->expects(self::atLeastOnce())
+            ->method('addFlashMessage')
+            ->with(
+                self::stringContains('We can not find any country information within your extension'),
+                'No country information found',
+                AbstractMessage::WARNING
+            );
+
+
+        /** @var PackageManager|MockObject $packageManagerMock */
+        $packageManagerMock = $this->createMock(PackageManager::class);
+        $packageManagerMock
+            ->expects(self::atLeastOnce())
+            ->method('isPackageActive')
+            ->with('static_info_tables')
             ->willReturn(true);
-        ExtensionManagementUtility::setPackageManager($packageManagerProphecy->reveal());
+        ExtensionManagementUtility::setPackageManager($packageManagerMock);
 
         $this->buildAssertionForDatabaseWithReturnValue(
             'static_countries',
@@ -272,13 +280,14 @@ class AddressHelperTest extends AbstractUnitTestCase
      */
     public function getAddressWithCountryUidWillNotFindCountryNameFromStaticCountries(): void
     {
-        /** @var PackageManager|ObjectProphecy $packageManagerProphecy */
-        $packageManagerProphecy = $this->prophesize(PackageManager::class);
-        $packageManagerProphecy
-            ->isPackageActive('static_info_tables')
-            ->shouldBeCalled()
+        /** @var PackageManager|MockObject $packageManagerMock */
+        $packageManagerMock = $this->createMock(PackageManager::class);
+        $packageManagerMock
+            ->expects(self::atLeastOnce())
+            ->method('isPackageActive')
+            ->with('static_info_tables')
             ->willReturn(true);
-        ExtensionManagementUtility::setPackageManager($packageManagerProphecy->reveal());
+        ExtensionManagementUtility::setPackageManager($packageManagerMock);
 
         $this->buildAssertionForDatabaseWithReturnValue(
             'static_countries',
@@ -292,13 +301,14 @@ class AddressHelperTest extends AbstractUnitTestCase
             ]
         );
 
-        $this->messageHelperProphecy
-            ->addFlashMessage(
-                Argument::containingString('static_countries table'),
+        $this->messageHelperMock
+            ->expects(self::atLeastOnce())
+            ->method('addFlashMessage')
+            ->with(
+                self::stringContains('static_countries table'),
                 'Country not found in DB',
                 AbstractMessage::WARNING
-            )
-            ->shouldBeCalled();
+            );
 
         $record = [
             'uid' => 100,

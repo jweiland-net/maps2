@@ -15,7 +15,6 @@ use JWeiland\Maps2\Client\Request\GoogleMaps\GeocodeRequest;
 use JWeiland\Maps2\Client\Request\RequestFactory;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Helper\MapHelper;
-use Prophecy\PhpUnit\ProphecyTrait;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
@@ -24,14 +23,12 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
  */
 class RequestFactoryTest extends FunctionalTestCase
 {
-    use ProphecyTrait;
-
     protected RequestFactory $subject;
 
     protected ExtConf $extConf;
 
-    protected $testExtensionsToLoad = [
-        'typo3conf/ext/maps2',
+    protected array $testExtensionsToLoad = [
+        'jweiland/maps2',
     ];
 
     protected function setUp(): void
@@ -65,7 +62,7 @@ class RequestFactoryTest extends FunctionalTestCase
 
         self::assertInstanceOf(
             GeocodeRequest::class,
-            $this->subject->create('GeocodeRequest', GeneralUtility::makeInstance(ExtConf::class))
+            $this->subject->create('GeocodeRequest')
         );
     }
 
@@ -79,7 +76,7 @@ class RequestFactoryTest extends FunctionalTestCase
 
         self::assertInstanceOf(
             \JWeiland\Maps2\Client\Request\OpenStreetMap\GeocodeRequest::class,
-            $this->subject->create('GeocodeRequest', GeneralUtility::makeInstance(ExtConf::class))
+            $this->subject->create('GeocodeRequest')
         );
     }
 
@@ -93,7 +90,7 @@ class RequestFactoryTest extends FunctionalTestCase
 
         self::assertInstanceOf(
             GeocodeRequest::class,
-            $this->subject->create('GeocodeRequest.php', GeneralUtility::makeInstance(ExtConf::class))
+            $this->subject->create('GeocodeRequest.php')
         );
     }
 
@@ -107,7 +104,7 @@ class RequestFactoryTest extends FunctionalTestCase
 
         self::assertInstanceOf(
             GeocodeRequest::class,
-            $this->subject->create('geocodeRequest', GeneralUtility::makeInstance(ExtConf::class))
+            $this->subject->create('geocodeRequest')
         );
     }
 
@@ -121,6 +118,6 @@ class RequestFactoryTest extends FunctionalTestCase
         $this->extConf->setMapProvider('both');
         $this->extConf->setDefaultMapProvider('gm');
 
-        $this->subject->create('NonExistingClass', GeneralUtility::makeInstance(ExtConf::class));
+        $this->subject->create('NonExistingClass');
     }
 }

@@ -45,7 +45,9 @@ class AllowMapProviderRequestFunctionsProvider implements ExpressionFunctionProv
 
         return new ExpressionFunction(
             'isRequestToMapProviderAllowed',
-            static function (): void {},
+            static function (): void {
+                // Not implemented, we only use the evaluator
+            },
             static function ($existingVariables) use ($mapHelper) {
                 return $mapHelper->isRequestToMapProviderAllowed();
             }

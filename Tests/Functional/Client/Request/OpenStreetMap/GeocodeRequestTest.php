@@ -25,8 +25,8 @@ class GeocodeRequestTest extends FunctionalTestCase
 
     protected ExtConf $extConf;
 
-    protected $testExtensionsToLoad = [
-        'typo3conf/ext/maps2',
+    protected array $testExtensionsToLoad = [
+        'jweiland/maps2',
     ];
 
     protected function setUp(): void

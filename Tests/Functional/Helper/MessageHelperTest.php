@@ -24,11 +24,8 @@ class MessageHelperTest extends FunctionalTestCase
 {
     protected MessageHelper $subject;
 
-    /**
-     * @var array
-     */
-    protected $testExtensionsToLoad = [
-        'typo3conf/ext/maps2',
+    protected array $testExtensionsToLoad = [
+        'jweiland/maps2',
     ];
 
     protected function setUp(): void

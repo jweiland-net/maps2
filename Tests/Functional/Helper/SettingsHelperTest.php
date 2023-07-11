@@ -12,8 +12,7 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Tests\Functional\Helper;
 
 use JWeiland\Maps2\Helper\SettingsHelper;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
+use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
@@ -22,14 +21,12 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
  */
 class SettingsHelperTest extends FunctionalTestCase
 {
-    use ProphecyTrait;
-
     protected SettingsHelper $subject;
 
     /**
-     * @var ConfigurationManagerInterface|ObjectProphecy
+     * @var ConfigurationManagerInterface|MockObject
      */
-    protected $configurationManagerProphecy;
+    protected $configurationManagerMock;
 
     protected array $typoScriptSettings = [
         'settings' => [
@@ -82,29 +79,24 @@ class SettingsHelperTest extends FunctionalTestCase
         ],
     ];
 
-    /**
-     * @var array
-     */
-    protected $testExtensionsToLoad = [
-        'typo3conf/ext/maps2',
+    protected array $testExtensionsToLoad = [
+        'jweiland/maps2',
     ];
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->configurationManagerProphecy = $this->prophesize(ConfigurationManagerInterface::class);
+        $this->configurationManagerMock = $this->createMock(ConfigurationManagerInterface::class);
 
-        $this->subject = new SettingsHelper(
-            $this->configurationManagerProphecy->reveal()
-        );
+        $this->subject = new SettingsHelper($this->configurationManagerMock);
     }
 
     protected function tearDown(): void
     {
         unset(
             $this->subject,
-            $this->configurationManagerProphecy
+            $this->configurationManagerMock
         );
 
         parent::tearDown();
@@ -115,20 +107,20 @@ class SettingsHelperTest extends FunctionalTestCase
      */
     public function getMergedSettingsWillNotChangeAnySettings(): void
     {
-        $this->configurationManagerProphecy
-            ->getConfiguration(
+        $this->configurationManagerMock
+            ->expects(self::atLeastOnce())
+            ->method('getConfiguration')
+            ->with(
                 ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,
                 'maps2',
                 'invalid'
             )
-            ->shouldBeCalled()
             ->willReturn($this->typoScriptSettings);
 
-        $this->configurationManagerProphecy
-            ->getConfiguration(
-                ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS
-            )
-            ->shouldBeCalled()
+        $this->configurationManagerMock
+            ->expects(self::atLeastOnce())
+            ->method('getConfiguration')
+            ->with(ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS)
             ->willReturn($this->mergedScriptSettings);
 
         self::assertSame(
@@ -146,20 +138,20 @@ class SettingsHelperTest extends FunctionalTestCase
         $typoScriptSettings['settings']['infoWindowContentTemplatePath']
             = 'EXT:maps2/Resources/Private/Templates/InfoWindowContent.html';
 
-        $this->configurationManagerProphecy
-            ->getConfiguration(
+        $this->configurationManagerMock
+            ->expects(self::atLeastOnce())
+            ->method('getConfiguration')
+            ->with(
                 ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,
                 'maps2',
                 'invalid'
             )
-            ->shouldBeCalled()
             ->willReturn($typoScriptSettings);
 
-        $this->configurationManagerProphecy
-            ->getConfiguration(
-                ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS
-            )
-            ->shouldBeCalled()
+        $this->configurationManagerMock
+            ->expects(self::atLeastOnce())
+            ->method('getConfiguration')
+            ->with(ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS)
             ->willReturn($this->mergedScriptSettings);
 
         self::assertSame(
@@ -173,23 +165,23 @@ class SettingsHelperTest extends FunctionalTestCase
      */
     public function getMergedSettingsWithDeactivatedFullscreenMapControlWillKeepFlexFormSetting(): void
     {
-        $this->configurationManagerProphecy
-            ->getConfiguration(
+        $this->configurationManagerMock
+            ->expects(self::atLeastOnce())
+            ->method('getConfiguration')
+            ->with(
                 ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,
                 'maps2',
                 'invalid'
             )
-            ->shouldBeCalled()
             ->willReturn($this->typoScriptSettings);
 
         $mergedSettings = $this->mergedScriptSettings;
         $mergedSettings['fullscreenMapControl'] = '0';
 
-        $this->configurationManagerProphecy
-            ->getConfiguration(
-                ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS
-            )
-            ->shouldBeCalled()
+        $this->configurationManagerMock
+            ->expects(self::atLeastOnce())
+            ->method('getConfiguration')
+            ->with(ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS)
             ->willReturn($mergedSettings);
 
         self::assertSame(
@@ -203,23 +195,23 @@ class SettingsHelperTest extends FunctionalTestCase
      */
     public function getMergedSettingsWithActivatedStreetViewControlWillKeepFlexFormSetting(): void
     {
-        $this->configurationManagerProphecy
-            ->getConfiguration(
+        $this->configurationManagerMock
+            ->expects(self::atLeastOnce())
+            ->method('getConfiguration')
+            ->with(
                 ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,
                 'maps2',
                 'invalid'
             )
-            ->shouldBeCalled()
             ->willReturn($this->typoScriptSettings);
 
         $mergedSettings = $this->mergedScriptSettings;
         $mergedSettings['streetViewControl'] = '1';
 
-        $this->configurationManagerProphecy
-            ->getConfiguration(
-                ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS
-            )
-            ->shouldBeCalled()
+        $this->configurationManagerMock
+            ->expects(self::atLeastOnce())
+            ->method('getConfiguration')
+            ->with(ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS)
             ->willReturn($mergedSettings);
 
         self::assertSame(

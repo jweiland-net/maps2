@@ -26,9 +26,12 @@ class AddressHelper
 {
     protected MessageHelper $messageHelper;
 
-    public function __construct(MessageHelper $messageHelper)
+    protected ExtConf $extConf;
+
+    public function __construct(MessageHelper $messageHelper, ExtConf $extConf)
     {
         $this->messageHelper = $messageHelper;
+        $this->extConf = $extConf;
     }
 
     /**
@@ -116,9 +119,7 @@ class AddressHelper
             AbstractMessage::WARNING
         );
 
-        // try to get default country of maps2 extConf
-        $extConf = GeneralUtility::makeInstance(ExtConf::class);
-        $defaultCountry = $extConf->getDefaultCountry();
+        $defaultCountry = $this->extConf->getDefaultCountry();
         if ($defaultCountry) {
             return trim($defaultCountry);
         }

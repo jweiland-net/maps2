@@ -21,12 +21,6 @@ trait GetExtConfTrait
 {
     private function getExtConf(): ExtConf
     {
-        static $extConf;
-
-        if ($extConf === null) {
-            $extConf = GeneralUtility::makeInstance(ExtConf::class);
-        }
-
-        return $extConf;
+        return GeneralUtility::makeInstance(ExtConf::class);
     }
 }

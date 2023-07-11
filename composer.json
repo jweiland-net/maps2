@@ -24,11 +24,10 @@
 		"typo3/cms-core": "^11.5.23 || ^12.4.0"
 	},
 	"require-dev": {
-		"roave/security-advisories": "dev-latest",
-		"friendsofphp/php-cs-fixer": "^3.4",
-		"nimut/testing-framework": "^6.0",
-		"phpunit/phpunit": "^9.5",
-		"phpspec/prophecy-phpunit": "^2.0",
+		"typo3/testing-framework": "^7.0.2",
+		"phpunit/phpunit": "^9.6",
+		"typo3/coding-standards": "^0.6",
+		"friendsofphp/php-cs-fixer": "^3.14",
 		"jweiland/events2": "^8.0"
 	},
 	"autoload": {
@@ -42,7 +41,8 @@
 		}
 	},
 	"config": {
-		"vendor-dir": ".build/vendor",
+		"vendor-dir": ".Build/vendor",
+		"bin-dir": ".Build/bin",
 		"allow-plugins": {
 			"typo3/class-alias-loader": true,
 			"typo3/cms-composer-installers": true
@@ -51,22 +51,8 @@
 	"extra": {
 		"typo3/cms": {
 			"extension-key": "maps2",
-			"app-dir": ".build",
-			"web-dir": ".build/public"
+			"app-dir": ".Build",
+			"web-dir": ".Build/Web"
 		}
-	},
-	"scripts": {
-		"php:fix": ".build/vendor/bin/php-cs-fixer --config=Build/php-cs-fixer/php-cs-fixer.php fix Classes Tests",
-		"ci:php:lint": "find *.php Classes Configuration Tests -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l",
-		"ci:php:fixer": ".build/vendor/bin/php-cs-fixer --config=Build/php-cs-fixer/php-cs-fixer.php fix --dry-run -v --show-progress=dots --diff Classes Tests",
-		"ci:tests:unit": "php .build/vendor/bin/phpunit -c .build/vendor/nimut/testing-framework/res/Configuration/UnitTests.xml Tests/Unit",
-		"ci:tests:functional": "php .build/vendor/bin/phpunit -c .build/vendor/nimut/testing-framework/res/Configuration/FunctionalTests.xml Tests/Functional",
-		"link-extension": [
-			"@php -r 'is_dir($extFolder=__DIR__.\"/.build/public/typo3conf/ext/\") || mkdir($extFolder, 0777, true);'",
-			"@php -r 'file_exists($extFolder=__DIR__.\"/.build/public/typo3conf/ext/maps2\") || symlink(__DIR__,$extFolder);'"
-		],
-		"post-autoload-dump": [
-			"@link-extension"
-		]
 	}
 }

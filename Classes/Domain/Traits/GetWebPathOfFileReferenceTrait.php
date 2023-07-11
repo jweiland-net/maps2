@@ -12,8 +12,8 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Domain\Traits;
 
 use TYPO3\CMS\Core\Resource\FileReference as CoreFileReference;
-use TYPO3\CMS\Extbase\Domain\Model\FileReference as ExtbaseFileReference;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Domain\Model\FileReference as ExtbaseFileReference;
 
 /**
  * Trait to provide full web-path of given FileReference
@@ -33,7 +33,7 @@ trait GetWebPathOfFileReferenceTrait
         }
 
         if ($coreFileReference instanceof CoreFileReference) {
-            return $this->getTypo3SiteUrl() . $fileReference->getPublicUrl();
+            return $this->getTypo3SiteUrl() . $coreFileReference->getPublicUrl();
         }
 
         return '';
@@ -44,12 +44,6 @@ trait GetWebPathOfFileReferenceTrait
      */
     private function getTypo3SiteUrl(): string
     {
-        static $webTypo3SiteUrl;
-
-        if ($webTypo3SiteUrl === null) {
-            rtrim(GeneralUtility::getIndpEnv('TYPO3_SITE_URL'), '/');
-        }
-
-        return $webTypo3SiteUrl;
+        return rtrim(GeneralUtility::getIndpEnv('TYPO3_SITE_URL'), '/');
     }
 }

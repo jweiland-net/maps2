@@ -387,7 +387,7 @@ class PoiCollection extends AbstractEntity
         }
 
         // Only use icon width of this model, if model has marker icons
-        if ($this->markerIconWidth > 0 && $this->getMarkerIcons()) {
+        if ($this->markerIconWidth > 0 && $this->getMarkerIcons()->count() !== 0) {
             $markerIconWidth = $this->markerIconWidth;
         }
 
@@ -412,7 +412,7 @@ class PoiCollection extends AbstractEntity
         }
 
         // Only use icon height of this model, if model has marker icons
-        if ($this->markerIconHeight > 0 && $this->getMarkerIcons()) {
+        if ($this->markerIconHeight > 0 && $this->getMarkerIcons()->count() !== 0) {
             $markerIconHeight = $this->markerIconHeight;
         }
 
@@ -437,7 +437,7 @@ class PoiCollection extends AbstractEntity
         }
 
         // Only use icon anchor pos X of this model, if model has marker icons
-        if ($this->markerIconAnchorPosX > 0 && $this->getMarkerIcons()) {
+        if ($this->markerIconAnchorPosX > 0 && $this->getMarkerIcons()->count() !== 0) {
             $markerIconAnchorPosX = $this->markerIconAnchorPosX;
         }
 
@@ -462,7 +462,7 @@ class PoiCollection extends AbstractEntity
         }
 
         // Only use icon anchor pos Y of this model, if model has marker icons
-        if ($this->markerIconAnchorPosY > 0 && $this->getMarkerIcons()) {
+        if ($this->markerIconAnchorPosY > 0 && $this->getMarkerIcons()->count() !== 0) {
             $markerIconAnchorPosY = $this->markerIconAnchorPosY;
         }
 

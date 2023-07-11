@@ -22,8 +22,8 @@ class ExtConfTest extends FunctionalTestCase
 {
     protected ExtConf $subject;
 
-    protected $testExtensionsToLoad = [
-        'typo3conf/ext/maps2',
+    protected array $testExtensionsToLoad = [
+        'jweiland/maps2',
     ];
 
     protected function setUp(): void
