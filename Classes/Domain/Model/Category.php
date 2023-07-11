@@ -11,8 +11,8 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Domain\Model;
 
-use JWeiland\Maps2\Configuration\ExtConf;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
+use JWeiland\Maps2\Domain\Traits\GetExtConfTrait;
+use JWeiland\Maps2\Domain\Traits\GetWebPathOfFileReferenceTrait;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
@@ -21,7 +21,8 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  */
 class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
 {
-    protected ExtConf $extConf;
+    use GetExtConfTrait;
+    use GetWebPathOfFileReferenceTrait;
 
     /**
      * @var ObjectStorage<FileReference>
@@ -40,8 +41,6 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
 
     public function __construct()
     {
-        $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
-
         $this->maps2MarkerIcons = new ObjectStorage();
     }
 
@@ -50,8 +49,6 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
      */
     public function initializeObject(): void
     {
-        $this->extConf = $this->extConf ?? GeneralUtility::makeInstance(ExtConf::class);
-
         $this->maps2MarkerIcons = $this->maps2MarkerIcons ?? new ObjectStorage();
     }
 
@@ -62,26 +59,9 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
 
     public function getMaps2MarkerIcon(): string
     {
-        if ($this->maps2MarkerIcons->count() === 0) {
-            return '';
-        }
-
         $this->maps2MarkerIcons->rewind();
-        // only one icon is allowed, so current() will give us the first icon
-        $iconReference = $this->maps2MarkerIcons->current();
-        if (!$iconReference instanceof FileReference) {
-            return '';
-        }
 
-        $falIconReference = $iconReference->getOriginalResource();
-        if (!$falIconReference instanceof \TYPO3\CMS\Core\Resource\FileReference) {
-            return '';
-        }
-
-        $siteUrl = GeneralUtility::getIndpEnv('TYPO3_SITE_URL');
-
-        // Argument deprecated with TYPO3 11.3. Remove while removing TYPO3 10 compatibility
-        return $siteUrl . $falIconReference->getPublicUrl();
+        return $this->getWebPathOfFileReference($this->maps2MarkerIcons->current());
     }
 
     public function setMaps2MarkerIcons(ObjectStorage $maps2MarkerIcons): void
@@ -91,12 +71,14 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
 
     public function getMaps2MarkerIconWidth(): int
     {
-        // prevent using local maps2MarkerIconWidth, if no markerIcon is set.
-        if ($this->maps2MarkerIconWidth === 0 || $this->getMaps2MarkerIcons()->count() === 0) {
-            return $this->extConf->getMarkerIconWidth();
+        $markerIconWidth = $this->getExtConf()->getMarkerIconWidth();
+
+        // Only use icon width of this model, if model has marker icons
+        if ($this->maps2MarkerIconWidth > 0 && $this->getMaps2MarkerIcons()) {
+            $markerIconWidth = $this->maps2MarkerIconWidth;
         }
 
-        return $this->maps2MarkerIconWidth;
+        return $markerIconWidth;
     }
 
     public function setMaps2MarkerIconWidth(int $maps2MarkerIconWidth): void
@@ -106,12 +88,14 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
 
     public function getMaps2MarkerIconHeight(): int
     {
-        // prevent using local maps2MarkerIconHeight, if no markerIcon is set.
-        if ($this->maps2MarkerIconHeight === 0 || $this->getMaps2MarkerIcons()->count() === 0) {
-            return $this->extConf->getMarkerIconHeight();
+        $markerIconHeight = $this->getExtConf()->getMarkerIconHeight();
+
+        // Only use icon height of this model, if model has marker icons
+        if ($this->maps2MarkerIconHeight > 0 && $this->getMaps2MarkerIcons()) {
+            $markerIconHeight = $this->maps2MarkerIconHeight;
         }
 
-        return $this->maps2MarkerIconHeight;
+        return $markerIconHeight;
     }
 
     public function setMaps2MarkerIconHeight(int $maps2MarkerIconHeight): void
@@ -121,12 +105,14 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
 
     public function getMaps2MarkerIconAnchorPosX(): int
     {
-        // prevent using local maps2MarkerIconAnchorPosX, if no markerIcon is set.
-        if ($this->maps2MarkerIconAnchorPosX === 0 || $this->getMaps2MarkerIcons()->count() === 0) {
-            return $this->extConf->getMarkerIconAnchorPosX();
+        $markerIconAnchorPosX = $this->getExtConf()->getMarkerIconAnchorPosX();
+
+        // Only use icon anchor pos X of this model, if model has marker icons
+        if ($this->maps2MarkerIconAnchorPosX > 0 && $this->getMaps2MarkerIcons()) {
+            $markerIconAnchorPosX = $this->maps2MarkerIconAnchorPosX;
         }
 
-        return $this->maps2MarkerIconAnchorPosX;
+        return $markerIconAnchorPosX;
     }
 
     public function setMaps2MarkerIconAnchorPosX(int $maps2MarkerIconAnchorPosX): void
@@ -136,12 +122,14 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
 
     public function getMaps2MarkerIconAnchorPosY(): int
     {
-        // prevent using local maps2MarkerIconAnchorPosY, if no markerIcon is set.
-        if ($this->maps2MarkerIconAnchorPosY === 0 || $this->getMaps2MarkerIcons()->count() === 0) {
-            return $this->extConf->getMarkerIconAnchorPosY();
+        $markerIconAnchorPosY = $this->getExtConf()->getMarkerIconAnchorPosY();
+
+        // Only use icon anchor pos Y of this model, if model has marker icons
+        if ($this->maps2MarkerIconAnchorPosY > 0 && $this->getMaps2MarkerIcons()) {
+            $markerIconAnchorPosY = $this->maps2MarkerIconAnchorPosY;
         }
 
-        return $this->maps2MarkerIconAnchorPosY;
+        return $markerIconAnchorPosY;
     }
 
     public function setMaps2MarkerIconAnchorPosY(int $maps2MarkerIconAnchorPosY): void
