@@ -13,10 +13,10 @@ namespace JWeiland\Maps2\Tests\Functional\ExpressionLanguage;
 
 use JWeiland\Maps2\ExpressionLanguage\AllowMapProviderRequestFunctionsProvider;
 use JWeiland\Maps2\Helper\MapHelper;
-use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\ExpressionLanguage\ExpressionFunction;
+use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 /**
  * Test AllowMapProviderRequestCondition

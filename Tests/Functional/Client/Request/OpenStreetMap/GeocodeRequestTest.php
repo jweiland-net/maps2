@@ -13,8 +13,8 @@ namespace JWeiland\Maps2\Tests\Functional\Client\Request\OpenStreetMap;
 
 use JWeiland\Maps2\Client\Request\OpenStreetMap\GeocodeRequest;
 use JWeiland\Maps2\Configuration\ExtConf;
-use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 /**
  * Test Open Street Map Geocode Request class

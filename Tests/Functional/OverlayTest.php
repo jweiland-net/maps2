@@ -11,8 +11,8 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Tests\Functional;
 
-use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
+use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 /**
  * Test Overlay
