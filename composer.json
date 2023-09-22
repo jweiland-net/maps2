@@ -31,6 +31,9 @@
 		"phpspec/prophecy-phpunit": "^2.0",
 		"jweiland/events2": "^8.0"
 	},
+	"replace": {
+		"typo3-ter/maps2": "self.version"
+	},
 	"autoload": {
 		"psr-4": {
 			"JWeiland\\Maps2\\": "Classes"
