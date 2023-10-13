@@ -18,7 +18,6 @@ use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\VariableFrontend;
 use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\CMS\Core\Site\Entity\NullSite;
-use TYPO3\CMS\Core\TypoScript\PageTsConfig;
 use TYPO3\CMS\Core\TypoScript\PageTsConfigFactory;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
