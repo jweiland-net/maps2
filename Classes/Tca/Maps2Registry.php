@@ -344,6 +344,7 @@ class Maps2Registry implements SingletonInterface
     public static function getTcaFieldConfiguration(array $fieldConfigurationOverride = []): array
     {
         // Forges a new field, default name is "categories"
+        // ToDo: Remove "internal_type" while removing TYPO3 11 compatibility
         $fieldConfiguration = [
             'type' => 'group',
             'internal_type' => 'db',

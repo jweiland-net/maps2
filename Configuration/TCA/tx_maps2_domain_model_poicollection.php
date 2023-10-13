@@ -7,6 +7,7 @@ return [
         'label_alt' => 'address',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
+        // ToDo: remove "cruser_id" while removing TYPO3 11 compatibility
         'cruser_id' => 'cruser_id',
         'default_sortby' => 'ORDER BY title',
         'type' => 'collection_type',
@@ -153,6 +154,8 @@ return [
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.starttime',
             'config' => [
                 'type' => 'input',
+                // ToDo: migrate to "datetime" while removing TYPO3 11 compatibility
+                // ToDo: Remove eval=int while removing TYPO3 11 compatibility
                 'renderType' => 'inputDateTime',
                 'eval' => 'datetime,int',
                 'default' => 0,
@@ -165,6 +168,8 @@ return [
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.endtime',
             'config' => [
                 'type' => 'input',
+                // ToDo: migrate to "datetime" while removing TYPO3 11 compatibility
+                // ToDo: Remove eval=int while removing TYPO3 11 compatibility
                 'renderType' => 'inputDateTime',
                 'eval' => 'datetime,int',
                 'default' => 0,
@@ -182,6 +187,7 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'default' => 'Empty',
+                // ToDo: migrate to "required => true" while removing TYPO3 11 compatibility
                 'eval' => 'required',
                 'items' => [
                     [
@@ -222,6 +228,7 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 30,
+                // ToDo: migrate to "required => true" while removing TYPO3 11 compatibility
                 'eval' => 'trim,required',
             ],
         ],
