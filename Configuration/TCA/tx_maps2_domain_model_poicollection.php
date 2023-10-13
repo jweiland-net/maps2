@@ -7,8 +7,6 @@ return [
         'label_alt' => 'address',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
-        // ToDo: remove "cruser_id" while removing TYPO3 11 compatibility
-        'cruser_id' => 'cruser_id',
         'default_sortby' => 'ORDER BY title',
         'type' => 'collection_type',
         'versioningWS' => true,

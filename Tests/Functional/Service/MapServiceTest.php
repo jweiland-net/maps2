@@ -301,7 +301,7 @@ class MapServiceTest extends FunctionalTestCase
             ->method('addFlashMessage')
             ->with(
                 self::any(),
-                self::assertStringNotContainsString('PoiCollection empty')
+                self::logicalNot(self::stringContains('PoiCollection empty'))
             );
 
         $this->messageHelperMock
@@ -366,7 +366,7 @@ class MapServiceTest extends FunctionalTestCase
             ->method('addFlashMessage')
             ->with(
                 self::any(),
-                self::assertStringNotContainsString('Foreign table name empty')
+                self::logicalNot(self::stringContains('Foreign table name empty'))
             );
 
         $this->messageHelperMock
@@ -399,7 +399,7 @@ class MapServiceTest extends FunctionalTestCase
             ->method('addFlashMessage')
             ->with(
                 self::any(),
-                self::assertStringNotContainsString('Foreign field name empty')
+                self::logicalNot(self::stringContains('Foreign field name empty'))
             );
 
         $this->messageHelperMock

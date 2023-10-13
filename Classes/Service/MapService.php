@@ -19,7 +19,6 @@ use JWeiland\Maps2\Event\PreAddForeignRecordEvent;
 use JWeiland\Maps2\Helper\MapHelper;
 use JWeiland\Maps2\Helper\MessageHelper;
 use JWeiland\Maps2\Tca\Maps2Registry;
-use JWeiland\Maps2\Traits\VersionCompareTrait;
 use JWeiland\Maps2\Utility\DatabaseUtility;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\FrontendRestrictionContainer;
@@ -36,8 +35,6 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
  */
 class MapService
 {
-    use VersionCompareTrait;
-
     protected ConfigurationManagerInterface $configurationManager;
 
     protected MessageHelper $messageHelper;
@@ -165,10 +162,6 @@ class MapService
         $fieldValues['collection_type'] = 'Point'; // currently only Point is allowed. If you want more: It's your turn
         $fieldValues['title'] = $position->getFormattedAddress(); // it's up to you to override this value
         $fieldValues['address'] = $position->getFormattedAddress();
-
-        if ($this->versionCompare('12.0', '<')) {
-            $fieldValues['cruser_id'] = $GLOBALS['BE_USER']->user['uid'] ?? 0;
-        }
 
         // you don't like the current fieldValues? Override them with $overrideFieldValues
         ArrayUtility::mergeRecursiveWithOverrule($fieldValues, $overrideFieldValues);
