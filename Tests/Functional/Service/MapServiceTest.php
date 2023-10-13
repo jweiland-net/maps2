@@ -77,28 +77,27 @@ class MapServiceTest extends FunctionalTestCase
         $this->configurationManagerMock
             ->expects(self::atLeastOnce())
             ->method('getConfiguration')
-            ->with(
-                ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,
-                'Maps2',
-                'Maps2'
-            )
-            ->willReturn([
-                'view' => [
-                    'layoutRootPaths' => [],
-                    'partialRootPaths' => [
-                        'EXT:maps2/Tests/Functional/Fixtures/Partials',
+            ->willReturnMap([
+                [
+                    ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,
+                    'Maps2',
+                    'Maps2',
+                    [
+                        'view' => [
+                            'layoutRootPaths' => [],
+                            'partialRootPaths' => [
+                                'EXT:maps2/Tests/Functional/Fixtures/Partials',
+                            ],
+                        ],
                     ],
                 ],
+                [
+                    ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
+                    'Maps2',
+                    'Maps2',
+                    []
+                ],
             ]);
-        $this->configurationManagerMock
-            ->expects(self::atLeastOnce())
-            ->method('getConfiguration')
-            ->with(
-                ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
-                'Maps2',
-                'Maps2'
-            )
-            ->willReturn([]);
 
         // Replace default template to prevent calling cache VHs. They check against FE
         $this->extConfMock = $this->createMock(ExtConf::class);
