@@ -95,7 +95,7 @@ class MapServiceTest extends FunctionalTestCase
                     ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
                     'Maps2',
                     'Maps2',
-                    []
+                    [],
                 ],
             ]);
 
