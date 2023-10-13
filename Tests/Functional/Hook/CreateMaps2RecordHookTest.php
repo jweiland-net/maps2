@@ -100,7 +100,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
         // So, for all tests (except the first one), we have to add the record ourselves.
         $country = $this->getConnectionPool()
             ->getConnectionForTable('static_countries')
-            ->select(['*'], 'static_countries', ['uid' =>54])
+            ->select(['*'], 'static_countries', ['uid' => 54])
             ->fetchAssociative();
         if ($country === false) {
             $this->importCSVDataSet(__DIR__ . '/../Fixtures/static_countries.csv');
