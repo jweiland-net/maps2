@@ -232,7 +232,6 @@ class AddressHelperTest extends FunctionalTestCase
                 AbstractMessage::WARNING
             );
 
-
         /** @var PackageManager|MockObject $packageManagerMock */
         $packageManagerMock = $this->createMock(PackageManager::class);
         $packageManagerMock
