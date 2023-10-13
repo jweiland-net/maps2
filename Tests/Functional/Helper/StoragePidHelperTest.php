@@ -17,6 +17,9 @@ use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\VariableFrontend;
 use TYPO3\CMS\Core\Package\PackageManager;
+use TYPO3\CMS\Core\Site\Entity\NullSite;
+use TYPO3\CMS\Core\TypoScript\PageTsConfig;
+use TYPO3\CMS\Core\TypoScript\PageTsConfigFactory;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
@@ -87,19 +90,17 @@ class StoragePidHelperTest extends FunctionalTestCase
      */
     public function getStoragePidWithPidInForeignRecordWillReturnStoragePid(): void
     {
+        $subject = $this->get(PageTsConfigFactory::class);
+        $pageTsConfig = $subject->create([], new NullSite());
+
         /** @var VariableFrontend|MockObject $variableFrontendMock */
         $variableFrontendMock = $this->createMock(VariableFrontend::class);
         $variableFrontendMock
             ->expects(self::atLeastOnce())
-            ->method('has')
-            ->with('pagesTsConfigIdToHash200')
-            ->willReturn(true);
-        $variableFrontendMock
-            ->expects(self::atLeastOnce())
             ->method('get')
             ->willReturnMap([
-                'pagesTsConfigIdToHash200', 'Blub',
-                'pagesTsConfigHashToContentBlub', [],
+                'pageTsConfig-pid-to-hash-200', 'Hash',
+                'pageTsConfig-hash-to-object-Hash', $pageTsConfig,
             ]);
 
         /** @var CacheManager|MockObject $cacheManagerMock */
@@ -129,19 +130,17 @@ class StoragePidHelperTest extends FunctionalTestCase
      */
     public function getStoragePidWithHardCodedMaps2RegistryWillReturnStoragePid(): void
     {
+        $subject = $this->get(PageTsConfigFactory::class);
+        $pageTsConfig = $subject->create([], new NullSite());
+
         /** @var VariableFrontend|MockObject $variableFrontendMock */
         $variableFrontendMock = $this->createMock(VariableFrontend::class);
         $variableFrontendMock
             ->expects(self::atLeastOnce())
-            ->method('has')
-            ->with('pagesTsConfigIdToHash200')
-            ->willReturn(true);
-        $variableFrontendMock
-            ->expects(self::atLeastOnce())
             ->method('get')
             ->willReturnMap([
-                'pagesTsConfigIdToHash200', 'Blub',
-                'pagesTsConfigHashToContentBlub', [],
+                'pageTsConfig-pid-to-hash-200', 'Hash',
+                'pageTsConfig-hash-to-object-Hash', $pageTsConfig,
             ]);
 
         /** @var CacheManager|MockObject $cacheManagerMock */
@@ -173,19 +172,17 @@ class StoragePidHelperTest extends FunctionalTestCase
      */
     public function getStoragePidWithHardCodedMaps2RegistryWillReturnUnifiedStoragePid(): void
     {
+        $subject = $this->get(PageTsConfigFactory::class);
+        $pageTsConfig = $subject->create([], new NullSite());
+
         /** @var VariableFrontend|MockObject $variableFrontendMock */
         $variableFrontendMock = $this->createMock(VariableFrontend::class);
         $variableFrontendMock
             ->expects(self::atLeastOnce())
-            ->method('has')
-            ->with('pagesTsConfigIdToHash200')
-            ->willReturn(true);
-        $variableFrontendMock
-            ->expects(self::atLeastOnce())
             ->method('get')
             ->willReturnMap([
-                'pagesTsConfigIdToHash200', 'Blub',
-                'pagesTsConfigHashToContentBlub', [],
+                'pageTsConfig-pid-to-hash-200', 'Hash',
+                'pageTsConfig-hash-to-object-Hash', $pageTsConfig,
             ]);
 
         /** @var CacheManager|MockObject $cacheManagerMock */
@@ -252,19 +249,17 @@ class StoragePidHelperTest extends FunctionalTestCase
      */
     public function getStoragePidWithPidWillReturnPidFromExtensionManager(): void
     {
+        $subject = $this->get(PageTsConfigFactory::class);
+        $pageTsConfig = $subject->create([], new NullSite());
+
         /** @var VariableFrontend|MockObject $variableFrontendMock */
         $variableFrontendMock = $this->createMock(VariableFrontend::class);
         $variableFrontendMock
             ->expects(self::atLeastOnce())
-            ->method('has')
-            ->with('pagesTsConfigIdToHash200')
-            ->willReturn(true);
-        $variableFrontendMock
-            ->expects(self::atLeastOnce())
             ->method('get')
             ->willReturnMap([
-                'pagesTsConfigIdToHash200', 'Blub',
-                'pagesTsConfigHashToContentBlub', [],
+                'pageTsConfig-pid-to-hash-200', 'Hash',
+                'pageTsConfig-hash-to-object-Hash', $pageTsConfig,
             ]);
 
         /** @var CacheManager|MockObject $cacheManagerMock */
@@ -312,19 +307,17 @@ class StoragePidHelperTest extends FunctionalTestCase
      */
     public function getStoragePidWithPidAndTypeWillReturnPidFromExtensionManager(): void
     {
+        $subject = $this->get(PageTsConfigFactory::class);
+        $pageTsConfig = $subject->create([], new NullSite());
+
         /** @var VariableFrontend|MockObject $variableFrontendMock */
         $variableFrontendMock = $this->createMock(VariableFrontend::class);
         $variableFrontendMock
             ->expects(self::atLeastOnce())
-            ->method('has')
-            ->with('pagesTsConfigIdToHash200')
-            ->willReturn(true);
-        $variableFrontendMock
-            ->expects(self::atLeastOnce())
             ->method('get')
             ->willReturnMap([
-                'pagesTsConfigIdToHash200', 'Blub',
-                'pagesTsConfigHashToContentBlub', [],
+                'pageTsConfig-pid-to-hash-200', 'Hash',
+                'pageTsConfig-hash-to-object-Hash', $pageTsConfig,
             ]);
 
         /** @var CacheManager|MockObject $cacheManagerMock */
@@ -373,25 +366,23 @@ class StoragePidHelperTest extends FunctionalTestCase
      */
     public function getStoragePidWithPidWillReturnPidFromDefaultPageTsConfigPath(): void
     {
+        $rootLine = [
+            [
+                'uid' => 1,
+                'TSconfig' => 'ext.maps2.defaultStoragePid = 582',
+            ],
+        ];
+        $subject = $this->get(PageTsConfigFactory::class);
+        $pageTsConfig = $subject->create($rootLine, new NullSite());
+
         /** @var VariableFrontend|MockObject $variableFrontendMock */
         $variableFrontendMock = $this->createMock(VariableFrontend::class);
         $variableFrontendMock
             ->expects(self::atLeastOnce())
-            ->method('has')
-            ->with('pagesTsConfigIdToHash200')
-            ->willReturn(true);
-        $variableFrontendMock
-            ->expects(self::atLeastOnce())
             ->method('get')
             ->willReturnMap([
-                'pagesTsConfigIdToHash200', 'Blub',
-                'pagesTsConfigHashToContentBlub', [
-                    'ext.' => [
-                        'maps2.' => [
-                            'defaultStoragePid' => 582,
-                        ],
-                    ],
-                ],
+                'pageTsConfig-pid-to-hash-200', 'Hash',
+                'pageTsConfig-hash-to-object-Hash', $pageTsConfig,
             ]);
 
         /** @var CacheManager|MockObject $cacheManagerMock */
@@ -421,25 +412,23 @@ class StoragePidHelperTest extends FunctionalTestCase
      */
     public function getStoragePidWithPidWillReturnPidFromConfiguredPageTsConfigPath(): void
     {
+        $rootLine = [
+            [
+                'uid' => 1,
+                'TSconfig' => 'ext.maps2.defaultStoragePid = 582',
+            ],
+        ];
+        $subject = $this->get(PageTsConfigFactory::class);
+        $pageTsConfig = $subject->create($rootLine, new NullSite());
+
         /** @var VariableFrontend|MockObject $variableFrontendMock */
         $variableFrontendMock = $this->createMock(VariableFrontend::class);
         $variableFrontendMock
             ->expects(self::atLeastOnce())
-            ->method('has')
-            ->with('pagesTsConfigIdToHash200')
-            ->willReturn(true);
-        $variableFrontendMock
-            ->expects(self::atLeastOnce())
             ->method('get')
             ->willReturnMap([
-                'pagesTsConfigIdToHash200', 'Blub',
-                'pagesTsConfigHashToContentBlub', [
-                    'ext.' => [
-                        'foreign_ext.' => [
-                            'maps2Storage' => 582,
-                        ],
-                    ],
-                ],
+                'pageTsConfig-pid-to-hash-200', 'Hash',
+                'pageTsConfig-hash-to-object-Hash', $pageTsConfig,
             ]);
 
         /** @var CacheManager|MockObject $cacheManagerMock */
@@ -475,28 +464,23 @@ class StoragePidHelperTest extends FunctionalTestCase
      */
     public function getStoragePidWithPidWillOverridePidOfForeignExtWithPidOfDefaultPageTsConfig(): void
     {
+        $rootLine = [
+            [
+                'uid' => 1,
+                'TSconfig' => 'ext.foreign_ext.maps2Storage = 491' . chr(10) . 'ext.maps2.defaultStoragePid = 927',
+            ],
+        ];
+        $subject = $this->get(PageTsConfigFactory::class);
+        $pageTsConfig = $subject->create($rootLine, new NullSite());
+
         /** @var VariableFrontend|MockObject $variableFrontendMock */
         $variableFrontendMock = $this->createMock(VariableFrontend::class);
         $variableFrontendMock
             ->expects(self::atLeastOnce())
-            ->method('has')
-            ->with('pagesTsConfigIdToHash200')
-            ->willReturn(true);
-        $variableFrontendMock
-            ->expects(self::atLeastOnce())
             ->method('get')
             ->willReturnMap([
-                'pagesTsConfigIdToHash200', 'Blub',
-                'pagesTsConfigHashToContentBlub', [
-                    'ext.' => [
-                        'foreign_ext.' => [
-                            'maps2Storage' => 491,
-                        ],
-                        'maps2.' => [
-                            'defaultStoragePid' => 927,
-                        ],
-                    ],
-                ],
+                'pageTsConfig-pid-to-hash-200', 'Hash',
+                'pageTsConfig-hash-to-object-Hash', $pageTsConfig,
             ]);
 
         /** @var CacheManager|MockObject $cacheManagerMock */
@@ -532,25 +516,23 @@ class StoragePidHelperTest extends FunctionalTestCase
      */
     public function getStoragePidWithPidWillOverridePidOfExtensionManagerWithPidOfPageTsConfig(): void
     {
+        $rootLine = [
+            [
+                'uid' => 1,
+                'TSconfig' => 'ext.maps2.defaultStoragePid = 582',
+            ],
+        ];
+        $subject = $this->get(PageTsConfigFactory::class);
+        $pageTsConfig = $subject->create($rootLine, new NullSite());
+
         /** @var VariableFrontend|MockObject $variableFrontendMock */
         $variableFrontendMock = $this->createMock(VariableFrontend::class);
         $variableFrontendMock
             ->expects(self::atLeastOnce())
-            ->method('has')
-            ->with('pagesTsConfigIdToHash200')
-            ->willReturn(true);
-        $variableFrontendMock
-            ->expects(self::atLeastOnce())
             ->method('get')
             ->willReturnMap([
-                'pagesTsConfigIdToHash200', 'Blub',
-                'pagesTsConfigHashToContentBlub', [
-                    'ext.' => [
-                        'maps2.' => [
-                            'defaultStoragePid' => 582,
-                        ],
-                    ],
-                ],
+                'pageTsConfig-pid-to-hash-200', 'Hash',
+                'pageTsConfig-hash-to-object-Hash', $pageTsConfig,
             ]);
 
         /** @var CacheManager|MockObject $cacheManagerMock */
@@ -582,25 +564,23 @@ class StoragePidHelperTest extends FunctionalTestCase
      */
     public function getStoragePidWithPidWillProcessVariousRegistryConfiguration(): void
     {
+        $rootLine = [
+            [
+                'uid' => 1,
+                'TSconfig' => 'ext.foreign_ext.maps2Pid = 4297',
+            ],
+        ];
+        $subject = $this->get(PageTsConfigFactory::class);
+        $pageTsConfig = $subject->create($rootLine, new NullSite());
+
         /** @var VariableFrontend|MockObject $variableFrontendMock */
         $variableFrontendMock = $this->createMock(VariableFrontend::class);
         $variableFrontendMock
             ->expects(self::atLeastOnce())
-            ->method('has')
-            ->with('pagesTsConfigIdToHash200')
-            ->willReturn(true);
-        $variableFrontendMock
-            ->expects(self::atLeastOnce())
             ->method('get')
             ->willReturnMap([
-                'pagesTsConfigIdToHash200', 'Blub',
-                'pagesTsConfigHashToContentBlub', [
-                    'ext.' => [
-                        'foreign_ext.' => [
-                            'maps2Pid' => 4297,
-                        ],
-                    ],
-                ],
+                'pageTsConfig-pid-to-hash-200', 'Hash',
+                'pageTsConfig-hash-to-object-Hash', $pageTsConfig,
             ]);
 
         /** @var CacheManager|MockObject $cacheManagerMock */
@@ -671,25 +651,23 @@ class StoragePidHelperTest extends FunctionalTestCase
      */
     public function getStoragePidWithPidWillProcessTwoRegistryConfiguration(): void
     {
+        $rootLine = [
+            [
+                'uid' => 1,
+                'TSconfig' => 'ext.foreign_ext.maps2Pid = 4297',
+            ],
+        ];
+        $subject = $this->get(PageTsConfigFactory::class);
+        $pageTsConfig = $subject->create($rootLine, new NullSite());
+
         /** @var VariableFrontend|MockObject $variableFrontendMock */
         $variableFrontendMock = $this->createMock(VariableFrontend::class);
         $variableFrontendMock
             ->expects(self::atLeastOnce())
-            ->method('has')
-            ->with('pagesTsConfigIdToHash200')
-            ->willReturn(true);
-        $variableFrontendMock
-            ->expects(self::atLeastOnce())
             ->method('get')
             ->willReturnMap([
-                'pagesTsConfigIdToHash200', 'Blub',
-                'pagesTsConfigHashToContentBlub', [
-                    'ext.' => [
-                        'foreign_ext.' => [
-                            'maps2Pid' => 4297,
-                        ],
-                    ],
-                ],
+                'pageTsConfig-pid-to-hash-200', 'Hash',
+                'pageTsConfig-hash-to-object-Hash', $pageTsConfig,
             ]);
 
         /** @var CacheManager|MockObject $cacheManagerMock */
@@ -760,28 +738,23 @@ class StoragePidHelperTest extends FunctionalTestCase
      */
     public function getStoragePidWithPidWillOverrideForeignPidWithPidOfDefaultPageTsConfig(): void
     {
+        $rootLine = [
+            [
+                'uid' => 1,
+                'TSconfig' => 'ext.foreign_ext.maps2Pid = 4297' . chr(10) . 'ext.maps2.defaultStoragePid = 5837',
+            ],
+        ];
+        $subject = $this->get(PageTsConfigFactory::class);
+        $pageTsConfig = $subject->create($rootLine, new NullSite());
+
         /** @var VariableFrontend|MockObject $variableFrontendMock */
         $variableFrontendMock = $this->createMock(VariableFrontend::class);
         $variableFrontendMock
             ->expects(self::atLeastOnce())
-            ->method('has')
-            ->with('pagesTsConfigIdToHash200')
-            ->willReturn(true);
-        $variableFrontendMock
-            ->expects(self::atLeastOnce())
             ->method('get')
             ->willReturnMap([
-                'pagesTsConfigIdToHash200', 'Blub',
-                'pagesTsConfigHashToContentBlub', [
-                    'ext.' => [
-                        'foreign_ext.' => [
-                            'maps2Pid' => 4297,
-                        ],
-                        'maps2.' => [
-                            'defaultStoragePid' => 5837,
-                        ],
-                    ],
-                ],
+                'pageTsConfig-pid-to-hash-200', 'Hash',
+                'pageTsConfig-hash-to-object-Hash', $pageTsConfig,
             ]);
 
         /** @var CacheManager|MockObject $cacheManagerMock */
