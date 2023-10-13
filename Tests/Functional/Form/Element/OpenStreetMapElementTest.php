@@ -121,8 +121,8 @@ class OpenStreetMapElementTest extends FunctionalTestCase
             ->expects(self::atLeastOnce())
             ->method('assign')
             ->willReturnMap([
-                'record', json_encode($record), null,
-                'extConf', self::any(), null,
+                ['record', json_encode($record), null],
+                ['extConf', self::any(), null],
             ]);
         $this->viewMock
             ->expects(self::atLeastOnce())
