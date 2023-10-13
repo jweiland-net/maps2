@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Helper;
 
 use JWeiland\Maps2\Configuration\ExtConf;
+use JWeiland\Maps2\Traits\GetTypo3RequestTrait;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -20,6 +21,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class MapHelper
 {
+    use GetTypo3RequestTrait;
+
     /**
      * @var ExtConf
      */
@@ -124,7 +127,8 @@ class MapHelper
             }
 
             // Else, check GET parameter for consent
-            $parameters = GeneralUtility::_GPmerged('tx_maps2_maps2');
+            $parameters = $this->getTypo3Request()->getQueryParams()['tx_maps2_maps2'] ?? [];
+
             return isset($parameters['mapProviderRequestsAllowedForMaps2'])
                 && (int)$parameters['mapProviderRequestsAllowedForMaps2'] === 1;
         }

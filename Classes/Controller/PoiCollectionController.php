@@ -57,7 +57,7 @@ class PoiCollectionController extends ActionController
             'ajaxUrl' => $cObj->typoLink_URL([
                 'additionalParams' => '&tx_maps2_maps2[controller]=Ajax&tx_maps2_maps2[action]=process&tx_maps2_maps2[method]=renderInfoWindowContent',
                 'forceAbsoluteUrl' => '1',
-                'parameter' => 't3://page?uid=' . $GLOBALS['TSFE']->id . '&type=1614075471',
+                'parameter' => 't3://page?uid=' . ($this->request->getQueryParams()['id'] ?? 0) . '&type=1614075471',
             ]),
             'contentRecord' => $contentRecord,
         ]);

@@ -49,7 +49,7 @@ class CityMapController extends ActionController
         $view->assign('environment', [
             'settings' => $this->getPreparedSettings(),
             'extConf' => ObjectAccess::getGettableProperties($this->extConf),
-            'id' => $GLOBALS['TSFE']->id,
+            'id' => (int)$this->request->getQueryParams()['id'] ?? 0,
             'contentRecord' => $contentRecord,
         ]);
     }

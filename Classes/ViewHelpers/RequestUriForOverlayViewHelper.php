@@ -45,10 +45,9 @@ class RequestUriForOverlayViewHelper extends AbstractViewHelper
         \Closure $renderChildrenClosure,
         RenderingContextInterface $renderingContext
     ): string {
-        $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class)
+        $uriBuilder = self::getUriBuilder()
             ->reset()
             ->setAddQueryString(true)
-            ->setAddQueryStringMethod('GET')
             ->setArguments([
                 'tx_maps2_maps2' => [
                     'mapProviderRequestsAllowedForMaps2' => 1,
@@ -69,5 +68,10 @@ class RequestUriForOverlayViewHelper extends AbstractViewHelper
     protected static function getSettingsHelper(): SettingsHelper
     {
         return GeneralUtility::makeInstance(SettingsHelper::class);
+    }
+
+    protected static function getUriBuilder(): UriBuilder
+    {
+        return GeneralUtility::makeInstance(UriBuilder::class);
     }
 }
