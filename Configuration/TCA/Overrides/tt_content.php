@@ -41,10 +41,10 @@ $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['maps2_cityma
 );
 
 $GLOBALS['TCA']['tt_content']['types']['list']['previewRenderer']['maps2_maps2']
-    = \JWeiland\Maps2\Backend\Preview\ReserveManagementPreviewRenderer::class;
+    = \JWeiland\Maps2\Backend\Preview\Maps2PluginPreview::class;
 
 $GLOBALS['TCA']['tt_content']['types']['list']['previewRenderer']['maps2_searchwithinradius']
-    = \JWeiland\Maps2\Backend\Preview\ReserveManagementPreviewRenderer::class;
+    = \JWeiland\Maps2\Backend\Preview\Maps2PluginPreview::class;
 
 $GLOBALS['TCA']['tt_content']['types']['list']['previewRenderer']['maps2_citymap']
-    = \JWeiland\Maps2\Backend\Preview\ReserveManagementPreviewRenderer::class;
+    = \JWeiland\Maps2\Backend\Preview\Maps2PluginPreview::class;

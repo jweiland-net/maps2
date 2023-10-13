@@ -85,7 +85,7 @@ class Maps2PluginPreview extends StandardContentPreviewRenderer
 
         $view->assign(
             'pluginName',
-            LocalizationUtility::translate('LLL:EXT:maps2/Resources/Private/Language/de.locallang_db.xlf:' . $langKey)
+            LocalizationUtility::translate('LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:' . $langKey)
         );
     }
 
