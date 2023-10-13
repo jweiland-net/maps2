@@ -241,20 +241,6 @@ class AddressHelperTest extends FunctionalTestCase
             ->willReturn(true);
         ExtensionManagementUtility::setPackageManager($packageManagerMock);
 
-        $this->buildAssertionForDatabaseWithReturnValue(
-            'static_countries',
-            [
-                'cn_short_en' => 'Poland',
-            ],
-            [
-                [
-                    'expr' => 'eq',
-                    'field' => 'uid',
-                    'value' => 328,
-                ],
-            ]
-        );
-
         $record = [
             'uid' => 100,
             'title' => 'Market',
@@ -287,18 +273,6 @@ class AddressHelperTest extends FunctionalTestCase
             ->with('static_info_tables')
             ->willReturn(true);
         ExtensionManagementUtility::setPackageManager($packageManagerMock);
-
-        $this->buildAssertionForDatabaseWithReturnValue(
-            'static_countries',
-            [],
-            [
-                [
-                    'expr' => 'eq',
-                    'field' => 'uid',
-                    'value' => 328,
-                ],
-            ]
-        );
 
         $this->messageHelperMock
             ->expects(self::atLeastOnce())
