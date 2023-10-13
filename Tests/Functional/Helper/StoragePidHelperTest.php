@@ -380,7 +380,7 @@ class StoragePidHelperTest extends FunctionalTestCase
             ->expects(self::atLeastOnce())
             ->method('get')
             ->willReturnMap([
-                ['pageTsConfig-pid-to-hash-200', 'Hash'],
+                ['pageTsConfig-pid-to-hash-5438', 'Hash'],
                 ['pageTsConfig-hash-to-object-Hash', $pageTsConfig],
             ]);
 
@@ -426,7 +426,7 @@ class StoragePidHelperTest extends FunctionalTestCase
             ->expects(self::atLeastOnce())
             ->method('get')
             ->willReturnMap([
-                ['pageTsConfig-pid-to-hash-200', 'Hash'],
+                ['pageTsConfig-pid-to-hash-5438', 'Hash'],
                 ['pageTsConfig-hash-to-object-Hash', $pageTsConfig],
             ]);
 
@@ -478,7 +478,7 @@ class StoragePidHelperTest extends FunctionalTestCase
             ->expects(self::atLeastOnce())
             ->method('get')
             ->willReturnMap([
-                ['pageTsConfig-pid-to-hash-200', 'Hash'],
+                ['pageTsConfig-pid-to-hash-5438', 'Hash'],
                 ['pageTsConfig-hash-to-object-Hash', $pageTsConfig],
             ]);
 
@@ -530,7 +530,7 @@ class StoragePidHelperTest extends FunctionalTestCase
             ->expects(self::atLeastOnce())
             ->method('get')
             ->willReturnMap([
-                ['pageTsConfig-pid-to-hash-200', 'Hash'],
+                ['pageTsConfig-pid-to-hash-5438', 'Hash'],
                 ['pageTsConfig-hash-to-object-Hash', $pageTsConfig],
             ]);
 
@@ -578,7 +578,7 @@ class StoragePidHelperTest extends FunctionalTestCase
             ->expects(self::atLeastOnce())
             ->method('get')
             ->willReturnMap([
-                ['pageTsConfig-pid-to-hash-200', 'Hash'],
+                ['pageTsConfig-pid-to-hash-5438', 'Hash'],
                 ['pageTsConfig-hash-to-object-Hash', $pageTsConfig],
             ]);
 
@@ -665,7 +665,7 @@ class StoragePidHelperTest extends FunctionalTestCase
             ->expects(self::atLeastOnce())
             ->method('get')
             ->willReturnMap([
-                ['pageTsConfig-pid-to-hash-200', 'Hash'],
+                ['pageTsConfig-pid-to-hash-5438', 'Hash'],
                 ['pageTsConfig-hash-to-object-Hash', $pageTsConfig],
             ]);
 
@@ -752,7 +752,7 @@ class StoragePidHelperTest extends FunctionalTestCase
             ->expects(self::atLeastOnce())
             ->method('get')
             ->willReturnMap([
-                ['pageTsConfig-pid-to-hash-200', 'Hash'],
+                ['pageTsConfig-pid-to-hash-5438', 'Hash'],
                 ['pageTsConfig-hash-to-object-Hash', $pageTsConfig],
             ]);
 
