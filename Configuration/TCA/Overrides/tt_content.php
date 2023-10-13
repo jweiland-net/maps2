@@ -39,3 +39,12 @@ $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['maps2_cityma
     'CityMap',
     'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.cityMap.title'
 );
+
+$GLOBALS['TCA']['tt_content']['types']['list']['previewRenderer']['maps2_maps2']
+    = \JWeiland\Maps2\Backend\Preview\ReserveManagementPreviewRenderer::class;
+
+$GLOBALS['TCA']['tt_content']['types']['list']['previewRenderer']['maps2_searchwithinradius']
+    = \JWeiland\Maps2\Backend\Preview\ReserveManagementPreviewRenderer::class;
+
+$GLOBALS['TCA']['tt_content']['types']['list']['previewRenderer']['maps2_citymap']
+    = \JWeiland\Maps2\Backend\Preview\ReserveManagementPreviewRenderer::class;

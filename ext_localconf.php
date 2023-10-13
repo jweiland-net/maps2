@@ -63,14 +63,6 @@ call_user_func(static function (): void {
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass']['createMaps2Record']
         = \JWeiland\Maps2\Hook\CreateMaps2RecordHook::class;
 
-    // Add plugin preview for maps2_maps2
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms/layout/class.tx_cms_layout.php']['list_type_Info']['maps2_maps2'][]
-        = \JWeiland\Maps2\Form\PluginPreview::class . '->render';
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms/layout/class.tx_cms_layout.php']['list_type_Info']['maps2_citymap'][]
-        = \JWeiland\Maps2\Form\PluginPreview::class . '->render';
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms/layout/class.tx_cms_layout.php']['list_type_Info']['maps2_searchwithinradius'][]
-        = \JWeiland\Maps2\Form\PluginPreview::class . '->render';
-
     // Move old flex form settings to new location before saving to DB
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['maps2MoveFlexFormFields']
         = \JWeiland\Maps2\Update\MoveOldFlexFormSettingsUpdate::class;
