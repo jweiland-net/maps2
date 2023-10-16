@@ -111,7 +111,10 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => [
-                    ['', 0],
+                    [
+                        'label' => '',
+                        'value' => 0,
+                    ],
                 ],
                 'foreign_table' => 'tx_maps2_domain_model_poicollection',
                 'foreign_table_where' => 'AND tx_maps2_domain_model_poicollection.pid=###CURRENT_PID### AND tx_maps2_domain_model_poicollection.sys_language_uid IN (-1,0)',
@@ -140,8 +143,8 @@ return [
                 'renderType' => 'checkboxToggle',
                 'items' => [
                     [
-                        0 => '',
-                        1 => '',
+                        'label' => '',
+                        'value' => '',
                         'invertStateDisplay' => true,
                     ],
                 ],
@@ -184,33 +187,32 @@ return [
             'config' => [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
+                'required' => true,
                 'default' => 'Empty',
-                // ToDo: migrate to "required => true" while removing TYPO3 11 compatibility
-                'eval' => 'required',
                 'items' => [
                     [
-                        'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.collectionType.empty',
-                        'Empty',
+                        'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.collectionType.empty',
+                        'value' => 'Empty',
                     ],
                     [
-                        'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.collectionType.point',
-                        'Point',
-                        'EXT:maps2/Resources/Public/Icons/TypeSelectPoint.png',
+                        'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.collectionType.point',
+                        'value' => 'Point',
+                        'icon' => 'EXT:maps2/Resources/Public/Icons/TypeSelectPoint.png',
                     ],
                     [
-                        'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.collectionType.area',
-                        'Area',
-                        'EXT:maps2/Resources/Public/Icons/TypeSelectArea.png',
+                        'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.collectionType.area',
+                        'value' => 'Area',
+                        'icon' => 'EXT:maps2/Resources/Public/Icons/TypeSelectArea.png',
                     ],
                     [
-                        'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.collectionType.route',
-                        'Route',
-                        'EXT:maps2/Resources/Public/Icons/TypeSelectRoute.png',
+                        'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.collectionType.route',
+                        'value' => 'Route',
+                        'icon' => 'EXT:maps2/Resources/Public/Icons/TypeSelectRoute.png',
                     ],
                     [
-                        'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.collectionType.radius',
-                        'Radius',
-                        'EXT:maps2/Resources/Public/Icons/TypeSelectRadius.png',
+                        'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.collectionType.radius',
+                        'value' => 'Radius',
+                        'icon' => 'EXT:maps2/Resources/Public/Icons/TypeSelectRadius.png',
                     ],
                 ],
                 'fieldWizard' => [
@@ -252,12 +254,12 @@ return [
                 'size' => 1,
                 'items' => [
                     [
-                        'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.mapProvider.gm',
-                        'gm',
+                        'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.mapProvider.gm',
+                        'value' => 'gm',
                     ],
                     [
-                        'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.mapProvider.osm',
-                        'osm',
+                        'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.mapProvider.osm',
+                        'value' => 'osm',
                     ],
                 ],
             ],
@@ -375,76 +377,22 @@ return [
         'info_window_images' => [
             'exclude' => 1,
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.info_window_images',
-            'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
-                'info_window_images',
-                [
-                    'minitems' => 0,
-                    'maxitems' => 1,
-                    'foreign_match_fields' => [
-                        'fieldname' => 'info_window_images',
-                        'tablenames' => 'tx_maps2_domain_model_poicollection',
-                    ],
-                    'behaviour' => [
-                        'allowLanguageSynchronization' => true,
-                    ],
-                    'appearance' => [
-                        'showPossibleLocalizationRecords' => true,
-                        'showAllLocalizationLink' => true,
-                        'showSynchronizationLink' => true,
-                    ],
-                    'overrideChildTca' => [
-                        'types' => [
-                            '0' => [
-                                'showitem' => '
-                                --palette--;LLL:EXT:core/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-                                --palette--;;filePalette',
-                            ],
-                            \TYPO3\CMS\Core\Resource\AbstractFile::FILETYPE_IMAGE => [
-                                'showitem' => '
-                                --palette--;LLL:EXT:core/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-                                --palette--;;filePalette',
-                            ],
-                        ],
-                    ],
-                ]
-            ),
+            'config' => [
+                'type' => 'file',
+                'minitems' => 0,
+                'maxitems' => 1,
+                'allowed' => 'common-image-types',
+            ],
         ],
         'marker_icons' => [
             'exclude' => 1,
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.marker_icons',
-            'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
-                'marker_icons',
-                [
-                    'minitems' => 0,
-                    'maxitems' => 1,
-                    'foreign_match_fields' => [
-                        'fieldname' => 'marker_icons',
-                        'tablenames' => 'tx_maps2_domain_model_poicollection',
-                    ],
-                    'behaviour' => [
-                        'allowLanguageSynchronization' => true,
-                    ],
-                    'appearance' => [
-                        'showPossibleLocalizationRecords' => true,
-                        'showAllLocalizationLink' => true,
-                        'showSynchronizationLink' => true,
-                    ],
-                    'overrideChildTca' => [
-                        'types' => [
-                            '0' => [
-                                'showitem' => '
-                            --palette--;LLL:EXT:core/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-                            --palette--;;filePalette',
-                            ],
-                            \TYPO3\CMS\Core\Resource\AbstractFile::FILETYPE_IMAGE => [
-                                'showitem' => '
-                            --palette--;LLL:EXT:core/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-                            --palette--;;filePalette',
-                            ],
-                        ],
-                    ],
-                ]
-            ),
+            'config' => [
+                'type' => 'file',
+                'minitems' => 0,
+                'maxitems' => 1,
+                'allowed' => 'common-image-types',
+            ],
         ],
         'marker_icon_width' => [
             'exclude' => true,
