@@ -227,9 +227,9 @@ return [
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.title',
             'config' => [
                 'type' => 'input',
+                'required' => true,
                 'size' => 30,
-                // ToDo: migrate to "required => true" while removing TYPO3 11 compatibility
-                'eval' => 'trim,required',
+                'eval' => 'trim',
             ],
         ],
         'address' => [
