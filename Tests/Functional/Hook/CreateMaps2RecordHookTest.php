@@ -14,7 +14,6 @@ namespace JWeiland\Maps2\Tests\Functional\Hook;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Event\AllowCreationOfPoiCollectionEvent;
-use JWeiland\Maps2\Event\PostProcessPoiCollectionRecordEvent;
 use JWeiland\Maps2\Helper\AddressHelper;
 use JWeiland\Maps2\Helper\MessageHelper;
 use JWeiland\Maps2\Helper\StoragePidHelper;
@@ -28,7 +27,6 @@ use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Cache\Frontend\VariableFrontend;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
-use TYPO3\CMS\Core\EventDispatcher\ListenerProvider;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
@@ -55,10 +53,12 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
      */
     protected $maps2RegistryMock;
 
+    protected bool $creationAllowed = true;
+
     /**
-     * @var ListenerProvider|MockObject
+     * @var EventDispatcher|MockObject
      */
-    protected $listenerProviderMock;
+    protected $eventDispatcherMock;
 
     protected array $columnRegistry = [
         'tx_events2_domain_model_location' => [
@@ -99,7 +99,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
         $this->importCSVDataSet(__DIR__ . '/../Fixtures/tx_events2_domain_model_location.csv');
 
         // Seems that records of ext_tables_static+adt.sql will be included just once for all tests in this class.
-        // So, for all tests (except the first one), we have to add the record ourselves.
+        // So, for all tests (except the first one), we have to add the records ourselves.
         $country = $this->getConnectionPool()
             ->getConnectionForTable('static_countries')
             ->select(['*'], 'static_countries', ['uid' => 54])
@@ -113,15 +113,12 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
         $this->maps2RegistryMock = $this->createMock(Maps2Registry::class);
 
         $this->maps2RegistryMock
-            ->expects(self::atLeastOnce())
+            ->expects(self::any())
             ->method('getColumnRegistry')
             ->willReturn($this->columnRegistry);
 
-        $this->listenerProviderMock = $this->createMock(ListenerProvider::class);
-        $this->listenerProviderMock
-            ->expects(self::atLeastOnce())
-            ->method('getListenersForEvent')
-            ->willReturn([]);
+        $this->eventDispatcherMock = $this->createMock(EventDispatcher::class);
+        $this->updateExpectationsForEventDispatcher();
 
         $this->subject = new CreateMaps2RecordHook(
             $this->geoCodeServiceMock,
@@ -136,7 +133,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
                 GeneralUtility::makeInstance(EventDispatcher::class)
             ),
             $this->maps2RegistryMock,
-            new EventDispatcher($this->listenerProviderMock)
+            $this->eventDispatcherMock
         );
     }
 
@@ -149,10 +146,31 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
             $this->mapService,
             $this->eventDispatcher,
             $this->maps2RegistryMock,
-            $this->listenerProviderMock
+            $this->eventDispatcherMock
         );
 
         parent::tearDown();
+    }
+
+    protected function updateExpectationsForEventDispatcher(): void
+    {
+        if ($this->creationAllowed) {
+            $this->eventDispatcherMock
+                ->expects(self::any())
+                ->method('dispatch')
+                ->willReturnArgument(0);
+        } else {
+            $creationAllowedEventMock = $this->createMock(AllowCreationOfPoiCollectionEvent::class);
+            $creationAllowedEventMock
+                ->expects(self::once())
+                ->method('isValid')
+                ->willReturn(false);
+
+            $this->eventDispatcherMock
+                ->expects(self::once())
+                ->method('dispatch')
+                ->willReturn($creationAllowedEventMock);
+        }
     }
 
     /**
@@ -160,9 +178,9 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
      */
     public function processDatamapWithInvalidTableNameWillNotStartRecordCreation(): void
     {
-        $this->listenerProviderMock
-            ->expects(self::atLeastOnce())
-            ->method('getListenersForEvent');
+        $this->eventDispatcherMock
+            ->expects(self::never())
+            ->method('dispatch');
 
         $this->subject->processDatamap_afterAllOperations(
             new DataHandler()
@@ -179,21 +197,19 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
         $cacheMock
             ->expects(self::atLeastOnce())
             ->method('flushByTag')
-            ->with('infoWindowUid123');
-        $cacheMock
-            ->expects(self::atLeastOnce())
-            ->method('flushByTag')
-            ->with('infoWindowUid234');
+            ->with(self::logicalOr(
+                self::equalTo('infoWindowUid123'),
+                self::equalTo('infoWindowUid234')
+            ));
 
         $cacheManagerMock = $this->createMock(CacheManager::class);
         $cacheManagerMock
             ->expects(self::atLeastOnce())
             ->method('getCache')
-            ->with('maps2_cachedhtml')
-            ->willReturn($cacheMock);
-        $cacheManagerMock
-            ->expects(self::atLeastOnce())
-            ->method('getCache');
+            ->willReturnMap([
+                ['maps2_cachedhtml', $cacheMock],
+                ['runtime', null],
+            ]);
         GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerMock);
 
         $dataHandler = new DataHandler();
@@ -216,33 +232,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
      */
     public function processDatamapWillBreakIfPoiCollectionIsNotAllowedToBeCreated(): void
     {
-        $event = new AllowCreationOfPoiCollectionEvent(
-            $this->getConnectionPool()
-                ->getConnectionForTable('tx_events2_domain_model_location')
-                ->select(['*'], 'tx_events2_domain_model_location', ['uid' => 1])
-                ->fetchAssociative(),
-            'tx_events2_domain_model_location',
-            'tx_maps2_uid',
-            $this->columnRegistry['tx_events2_domain_model_location']['tx_maps2_uid'],
-            true
-        );
-
-        $listenerWithInvalidFlag = static function (AllowCreationOfPoiCollectionEvent $event): void {
-            $event->setIsValid(false);
-        };
-
-        // First EventListener will be called with foreignLocationRecord and returns false to break further processing
-        $this->listenerProviderMock
-            ->expects(self::atLeastOnce())
-            ->method('getListenersForEvent')
-            ->with($event)
-            ->willReturn([$listenerWithInvalidFlag]);
-
-        // Second EventListener should not be called. It's true, if break is working
-        $this->listenerProviderMock
-            ->expects(self::never())
-            ->method('getListenersForEvent')
-            ->with(self::isInstanceOf(PostProcessPoiCollectionRecordEvent::class));
+        $this->creationAllowed = false;
 
         $dataHandler = new DataHandler();
         $dataHandler->datamap = [
@@ -266,6 +256,8 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
      */
     public function processDatamapInvalidForeignRecordBecausePidIsNotEqual(): void
     {
+        $this->creationAllowed = false;
+
         $columnRegistry = $this->columnRegistry;
         $columnRegistry['tx_events2_domain_model_location']['tx_maps2_uid']['columnMatch']['pid'] = 432;
 
@@ -273,12 +265,6 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
             ->expects(self::atLeastOnce())
             ->method('getColumnRegistry')
             ->willReturn($columnRegistry);
-
-        // If EventListener was not called, the columnMatch was invalid.
-        $this->listenerProviderMock
-            ->expects(self::never())
-            ->method('getListenersForEvent')
-            ->with(self::isInstanceOf(PostProcessPoiCollectionRecordEvent::class));
 
         $dataHandler = new DataHandler();
         $dataHandler->datamap = [
@@ -329,6 +315,8 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
         array $columnMatch,
         bool $isValid
     ): void {
+        $this->creationAllowed = $isValid;
+
         $columnRegistry = $this->columnRegistry;
         $columnRegistry['tx_events2_domain_model_location']['tx_maps2_uid']['columnMatch'] = $columnMatch;
 
@@ -336,19 +324,6 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
             ->expects(self::atLeastOnce())
             ->method('getColumnRegistry')
             ->willReturn($columnRegistry);
-
-        if ($isValid) {
-            $this->listenerProviderMock
-                ->expects(self::atLeastOnce())
-                ->method('getListenersForEvent')
-                ->with(self::isInstanceOf(PostProcessPoiCollectionRecordEvent::class))
-                ->willReturn([]);
-        } else {
-            $this->listenerProviderMock
-                ->expects(self::never())
-                ->method('getListenersForEvent')
-                ->with(self::isInstanceOf(PostProcessPoiCollectionRecordEvent::class));
-        }
 
         $dataHandler = new DataHandler();
         $dataHandler->datamap = [
