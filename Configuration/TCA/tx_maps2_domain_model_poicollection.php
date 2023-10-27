@@ -154,11 +154,8 @@ return [
             'exclude' => true,
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.starttime',
             'config' => [
-                'type' => 'input',
-                // ToDo: migrate to "datetime" while removing TYPO3 11 compatibility
-                // ToDo: Remove eval=int while removing TYPO3 11 compatibility
-                'renderType' => 'inputDateTime',
-                'eval' => 'datetime,int',
+                'type' => 'datetime',
+                'format' => 'datetime',
                 'default' => 0,
             ],
             'l10n_mode' => 'exclude',
@@ -168,11 +165,8 @@ return [
             'exclude' => true,
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.endtime',
             'config' => [
-                'type' => 'input',
-                // ToDo: migrate to "datetime" while removing TYPO3 11 compatibility
-                // ToDo: Remove eval=int while removing TYPO3 11 compatibility
-                'renderType' => 'inputDateTime',
-                'eval' => 'datetime,int',
+                'type' => 'datetime',
+                'format' => 'datetime',
                 'default' => 0,
                 'range' => [
                     'upper' => mktime(0, 0, 0, 1, 1, 2038),
@@ -295,9 +289,8 @@ return [
             'exclude' => true,
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.radius',
             'config' => [
-                'type' => 'input',
+                'type' => 'number',
                 'size' => 12,
-                'eval' => 'trim,int',
             ],
         ],
         'pois' => [
