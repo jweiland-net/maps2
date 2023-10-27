@@ -20,7 +20,7 @@ use JWeiland\Maps2\Service\MapService;
 use JWeiland\Maps2\Tca\Maps2Registry;
 use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
@@ -309,7 +309,7 @@ class MapServiceTest extends FunctionalTestCase
             ->with(
                 self::stringContains('PoiCollection UID can not be empty'),
                 'PoiCollection empty',
-                AbstractMessage::ERROR
+                ContextualFeedbackSeverity::ERROR
             );
 
         $foreignRecord = [
@@ -334,7 +334,7 @@ class MapServiceTest extends FunctionalTestCase
             ->with(
                 self::stringContains('Foreign record can not be empty'),
                 'Foreign record empty',
-                AbstractMessage::ERROR
+                ContextualFeedbackSeverity::ERROR
             );
 
         $this->messageHelperMock
@@ -343,7 +343,7 @@ class MapServiceTest extends FunctionalTestCase
             ->with(
                 self::stringContains('Foreign record must have the array key "uid" which is currently not present'),
                 'UID not filled',
-                AbstractMessage::ERROR
+                ContextualFeedbackSeverity::ERROR
             );
 
         $foreignRecord = [];
@@ -374,7 +374,7 @@ class MapServiceTest extends FunctionalTestCase
             ->with(
                 self::stringContains('Foreign table name is a must have value'),
                 'Foreign table name empty',
-                AbstractMessage::ERROR
+                ContextualFeedbackSeverity::ERROR
             );
 
         $foreignRecord = [
@@ -407,7 +407,7 @@ class MapServiceTest extends FunctionalTestCase
             ->with(
                 self::stringContains('Foreign field name is a must have value'),
                 'Foreign field name empty',
-                AbstractMessage::ERROR
+                ContextualFeedbackSeverity::ERROR
             );
 
         $foreignRecord = [
@@ -433,7 +433,7 @@ class MapServiceTest extends FunctionalTestCase
             ->with(
                 self::stringContains('Table "invalidTable" is not configured in TCA'),
                 'Table not found',
-                AbstractMessage::ERROR
+                ContextualFeedbackSeverity::ERROR
             );
 
         $foreignRecord = [
@@ -458,7 +458,7 @@ class MapServiceTest extends FunctionalTestCase
             ->with(
                 self::stringContains('Field "invalidField" is not configured in TCA'),
                 'Field not found',
-                AbstractMessage::ERROR
+                ContextualFeedbackSeverity::ERROR
             );
 
         $foreignRecord = [

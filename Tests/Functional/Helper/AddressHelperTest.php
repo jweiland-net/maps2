@@ -9,14 +9,14 @@ declare(strict_types=1);
  * LICENSE file that was distributed with this source code.
  */
 
-namespace JWeiland\Maps2\Tests\Unit\Helper;
+namespace JWeiland\Maps2\Tests\Functional\Helper;
 
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Helper\AddressHelper;
 use JWeiland\Maps2\Helper\MessageHelper;
 use PHPUnit\Framework\MockObject\MockObject;
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Package\PackageManager;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
@@ -77,7 +77,7 @@ class AddressHelperTest extends FunctionalTestCase
             ->with(
                 self::stringContains('addressColumns'),
                 'Key addressColumns is missing',
-                AbstractMessage::ERROR
+                ContextualFeedbackSeverity::ERROR
             );
 
         $record = [
@@ -103,7 +103,7 @@ class AddressHelperTest extends FunctionalTestCase
             ->with(
                 self::stringContains('required field'),
                 'Key addressColumns is empty',
-                AbstractMessage::ERROR
+                ContextualFeedbackSeverity::ERROR
             );
 
         $record = [
@@ -131,7 +131,7 @@ class AddressHelperTest extends FunctionalTestCase
             ->with(
                 self::stringContains('We can not find any country information within your extension'),
                 'No country information found',
-                AbstractMessage::WARNING
+                ContextualFeedbackSeverity::WARNING
             );
 
         $this->messageHelperMock
@@ -140,7 +140,7 @@ class AddressHelperTest extends FunctionalTestCase
             ->with(
                 self::stringContains('extension manager configuration'),
                 'Default country of maps2 is not configured',
-                AbstractMessage::WARNING
+                ContextualFeedbackSeverity::WARNING
             );
 
         $record = [
@@ -172,7 +172,7 @@ class AddressHelperTest extends FunctionalTestCase
             ->with(
                 self::stringContains('We can not find any country information within your extension'),
                 'No country information found',
-                AbstractMessage::WARNING
+                ContextualFeedbackSeverity::WARNING
             );
 
         $this->extConf->setDefaultCountry('Germany');
@@ -229,7 +229,7 @@ class AddressHelperTest extends FunctionalTestCase
             ->with(
                 self::stringContains('We can not find any country information within your extension'),
                 'No country information found',
-                AbstractMessage::WARNING
+                ContextualFeedbackSeverity::WARNING
             );
 
         /** @var PackageManager|MockObject $packageManagerMock */
@@ -280,7 +280,7 @@ class AddressHelperTest extends FunctionalTestCase
             ->with(
                 self::stringContains('static_countries table'),
                 'Country not found in DB',
-                AbstractMessage::WARNING
+                ContextualFeedbackSeverity::WARNING
             );
 
         $record = [
