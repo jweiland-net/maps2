@@ -24,7 +24,7 @@ use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\FrontendRestrictionContainer;
 use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
 use TYPO3\CMS\Core\Http\ApplicationType;
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
@@ -143,7 +143,7 @@ class MapService
             $this->messageHelper->addFlashMessage(
                 'The is no latitude or longitude in Response of Map Provider.',
                 'Missing Lat or Lng',
-                AbstractMessage::ERROR
+                ContextualFeedbackSeverity::ERROR
             );
             return 0;
         }
@@ -204,7 +204,7 @@ class MapService
             $this->messageHelper->addFlashMessage(
                 'PoiCollection UID can not be empty. Please check your values near method assignPoiCollectionToForeignRecord',
                 'PoiCollection empty',
-                AbstractMessage::ERROR
+                ContextualFeedbackSeverity::ERROR
             );
         }
 
@@ -213,7 +213,7 @@ class MapService
             $this->messageHelper->addFlashMessage(
                 'Foreign record can not be empty. Please check your values near method assignPoiCollectionToForeignRecord',
                 'Foreign record empty',
-                AbstractMessage::ERROR
+                ContextualFeedbackSeverity::ERROR
             );
         }
 
@@ -222,7 +222,7 @@ class MapService
             $this->messageHelper->addFlashMessage(
                 'Foreign record must have the array key "uid" which is currently not present. Please check your values near method assignPoiCollectionToForeignRecord',
                 'UID not filled',
-                AbstractMessage::ERROR
+                ContextualFeedbackSeverity::ERROR
             );
         }
 
@@ -231,7 +231,7 @@ class MapService
             $this->messageHelper->addFlashMessage(
                 'Foreign table name is a must have value, which is currently not present. Please check your values near method assignPoiCollectionToForeignRecord',
                 'Foreign table name empty',
-                AbstractMessage::ERROR
+                ContextualFeedbackSeverity::ERROR
             );
         }
 
@@ -240,7 +240,7 @@ class MapService
             $this->messageHelper->addFlashMessage(
                 'Foreign field name is a must have value, which is currently not present. Please check your values near method assignPoiCollectionToForeignRecord',
                 'Foreign field name empty',
-                AbstractMessage::ERROR
+                ContextualFeedbackSeverity::ERROR
             );
         }
 
@@ -252,7 +252,7 @@ class MapService
             $this->messageHelper->addFlashMessage(
                 'Table "' . $foreignTableName . '" is not configured in TCA',
                 'Table not found',
-                AbstractMessage::ERROR
+                ContextualFeedbackSeverity::ERROR
             );
             return;
         }
@@ -261,7 +261,7 @@ class MapService
             $this->messageHelper->addFlashMessage(
                 'Field "' . $foreignFieldName . '" is not configured in TCA',
                 'Field not found',
-                AbstractMessage::ERROR
+                ContextualFeedbackSeverity::ERROR
             );
             return;
         }

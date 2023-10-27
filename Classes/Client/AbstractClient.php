@@ -15,6 +15,7 @@ use JWeiland\Maps2\Client\Request\RequestInterface;
 use JWeiland\Maps2\Helper\MessageHelper;
 use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 
 /**
  * Abstract client to send Requests to Map Providers
@@ -37,7 +38,7 @@ abstract class AbstractClient implements ClientInterface
             $this->messageHelper->addFlashMessage(
                 'URI is empty or contains invalid chars. URI: ' . $request->getUri(),
                 'Invalid request URI',
-                AbstractMessage::ERROR
+                ContextualFeedbackSeverity::ERROR
             );
             return [];
         }
@@ -45,13 +46,13 @@ abstract class AbstractClient implements ClientInterface
         $processedResponse = [];
         $response = $this->requestFactory->request($request->getUri());
         if ($response->getStatusCode() === 200) {
-            $processedResponse = json_decode((string)$response->getBody(), true, 512, JSON_THROW_ON_ERROR);
+            $processedResponse = \json_decode((string)$response->getBody(), true, 512, JSON_THROW_ON_ERROR);
             $this->checkResponseForErrors($processedResponse);
         } else {
             $this->messageHelper->addFlashMessage(
                 'MapProvider returns a response with a status code different than 200',
                 'Client Error',
-                AbstractMessage::ERROR
+                ContextualFeedbackSeverity::ERROR
             );
         }
 

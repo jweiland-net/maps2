@@ -13,7 +13,7 @@ namespace JWeiland\Maps2\Helper;
 
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
@@ -84,7 +84,7 @@ class StoragePidHelper
                 $this->messageHelper->addFlashMessage(
                     'You have configured a defaultStoragePid in maps2 registration, but returned value is still 0. Please check Maps2 Registry',
                     'Invalid defaultStoragePid configuration found',
-                    AbstractMessage::WARNING
+                    ContextualFeedbackSeverity::WARNING
                 );
             } else {
                 $defaultStoragePid = $storagePid;
