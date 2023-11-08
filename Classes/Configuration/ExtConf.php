@@ -265,7 +265,7 @@ class ExtConf implements SingletonInterface
     public function getOpenStreetMapGeocodeUri(): string
     {
         if ($this->openStreetMapGeocodeUri === '') {
-            $this->openStreetMapGeocodeUri = 'https://nominatim.openstreetmap.org/search/%s?format=json&addressdetails=1';
+            $this->openStreetMapGeocodeUri = 'https://nominatim.openstreetmap.org/search?q=%s&format=json&addressdetails=1';
         }
 
         return $this->openStreetMapGeocodeUri;

@@ -7,6 +7,11 @@
 ChangeLog
 =========
 
+Version 10.0.10
+===============
+
+*   BUGFIX: Update to new OSM Geocode URI. Please execute UpgradeWizard
+
 Version 10.0.9
 ==============
 
