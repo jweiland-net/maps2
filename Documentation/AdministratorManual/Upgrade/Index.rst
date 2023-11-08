@@ -7,8 +7,8 @@ Upgrade
 
 If you upgrade EXT:maps2 to a newer version, please read this section carefully!
 
-Upgrade to Version 10.0.10
-==========================
+Upgrade to Version 10.0.9
+=========================
 
 Somewhere in October 2023 the usage of addresses as path segment in
 OpenStreetMap Geocoding URIs has been deprecated/removed. Please execute
