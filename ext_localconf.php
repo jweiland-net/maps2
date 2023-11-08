@@ -77,6 +77,9 @@ call_user_func(static function (): void {
     // Migrate old POI record into configuration_map of poicollection table
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['maps2MigratePoiRecord']
         = \JWeiland\Maps2\Update\MigratePoiRecordsToConfigurationMapUpdate::class;
+    // Migrate to new OSM Geocode URI in extension settings
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['maps2NewOsmGeocodeUriExtConf']
+        = \JWeiland\Maps2\Update\NewGeocodeUriForOsmUpdate::class;
 
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1530778687] = [
         'nodeName' => 'maps2InfoWindowContent',

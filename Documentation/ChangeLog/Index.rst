@@ -11,6 +11,7 @@ Version 10.0.9
 ==============
 
 *   BUGFIX: Exclude external Google Maps JS script from concatenation
+*   BUGFIX: Update to new OSM Geocode URI. Please execute UpgradeWizard
 *   DOCU: Set indents to 4 spaces
 
 Version 10.0.8

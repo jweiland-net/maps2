@@ -457,7 +457,7 @@ class ExtConfTest extends FunctionalTestCase
     public function getOpenStreetMapGeocodeUriInitiallyReturnsPreConfiguredUri(): void
     {
         self::assertSame(
-            'https://nominatim.openstreetmap.org/search/%s?format=json&addressdetails=1',
+            'https://nominatim.openstreetmap.org/search?q=%s&format=json&addressdetails=1',
             $this->subject->getOpenStreetMapGeocodeUri()
         );
     }

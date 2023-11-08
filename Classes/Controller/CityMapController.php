@@ -20,9 +20,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class CityMapController extends AbstractController
 {
-    public function showAction(): void
-    {
-    }
+    public function showAction(): void {}
 
     public function searchAction(string $street): void
     {
