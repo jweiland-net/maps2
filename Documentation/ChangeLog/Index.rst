@@ -7,6 +7,11 @@
 ChangeLog
 =========
 
+Version 10.0.10
+===============
+
+*   BUGFIX: Repair OSM UpgradeWizard for TYPO3 10
+
 Version 10.0.9
 ==============
 

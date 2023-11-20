@@ -14,6 +14,7 @@ namespace JWeiland\Maps2\Update;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Install\Updates\UpgradeWizardInterface;
 
@@ -57,9 +58,20 @@ class NewGeocodeUriForOsmUpdate implements UpgradeWizardInterface
                     is_array($maps2ExtensionConfiguration)
                     && array_key_exists('openStreetMapGeocodeUri', $maps2ExtensionConfiguration)
                 ) {
-                    $maps2ExtensionConfiguration['openStreetMapGeocodeUri'] = $this->newOsmGeocodeUri;
+                    if (version_compare($this->getTypo3Version()->getBranch(), '11.0', '>=')) {
+                        $maps2ExtensionConfiguration['openStreetMapGeocodeUri'] = $this->newOsmGeocodeUri;
+                        $this->getExtensionConfiguration()->set(
+                            'maps2',
+                            $maps2ExtensionConfiguration
+                        );
+                    } else {
+                        $this->getExtensionConfiguration()->set(
+                            'maps2',
+                            'openStreetMapGeocodeUri',
+                            $this->newOsmGeocodeUri
+                        );
+                    }
                 }
-                $this->getExtensionConfiguration()->set('maps2', $maps2ExtensionConfiguration);
 
                 return true;
             } catch (ExtensionConfigurationExtensionNotConfiguredException | ExtensionConfigurationPathDoesNotExistException $e) {
@@ -81,6 +93,11 @@ class NewGeocodeUriForOsmUpdate implements UpgradeWizardInterface
     private function getExtensionConfiguration(): ExtensionConfiguration
     {
         return GeneralUtility::makeInstance(ExtensionConfiguration::class);
+    }
+
+    private function getTypo3Version(): Typo3Version
+    {
+        return GeneralUtility::makeInstance(Typo3Version::class);
     }
 
     public function getPrerequisites(): array
