@@ -7,6 +7,12 @@
 ChangeLog
 =========
 
+Version 11.0.0
+==============
+
+*   BUGFIX: Show info window content for TYPO3 instances where FE/pageNotFoundOnCHashError is active
+*   DOCU: Add section about routing configuration
+
 Version 10.0.10
 ===============
 

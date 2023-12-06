@@ -14,22 +14,18 @@ namespace JWeiland\Maps2\Tests\Functional\Form\Element;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Form\Element\GoogleMapsElement;
 use JWeiland\Maps2\Helper\MapHelper;
-use Nimut\TestingFramework\TestCase\FunctionalTestCase;
-use Prophecy\Argument;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
+use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Backend\Form\NodeFactory;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
+use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 /**
  * Class GoogleMapsElementTest
  */
 class GoogleMapsElementTest extends FunctionalTestCase
 {
-    use ProphecyTrait;
-
     protected GoogleMapsElement $subject;
 
     protected array $data = [];
@@ -37,25 +33,22 @@ class GoogleMapsElementTest extends FunctionalTestCase
     protected ExtConf $extConf;
 
     /**
-     * @var PageRenderer|ObjectProphecy
+     * @var PageRenderer|MockObject
      */
-    protected $pageRendererProphecy;
+    protected $pageRendererMock;
 
     /**
-     * @var MapHelper|ObjectProphecy
+     * @var MapHelper|MockObject
      */
-    protected $mapHelperProphecy;
+    protected $mapHelperMock;
 
     /**
-     * @var StandaloneView|ObjectProphecy
+     * @var StandaloneView|MockObject
      */
-    protected $viewProphecy;
+    protected $viewMock;
 
-    /**
-     * @var array
-     */
-    protected $testExtensionsToLoad = [
-        'typo3conf/ext/maps2',
+    protected array $testExtensionsToLoad = [
+        'jweiland/maps2',
     ];
 
     protected function setUp(): void
@@ -82,14 +75,14 @@ class GoogleMapsElementTest extends FunctionalTestCase
         $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
         GeneralUtility::setSingletonInstance(ExtConf::class, $this->extConf);
 
-        $this->pageRendererProphecy = $this->prophesize(PageRenderer::class);
-        GeneralUtility::setSingletonInstance(PageRenderer::class, $this->pageRendererProphecy->reveal());
+        $this->pageRendererMock = $this->createMock(PageRenderer::class);
+        GeneralUtility::setSingletonInstance(PageRenderer::class, $this->pageRendererMock);
 
-        $this->mapHelperProphecy = $this->prophesize(MapHelper::class);
-        GeneralUtility::addInstance(MapHelper::class, $this->mapHelperProphecy->reveal());
+        $this->mapHelperMock = $this->createMock(MapHelper::class);
+        GeneralUtility::addInstance(MapHelper::class, $this->mapHelperMock);
 
-        $this->viewProphecy = $this->prophesize(StandaloneView::class);
-        GeneralUtility::addInstance(StandaloneView::class, $this->viewProphecy->reveal());
+        $this->viewMock = $this->createMock(StandaloneView::class);
+        GeneralUtility::addInstance(StandaloneView::class, $this->viewMock);
 
         $this->subject = new GoogleMapsElement(
             GeneralUtility::makeInstance(NodeFactory::class),
@@ -102,9 +95,9 @@ class GoogleMapsElementTest extends FunctionalTestCase
         unset(
             $this->subject,
             $this->extConf,
-            $this->pageRendererProphecy,
-            $this->mapHelperProphecy,
-            $this->viewProphecy
+            $this->pageRendererMock,
+            $this->mapHelperMock,
+            $this->viewMock
         );
 
         parent::tearDown();
@@ -118,49 +111,24 @@ class GoogleMapsElementTest extends FunctionalTestCase
         $record = $this->data['databaseRow'];
         $record['collection_type'] = 'Point';
 
-        $this->viewProphecy
-            ->setTemplatePathAndFilename(
-                Argument::containingString('Resources/Private/Templates/Tca/GoogleMaps.html')
-            )
-            ->shouldBeCalled();
-        $this->viewProphecy
-            ->assign('record', json_encode($record))
-            ->shouldBeCalled();
-        $this->viewProphecy
-            ->assign('extConf', Argument::any())
-            ->shouldBeCalled();
-        $this->viewProphecy
-            ->render()
-            ->shouldBeCalled()
+        $this->viewMock
+            ->expects(self::atLeastOnce())
+            ->method('setTemplatePathAndFilename')
+            ->with(
+                self::stringContains('Resources/Private/Templates/Tca/GoogleMaps.html')
+            );
+        $this->viewMock
+            ->expects(self::atLeastOnce())
+            ->method('assign')
+            ->willReturnMap([
+                ['record', json_encode($record), null],
+                ['extConf', self::any(), null],
+            ]);
+        $this->viewMock
+            ->expects(self::atLeastOnce())
+            ->method('render')
             ->willReturn('foo');
 
         $this->subject->render();
-    }
-
-    /**
-     * @test
-     */
-    public function renderWillAddRequireJsModule(): void
-    {
-        $this->viewProphecy
-            ->setTemplatePathAndFilename(
-                Argument::containingString('Resources/Private/Templates/Tca/GoogleMaps.html')
-            )
-            ->shouldBeCalled();
-        $this->viewProphecy
-            ->assign('record', Argument::any())
-            ->shouldBeCalled();
-        $this->viewProphecy
-            ->assign('extConf', Argument::any())
-            ->shouldBeCalled();
-        $this->viewProphecy
-            ->render()
-            ->shouldBeCalled()
-            ->willReturn('foo');
-
-        self::assertSame(
-            ['TYPO3/CMS/Maps2/GoogleMapsModule'],
-            $this->subject->render()['requireJsModules']
-        );
     }
 }

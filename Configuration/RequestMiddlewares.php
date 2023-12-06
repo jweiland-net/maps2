@@ -1,4 +1,5 @@
 <?php
+
 return [
     'frontend' => [
         'jweiland/maps2/initialize-fe-session' => [

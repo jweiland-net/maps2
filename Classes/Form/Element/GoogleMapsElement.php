@@ -14,6 +14,7 @@ namespace JWeiland\Maps2\Form\Element;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Helper\MapHelper;
 use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
+use TYPO3\CMS\Core\Page\JavaScriptModuleInstruction;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -95,7 +96,9 @@ class GoogleMapsElement extends AbstractFormElement
             false
         );
         $resultArray['stylesheetFiles'][] = $publicResourcesPath . 'Css/GoogleMapsModule.css';
-        $resultArray['requireJsModules'][] = 'TYPO3/CMS/Maps2/GoogleMapsModule';
+        $resultArray['requireJsModules'][] = JavaScriptModuleInstruction::forRequireJS(
+            'TYPO3/CMS/Maps2/GoogleMapsModule'
+        );
 
         $fieldInformationResult = $this->renderFieldInformation();
         $fieldInformationHtml = $fieldInformationResult['html'];
@@ -110,11 +113,11 @@ class GoogleMapsElement extends AbstractFormElement
             ]),
             'data-formengine-validation-rules' => $this->getValidationDataAsJsonString($config),
             'data-formengine-input-params' => (string)json_encode([
-                'field' => $parameterArray['itemFormElName'],
+                'field' => $parameterArray['itemFormElName'] ?? '',
                 'evalList' => implode(',', $evalList),
                 'is_in' => '',
             ]),
-            'data-formengine-input-name' => (string)$parameterArray['itemFormElName'],
+            'data-formengine-input-name' => (string)($parameterArray['itemFormElName'] ?? ''),
         ];
 
         // SF: We can not set this field to type="hidden" as FormEngine.getFieldElement
@@ -127,7 +130,7 @@ class GoogleMapsElement extends AbstractFormElement
         $html[] =         '<div class="form-wizards-element">';
         $html[] =             $this->getMapHtml($this->cleanUpCurrentRecord($this->data['databaseRow']));
         $html[] =             '<input type="text" ' . GeneralUtility::implodeAttributes($attributes, true) . ' />';
-        $html[] =             '<input type="hidden" name="' . $parameterArray['itemFormElName'] . '" value="' . htmlspecialchars($itemValue) . '" />';
+        $html[] =             '<input type="hidden" name="' . ($parameterArray['itemFormElName'] ?? '') . '" value="' . htmlspecialchars($itemValue) . '" />';
         $html[] =         '</div>';
         $html[] =     '</div>';
         $html[] = '</div>';

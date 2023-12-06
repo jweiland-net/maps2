@@ -63,7 +63,7 @@ abstract class AbstractRequest implements RequestInterface
      */
     public function getParameter(string $parameter)
     {
-        return $this->parameters[$parameter];
+        return $this->parameters[$parameter] ?? null;
     }
 
     public function hasParameter(string $parameter): bool
@@ -80,7 +80,7 @@ abstract class AbstractRequest implements RequestInterface
         // if address can be interpreted as zip, attach the default country to prevent a worldwide search
         if (
             MathUtility::canBeInterpretedAsInteger($address)
-            && !empty($this->extConf->getDefaultCountry())
+            && $this->extConf->getDefaultCountry() !== ''
         ) {
             $address .= ' ' . $this->extConf->getDefaultCountry();
         }
@@ -90,7 +90,7 @@ abstract class AbstractRequest implements RequestInterface
 
     public function isValidRequest(): bool
     {
-        if (empty($this->getUri())) {
+        if ($this->getUri() === '') {
             return false;
         }
 

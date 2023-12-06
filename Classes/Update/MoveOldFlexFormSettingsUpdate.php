@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Update;
 
+use Doctrine\DBAL\Driver\Exception as DBALException;
 use TYPO3\CMS\Core\Configuration\FlexForm\FlexFormTools;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
@@ -160,42 +161,44 @@ class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
 
     /**
      * Get all (incl. deleted/hidden) tt_content records with plugin maps2_maps2
-     *
-     * @return mixed[]
      */
     protected function getTtContentRecordsWithMaps2Plugin(): array
     {
         $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable('tt_content');
         $queryBuilder->getRestrictions()->removeAll();
 
-        $statement = $queryBuilder
-            ->select('uid', 'pi_flexform')
-            ->from('tt_content')
-            ->where(
-                $queryBuilder->expr()->eq(
-                    'CType',
-                    $queryBuilder->createNamedParameter('list')
-                ),
-                $queryBuilder->expr()->orX(
+        try {
+            $statement = $queryBuilder
+                ->select('uid', 'pi_flexform')
+                ->from('tt_content')
+                ->where(
                     $queryBuilder->expr()->eq(
-                        'list_type',
-                        $queryBuilder->createNamedParameter('maps2_citymap')
+                        'CType',
+                        $queryBuilder->createNamedParameter('list')
                     ),
-                    $queryBuilder->expr()->eq(
-                        'list_type',
-                        $queryBuilder->createNamedParameter('maps2_maps2')
-                    ),
-                    $queryBuilder->expr()->eq(
-                        'list_type',
-                        $queryBuilder->createNamedParameter('maps2_searchwithinradius')
+                    $queryBuilder->expr()->orX(
+                        $queryBuilder->expr()->eq(
+                            'list_type',
+                            $queryBuilder->createNamedParameter('maps2_citymap')
+                        ),
+                        $queryBuilder->expr()->eq(
+                            'list_type',
+                            $queryBuilder->createNamedParameter('maps2_maps2')
+                        ),
+                        $queryBuilder->expr()->eq(
+                            'list_type',
+                            $queryBuilder->createNamedParameter('maps2_searchwithinradius')
+                        )
                     )
                 )
-            )
-            ->execute();
+                ->executeQuery();
 
-        $records = [];
-        while ($record = $statement->fetch(\PDO::FETCH_ASSOC)) {
-            $records[] = $record;
+            $records = [];
+            while ($record = $statement->fetchAssociative()) {
+                $records[] = $record;
+            }
+        } catch (DBALException $exception) {
+            $records = [];
         }
 
         return $records;

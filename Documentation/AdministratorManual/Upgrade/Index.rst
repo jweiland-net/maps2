@@ -7,6 +7,15 @@ Upgrade
 
 If you upgrade EXT:maps2 to a newer version, please read this section carefully!
 
+Upgrade to Version 11.0.0
+=========================
+
+Updating TYPO3 extensions with help of `class.ext_update.php` is deprecated
+since TYPO3 11.0 and was removed with TYPO3 12.0. So, if you upgrade from
+a very old maps2 version you should upgrade maps2 to at lease version 10.*
+and execute the upgrade wizard in extensionmanager first.
+
+
 Upgrade to Version 10.0.9
 =========================
 

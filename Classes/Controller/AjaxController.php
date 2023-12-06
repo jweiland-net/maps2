@@ -11,31 +11,26 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Controller;
 
+use JWeiland\Maps2\Controller\Traits\InjectPoiCollectionRepositoryTrait;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
-use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
 use JWeiland\Maps2\Event\RenderInfoWindowContentEvent;
 use JWeiland\Maps2\Service\MapService;
+use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 
 /**
- * Handle Ajax requests.
+ * Handle Ajax requests of EXT:maps2.
  * Currently, it is used to render the infoWindowContent of POIs.
- * This controller is not connected to the extbase environment and is reachable
- * over typeNum 1614075471
+ * This controller is called by typeNum 1614075471
  */
 class AjaxController extends ActionController
 {
+    use InjectPoiCollectionRepositoryTrait;
+
     public array $errors = [];
 
-    public PoiCollectionRepository $poiCollectionRepository;
-
-    public function injectPoiCollectionRepository(PoiCollectionRepository $poiCollectionRepository): void
-    {
-        $this->poiCollectionRepository = $poiCollectionRepository;
-    }
-
-    public function processAction(string $method): string
+    public function processAction(string $method): ResponseInterface
     {
         $response = [
             'content' => '',
@@ -49,7 +44,7 @@ class AjaxController extends ActionController
 
         $response['errors'] = $this->errors;
 
-        return \json_encode($response, JSON_THROW_ON_ERROR);
+        return $this->jsonResponse(\json_encode($response, JSON_THROW_ON_ERROR));
     }
 
     public function renderInfoWindowContentAction(int $poiCollectionUid): string

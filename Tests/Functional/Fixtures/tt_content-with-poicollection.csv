@@ -1,0 +1,3 @@
+"tt_content",,,,,,,,,,,
+,"uid","pid","hidden","deleted","t3ver_oid","t3ver_wsid","colPos","CType","list_type","header","pi_flexform"
+,1,1,0,0,0,0,0,"list","maps2_maps2","Maps2: Point","<?xml version=""1.0"" encoding=""utf-8"" standalone=""yes"" ?><T3FlexForms><data><sheet index=""sDEF""><language index=""lDEF""><field index=""settings.poiCollection""><value index=""vDEF"">1</value></field></language></sheet></data></T3FlexForms>"

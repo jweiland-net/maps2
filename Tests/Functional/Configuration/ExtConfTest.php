@@ -12,8 +12,8 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Tests\Functional\Configuration;
 
 use JWeiland\Maps2\Configuration\ExtConf;
-use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 /**
  * Class ExtConfTest
@@ -22,8 +22,8 @@ class ExtConfTest extends FunctionalTestCase
 {
     protected ExtConf $subject;
 
-    protected $testExtensionsToLoad = [
-        'typo3conf/ext/maps2',
+    protected array $testExtensionsToLoad = [
+        'jweiland/maps2',
     ];
 
     protected function setUp(): void

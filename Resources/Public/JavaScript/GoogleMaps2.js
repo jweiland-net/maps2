@@ -463,18 +463,11 @@ function GoogleMaps2($element, environment) {
         let infoWindow = me.infoWindow;
         let map = me.map;
         google.maps.event.addListener(element, "click", function (event) {
-            let url = window.location.protocol + "//" + window.location.host;
-            url += "/index.php?id=" + environment.id + "&type=1614075471";
-            if (poiCollection.sysLanguageUid) {
-                url += "&L=" + poiCollection.sysLanguageUid;
-            }
-            url += "&tx_maps2_maps2[controller]=Ajax&tx_maps2_maps2[action]=process&tx_maps2_maps2[method]=renderInfoWindowContent"
             jQuery.ajax({
-                url: url,
+                url: environment.ajaxUrl,
                 method: "POST",
                 dataType: "json",
                 data: {
-                    storagePids: environment.contentRecord.pages,
                     poiCollection: poiCollection.uid
                 }
             }).done(function(data) {

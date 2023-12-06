@@ -15,35 +15,33 @@ use JWeiland\Maps2\Client\GoogleMapsClient;
 use JWeiland\Maps2\Client\Request\GoogleMaps\GeocodeRequest;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Helper\MessageHelper;
-use Nimut\TestingFramework\TestCase\FunctionalTestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
+use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Core\Http\RequestFactory;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 /**
  * Test Google Maps Client class
  */
 class GoogleMapsClientTest extends FunctionalTestCase
 {
-    use ProphecyTrait;
-
     protected GoogleMapsClient $subject;
 
     protected ExtConf $extConf;
 
     /**
-     * @var MessageHelper|ObjectProphecy
+     * @var MessageHelper|MockObject
      */
-    protected $messageHelperProphecy;
+    protected $messageHelperMock;
 
     /**
-     * @var RequestFactory|ObjectProphecy
+     * @var RequestFactory|MockObject
      */
-    protected $requestFactoryProphecy;
+    protected $requestFactoryMock;
 
-    protected $testExtensionsToLoad = [
-        'typo3conf/ext/maps2',
+    protected array $testExtensionsToLoad = [
+        'jweiland/maps2',
     ];
 
     protected function setUp(): void
@@ -51,12 +49,12 @@ class GoogleMapsClientTest extends FunctionalTestCase
         parent::setUp();
 
         $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
-        $this->messageHelperProphecy = $this->prophesize(MessageHelper::class);
-        $this->requestFactoryProphecy = $this->prophesize(RequestFactory::class);
+        $this->messageHelperMock = $this->createMock(MessageHelper::class);
+        $this->requestFactoryMock = $this->createMock(RequestFactory::class);
 
         $this->subject = new GoogleMapsClient(
-            $this->messageHelperProphecy->reveal(),
-            $this->requestFactoryProphecy->reveal()
+            $this->messageHelperMock,
+            $this->requestFactoryMock
         );
     }
 
@@ -65,8 +63,10 @@ class GoogleMapsClientTest extends FunctionalTestCase
         unset(
             $this->subject,
             $this->extConf,
-            $this->messageHelperProphecy
+            $this->messageHelperMock,
+            $this->requestFactoryMock
         );
+
         parent::tearDown();
     }
 
@@ -78,13 +78,14 @@ class GoogleMapsClientTest extends FunctionalTestCase
         $geocodeRequest = new GeocodeRequest($this->extConf);
         $geocodeRequest->setUri('');
 
-        $this->messageHelperProphecy
-            ->addFlashMessage(
+        $this->messageHelperMock
+            ->expects(self::atLeastOnce())
+            ->method('addFlashMessage')
+            ->with(
                 'URI is empty or contains invalid chars. URI: ',
                 'Invalid request URI',
-                2
-            )
-            ->shouldBeCalled();
+                ContextualFeedbackSeverity::ERROR
+            );
 
         self::assertSame(
             [],
@@ -100,13 +101,14 @@ class GoogleMapsClientTest extends FunctionalTestCase
         $geocodeRequest = new GeocodeRequest($this->extConf);
         $geocodeRequest->setUri('https://www.jweiländ.net');
 
-        $this->messageHelperProphecy
-            ->addFlashMessage(
+        $this->messageHelperMock
+            ->expects(self::atLeastOnce())
+            ->method('addFlashMessage')
+            ->with(
                 'URI is empty or contains invalid chars. URI: https://www.jweiländ.net',
                 'Invalid request URI',
-                2
-            )
-            ->shouldBeCalled();
+                ContextualFeedbackSeverity::ERROR
+            );
 
         self::assertSame(
             [],

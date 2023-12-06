@@ -1,0 +1,4 @@
+"tx_maps2_domain_model_poicollection",,,,,,,,,,,
+,"uid","pid","hidden","deleted","map_provider","collection_type","title","latitude","longitude","info_window_content","categories"
+,1,1,0,0,"gm","Point","Jochen",51.01827735,7.3854744963651,"Cat: 1",1
+,2,12,0,0,"gm","Point","Stefan",46.01827735,3.3854744963651,"Cat: 1",1

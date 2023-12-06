@@ -1,0 +1,4 @@
+"sys_category_record_mm",,,,,,
+,"uid_local","uid_foreign","tablenames","fieldname","sorting","sorting_foreign"
+,1,1,"tx_maps2_domain_model_poicollection","categories",0,1
+,1,2,"tx_maps2_domain_model_poicollection","categories",0,2

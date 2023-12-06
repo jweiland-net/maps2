@@ -12,7 +12,9 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\ViewHelpers\Form;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Mvc\RequestInterface;
 use TYPO3\CMS\Extbase\Service\ExtensionService;
+use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
 use TYPO3\CMS\Frontend\Page\CacheHashCalculator;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
@@ -38,9 +40,23 @@ class RenderHiddenFieldsForGetViewHelper extends AbstractViewHelper
 
     public function initializeArguments(): void
     {
-        $this->registerArgument('pageUid', 'int', 'The target page UID', false);
-        $this->registerArgument('action', 'string', 'Target action', false);
-        $this->registerArgument('controller', 'string', 'Target controller. If null current controllerName is used', false);
+        $this->registerArgument(
+            'pageUid',
+            'int',
+            'The target page UID'
+        );
+
+        $this->registerArgument(
+            'action',
+            'string',
+            'Target action'
+        );
+
+        $this->registerArgument(
+            'controller',
+            'string',
+            'Target controller. If null current controllerName is used'
+        );
     }
 
     /**
@@ -53,14 +69,18 @@ class RenderHiddenFieldsForGetViewHelper extends AbstractViewHelper
     ): string {
         $extensionService = GeneralUtility::makeInstance(ExtensionService::class);
         $cacheHashCalculator = GeneralUtility::makeInstance(CacheHashCalculator::class);
+        $extbaseRequest = self::getExtbaseRequest($renderingContext);
+        if (!$extbaseRequest instanceof RequestInterface) {
+            return '';
+        }
 
         $pluginNamespace = $extensionService->getPluginNamespace(
-            $renderingContext->getControllerContext()->getRequest()->getControllerExtensionName(),
-            $renderingContext->getControllerContext()->getRequest()->getPluginName()
+            $extbaseRequest->getControllerExtensionName(),
+            $extbaseRequest->getPluginName()
         );
 
         // get pageUid
-        $pageUid = $arguments['pageUid'] ?: $GLOBALS['TSFE']->id;
+        $pageUid = (int)($arguments['pageUid'] ?: $extbaseRequest->getQueryParams()['id'] ?? 0);
 
         // create array for cHash calculation
         $parameters = [];
@@ -97,5 +117,17 @@ class RenderHiddenFieldsForGetViewHelper extends AbstractViewHelper
         );
 
         return implode(chr(10), $fields);
+    }
+
+    private static function getExtbaseRequest(RenderingContextInterface $renderingContext): ?RequestInterface
+    {
+        if (
+            $renderingContext instanceof RenderingContext
+            && $renderingContext->getRequest() instanceof RequestInterface
+        ) {
+            return $renderingContext->getRequest();
+        }
+
+        return null;
     }
 }

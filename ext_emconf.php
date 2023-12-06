@@ -12,8 +12,7 @@ $EM_CONF[$_EXTKEY] = [
     'author_company' => 'jweiland.net',
     'constraints' => [
         'depends' => [
-            'php' => '7.4.0-8.99.99',
-            'typo3' => '10.4.19-11.5.99',
+            'typo3' => '12.4.4-12.4.99',
         ],
         'conflicts' => [
         ],

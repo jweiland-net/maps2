@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Tests\Unit\Domain\Model;
 
 use JWeiland\Maps2\Domain\Model\Position;
-use Nimut\TestingFramework\TestCase\UnitTestCase;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 /**
  * Class PositionTest
@@ -33,6 +33,30 @@ class PositionTest extends UnitTestCase
         );
 
         parent::tearDown();
+    }
+
+    /**
+     * @test
+     */
+    public function getFormattedAddressInitiallyReturnsEmptyString(): void
+    {
+        self::assertSame(
+            '',
+            $this->subject->getFormattedAddress()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function setFormattedAddressSetsFormattedAddress(): void
+    {
+        $this->subject->setFormattedAddress('foo bar');
+
+        self::assertSame(
+            'foo bar',
+            $this->subject->getFormattedAddress()
+        );
     }
 
     /**
@@ -80,30 +104,6 @@ class PositionTest extends UnitTestCase
         self::assertSame(
             1234.56,
             $this->subject->getLongitude()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function getFormattedAddressInitiallyReturnsEmptyString(): void
-    {
-        self::assertSame(
-            '',
-            $this->subject->getFormattedAddress()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function setFormattedAddressSetsFormattedAddress(): void
-    {
-        $this->subject->setFormattedAddress('foo bar');
-
-        self::assertSame(
-            'foo bar',
-            $this->subject->getFormattedAddress()
         );
     }
 }

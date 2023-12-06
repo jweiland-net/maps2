@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Service;
 
+use Doctrine\DBAL\Driver\Exception as DBALException;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Domain\Model\Position;
@@ -22,11 +23,11 @@ use JWeiland\Maps2\Utility\DatabaseUtility;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\FrontendRestrictionContainer;
 use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Core\Http\ApplicationType;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
-use TYPO3\CMS\Extbase\Service\EnvironmentService;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
@@ -44,8 +45,6 @@ class MapService
 
     protected EventDispatcher $eventDispatcher;
 
-    protected EnvironmentService $environmentService;
-
     protected array $settings = [];
 
     public function __construct(
@@ -53,15 +52,13 @@ class MapService
         MessageHelper $messageHelper,
         Maps2Registry $maps2Registry,
         ExtConf $extConf,
-        EventDispatcher $eventDispatcher,
-        EnvironmentService $environmentService
+        EventDispatcher $eventDispatcher
     ) {
         $this->configurationManager = $configurationManager;
         $this->messageHelper = $messageHelper;
         $this->maps2Registry = $maps2Registry;
         $this->extConf = $extConf;
         $this->eventDispatcher = $eventDispatcher;
-        $this->environmentService = $environmentService;
     }
 
     /**
@@ -113,7 +110,7 @@ class MapService
     protected function getSettings(): array
     {
         $settings = [];
-        if ($this->environmentService->isEnvironmentInFrontendMode()) {
+        if (ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend()) {
             // Keep ExtName and PluginName, else the extKey will not be added to return-value
             // in further getConfiguration calls.
             $settings = $this->configurationManager->getConfiguration(
@@ -146,7 +143,7 @@ class MapService
             $this->messageHelper->addFlashMessage(
                 'The is no latitude or longitude in Response of Map Provider.',
                 'Missing Lat or Lng',
-                AbstractMessage::ERROR
+                ContextualFeedbackSeverity::ERROR
             );
             return 0;
         }
@@ -158,7 +155,6 @@ class MapService
         $fieldValues['pid'] = $pid;
         $fieldValues['tstamp'] = time();
         $fieldValues['crdate'] = time();
-        $fieldValues['cruser_id'] = $GLOBALS['BE_USER']->user['uid'] ?? 0;
         $fieldValues['hidden'] = 0;
         $fieldValues['deleted'] = 0;
         $fieldValues['latitude'] = $latitude;
@@ -189,7 +185,7 @@ class MapService
      * Assign PoiCollection UID to foreign record
      *
      * @param int $poiCollectionUid This must be the UID of the newly created POI collection record
-     * @param array $foreignRecord This is the record of the foreign extensions. It must be an already saved record and it MUST HAVE an UID assigned
+     * @param array $foreignRecord This is the record of the foreign extensions. It must be an already saved record, and it MUST HAVE an UID assigned
      * @param string $foreignTableName This is your (foreign) location table name, from where you get the $foreignRecord
      * @param string $foreignFieldName This is our column name (mostly tx_maps2_uid) in your/foreign location table.
      * @throws \Exception
@@ -208,7 +204,7 @@ class MapService
             $this->messageHelper->addFlashMessage(
                 'PoiCollection UID can not be empty. Please check your values near method assignPoiCollectionToForeignRecord',
                 'PoiCollection empty',
-                AbstractMessage::ERROR
+                ContextualFeedbackSeverity::ERROR
             );
         }
 
@@ -217,7 +213,7 @@ class MapService
             $this->messageHelper->addFlashMessage(
                 'Foreign record can not be empty. Please check your values near method assignPoiCollectionToForeignRecord',
                 'Foreign record empty',
-                AbstractMessage::ERROR
+                ContextualFeedbackSeverity::ERROR
             );
         }
 
@@ -226,7 +222,7 @@ class MapService
             $this->messageHelper->addFlashMessage(
                 'Foreign record must have the array key "uid" which is currently not present. Please check your values near method assignPoiCollectionToForeignRecord',
                 'UID not filled',
-                AbstractMessage::ERROR
+                ContextualFeedbackSeverity::ERROR
             );
         }
 
@@ -235,7 +231,7 @@ class MapService
             $this->messageHelper->addFlashMessage(
                 'Foreign table name is a must have value, which is currently not present. Please check your values near method assignPoiCollectionToForeignRecord',
                 'Foreign table name empty',
-                AbstractMessage::ERROR
+                ContextualFeedbackSeverity::ERROR
             );
         }
 
@@ -244,7 +240,7 @@ class MapService
             $this->messageHelper->addFlashMessage(
                 'Foreign field name is a must have value, which is currently not present. Please check your values near method assignPoiCollectionToForeignRecord',
                 'Foreign field name empty',
-                AbstractMessage::ERROR
+                ContextualFeedbackSeverity::ERROR
             );
         }
 
@@ -256,7 +252,7 @@ class MapService
             $this->messageHelper->addFlashMessage(
                 'Table "' . $foreignTableName . '" is not configured in TCA',
                 'Table not found',
-                AbstractMessage::ERROR
+                ContextualFeedbackSeverity::ERROR
             );
             return;
         }
@@ -265,7 +261,7 @@ class MapService
             $this->messageHelper->addFlashMessage(
                 'Field "' . $foreignFieldName . '" is not configured in TCA',
                 'Field not found',
-                AbstractMessage::ERROR
+                ContextualFeedbackSeverity::ERROR
             );
             return;
         }
@@ -301,31 +297,36 @@ class MapService
                 $queryBuilder->setRestrictions(
                     GeneralUtility::makeInstance(FrontendRestrictionContainer::class)
                 );
-                $statement = $queryBuilder
-                    ->select('*')
-                    ->from($tableName)
-                    ->where(
-                        $queryBuilder->expr()->eq(
-                            $columnName,
-                            $queryBuilder->createNamedParameter($poiCollection->getUid(), \PDO::PARAM_INT)
+
+                try {
+                    $statement = $queryBuilder
+                        ->select('*')
+                        ->from($tableName)
+                        ->where(
+                            $queryBuilder->expr()->eq(
+                                $columnName,
+                                $queryBuilder->createNamedParameter($poiCollection->getUid(), \PDO::PARAM_INT)
+                            )
                         )
-                    )
-                    ->execute();
+                        ->executeQuery();
 
-                while ($foreignRecord = $statement->fetch(\PDO::FETCH_ASSOC)) {
-                    // Hopefully these keys are unique enough
-                    // Very useful to f:groupedFor in Fluid Templates
-                    $foreignRecord['jwMaps2TableName'] = $tableName;
-                    $foreignRecord['jwMaps2ColumnName'] = $columnName;
+                    while ($foreignRecord = $statement->fetchAssociative()) {
+                        // Hopefully these keys are unique enough
+                        // Very useful to f:groupedFor in Fluid Templates
+                        $foreignRecord['jwMaps2TableName'] = $tableName;
+                        $foreignRecord['jwMaps2ColumnName'] = $columnName;
 
-                    // Add or remove your own values
-                    $foreignRecord = $this->emitPreAddForeignRecordToPoiCollectionEvent(
-                        $foreignRecord,
-                        $tableName,
-                        $columnName
-                    );
+                        // Add or remove your own values
+                        $foreignRecord = $this->emitPreAddForeignRecordToPoiCollectionEvent(
+                            $foreignRecord,
+                            $tableName,
+                            $columnName
+                        );
 
-                    $poiCollection->addForeignRecord($foreignRecord);
+                        $poiCollection->addForeignRecord($foreignRecord);
+                    }
+                } catch (DBALException $exception) {
+                    continue;
                 }
             }
         }
