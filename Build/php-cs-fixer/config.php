@@ -26,10 +26,8 @@ COMMENT;
 $finder = Finder::create()
     ->name('*.php')
     ->exclude('.Build')
-    ->exclude('Configuration')
     ->ignoreVCSIgnored(true)
     ->in([
-        __DIR__ . '/../../Build/',
         __DIR__ . '/../../Classes/',
         __DIR__ . '/../../Configuration/',
         __DIR__ . '/../../Tests/',
