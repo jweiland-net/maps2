@@ -29,7 +29,6 @@ $finder = Finder::create()
     ->ignoreVCSIgnored(true)
     ->in([
         __DIR__ . '/../../Classes/',
-        __DIR__ . '/../../Configuration/',
         __DIR__ . '/../../Tests/',
     ]);
 
