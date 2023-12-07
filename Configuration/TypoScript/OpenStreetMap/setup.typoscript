@@ -1,6 +1,5 @@
 # Prevent including both static maps of map providers on one page
 page.includeCSS.leaflet >
-page.includeJSFooterlibs.jQueryForMaps2 >
 page.includeJSFooterlibs.maps2Leaflet >
 page.includeJSFooterlibs.maps2 >
 plugin.tx_maps2.settings.markerClusterer >
@@ -9,10 +8,13 @@ plugin.tx_maps2.settings.markerClusterer >
   page.includeCSS.leaflet = EXT:maps2/Resources/Public/Css/Leaflet/Leaflet.css
 
   page.includeJSFooterlibs {
-    jQueryForMaps2 = EXT:maps2/Resources/Public/JavaScript/jquery.min.js
-    jQueryForMaps2.if.isTrue = {$plugin.tx_maps2.view.includeJQuery}
-    maps2Leaflet = EXT:maps2/Resources/Public/JavaScript/Leaflet.js
-    maps2 = EXT:maps2/Resources/Public/JavaScript/OpenStreetMaps2.js
+    leaflet = EXT:maps2/Resources/Public/JavaScript/leaflet.min.js
+    leaflet.disableCompression = 1
+    leaflet.excludeFromConcatenation = 1
+    maps2 = EXT:maps2/Resources/Public/JavaScript/OpenStreetMap2.min.js
+    maps2.type = module
+    maps2.disableCompression = 1
+    maps2.excludeFromConcatenation = 1
   }
 [ELSE]
   # Requests to OpenStreetMap are not allowed. Inform the user about cookies and request permissions for 3rd party.

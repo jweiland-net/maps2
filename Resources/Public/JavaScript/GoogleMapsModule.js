@@ -1,7 +1,7 @@
 /**
  * Module: TYPO3/CMS/Maps2/GoogleMapsModule
  */
-define(["jquery", "gmaps", "TYPO3/CMS/Backend/Notification"], function($, gmaps, Notification) {
+define(["gmaps", "TYPO3/CMS/Backend/Notification"], function($, gmaps, Notification) {
     /**
      * GoogleMaps object
      */

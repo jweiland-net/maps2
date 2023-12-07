@@ -1,7 +1,5 @@
 plugin.tx_maps2 {
   view {
-    # cat=plugin.tx_maps2/enable; type=boolean; label=Include jQuery
-    includeJQuery = 1
     # cat=plugin.tx_maps2/enable; type=boolean; label=Enable Marker Clusterer
     enableMarkerClusterer = 0
     # cat=plugin.tx_maps2//b; type=string; label=Google Maps Api Key: Please visit: https://console.developers.google.com/ Create a project for your site -> Activate Google Maps JavaScript API -> Create an authorization for that API and copy the Api key here.

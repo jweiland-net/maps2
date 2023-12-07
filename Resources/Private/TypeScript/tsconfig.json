@@ -1,0 +1,16 @@
+{
+	"include": [
+		"src/*.ts",
+		"defs/*.d.ts",
+		"../../../node_modules/@types/**/index.d.ts"
+	],
+	"exclude": [
+		"tsconfig.json"
+	],
+	"compilerOptions": {
+		"target": "es5",
+		"module": "none",
+		"sourceMap": true,
+		"outDir": "dist"
+	}
+}

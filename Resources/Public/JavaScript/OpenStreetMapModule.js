@@ -1,7 +1,7 @@
 /**
  * Module: TYPO3/CMS/Maps2/OpenStreetMapModule
  */
-define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["jquery", "leaflet", "leafletDragPath", "leafletEditable"], function($, L) {
+define("TYPO3/CMS/Maps2/OpenStreetMapModule", ["leaflet", "leafletDragPath", "leafletEditable"], function($, L) {
     let initialize = function(element, record, extConf) {
         let marker = {};
         let map = {};
