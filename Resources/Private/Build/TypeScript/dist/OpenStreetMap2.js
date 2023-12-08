@@ -1,88 +1,76 @@
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-var OpenStreetMap2 = /** @class */ (function () {
-    function OpenStreetMap2(element, environment) {
+class OpenStreetMap2 {
+    constructor(element, environment) {
         this.element = element;
         this.environment = environment;
         this.allMarkers = [];
         this.categorizedMarkers = {};
+        this.editable = this.element.classList.contains("editMarker");
         this.bounds = new L.LatLngBounds([
             [environment.extConf.defaultLatitude, environment.extConf.defaultLongitude]
         ]);
-        this.editable = this.element.classList.contains("editMarker");
-        this.preparePoisCollections();
-        this.editable = this.element.classList.contains("editMarker");
-        this.setWidthAndHeight();
+        this.preparePoiCollection();
+        this.setMapDimensions();
         this.createMap();
-        this.mainProcess();
+        this.setMarkersOnMap();
     }
-    OpenStreetMap2.prototype.preparePoisCollections = function () {
+    preparePoiCollection() {
         this.poiCollections = JSON.parse(this.element.getAttribute("data-pois") || '[]');
-    };
-    OpenStreetMap2.prototype.mainProcess = function () {
+    }
+    setMarkersOnMap() {
         if (this.isPOICollectionsEmpty()) {
             this.createMarkerBasedOnDataAttributes();
         }
         else {
             this.createMarkerBasedOnPOICollections();
         }
-    };
-    OpenStreetMap2.prototype.isPOICollectionsEmpty = function () {
-        return this.poiCollections === "undefined" || this.poiCollections.length === 0;
-    };
-    OpenStreetMap2.prototype.createMarkerBasedOnDataAttributes = function () {
-        var latitude = this.getAttributeAsFloat("data-latitude");
-        var longitude = this.getAttributeAsFloat("data-longitude");
+    }
+    isPOICollectionsEmpty() {
+        return this.poiCollections.length === 0;
+    }
+    createMarkerBasedOnDataAttributes() {
+        const latitude = this.getAttributeAsFloat("data-latitude");
+        const longitude = this.getAttributeAsFloat("data-longitude");
         if (!isNaN(latitude) && !isNaN(longitude)) {
             this.createMarkerByLatLng(latitude, longitude);
         }
-    };
-    OpenStreetMap2.prototype.getAttributeAsFloat = function (attributeName) {
+    }
+    getAttributeAsFloat(attributeName) {
         return parseFloat(this.element.getAttribute(attributeName) || "");
-    };
-    OpenStreetMap2.prototype.createMarkerBasedOnPOICollections = function () {
-        this.createPointByCollectionType(this.environment);
+    }
+    createMarkerBasedOnPOICollections() {
+        this.createPointByCollectionType();
         if (this.countObjectProperties(this.categorizedMarkers) > 1) {
-            this.showSwitchableCategories(this.environment);
+            this.showSwitchableCategories();
         }
         this.adjustMapZoom();
-    };
-    OpenStreetMap2.prototype.adjustMapZoom = function () {
+    }
+    adjustMapZoom() {
         if (this.shouldFitBounds()) {
             this.map.fitBounds(this.bounds);
         }
         else {
             this.map.panTo([this.poiCollections[0].latitude, this.poiCollections[0].longitude]);
         }
-    };
-    OpenStreetMap2.prototype.shouldFitBounds = function () {
-        return this.environment.settings.forceZoom === false
+    }
+    shouldFitBounds() {
+        return this.getSettings().forceZoom === false
             && (this.poiCollections.length > 1
                 || (this.poiCollections.length === 1
                     && (this.poiCollections[0].collectionType === "Area"
                         || this.poiCollections[0].collectionType === "Route")));
-    };
-    OpenStreetMap2.prototype.setWidthAndHeight = function () {
-        this.element.style.height = this.normalizeDimension(this.environment.settings.mapHeight);
-        this.element.style.width = this.normalizeDimension(this.environment.settings.mapWidth);
-    };
-    OpenStreetMap2.prototype.normalizeDimension = function (dimension) {
-        var normalizedDimension = String(dimension);
+    }
+    setMapDimensions() {
+        this.element.style.height = this.normalizeDimension(this.getSettings().mapHeight);
+        this.element.style.width = this.normalizeDimension(this.getSettings().mapWidth);
+    }
+    normalizeDimension(dimension) {
+        let normalizedDimension = String(dimension);
         if (this.canBeInterpretedAsNumber(normalizedDimension)) {
             normalizedDimension += 'px';
         }
         return normalizedDimension;
-    };
-    OpenStreetMap2.prototype.createMap = function () {
+    }
+    createMap() {
         this.map = L.map(this.element, {
             center: [this.getExtConf().defaultLatitude, this.getExtConf().defaultLongitude],
             zoom: this.getSettings().zoom ? this.getSettings().zoom : 12,
@@ -93,47 +81,49 @@ var OpenStreetMap2 = /** @class */ (function () {
             attribution: this.getSettings().mapTileAttribution,
             maxZoom: 20
         }).addTo(this.map);
-    };
-    OpenStreetMap2.prototype.groupCategories = function (environment) {
-        var me = this;
-        var groupedCategories = {};
-        var categoryUid = "0";
-        for (var x = 0; x < this.poiCollections.length; x++) {
-            for (var y = 0; y < this.poiCollections[x].categories.length; y++) {
-                categoryUid = String(this.poiCollections[x].categories[y].uid);
-                if (this.inList(environment.settings.categories, categoryUid) > -1 && !groupedCategories.hasOwnProperty(categoryUid)) {
-                    groupedCategories[categoryUid] = this.poiCollections[x].categories[y];
+    }
+    groupCategories() {
+        const groupedCategories = {};
+        this.poiCollections.forEach((poiCollection) => {
+            const categoryUids = poiCollection.categories.map((category) => String(category.uid));
+            categoryUids
+                .filter((categoryUid) => this.getSettings().categories.includes(categoryUid))
+                .forEach((categoryUid) => {
+                if (!groupedCategories.hasOwnProperty(categoryUid)) {
+                    groupedCategories[categoryUid] = poiCollection.categories.find((category) => String(category.uid) === categoryUid);
                 }
-            }
-        }
+            });
+        });
         return groupedCategories;
-    };
-    OpenStreetMap2.prototype.getCategoriesOfCheckboxesWithStatus = function (form, isChecked) {
-        var categories = [];
-        var checkboxes = isChecked ? form.querySelectorAll("input:checked") : form.querySelectorAll("input:not(:checked)");
-        checkboxes.forEach(function (checkbox) {
+    }
+    getCategoriesOfCheckboxesWithStatus(form, isChecked) {
+        let categories = [];
+        let checkboxes = isChecked
+            ? Array.from(form.querySelectorAll("input:checked"))
+            : Array.from(form.querySelectorAll("input:not(:checked)"));
+        checkboxes.forEach((checkbox) => {
             categories.push(parseInt(checkbox.value));
         });
         return categories;
-    };
-    OpenStreetMap2.prototype.getMarkersToChangeVisibilityFor = function (categoryUid, form, isChecked) {
-        var markers = [];
+    }
+    getMarkersToChangeVisibilityFor(categoryUid, form, isChecked) {
+        let markers = [];
         if (this.allMarkers.length === 0) {
             return markers;
         }
-        var marker = null;
-        var allCategoriesOfMarker = null;
-        var categoriesOfCheckboxesWithStatus = this.getCategoriesOfCheckboxesWithStatus(form, isChecked);
-        for (var i = 0; i < this.allMarkers.length; i++) {
+        let marker = null;
+        let allCategoriesOfMarker = null;
+        let categoriesOfCheckboxesWithStatus = this.getCategoriesOfCheckboxesWithStatus(form, isChecked);
+        for (let i = 0; i < this.allMarkers.length; i++) {
             marker = this.allMarkers[i];
             allCategoriesOfMarker = marker.poiCollection.categories;
             if (allCategoriesOfMarker.length === 0) {
                 continue;
             }
-            var markerCategoryHasCheckboxWithStatus = void 0;
-            for (var j = 0; j < allCategoriesOfMarker.length; j++) {
+            let markerCategoryHasCheckboxWithStatus;
+            for (let j = 0; j < allCategoriesOfMarker.length; j++) {
                 markerCategoryHasCheckboxWithStatus = false;
-                for (var k = 0; k < categoriesOfCheckboxesWithStatus.length; k++) {
+                for (let k = 0; k < categoriesOfCheckboxesWithStatus.length; k++) {
                     if (allCategoriesOfMarker[j].uid === categoriesOfCheckboxesWithStatus[k]) {
                         markerCategoryHasCheckboxWithStatus = true;
                     }
@@ -147,78 +137,82 @@ var OpenStreetMap2 = /** @class */ (function () {
             }
         }
         return markers;
-    };
-    OpenStreetMap2.prototype.showSwitchableCategories = function (environment) {
-        var _this = this;
+    }
+    showSwitchableCategories() {
         var _a;
-        var categories = this.groupCategories(environment);
-        var form = document.createElement("form");
+        let categories = this.groupCategories();
+        let form = document.createElement("form");
         form.classList.add("txMaps2Form");
-        form.setAttribute("id", "txMaps2Form-" + environment.contentRecord.uid);
+        form.setAttribute("id", "txMaps2Form-" + this.getContentRecord().uid);
         // Add checkbox for category
-        for (var categoryUid in categories) {
+        for (let categoryUid in categories) {
             if (categories.hasOwnProperty(categoryUid)) {
                 form.appendChild(this.getCheckbox(categories[categoryUid]));
-                (_a = form.querySelector("#checkCategory_" + categoryUid)) === null || _a === void 0 ? void 0 : _a.insertAdjacentHTML("afterend", "<span class=\"map-category\">".concat(categories[categoryUid].title, "</span>"));
+                (_a = form.querySelector("#checkCategory_" + categoryUid)) === null || _a === void 0 ? void 0 : _a.insertAdjacentHTML("afterend", `<span class="map-category">${categories[categoryUid].title}</span>`);
             }
         }
         // Add listener for checkboxes
-        form.querySelectorAll("input").forEach(function (checkbox) {
-            checkbox.addEventListener("click", function () {
-                var isChecked = checkbox.checked;
-                var categoryUid = checkbox.value;
-                var markers = _this.getMarkersToChangeVisibilityFor(categoryUid, form, isChecked);
-                markers.forEach(function (marker) {
+        form.querySelectorAll("input").forEach((checkbox) => {
+            checkbox.addEventListener("click", () => {
+                let isChecked = checkbox.checked;
+                let categoryUid = checkbox.value;
+                let markers = this.getMarkersToChangeVisibilityFor(categoryUid, form, isChecked);
+                markers.forEach((marker) => {
                     if (isChecked) {
-                        _this.map.addLayer(marker);
+                        this.map.addLayer(marker);
                     }
                     else {
-                        _this.map.removeLayer(marker);
+                        this.map.removeLayer(marker);
                     }
                 });
             });
         });
         this.element.insertAdjacentElement("afterend", form);
-    };
-    OpenStreetMap2.prototype.getCheckbox = function (category) {
-        var div = document.createElement("div");
+    }
+    getCheckbox(category) {
+        let div = document.createElement("div");
         div.classList.add("form-group");
-        div.innerHTML = "\n            <div class=\"checkbox\">\n                <label>\n                    <input type=\"checkbox\" class=\"checkCategory\" id=\"checkCategory_".concat(category.uid, "\" checked=\"checked\" value=\"").concat(category.uid, "\">\n                </label>\n            </div>");
+        div.innerHTML = `
+      <div class="checkbox">
+          <label>
+              <input type="checkbox" class="checkCategory" id="checkCategory_${category.uid}" checked="checked" value="${category.uid}">
+          </label>
+      </div>`;
         return div;
-    };
-    OpenStreetMap2.prototype.countObjectProperties = function (obj) {
-        var count = 0;
-        for (var key in obj) {
+    }
+    countObjectProperties(obj) {
+        let count = 0;
+        for (let key in obj) {
             if (obj.hasOwnProperty(key)) {
                 count++;
             }
         }
         return count;
-    };
-    OpenStreetMap2.prototype.createPointByCollectionType = function (environment) {
-        var marker;
-        var categoryUid = 0;
-        for (var i = 0; i < this.poiCollections.length; i++) {
+    }
+    createPointByCollectionType() {
+        let marker;
+        let categoryUid = 0;
+        for (let i = 0; i < this.poiCollections.length; i++) {
             if (this.poiCollections[i].strokeColor === "") {
-                this.poiCollections[i].strokeColor = environment.extConf.strokeColor;
+                this.poiCollections[i].strokeColor = this.getExtConf().strokeColor;
             }
-            if (this.poiCollections[i].strokeOpacity === "") {
-                this.poiCollections[i].strokeOpacity = environment.extConf.strokeOpacity;
+            if (this.poiCollections[i].strokeOpacity === 0) {
+                this.poiCollections[i].strokeOpacity = this.getExtConf().strokeOpacity;
             }
             // ... (similar updates for other properties)
             marker = null;
             switch (this.poiCollections[i].collectionType) {
                 case "Point":
-                    marker = this.createMarker(this.poiCollections[i], environment);
+                    marker = this.createMarker(this.poiCollections[i]);
                     break;
                 case "Area":
-                    marker = this.createArea(this.poiCollections[i], environment);
+                    marker = this.createArea(this.poiCollections[i]);
                     break;
                 case "Route":
-                    marker = this.createRoute(this.poiCollections[i], environment);
+                    marker = this.createRoute(this.poiCollections[i]);
                     break;
                 case "Radius":
-                    marker = this.createRadius(this.poiCollections[i], environment);
+                    marker = this.createRadius(this.poiCollections[i]);
                     break;
             }
             this.allMarkers.push({
@@ -226,7 +220,7 @@ var OpenStreetMap2 = /** @class */ (function () {
                 poiCollection: this.poiCollections[i]
             });
             categoryUid = 0;
-            for (var c = 0; c < this.poiCollections[i].categories.length; c++) {
+            for (let c = 0; c < this.poiCollections[i].categories.length; c++) {
                 categoryUid = this.poiCollections[i].categories[c].uid;
                 if (!this.categorizedMarkers.hasOwnProperty(categoryUid)) {
                     this.categorizedMarkers[categoryUid] = [];
@@ -234,22 +228,17 @@ var OpenStreetMap2 = /** @class */ (function () {
                 this.categorizedMarkers[categoryUid].push(marker);
             }
         }
-    };
-    OpenStreetMap2.prototype.createMarkerByLatLng = function (latitude, longitude) {
-        var marker = L.marker([latitude, longitude]).addTo(this.map);
+    }
+    createMarkerByLatLng(latitude, longitude) {
+        let marker = L.marker([latitude, longitude]).addTo(this.map);
         this.bounds.extend(marker.getLatLng());
-    };
-    OpenStreetMap2.prototype.inList = function (list, item) {
-        var catSearch = ',' + list + ',';
-        item = ',' + item + ',';
-        return catSearch.indexOf(item);
-    };
-    OpenStreetMap2.prototype.createMarker = function (poiCollection, environment) {
-        var marker = L.marker([poiCollection.latitude, poiCollection.longitude], {
+    }
+    createMarker(poiCollection) {
+        let marker = L.marker([poiCollection.latitude, poiCollection.longitude], {
             'draggable': this.editable
         }).addTo(this.map);
         if (poiCollection.hasOwnProperty("markerIcon") && poiCollection.markerIcon !== "") {
-            var icon = L.icon({
+            let icon = L.icon({
                 iconUrl: poiCollection.markerIcon,
                 iconSize: [poiCollection.markerIconWidth, poiCollection.markerIconHeight],
                 iconAnchor: [poiCollection.markerIconAnchorPosX, poiCollection.markerIconAnchorPosY]
@@ -258,49 +247,49 @@ var OpenStreetMap2 = /** @class */ (function () {
         }
         this.bounds.extend(marker.getLatLng());
         if (this.editable) {
-            this.addEditListeners(this.element, marker, poiCollection, environment);
+            this.addEditListeners(this.element, marker, poiCollection);
         }
         else {
-            this.addInfoWindow(marker, poiCollection, environment);
+            this.addInfoWindow(marker, poiCollection);
         }
         return marker;
-    };
-    OpenStreetMap2.prototype.createArea = function (poiCollection, environment) {
-        var latlngs = [];
-        for (var i = 0; i < poiCollection.pois.length; i++) {
-            var latLng = [poiCollection.pois[i].latitude, poiCollection.pois[i].longitude];
+    }
+    createArea(poiCollection) {
+        let latlngs = [];
+        for (let i = 0; i < poiCollection.pois.length; i++) {
+            let latLng = [poiCollection.pois[i].latitude, poiCollection.pois[i].longitude];
             this.bounds.extend(latLng);
             latlngs.push(latLng);
         }
-        var marker = L.polygon(latlngs, {
+        let marker = L.polygon(latlngs, {
             color: poiCollection.strokeColor,
             opacity: poiCollection.strokeOpacity,
             weight: poiCollection.strokeWeight,
             fillColor: poiCollection.fillColor,
             fillOpacity: poiCollection.fillOpacity
         }).addTo(this.map);
-        this.addInfoWindow(marker, poiCollection, environment);
+        this.addInfoWindow(marker, poiCollection);
         return marker;
-    };
-    OpenStreetMap2.prototype.createRoute = function (poiCollection, environment) {
-        var latlngs = [];
-        for (var i = 0; i < poiCollection.pois.length; i++) {
-            var latLng = [poiCollection.pois[i].latitude, poiCollection.pois[i].longitude];
+    }
+    createRoute(poiCollection) {
+        let latlngs = [];
+        for (let i = 0; i < poiCollection.pois.length; i++) {
+            let latLng = [poiCollection.pois[i].latitude, poiCollection.pois[i].longitude];
             this.bounds.extend(latLng);
             latlngs.push(latLng);
         }
-        var marker = L.polyline(latlngs, {
+        let marker = L.polyline(latlngs, {
             color: poiCollection.strokeColor,
             opacity: poiCollection.strokeOpacity,
             weight: poiCollection.strokeWeight,
             fillColor: poiCollection.fillColor,
             fillOpacity: poiCollection.fillOpacity
         }).addTo(this.map);
-        this.addInfoWindow(marker, poiCollection, environment);
+        this.addInfoWindow(marker, poiCollection);
         return marker;
-    };
-    OpenStreetMap2.prototype.createRadius = function (poiCollection, environment) {
-        var marker = L.circle([poiCollection.latitude, poiCollection.longitude], {
+    }
+    createRadius(poiCollection) {
+        let marker = L.circle([poiCollection.latitude, poiCollection.longitude], {
             color: poiCollection.strokeColor,
             opacity: poiCollection.strokeOpacity,
             weight: poiCollection.strokeWeight,
@@ -309,12 +298,12 @@ var OpenStreetMap2 = /** @class */ (function () {
             radius: poiCollection.radius
         }).addTo(this.map);
         this.bounds.extend(marker.getBounds());
-        this.addInfoWindow(marker, poiCollection, environment);
+        this.addInfoWindow(marker, poiCollection);
         return marker;
-    };
-    OpenStreetMap2.prototype.addInfoWindow = function (element, poiCollection, environment) {
-        element.addEventListener("click", function () {
-            fetch(environment.ajaxUrl, {
+    }
+    addInfoWindow(element, poiCollection) {
+        element.addEventListener("click", () => {
+            fetch(this.environment.ajaxUrl, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -323,46 +312,48 @@ var OpenStreetMap2 = /** @class */ (function () {
                     poiCollection: poiCollection.uid
                 })
             })
-                .then(function (response) { return response.json(); })
-                .then(function (data) {
+                .then(response => response.json())
+                .then(data => {
                 element.bindPopup(data.content).openPopup();
             })
-                .catch(function (error) { return console.error('Error:', error); });
+                .catch(error => console.error('Error:', error));
         });
-    };
-    OpenStreetMap2.prototype.addEditListeners = function (mapContainer, marker, poiCollection, environment) {
-        marker.on('dragend', function () {
+    }
+    addEditListeners(mapContainer, marker, poiCollection) {
+        marker.on('dragend', () => {
             var _a, _b;
-            var lat = marker.getLatLng().lat.toFixed(6);
-            var lng = marker.getLatLng().lng.toFixed(6);
+            let lat = marker.getLatLng().lat.toFixed(6);
+            let lng = marker.getLatLng().lng.toFixed(6);
             (_a = mapContainer
-                .previousElementSibling) === null || _a === void 0 ? void 0 : _a.querySelector("input.latitude-".concat(environment.contentRecord.uid)).setAttribute("value", lat);
+                .previousElementSibling) === null || _a === void 0 ? void 0 : _a.querySelector(`input.latitude-${this.getContentRecord().uid}`).setAttribute("value", lat);
             (_b = mapContainer
-                .previousElementSibling) === null || _b === void 0 ? void 0 : _b.querySelector("input.longitude-".concat(environment.contentRecord.uid)).setAttribute("value", lng);
+                .previousElementSibling) === null || _b === void 0 ? void 0 : _b.querySelector(`input.longitude-${this.getContentRecord().uid}`).setAttribute("value", lng);
         });
-        this.map.on('click', function (event) {
+        this.map.on('click', (event) => {
             var _a, _b;
             marker.setLatLng(event.latlng);
             (_a = mapContainer
-                .previousElementSibling) === null || _a === void 0 ? void 0 : _a.querySelector("input.latitude-".concat(environment.contentRecord.uid)).setAttribute("value", event.latlng.lat.toFixed(6));
+                .previousElementSibling) === null || _a === void 0 ? void 0 : _a.querySelector(`input.latitude-${this.getContentRecord().uid}`).setAttribute("value", event.latlng.lat.toFixed(6));
             (_b = mapContainer
-                .previousElementSibling) === null || _b === void 0 ? void 0 : _b.querySelector("input.longitude-".concat(environment.contentRecord.uid)).setAttribute("value", event.latlng.lng.toFixed(6));
+                .previousElementSibling) === null || _b === void 0 ? void 0 : _b.querySelector(`input.longitude-${this.getContentRecord().uid}`).setAttribute("value", event.latlng.lng.toFixed(6));
         });
-    };
-    OpenStreetMap2.prototype.canBeInterpretedAsNumber = function (value) {
+    }
+    canBeInterpretedAsNumber(value) {
         return typeof value === 'number' || !isNaN(Number(value));
-    };
-    OpenStreetMap2.prototype.getExtConf = function () {
+    }
+    getContentRecord() {
+        return this.environment.contentRecord;
+    }
+    getExtConf() {
         return this.environment.extConf;
-    };
-    OpenStreetMap2.prototype.getSettings = function () {
+    }
+    getSettings() {
         return this.environment.settings;
-    };
-    return OpenStreetMap2;
-}());
-var maps2OpenStreetMaps = [];
-document.querySelectorAll(".maps2").forEach(function (element) {
-    var environment = typeof element.dataset.environment !== 'undefined' ? element.dataset.environment : '{}';
-    var override = typeof element.dataset.override !== 'undefined' ? element.dataset.override : '{}';
-    maps2OpenStreetMaps.push(new OpenStreetMap2(element, __assign(__assign({}, JSON.parse(environment)), JSON.parse(override))));
+    }
+}
+let maps2OpenStreetMaps = [];
+document.querySelectorAll(".maps2").forEach((element) => {
+    const environment = typeof element.dataset.environment !== 'undefined' ? element.dataset.environment : '{}';
+    const override = typeof element.dataset.override !== 'undefined' ? element.dataset.override : '{}';
+    maps2OpenStreetMaps.push(new OpenStreetMap2(element, Object.assign(Object.assign({}, JSON.parse(environment)), JSON.parse(override))));
 });

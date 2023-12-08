@@ -8,7 +8,7 @@
 		"tsconfig.json"
 	],
 	"compilerOptions": {
-		"target": "es5",
+		"target": "es2015",
 		"module": "none",
 		"sourceMap": true,
 		"outDir": "dist"

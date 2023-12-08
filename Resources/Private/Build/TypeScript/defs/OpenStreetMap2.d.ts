@@ -21,6 +21,37 @@ interface ContentRecord {
   uid: number;
 }
 
+interface Category {
+  uid: number;
+  title: string;
+}
+
+interface PoiCollection {
+  address: string;
+  categories: Category[];
+  collectionType: string;
+  distance: number;
+  fillColor: string;
+  fillOpacity: number;
+  foreignRecords: any[];
+  infoWindowContent: string;
+  latitude: number;
+  longitude: number;
+  markerIcon: string;
+  markerIconAnchorPosX: number;
+  markerIconAnchorPosY: number;
+  markerIconHeight: number;
+  markerIconWidth: number;
+  pid: number;
+  pois: any[];
+  radius: number;
+  strokeColor: string;
+  strokeOpacity: number;
+  strokeWeight: number;
+  title: string;
+  uid: number;
+}
+
 interface Image {
   height: number;
   width: number;

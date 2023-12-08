@@ -2,30 +2,29 @@ class OpenStreetMap2 {
   private allMarkers: any[];
   private categorizedMarkers: any;
   private bounds: L.LatLngBounds;
-  private poiCollections: any;
+  private poiCollections: PoiCollection[];
   private editable: boolean;
   private map: L.Map;
 
   constructor(public element: HTMLElement, public environment: Environment) {
     this.allMarkers = [];
     this.categorizedMarkers = {};
+    this.editable = this.element.classList.contains("editMarker");
     this.bounds = new L.LatLngBounds([
       [environment.extConf.defaultLatitude, environment.extConf.defaultLongitude]
     ]);
-    this.editable = this.element.classList.contains("editMarker");
 
-    this.preparePoisCollections();
-    this.editable = this.element.classList.contains("editMarker");
-    this.setWidthAndHeight();
+    this.preparePoiCollection();
+    this.setMapDimensions();
     this.createMap();
-    this.mainProcess();
+    this.setMarkersOnMap();
   }
 
-  private preparePoisCollections(): void {
+  private preparePoiCollection(): void {
     this.poiCollections = JSON.parse(this.element.getAttribute("data-pois") || '[]');
   }
 
-  private mainProcess(): void {
+  private setMarkersOnMap(): void {
     if (this.isPOICollectionsEmpty()) {
       this.createMarkerBasedOnDataAttributes();
     } else {
@@ -34,7 +33,7 @@ class OpenStreetMap2 {
   }
 
   private isPOICollectionsEmpty(): boolean {
-    return this.poiCollections === "undefined" || this.poiCollections.length === 0;
+    return this.poiCollections.length === 0;
   }
 
   private createMarkerBasedOnDataAttributes(): void {
@@ -51,9 +50,9 @@ class OpenStreetMap2 {
   }
 
   private createMarkerBasedOnPOICollections(): void {
-    this.createPointByCollectionType(this.environment);
+    this.createPointByCollectionType();
     if (this.countObjectProperties(this.categorizedMarkers) > 1) {
-      this.showSwitchableCategories(this.environment);
+      this.showSwitchableCategories();
     }
     this.adjustMapZoom();
   }
@@ -67,23 +66,25 @@ class OpenStreetMap2 {
   }
 
   private shouldFitBounds(): boolean {
-    return this.environment.settings.forceZoom === false
+    return this.getSettings().forceZoom === false
       && (this.poiCollections.length > 1
         || (this.poiCollections.length === 1
           && (this.poiCollections[0].collectionType === "Area"
             || this.poiCollections[0].collectionType === "Route")));
   }
 
-  private setWidthAndHeight (): void {
-    this.element.style.height = this.normalizeDimension(this.environment.settings.mapHeight);
-    this.element.style.width = this.normalizeDimension(this.environment.settings.mapWidth);
+  private setMapDimensions(): void {
+    this.element.style.height = this.normalizeDimension(this.getSettings().mapHeight);
+    this.element.style.width = this.normalizeDimension(this.getSettings().mapWidth);
   }
 
-  private normalizeDimension (dimension: string | number): string {
+  private normalizeDimension(dimension: string | number): string {
     let normalizedDimension = String(dimension);
+
     if (this.canBeInterpretedAsNumber(normalizedDimension)) {
       normalizedDimension += 'px';
     }
+
     return normalizedDimension;
   }
 
@@ -103,25 +104,31 @@ class OpenStreetMap2 {
     }).addTo(this.map);
   }
 
-  private groupCategories(environment: any): any {
-    let me = this;
-    let groupedCategories: any = {};
-    let categoryUid = "0";
-    for (let x = 0; x < this.poiCollections.length; x++) {
-      for (let y = 0; y < this.poiCollections[x].categories.length; y++) {
-        categoryUid = String(this.poiCollections[x].categories[y].uid);
-        if (this.inList(environment.settings.categories, categoryUid) > -1 && !groupedCategories.hasOwnProperty(categoryUid)) {
-          groupedCategories[categoryUid] = this.poiCollections[x].categories[y];
-        }
-      }
-    }
+  private groupCategories(): { [key: string]: Category } {
+    const groupedCategories: { [key: string]: Category } = {};
+
+    this.poiCollections.forEach((poiCollection: PoiCollection): void => {
+      const categoryUids: string[] = poiCollection.categories.map((category: Category) => String(category.uid));
+
+      categoryUids
+        .filter((categoryUid: string) => this.getSettings().categories.includes(categoryUid))
+        .forEach((categoryUid: string): void => {
+          if (!groupedCategories.hasOwnProperty(categoryUid)) {
+            groupedCategories[categoryUid] = poiCollection.categories.find((category: Category): boolean => String(category.uid) === categoryUid);
+          }
+        });
+    });
+
     return groupedCategories;
   }
 
   private getCategoriesOfCheckboxesWithStatus(form: HTMLElement, isChecked: boolean): number[] {
     let categories: number[] = [];
-    let checkboxes = isChecked ? form.querySelectorAll("input:checked") : form.querySelectorAll("input:not(:checked)");
-    checkboxes.forEach((checkbox) => {
+    let checkboxes: HTMLInputElement[] = isChecked
+      ? Array.from(form.querySelectorAll("input:checked"))
+      : Array.from(form.querySelectorAll("input:not(:checked)"));
+
+    checkboxes.forEach((checkbox: HTMLInputElement) => {
       categories.push(parseInt((checkbox as HTMLInputElement).value));
     });
 
@@ -165,11 +172,11 @@ class OpenStreetMap2 {
     return markers;
   }
 
-  private showSwitchableCategories(environment: any): void {
-    let categories = this.groupCategories(environment);
+  private showSwitchableCategories(): void {
+    let categories = this.groupCategories();
     let form = document.createElement("form");
     form.classList.add("txMaps2Form");
-    form.setAttribute("id", "txMaps2Form-" + environment.contentRecord.uid);
+    form.setAttribute("id", "txMaps2Form-" + this.getContentRecord().uid);
 
     // Add checkbox for category
     for (let categoryUid in categories) {
@@ -202,19 +209,20 @@ class OpenStreetMap2 {
     this.element.insertAdjacentElement("afterend", form);
   }
 
-  private getCheckbox(category: any): HTMLElement {
+  private getCheckbox(category: Category): HTMLElement {
     let div = document.createElement("div");
     div.classList.add("form-group");
     div.innerHTML = `
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" class="checkCategory" id="checkCategory_${category.uid}" checked="checked" value="${category.uid}">
-                </label>
-            </div>`;
+      <div class="checkbox">
+          <label>
+              <input type="checkbox" class="checkCategory" id="checkCategory_${category.uid}" checked="checked" value="${category.uid}">
+          </label>
+      </div>`;
+
     return div;
   }
 
-  private countObjectProperties(obj: any): number {
+  private countObjectProperties(obj: object): number {
     let count = 0;
     for (let key in obj) {
       if (obj.hasOwnProperty(key)) {
@@ -224,32 +232,32 @@ class OpenStreetMap2 {
     return count;
   }
 
-  private createPointByCollectionType(environment: any): void {
+  private createPointByCollectionType(): void {
     let marker;
     let categoryUid = 0;
 
     for (let i = 0; i < this.poiCollections.length; i++) {
       if (this.poiCollections[i].strokeColor === "") {
-        this.poiCollections[i].strokeColor = environment.extConf.strokeColor;
+        this.poiCollections[i].strokeColor = this.getExtConf().strokeColor;
       }
-      if (this.poiCollections[i].strokeOpacity === "") {
-        this.poiCollections[i].strokeOpacity = environment.extConf.strokeOpacity;
+      if (this.poiCollections[i].strokeOpacity === 0) {
+        this.poiCollections[i].strokeOpacity = this.getExtConf().strokeOpacity;
       }
       // ... (similar updates for other properties)
 
       marker = null;
       switch (this.poiCollections[i].collectionType) {
         case "Point":
-          marker = this.createMarker(this.poiCollections[i], environment);
+          marker = this.createMarker(this.poiCollections[i]);
           break;
         case "Area":
-          marker = this.createArea(this.poiCollections[i], environment);
+          marker = this.createArea(this.poiCollections[i]);
           break;
         case "Route":
-          marker = this.createRoute(this.poiCollections[i], environment);
+          marker = this.createRoute(this.poiCollections[i]);
           break;
         case "Radius":
-          marker = this.createRadius(this.poiCollections[i], environment);
+          marker = this.createRadius(this.poiCollections[i]);
           break;
       }
 
@@ -277,13 +285,7 @@ class OpenStreetMap2 {
     this.bounds.extend(marker.getLatLng());
   }
 
-  private inList(list: string, item: string): number {
-    let catSearch = ',' + list + ',';
-    item = ',' + item + ',';
-    return catSearch.indexOf(item);
-  }
-
-  private createMarker(poiCollection: any, environment: any): any {
+  private createMarker(poiCollection: PoiCollection): any {
     let marker = L.marker(
       [poiCollection.latitude, poiCollection.longitude],
       {
@@ -303,15 +305,15 @@ class OpenStreetMap2 {
     this.bounds.extend(marker.getLatLng());
 
     if (this.editable) {
-      this.addEditListeners(this.element, marker, poiCollection, environment);
+      this.addEditListeners(this.element, marker, poiCollection);
     } else {
-      this.addInfoWindow(marker, poiCollection, environment);
+      this.addInfoWindow(marker, poiCollection);
     }
 
     return marker;
   }
 
-  private createArea(poiCollection: any, environment: any): any {
+  private createArea(poiCollection: PoiCollection): any {
     let latlngs = [];
     for (let i = 0; i < poiCollection.pois.length; i++) {
       let latLng = [poiCollection.pois[i].latitude, poiCollection.pois[i].longitude];
@@ -327,12 +329,12 @@ class OpenStreetMap2 {
       fillOpacity: poiCollection.fillOpacity
     }).addTo(this.map);
 
-    this.addInfoWindow(marker, poiCollection, environment);
+    this.addInfoWindow(marker, poiCollection);
 
     return marker;
   }
 
-  private createRoute(poiCollection: any, environment: any): any {
+  private createRoute(poiCollection: PoiCollection): any {
     let latlngs = [];
     for (let i = 0; i < poiCollection.pois.length; i++) {
       let latLng = [poiCollection.pois[i].latitude, poiCollection.pois[i].longitude];
@@ -348,12 +350,12 @@ class OpenStreetMap2 {
       fillOpacity: poiCollection.fillOpacity
     }).addTo(this.map);
 
-    this.addInfoWindow(marker, poiCollection, environment);
+    this.addInfoWindow(marker, poiCollection);
 
     return marker;
   }
 
-  private createRadius(poiCollection: any, environment: any): any {
+  private createRadius(poiCollection: PoiCollection): any {
     let marker = L.circle([poiCollection.latitude, poiCollection.longitude], {
       color: poiCollection.strokeColor,
       opacity: poiCollection.strokeOpacity,
@@ -365,14 +367,14 @@ class OpenStreetMap2 {
 
     this.bounds.extend(marker.getBounds());
 
-    this.addInfoWindow(marker, poiCollection, environment);
+    this.addInfoWindow(marker, poiCollection);
 
     return marker;
   }
 
-  private addInfoWindow(element: any, poiCollection: any, environment: Environment): void {
+  private addInfoWindow(element: any, poiCollection: PoiCollection): void {
     element.addEventListener("click", () => {
-      fetch(environment.ajaxUrl, {
+      fetch(this.environment.ajaxUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -389,17 +391,17 @@ class OpenStreetMap2 {
     });
   }
 
-  private addEditListeners(mapContainer: HTMLElement, marker: any, poiCollection: any, environment: any): void {
+  private addEditListeners(mapContainer: HTMLElement, marker: any, poiCollection: PoiCollection): void {
     marker.on('dragend', () => {
       let lat = marker.getLatLng().lat.toFixed(6);
       let lng = marker.getLatLng().lng.toFixed(6);
       mapContainer
         .previousElementSibling
-        ?.querySelector(`input.latitude-${environment.contentRecord.uid}`)
+        ?.querySelector(`input.latitude-${this.getContentRecord().uid}`)
         .setAttribute("value", lat);
       mapContainer
         .previousElementSibling
-        ?.querySelector(`input.longitude-${environment.contentRecord.uid}`)
+        ?.querySelector(`input.longitude-${this.getContentRecord().uid}`)
         .setAttribute("value", lng);
     });
 
@@ -407,17 +409,21 @@ class OpenStreetMap2 {
       marker.setLatLng(event.latlng);
       mapContainer
         .previousElementSibling
-        ?.querySelector(`input.latitude-${environment.contentRecord.uid}`)
+        ?.querySelector(`input.latitude-${this.getContentRecord().uid}`)
         .setAttribute("value", event.latlng.lat.toFixed(6));
       mapContainer
         .previousElementSibling
-        ?.querySelector(`input.longitude-${environment.contentRecord.uid}`)
+        ?.querySelector(`input.longitude-${this.getContentRecord().uid}`)
         .setAttribute("value", event.latlng.lng.toFixed(6));
     });
   }
 
-  private canBeInterpretedAsNumber(value: string|number): boolean {
+  private canBeInterpretedAsNumber(value: string | number): boolean {
     return typeof value === 'number' || !isNaN(Number(value));
+  }
+
+  private getContentRecord(): ContentRecord {
+    return this.environment.contentRecord;
   }
 
   private getExtConf(): ExtConf {
