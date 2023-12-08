@@ -18,6 +18,7 @@
 .DS_Store
 
 # Ignore by common IDEs used directories/files
+.ddev
 nbproject
 *.idea
 *.project
@@ -29,7 +30,7 @@ nbproject
 
 # Temporary files and folders
 /.cache
-/node_modules
+node_modules
 .php_cs.cache
 .php-cs-fixer.cache
 .sass-cache
@@ -43,7 +44,3 @@ nbproject
 /.Build
 /composer.json.orig
 /composer.json.testing
-
-# Ignore js min files as they are build automatically while deploying
-*.min.js
-*.min.js.map
