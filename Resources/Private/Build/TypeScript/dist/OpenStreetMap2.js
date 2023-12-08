@@ -18,46 +18,69 @@ var OpenStreetMap2 = /** @class */ (function () {
         this.bounds = new L.LatLngBounds([
             [environment.extConf.defaultLatitude, environment.extConf.defaultLongitude]
         ]);
-        this.poiCollections = JSON.parse(this.element.getAttribute("data-pois") || "[]");
+        this.editable = this.element.classList.contains("editMarker");
+        this.preparePoisCollections();
         this.editable = this.element.classList.contains("editMarker");
         this.setWidthAndHeight();
         this.createMap();
-        if (typeof this.poiCollections === "undefined" || this.poiCollections.length === 0) {
-            // Plugin: CityMap
-            var lat = parseFloat(this.element.getAttribute("data-latitude") || "");
-            var lng = parseFloat(this.element.getAttribute("data-longitude") || "");
-            if (!isNaN(lat) && !isNaN(lng)) {
-                this.createMarkerByLatLng(lat, lng);
-            }
+        this.mainProcess();
+    }
+    OpenStreetMap2.prototype.preparePoisCollections = function () {
+        this.poiCollections = JSON.parse(this.element.getAttribute("data-pois") || '[]');
+    };
+    OpenStreetMap2.prototype.mainProcess = function () {
+        if (this.isPOICollectionsEmpty()) {
+            this.createMarkerBasedOnDataAttributes();
         }
         else {
-            this.createPointByCollectionType(environment);
-            if (this.countObjectProperties(this.categorizedMarkers) > 1) {
-                this.showSwitchableCategories(environment);
-            }
-            if (environment.settings.forceZoom === false
-                && (this.poiCollections.length > 1
-                    || (this.poiCollections.length === 1
-                        && (this.poiCollections[0].collectionType === "Area"
-                            || this.poiCollections[0].collectionType === "Route")))) {
-                this.map.fitBounds(this.bounds);
-            }
-            else {
-                this.map.panTo([this.poiCollections[0].latitude, this.poiCollections[0].longitude]);
-            }
+            this.createMarkerBasedOnPOICollections();
         }
-    }
+    };
+    OpenStreetMap2.prototype.isPOICollectionsEmpty = function () {
+        return this.poiCollections === "undefined" || this.poiCollections.length === 0;
+    };
+    OpenStreetMap2.prototype.createMarkerBasedOnDataAttributes = function () {
+        var latitude = this.getAttributeAsFloat("data-latitude");
+        var longitude = this.getAttributeAsFloat("data-longitude");
+        if (!isNaN(latitude) && !isNaN(longitude)) {
+            this.createMarkerByLatLng(latitude, longitude);
+        }
+    };
+    OpenStreetMap2.prototype.getAttributeAsFloat = function (attributeName) {
+        return parseFloat(this.element.getAttribute(attributeName) || "");
+    };
+    OpenStreetMap2.prototype.createMarkerBasedOnPOICollections = function () {
+        this.createPointByCollectionType(this.environment);
+        if (this.countObjectProperties(this.categorizedMarkers) > 1) {
+            this.showSwitchableCategories(this.environment);
+        }
+        this.adjustMapZoom();
+    };
+    OpenStreetMap2.prototype.adjustMapZoom = function () {
+        if (this.shouldFitBounds()) {
+            this.map.fitBounds(this.bounds);
+        }
+        else {
+            this.map.panTo([this.poiCollections[0].latitude, this.poiCollections[0].longitude]);
+        }
+    };
+    OpenStreetMap2.prototype.shouldFitBounds = function () {
+        return this.environment.settings.forceZoom === false
+            && (this.poiCollections.length > 1
+                || (this.poiCollections.length === 1
+                    && (this.poiCollections[0].collectionType === "Area"
+                        || this.poiCollections[0].collectionType === "Route")));
+    };
     OpenStreetMap2.prototype.setWidthAndHeight = function () {
-        var height = String(this.environment.settings.mapHeight);
-        if (this.canBeInterpretedAsNumber(height)) {
-            height += "px";
+        this.element.style.height = this.normalizeDimension(this.environment.settings.mapHeight);
+        this.element.style.width = this.normalizeDimension(this.environment.settings.mapWidth);
+    };
+    OpenStreetMap2.prototype.normalizeDimension = function (dimension) {
+        var normalizedDimension = String(dimension);
+        if (this.canBeInterpretedAsNumber(normalizedDimension)) {
+            normalizedDimension += 'px';
         }
-        var width = String(this.environment.settings.mapWidth);
-        if (this.canBeInterpretedAsNumber(width)) {
-            width += "px";
-        }
-        this.element.style.height = height;
-        this.element.style.width = width;
+        return normalizedDimension;
     };
     OpenStreetMap2.prototype.createMap = function () {
         this.map = L.map(this.element, {

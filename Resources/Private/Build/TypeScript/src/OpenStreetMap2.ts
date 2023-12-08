@@ -12,57 +12,79 @@ class OpenStreetMap2 {
     this.bounds = new L.LatLngBounds([
       [environment.extConf.defaultLatitude, environment.extConf.defaultLongitude]
     ]);
-    this.poiCollections = JSON.parse(this.element.getAttribute("data-pois") || "[]");
     this.editable = this.element.classList.contains("editMarker");
 
+    this.preparePoisCollections();
+    this.editable = this.element.classList.contains("editMarker");
     this.setWidthAndHeight();
     this.createMap();
+    this.mainProcess();
+  }
 
-    if (typeof this.poiCollections === "undefined" || this.poiCollections.length === 0) {
-      // Plugin: CityMap
-      let lat = parseFloat(this.element.getAttribute("data-latitude") || "");
-      let lng = parseFloat(this.element.getAttribute("data-longitude") || "");
-      if (!isNaN(lat) && !isNaN(lng)) {
-        this.createMarkerByLatLng(lat, lng);
-      }
+  private preparePoisCollections(): void {
+    this.poiCollections = JSON.parse(this.element.getAttribute("data-pois") || '[]');
+  }
+
+  private mainProcess(): void {
+    if (this.isPOICollectionsEmpty()) {
+      this.createMarkerBasedOnDataAttributes();
     } else {
-      this.createPointByCollectionType(environment);
-      if (this.countObjectProperties(this.categorizedMarkers) > 1) {
-        this.showSwitchableCategories(environment);
-      }
-      if (
-        environment.settings.forceZoom === false
-        && (
-          this.poiCollections.length > 1
-          || (
-            this.poiCollections.length === 1
-            && (
-              this.poiCollections[0].collectionType === "Area"
-              || this.poiCollections[0].collectionType === "Route"
-            )
-          )
-        )
-      ) {
-        this.map.fitBounds(this.bounds);
-      } else {
-        this.map.panTo([this.poiCollections[0].latitude, this.poiCollections[0].longitude]);
-      }
+      this.createMarkerBasedOnPOICollections();
     }
   }
 
-  private setWidthAndHeight(): void {
-    let height: string = String(this.environment.settings.mapHeight);
-    if (this.canBeInterpretedAsNumber(height)) {
-      height += "px";
-    }
+  private isPOICollectionsEmpty(): boolean {
+    return this.poiCollections === "undefined" || this.poiCollections.length === 0;
+  }
 
-    let width: string = String(this.environment.settings.mapWidth);
-    if (this.canBeInterpretedAsNumber(width)) {
-      width += "px";
-    }
+  private createMarkerBasedOnDataAttributes(): void {
+    const latitude = this.getAttributeAsFloat("data-latitude");
+    const longitude = this.getAttributeAsFloat("data-longitude");
 
-    this.element.style.height = height;
-    this.element.style.width = width;
+    if (!isNaN(latitude) && !isNaN(longitude)) {
+      this.createMarkerByLatLng(latitude, longitude);
+    }
+  }
+
+  private getAttributeAsFloat(attributeName: string): number {
+    return parseFloat(this.element.getAttribute(attributeName) || "");
+  }
+
+  private createMarkerBasedOnPOICollections(): void {
+    this.createPointByCollectionType(this.environment);
+    if (this.countObjectProperties(this.categorizedMarkers) > 1) {
+      this.showSwitchableCategories(this.environment);
+    }
+    this.adjustMapZoom();
+  }
+
+  private adjustMapZoom(): void {
+    if (this.shouldFitBounds()) {
+      this.map.fitBounds(this.bounds);
+    } else {
+      this.map.panTo([this.poiCollections[0].latitude, this.poiCollections[0].longitude]);
+    }
+  }
+
+  private shouldFitBounds(): boolean {
+    return this.environment.settings.forceZoom === false
+      && (this.poiCollections.length > 1
+        || (this.poiCollections.length === 1
+          && (this.poiCollections[0].collectionType === "Area"
+            || this.poiCollections[0].collectionType === "Route")));
+  }
+
+  private setWidthAndHeight (): void {
+    this.element.style.height = this.normalizeDimension(this.environment.settings.mapHeight);
+    this.element.style.width = this.normalizeDimension(this.environment.settings.mapWidth);
+  }
+
+  private normalizeDimension (dimension: string | number): string {
+    let normalizedDimension = String(dimension);
+    if (this.canBeInterpretedAsNumber(normalizedDimension)) {
+      normalizedDimension += 'px';
+    }
+    return normalizedDimension;
   }
 
   private createMap(): void {
@@ -348,7 +370,7 @@ class OpenStreetMap2 {
     return marker;
   }
 
-  private addInfoWindow(element: any, poiCollection: any, environment: any): void {
+  private addInfoWindow(element: any, poiCollection: any, environment: Environment): void {
     element.addEventListener("click", () => {
       fetch(environment.ajaxUrl, {
         method: "POST",
