@@ -36,10 +36,16 @@ class AjaxController extends ActionController
             'content' => '',
         ];
 
-        if ($method === 'renderInfoWindowContent') {
+        if (
+            $method === 'renderInfoWindowContent'
+            && ($postData = $this->getPostData())
+            && array_key_exists('poiCollection', $postData)
+        ) {
             $response['content'] = $this->renderInfoWindowContentAction(
-                (int)$_POST['poiCollection']
+                (int)$postData['poiCollection']
             );
+        } else {
+            $this->errors[] = 'Given method "' . $method . '" is not allowed here.';
         }
 
         $response['errors'] = $this->errors;
@@ -47,21 +53,33 @@ class AjaxController extends ActionController
         return $this->jsonResponse(\json_encode($response, JSON_THROW_ON_ERROR));
     }
 
+    protected function getPostData(): array
+    {
+        try {
+            $payload = json_decode((string)$this->request->getBody(), true, 512, JSON_THROW_ON_ERROR);
+        } catch (\JsonException $e) {
+            $this->errors[] = 'Given post stream does not contain valid JSON string';
+            $payload = [];
+        }
+
+        return is_array($payload) ? $payload : [];
+    }
+
     public function renderInfoWindowContentAction(int $poiCollectionUid): string
     {
-        $infoWindowContent = $this->emitRenderInfoWindowEvent($poiCollectionUid);
+        $poiCollection = $this->poiCollectionRepository->findByIdentifier($poiCollectionUid);
+        if (!$poiCollection instanceof PoiCollection) {
+            $this->errors[] = sprintf(
+                'PoiCollection with UID %d could not be found in AjaxController',
+                $poiCollectionUid
+            );
+            return '';
+        }
 
+        $infoWindowContent = $this->emitRenderInfoWindowEvent($poiCollectionUid);
         if ($infoWindowContent === '') {
-            $poiCollection = $this->poiCollectionRepository->findByIdentifier($poiCollectionUid);
-            if ($poiCollection instanceof PoiCollection) {
-                $mapService = GeneralUtility::makeInstance(MapService::class);
-                $infoWindowContent = $mapService->renderInfoWindow($poiCollection);
-            } else {
-                $this->errors[] = sprintf(
-                    'PoiCollection with UID %d could not be found in AjaxController',
-                    $poiCollectionUid
-                );
-            }
+            $mapService = GeneralUtility::makeInstance(MapService::class);
+            $infoWindowContent = $mapService->renderInfoWindow($poiCollection);
         }
 
         return $infoWindowContent;
