@@ -90,33 +90,6 @@ call_user_func(static function (): void {
         'class' => \JWeiland\Maps2\Form\Resolver\MapProviderResolver::class,
     ];
 
-    // Register SVG Icon Identifier
-    $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
-    $svgIcons = [
-        'ext-maps2-wizard-icon' => 'plugin_wizard.svg',
-    ];
-    foreach ($svgIcons as $identifier => $fileName) {
-        $iconRegistry->registerIcon(
-            $identifier,
-            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
-            ['source' => 'EXT:maps2/Resources/Public/Icons/' . $fileName]
-        );
-    }
-
-    $bmpIcons = [
-        'ext-maps2-record-type-point' => 'RecordTypePoint.png',
-        'ext-maps2-record-type-area' => 'RecordTypeArea.png',
-        'ext-maps2-record-type-route' => 'RecordTypeRoute.png',
-        'ext-maps2-record-type-radius' => 'RecordTypeRadius.png',
-    ];
-    foreach ($bmpIcons as $identifier => $fileName) {
-        $iconRegistry->registerIcon(
-            $identifier,
-            \TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider::class,
-            ['source' => 'EXT:maps2/Resources/Public/Icons/' . $fileName]
-        );
-    }
-
     // Add maps2 plugin to new element wizard
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
         '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:maps2/Configuration/TsConfig/Page/ContentElementWizard.tsconfig">'
