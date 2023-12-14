@@ -16,7 +16,6 @@ use JWeiland\Maps2\Helper\MapHelper;
 use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
 use TYPO3\CMS\Core\Page\JavaScriptModuleInstruction;
 use TYPO3\CMS\Core\Page\PageRenderer;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Core\Utility\StringUtility;
@@ -66,39 +65,15 @@ class OpenStreetMapElement extends AbstractFormElement
         $config = $parameterArray['fieldConf']['config'];
         $evalList = GeneralUtility::trimExplode(',', $config['eval'] ?? '', true);
 
-        if (method_exists(PathUtility::class, 'getPublicResourceWebPath')) {
-            $publicResourcesPath = PathUtility::getPublicResourceWebPath('EXT:maps2/Resources/Public/');
-        } else {
-            $publicResourcesPath = sprintf(
-                '%sResources/Public/',
-                PathUtility::getAbsoluteWebPath(ExtensionManagementUtility::extPath('maps2'))
-            );
-        }
+        $this->pageRenderer->loadJavaScriptModule('@jweiland/maps2/leaflet.min.js');
 
-        $this->pageRenderer->addRequireJsConfiguration([
-            'paths' => [
-                'leaflet' => $publicResourcesPath . 'JavaScript/Leaflet',
-                'leafletDragPath' => $publicResourcesPath . 'JavaScript/Leaflet.Drag.Path',
-                'leafletEditable' => $publicResourcesPath . 'JavaScript/Leaflet.Editable',
-            ],
-            'shim' => [
-                'leaflet' => [
-                    'deps' => ['jquery'],
-                    'exports' => 'L',
-                ],
-                'leafletDragPath' => [
-                    'deps' => ['leaflet'],
-                ],
-                'leafletEditable' => [
-                    'deps' => ['leafletDragPath'],
-                ],
-            ],
-        ]);
+        $resultArray['stylesheetFiles'][] = PathUtility::getPublicResourceWebPath(
+            'EXT:maps2/Resources/Public/Css/Leaflet/Leaflet.css'
+        );
 
-        $resultArray['stylesheetFiles'][] = $publicResourcesPath . 'Css/Leaflet/Leaflet.css';
-        $resultArray['requireJsModules'][] = JavaScriptModuleInstruction::forRequireJS(
-            'TYPO3/CMS/Maps2/OpenStreetMapModule'
-        )->instance();
+        $resultArray['javaScriptModules'][] = JavaScriptModuleInstruction::create(
+            '@jweiland/maps2/OpenStreetMapModule.js'
+        );
 
         $fieldInformationResult = $this->renderFieldInformation();
         $fieldInformationHtml = $fieldInformationResult['html'];
