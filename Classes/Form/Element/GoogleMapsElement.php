@@ -15,8 +15,6 @@ use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Helper\MapHelper;
 use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
 use TYPO3\CMS\Core\Page\JavaScriptModuleInstruction;
-use TYPO3\CMS\Core\Page\PageRenderer;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Core\Utility\StringUtility;
@@ -30,12 +28,6 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
  */
 class GoogleMapsElement extends AbstractFormElement
 {
-    protected ExtConf $extConf;
-
-    protected PageRenderer $pageRenderer;
-
-    protected MapHelper $mapHelper;
-
     /**
      * Default field information enabled for this element.
      *
@@ -55,10 +47,6 @@ class GoogleMapsElement extends AbstractFormElement
      */
     public function render(): array
     {
-        $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
-        $this->pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
-        $this->mapHelper = GeneralUtility::makeInstance(MapHelper::class);
-
         $parameterArray = $this->data['parameterArray'];
         $resultArray = $this->initializeResultArray();
 
@@ -66,38 +54,12 @@ class GoogleMapsElement extends AbstractFormElement
         $config = $parameterArray['fieldConf']['config'];
         $evalList = GeneralUtility::trimExplode(',', $config['eval'] ?? '', true);
 
-        if (method_exists(PathUtility::class, 'getPublicResourceWebPath')) {
-            $publicResourcesPath = PathUtility::getPublicResourceWebPath('EXT:maps2/Resources/Public/');
-        } else {
-            $publicResourcesPath = sprintf(
-                '%sResources/Public/',
-                PathUtility::getAbsoluteWebPath(ExtensionManagementUtility::extPath('maps2'))
-            );
-        }
+        $publicResourcesPath = PathUtility::getPublicResourceWebPath('EXT:maps2/Resources/Public/');
 
-        // loadRequireJsModule has to be loaded before configuring additional paths, else all ext paths will not be initialized
-        $this->pageRenderer->addRequireJsConfiguration([
-            'paths' => [
-                'async' => $publicResourcesPath . 'JavaScript/async',
-            ],
-        ]);
-        // make Google Maps2 available as dependency for all RequireJS modules
-        $this->pageRenderer->addJsInlineCode(
-            'definegooglemaps',
-            sprintf(
-                '// convert Google Maps into an AMD module
-                define("gmaps", ["async!%s"],
-                function() {
-                    // return the gmaps namespace for brevity
-                    return window.google.maps;
-                });',
-                $this->extConf->getGoogleMapsLibrary()
-            ),
-            false
-        );
         $resultArray['stylesheetFiles'][] = $publicResourcesPath . 'Css/GoogleMapsModule.css';
-        $resultArray['requireJsModules'][] = JavaScriptModuleInstruction::forRequireJS(
-            'TYPO3/CMS/Maps2/GoogleMapsModule'
+
+        $resultArray['javaScriptModules'][] = JavaScriptModuleInstruction::create(
+            '@jweiland/maps2/GoogleMapsModule.min.js'
         );
 
         $fieldInformationResult = $this->renderFieldInformation();
@@ -128,7 +90,7 @@ class GoogleMapsElement extends AbstractFormElement
         $html[] = '<div class="form-control-wrap">';
         $html[] =     '<div class="form-wizards-wrap">';
         $html[] =         '<div class="form-wizards-element">';
-        $html[] =             $this->getMapHtml($this->cleanUpCurrentRecord($this->data['databaseRow']));
+        $html[] =             $this->getMapHtml($this->cleanUpPoiCollectionRecord($this->data['databaseRow']));
         $html[] =             '<input type="text" ' . GeneralUtility::implodeAttributes($attributes, true) . ' />';
         $html[] =             '<input type="hidden" name="' . ($parameterArray['itemFormElName'] ?? '') . '" value="' . htmlspecialchars($itemValue) . '" />';
         $html[] =         '</div>';
@@ -147,31 +109,28 @@ class GoogleMapsElement extends AbstractFormElement
     /**
      * Since TYPO3 7.5 $this->data['databaseRow'] consists of arrays where TCA was configured as type "select"
      * Convert these types back to strings/int
-     *
-     * @param array $record
-     * @return array
      */
-    protected function cleanUpCurrentRecord(array $record): array
+    protected function cleanUpPoiCollectionRecord(array $poiCollection): array
     {
-        foreach ($record as $field => $value) {
+        foreach ($poiCollection as $field => $value) {
             if ($field === 'configuration_map') {
-                $record[$field] = $this->mapHelper->convertPoisAsJsonToArray($value);
+                $poiCollection[$field] = $this->getMapHelper()->convertPoisAsJsonToArray($value);
             } else {
-                $record[$field] = is_array($value) && array_key_exists(0, $value) ? $value[0] : $value;
+                $poiCollection[$field] = is_array($value) && array_key_exists(0, $value) ? $value[0] : $value;
             }
         }
 
-        return $record;
+        return $poiCollection;
     }
 
-    protected function getMapHtml(array $record): string
+    protected function getMapHtml(array $poiCollectionRecord): string
     {
         try {
             $view = GeneralUtility::makeInstance(StandaloneView::class);
             $view->setTemplatePathAndFilename('EXT:maps2/Resources/Private/Templates/Tca/GoogleMaps.html');
-            $view->assign('record', json_encode($record, JSON_THROW_ON_ERROR));
+            $view->assign('poiCollection', json_encode($poiCollectionRecord, JSON_THROW_ON_ERROR));
             $view->assign('extConf', json_encode(
-                ObjectAccess::getGettableProperties($this->extConf),
+                ObjectAccess::getGettableProperties($this->getExtConf()),
                 JSON_THROW_ON_ERROR
             ));
 
@@ -179,5 +138,15 @@ class GoogleMapsElement extends AbstractFormElement
         } catch (\JsonException $jsonException) {
             return '';
         }
+    }
+
+    protected function getExtConf(): ExtConf
+    {
+        return GeneralUtility::makeInstance(ExtConf::class);
+    }
+
+    protected function getMapHelper(): MapHelper
+    {
+        return GeneralUtility::makeInstance(MapHelper::class);
     }
 }

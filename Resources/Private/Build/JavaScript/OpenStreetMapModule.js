@@ -1,38 +1,59 @@
 import $ from 'jquery';
+import { ExtConf, PoiCollection } from '@jweiland/maps2/Classes.js';
 import FormEngine from "@typo3/backend/form-engine.js";
 
 class OpenStreetMapModule {
-  marker = {};
+  "use strict"
+
+  /**
+   * @type {HTMLElement}
+   */
+  element = {};
+
+  /**
+   * @type {L.Map}
+   */
   map = {};
-  $element = {};
 
   constructor() {
-    this.$element = $("#maps2ConfigurationMap");
+    this.element = document.querySelector("#maps2ConfigurationMap");
 
-    let record = this.$element.data("record");
-    let extConf = this.$element.data("extconf");
-    let map = this.createMap();
+    /**
+     * @type {ExtConf}
+     */
+    let extConf = new ExtConf(JSON.parse(this.element.dataset.extConf));
+
+    /**
+     * @type {PoiCollection}
+     */
+    let poiCollection = new PoiCollection(JSON.parse(this.element.dataset.poiCollection));
+
+    /**
+     * @type {L.Marker}
+     */
     let marker = {};
 
-    switch (record.collection_type) {
+    this.createMap();
+
+    switch (poiCollection.collectionType) {
       case "Point":
-        marker = this.createMarker(record);
+        marker = this.createMarker(poiCollection);
         break;
       case "Area":
-        this.createArea(record, extConf);
+        this.createArea(poiCollection, extConf);
         break;
       case "Route":
-        this.createRoute(record, extConf);
+        this.createRoute(poiCollection, extConf);
         break;
       case "Radius":
-        marker = this.createRadius(record, extConf);
+        marker = this.createRadius(poiCollection, extConf);
         break;
     }
 
-    this.findAddress(record, marker);
+    this.findAddress(poiCollection, marker);
 
-    if (record.latitude && record.longitude) {
-      this.map.panTo([record.latitude, record.longitude]);
+    if (poiCollection.latitude && poiCollection.longitude) {
+      this.map.panTo([poiCollection.latitude, poiCollection.longitude]);
     } else {
       // Fallback
       this.map.panTo([extConf.defaultLatitude, extConf.defaultLongitude]);
@@ -41,8 +62,8 @@ class OpenStreetMapModule {
     // If maps2 was inserted in (bootstrap) tabs, we have to re-render the map
     $("ul.t3js-tabs a[data-bs-toggle='tab']:eq(1)").on("shown.bs.tab", () => {
       this.map.invalidateSize();
-      if (record.latitude && record.longitude) {
-        this.map.panTo([record.latitude, record.longitude]);
+      if (poiCollection.latitude && poiCollection.longitude) {
+        this.map.panTo([poiCollection.latitude, poiCollection.longitude]);
       } else {
         // Fallback
         this.map.panTo([extConf.defaultLatitude, extConf.defaultLongitude]);
@@ -52,31 +73,31 @@ class OpenStreetMapModule {
 
   createMap = () => {
     this.map = L.map(
-      this.$element.get(0),
+      this.element,
       {
         editable: true
       }).setView([51.505, -0.09], 15);
 
-    L.tileLayer(location.protocol + '//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    L.tileLayer(location.protocol + "//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 18,
       attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +  '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' + 'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-      id: 'mapbox.streets'
+      id: "mapbox.streets"
     }).addTo(this.map);
   };
 
-  createMarker = record => {
+  createMarker = poiCollection => {
     let osm = this;
     let marker = L.marker(
-      [record.latitude, record.longitude],
+      [poiCollection.latitude, poiCollection.longitude],
       {
-        'draggable': true
+        "draggable": true
       }
     ).addTo(this.map);
 
     // update fields and marker while dragging
-    marker.on('dragend', () => {
+    marker.on("dragend", () => {
       osm.setLatLngFields(
-        record,
+        poiCollection,
         marker.getLatLng().lat.toFixed(6),
         marker.getLatLng().lng.toFixed(6),
         0
@@ -84,10 +105,10 @@ class OpenStreetMapModule {
     });
 
     // update fields and marker when clicking on the map
-    this.map.on('click', event => {
+    this.map.on("click", event => {
       marker.setLatLng(event.latlng);
       osm.setLatLngFields(
-        record,
+        poiCollection,
         event.latlng.lat.toFixed(6),
         event.latlng.lng.toFixed(6),
         0
@@ -97,7 +118,7 @@ class OpenStreetMapModule {
     return marker;
   };
 
-  createArea = (record, extConf) => {
+  createArea = (poiCollection, extConf) => {
     let osm = this;
     let area = {};
     let coordinatesArray = [];
@@ -109,11 +130,11 @@ class OpenStreetMapModule {
       fillOpacity: extConf.fillOpacity
     };
 
-    if (record.configuration_map) {
-      for (let i = 0; i < record.configuration_map.length; i++) {
+    if (poiCollection.configurationMap) {
+      for (let i = 0; i < poiCollection.configurationMap.length; i++) {
         coordinatesArray.push([
-          record.configuration_map[i].latitude,
-          record.configuration_map[i].longitude]
+          poiCollection.configurationMap[i].latitude,
+          poiCollection.configurationMap[i].longitude]
         );
       }
     }
@@ -125,26 +146,26 @@ class OpenStreetMapModule {
       area.enableEdit();
     }
 
-    this.map.on('moveend', event => {
+    this.map.on("moveend", event => {
       osm.setLatLngFields(
-        record,
+        poiCollection,
         event.target.getCenter().lat.toFixed(6),
         event.target.getCenter().lng.toFixed(6),
         0
       );
     });
     this.map.on("editable:vertex:new", event => {
-      osm.storeRouteAsJson(record, area.getLatLngs()[0]);
+      osm.storeRouteAsJson(poiCollection, area.getLatLngs()[0]);
     });
     this.map.on("editable:vertex:deleted", event => {
-      osm.storeRouteAsJson(record, area.getLatLngs()[0]);
+      osm.storeRouteAsJson(poiCollection, area.getLatLngs()[0]);
     });
     this.map.on("editable:vertex:dragend", event => {
-      osm.storeRouteAsJson(record, area.getLatLngs()[0]);
+      osm.storeRouteAsJson(poiCollection, area.getLatLngs()[0]);
     });
   };
 
-  createRoute = (record, extConf) => {
+  createRoute = (poiCollection, extConf) => {
     let osm = this;
     let route = {};
     let coordinatesArray = [];
@@ -154,11 +175,11 @@ class OpenStreetMapModule {
       opacity: extConf.strokeOpacity
     };
 
-    if (record.configuration_map) {
-      for (let i = 0; i < record.configuration_map.length; i++) {
+    if (poiCollection.configurationMap) {
+      for (let i = 0; i < poiCollection.configurationMap.length; i++) {
         coordinatesArray.push([
-          record.configuration_map[i].latitude,
-          record.configuration_map[i].longitude]
+          poiCollection.configurationMap[i].latitude,
+          poiCollection.configurationMap[i].longitude]
         );
       }
     }
@@ -170,45 +191,45 @@ class OpenStreetMapModule {
       route.enableEdit();
     }
 
-    this.map.on('moveend', event => {
+    this.map.on("moveend", event => {
       osm.setLatLngFields(
-        record,
+        poiCollection,
         event.target.getCenter().lat.toFixed(6),
         event.target.getCenter().lng.toFixed(6),
         0
       );
     });
     this.map.on("editable:vertex:new", event => {
-      osm.storeRouteAsJson(record, route.getLatLngs());
+      osm.storeRouteAsJson(poiCollection, route.getLatLngs());
     });
     this.map.on("editable:vertex:deleted", event => {
-      osm.storeRouteAsJson(record, route.getLatLngs());
+      osm.storeRouteAsJson(poiCollection, route.getLatLngs());
     });
     this.map.on("editable:vertex:dragend", event => {
-      osm.storeRouteAsJson(record, route.getLatLngs());
+      osm.storeRouteAsJson(poiCollection, route.getLatLngs());
     });
   };
 
-  createRadius = (record, extConf) => {
+  createRadius = (poiCollection, extConf) => {
     let osm = this;
     let marker = L.circle(
-      [record.latitude, record.longitude],
+      [poiCollection.latitude, poiCollection.longitude],
       {
         color: extConf.strokeColor,
         opacity: extConf.strokeOpacity,
         weight: extConf.strokeWeight,
         fillColor: extConf.fillColor,
         fillOpacity: extConf.fillOpacity,
-        radius: record.radius ? record.radius : extConf.defaultRadius
+        radius: poiCollection.radius ? poiCollection.radius : extConf.defaultRadius
       }
     ).addTo(this.map);
 
     let editor = marker.enableEdit();
 
     // Update fields and marker while dragging
-    marker.on('editable:dragend editable:vertex:dragend', event => {
+    marker.on("editable:dragend editable:vertex:dragend", event => {
       osm.setLatLngFields(
-        record,
+        poiCollection,
         marker.getLatLng().lat.toFixed(6),
         marker.getLatLng().lng.toFixed(6),
         marker.getRadius()
@@ -226,16 +247,16 @@ class OpenStreetMapModule {
    * @param number rad
    * @param string address
    */
-  setLatLngFields = (record, lat, lng, rad, address) => {
-    this.setFieldValue(record, "latitude", lat);
-    this.setFieldValue(record, "longitude", lng);
+  setLatLngFields = (poiCollection, lat, lng, rad, address) => {
+    this.setFieldValue(poiCollection, "latitude", lat);
+    this.setFieldValue(poiCollection, "longitude", lng);
 
     if (typeof rad !== "undefined" && rad > 0) {
-      this.setFieldValue(record, "radius", parseInt(rad));
+      this.setFieldValue(poiCollection, "radius", parseInt(rad));
     }
 
     if (typeof address !== "undefined") {
-      this.setFieldValue(record, "address", address);
+      this.setFieldValue(poiCollection, "address", address);
     }
   };
 
@@ -248,7 +269,7 @@ class OpenStreetMapModule {
     let routeObject = {};
 
     for (let index = 0; index < coordinates.length; index++) {
-      routeObject[index] = coordinates[index]['lat'] + ',' + coordinates[index]['lng'];
+      routeObject[index] = coordinates[index]["lat"] + "," + coordinates[index]["lng"];
     }
 
     return routeObject;
@@ -260,31 +281,31 @@ class OpenStreetMapModule {
    * @param field
    * @returns {*|HTMLElement} jQuery object. FormEngine works with $ selectors
    */
-  getFieldElement = (record, field) => {
+  getFieldElement = (poiCollection, field) => {
     // Return the FieldElement which is visible to the editor
-    return FormEngine.getFieldElement(this.buildFieldName(record, field), '_list');
+    return FormEngine.getFieldElement(this.buildFieldName(poiCollection, field), "_list");
   };
 
   /**
-   * Build fieldName like 'data[tx_maps2_domain_model_poicollection][1][latitude]'
+   * Build fieldName like "data[tx_maps2_domain_model_poicollection][1][latitude]"
    *
-   * @param record
+   * @param poiCollection
    * @param field
    * @returns {string}
    */
-  buildFieldName = (record, field) => {
-    return 'data[tx_maps2_domain_model_poicollection][' + record.uid + '][' + field + ']';
+  buildFieldName = (poiCollection, field) => {
+    return "data[tx_maps2_domain_model_poicollection][" + poiCollection.uid + "][" + field + "]";
   };
 
   /**
    * Set field value
    *
-   * @param record
+   * @param poiCollection
    * @param field
    * @param value
    */
-  setFieldValue = (record, field, value) => {
-    let $fieldElement = this.getFieldElement(record, field);
+  setFieldValue = (poiCollection, field, value) => {
+    let $fieldElement = this.getFieldElement(poiCollection, field);
     if ($fieldElement && $fieldElement.length) {
       $fieldElement.val(value);
       $fieldElement.triggerHandler("change");
@@ -292,13 +313,13 @@ class OpenStreetMapModule {
   };
 
   /**
-   * Store route/area path into configuration_map as JSON
+   * Store route/area path into configurationMap as JSON
    *
    * @param coordinates
    */
-  storeRouteAsJson = (record, coordinates) => {
+  storeRouteAsJson = (poiCollection, coordinates) => {
     this.setFieldValue(
-      record,
+      poiCollection,
       "configuration_map",
       JSON.stringify(this.getUriForCoordinates(coordinates))
     );
@@ -307,7 +328,7 @@ class OpenStreetMapModule {
   /**
    * read address, send it to OpenStreetMap and move map/marker to new location
    */
-  findAddress = (record, marker) => {
+  findAddress = (poiCollection, marker) => {
     let osm = this;
     let $pacSearch = $(document.getElementById("pac-search"));
 
@@ -317,33 +338,33 @@ class OpenStreetMapModule {
         if ($pacSearch.val()) {
           $.ajax({
             type: "GET",
-            url: 'https://nominatim.openstreetmap.org/search?q=' + encodeURI($pacSearch.val()) + '&format=json&addressdetails=1',
-            dataType: 'json'
+            url: "https://nominatim.openstreetmap.org/search?q=" + encodeURI($pacSearch.val()) + "&format=json&addressdetails=1",
+            dataType: "json"
           }).done(data => {
             if (data.length === 0) {
-              alert('Address not found');
+              alert("Address not found");
             } else {
               let lat = parseFloat(data[0].lat).toFixed(6);
               let lng = parseFloat(data[0].lon).toFixed(6);
               let address = data[0].address;
               let formattedAddress = osm.getFormattedAddress(address);
 
-              switch (record.collection_type) {
-                case 'Point':
+              switch (poiCollection.collectionType) {
+                case "Point":
                   marker.setLatLng([lat, lng]);
-                  osm.setLatLngFields(record, lat, lng, 0, formattedAddress);
+                  osm.setLatLngFields(poiCollection, lat, lng, 0, formattedAddress);
                   break;
-                case 'Area':
-                  osm.setLatLngFields(record, lat, lng, 0, formattedAddress);
+                case "Area":
+                  osm.setLatLngFields(poiCollection, lat, lng, 0, formattedAddress);
                   break;
-                case 'Route':
-                  osm.setLatLngFields(record, lat, lng, 0, formattedAddress);
+                case "Route":
+                  osm.setLatLngFields(poiCollection, lat, lng, 0, formattedAddress);
                   break;
-                case 'Radius':
+                case "Radius":
                   marker.setLatLng([lat, lng]);
                   marker.editor.updateResizeLatLng();
                   marker.editor.reset();
-                  osm.setLatLngFields(record, lat, lng, marker.getRadius(), formattedAddress);
+                  osm.setLatLngFields(poiCollection, lat, lng, marker.getRadius(), formattedAddress);
                   break;
               }
 
@@ -366,32 +387,32 @@ class OpenStreetMapModule {
    * @returns {string}
    */
   getFormattedAddress = address => {
-    let formattedAddress = '';
-    let city = '';
+    let formattedAddress = "";
+    let city = "";
 
-    if (address.hasOwnProperty('road')) {
+    if (address.hasOwnProperty("road")) {
       formattedAddress += address.road;
     }
-    if (address.hasOwnProperty('house_number')) {
-      formattedAddress += ' ' + address.house_number;
+    if (address.hasOwnProperty("houseNumber")) {
+      formattedAddress += " " + address.houseNumber;
     }
-    if (address.hasOwnProperty('postcode')) {
-      formattedAddress += ', ' + address.postcode;
+    if (address.hasOwnProperty("postcode")) {
+      formattedAddress += ", " + address.postcode;
     }
 
-    if (address.hasOwnProperty('village')) {
+    if (address.hasOwnProperty("village")) {
       city = address.village;
     }
-    if (address.hasOwnProperty('town')) {
+    if (address.hasOwnProperty("town")) {
       city = address.town;
     }
-    if (address.hasOwnProperty('city')) {
+    if (address.hasOwnProperty("city")) {
       city = address.city;
     }
-    formattedAddress += ' ' + city;
+    formattedAddress += " " + city;
 
-    if (address.hasOwnProperty('country')) {
-      formattedAddress += ', ' + address.country;
+    if (address.hasOwnProperty("country")) {
+      formattedAddress += ", " + address.country;
     }
 
     return formattedAddress;

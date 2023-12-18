@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Controller;
 
 use JWeiland\Maps2\Controller\Traits\InjectExtConfTrait;
+use JWeiland\Maps2\Controller\Traits\InjectLinkHelperTrait;
 use JWeiland\Maps2\Controller\Traits\InjectPoiCollectionRepositoryTrait;
 use JWeiland\Maps2\Controller\Traits\InjectSettingsHelperTrait;
 use JWeiland\Maps2\Domain\Model\Position;
@@ -31,6 +32,7 @@ use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 class PoiCollectionController extends ActionController
 {
     use InjectExtConfTrait;
+    use InjectLinkHelperTrait;
     use InjectSettingsHelperTrait;
     use InjectPoiCollectionRepositoryTrait;
 
@@ -54,11 +56,17 @@ class PoiCollectionController extends ActionController
         $view->assign('environment', [
             'settings' => $this->getPreparedSettings(),
             'extConf' => ObjectAccess::getGettableProperties($this->extConf),
-            'ajaxUrl' => $cObj->typoLink_URL([
-                'additionalParams' => '&tx_maps2_maps2[controller]=Ajax&tx_maps2_maps2[action]=process&tx_maps2_maps2[method]=renderInfoWindowContent',
-                'forceAbsoluteUrl' => '1',
-                'parameter' => 't3://page?uid=' . ($this->request->getQueryParams()['id'] ?? 0) . '&type=1614075471',
-            ]),
+            'ajaxUrl' => $this->linkHelper->buildUriToCurrentPage(
+                [
+                    'type' => '1614075471',
+                    'tx_maps2_maps2' => [
+                        'controller' => 'Ajax',
+                        'action' => 'process',
+                        'method' => 'renderInfoWindowContent',
+                    ],
+                ],
+                $this->request
+            ),
             'contentRecord' => $contentRecord,
         ]);
     }

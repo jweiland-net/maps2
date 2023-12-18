@@ -72,7 +72,7 @@ class OpenStreetMapElement extends AbstractFormElement
         );
 
         $resultArray['javaScriptModules'][] = JavaScriptModuleInstruction::create(
-            '@jweiland/maps2/OpenStreetMapModule.js'
+            '@jweiland/maps2/OpenStreetMapModule.min.js'
         );
 
         $fieldInformationResult = $this->renderFieldInformation();
@@ -103,7 +103,7 @@ class OpenStreetMapElement extends AbstractFormElement
         $html[] = '<div class="form-control-wrap">';
         $html[] =     '<div class="form-wizards-wrap">';
         $html[] =         '<div class="form-wizards-element">';
-        $html[] =             $this->getMapHtml($this->cleanUpCurrentRecord($this->data['databaseRow']));
+        $html[] =             $this->getMapHtml($this->cleanUpPoiCollectionRecord($this->data['databaseRow']));
         $html[] =             '<input type="text" ' . GeneralUtility::implodeAttributes($attributes, true) . ' />';
         $html[] =             '<input type="hidden" name="' . ($parameterArray['itemFormElName'] ?? '') . '" value="' . htmlspecialchars($itemValue) . '" />';
         $html[] =         '</div>';
@@ -122,28 +122,25 @@ class OpenStreetMapElement extends AbstractFormElement
     /**
      * Since TYPO3 7.5 $this->data['databaseRow'] consists of arrays where TCA was configured as type "select"
      * Convert these types back to strings/int
-     *
-     * @param array $record
-     * @return array
      */
-    protected function cleanUpCurrentRecord(array $record): array
+    protected function cleanUpPoiCollectionRecord(array $poiCollectionRecord): array
     {
-        foreach ($record as $field => $value) {
+        foreach ($poiCollectionRecord as $field => $value) {
             if ($field === 'configuration_map') {
-                $record[$field] = $this->mapHelper->convertPoisAsJsonToArray($value);
+                $poiCollectionRecord[$field] = $this->mapHelper->convertPoisAsJsonToArray($value);
             } else {
-                $record[$field] = is_array($value) && array_key_exists(0, $value) ? $value[0] : $value;
+                $poiCollectionRecord[$field] = is_array($value) && array_key_exists(0, $value) ? $value[0] : $value;
             }
         }
 
-        return $record;
+        return $poiCollectionRecord;
     }
 
-    protected function getMapHtml(array $record): string
+    protected function getMapHtml(array $poiCollectionRecord): string
     {
         $view = GeneralUtility::makeInstance(StandaloneView::class);
         $view->setTemplatePathAndFilename('EXT:maps2/Resources/Private/Templates/Tca/OpenStreetMap.html');
-        $view->assign('record', json_encode($record, JSON_THROW_ON_ERROR));
+        $view->assign('poiCollection', json_encode($poiCollectionRecord, JSON_THROW_ON_ERROR));
         $view->assign('extConf', json_encode(
             ObjectAccess::getGettableProperties($this->extConf),
             JSON_THROW_ON_ERROR

@@ -2,17 +2,6 @@ const gulp = require('gulp');
 const concat = require('gulp-concat');
 const uglify = require('gulp-uglify');
 const sourcemaps = require('gulp-sourcemaps');
-const ts = require('gulp-typescript');
-const tsProject = ts.createProject('TypeScript/tsconfig.json');
-
-// Define a task to process TypeScript files
-gulp.task('typescript', function () {
-  return tsProject.src()
-    .pipe(sourcemaps.init())
-    .pipe(tsProject())
-    .js
-    .pipe(gulp.dest('TypeScript/dist'));
-});
 
 gulp.task('leaflet', function buildLeaflet () {
   const paths = [
@@ -29,10 +18,54 @@ gulp.task('leaflet', function buildLeaflet () {
     .pipe(gulp.dest('../../Public/JavaScript'));
 });
 
-gulp.task('main', function () {
+gulp.task('classes', function () {
   return gulp.src([
-    'TypeScript/dist/OpenStreetMap2.js',
-  ])
+      'JavaScript/Classes.js'
+    ])
+    .pipe(sourcemaps.init())
+    .pipe(concat('Classes.js'))
+    .pipe(uglify())
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest('../../Public/JavaScript'));
+});
+
+gulp.task('google_be', function () {
+  return gulp.src([
+      'JavaScript/GoogleMapsModule.js'
+    ])
+    .pipe(sourcemaps.init())
+    .pipe(concat('GoogleMapsModule.min.js'))
+    .pipe(uglify())
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest('../../Public/JavaScript'));
+});
+
+gulp.task('osm_be', function () {
+  return gulp.src([
+      'JavaScript/OpenStreetMapModule.js'
+    ])
+    .pipe(sourcemaps.init())
+    .pipe(concat('OpenStreetMapModule.min.js'))
+    .pipe(uglify())
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest('../../Public/JavaScript'));
+});
+
+gulp.task('google_fe', function () {
+  return gulp.src([
+      'JavaScript/GoogleMaps2.js'
+    ])
+    .pipe(sourcemaps.init())
+    .pipe(concat('GoogleMaps2.min.js'))
+    .pipe(uglify())
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest('../../Public/JavaScript'));
+});
+
+gulp.task('osm_fe', function () {
+  return gulp.src([
+      'JavaScript/OpenStreetMap2.js'
+    ])
     .pipe(sourcemaps.init())
     .pipe(concat('OpenStreetMap2.min.js'))
     .pipe(uglify())
@@ -40,4 +73,11 @@ gulp.task('main', function () {
     .pipe(gulp.dest('../../Public/JavaScript'));
 });
 
-gulp.task('default', gulp.series(gulp.parallel('typescript', 'leaflet'), 'main'));
+gulp.task(
+  'default',
+  gulp.series(
+    'leaflet',
+    'classes',
+    gulp.parallel('google_be', 'osm_be', 'google_fe', 'osm_fe')
+  )
+);
