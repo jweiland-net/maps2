@@ -13,6 +13,7 @@ namespace JWeiland\Maps2\Update;
 
 use Doctrine\DBAL\Driver\Exception as DBALException;
 use TYPO3\CMS\Core\Configuration\FlexForm\FlexFormTools;
+use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\Exception\MissingArrayPathException;
@@ -141,7 +142,7 @@ class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
                     'uid' => (int)$record['uid'],
                 ],
                 [
-                    'pi_flexform' => \PDO::PARAM_STR,
+                    'pi_flexform' => Connection::PARAM_STR,
                 ]
             );
         }

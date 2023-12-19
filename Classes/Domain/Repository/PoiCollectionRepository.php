@@ -60,7 +60,7 @@ class PoiCollectionRepository extends Repository
             $queryBuilder->andWhere(
                 $queryBuilder->expr()->eq(
                     'pc.uid',
-                    $queryBuilder->createNamedParameter($poiCollectionUid, \PDO::PARAM_INT)
+                    $queryBuilder->createNamedParameter($poiCollectionUid, Connection::PARAM_INT)
                 )
             );
         } elseif (array_key_exists('categories', $settings) && $settings['categories'] !== '') {

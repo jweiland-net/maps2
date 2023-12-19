@@ -13,6 +13,7 @@ namespace JWeiland\Maps2\Helper;
 
 use Doctrine\DBAL\Driver\Exception as DBALException;
 use JWeiland\Maps2\Configuration\ExtConf;
+use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
@@ -143,7 +144,7 @@ class AddressHelper
                 ->where(
                     $queryBuilder->expr()->eq(
                         'uid',
-                        $queryBuilder->createNamedParameter($uid, \PDO::PARAM_INT)
+                        $queryBuilder->createNamedParameter($uid, Connection::PARAM_INT)
                     )
                 )
                 ->executeQuery()

@@ -24,6 +24,7 @@ use JWeiland\Maps2\Tca\Maps2Registry;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
+use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
@@ -361,7 +362,7 @@ class CreateMaps2RecordHook
                 ->where(
                     $queryBuilder->expr()->eq(
                         'uid',
-                        $queryBuilder->createNamedParameter($poiCollectionUid, \PDO::PARAM_INT)
+                        $queryBuilder->createNamedParameter($poiCollectionUid, Connection::PARAM_INT)
                     )
                 )
                 ->executeQuery()
@@ -441,7 +442,7 @@ class CreateMaps2RecordHook
                 ->where(
                     $queryBuilder->expr()->eq(
                         'uid',
-                        $queryBuilder->createNamedParameter($uid, \PDO::PARAM_INT)
+                        $queryBuilder->createNamedParameter($uid, Connection::PARAM_INT)
                     )
                 )
                 ->executeQuery()
@@ -498,7 +499,7 @@ class CreateMaps2RecordHook
             ->where(
                 $queryBuilder->expr()->eq(
                     'uid',
-                    $queryBuilder->createNamedParameter($foreignLocationRecord[$maps2ColumnName], \PDO::PARAM_INT)
+                    $queryBuilder->createNamedParameter($foreignLocationRecord[$maps2ColumnName], Connection::PARAM_INT)
                 )
             );
 

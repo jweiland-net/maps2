@@ -13,6 +13,7 @@ namespace JWeiland\Maps2\Update;
 
 use Doctrine\DBAL\Driver\Exception as DBALException;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
+use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -178,7 +179,7 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
                 ->where(
                     $queryBuilder->expr()->eq(
                         'poicollection',
-                        $queryBuilder->createNamedParameter($poiCollectionUid, \PDO::PARAM_INT)
+                        $queryBuilder->createNamedParameter($poiCollectionUid, Connection::PARAM_INT)
                     )
                 )
                 ->executeQuery();

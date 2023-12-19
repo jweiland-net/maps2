@@ -64,8 +64,7 @@ class SetCacheViewHelper extends AbstractViewHelper
         $this->registerArgument(
             'lifetime',
             'int',
-            'Lifetime of this cache entry in seconds. If null is specified, the default lifetime is used. "0" means unlimited lifetime',
-            false
+            'Lifetime of this cache entry in seconds. If null is specified, the default lifetime is used. "0" means unlimited lifetime'
         );
     }
 
