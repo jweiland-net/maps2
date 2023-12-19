@@ -352,22 +352,6 @@ class MapService
     }
 
     /**
-     * Get currently valid default map provider
-     *
-     * @param array $databaseRow If set, we will try to retrieve map provider from this row before.
-     * @return string Returns either "gm" or "osm"
-     * @deprecated
-     */
-    public function getMapProvider(array $databaseRow = []): string
-    {
-        trigger_error('Method MapService::getMapProvider is deprecated and has been moved to MapHelper::getMapProvider.', E_USER_DEPRECATED);
-
-        $mapHelper = GeneralUtility::makeInstance(MapHelper::class);
-
-        return $mapHelper->getMapProvider($databaseRow);
-    }
-
-    /**
      * Set info window for Poi Collection
      *
      * @deprecated
