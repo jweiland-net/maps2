@@ -66,26 +66,47 @@ class ReadOnlyInputTextElement extends AbstractFormElement
      */
     public function render(): array
     {
-        $languageService = $this->getLanguageService();
-
         $table = $this->data['tableName'];
         $fieldName = $this->data['fieldName'];
-        $row = $this->data['databaseRow'];
         $parameterArray = $this->data['parameterArray'];
         $resultArray = $this->initializeResultArray();
+        // @deprecated since v12, will be removed with v13 when all elements handle label/legend on their own
+        $resultArray['labelHasBeenHandled'] = true;
+        $config = $parameterArray['fieldConf']['config'];
 
         $itemValue = $parameterArray['itemFormElValue'];
-        $config = $parameterArray['fieldConf']['config'];
-        $evalList = GeneralUtility::trimExplode(',', $config['eval'] ?? '', true);
-        $size = MathUtility::forceIntegerInRange($config['size'] ?? $this->defaultInputWidth, $this->minimumInputWidth, $this->maxInputWidth);
-        $width = $this->formMaxWidth($size);
-        $nullControlNameEscaped = htmlspecialchars('control[active][' . $table . '][' . $row['uid'] . '][' . $fieldName . ']');
+        $width = $this->formMaxWidth(
+            MathUtility::forceIntegerInRange($config['size'] ?? $this->defaultInputWidth, $this->minimumInputWidth, $this->maxInputWidth)
+        );
+        $fieldId = StringUtility::getUniqueId('formengine-input-');
+        $renderedLabel = $this->renderLabel($fieldId);
 
         $fieldInformationResult = $this->renderFieldInformation();
         $fieldInformationHtml = $fieldInformationResult['html'];
         $resultArray = $this->mergeChildReturnIntoExistingResult($resultArray, $fieldInformationResult, false);
 
+        if ($config['readOnly'] ?? false) {
+            $html = [];
+            $html[] = $renderedLabel;
+            $html[] = '<div class="formengine-field-item t3js-formengine-field-item">';
+            $html[] =   $fieldInformationHtml;
+            $html[] =   '<div class="form-wizards-wrap">';
+            $html[] =       '<div class="form-wizards-element">';
+            $html[] =           '<div class="form-control-wrap" style="max-width: ' . $width . 'px">';
+            $html[] =               '<input class="form-control" id="' . htmlspecialchars($fieldId) . '" value="' . htmlspecialchars((string)$itemValue) . '" type="text" disabled>';
+            $html[] =           '</div>';
+            $html[] =       '</div>';
+            $html[] =   '</div>';
+            $html[] = '</div>';
+            $resultArray['html'] = implode(LF, $html);
+            return $resultArray;
+        }
+
+        $languageService = $this->getLanguageService();
+        $itemName = (string)$parameterArray['itemFormElName'];
+
         // @todo: The whole eval handling is a mess and needs refactoring
+        $evalList = GeneralUtility::trimExplode(',', $config['eval'] ?? '', true);
         foreach ($evalList as $func) {
             // @todo: This is ugly: The code should find out on it's own whether an eval definition is a
             // @todo: keyword like "date", or a class reference. The global registration could be dropped then
@@ -99,15 +120,14 @@ class ReadOnlyInputTextElement extends AbstractFormElement
                         ];
                         $itemValue = $evalObj->deevaluateFieldValue($_params);
                     }
-                    if (method_exists($evalObj, 'returnFieldJS')) {
-                        $resultArray['additionalJavaScriptPost'][] = 'TBE_EDITOR.customEvalFunctions[' . GeneralUtility::quoteJSvalue($func) . ']'
-                            . ' = function(value) {' . $evalObj->returnFieldJS() . '};';
-                    }
+                    $resultArray = $this->resolveJavaScriptEvaluation($resultArray, $func, $evalObj);
                 }
             }
         }
 
-        $fieldId = StringUtility::getUniqueId('formengine-input-');
+        if ($config['nullable'] ?? false) {
+            $evalList[] = 'null';
+        }
 
         $attributes = [
             'value' => '',
@@ -115,21 +135,26 @@ class ReadOnlyInputTextElement extends AbstractFormElement
             'readOnly' => 'readOnly',
             'class' => implode(' ', [
                 'form-control',
+                'form-control-clearable',
                 't3js-clearable',
                 'hasDefaultValue',
             ]),
             'data-formengine-validation-rules' => $this->getValidationDataAsJsonString($config),
             'data-formengine-input-params' => (string)json_encode([
-                'field' => $parameterArray['itemFormElName'],
+                'field' => $itemName,
                 'evalList' => implode(',', $evalList),
                 'is_in' => trim($config['is_in'] ?? ''),
-            ]),
-            'data-formengine-input-name' => (string)$parameterArray['itemFormElName'],
+            ], JSON_THROW_ON_ERROR),
+            'data-formengine-input-name' => $itemName,
         ];
 
-        $maxLength = $config['max'] ?? 0;
-        if ((int)$maxLength > 0) {
-            $attributes['maxlength'] = (string)(int)$maxLength;
+        $maxLength = (int)($config['max'] ?? 0);
+        if ($maxLength > 0) {
+            $attributes['maxlength'] = (string)$maxLength;
+        }
+        $minLength = (int)($config['min'] ?? 0);
+        if ($minLength > 0 && ($maxLength === 0 || $minLength <= $maxLength)) {
+            $attributes['minlength'] = (string)$minLength;
         }
         if (!empty($config['placeholder'])) {
             $attributes['placeholder'] = trim($config['placeholder']);
@@ -139,15 +164,17 @@ class ReadOnlyInputTextElement extends AbstractFormElement
         }
 
         $valuePickerHtml = [];
-        if (isset($config['valuePicker']['items']) && is_array($config['valuePicker']['items'])) {
+        if (is_array($config['valuePicker']['items'] ?? false)) {
             $valuePickerConfiguration = [
                 'mode' => $config['valuePicker']['mode'] ?? 'replace',
-                'linked-field' => '[data-formengine-input-name="' . $parameterArray['itemFormElName'] . '"]',
+                'linked-field' => '[data-formengine-input-name="' . $itemName . '"]',
             ];
-            $valuePickerAttributes = [
-                'class' => 'form-select form-control-adapt',
-                'onchange' => implode('', $parameterArray['fieldChangeFunc']),
-            ];
+            $valuePickerAttributes = array_merge(
+                [
+                    'class' => 'form-select form-control-adapt',
+                ],
+                $this->getOnFieldChangeAttrs('change', $parameterArray['fieldChangeFunc'] ?? [])
+            );
 
             $valuePickerHtml[] = '<typo3-formengine-valuepicker ' . GeneralUtility::implodeAttributes($valuePickerConfiguration, true) . '>';
             $valuePickerHtml[] = '<select ' . GeneralUtility::implodeAttributes($valuePickerAttributes, true) . '>';
@@ -158,47 +185,7 @@ class ReadOnlyInputTextElement extends AbstractFormElement
             $valuePickerHtml[] = '</select>';
             $valuePickerHtml[] = '</typo3-formengine-valuepicker>';
 
-            $resultArray['requireJsModules'][] = JavaScriptModuleInstruction::forRequireJS(
-                'TYPO3/CMS/Backend/FormEngine/FieldWizard/ValuePicker'
-            );
-        }
-
-        $valueSliderHtml = [];
-        if (isset($config['slider']) && is_array($config['slider'])) {
-            $id = 'slider-' . $fieldId;
-            $resultArray['requireJsModules'][] = JavaScriptModuleInstruction::forRequireJS(
-                'TYPO3/CMS/Backend/FormEngine/FieldWizard/ValueSlider'
-            )->instance($id);
-
-            $min = $config['range']['lower'] ?? 0;
-            $max = $config['range']['upper'] ?? 10000;
-            $step = $config['slider']['step'] ?? 1;
-            $width = $config['slider']['width'] ?? 400;
-            $valueType = 'null';
-            if (in_array('int', $evalList, true)) {
-                $valueType = 'int';
-                $itemValue = (int)$itemValue;
-            } elseif (in_array('double2', $evalList, true)) {
-                $valueType = 'double';
-                $itemValue = (float)$itemValue;
-            }
-            $rangeAttributes = [
-                'id' => $id,
-                'type' => 'range',
-                'class' => 'slider',
-                'min' => (string)(int)$min,
-                'max' => (string)(int)$max,
-                'step' => (string)$step,
-                'style' => 'width: ' . (int)$width . 'px',
-                'title' => (string)$itemValue,
-                'value' => (string)$itemValue,
-                'data-slider-id' => $id,
-                'data-slider-value-type' => $valueType,
-                'data-slider-item-name' => (string)($parameterArray['itemFormElName'] ?? ''),
-            ];
-            $valueSliderHtml[] = '<div class="slider-wrapper">';
-            $valueSliderHtml[] = '<input ' . GeneralUtility::implodeAttributes($rangeAttributes, true) . '>';
-            $valueSliderHtml[] = '</div>';
+            $resultArray['javaScriptModules'][] = JavaScriptModuleInstruction::create('@typo3/backend/form-engine/field-wizard/value-picker.js');
         }
 
         $fieldControlResult = $this->renderFieldControl();
@@ -208,33 +195,18 @@ class ReadOnlyInputTextElement extends AbstractFormElement
         $fieldWizardResult = $this->renderFieldWizard();
         $fieldWizardHtml = $fieldWizardResult['html'];
         $resultArray = $this->mergeChildReturnIntoExistingResult($resultArray, $fieldWizardResult, false);
-        $inputType = 'text';
-
-        if (in_array('email', $evalList, true)) {
-            $inputType = 'email';
-        } elseif (!empty(array_intersect($evalList, ['int', 'num']))) {
-            $inputType = 'number';
-
-            if (isset($config['range']['lower'])) {
-                $attributes['min'] = (string)(int)$config['range']['lower'];
-            }
-            if (isset($config['range']['upper'])) {
-                $attributes['max'] = (string)(int)$config['range']['upper'];
-            }
-        }
 
         $mainFieldHtml = [];
         $mainFieldHtml[] = '<div class="form-control-wrap" style="max-width: ' . $width . 'px">';
         $mainFieldHtml[] =  '<div class="form-wizards-wrap">';
         $mainFieldHtml[] =      '<div class="form-wizards-element">';
-        $mainFieldHtml[] =          '<input type="' . $inputType . '" ' . GeneralUtility::implodeAttributes($attributes, true) . ' />';
-        $mainFieldHtml[] =          '<input type="hidden" name="' . $parameterArray['itemFormElName'] . '" value="' . htmlspecialchars($itemValue) . '" />';
+        $mainFieldHtml[] =          '<input type="text" ' . GeneralUtility::implodeAttributes($attributes, true) . ' />';
+        $mainFieldHtml[] =          '<input type="hidden" name="' . $itemName . '" value="' . htmlspecialchars((string)$itemValue) . '" />';
         $mainFieldHtml[] =      '</div>';
-        if (!empty($valuePickerHtml) || !empty($valueSliderHtml) || !empty($fieldControlHtml)) {
-            $mainFieldHtml[] =      '<div class="form-wizards-items-aside">';
+        if (!empty($valuePickerHtml) || !empty($fieldControlHtml)) {
+            $mainFieldHtml[] =      '<div class="form-wizards-items-aside form-wizards-items-aside--field-control">';
             $mainFieldHtml[] =          '<div class="btn-group">';
             $mainFieldHtml[] =              implode(LF, $valuePickerHtml);
-            $mainFieldHtml[] =              implode(LF, $valueSliderHtml);
             $mainFieldHtml[] =              $fieldControlHtml;
             $mainFieldHtml[] =          '</div>';
             $mainFieldHtml[] =      '</div>';
@@ -247,6 +219,8 @@ class ReadOnlyInputTextElement extends AbstractFormElement
         $mainFieldHtml[] =  '</div>';
         $mainFieldHtml[] = '</div>';
         $mainFieldHtml = implode(LF, $mainFieldHtml);
+
+        $nullControlNameEscaped = htmlspecialchars('control[active][' . $table . '][' . $this->data['databaseRow']['uid'] . '][' . $fieldName . ']');
 
         $fullElement = $mainFieldHtml;
         if ($this->hasNullCheckboxButNoPlaceholder()) {
@@ -264,10 +238,8 @@ class ReadOnlyInputTextElement extends AbstractFormElement
             $fullElement = implode(LF, $fullElement);
         } elseif ($this->hasNullCheckboxWithPlaceholder()) {
             $checked = $itemValue !== null ? ' checked="checked"' : '';
-            $placeholder = $shortenedPlaceholder = trim($config['placeholder'] ?? '');
-            $disabled = '';
-            $fallbackValue = 0;
-            if (strlen($placeholder) > 0) {
+            $placeholder = $shortenedPlaceholder = trim((string)($config['placeholder'] ?? ''));
+            if ($placeholder !== '') {
                 $shortenedPlaceholder = GeneralUtility::fixed_lgd_cs($placeholder, 20);
                 if ($placeholder !== $shortenedPlaceholder) {
                     $overrideLabel = sprintf(
@@ -287,8 +259,8 @@ class ReadOnlyInputTextElement extends AbstractFormElement
             }
             $fullElement = [];
             $fullElement[] = '<div class="form-check t3js-form-field-eval-null-placeholder-checkbox">';
-            $fullElement[] =     '<input type="hidden" name="' . $nullControlNameEscaped . '" value="' . $fallbackValue . '" />';
-            $fullElement[] =     '<input type="checkbox" class="form-check-input" name="' . $nullControlNameEscaped . '" id="' . $nullControlNameEscaped . '" value="1"' . $checked . $disabled . ' />';
+            $fullElement[] =     '<input type="hidden" name="' . $nullControlNameEscaped . '" value="0" />';
+            $fullElement[] =     '<input type="checkbox" class="form-check-input" name="' . $nullControlNameEscaped . '" id="' . $nullControlNameEscaped . '" value="1"' . $checked . ' />';
             $fullElement[] =     '<label class="form-check-label" for="' . $nullControlNameEscaped . '">';
             $fullElement[] =         $overrideLabel;
             $fullElement[] =     '</label>';
@@ -304,7 +276,11 @@ class ReadOnlyInputTextElement extends AbstractFormElement
             $fullElement = implode(LF, $fullElement);
         }
 
-        $resultArray['html'] = '<div class="formengine-field-item t3js-formengine-field-item">' . $fieldInformationHtml . $fullElement . '</div>';
+        $resultArray['html'] = $renderedLabel . '
+            <div class="formengine-field-item t3js-formengine-field-item">
+                ' . $fieldInformationHtml . $fullElement . '
+            </div>';
+
         return $resultArray;
     }
 }
