@@ -18,6 +18,7 @@ use JWeiland\Maps2\Service\MapService;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 /**
  * Handle Ajax requests of EXT:maps2.
@@ -98,10 +99,15 @@ class AjaxController extends ActionController
             new RenderInfoWindowContentEvent(
                 $poiCollectionUid,
                 '',
-                $this->configurationManager->getContentObject()
+                $this->getContentObjectRenderer()
             )
         );
 
         return $event->getInfoWindowContent();
+    }
+
+    protected function getContentObjectRenderer(): ContentObjectRenderer
+    {
+        return $this->request->getAttribute('currentContentObject');
     }
 }
