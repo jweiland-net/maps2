@@ -20,6 +20,7 @@ use JWeiland\Maps2\Helper\MapHelper;
 use JWeiland\Maps2\Helper\MessageHelper;
 use JWeiland\Maps2\Tca\Maps2Registry;
 use JWeiland\Maps2\Utility\DatabaseUtility;
+use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\FrontendRestrictionContainer;
 use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
@@ -104,9 +105,6 @@ class MapService
         return trim($settings['infoWindowContentTemplatePath']);
     }
 
-    /**
-     * @return array
-     */
     protected function getSettings(): array
     {
         $settings = [];
@@ -305,7 +303,7 @@ class MapService
                         ->where(
                             $queryBuilder->expr()->eq(
                                 $columnName,
-                                $queryBuilder->createNamedParameter($poiCollection->getUid(), \PDO::PARAM_INT)
+                                $queryBuilder->createNamedParameter($poiCollection->getUid(), Connection::PARAM_INT)
                             )
                         )
                         ->executeQuery();
