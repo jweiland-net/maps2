@@ -351,23 +351,6 @@ class MapService
         return $event->getForeignRecord();
     }
 
-    /**
-     * Set info window for Poi Collection
-     *
-     * @deprecated
-     */
-    public function setInfoWindow(PoiCollection $poiCollection): void
-    {
-        trigger_error(
-            'MapService::setInfoWindow is deprecated please use MapService::renderInfoWindow directly.',
-            E_USER_DEPRECATED
-        );
-
-        $poiCollection->setInfoWindowContent(
-            $this->renderInfoWindow($poiCollection)
-        );
-    }
-
     protected function getConnectionPool(): ConnectionPool
     {
         return GeneralUtility::makeInstance(ConnectionPool::class);
