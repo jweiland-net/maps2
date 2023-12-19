@@ -62,7 +62,7 @@ class OpenStreetMapMapper implements MapperInterface
             $formattedAddress = $data['display_name'];
         }
 
-        return trim($formattedAddress, ' ,\t\n\r\0\x0B');
+        return trim($formattedAddress, " ,\t\n\r\0\x0B");
     }
 
     /**

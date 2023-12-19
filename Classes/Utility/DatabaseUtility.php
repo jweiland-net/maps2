@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Utility;
 
+use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Schema\Column;
 use TYPO3\CMS\Core\Database\ConnectionPool;
@@ -28,12 +29,12 @@ class DatabaseUtility
      */
     public static function getColumnsFromTable(string $tableName): array
     {
-        $columns = [];
         $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable($tableName);
-        if ($connection->getSchemaManager() instanceof AbstractSchemaManager) {
-            $columns = $connection->getSchemaManager()->listTableColumns($tableName);
+        try {
+            return $connection->createSchemaManager()->listTableColumns($tableName);
+        } catch (Exception $e) {
         }
 
-        return $columns;
+        return [];
     }
 }

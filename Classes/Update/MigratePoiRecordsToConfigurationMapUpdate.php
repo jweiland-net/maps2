@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Update;
 
 use Doctrine\DBAL\Driver\Exception as DBALException;
-use Doctrine\DBAL\Schema\AbstractSchemaManager;
+use Doctrine\DBAL\Exception;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
@@ -67,17 +67,19 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
         }
 
         // If table "tx_maps2_domain_model_poi" was already removed, skip this upgrade
-        $schemaManager = $connection->getSchemaManager();
-        if (
-            $schemaManager instanceof AbstractSchemaManager
-            && !$schemaManager->tablesExist(['tx_maps2_domain_model_poi'])
-        ) {
+        try {
+            $schemaManager = $connection->createSchemaManager();
+            if (!$schemaManager->tablesExist(['tx_maps2_domain_model_poi'])) {
+                return false;
+            }
+        } catch (Exception $e) {
             return false;
         }
 
         $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable('tx_maps2_domain_model_poicollection');
-        $queryBuilder->getRestrictions()->removeAll();
-        $queryBuilder->getRestrictions()->add(GeneralUtility::makeInstance(DeletedRestriction::class));
+        $queryBuilder
+            ->getRestrictions()->removeAll()
+            ->add(GeneralUtility::makeInstance(DeletedRestriction::class));
 
         try {
             $amountOfRows = (bool)$queryBuilder
@@ -109,7 +111,7 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
                 )
                 ->executeQuery()
                 ->fetchOne();
-        } catch (DBALException $exception) {
+        } catch (Exception $e) {
             $amountOfRows = 0;
         }
 
@@ -119,8 +121,10 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
     public function executeUpdate(): bool
     {
         $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable('tx_maps2_domain_model_poicollection');
-        $queryBuilder->getRestrictions()->removeAll();
-        $queryBuilder->getRestrictions()->add(GeneralUtility::makeInstance(DeletedRestriction::class));
+        $queryBuilder
+            ->getRestrictions()
+            ->removeAll()
+            ->add(GeneralUtility::makeInstance(DeletedRestriction::class));
 
         try {
             $statement = $queryBuilder
@@ -130,7 +134,6 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
 
             while ($poiCollectionRecord = $statement->fetchAssociative()) {
                 $connection = $this->getConnectionPool()->getConnectionForTable('tx_maps2_domain_model_poi');
-
                 $connection->update(
                     'tx_maps2_domain_model_poicollection',
                     [
@@ -146,16 +149,13 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
                     ]
                 );
             }
-        } catch (DBALException $exception) {
+        } catch (Exception $e) {
             return false;
         }
 
         return true;
     }
 
-    /**
-     * @return array<int|string, string>
-     */
     protected function migratePoiRecords(int $poiCollectionUid): array
     {
         $routes = [];
@@ -169,11 +169,13 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
     protected function getPoiRecords(int $poiCollectionUid): array
     {
         $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable('tx_maps2_domain_model_poi');
-        $queryBuilder->getRestrictions()->removeAll();
-        $queryBuilder->getRestrictions()->add(GeneralUtility::makeInstance(DeletedRestriction::class));
+        $queryBuilder
+            ->getRestrictions()
+            ->removeAll()
+            ->add(GeneralUtility::makeInstance(DeletedRestriction::class));
 
         try {
-            $statement = $queryBuilder
+            $queryResult = $queryBuilder
                 ->select('uid', 'pos_index', 'latitude', 'longitude')
                 ->from('tx_maps2_domain_model_poi')
                 ->where(
@@ -185,19 +187,16 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
                 ->executeQuery();
 
             $poiRecords = [];
-            while ($poiRecord = $statement->fetchAssociative()) {
+            while ($poiRecord = $queryResult->fetchAssociative()) {
                 $poiRecords[] = $poiRecord;
             }
-        } catch (DBALException $exception) {
+        } catch (Exception $e) {
             $poiRecords = [];
         }
 
         return $poiRecords;
     }
 
-    /**
-     * @return array<class-string<DatabaseUpdatedPrerequisite>>
-     */
     public function getPrerequisites(): array
     {
         return [

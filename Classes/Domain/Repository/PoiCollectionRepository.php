@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Domain\Repository;
 
+use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use JWeiland\Maps2\Event\ModifyQueryOfFindPoiCollectionsEvent;
 use JWeiland\Maps2\Helper\OverlayHelper;
@@ -112,7 +113,7 @@ class PoiCollectionRepository extends Repository
             'pc',
             'sys_category_record_mm',
             'category_mm',
-            (string)$queryBuilder->expr()->andX(
+            (string)$queryBuilder->expr()->and(
                 $queryBuilder->expr()->eq(
                     'pc.uid',
                     $queryBuilder->quoteIdentifier('category_mm.uid_foreign')
@@ -171,20 +172,21 @@ class PoiCollectionRepository extends Repository
     /**
      * ->select() and ->groupBy() has to be the same in DB configuration
      * where only_full_group_by is activated.
-     *
-     * @return array
      */
     protected function getColumnsForPoiCollectionTable(): array
     {
         $columns = [];
         $connection = $this->getConnectionPool()->getConnectionForTable('tx_maps2_domain_model_poicollection');
-        if ($connection->getSchemaManager() instanceof AbstractSchemaManager) {
+
+        try {
+            $schemaManager = $connection->createSchemaManager();
             $columns = array_map(
                 static fn($column): string => 'pc.' . $column,
                 array_keys(
-                    $connection->getSchemaManager()->listTableColumns('tx_maps2_domain_model_poicollection') ?? []
+                    $schemaManager->listTableColumns('tx_maps2_domain_model_poicollection') ?? []
                 )
             );
+        } catch (Exception $e) {
         }
 
         return $columns;

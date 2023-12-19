@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Update;
 
 use Doctrine\DBAL\Driver\Exception as DBALException;
+use Doctrine\DBAL\Exception;
 use TYPO3\CMS\Core\Configuration\FlexForm\FlexFormTools;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
@@ -177,7 +178,7 @@ class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
                         'CType',
                         $queryBuilder->createNamedParameter('list')
                     ),
-                    $queryBuilder->expr()->orX(
+                    $queryBuilder->expr()->or(
                         $queryBuilder->expr()->eq(
                             'list_type',
                             $queryBuilder->createNamedParameter('maps2_citymap')
@@ -198,7 +199,7 @@ class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
             while ($record = $statement->fetchAssociative()) {
                 $records[] = $record;
             }
-        } catch (DBALException $exception) {
+        } catch (Exception $e) {
             $records = [];
         }
 

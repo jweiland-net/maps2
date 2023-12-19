@@ -169,6 +169,7 @@ class ReadOnlyInputTextElement extends AbstractFormElement
             $resultArray['requireJsModules'][] = JavaScriptModuleInstruction::forRequireJS(
                 'TYPO3/CMS/Backend/FormEngine/FieldWizard/ValueSlider'
             )->instance($id);
+
             $min = $config['range']['lower'] ?? 0;
             $max = $config['range']['upper'] ?? 10000;
             $step = $config['slider']['step'] ?? 1;
