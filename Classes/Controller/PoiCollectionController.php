@@ -43,8 +43,7 @@ class PoiCollectionController extends ActionController
 
     protected function initializeView($view): void
     {
-        $cObj = $this->configurationManager->getContentObject();
-        $contentRecord = $cObj->data;
+        $contentRecord = $this->request->getAttribute('currentContentObject')->data;
 
         // Remove unneeded columns from tt_content array
         unset(

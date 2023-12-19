@@ -37,7 +37,7 @@ class CityMapController extends ActionController
 
     protected function initializeView($view): void
     {
-        $contentRecord = $this->configurationManager->getContentObject()->data;
+        $contentRecord = $this->request->getAttribute('currentContentObject')->data;
 
         // Remove unneeded columns from tt_content array
         unset(

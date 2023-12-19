@@ -55,7 +55,7 @@ class GetEnvironmentViewHelper extends AbstractViewHelper
                 'settings' => self::getSettingsHelper()->getPreparedSettings(),
                 'extConf' => ObjectAccess::getGettableProperties(self::getExtConf()),
                 'id' => (int)($extbaseRequest->getQueryParams()['id'] ?? 0),
-                'contentRecord' => self::getConfigurationManager()->getContentObject()->data,
+                'contentRecord' => $extbaseRequest->getAttribute('currentContentObject')->data,
             ]
         );
 
@@ -76,11 +76,6 @@ class GetEnvironmentViewHelper extends AbstractViewHelper
         }
 
         return null;
-    }
-
-    protected static function getConfigurationManager(): ConfigurationManagerInterface
-    {
-        return GeneralUtility::makeInstance(ConfigurationManagerInterface::class);
     }
 
     protected static function getSettingsHelper(): SettingsHelper
