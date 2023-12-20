@@ -13,8 +13,8 @@ class GoogleMapsModule {
 
   constructor() {
     let googleMaps = document.querySelector(this.selector);
-    let poiCollection = JSON.parse(googleMaps.dataset.poiCollection);
-    let extConf = JSON.parse(googleMaps.dataset.extConf);
+    let poiCollection = new PoiCollection(JSON.parse(googleMaps.dataset.poiCollection));
+    let extConf = new ExtConf(JSON.parse(googleMaps.dataset.extConf));
 
     this.load(extConf).then(() => {
       this.initialize(googleMaps, poiCollection, extConf);
