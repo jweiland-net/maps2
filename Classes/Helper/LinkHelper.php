@@ -16,6 +16,7 @@ use TYPO3\CMS\Core\Routing\PageArguments;
 use TYPO3\CMS\Core\Routing\RouterInterface;
 use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Site\SiteFinder;
+use TYPO3\CMS\Core\Utility\ArrayUtility;
 
 /**
  * Extract address parts from foreign record array and build an address for Google Maps GoeCode requests
@@ -36,9 +37,15 @@ class LinkHelper
             return '';
         }
 
+        $mergedParameters = [
+            '_language' => $request->getAttribute('language')
+        ];
+
+        ArrayUtility::mergeRecursiveWithOverrule($mergedParameters, $parameters);
+
         return (string)$router->generateUri(
             $this->getCurrentPageUid($request),
-            $parameters,
+            $mergedParameters,
             RouterInterface::ABSOLUTE_URL
         );
     }
