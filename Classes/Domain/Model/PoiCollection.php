@@ -351,9 +351,7 @@ class PoiCollection extends AbstractEntity
             && ($falIconReference = $iconReference->getOriginalResource())
             && $falIconReference instanceof \TYPO3\CMS\Core\Resource\FileReference
         ) {
-            $siteUrl = rtrim(GeneralUtility::getIndpEnv('TYPO3_SITE_URL'), '/');
-
-            return $siteUrl . $falIconReference->getPublicUrl();
+            return $this->getWebPathOfFileReference($falIconReference);
         }
 
         return '';

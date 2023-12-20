@@ -33,17 +33,9 @@ trait GetWebPathOfFileReferenceTrait
         }
 
         if ($coreFileReference instanceof CoreFileReference) {
-            return $this->getTypo3SiteUrl() . $coreFileReference->getPublicUrl();
+            return GeneralUtility::locationHeaderUrl($coreFileReference->getPublicUrl());
         }
 
         return '';
-    }
-
-    /**
-     * Returns the TYPO3_SITE_URL without ending Slash.
-     */
-    private function getTypo3SiteUrl(): string
-    {
-        return rtrim(GeneralUtility::getIndpEnv('TYPO3_SITE_URL'), '/');
     }
 }
