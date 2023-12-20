@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import { ExtConf, PoiCollection } from '@jweiland/maps2/Classes.js';
 import FormEngine from "@typo3/backend/form-engine.js";
 
@@ -60,7 +59,7 @@ class OpenStreetMapModule {
     }
 
     // If maps2 was inserted in (bootstrap) tabs, we have to re-render the map
-    $("ul.t3js-tabs a[data-bs-toggle='tab']:eq(1)").on("shown.bs.tab", () => {
+    document.querySelector("ul.t3js-tabs li:nth-of-type(2) a[data-bs-toggle='tab']").addEventListener("shown.bs.tab", () => {
       this.map.invalidateSize();
       if (poiCollection.latitude && poiCollection.longitude) {
         this.map.panTo([poiCollection.latitude, poiCollection.longitude]);
@@ -263,7 +262,8 @@ class OpenStreetMapModule {
   /**
    * Generate an uri to save all coordinates
    *
-   * @param coordinates
+   * @param {array} coordinates
+   * @return {object}
    */
   getUriForCoordinates = coordinates => {
     let routeObject = {};
@@ -300,9 +300,9 @@ class OpenStreetMapModule {
   /**
    * Set field value
    *
-   * @param poiCollection
-   * @param field
-   * @param value
+   * @param {PoiCollection} poiCollection
+   * @param {string} field
+   * @param {string | number} value
    */
   setFieldValue = (poiCollection, field, value) => {
     let $fieldElement = this.getFieldElement(poiCollection, field);
@@ -315,6 +315,7 @@ class OpenStreetMapModule {
   /**
    * Store route/area path into configurationMap as JSON
    *
+   * @param {PoiCollection} poiCollection
    * @param coordinates
    */
   storeRouteAsJson = (poiCollection, coordinates) => {
@@ -330,17 +331,19 @@ class OpenStreetMapModule {
    */
   findAddress = (poiCollection, marker) => {
     let osm = this;
-    let $pacSearch = $(document.getElementById("pac-search"));
+    let pacSearch = document.querySelector("#pac-search");
 
     // Prevent submitting the BE form on enter
-    $pacSearch.keydown(event => {
-      if (event.which === 13) {
-        if ($pacSearch.val()) {
-          $.ajax({
-            type: "GET",
-            url: "https://nominatim.openstreetmap.org/search?q=" + encodeURI($pacSearch.val()) + "&format=json&addressdetails=1",
-            dataType: "json"
-          }).done(data => {
+    pacSearch.addEventListener("keydown", event => {
+      if (event.keyCode === 13 && event.target.value) {
+        fetch("https://nominatim.openstreetmap.org/search?q=" + encodeURI(event.target.value) + "&format=json&addressdetails=1", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          }
+        })
+          .then(response => response.json())
+          .then(data => {
             if (data.length === 0) {
               alert("Address not found");
             } else {
@@ -370,10 +373,8 @@ class OpenStreetMapModule {
 
               osm.map.panTo([lat, lng]);
             }
-          }).fail(() => {
-            // alert("Shit");
-          });
-        }
+          })
+          .catch(error => console.error('Error:', error));
 
         return false;
       }

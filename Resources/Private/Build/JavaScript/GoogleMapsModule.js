@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import { ExtConf, PoiCollection } from '@jweiland/maps2/Classes.js';
 import FormEngine from "@typo3/backend/form-engine.js";
 import Notification from"@typo3/backend/notification.js"
@@ -44,8 +43,13 @@ class GoogleMapsModule {
     }
   };
 
-  initialize = function(element, record, extConf) {
-    this.record = record;
+  /**
+   * @param {HTMLElement} element
+   * @param {PoiCollection} poiCollection
+   * @param {ExtConf} extConf
+   */
+  initialize = (element, poiCollection, extConf) => {
+    this.record = poiCollection;
     this.extConf = extConf;
     this.infoWindow = new google.maps.InfoWindow();
     this.infoWindowContent = document.getElementById("infowindow-content");
@@ -67,35 +71,35 @@ class GoogleMapsModule {
       );
     }
 
-    switch (record.collection_type) {
+    switch (poiCollection.collectionType) {
       case "Point":
-        this.createMarker(record);
+        this.createMarker(poiCollection);
         break;
       case "Area":
-        this.createArea(record);
+        this.createArea(poiCollection);
         break;
       case "Route":
-        this.createRoute(record);
+        this.createRoute(poiCollection);
         break;
       case "Radius":
-        this.createRadius(record);
+        this.createRadius(poiCollection);
         break;
     }
 
     this.findAddress();
 
-    if (record.latitude && record.longitude) {
-      this.map.setCenter(new google.maps.LatLng(record.latitude, record.longitude));
+    if (poiCollection.latitude && poiCollection.longitude) {
+      this.map.setCenter(new google.maps.LatLng(poiCollection.latitude, poiCollection.longitude));
     } else {
       // Fallback
       this.map.setCenter(new google.maps.LatLng(extConf.defaultLatitude, extConf.defaultLongitude));
     }
 
     // if maps2 was inserted in (bootstrap) tabs, we have to re-render the map
-    $("ul.t3js-tabs a[data-toggle='tab']:eq(1)").on("shown.bs.tab", function() {
+    document.querySelector("ul.t3js-tabs li:nth-of-type(2) a[data-bs-toggle='tab']").addEventListener("shown.bs.tab", () => {
       google.maps.event.trigger(this.map, "resize");
-      if (record.latitude && record.longitude) {
-        this.map.setCenter(new google.maps.LatLng(record.latitude, record.longitude));
+      if (poiCollection.latitude && poiCollection.longitude) {
+        this.map.setCenter(new google.maps.LatLng(poiCollection.latitude, poiCollection.longitude));
       } else {
         this.map.setCenter(new google.maps.LatLng(extConf.defaultLatitude, extConf.defaultLongitude));
       }
@@ -345,12 +349,12 @@ class GoogleMapsModule {
   /**
    * Fill TCA fields for Lat and Lng with value of marker position
    *
-   * @param lat
-   * @param lng
-   * @param rad
-   * @param address
+   * @param {number} lat
+   * @param {number} lng
+   * @param {number} rad
+   * @param {string} address
    */
-  setLatLngFields = function(lat, lng, rad, address) {
+  setLatLngFields = (lat, lng, rad, address) => {
     this.setFieldValue("latitude", lat);
     this.setFieldValue("longitude", lng);
 
@@ -366,23 +370,25 @@ class GoogleMapsModule {
   /**
    * Generate an uri to save all coordinates
    *
-   * @param route
+   * @param {object} route
    */
-  getUriForRoute = function(route) {
+  getUriForRoute = route => {
     let routeObject = {};
-    route.getPath().forEach(function(latLng, index) {
+
+    route.getPath().forEach((latLng, index) => {
       routeObject[index] = latLng.toUrlValue();
     });
+
     return routeObject;
   };
 
   /**
    * Return FieldElement from TCEFORM by fieldName
    *
-   * @param field
+   * @param {string} field
    * @returns {*|HTMLElement} jQuery object. FormEngine works with $ selectors
    */
-  getFieldElement = function(field) {
+  getFieldElement = field => {
     // Return the FieldElement which is visible to the editor
     return TYPO3.FormEngine.getFieldElement(this.buildFieldName(field), '_list');
   };
@@ -390,21 +396,23 @@ class GoogleMapsModule {
   /**
    * Build fieldName like 'data[tx_maps2_domain_model_poicollection][1][latitude]'
    *
-   * @param field
+   * @param {string} field
    * @returns {string}
    */
-  buildFieldName = function(field) {
+  buildFieldName = field => {
     return 'data[tx_maps2_domain_model_poicollection][' + this.record.uid + '][' + field + ']';
   };
 
   /**
    * Set field value
    *
-   * @param field
-   * @param value
+   * @param {string} field
+   * @param {string | int} value
    */
-  setFieldValue = function(field, value) {
+  setFieldValue = (field, value) => {
+    /* getFieldName returns a jquery object via FormEngine */
     let $fieldElement = this.getFieldElement(field);
+
     if ($fieldElement && $fieldElement.length) {
       $fieldElement.val(value);
       $fieldElement.triggerHandler("change");
@@ -416,7 +424,7 @@ class GoogleMapsModule {
    *
    * @param route
    */
-  storeRouteAsJson = function(route) {
+  storeRouteAsJson = route => {
     this.setFieldValue(
       "configuration_map",
       JSON.stringify(this.getUriForRoute(route))
@@ -426,20 +434,21 @@ class GoogleMapsModule {
   /**
    * Read address, send it to Google and move map/marker to new location
    */
-  findAddress = function() {
-    let input = document.getElementById("pac-input");
-    let autocomplete = new google.maps.places.Autocomplete(input, {fields: ["place_id"]});
+  findAddress = () => {
+    let pacInput = document.querySelector("#pac-input");
+    let autocomplete = new google.maps.places.Autocomplete(pacInput, {fields: ["place_id"]});
     let geoCoder = new google.maps.Geocoder;
 
     autocomplete.bindTo("bounds", this.map);
-    this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+    this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(pacInput);
 
     // Prevent submitting the BE form on enter, while selecting entry from AutoSuggest
-    $(input).keydown(function(e) {
-      if (e.which === 13 && $(".pac-container:visible").length) return false;
+    pacInput.addEventListener("keydown", event => {
+      let pacContainer = document.querySelector(".pac-container");
+      if (event.keyCode === 13 && pacContainer !== null) return false;
     });
 
-    autocomplete.addListener("place_changed", function() {
+    autocomplete.addListener("place_changed", () => {
       this.infoWindow.close();
       let place = autocomplete.getPlace();
 
@@ -447,17 +456,17 @@ class GoogleMapsModule {
         return;
       }
 
-      geoCoder.geocode({"placeId": place.place_id}, function(results, status) {
+      geoCoder.geocode({"placeId": place.place_id}, (results, status) => {
         if (status !== "OK") {
           window.alert("Geocoder failed due to: " + status);
           return;
         }
+
         let lat = results[0].geometry.location.lat().toFixed(6);
         let lng = results[0].geometry.location.lng().toFixed(6);
 
-        switch (this.record.collection_type) {
+        switch (this.record.collectionType) {
           case 'Point':
-            //this.marker.setPlace(); // setPlace works, but it resets previous marker settings like draggable, ...
             this.marker.setPosition(results[0].geometry.location);
             this.marker.setVisible(true);
             this.setLatLngFields(lat, lng, 0, results[0].formatted_address);
