@@ -308,29 +308,28 @@ class GoogleMaps2 {
     // Add checkbox for category
     for (let categoryUid in categories) {
       if (categories.hasOwnProperty(categoryUid)) {
-        span = document.createElement("span");
-        span.classList.add("map-category");
-        span.innerText = categories[categoryUid].title;
-
-        form.append(this.getCheckbox(categories[categoryUid]).cloneNode(true));
-        form.querySelector("#checkCategory_" + categoryUid).after(span.cloneNode(true));
+        form.appendChild(this.getCheckbox(categories[categoryUid]));
+        form.querySelector("#checkCategory_" + categoryUid)?.insertAdjacentHTML(
+          "afterend",
+          `<span class="map-category">${categories[categoryUid].title}</span>`
+        );
       }
     }
 
     // Add listener for checkboxes
-    form.querySelectorAll("input").forEach(checkbox => {
-      checkbox.addEventListener("click", event => {
-        let isChecked = event.target.checked;
-        let categoryUid = event.target.value;
+    form.querySelectorAll("input").forEach((checkbox) => {
+      checkbox.addEventListener("click", () => {
+        let isChecked = (checkbox).checked;
+        let categoryUid = (checkbox).value;
         let markers = this.getMarkersToChangeVisibilityFor(categoryUid, form, isChecked);
 
-        for (let i = 0; i < markers.length; i++) {
-          markers[i].setVisible(isChecked);
-        }
+        markers.forEach((marker) => {
+          marker.setVisible(isChecked);
+        });
       });
     });
 
-    element.after(form.cloneNode(true));
+    element.insertAdjacentElement("afterend", form);
   }
 
   /**
@@ -338,27 +337,17 @@ class GoogleMaps2 {
    *
    * @param category
    */
-  getCheckbox = category => {
-    let input = document.createElement("input");
-    let label = document.createElement("label");
-    let divCheckbox = document.createElement("div");
-    let divFormGroup = document.createElement("div");
+  getCheckbox(category) {
+    let div = document.createElement("div");
+    div.classList.add("form-group");
+    div.innerHTML = `
+      <div class="checkbox">
+          <label>
+              <input type="checkbox" class="checkCategory" id="checkCategory_${category.uid}" checked="checked" value="${category.uid}">
+          </label>
+      </div>`;
 
-    input.setAttribute("type", "checkbox");
-    input.setAttribute("class", "checkCategory");
-    input.setAttribute("id", "checkCategory_" + category.uid);
-    input.setAttribute("checked", "checked");
-    input.setAttribute("value", category.uid);
-
-    divCheckbox.setAttribute("class", "checkbox");
-
-    divFormGroup.setAttribute("class", "form-group");
-
-    label.append(input.cloneNode(true));
-    divCheckbox.append(label.cloneNode(true));
-    divFormGroup.append(divCheckbox.cloneNode(true));
-
-    return divFormGroup;
+    return div;
   }
 
   /**
