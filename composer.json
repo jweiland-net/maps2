@@ -20,7 +20,7 @@
 	},
 	"require": {
 		"ext-json": "*",
-		"typo3/cms-core": "^12.4.4"
+		"typo3/cms-core": "^12.4.8"
 	},
 	"require-dev": {
 		"typo3/testing-framework": "^7.0.2",
