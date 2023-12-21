@@ -228,7 +228,15 @@ class AddressHelperTest extends FunctionalTestCase
      */
     public function getAddressWithCountryUidWillGetCountryNameFromStaticCountries(): void
     {
-        $this->importCSVDataSet(__DIR__ . '/../Fixtures/static_countries.csv');
+        // Prevent including records multiple times on SQLite
+        $amountOfCountries = $this
+            ->getConnectionPool()
+            ->getConnectionForTable('static_countries')
+            ->count('*', 'static_countries', []);
+
+        if ($amountOfCountries === 0) {
+            $this->importCSVDataSet(__DIR__ . '/../Fixtures/static_countries.csv');
+        }
 
         $this->messageHelperMock
             ->expects(self::never())
