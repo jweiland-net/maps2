@@ -361,6 +361,9 @@ class MapServiceTest extends FunctionalTestCase
             ['uid' => 1, 'longitude' => 1]
         );
 
+        // DB systems other than MySQL collect float values as string. Convert them back to float.
+        $poiCollectionRecord['longitude'] = (float)$poiCollectionRecord['longitude'];
+
         self::assertSame(
             [
                 'uid' => 1,
