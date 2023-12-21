@@ -1,8 +1,4 @@
-.. include:: /Includes.rst.txt
-
-
-..  Every manual should have a start label for cross-referencing to
-..  start page. Do not remove this!
+..  include:: /Includes.rst.txt
 
 ..  _start:
 
@@ -10,57 +6,47 @@
 Maps2
 =====
 
-.. only:: html
+:Language:
+    en
 
-   :Classification:
-      maps2
+:Version:
+    |release|
 
-   :Version:
-      |release|
+:Description:
+    This TYPO3 extension supports the rendering of a map based on Google Maps or
+    OpenStreetMap. The map can be additionally enriched with markers, routes,
+    area and radius overlays and these overlays can be grouped into categories
+    for easy and recurring assignment.
 
-   :Language:
-      en
+:Keywords:
+    typo3,TYPO3 CMS,google maps,osm,open street map,openstreetmap,maps2
 
-   :Description:
-      This TYPO3 extension supports the rendering of a map based on Google Maps or
-      OpenStreetMap. The map can be additionally enriched with markers, routes,
-      area and radius overlays and these overlays can be grouped into categories
-      for easy and recurring assignment.
+:Copyright:
+    2013-2021
 
-   :Keywords:
-      typo3,TYPO3 CMS,google maps,osm,open street map,openstreetmap,maps2
+:Author:
+    Stefan Froemken
 
-   :Copyright:
-      2013-2019
+:Email:
+    projects@jweiland.net
 
-   :Author:
-      Stefan Froemken
+:License:
+    This document is published under the Open Content License
+    available from http://www.opencontent.org/opl.shtml
 
-   :Email:
-      projects@jweiland.net
-
-   :License:
-      This document is published under the Open Publication License
-      available from http://www.opencontent.org/openpub/
-
-   :Rendered:
-      |today|
-
-   The content of this document is related to TYPO3,
-   a GNU/GPL CMS/Framework available from `www.typo3.org <https://typo3.org/>`__.
+:Rendered:
+    |today|
 
 
-   **Table of Contents**
+..  toctree::
+    :titlesonly:
 
-.. toctree::
-   :maxdepth: 2
-
-   Introduction/Index
-   Installation/Index
-   Configuration/Index
-   User/Index
-   AdministratorManual/Index
-   DeveloperManual/Index
-   FAQ/Index
-   ToDoList/Index
-   ChangeLog/Index
+    Introduction/Index
+    Installation/Index
+    Configuration/Index
+    User/Index
+    AdministratorManual/Index
+    DeveloperManual/Index
+    FAQ/Index
+    ToDoList/Index
+    ChangeLog/Index

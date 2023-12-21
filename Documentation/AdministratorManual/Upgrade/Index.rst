@@ -1,4 +1,4 @@
-.. include:: /Includes.rst.txt
+..  include:: /Includes.rst.txt
 
 
 =======
@@ -9,6 +9,8 @@ If you upgrade EXT:maps2 to a newer version, please read this section carefully!
 
 Upgrade to Version 11.0.0
 =========================
+
+This version is not TYPO3 11 compatible!
 
 Updating TYPO3 extensions with help of `class.ext_update.php` is deprecated
 since TYPO3 11.0 and was removed with TYPO3 12.0. So, if you upgrade from
