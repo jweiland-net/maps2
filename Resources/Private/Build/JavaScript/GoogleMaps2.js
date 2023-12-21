@@ -19,14 +19,14 @@ class GoogleMaps2 {
     this.pointMarkers = [];
     this.bounds = new google.maps.LatLngBounds();
     this.infoWindow = new google.maps.InfoWindow();
-    this.poiCollections = JSON.parse(element.dataset.pois);
+    this.poiCollections = JSON.parse(element.dataset.pois || "null");
     this.editable = element.classList.contains('editMarker');
 
     this.setMapDimensions(element, environment.settings);
 
     this.createMap(element, environment);
 
-    if (typeof this.poiCollections === 'undefined') {
+    if (typeof this.poiCollections === 'undefined' || this.poiCollections === null) {
       // Plugin: CityMap
       let lat = Number(element.dataset.latitude);
       let lng = Number(element.dataset.longitude);
@@ -50,22 +50,12 @@ class GoogleMaps2 {
           { imagePath: environment.settings.markerClusterer.imagePath }
         );
       }
+
       if (this.countObjectProperties(this.categorizedMarkers) > 1) {
         this.showSwitchableCategories(element, environment);
       }
-      if (
-        environment.settings.forceZoom === false
-        && (
-          this.poiCollections.length > 1
-          || (
-            this.poiCollections.length === 1
-            && (
-              this.poiCollections[0].collectionType === 'Area'
-              || this.poiCollections[0].collectionType === 'Route'
-            )
-          )
-        )
-      ) {
+
+      if (this.shouldFitBounds(environment.settings)) {
         this.map.fitBounds(this.bounds);
       } else {
         this.map.setCenter(new google.maps.LatLng(this.poiCollections[0].latitude, this.poiCollections[0].longitude));
@@ -206,6 +196,36 @@ class GoogleMaps2 {
     }
 
     return normalizedDimension;
+  }
+
+  /**
+   * @param {Settings} settings
+   * @returns {boolean}
+   */
+  shouldFitBounds(settings) {
+    if (settings.forceZoom === true) {
+      return false;
+    }
+
+    if (this.poiCollections === null) {
+      return false;
+    }
+
+    if (this.poiCollections.length > 1) {
+      return true;
+    }
+
+    if (
+      this.poiCollections.length === 1
+      && (
+        this.poiCollections[0].collectionType === "Area"
+        || this.poiCollections[0].collectionType === "Route"
+      )
+    ) {
+      return true;
+    }
+
+    return false;
   }
 
   /**
@@ -375,58 +395,60 @@ class GoogleMaps2 {
     let marker;
     let categoryUid = 0;
 
-    this.poiCollections.forEach(poiCollection => {
-      if (poiCollection.strokeColor === "") {
-        poiCollection.strokeColor = environment.extConf.strokeColor;
-      }
-      if (poiCollection.strokeOpacity === "") {
-        poiCollection.strokeOpacity = environment.extConf.strokeOpacity;
-      }
-      if (poiCollection.strokeWeight === "") {
-        poiCollection.strokeWeight = environment.extConf.strokeWeight;
-      }
-      if (poiCollection.fillColor === "") {
-        poiCollection.fillColor = environment.extConf.fillColor;
-      }
-      if (poiCollection.fillOpacity === "") {
-        poiCollection.fillOpacity = environment.extConf.fillOpacity;
-      }
-
-      marker = null;
-      switch (poiCollection.collectionType) {
-        case "Point":
-          marker = this.createMarker(poiCollection, element, environment);
-          break;
-        case "Area":
-          marker = this.createArea(poiCollection, environment);
-          break;
-        case "Route":
-          marker = this.createRoute(poiCollection, environment);
-          break;
-        case "Radius":
-          marker = this.createRadius(poiCollection, environment);
-          break;
-      }
-
-      if (marker !== null) {
-        this.allMarkers.push({
-          marker: marker,
-          poiCollection: poiCollection
-        });
-
-        categoryUid = 0;
-        for (let c = 0; c < poiCollection.categories.length; c++) {
-          categoryUid = poiCollection.categories[c].uid;
-          if (!this.categorizedMarkers.hasOwnProperty(categoryUid)) {
-            this.categorizedMarkers[categoryUid] = [];
-          }
-          this.categorizedMarkers[categoryUid].push({
-            marker: marker,
-            relatedCategories: poiCollection.categories
-          });
+    if (this.poiCollections !== null && this.poiCollections.length) {
+      this.poiCollections.forEach(poiCollection => {
+        if (poiCollection.strokeColor === "") {
+          poiCollection.strokeColor = environment.extConf.strokeColor;
         }
-      }
-    });
+        if (poiCollection.strokeOpacity === "") {
+          poiCollection.strokeOpacity = environment.extConf.strokeOpacity;
+        }
+        if (poiCollection.strokeWeight === "") {
+          poiCollection.strokeWeight = environment.extConf.strokeWeight;
+        }
+        if (poiCollection.fillColor === "") {
+          poiCollection.fillColor = environment.extConf.fillColor;
+        }
+        if (poiCollection.fillOpacity === "") {
+          poiCollection.fillOpacity = environment.extConf.fillOpacity;
+        }
+
+        marker = null;
+        switch (poiCollection.collectionType) {
+          case "Point":
+            marker = this.createMarker(poiCollection, element, environment);
+            break;
+          case "Area":
+            marker = this.createArea(poiCollection, environment);
+            break;
+          case "Route":
+            marker = this.createRoute(poiCollection, environment);
+            break;
+          case "Radius":
+            marker = this.createRadius(poiCollection, environment);
+            break;
+        }
+
+        if (marker !== null) {
+          this.allMarkers.push({
+            marker: marker,
+            poiCollection: poiCollection
+          });
+
+          categoryUid = 0;
+          for (let c = 0; c < poiCollection.categories.length; c++) {
+            categoryUid = poiCollection.categories[c].uid;
+            if (!this.categorizedMarkers.hasOwnProperty(categoryUid)) {
+              this.categorizedMarkers[categoryUid] = [];
+            }
+            this.categorizedMarkers[categoryUid].push({
+              marker: marker,
+              relatedCategories: poiCollection.categories
+            });
+          }
+        }
+      });
+    }
   }
 
   /**

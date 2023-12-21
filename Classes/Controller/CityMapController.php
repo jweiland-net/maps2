@@ -16,10 +16,8 @@ use JWeiland\Maps2\Controller\Traits\InjectSettingsHelperTrait;
 use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Service\GeoCodeService;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Routing\PageArguments;
-use TYPO3\CMS\Core\Routing\Route;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
@@ -32,6 +30,13 @@ class CityMapController extends ActionController
 {
     use InjectExtConfTrait;
     use InjectSettingsHelperTrait;
+
+    protected GeoCodeService $geoCodeService;
+
+    public function injectGeoCodeService(GeoCodeService $geoCodeService): void
+    {
+        $this->geoCodeService = $geoCodeService;
+    }
 
     public function initializeObject(): void
     {
@@ -85,8 +90,7 @@ class CityMapController extends ActionController
 
     public function searchAction(string $street): ResponseInterface
     {
-        $geoCodeService = GeneralUtility::makeInstance(GeoCodeService::class);
-        $position = $geoCodeService->getFirstFoundPositionByAddress(
+        $position = $this->geoCodeService->getFirstFoundPositionByAddress(
             strip_tags($street) . ' ' . $this->settings['autoAppend']
         );
 

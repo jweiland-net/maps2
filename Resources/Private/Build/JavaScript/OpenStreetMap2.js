@@ -81,6 +81,10 @@ class OpenStreetMap2 {
       return false;
     }
 
+    if (this.poiCollections === null) {
+      return false;
+    }
+
     if (this.poiCollections.length > 1) {
       return true;
     }
@@ -287,53 +291,55 @@ class OpenStreetMap2 {
     let marker;
     let categoryUid = 0;
 
-    this.poiCollections.forEach(poiCollection => {
-      if (poiCollection.strokeColor === "") {
-        poiCollection.strokeColor = this.getExtConf().strokeColor;
-      }
-      if (poiCollection.strokeOpacity === "") {
-        poiCollection.strokeOpacity = this.getExtConf().strokeOpacity;
-      }
-      if (poiCollection.strokeWeight === "") {
-        poiCollection.strokeWeight = this.getExtConf().strokeWeight;
-      }
-      if (poiCollection.fillColor === "") {
-        poiCollection.fillColor = this.getExtConf().fillColor;
-      }
-      if (poiCollection.fillOpacity === "") {
-        poiCollection.fillOpacity = this.getExtConf().fillOpacity;
-      }
-
-      marker = null;
-      switch (poiCollection.collectionType) {
-        case "Point":
-          marker = this.createMarker(poiCollection);
-          break;
-        case "Area":
-          marker = this.createArea(poiCollection);
-          break;
-        case "Route":
-          marker = this.createRoute(poiCollection);
-          break;
-        case "Radius":
-          marker = this.createRadius(poiCollection);
-          break;
-      }
-
-      this.allMarkers.push({
-        marker: marker,
-        poiCollection: poiCollection
-      });
-
-      categoryUid = 0;
-      for (let c = 0; c < poiCollection.categories.length; c++) {
-        categoryUid = poiCollection.categories[c].uid;
-        if (!this.categorizedMarkers.hasOwnProperty(categoryUid)) {
-          this.categorizedMarkers[categoryUid] = [];
+    if (this.poiCollections !== null && this.poiCollections.length) {
+      this.poiCollections.forEach(poiCollection => {
+        if (poiCollection.strokeColor === "") {
+          poiCollection.strokeColor = this.getExtConf().strokeColor;
         }
-        this.categorizedMarkers[categoryUid].push(marker);
-      }
-    });
+        if (poiCollection.strokeOpacity === "") {
+          poiCollection.strokeOpacity = this.getExtConf().strokeOpacity;
+        }
+        if (poiCollection.strokeWeight === "") {
+          poiCollection.strokeWeight = this.getExtConf().strokeWeight;
+        }
+        if (poiCollection.fillColor === "") {
+          poiCollection.fillColor = this.getExtConf().fillColor;
+        }
+        if (poiCollection.fillOpacity === "") {
+          poiCollection.fillOpacity = this.getExtConf().fillOpacity;
+        }
+
+        marker = null;
+        switch (poiCollection.collectionType) {
+          case "Point":
+            marker = this.createMarker(poiCollection);
+            break;
+          case "Area":
+            marker = this.createArea(poiCollection);
+            break;
+          case "Route":
+            marker = this.createRoute(poiCollection);
+            break;
+          case "Radius":
+            marker = this.createRadius(poiCollection);
+            break;
+        }
+
+        this.allMarkers.push({
+          marker: marker,
+          poiCollection: poiCollection
+        });
+
+        categoryUid = 0;
+        for (let c = 0; c < poiCollection.categories.length; c++) {
+          categoryUid = poiCollection.categories[c].uid;
+          if (!this.categorizedMarkers.hasOwnProperty(categoryUid)) {
+            this.categorizedMarkers[categoryUid] = [];
+          }
+          this.categorizedMarkers[categoryUid].push(marker);
+        }
+      });
+    }
   }
 
   /**
