@@ -17,6 +17,7 @@ use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Helper\MessageHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Core\Http\RequestFactory;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
@@ -83,7 +84,7 @@ class OpenStreetMapClientTest extends FunctionalTestCase
             ->with(
                 'URI is empty or contains invalid chars. URI: ',
                 'Invalid request URI',
-                2
+                ContextualFeedbackSeverity::ERROR
             );
 
         self::assertSame(
@@ -106,7 +107,7 @@ class OpenStreetMapClientTest extends FunctionalTestCase
             ->with(
                 'URI is empty or contains invalid chars. URI: https://www.jweiländ.net',
                 'Invalid request URI',
-                2
+                ContextualFeedbackSeverity::ERROR
             );
 
         self::assertSame(
