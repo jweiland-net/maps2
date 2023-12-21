@@ -14,7 +14,6 @@ namespace JWeiland\Maps2\ViewHelpers;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Helper\SettingsHelper;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\RequestInterface;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;

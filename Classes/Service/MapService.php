@@ -16,7 +16,6 @@ use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Event\PreAddForeignRecordEvent;
-use JWeiland\Maps2\Helper\MapHelper;
 use JWeiland\Maps2\Helper\MessageHelper;
 use JWeiland\Maps2\Tca\Maps2Registry;
 use JWeiland\Maps2\Utility\DatabaseUtility;

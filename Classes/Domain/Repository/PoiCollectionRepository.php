@@ -12,7 +12,6 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Domain\Repository;
 
 use Doctrine\DBAL\Exception;
-use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use JWeiland\Maps2\Event\ModifyQueryOfFindPoiCollectionsEvent;
 use JWeiland\Maps2\Helper\OverlayHelper;
 use TYPO3\CMS\Core\Database\Connection;

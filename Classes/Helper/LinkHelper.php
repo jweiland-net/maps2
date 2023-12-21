@@ -38,7 +38,7 @@ class LinkHelper
         }
 
         $mergedParameters = [
-            '_language' => $request->getAttribute('language')
+            '_language' => $request->getAttribute('language'),
         ];
 
         ArrayUtility::mergeRecursiveWithOverrule($mergedParameters, $parameters);
