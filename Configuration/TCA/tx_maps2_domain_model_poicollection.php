@@ -1,5 +1,7 @@
 <?php
 
+use JWeiland\Maps2\Tca\Type\FloatType;
+
 return [
     'ctrl' => [
         'title' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection',
@@ -265,7 +267,7 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 12,
-                'eval' => \JWeiland\Maps2\Tca\Type\FloatType::class,
+                'eval' => FloatType::class,
             ],
         ],
         'longitude' => [
@@ -274,7 +276,7 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 12,
-                'eval' => \JWeiland\Maps2\Tca\Type\FloatType::class,
+                'eval' => FloatType::class,
             ],
         ],
         'radius' => [
