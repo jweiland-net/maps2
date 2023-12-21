@@ -102,9 +102,4 @@ call_user_func(static function (): void {
         'priority' => 40,
         'class' => MapProviderResolver::class,
     ];
-
-    // Add maps2 plugin to new element wizard
-    ExtensionManagementUtility::addPageTSConfig(
-        '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:maps2/Configuration/TsConfig/Page/ContentElementWizard.tsconfig">'
-    );
 });
