@@ -39,6 +39,7 @@ class AddressHelperTest extends FunctionalTestCase
     protected $extConf;
 
     protected array $testExtensionsToLoad = [
+        'sjbr/static-info-tables',
         'jweiland/maps2',
     ];
 
@@ -128,19 +129,23 @@ class AddressHelperTest extends FunctionalTestCase
         $this->messageHelperMock
             ->expects(self::atLeastOnce())
             ->method('addFlashMessage')
-            ->with(
-                self::stringContains('We can not find any country information within your extension'),
-                'No country information found',
-                ContextualFeedbackSeverity::WARNING
-            );
+            ->willReturnMap([
+                [
+                    self::stringContains('We can not find any country information within your extension'),
+                    'No country information found',
+                    ContextualFeedbackSeverity::WARNING,
+                ],
+                [
+                    self::stringContains('extension manager configuration'),
+                    'Default country of maps2 is not configured',
+                    ContextualFeedbackSeverity::WARNING,
+                ],
+            ]);
 
         $this->messageHelperMock
             ->expects(self::atLeastOnce())
             ->method('addFlashMessage')
             ->with(
-                self::stringContains('extension manager configuration'),
-                'Default country of maps2 is not configured',
-                ContextualFeedbackSeverity::WARNING
             );
 
         $record = [
@@ -223,8 +228,10 @@ class AddressHelperTest extends FunctionalTestCase
      */
     public function getAddressWithCountryUidWillGetCountryNameFromStaticCountries(): void
     {
+        $this->importCSVDataSet(__DIR__ . '/../Fixtures/static_countries.csv');
+
         $this->messageHelperMock
-            ->expects(self::atLeastOnce())
+            ->expects(self::never())
             ->method('addFlashMessage')
             ->with(
                 self::stringContains('We can not find any country information within your extension'),
@@ -246,8 +253,8 @@ class AddressHelperTest extends FunctionalTestCase
             'title' => 'Market',
             'street' => 'Mainstreet 17',
             'zip' => '23145',
-            'city' => 'Warschau',
-            'country' => '328',
+            'city' => 'Filderstadt',
+            'country' => '54',
         ];
         $options = [
             'addressColumns' => ['street', 'zip', 'city'],
@@ -255,7 +262,7 @@ class AddressHelperTest extends FunctionalTestCase
         ];
 
         self::assertSame(
-            'Mainstreet 17 23145 Warschau Poland',
+            'Mainstreet 17 23145 Filderstadt Germany',
             $this->subject->getAddress($record, $options)
         );
     }

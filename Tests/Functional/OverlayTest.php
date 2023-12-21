@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Tests\Functional;
 
+use JWeiland\Maps2\Tests\Functional\Traits\SetUpFrontendSiteTrait;
 use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\InternalRequest;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
@@ -19,6 +20,8 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
  */
 class OverlayTest extends FunctionalTestCase
 {
+    use SetUpFrontendSiteTrait;
+
     protected array $testExtensionsToLoad = [
         'jweiland/maps2',
     ];
@@ -30,11 +33,12 @@ class OverlayTest extends FunctionalTestCase
         $this->importCSVDataSet(__DIR__ . '/Fixtures/pages.csv');
         $this->importCSVDataSet(__DIR__ . '/Fixtures/tt_content-with-poicollection.csv');
         $this->importCSVDataSet(__DIR__ . '/Fixtures/tx_maps2_domain_model_poicollection.csv');
+        $this->setUpFrontendSite(1);
         $this->setUpFrontendRootPage(
             1,
             [
-                __DIR__ . '/Fixtures/TypoScript/setup.typoscript',
-                __DIR__ . '/Fixtures/TypoScript/activate-plugin-overlay.typoscript',
+                'EXT:maps2/Tests/Functional/Fixtures/TypoScript/setup.typoscript',
+                'EXT:maps2/Tests/Functional/Fixtures/TypoScript/activate-plugin-overlay.typoscript',
             ]
         );
     }

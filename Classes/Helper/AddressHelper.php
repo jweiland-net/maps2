@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Helper;
 
-use Doctrine\DBAL\Driver\Exception as DBALException;
+use Doctrine\DBAL\Exception;
 use JWeiland\Maps2\Configuration\ExtConf;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
@@ -149,7 +149,7 @@ class AddressHelper
                 )
                 ->executeQuery()
                 ->fetchAssociative();
-        } catch (DBALException $exception) {
+        } catch (Exception $e) {
             $countryRecord = [];
         }
 
@@ -171,7 +171,7 @@ class AddressHelper
      */
     protected function canCountryBeLoadedFromStaticCountry(array $record, string $countryColumn): bool
     {
-        if (empty($countryColumn)) {
+        if ($countryColumn === '') {
             return false;
         }
 

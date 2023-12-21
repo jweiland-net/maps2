@@ -110,18 +110,20 @@ class SettingsHelperTest extends FunctionalTestCase
         $this->configurationManagerMock
             ->expects(self::atLeastOnce())
             ->method('getConfiguration')
-            ->with(
-                ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,
-                'maps2',
-                'invalid'
-            )
-            ->willReturn($this->typoScriptSettings);
-
-        $this->configurationManagerMock
-            ->expects(self::atLeastOnce())
-            ->method('getConfiguration')
-            ->with(ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS)
-            ->willReturn($this->mergedScriptSettings);
+            ->willReturnMap([
+                [
+                    ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,
+                    'maps2',
+                    'invalid',
+                    $this->typoScriptSettings,
+                ],
+                [
+                    ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
+                    null,
+                    null,
+                    $this->mergedScriptSettings,
+                ],
+            ]);
 
         self::assertSame(
             $this->mergedScriptSettings,
@@ -141,18 +143,20 @@ class SettingsHelperTest extends FunctionalTestCase
         $this->configurationManagerMock
             ->expects(self::atLeastOnce())
             ->method('getConfiguration')
-            ->with(
-                ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,
-                'maps2',
-                'invalid'
-            )
-            ->willReturn($typoScriptSettings);
-
-        $this->configurationManagerMock
-            ->expects(self::atLeastOnce())
-            ->method('getConfiguration')
-            ->with(ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS)
-            ->willReturn($this->mergedScriptSettings);
+            ->willReturnMap([
+                [
+                    ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,
+                    'maps2',
+                    'invalid',
+                    $typoScriptSettings,
+                ],
+                [
+                    ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
+                    null,
+                    null,
+                    $this->mergedScriptSettings,
+                ],
+            ]);
 
         self::assertSame(
             'EXT:maps2/Resources/Private/Templates/InfoWindowContent.html',
@@ -165,24 +169,26 @@ class SettingsHelperTest extends FunctionalTestCase
      */
     public function getMergedSettingsWithDeactivatedFullscreenMapControlWillKeepFlexFormSetting(): void
     {
-        $this->configurationManagerMock
-            ->expects(self::atLeastOnce())
-            ->method('getConfiguration')
-            ->with(
-                ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,
-                'maps2',
-                'invalid'
-            )
-            ->willReturn($this->typoScriptSettings);
-
         $mergedSettings = $this->mergedScriptSettings;
         $mergedSettings['fullscreenMapControl'] = '0';
 
         $this->configurationManagerMock
             ->expects(self::atLeastOnce())
             ->method('getConfiguration')
-            ->with(ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS)
-            ->willReturn($mergedSettings);
+            ->willReturnMap([
+                [
+                    ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,
+                    'maps2',
+                    'invalid',
+                    $this->typoScriptSettings,
+                ],
+                [
+                    ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
+                    null,
+                    null,
+                    $mergedSettings,
+                ],
+            ]);
 
         self::assertSame(
             '0',
@@ -195,24 +201,26 @@ class SettingsHelperTest extends FunctionalTestCase
      */
     public function getMergedSettingsWithActivatedStreetViewControlWillKeepFlexFormSetting(): void
     {
-        $this->configurationManagerMock
-            ->expects(self::atLeastOnce())
-            ->method('getConfiguration')
-            ->with(
-                ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,
-                'maps2',
-                'invalid'
-            )
-            ->willReturn($this->typoScriptSettings);
-
         $mergedSettings = $this->mergedScriptSettings;
         $mergedSettings['streetViewControl'] = '1';
 
         $this->configurationManagerMock
             ->expects(self::atLeastOnce())
             ->method('getConfiguration')
-            ->with(ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS)
-            ->willReturn($mergedSettings);
+            ->willReturnMap([
+                [
+                    ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,
+                    'maps2',
+                    'invalid',
+                    $this->typoScriptSettings,
+                ],
+                [
+                    ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
+                    null,
+                    null,
+                    $mergedSettings,
+                ],
+            ]);
 
         self::assertSame(
             '1',

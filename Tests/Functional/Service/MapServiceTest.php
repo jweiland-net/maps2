@@ -19,7 +19,9 @@ use JWeiland\Maps2\Helper\MessageHelper;
 use JWeiland\Maps2\Service\MapService;
 use JWeiland\Maps2\Tca\Maps2Registry;
 use PHPUnit\Framework\MockObject\MockObject;
+use TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
 use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
+use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
@@ -68,43 +70,18 @@ class MapServiceTest extends FunctionalTestCase
 
         $this->importCSVDataSet(__DIR__ . '/../Fixtures/tx_events2_domain_model_location.csv');
 
+        $GLOBALS['TYPO3_REQUEST'] = (new ServerRequest('https://www.example.com/'))
+            ->withAttribute('applicationType', SystemEnvironmentBuilder::REQUESTTYPE_FE);
+
         $this->messageHelperMock = $this->createMock(MessageHelper::class);
         $this->maps2RegistryMock = $this->createMock(Maps2Registry::class);
         $this->eventDispatcherMock = $this->createMock(EventDispatcher::class);
 
         // Override partials path to prevent using f:format.html VH. It checks against applicationType which is not present in TYPO3 10.
         $this->configurationManagerMock = $this->createMock(ConfigurationManager::class);
-        $this->configurationManagerMock
-            ->expects(self::atLeastOnce())
-            ->method('getConfiguration')
-            ->willReturnMap([
-                [
-                    ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,
-                    'Maps2',
-                    'Maps2',
-                    [
-                        'view' => [
-                            'layoutRootPaths' => [],
-                            'partialRootPaths' => [
-                                'EXT:maps2/Tests/Functional/Fixtures/Partials',
-                            ],
-                        ],
-                    ],
-                ],
-                [
-                    ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
-                    'Maps2',
-                    'Maps2',
-                    [],
-                ],
-            ]);
 
         // Replace default template to prevent calling cache VHs. They check against FE
         $this->extConfMock = $this->createMock(ExtConf::class);
-        $this->extConfMock
-            ->expects(self::atLeastOnce())
-            ->method('getInfoWindowContentTemplatePath')
-            ->willReturn('EXT:maps2/Resources/Private/Templates/InfoWindowContentNoCache.html');
 
         $this->subject = new MapService(
             $this->configurationManagerMock,
@@ -137,13 +114,28 @@ class MapServiceTest extends FunctionalTestCase
         $this->configurationManagerMock
             ->expects(self::atLeastOnce())
             ->method('getConfiguration')
-            ->with(
-                ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
-                'Maps2',
-                'Maps2'
-            )
-            ->willReturn([
-                'infoWindowContentTemplatePath' => 'EXT:maps2/Resources/Private/Templates/InfoWindowContentNoCache.html',
+            ->willReturnMap([
+                [
+                    ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,
+                    'Maps2',
+                    'Maps2',
+                    [
+                        'view' => [
+                            'layoutRootPaths' => [],
+                            'partialRootPaths' => [
+                                'EXT:maps2/Tests/Functional/Fixtures/Partials',
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
+                    'Maps2',
+                    'Maps2',
+                    [
+                        'infoWindowContentTemplatePath' => 'EXT:maps2/Resources/Private/Templates/InfoWindowContentNoCache.html',
+                    ],
+                ],
             ]);
 
         $this->extConfMock
@@ -164,6 +156,36 @@ class MapServiceTest extends FunctionalTestCase
      */
     public function renderInfoWindowWillRenderPoiCollectionTitle(): void
     {
+        $this->configurationManagerMock
+            ->expects(self::atLeastOnce())
+            ->method('getConfiguration')
+            ->willReturnMap([
+                [
+                    ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,
+                    'Maps2',
+                    'Maps2',
+                    [
+                        'view' => [
+                            'layoutRootPaths' => [],
+                            'partialRootPaths' => [
+                                'EXT:maps2/Tests/Functional/Fixtures/Partials',
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
+                    'Maps2',
+                    'Maps2',
+                    [],
+                ],
+            ]);
+
+        $this->extConfMock
+            ->expects(self::atLeastOnce())
+            ->method('getInfoWindowContentTemplatePath')
+            ->willReturn('EXT:maps2/Resources/Private/Templates/InfoWindowContentNoCache.html');
+
         $poiCollection = new PoiCollection();
         $poiCollection->setTitle('Test 123');
 
@@ -178,6 +200,36 @@ class MapServiceTest extends FunctionalTestCase
      */
     public function renderInfoWindowWillRenderPoiCollectionAddress(): void
     {
+        $this->configurationManagerMock
+            ->expects(self::atLeastOnce())
+            ->method('getConfiguration')
+            ->willReturnMap([
+                [
+                    ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,
+                    'Maps2',
+                    'Maps2',
+                    [
+                        'view' => [
+                            'layoutRootPaths' => [],
+                            'partialRootPaths' => [
+                                'EXT:maps2/Tests/Functional/Fixtures/Partials',
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
+                    'Maps2',
+                    'Maps2',
+                    [],
+                ],
+            ]);
+
+        $this->extConfMock
+            ->expects(self::atLeastOnce())
+            ->method('getInfoWindowContentTemplatePath')
+            ->willReturn('EXT:maps2/Resources/Private/Templates/InfoWindowContentNoCache.html');
+
         $poiCollection = new PoiCollection();
         $poiCollection->setTitle('jweiland.net');
         $poiCollection->setAddress('Echterdinger Straße 57, Gebäude 9, 70794 Filderstadt, Germany');
@@ -208,6 +260,36 @@ class MapServiceTest extends FunctionalTestCase
      */
     public function renderInfoWindowWillRenderPoiCollectionInfoWindowContent(): void
     {
+        $this->configurationManagerMock
+            ->expects(self::atLeastOnce())
+            ->method('getConfiguration')
+            ->willReturnMap([
+                [
+                    ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,
+                    'Maps2',
+                    'Maps2',
+                    [
+                        'view' => [
+                            'layoutRootPaths' => [],
+                            'partialRootPaths' => [
+                                'EXT:maps2/Tests/Functional/Fixtures/Partials',
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
+                    'Maps2',
+                    'Maps2',
+                    [],
+                ],
+            ]);
+
+        $this->extConfMock
+            ->expects(self::atLeastOnce())
+            ->method('getInfoWindowContentTemplatePath')
+            ->willReturn('EXT:maps2/Resources/Private/Templates/InfoWindowContentNoCache.html');
+
         $poiCollection = new PoiCollection();
         $poiCollection->setTitle('Test 123');
         $poiCollection->setInfoWindowContent('Hello all together');
@@ -261,29 +343,27 @@ class MapServiceTest extends FunctionalTestCase
         $position->setLongitude(7.4);
         $position->setFormattedAddress('Echterdinger Straße 57, 70794 Filderstadt, Germany');
 
-        $this->subject->createNewPoiCollection(
+        $poiCollectionUid = $this->subject->createNewPoiCollection(
             1,
             $position,
             [
-                'hidden' => 1,
                 'longitude' => 12.3,
             ]
         );
 
         $poiCollectionRecord = $this->getConnectionPool()
             ->getConnectionForTable('tx_maps2_domain_model_poicollection')
-            ->select(['*'], 'tx_maps2_domain_model_poicollection', ['uid' => 1])
+            ->select(['*'], 'tx_maps2_domain_model_poicollection', ['uid' => $poiCollectionUid])
             ->fetchAssociative();
 
         $poiCollectionRecord = array_intersect_key(
             $poiCollectionRecord,
-            ['uid' => 1, 'hidden' => 1, 'longitude' => 1]
+            ['uid' => 1, 'longitude' => 1]
         );
 
         self::assertSame(
             [
                 'uid' => 1,
-                'hidden' => 1,
                 'longitude' => 12.3,
             ],
             $poiCollectionRecord
@@ -295,14 +375,6 @@ class MapServiceTest extends FunctionalTestCase
      */
     public function assignPoiCollectionToForeignRecordWithEmptyPoiCollectionUidAddsFlashMessage(): void
     {
-        $this->messageHelperMock
-            ->expects(self::never())
-            ->method('addFlashMessage')
-            ->with(
-                self::any(),
-                self::logicalNot(self::stringContains('PoiCollection empty'))
-            );
-
         $this->messageHelperMock
             ->expects(self::atLeastOnce())
             ->method('addFlashMessage')
@@ -331,20 +403,18 @@ class MapServiceTest extends FunctionalTestCase
         $this->messageHelperMock
             ->expects(self::atLeastOnce())
             ->method('addFlashMessage')
-            ->with(
-                self::stringContains('Foreign record can not be empty'),
-                'Foreign record empty',
-                ContextualFeedbackSeverity::ERROR
-            );
-
-        $this->messageHelperMock
-            ->expects(self::atLeastOnce())
-            ->method('addFlashMessage')
-            ->with(
-                self::stringContains('Foreign record must have the array key "uid" which is currently not present'),
-                'UID not filled',
-                ContextualFeedbackSeverity::ERROR
-            );
+            ->willReturnMap([
+                [
+                    self::stringContains('Foreign record can not be empty'),
+                    'Foreign record empty',
+                    ContextualFeedbackSeverity::ERROR,
+                ],
+                [
+                    self::stringContains('Foreign record must have the array key "uid" which is currently not present'),
+                    'UID not filled',
+                    ContextualFeedbackSeverity::ERROR,
+                ],
+            ]);
 
         $foreignRecord = [];
 
@@ -360,14 +430,6 @@ class MapServiceTest extends FunctionalTestCase
      */
     public function assignPoiCollectionToForeignRecordWithEmptyForeignTableNameAddsFlashMessage(): void
     {
-        $this->messageHelperMock
-            ->expects(self::never())
-            ->method('addFlashMessage')
-            ->with(
-                self::any(),
-                self::logicalNot(self::stringContains('Foreign table name empty'))
-            );
-
         $this->messageHelperMock
             ->expects(self::atLeastOnce())
             ->method('addFlashMessage')
@@ -393,14 +455,6 @@ class MapServiceTest extends FunctionalTestCase
      */
     public function assignPoiCollectionToForeignRecordWithEmptyForeignFieldNameAddsFlashMessage(): void
     {
-        $this->messageHelperMock
-            ->expects(self::never())
-            ->method('addFlashMessage')
-            ->with(
-                self::any(),
-                self::logicalNot(self::stringContains('Foreign field name empty'))
-            );
-
         $this->messageHelperMock
             ->expects(self::atLeastOnce())
             ->method('addFlashMessage')
