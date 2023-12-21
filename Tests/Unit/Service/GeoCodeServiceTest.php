@@ -85,6 +85,8 @@ class GeoCodeServiceTest extends UnitTestCase
             $this->gmGeocodeRequestMock
         );
 
+        GeneralUtility::purgeInstances();
+
         parent::tearDown();
     }
 

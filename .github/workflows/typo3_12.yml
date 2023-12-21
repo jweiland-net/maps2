@@ -40,6 +40,9 @@ jobs:
       - name: Composer
         run: Build/Scripts/runTests.sh -t 12 -p 8.1 -s composerUpdate
 
+      - name: Unit tests
+        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s unit
+
       - name: Functional tests with mariadb
         run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -d mariadb -s functional
 
