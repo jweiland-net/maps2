@@ -16,7 +16,10 @@ use JWeiland\Maps2\Controller\Traits\InjectSettingsHelperTrait;
 use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Service\GeoCodeService;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Routing\PageArguments;
+use TYPO3\CMS\Core\Routing\Route;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
@@ -49,7 +52,7 @@ class CityMapController extends ActionController
         $view->assign('environment', [
             'settings' => $this->getPreparedSettings(),
             'extConf' => ObjectAccess::getGettableProperties($this->extConf),
-            'id' => (int)$this->request->getQueryParams()['id'] ?? 0,
+            'id' => $this->getPageArguments()->getPageId(),
             'contentRecord' => $contentRecord,
         ]);
     }
@@ -94,5 +97,10 @@ class CityMapController extends ActionController
         }
 
         return $this->htmlResponse();
+    }
+
+    protected function getPageArguments(): PageArguments
+    {
+        return $this->request->getAttribute('routing');
     }
 }

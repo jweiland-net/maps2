@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\ViewHelpers\Form;
 
+use TYPO3\CMS\Core\Routing\PageArguments;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\RequestInterface;
 use TYPO3\CMS\Extbase\Service\ExtensionService;
@@ -80,7 +81,13 @@ class RenderHiddenFieldsForGetViewHelper extends AbstractViewHelper
         );
 
         // get pageUid
-        $pageUid = (int)($arguments['pageUid'] ?: $extbaseRequest->getQueryParams()['id'] ?? 0);
+        $pageUid = (int)$arguments['pageUid'];
+        if ($pageUid === 0) {
+            $pageArguments = $extbaseRequest->getAttribute('routing');
+            if ($pageArguments instanceof PageArguments) {
+                $pageUid = $pageArguments->getPageId();
+            }
+        }
 
         // create array for cHash calculation
         $parameters = [];
