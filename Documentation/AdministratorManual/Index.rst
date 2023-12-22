@@ -1,7 +1,7 @@
-.. include:: /Includes.rst.txt
+..  include:: /Includes.rst.txt
 
 
-.. _admin-manual:
+..  _admin-manual:
 
 ====================
 Administrator manual
@@ -16,5 +16,6 @@ Administrator manual
     :titlesonly:
 
     GoogleApiKeys/Index
+    Routing/Index
     Upgrade/Index
     Templates/Index

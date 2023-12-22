@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Hook;
 
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Driver\Exception as DBALException;
 use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Event\AllowCreationOfPoiCollectionEvent;
 use JWeiland\Maps2\Event\PostProcessPoiCollectionRecordEvent;
@@ -24,11 +24,12 @@ use JWeiland\Maps2\Tca\Maps2Registry;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
+use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
 
@@ -166,8 +167,7 @@ class CreateMaps2RecordHook
         return
             !$isTableLocalizable
             || (
-                $isTableLocalizable
-                && ($languageField = $GLOBALS['TCA'][$tableName]['ctrl']['languageField'])
+                ($languageField = $GLOBALS['TCA'][$tableName]['ctrl']['languageField'])
                 && array_key_exists($languageField, $recordFromRequest)
             );
     }
@@ -362,12 +362,12 @@ class CreateMaps2RecordHook
                 ->where(
                     $queryBuilder->expr()->eq(
                         'uid',
-                        $queryBuilder->createNamedParameter($poiCollectionUid, \PDO::PARAM_INT)
+                        $queryBuilder->createNamedParameter($poiCollectionUid, Connection::PARAM_INT)
                     )
                 )
-                ->execute()
-                ->fetch(\PDO::FETCH_ASSOC);
-        } catch (DBALException $DBALException) {
+                ->executeQuery()
+                ->fetchAssociative();
+        } catch (DBALException $exception) {
             $poiCollection = false;
         }
 
@@ -413,7 +413,7 @@ class CreateMaps2RecordHook
         $this->messageHelper->addFlashMessage(
             'While saving this record, we tried to automatically create a new maps2 record, but Map Providers GeoCode API can not find your address: ' . $address,
             'Map Provider has not found your address',
-            AbstractMessage::ERROR
+            ContextualFeedbackSeverity::ERROR
         );
 
         return false;
@@ -423,8 +423,6 @@ class CreateMaps2RecordHook
      * Get location record of foreign extension, where our maps2 column (tx_maps2_uid) exists.
      * The record we try to fetch, is the record which the user has just saved. So this method should always find
      * this record.
-     *
-     * @return mixed[]
      */
     protected function getForeignLocationRecord(string $foreignTableName, int $uid): array
     {
@@ -437,17 +435,21 @@ class CreateMaps2RecordHook
             GeneralUtility::makeInstance(DeletedRestriction::class)
         );
 
-        $foreignLocationRecord = $queryBuilder
-            ->select('*')
-            ->from($foreignTableName)
-            ->where(
-                $queryBuilder->expr()->eq(
-                    'uid',
-                    $queryBuilder->createNamedParameter($uid, \PDO::PARAM_INT)
+        try {
+            $foreignLocationRecord = $queryBuilder
+                ->select('*')
+                ->from($foreignTableName)
+                ->where(
+                    $queryBuilder->expr()->eq(
+                        'uid',
+                        $queryBuilder->createNamedParameter($uid, Connection::PARAM_INT)
+                    )
                 )
-            )
-            ->execute()
-            ->fetch(\PDO::FETCH_ASSOC);
+                ->executeQuery()
+                ->fetchAssociative();
+        } catch (DBALException $exception) {
+            $foreignLocationRecord = [];
+        }
 
         if (empty($foreignLocationRecord)) {
             $foreignLocationRecord = [];
@@ -484,7 +486,7 @@ class CreateMaps2RecordHook
             $this->messageHelper->addFlashMessage(
                 'There are no synchronizationColumns configured in your maps2 registration, so we are using the address as maps2 title',
                 'Using address as record title',
-                AbstractMessage::INFO
+                ContextualFeedbackSeverity::INFO
             );
 
             return false;
@@ -497,7 +499,7 @@ class CreateMaps2RecordHook
             ->where(
                 $queryBuilder->expr()->eq(
                     'uid',
-                    $queryBuilder->createNamedParameter($foreignLocationRecord[$maps2ColumnName], \PDO::PARAM_INT)
+                    $queryBuilder->createNamedParameter($foreignLocationRecord[$maps2ColumnName], Connection::PARAM_INT)
                 )
             );
 
@@ -516,7 +518,10 @@ class CreateMaps2RecordHook
 
         // Only execute query, if there are columns to update
         if ($tableNeedsUpdate) {
-            $queryBuilder->execute();
+            try {
+                $queryBuilder->executeStatement();
+            } catch (DBALException $exception) {
+            }
         }
 
         return true;
@@ -537,7 +542,7 @@ class CreateMaps2RecordHook
             $this->messageHelper->addFlashMessage(
                 'Please check your Maps registration. The keys foreignColumnName and poiCollectionColumnName have to be set.',
                 'Missing registration keys',
-                AbstractMessage::ERROR
+                ContextualFeedbackSeverity::ERROR
             );
 
             return false;
@@ -553,7 +558,7 @@ class CreateMaps2RecordHook
             $this->messageHelper->addFlashMessage(
                 'Error while trying to synchronize columns of your record with maps2 record. It seems that "' . $foreignTableName . '" is not registered as table or "' . $foreignColumnName . '" is not a valid column in ' . $foreignTableName,
                 'Missing table/column in TCA',
-                AbstractMessage::ERROR
+                ContextualFeedbackSeverity::ERROR
             );
 
             return false;

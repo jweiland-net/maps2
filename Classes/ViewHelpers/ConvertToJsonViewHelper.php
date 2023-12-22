@@ -21,7 +21,7 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
 /**
- * As we need many information in frontend, this ViewHelper is really helpful to
+ * As we need much information in frontend, this ViewHelper is really helpful to
  * convert all array and object types into a json string which we/you can use for various data attributes.
  */
 class ConvertToJsonViewHelper extends AbstractViewHelper

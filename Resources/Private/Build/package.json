@@ -1,0 +1,19 @@
+{
+  "dependencies": {
+    "@types/geojson": "^7946.0.13",
+    "@types/leaflet": "^1.9.8",
+    "@types/leaflet-editable": "^1.2.6",
+    "gulp-concat": "^2.6.1",
+    "gulp-sourcemaps": "^3.0.0",
+    "gulp-uglify": "^3.0.2",
+    "leaflet": "^1.9.4",
+    "leaflet-editable": "^1.2.0",
+    "leaflet.path.drag": "^0.0.6"
+  },
+  "name": "maps2",
+  "description": "[![Latest Stable Version](https://poser.pugx.org/jweiland/maps2/v/stable.svg)](https://extensions.typo3.org/extension/maps2/) [![TYPO3 11](https://img.shields.io/badge/TYPO3-11-orange.svg?style=flat-square)](https://get.typo3.org/version/11) [![TYPO3 10](https://img.shields.io/badge/TYPO3-10-orange.svg?style=flat-square)](https://get.typo3.org/version/10) [![Total Downloads](https://poser.pugx.org/jweiland/maps2/d/total.svg)](https://packagist.org/packages/jweiland/maps2) [![Monthly Downloads](https://poser.pugx.org/jweiland/maps2/d/monthly)](https://packagist.org/packages/jweiland/maps2) ![Build Status](https://github.com/jweiland-net/maps2/workflows/CI/badge.svg)",
+  "version": "10.0.8",
+  "main": "index.js",
+  "author": "Stefan Froemken",
+  "license": "GPL-2.0-or-later"
+}

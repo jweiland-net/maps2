@@ -13,30 +13,24 @@ use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\Category;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Helper\MapHelper;
-use Nimut\TestingFramework\TestCase\FunctionalTestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 /**
  * Class PoiCollectionTest
  */
 class PoiCollectionTest extends FunctionalTestCase
 {
-    use ProphecyTrait;
-
     protected PoiCollection $subject;
 
     protected ExtConf $extConf;
 
     protected MapHelper $mapHelper;
 
-    /**
-     * @var array
-     */
-    protected $testExtensionsToLoad = [
-        'typo3conf/ext/maps2',
+    protected array $testExtensionsToLoad = [
+        'jweiland/maps2',
     ];
 
     protected function setUp(): void
@@ -512,9 +506,9 @@ class PoiCollectionTest extends FunctionalTestCase
      */
     public function setMarkerIconWidthSetsMarkerIconWidth(): void
     {
-        $image = $this->prophesize(FileReference::class);
+        $imageMock = $this->createMock(FileReference::class);
         $images = new ObjectStorage();
-        $images->attach($image->reveal());
+        $images->attach($imageMock);
 
         $this->subject->setMarkerIcons($images);
         $this->subject->setMarkerIconWidth(123456);
@@ -530,10 +524,10 @@ class PoiCollectionTest extends FunctionalTestCase
      */
     public function setMarkerIconWidthWillGetValueFromCategoryIfEmpty(): void
     {
-        $fileReference = $this->prophesize(FileReference::class);
+        $fileReferenceMock = $this->createMock(FileReference::class);
 
         $category = new Category();
-        $category->getMaps2MarkerIcons()->attach($fileReference);
+        $category->getMaps2MarkerIcons()->attach($fileReferenceMock);
         $category->setMaps2MarkerIconWidth(123456);
 
         $this->subject->getCategories()->attach($category);
@@ -550,10 +544,10 @@ class PoiCollectionTest extends FunctionalTestCase
     public function setMarkerIconWidthWillGetValueFromCategoryIfImageIsEmpty(): void
     {
         $this->subject->setMarkerIconWidth(123456);
-        $fileReference = $this->prophesize(FileReference::class);
+        $fileReferenceMock = $this->createMock(FileReference::class);
 
         $category = new Category();
-        $category->getMaps2MarkerIcons()->attach($fileReference);
+        $category->getMaps2MarkerIcons()->attach($fileReferenceMock);
         $category->setMaps2MarkerIconWidth(654321);
 
         $this->subject->getCategories()->attach($category);
@@ -607,9 +601,9 @@ class PoiCollectionTest extends FunctionalTestCase
      */
     public function setMarkerIconHeightSetsMarkerIconHeight(): void
     {
-        $image = $this->prophesize(FileReference::class);
+        $imageMock = $this->createMock(FileReference::class);
         $images = new ObjectStorage();
-        $images->attach($image->reveal());
+        $images->attach($imageMock);
 
         $this->subject->setMarkerIcons($images);
         $this->subject->setMarkerIconHeight(123456);
@@ -625,10 +619,10 @@ class PoiCollectionTest extends FunctionalTestCase
      */
     public function setMarkerIconHeightWillGetValueFromCategoryIfEmpty(): void
     {
-        $fileReference = $this->prophesize(FileReference::class);
+        $fileReferenceMock = $this->createMock(FileReference::class);
 
         $category = new Category();
-        $category->getMaps2MarkerIcons()->attach($fileReference);
+        $category->getMaps2MarkerIcons()->attach($fileReferenceMock);
         $category->setMaps2MarkerIconHeight(123456);
 
         $this->subject->getCategories()->attach($category);
@@ -645,10 +639,10 @@ class PoiCollectionTest extends FunctionalTestCase
     public function setMarkerIconHeightWillGetValueFromCategoryIfImageIsEmpty(): void
     {
         $this->subject->setMarkerIconHeight(123456);
-        $fileReference = $this->prophesize(FileReference::class);
+        $fileReferenceMock = $this->createMock(FileReference::class);
 
         $category = new Category();
-        $category->getMaps2MarkerIcons()->attach($fileReference);
+        $category->getMaps2MarkerIcons()->attach($fileReferenceMock);
         $category->setMaps2MarkerIconHeight(654321);
 
         $this->subject->getCategories()->attach($category);
@@ -688,10 +682,10 @@ class PoiCollectionTest extends FunctionalTestCase
      */
     public function setMarkerIconAnchorPosXSetsMarkerIconAnchorPosX(): void
     {
-        $image = $this->prophesize(FileReference::class);
+        $imageMock = $this->createMock(FileReference::class);
 
         $images = new ObjectStorage();
-        $images->attach($image->reveal());
+        $images->attach($imageMock);
 
         $this->subject->setMarkerIcons($images);
         $this->subject->setMarkerIconAnchorPosX(123456);
@@ -707,10 +701,10 @@ class PoiCollectionTest extends FunctionalTestCase
      */
     public function setMarkerIconAnchorPosXWillGetValueFromCategoryIfEmpty(): void
     {
-        $fileReference = $this->prophesize(FileReference::class);
+        $fileReferenceMock = $this->createMock(FileReference::class);
 
         $category = new Category();
-        $category->getMaps2MarkerIcons()->attach($fileReference);
+        $category->getMaps2MarkerIcons()->attach($fileReferenceMock);
         $category->setMaps2MarkerIconAnchorPosX(123456);
 
         $this->subject->getCategories()->attach($category);
@@ -727,10 +721,10 @@ class PoiCollectionTest extends FunctionalTestCase
     public function setMarkerIconAnchorPosXWillGetValueFromCategoryIfImageIsEmpty(): void
     {
         $this->subject->setMarkerIconAnchorPosX(123456);
-        $fileReference = $this->prophesize(FileReference::class);
+        $fileReferenceMock = $this->createMock(FileReference::class);
 
         $category = new Category();
-        $category->getMaps2MarkerIcons()->attach($fileReference);
+        $category->getMaps2MarkerIcons()->attach($fileReferenceMock);
         $category->setMaps2MarkerIconAnchorPosX(654321);
 
         $this->subject->getCategories()->attach($category);
@@ -798,10 +792,10 @@ class PoiCollectionTest extends FunctionalTestCase
      */
     public function setMarkerIconAnchorPosYSetsMarkerIconAnchorPosY(): void
     {
-        $image = $this->prophesize(FileReference::class);
+        $imageMock = $this->createMock(FileReference::class);
 
         $images = new ObjectStorage();
-        $images->attach($image->reveal());
+        $images->attach($imageMock);
 
         $this->subject->setMarkerIcons($images);
         $this->subject->setMarkerIconAnchorPosY(123456);
@@ -817,10 +811,10 @@ class PoiCollectionTest extends FunctionalTestCase
      */
     public function setMarkerIconAnchorPosYWillGetValueFromCategoryIfEmpty(): void
     {
-        $fileReference = $this->prophesize(FileReference::class);
+        $fileReferenceMock = $this->createMock(FileReference::class);
 
         $category = new Category();
-        $category->getMaps2MarkerIcons()->attach($fileReference);
+        $category->getMaps2MarkerIcons()->attach($fileReferenceMock);
         $category->setMaps2MarkerIconAnchorPosY(123456);
 
         $this->subject->getCategories()->attach($category);
@@ -837,7 +831,7 @@ class PoiCollectionTest extends FunctionalTestCase
     public function setMarkerIconAnchorPosYWillGetValueFromCategoryIfImageIsEmpty(): void
     {
         $this->subject->setMarkerIconAnchorPosY(123456);
-        $fileReference = $this->prophesize(FileReference::class);
+        $fileReference = $this->createMock(FileReference::class);
 
         $category = new Category();
         $category->getMaps2MarkerIcons()->attach($fileReference);

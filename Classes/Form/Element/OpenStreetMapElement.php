@@ -14,8 +14,8 @@ namespace JWeiland\Maps2\Form\Element;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Helper\MapHelper;
 use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
+use TYPO3\CMS\Core\Page\JavaScriptModuleInstruction;
 use TYPO3\CMS\Core\Page\PageRenderer;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Core\Utility\StringUtility;
@@ -65,39 +65,15 @@ class OpenStreetMapElement extends AbstractFormElement
         $config = $parameterArray['fieldConf']['config'];
         $evalList = GeneralUtility::trimExplode(',', $config['eval'] ?? '', true);
 
-        if (method_exists(PathUtility::class, 'getPublicResourceWebPath')) {
-            $publicResourcesPath = PathUtility::getPublicResourceWebPath('EXT:maps2/Resources/Public/');
-        } else {
-            $publicResourcesPath = sprintf(
-                '%sResources/Public/',
-                PathUtility::getAbsoluteWebPath(ExtensionManagementUtility::extPath('maps2'))
-            );
-        }
+        $this->pageRenderer->loadJavaScriptModule('@jweiland/maps2/leaflet.min.js');
 
-        $this->pageRenderer->addRequireJsConfiguration([
-            'paths' => [
-                'leaflet' => $publicResourcesPath . 'JavaScript/Leaflet',
-                'leafletDragPath' => $publicResourcesPath . 'JavaScript/Leaflet.Drag.Path',
-                'leafletEditable' => $publicResourcesPath . 'JavaScript/Leaflet.Editable',
-            ],
-            'shim' => [
-                'leaflet' => [
-                    'deps' => ['jquery'],
-                    'exports' => 'L',
-                ],
-                'leafletDragPath' => [
-                    'deps' => ['leaflet'],
-                ],
-                'leafletEditable' => [
-                    'deps' => ['leafletDragPath'],
-                ],
-            ],
-        ]);
+        $resultArray['stylesheetFiles'][] = PathUtility::getPublicResourceWebPath(
+            'EXT:maps2/Resources/Public/Css/Leaflet/Leaflet.css'
+        );
 
-        $resultArray['stylesheetFiles'][] = $publicResourcesPath . 'Css/Leaflet/Leaflet.css';
-        $resultArray['requireJsModules'][] = [
-            'TYPO3/CMS/Maps2/OpenStreetMapModule' => 'function(OpenStreetMap){OpenStreetMap();}',
-        ];
+        $resultArray['javaScriptModules'][] = JavaScriptModuleInstruction::create(
+            '@jweiland/maps2/OpenStreetMapModule.min.js'
+        );
 
         $fieldInformationResult = $this->renderFieldInformation();
         $fieldInformationHtml = $fieldInformationResult['html'];
@@ -112,11 +88,11 @@ class OpenStreetMapElement extends AbstractFormElement
             ]),
             'data-formengine-validation-rules' => $this->getValidationDataAsJsonString($config),
             'data-formengine-input-params' => (string)json_encode([
-                'field' => $parameterArray['itemFormElName'],
+                'field' => $parameterArray['itemFormElName'] ?? '',
                 'evalList' => implode(',', $evalList),
                 'is_in' => '',
             ]),
-            'data-formengine-input-name' => (string)$parameterArray['itemFormElName'],
+            'data-formengine-input-name' => (string)($parameterArray['itemFormElName'] ?? ''),
         ];
 
         // SF: We can not set this field to type="hidden" as FormEngine.getFieldElement
@@ -127,9 +103,9 @@ class OpenStreetMapElement extends AbstractFormElement
         $html[] = '<div class="form-control-wrap">';
         $html[] =     '<div class="form-wizards-wrap">';
         $html[] =         '<div class="form-wizards-element">';
-        $html[] =             $this->getMapHtml($this->cleanUpCurrentRecord($this->data['databaseRow']));
+        $html[] =             $this->getMapHtml($this->cleanUpPoiCollectionRecord($this->data['databaseRow']));
         $html[] =             '<input type="text" ' . GeneralUtility::implodeAttributes($attributes, true) . ' />';
-        $html[] =             '<input type="hidden" name="' . $parameterArray['itemFormElName'] . '" value="' . htmlspecialchars($itemValue) . '" />';
+        $html[] =             '<input type="hidden" name="' . ($parameterArray['itemFormElName'] ?? '') . '" value="' . htmlspecialchars($itemValue) . '" />';
         $html[] =         '</div>';
         $html[] =     '</div>';
         $html[] = '</div>';
@@ -146,28 +122,25 @@ class OpenStreetMapElement extends AbstractFormElement
     /**
      * Since TYPO3 7.5 $this->data['databaseRow'] consists of arrays where TCA was configured as type "select"
      * Convert these types back to strings/int
-     *
-     * @param array $record
-     * @return array
      */
-    protected function cleanUpCurrentRecord(array $record): array
+    protected function cleanUpPoiCollectionRecord(array $poiCollectionRecord): array
     {
-        foreach ($record as $field => $value) {
+        foreach ($poiCollectionRecord as $field => $value) {
             if ($field === 'configuration_map') {
-                $record[$field] = $this->mapHelper->convertPoisAsJsonToArray($value);
+                $poiCollectionRecord[$field] = $this->mapHelper->convertPoisAsJsonToArray($value);
             } else {
-                $record[$field] = is_array($value) && array_key_exists(0, $value) ? $value[0] : $value;
+                $poiCollectionRecord[$field] = is_array($value) && array_key_exists(0, $value) ? $value[0] : $value;
             }
         }
 
-        return $record;
+        return $poiCollectionRecord;
     }
 
-    protected function getMapHtml(array $record): string
+    protected function getMapHtml(array $poiCollectionRecord): string
     {
         $view = GeneralUtility::makeInstance(StandaloneView::class);
         $view->setTemplatePathAndFilename('EXT:maps2/Resources/Private/Templates/Tca/OpenStreetMap.html');
-        $view->assign('record', json_encode($record, JSON_THROW_ON_ERROR));
+        $view->assign('poiCollection', json_encode($poiCollectionRecord, JSON_THROW_ON_ERROR));
         $view->assign('extConf', json_encode(
             ObjectAccess::getGettableProperties($this->extConf),
             JSON_THROW_ON_ERROR

@@ -6,6 +6,7 @@ services:
 
   JWeiland\Maps2\:
     resource: '../Classes/*'
+    exclude: '../Classes/Domain/Model/*'
 
   # Called by makeInstance in our RequestFactory
   JWeiland\Maps2\Client\Request\GoogleMaps\GeocodeRequest:

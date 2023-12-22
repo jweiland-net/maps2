@@ -14,29 +14,24 @@ namespace JWeiland\Maps2\Tests\Functional\Domain\Model;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\Category;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
-use Nimut\TestingFramework\TestCase\FunctionalTestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
+use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 /**
  * Class CategoryTest
  */
 class CategoryTest extends FunctionalTestCase
 {
-    use ProphecyTrait;
-
     protected Category $subject;
 
     protected ExtConf $extConf;
 
-    /**
-     * @var array
-     */
-    protected $testExtensionsToLoad = [
-        'typo3conf/ext/maps2',
+    protected array $testExtensionsToLoad = [
+        'jweiland/maps2',
     ];
 
     protected function setUp(): void
@@ -44,7 +39,6 @@ class CategoryTest extends FunctionalTestCase
         parent::setUp();
 
         $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
-        GeneralUtility::setSingletonInstance(ExtConf::class, $this->extConf);
 
         $this->subject = new Category();
     }
@@ -103,10 +97,15 @@ class CategoryTest extends FunctionalTestCase
      */
     public function getMaps2MarkerIconWithMissingCoreFileReferenceWillReturnEmptyString(): void
     {
-        /** @var FileReference $fileReference */
-        $fileReference = $this->prophesize(FileReference::class);
-        $fileReference->getOriginalResource()->shouldBeCalled()->willReturn(null);
-        $this->subject->getMaps2MarkerIcons()->attach($fileReference->reveal());
+        /** @var FileReference|MockObject $fileReferenceMock */
+        $fileReferenceMock = $this->createMock(FileReference::class);
+        $fileReferenceMock
+            ->expects(self::atLeastOnce())
+            ->method('getOriginalResource')
+            ->willReturn(null);
+
+        $this->subject->getMaps2MarkerIcons()->attach($fileReferenceMock);
+
         self::assertSame(
             '',
             $this->subject->getMaps2MarkerIcon()
@@ -119,6 +118,7 @@ class CategoryTest extends FunctionalTestCase
     public function getMaps2MarkerIconWithWrongObjectInStorageWillReturnEmptyString(): void
     {
         $this->subject->getMaps2MarkerIcons()->attach(new PoiCollection());
+
         self::assertSame(
             '',
             $this->subject->getMaps2MarkerIcon()
@@ -130,22 +130,25 @@ class CategoryTest extends FunctionalTestCase
      */
     public function getMaps2MarkerIconWillReturnIconPath(): void
     {
-        $file = $this->prophesize(File::class);
-        $file
-            ->getUid()
-            ->shouldBeCalled()
+        $fileMock = $this->createMock(File::class);
+        $fileMock
+            ->expects(self::atLeastOnce())
+            ->method('getUid')
             ->willReturn(123);
 
-        /** @var \TYPO3\CMS\Core\Resource\FileReference $coreFileReference */
-        $coreFileReference = $this->prophesize(\TYPO3\CMS\Core\Resource\FileReference::class);
-        $coreFileReference->getOriginalFile()->shouldBeCalled()->willReturn($file->reveal());
-        $coreFileReference
-            ->getPublicUrl()
-            ->shouldBeCalled()
+        /** @var \TYPO3\CMS\Core\Resource\FileReference|MockObject $coreFileReferenceMock */
+        $coreFileReferenceMock = $this->createMock(\TYPO3\CMS\Core\Resource\FileReference::class);
+        $coreFileReferenceMock
+            ->expects(self::atLeastOnce())
+            ->method('getOriginalFile')
+            ->willReturn($fileMock);
+        $coreFileReferenceMock
+            ->expects(self::atLeastOnce())
+            ->method('getPublicUrl')
             ->willReturn('ImagePath');
 
         $fileReference = new FileReference();
-        $fileReference->setOriginalResource($coreFileReference->reveal());
+        $fileReference->setOriginalResource($coreFileReferenceMock);
         $this->subject->getMaps2MarkerIcons()->attach($fileReference);
 
         self::assertStringEndsWith(
@@ -170,9 +173,9 @@ class CategoryTest extends FunctionalTestCase
      */
     public function getMaps2MarkerIconWidthReturnsValueFromExtConfIfEmpty(): void
     {
-        $image = $this->prophesize(FileReference::class);
+        $imageMock = $this->createMock(FileReference::class);
         $images = new ObjectStorage();
-        $images->attach($image->reveal());
+        $images->attach($imageMock);
 
         $this->subject->setMaps2MarkerIcons($images);
         $this->extConf->setMarkerIconWidth(123);
@@ -201,9 +204,9 @@ class CategoryTest extends FunctionalTestCase
      */
     public function setMaps2MarkerIconWidthSetsMaps2MarkerIconWidth(): void
     {
-        $image = $this->prophesize(FileReference::class);
+        $imageMock = $this->createMock(FileReference::class);
         $images = new ObjectStorage();
-        $images->attach($image->reveal());
+        $images->attach($imageMock);
 
         $this->subject->setMaps2MarkerIcons($images);
         $this->subject->setMaps2MarkerIconWidth(123456);
@@ -229,9 +232,9 @@ class CategoryTest extends FunctionalTestCase
      */
     public function getMaps2MarkerIconHeightReturnsValueFromExtConfIfEmpty(): void
     {
-        $image = $this->prophesize(FileReference::class);
+        $imageMock = $this->createMock(FileReference::class);
         $images = new ObjectStorage();
-        $images->attach($image->reveal());
+        $images->attach($imageMock);
 
         $this->subject->setMaps2MarkerIcons($images);
         $this->extConf->setMarkerIconHeight(123);
@@ -259,9 +262,9 @@ class CategoryTest extends FunctionalTestCase
      */
     public function setMaps2MarkerIconHeightSetsMaps2MarkerIconHeight(): void
     {
-        $image = $this->prophesize(FileReference::class);
+        $imageMock = $this->createMock(FileReference::class);
         $images = new ObjectStorage();
-        $images->attach($image->reveal());
+        $images->attach($imageMock);
 
         $this->subject->setMaps2MarkerIcons($images);
         $this->subject->setMaps2MarkerIconHeight(123456);
@@ -287,9 +290,9 @@ class CategoryTest extends FunctionalTestCase
      */
     public function getMaps2MarkerIconAnchorPosXReturnsValueFromExtConfIfEmpty(): void
     {
-        $image = $this->prophesize(FileReference::class);
+        $imageMock = $this->createMock(FileReference::class);
         $images = new ObjectStorage();
-        $images->attach($image->reveal());
+        $images->attach($imageMock);
 
         $this->subject->setMaps2MarkerIcons($images);
         $this->extConf->setMarkerIconAnchorPosX(123);
@@ -317,9 +320,9 @@ class CategoryTest extends FunctionalTestCase
      */
     public function setMaps2MarkerIconAnchorPosXSetsMaps2MarkerIconAnchorPosX(): void
     {
-        $image = $this->prophesize(FileReference::class);
+        $imageMock = $this->createMock(FileReference::class);
         $images = new ObjectStorage();
-        $images->attach($image->reveal());
+        $images->attach($imageMock);
 
         $this->subject->setMaps2MarkerIcons($images);
         $this->subject->setMaps2MarkerIconAnchorPosX(123456);
@@ -345,9 +348,9 @@ class CategoryTest extends FunctionalTestCase
      */
     public function getMaps2MarkerIconAnchorPosYReturnsValueFromExtConfIfEmpty(): void
     {
-        $image = $this->prophesize(FileReference::class);
+        $imageMock = $this->createMock(FileReference::class);
         $images = new ObjectStorage();
-        $images->attach($image->reveal());
+        $images->attach($imageMock);
 
         $this->subject->setMaps2MarkerIcons($images);
         $this->extConf->setMarkerIconAnchorPosY(123);
@@ -375,9 +378,9 @@ class CategoryTest extends FunctionalTestCase
      */
     public function setMaps2MarkerIconAnchorPosYSetsMaps2MarkerIconAnchorPosY(): void
     {
-        $image = $this->prophesize(FileReference::class);
+        $imageMock = $this->createMock(FileReference::class);
         $images = new ObjectStorage();
-        $images->attach($image->reveal());
+        $images->attach($imageMock);
 
         $this->subject->setMaps2MarkerIcons($images);
         $this->subject->setMaps2MarkerIconAnchorPosY(123456);

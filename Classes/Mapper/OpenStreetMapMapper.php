@@ -53,7 +53,7 @@ class OpenStreetMapMapper implements MapperInterface
                 $data['address']['road'] ?? $data['address']['footway'] ?? '',
                 $data['address']['house_number'] ?? '',
                 $data['address']['postcode'] ?? '',
-                $data['address']['city'] ?? '',
+                $data['address']['city'],
                 $data['address']['country'] ?? ''
             );
         } else {
@@ -62,7 +62,7 @@ class OpenStreetMapMapper implements MapperInterface
             $formattedAddress = $data['display_name'];
         }
 
-        return trim($formattedAddress, ' ,\t\n\r\0\x0B');
+        return trim($formattedAddress, " ,\t\n\r\0\x0B");
     }
 
     /**

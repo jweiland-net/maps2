@@ -13,48 +13,40 @@ namespace JWeiland\Maps2\Tests\Functional\ExpressionLanguage;
 
 use JWeiland\Maps2\ExpressionLanguage\AllowMapProviderRequestFunctionsProvider;
 use JWeiland\Maps2\Helper\MapHelper;
-use Nimut\TestingFramework\TestCase\FunctionalTestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\ExpressionLanguage\ExpressionFunction;
+use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 /**
  * Test AllowMapProviderRequestCondition
  */
 class AllowMapProviderRequestFunctionsProviderTest extends FunctionalTestCase
 {
-    use ProphecyTrait;
-
     /**
-     * @var MapHelper|ObjectProphecy
+     * @var MapHelper|MockObject
      */
-    protected $mapHelperProphecy;
+    protected $mapHelperMock;
 
     protected AllowMapProviderRequestFunctionsProvider $subject;
 
-    /**
-     * @var array
-     */
-    protected $testExtensionsToLoad = [
-        'typo3conf/ext/maps2',
+    protected array $testExtensionsToLoad = [
+        'jweiland/maps2',
     ];
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->mapHelperProphecy = $this->prophesize(MapHelper::class);
+        $this->mapHelperMock = $this->createMock(MapHelper::class);
 
-        $this->subject = new AllowMapProviderRequestFunctionsProvider(
-            $this->mapHelperProphecy->reveal()
-        );
+        $this->subject = new AllowMapProviderRequestFunctionsProvider($this->mapHelperMock);
     }
 
     protected function tearDown(): void
     {
         unset(
             $this->subject,
-            $this->mapHelperProphecy
+            $this->mapHelperMock
         );
 
         parent::tearDown();
@@ -77,9 +69,9 @@ class AllowMapProviderRequestFunctionsProviderTest extends FunctionalTestCase
      */
     public function getFunctionsWillReturnSpecificExpressionFunction(): void
     {
-        $this->mapHelperProphecy
-            ->isRequestToMapProviderAllowed()
-            ->shouldBeCalled()
+        $this->mapHelperMock
+            ->expects(self::atLeastOnce())
+            ->method('isRequestToMapProviderAllowed')
             ->willReturn(true);
 
         $expressionFunction = $this->subject->getFunctions()[0];

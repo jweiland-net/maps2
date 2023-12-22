@@ -9,6 +9,9 @@ declare(strict_types=1);
  * LICENSE file that was distributed with this source code.
  */
 
+use PhpCsFixer\Config;
+use PhpCsFixer\Finder;
+
 if (PHP_SAPI !== 'cli') {
     die('This script supports command line usage only. Please check your command.');
 }
@@ -20,38 +23,35 @@ For the full copyright and license information, please read the
 LICENSE file that was distributed with this source code.
 COMMENT;
 
-$finder = PhpCsFixer\Finder::create()
+$finder = Finder::create()
     ->name('*.php')
-    ->exclude('.build')
-    ->in(__DIR__);
+    ->exclude('.Build')
+    ->ignoreVCSIgnored(true)
+    ->in([
+        __DIR__ . '/../../Classes/',
+        __DIR__ . '/../../Tests/',
+    ]);
 
-return (new \PhpCsFixer\Config())
+return (new Config())
     ->setFinder($finder)
+    ->setUsingCache(false)
     ->setRiskyAllowed(true)
     ->setRules([
         '@DoctrineAnnotation' => true,
-        // @todo: Switch to @PER-CS2.0 once php-cs-fixer's todo list is done: https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/issues/7247
-        '@PER-CS1.0' => true,
+        '@PER' => true,
         'header_comment' => [
             'header' => $headerComment,
         ],
         'array_syntax' => ['syntax' => 'short'],
         'cast_spaces' => ['space' => 'none'],
-        // @todo: Can be dropped once we enable @PER-CS2.0
         'concat_space' => ['spacing' => 'one'],
         'declare_equal_normalize' => ['space' => 'none'],
         'declare_parentheses' => true,
         'dir_constant' => true,
-        // @todo: Can be dropped once we enable @PER-CS2.0
-        'function_declaration' => [
-            'closure_fn_spacing' => 'none',
-        ],
         'function_to_constant' => ['functions' => ['get_called_class', 'get_class', 'get_class_this', 'php_sapi_name', 'phpversion', 'pi']],
         'type_declaration_spaces' => true,
         'global_namespace_import' => ['import_classes' => false, 'import_constants' => false, 'import_functions' => false],
         'list_syntax' => ['syntax' => 'short'],
-        // @todo: Can be dropped once we enable @PER-CS2.0
-        'method_argument_space' => true,
         'modernize_strpos' => true,
         'modernize_types_casting' => true,
         'native_function_casing' => true,
@@ -85,8 +85,6 @@ return (new \PhpCsFixer\Config())
         'single_quote' => true,
         'single_space_around_construct' => true,
         'single_line_comment_style' => ['comment_types' => ['hash']],
-        // @todo: Can be dropped once we enable @PER-CS2.0
-        'single_line_empty_body' => true,
         'trailing_comma_in_multiline' => ['elements' => ['arrays']],
         'whitespace_after_comma_in_array' => ['ensure_single_space' => true],
         'yoda_style' => ['equal' => false, 'identical' => false, 'less_and_greater' => false],

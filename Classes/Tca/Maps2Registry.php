@@ -89,7 +89,7 @@ class Maps2Registry implements SingletonInterface
      *              + position: insert position of the tx_maps2_uid field
      *              + label: backend label of the tx_maps2_uid field
      *              + fieldConfiguration: TCA field config array to override defaults
-     *              + addressColumns: Define some columns which should be used to build a full address for google requests
+     *              + addressColumns: Define some columns which should be used to build a full address for Google requests
      *              + countryColumn: If you're using static_info_tables in your TCE forms, define the column, which stores the UID of the static country. Else, leave empty
      *              + synchronizeColumns: If you want to sync some columns from foreign record with poi record you can define them here. Multi array. Each array entry needs these keys:
      *                                    -> foreignColumnName: column name of the foreign table. That's your table...of your extension
@@ -107,11 +107,11 @@ class Maps2Registry implements SingletonInterface
     ): bool {
         $this->initialize();
         $didRegister = false;
-        if (empty($tableName) || !is_string($tableName)) {
+        if ($tableName === '') {
             throw new \InvalidArgumentException('No or invalid table name "' . $tableName . '" given.', 1369122038);
         }
 
-        if (empty($extensionKey) || !is_string($extensionKey)) {
+        if ($extensionKey === '') {
             throw new \InvalidArgumentException('No or invalid extension key "' . $extensionKey . '" given.', 1397836158);
         }
 
@@ -340,14 +340,12 @@ class Maps2Registry implements SingletonInterface
      * This has to be taken care of manually!
      *
      * @param array $fieldConfigurationOverride Changes to the default configuration
-     * @return mixed[]
      */
     public static function getTcaFieldConfiguration(array $fieldConfigurationOverride = []): array
     {
         // Forges a new field, default name is "categories"
         $fieldConfiguration = [
             'type' => 'group',
-            'internal_type' => 'db',
             'allowed' => 'tx_maps2_domain_model_poicollection',
             'foreign_table' => 'tx_maps2_domain_model_poicollection',
             'prepend_tname' => 0,
@@ -378,10 +376,6 @@ class Maps2Registry implements SingletonInterface
      * extension to the tables definition string
      *
      * Called, when an extension was installed
-     *
-     * @param array $sqlString
-     * @param string $extensionKey
-     * @return array<string, mixed[]>|array<string, string>
      */
     public function addMaps2DatabaseSchemaToTablesDefinition(array $sqlString, string $extensionKey): array
     {

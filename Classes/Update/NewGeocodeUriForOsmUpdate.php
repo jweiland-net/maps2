@@ -58,19 +58,11 @@ class NewGeocodeUriForOsmUpdate implements UpgradeWizardInterface
                     is_array($maps2ExtensionConfiguration)
                     && array_key_exists('openStreetMapGeocodeUri', $maps2ExtensionConfiguration)
                 ) {
-                    if (version_compare($this->getTypo3Version()->getBranch(), '11.0', '>=')) {
-                        $maps2ExtensionConfiguration['openStreetMapGeocodeUri'] = $this->newOsmGeocodeUri;
-                        $this->getExtensionConfiguration()->set(
-                            'maps2',
-                            $maps2ExtensionConfiguration
-                        );
-                    } else {
-                        $this->getExtensionConfiguration()->set(
-                            'maps2',
-                            'openStreetMapGeocodeUri',
-                            $this->newOsmGeocodeUri
-                        );
-                    }
+                    $maps2ExtensionConfiguration['openStreetMapGeocodeUri'] = $this->newOsmGeocodeUri;
+                    $this->getExtensionConfiguration()->set(
+                        'maps2',
+                        $maps2ExtensionConfiguration
+                    );
                 }
 
                 return true;

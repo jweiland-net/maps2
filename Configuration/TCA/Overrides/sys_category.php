@@ -1,17 +1,27 @@
 <?php
 
-if (!defined('TYPO3_MODE')) {
+use JWeiland\Maps2\Configuration\ExtConf;
+use JWeiland\Maps2\Helper\MapHelper;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
+if (!defined('TYPO3')) {
     die('Access denied.');
 }
 
 call_user_func(static function (): void {
-    $extConf = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-        \JWeiland\Maps2\Configuration\ExtConf::class
+    // Use constructor arguments here to prevent DI. Else, some functions in InstallTool will not work.
+    $extConf = GeneralUtility::makeInstance(
+        ExtConf::class,
+        GeneralUtility::makeInstance(ExtensionConfiguration::class)
     );
-    $mapHelper = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-        \JWeiland\Maps2\Helper\MapHelper::class,
+
+    $mapHelper = GeneralUtility::makeInstance(
+        MapHelper::class,
         $extConf
     );
+
     $ll = 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:';
     $mapProvider = $mapHelper->getMapProvider();
 
@@ -20,42 +30,12 @@ call_user_func(static function (): void {
             'exclude' => 1,
             'label' => $ll . 'sys_category.maps2_marker_icons.' . $mapProvider,
             'description' => $ll . 'sys_category.maps2_marker_icons.' . $mapProvider . '.description',
-            'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
-                'maps2_marker_icons',
-                [
-                    'minitems' => 0,
-                    'maxitems' => 1,
-                    'foreign_match_fields' => [
-                        'fieldname' => 'maps2_marker_icons',
-                        'tablenames' => 'sys_category',
-                        'table_local' => 'sys_file',
-                    ],
-                    'behaviour' => [
-                        'allowLanguageSynchronization' => true,
-                    ],
-                    'appearance' => [
-                        'showPossibleLocalizationRecords' => true,
-                        'showAllLocalizationLink' => true,
-                        'showSynchronizationLink' => true,
-                    ],
-                    // custom configuration for displaying fields in the overlay/reference table
-                    // to use the imageoverlayPalette instead of the basicoverlayPalette
-                    'overrideChildTca' => [
-                        'types' => [
-                            '0' => [
-                                'showitem' => '
-                                    --palette--;LLL:EXT:core/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-                                    --palette--;;filePalette',
-                            ],
-                            \TYPO3\CMS\Core\Resource\AbstractFile::FILETYPE_IMAGE => [
-                                'showitem' => '
-                                    --palette--;LLL:EXT:core/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
-                                    --palette--;;filePalette',
-                            ],
-                        ],
-                    ],
-                ]
-            ),
+            'config' => [
+                'type' => 'file',
+                'minitems' => 0,
+                'maxitems' => 1,
+                'allowed' => 'common-image-types',
+            ],
         ],
         'maps2_marker_icon_width' => [
             'exclude' => true,
@@ -103,8 +83,8 @@ call_user_func(static function (): void {
         ],
     ];
 
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('sys_category', $newSysCategoryColumn);
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
+    ExtensionManagementUtility::addTCAcolumns('sys_category', $newSysCategoryColumn);
+    ExtensionManagementUtility::addToAllTCAtypes(
         'sys_category',
         '--div--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tab.maps2.' . $mapHelper->getMapProvider() . ', maps2_marker_icons, maps2_marker_icon_width, maps2_marker_icon_height, maps2_marker_icon_anchor_pos_x, maps2_marker_icon_anchor_pos_y'
     );

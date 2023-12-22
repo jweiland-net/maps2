@@ -14,8 +14,9 @@ namespace JWeiland\Maps2\ViewHelpers;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Helper\SettingsHelper;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Extbase\Mvc\RequestInterface;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
+use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
@@ -42,14 +43,18 @@ class GetEnvironmentViewHelper extends AbstractViewHelper
         RenderingContextInterface $renderingContext
     ): string {
         $templateVariableContainer = $renderingContext->getVariableProvider();
+        $extbaseRequest = self::getExtbaseRequest($renderingContext);
+        if (!$extbaseRequest instanceof RequestInterface) {
+            return '';
+        }
 
         $templateVariableContainer->add(
             'environment',
             [
                 'settings' => self::getSettingsHelper()->getPreparedSettings(),
-                'extConf' => ObjectAccess::getGettableProperties(GeneralUtility::makeInstance(ExtConf::class)),
-                'id' => $GLOBALS['TSFE']->id,
-                'contentRecord' => self::getConfigurationManager()->getContentObject()->data,
+                'extConf' => ObjectAccess::getGettableProperties(self::getExtConf()),
+                'id' => (int)($extbaseRequest->getQueryParams()['id'] ?? 0),
+                'contentRecord' => $extbaseRequest->getAttribute('currentContentObject')->data,
             ]
         );
 
@@ -60,13 +65,25 @@ class GetEnvironmentViewHelper extends AbstractViewHelper
         return $content;
     }
 
-    protected static function getConfigurationManager(): ConfigurationManagerInterface
+    private static function getExtbaseRequest(RenderingContextInterface $renderingContext): ?RequestInterface
     {
-        return GeneralUtility::makeInstance(ConfigurationManagerInterface::class);
+        if (
+            $renderingContext instanceof RenderingContext
+            && $renderingContext->getRequest() instanceof RequestInterface
+        ) {
+            return $renderingContext->getRequest();
+        }
+
+        return null;
     }
 
     protected static function getSettingsHelper(): SettingsHelper
     {
         return GeneralUtility::makeInstance(SettingsHelper::class);
+    }
+
+    protected static function getExtConf(): ExtConf
+    {
+        return GeneralUtility::makeInstance(ExtConf::class);
     }
 }

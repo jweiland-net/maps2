@@ -11,62 +11,76 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Controller;
 
+use JWeiland\Maps2\Controller\Traits\InjectPoiCollectionRepositoryTrait;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
-use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
 use JWeiland\Maps2\Event\RenderInfoWindowContentEvent;
 use JWeiland\Maps2\Service\MapService;
+use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 /**
- * Handle Ajax requests.
+ * Handle Ajax requests of EXT:maps2.
  * Currently, it is used to render the infoWindowContent of POIs.
- * This controller is not connected to the extbase environment and is reachable
- * over typeNum 1614075471
+ * This controller is called by typeNum 1614075471
  */
 class AjaxController extends ActionController
 {
+    use InjectPoiCollectionRepositoryTrait;
+
     public array $errors = [];
 
-    public PoiCollectionRepository $poiCollectionRepository;
-
-    public function injectPoiCollectionRepository(PoiCollectionRepository $poiCollectionRepository): void
-    {
-        $this->poiCollectionRepository = $poiCollectionRepository;
-    }
-
-    public function processAction(string $method): string
+    public function processAction(string $method): ResponseInterface
     {
         $response = [
             'content' => '',
         ];
 
-        if ($method === 'renderInfoWindowContent') {
+        if (
+            $method === 'renderInfoWindowContent'
+            && ($postData = $this->getPostData())
+            && array_key_exists('poiCollection', $postData)
+        ) {
             $response['content'] = $this->renderInfoWindowContentAction(
-                (int)$_POST['poiCollection']
+                (int)$postData['poiCollection']
             );
+        } else {
+            $this->errors[] = 'Given method "' . $method . '" is not allowed here.';
         }
 
         $response['errors'] = $this->errors;
 
-        return \json_encode($response, JSON_THROW_ON_ERROR);
+        return $this->jsonResponse(\json_encode($response, JSON_THROW_ON_ERROR));
+    }
+
+    protected function getPostData(): array
+    {
+        try {
+            $payload = json_decode((string)$this->request->getBody(), true, 512, JSON_THROW_ON_ERROR);
+        } catch (\JsonException $e) {
+            $this->errors[] = 'Given post stream does not contain valid JSON string';
+            $payload = [];
+        }
+
+        return is_array($payload) ? $payload : [];
     }
 
     public function renderInfoWindowContentAction(int $poiCollectionUid): string
     {
-        $infoWindowContent = $this->emitRenderInfoWindowEvent($poiCollectionUid);
+        $poiCollection = $this->poiCollectionRepository->findByIdentifier($poiCollectionUid);
+        if (!$poiCollection instanceof PoiCollection) {
+            $this->errors[] = sprintf(
+                'PoiCollection with UID %d could not be found in AjaxController',
+                $poiCollectionUid
+            );
+            return '';
+        }
 
+        $infoWindowContent = $this->emitRenderInfoWindowEvent($poiCollectionUid);
         if ($infoWindowContent === '') {
-            $poiCollection = $this->poiCollectionRepository->findByIdentifier($poiCollectionUid);
-            if ($poiCollection instanceof PoiCollection) {
-                $mapService = GeneralUtility::makeInstance(MapService::class);
-                $infoWindowContent = $mapService->renderInfoWindow($poiCollection);
-            } else {
-                $this->errors[] = sprintf(
-                    'PoiCollection with UID %d could not be found in AjaxController',
-                    $poiCollectionUid
-                );
-            }
+            $mapService = GeneralUtility::makeInstance(MapService::class);
+            $infoWindowContent = $mapService->renderInfoWindow($poiCollection);
         }
 
         return $infoWindowContent;
@@ -85,10 +99,15 @@ class AjaxController extends ActionController
             new RenderInfoWindowContentEvent(
                 $poiCollectionUid,
                 '',
-                $this->configurationManager->getContentObject()
+                $this->getContentObjectRenderer()
             )
         );
 
         return $event->getInfoWindowContent();
+    }
+
+    protected function getContentObjectRenderer(): ContentObjectRenderer
+    {
+        return $this->request->getAttribute('currentContentObject');
     }
 }

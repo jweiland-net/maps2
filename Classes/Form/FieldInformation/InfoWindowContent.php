@@ -20,9 +20,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class InfoWindowContent extends AbstractNode
 {
-    /**
-     * @return mixed[]
-     */
     public function render(): array
     {
         $resultArray = $this->initializeResultArray();

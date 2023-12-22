@@ -12,34 +12,34 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Tests\Functional\Controller;
 
 use JWeiland\Maps2\Controller\PoiCollectionController;
-use Nimut\TestingFramework\TestCase\FunctionalTestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
+use JWeiland\Maps2\Tests\Functional\Traits\SetUpFrontendSiteTrait;
+use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\InternalRequest;
+use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 /**
  * Class PoiCollectionControllerTest
  */
 class PoiCollectionControllerTest extends FunctionalTestCase
 {
-    use ProphecyTrait;
+    use SetUpFrontendSiteTrait;
 
     protected PoiCollectionController $subject;
 
-    /**
-     * @var array
-     */
-    protected $testExtensionsToLoad = [
-        'typo3conf/ext/maps2',
+    protected array $testExtensionsToLoad = [
+        'jweiland/maps2',
     ];
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->importDataSet('ntf://Database/pages.xml');
-        $this->importDataSet(__DIR__ . '/../Fixtures/sys_category_record_mm.xml');
-        $this->importDataSet(__DIR__ . '/../Fixtures/sys_category.xml');
-        $this->importDataSet(__DIR__ . '/../Fixtures/tx_maps2_domain_model_poicollection.xml');
-        $this->setUpFrontendRootPage(1, [__DIR__ . '/../Fixtures/TypoScript/setup.typoscript']);
+        $this->importCSVDataSet(__DIR__ . '/../Fixtures/pages.csv');
+        $this->importCSVDataSet(__DIR__ . '/../Fixtures/sys_category_record_mm.csv');
+        $this->importCSVDataSet(__DIR__ . '/../Fixtures/sys_category.csv');
+        $this->importCSVDataSet(__DIR__ . '/../Fixtures/tx_maps2_domain_model_poicollection.csv');
+
+        $this->setUpFrontendSite(1);
+        $this->setUpFrontendRootPage(1, ['EXT:maps2/Tests/Functional/Fixtures/TypoScript/setup.typoscript']);
     }
 
     protected function tearDown(): void
@@ -56,13 +56,15 @@ class PoiCollectionControllerTest extends FunctionalTestCase
      */
     public function showActionWillShowPoiCollectionDefinedInPlugin(): void
     {
-        $this->importDataSet(__DIR__ . '/../Fixtures/tt_content-with-poicollection.xml');
+        $this->importCSVDataSet(__DIR__ . '/../Fixtures/tt_content-with-poicollection.csv');
 
-        $response = $this->getFrontendResponse(1);
+        $response = $this->executeFrontendSubRequest(
+            (new InternalRequest())->withPageId(1)
+        );
 
-        self::assertSame('success', $response->getStatus());
+        self::assertSame(200, $response->getStatusCode());
 
-        $content = $response->getContent();
+        $content = (string)$response->getBody();
 
         self::assertStringContainsString(
             '&quot;title&quot;:&quot;Jochen&quot;',
@@ -80,13 +82,15 @@ class PoiCollectionControllerTest extends FunctionalTestCase
      */
     public function showActionWithCategoriesButWithoutPoiCollectionsAddsEmptyPois(): void
     {
-        $this->importDataSet(__DIR__ . '/../Fixtures/tt_content-with-empty-category.xml');
+        $this->importCSVDataSet(__DIR__ . '/../Fixtures/tt_content-with-category-uid-2.csv');
 
-        $response = $this->getFrontendResponse(1);
+        $response = $this->executeFrontendSubRequest(
+            (new InternalRequest())->withPageId(1)
+        );
 
-        self::assertSame('success', $response->getStatus());
+        self::assertSame(200, $response->getStatusCode());
 
-        $content = $response->getContent();
+        $content = (string)$response->getBody();
 
         self::assertStringContainsString(
             'data-pois="{}"',
@@ -101,13 +105,15 @@ class PoiCollectionControllerTest extends FunctionalTestCase
      */
     public function showActionWithCategoriesWillShowPoiCollection(): void
     {
-        $this->importDataSet(__DIR__ . '/../Fixtures/tt_content-with-category.xml');
+        $this->importCSVDataSet(__DIR__ . '/../Fixtures/tt_content-with-category-uid-1.csv');
 
-        $response = $this->getFrontendResponse(1);
+        $response = $this->executeFrontendSubRequest(
+            (new InternalRequest())->withPageId(1)
+        );
 
-        self::assertSame('success', $response->getStatus());
+        self::assertSame(200, $response->getStatusCode());
 
-        $content = $response->getContent();
+        $content = (string)$response->getBody();
 
         self::assertStringContainsString(
             '&quot;title&quot;:&quot;Jochen&quot;',
@@ -125,13 +131,15 @@ class PoiCollectionControllerTest extends FunctionalTestCase
      */
     public function showActionWithStorageFoldersWithPoiCollections(): void
     {
-        $this->importDataSet(__DIR__ . '/../Fixtures/tt_content-with-pages.xml');
+        $this->importCSVDataSet(__DIR__ . '/../Fixtures/tt_content-with-pages.csv');
 
-        $response = $this->getFrontendResponse(1);
+        $response = $this->executeFrontendSubRequest(
+            (new InternalRequest())->withPageId(1)
+        );
 
-        self::assertSame('success', $response->getStatus());
+        self::assertSame(200, $response->getStatusCode());
 
-        $content = $response->getContent();
+        $content = (string)$response->getBody();
 
         self::assertStringContainsString(
             '&quot;title&quot;:&quot;Jochen&quot;',

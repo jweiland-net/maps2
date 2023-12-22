@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Update;
 
 use Doctrine\DBAL\Exception;
-use Doctrine\DBAL\Schema\AbstractSchemaManager;
+use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -66,85 +66,95 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
         }
 
         // If table "tx_maps2_domain_model_poi" was already removed, skip this upgrade
-        $schemaManager = $connection->getSchemaManager();
-        if (
-            $schemaManager instanceof AbstractSchemaManager
-            && !$schemaManager->tablesExist(['tx_maps2_domain_model_poi'])
-        ) {
+        try {
+            $schemaManager = $connection->createSchemaManager();
+            if (!$schemaManager->tablesExist(['tx_maps2_domain_model_poi'])) {
+                return false;
+            }
+        } catch (Exception $e) {
             return false;
         }
 
         $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable('tx_maps2_domain_model_poicollection');
-        $queryBuilder->getRestrictions()->removeAll();
-        $queryBuilder->getRestrictions()->add(GeneralUtility::makeInstance(DeletedRestriction::class));
+        $queryBuilder
+            ->getRestrictions()->removeAll()
+            ->add(GeneralUtility::makeInstance(DeletedRestriction::class));
 
-        return (bool)$queryBuilder
-            ->select('*')
-            ->from('tx_maps2_domain_model_poicollection', 'pc')
-            ->leftJoin(
-                'pc',
-                'tx_maps2_domain_model_poi',
-                'p',
-                $queryBuilder->expr()->eq(
-                    'pc.uid',
-                    $queryBuilder->quoteIdentifier('p.poicollection')
+        try {
+            $amountOfRows = (bool)$queryBuilder
+                ->count('*')
+                ->from('tx_maps2_domain_model_poicollection', 'pc')
+                ->leftJoin(
+                    'pc',
+                    'tx_maps2_domain_model_poi',
+                    'p',
+                    $queryBuilder->expr()->eq(
+                        'pc.uid',
+                        $queryBuilder->quoteIdentifier('p.poicollection')
+                    )
                 )
-            )
-            ->where(
-                $queryBuilder->expr()->isNotNull(
-                    'p.pid'
+                ->where(
+                    $queryBuilder->expr()->isNotNull(
+                        'p.pid'
+                    )
                 )
-            )
-            ->orWhere(
-                $queryBuilder->expr()->eq(
-                    'collection_type',
-                    $queryBuilder->createNamedParameter('Area')
-                ),
-                $queryBuilder->expr()->eq(
-                    'collection_type',
-                    $queryBuilder->createNamedParameter('Route')
+                ->orWhere(
+                    $queryBuilder->expr()->eq(
+                        'collection_type',
+                        $queryBuilder->createNamedParameter('Area')
+                    ),
+                    $queryBuilder->expr()->eq(
+                        'collection_type',
+                        $queryBuilder->createNamedParameter('Route')
+                    )
                 )
-            )
-            ->execute()
-            ->fetchColumn();
+                ->executeQuery()
+                ->fetchOne();
+        } catch (Exception $e) {
+            $amountOfRows = 0;
+        }
+
+        return (bool)$amountOfRows;
     }
 
     public function executeUpdate(): bool
     {
         $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable('tx_maps2_domain_model_poicollection');
-        $queryBuilder->getRestrictions()->removeAll();
-        $queryBuilder->getRestrictions()->add(GeneralUtility::makeInstance(DeletedRestriction::class));
+        $queryBuilder
+            ->getRestrictions()
+            ->removeAll()
+            ->add(GeneralUtility::makeInstance(DeletedRestriction::class));
 
-        $statement = $queryBuilder
-            ->select('uid')
-            ->from('tx_maps2_domain_model_poicollection')
-            ->execute();
+        try {
+            $statement = $queryBuilder
+                ->select('uid')
+                ->from('tx_maps2_domain_model_poicollection')
+                ->executeQuery();
 
-        while ($poiCollectionRecord = $statement->fetch(\PDO::FETCH_ASSOC)) {
-            $connection = $this->getConnectionPool()->getConnectionForTable('tx_maps2_domain_model_poi');
-
-            $connection->update(
-                'tx_maps2_domain_model_poicollection',
-                [
-                    'configuration_map' => json_encode(
-                        $this->migratePoiRecords(
-                            $poiCollectionRecord['uid']
+            while ($poiCollectionRecord = $statement->fetchAssociative()) {
+                $connection = $this->getConnectionPool()->getConnectionForTable('tx_maps2_domain_model_poi');
+                $connection->update(
+                    'tx_maps2_domain_model_poicollection',
+                    [
+                        'configuration_map' => json_encode(
+                            $this->migratePoiRecords(
+                                $poiCollectionRecord['uid']
+                            ),
+                            JSON_THROW_ON_ERROR
                         ),
-                        JSON_THROW_ON_ERROR
-                    ),
-                ],
-                [
-                    'uid' => (int)$poiCollectionRecord['uid'],
-                ]
-            );
+                    ],
+                    [
+                        'uid' => (int)$poiCollectionRecord['uid'],
+                    ]
+                );
+            }
+        } catch (Exception $e) {
+            return false;
         }
 
         return true;
     }
 
-    /**
-     * @return array<int|string, string>
-     */
     protected function migratePoiRecords(int $poiCollectionUid): array
     {
         $routes = [];
@@ -155,37 +165,37 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
         return $routes;
     }
 
-    /**
-     * @return mixed[]
-     */
     protected function getPoiRecords(int $poiCollectionUid): array
     {
         $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable('tx_maps2_domain_model_poi');
-        $queryBuilder->getRestrictions()->removeAll();
-        $queryBuilder->getRestrictions()->add(GeneralUtility::makeInstance(DeletedRestriction::class));
+        $queryBuilder
+            ->getRestrictions()
+            ->removeAll()
+            ->add(GeneralUtility::makeInstance(DeletedRestriction::class));
 
-        $statement = $queryBuilder
-            ->select('uid', 'pos_index', 'latitude', 'longitude')
-            ->from('tx_maps2_domain_model_poi')
-            ->where(
-                $queryBuilder->expr()->eq(
-                    'poicollection',
-                    $queryBuilder->createNamedParameter($poiCollectionUid, \PDO::PARAM_INT)
+        try {
+            $queryResult = $queryBuilder
+                ->select('uid', 'pos_index', 'latitude', 'longitude')
+                ->from('tx_maps2_domain_model_poi')
+                ->where(
+                    $queryBuilder->expr()->eq(
+                        'poicollection',
+                        $queryBuilder->createNamedParameter($poiCollectionUid, Connection::PARAM_INT)
+                    )
                 )
-            )
-            ->execute();
+                ->executeQuery();
 
-        $poiRecords = [];
-        while ($poiRecord = $statement->fetch(\PDO::FETCH_ASSOC)) {
-            $poiRecords[] = $poiRecord;
+            $poiRecords = [];
+            while ($poiRecord = $queryResult->fetchAssociative()) {
+                $poiRecords[] = $poiRecord;
+            }
+        } catch (Exception $e) {
+            $poiRecords = [];
         }
 
         return $poiRecords;
     }
 
-    /**
-     * @return array<class-string<DatabaseUpdatedPrerequisite>>
-     */
     public function getPrerequisites(): array
     {
         return [
