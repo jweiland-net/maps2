@@ -287,14 +287,6 @@ return [
                 'size' => 12,
             ],
         ],
-        'pois' => [
-            'exclude' => true,
-            'config' => [
-                'type' => 'passthrough',
-                'foreign_table' => 'tx_maps2_domain_model_poi',
-                'foreign_field' => 'poicollection',
-            ],
-        ],
         'stroke_color' => [
             'exclude' => true,
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.stroke_color',
