@@ -1,6 +1,5 @@
 [![Latest Stable Version](https://poser.pugx.org/jweiland/maps2/v/stable.svg)](https://extensions.typo3.org/extension/maps2/)
-[![TYPO3 11](https://img.shields.io/badge/TYPO3-11-orange.svg?style=flat-square)](https://get.typo3.org/version/11)
-[![TYPO3 10](https://img.shields.io/badge/TYPO3-10-orange.svg?style=flat-square)](https://get.typo3.org/version/10)
+[![TYPO3 12](https://img.shields.io/badge/TYPO3-12-orange.svg?style=flat-square)](https://get.typo3.org/version/12)
 [![Total Downloads](https://poser.pugx.org/jweiland/maps2/d/total.svg)](https://packagist.org/packages/jweiland/maps2)
 [![Monthly Downloads](https://poser.pugx.org/jweiland/maps2/d/monthly)](https://packagist.org/packages/jweiland/maps2)
 ![Build Status](https://github.com/jweiland-net/maps2/workflows/CI/badge.svg)
