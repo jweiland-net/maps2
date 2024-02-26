@@ -7,6 +7,11 @@
 ChangeLog
 =========
 
+Version 11.0.1
+==============
+
+*   BUGFIX: Use correct TypoScript syntax for settings.mapTypeId
+
 Version 11.0.0
 ==============
 

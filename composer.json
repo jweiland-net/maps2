@@ -27,7 +27,7 @@
 		"phpunit/phpunit": "^9.6",
 		"typo3/coding-standards": "^0.6",
 		"friendsofphp/php-cs-fixer": "^3.14",
-		"jweiland/events2": "^8.0 || dev-typo3_12_compatibility",
+		"jweiland/events2": "^9.0",
 		"sjbr/static-info-tables": "^12.4"
 	},
 	"suggest": {
