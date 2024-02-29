@@ -35,5 +35,5 @@ Follow these steps to build fresh JS files:
   the `Resources/Public/JavaScript` folder:
 
   ```
-  gulp
+  ./node_modules/.bin/gulp
   ```
