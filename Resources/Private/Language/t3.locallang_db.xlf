@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<xliff version="1.0">
+  <file source-language="en" datatype="plaintext" original="messages" date="2013-02-07T11:13:04Z" product-name="maps2" target-language="t3">
+    <header/>
+    <body>
+      <trans-unit id="plugin.maps.title">
+        <source>Maps2: Show map</source>
+        <target>crwdns308062:0crwdne308062:0</target>
+      </trans-unit>
+      <trans-unit id="plugin.radius.title">
+        <source>Maps2: Search Radius</source>
+        <target>crwdns308064:0crwdne308064:0</target>
+      </trans-unit>
+      <trans-unit id="plugin.cityMap.title">
+        <source>Maps2: City Map</source>
+        <target>crwdns308066:0crwdne308066:0</target>
+      </trans-unit>
+      <trans-unit id="plugin.maps2.title">
+        <source>Maps2: Show map</source>
+        <target>crwdns308068:0crwdne308068:0</target>
+      </trans-unit>
+      <trans-unit id="plugin.maps2.description">
+        <source>Add a world map to your website</source>
+        <target>crwdns308070:0crwdne308070:0</target>
+      </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poi" xml:space="preserve">
+				<source>Map Position</source>
+			<target>crwdns308072:0crwdne308072:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poi.latitude" xml:space="preserve">
+				<source>Latitude</source>
+			<target>crwdns308074:0crwdne308074:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poi.longitude" xml:space="preserve">
+				<source>Longitude</source>
+			<target>crwdns308076:0crwdne308076:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poi.posIndex" xml:space="preserve">
+				<source>Position Index</source>
+			<target>crwdns308078:0crwdne308078:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection" xml:space="preserve">
+				<source>Marking</source>
+			<target>crwdns308080:0crwdne308080:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.collectionType" xml:space="preserve">
+				<source>Type</source>
+			<target>crwdns308082:0crwdne308082:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.collectionType.empty" xml:space="preserve">
+				<source>Please choose a type</source>
+			<target>crwdns308084:0crwdne308084:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.collectionType.point" xml:space="preserve">
+				<source>Point of Interest</source>
+			<target>crwdns308086:0crwdne308086:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.collectionType.area" xml:space="preserve">
+				<source>Area</source>
+			<target>crwdns308088:0crwdne308088:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.collectionType.route" xml:space="preserve">
+				<source>Route</source>
+			<target>crwdns308090:0crwdne308090:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.collectionType.radius" xml:space="preserve">
+				<source>Radius</source>
+			<target>crwdns308092:0crwdne308092:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.title" xml:space="preserve">
+				<source>Title</source>
+			<target>crwdns308094:0crwdne308094:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.map" xml:space="preserve">
+				<source>Map</source>
+			<target>crwdns308096:0crwdne308096:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.address" xml:space="preserve">
+				<source>Formatted address</source>
+			<target>crwdns308098:0crwdne308098:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.address" xml:space="preserve">
+				<source>Formatted address</source>
+			<target>crwdns308098:0crwdne308098:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.address.description" xml:space="preserve">
+				<source>Please enter an address in the search field near the map. If search was successfully a formatted version of your address will be inserted here automatically.</source>
+			<target>crwdns308102:0crwdne308102:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.mapProvider" xml:space="preserve">
+				<source>Choose a preferred Map Provider to render the map for this record.</source>
+			<target>crwdns308104:0crwdne308104:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.mapProvider.description" xml:space="preserve">
+				<source>This option is only valid for the TYPO3 backend and will reload the form, if you switch to another value.</source>
+			<target>crwdns308106:0crwdne308106:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.mapProvider.gm" xml:space="preserve">
+				<source>Google Maps</source>
+			<target>crwdns308108:0crwdne308108:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.mapProvider.osm" xml:space="preserve">
+				<source>Open Street Map</source>
+			<target>crwdns308110:0crwdne308110:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.configuration_map" xml:space="preserve">
+				<source>Configure position on Map</source>
+			<target>crwdns308112:0crwdne308112:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.configuration_map.description" xml:space="preserve">
+				<source>Please use the search field to move the pointer to your given address. With help of drag and drop you can finetune the position of the pointer.</source>
+			<target>crwdns308114:0crwdne308114:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.latitude" xml:space="preserve">
+				<source>Latitude for map position</source>
+			<target>crwdns308116:0crwdne308116:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.longitude" xml:space="preserve">
+				<source>Longitude for map position</source>
+			<target>crwdns308118:0crwdne308118:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.radius" xml:space="preserve">
+				<source>Radius</source>
+			<target>crwdns308120:0crwdne308120:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.address.useSearchField" xml:space="preserve">
+				<source>Please use search field in map below to fill this field</source>
+			<target>crwdns308122:0crwdne308122:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.style" xml:space="preserve">
+				<source>Style</source>
+			<target>crwdns308124:0crwdne308124:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.stroke_color" xml:space="preserve">
+				<source>Color</source>
+			<target>crwdns308126:0crwdne308126:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.stroke_opacity" xml:space="preserve">
+				<source>Opacity</source>
+			<target>crwdns308128:0crwdne308128:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.stroke_weight" xml:space="preserve">
+				<source>Weight</source>
+			<target>crwdns308130:0crwdne308130:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.fill_color" xml:space="preserve">
+				<source>Color</source>
+			<target>crwdns308132:0crwdne308132:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.fill_opacity" xml:space="preserve">
+				<source>Opacity</source>
+			<target>crwdns308134:0crwdne308134:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.info_window_address" xml:space="preserve">
+				<source>Info Window Content</source>
+			<target>crwdns308136:0crwdne308136:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.info_window_content" xml:space="preserve">
+				<source>Text within info window</source>
+			<target>crwdns308138:0crwdne308138:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.info_window_images" xml:space="preserve">
+				<source>Images within info window</source>
+			<target>crwdns308140:0crwdne308140:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.marker_icons" xml:space="preserve">
+				<source>Marker icon</source>
+			<target>crwdns308142:0crwdne308142:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.marker_icon_width" xml:space="preserve">
+				<source>Width</source>
+			<target>crwdns308144:0crwdne308144:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.marker_icon_height" xml:space="preserve">
+				<source>Height</source>
+			<target>crwdns308146:0crwdne308146:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.marker_icon_anchor_pos_x" xml:space="preserve">
+				<source>Horizontal pixel X</source>
+			<target>crwdns308148:0crwdne308148:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.marker_icon_anchor_pos_y" xml:space="preserve">
+				<source>Vertical pixel Y</source>
+			<target>crwdns308150:0crwdne308150:0</target></trans-unit>
+      <trans-unit id="tx_maps2_uid" xml:space="preserve">
+				<source>Connect this record to Google Maps record</source>
+			<target>crwdns308152:0crwdne308152:0</target></trans-unit>
+      <trans-unit id="info_window_content.preview" xml:space="preserve">
+				<source>Preview</source>
+			<target>crwdns308154:0crwdne308154:0</target></trans-unit>
+      <trans-unit id="tab.maps2" xml:space="preserve">
+				<source>Not needed. Will be removed in future</source>
+			<target>crwdns308156:0crwdne308156:0</target></trans-unit>
+      <trans-unit id="tab.maps2.gm" xml:space="preserve">
+				<source>Google Maps (maps2)</source>
+			<target>crwdns308158:0crwdne308158:0</target></trans-unit>
+      <trans-unit id="tab.maps2.osm" xml:space="preserve">
+				<source>Open Street Map (maps2)</source>
+			<target>crwdns308160:0crwdne308160:0</target></trans-unit>
+      <trans-unit id="palette.language_hidden" xml:space="preserve">
+				<source>Visibility and Language</source>
+			<target>crwdns308162:0crwdne308162:0</target></trans-unit>
+      <trans-unit id="palette.latitude_longitude" xml:space="preserve">
+				<source>Latitude and Longitude</source>
+			<target>crwdns308164:0crwdne308164:0</target></trans-unit>
+      <trans-unit id="palette.marker_icon_size" xml:space="preserve">
+				<source>Set size of marker icon in px</source>
+			<target>crwdns308166:0crwdne308166:0</target></trans-unit>
+      <trans-unit id="palette.marker_icon_pos" xml:space="preserve">
+				<source>XY coordinate of the marker icon whose pixel will show the exact position on the map</source>
+			<target>crwdns308168:0crwdne308168:0</target></trans-unit>
+      <trans-unit id="palette.stroke" xml:space="preserve">
+				<source>Stroke settings</source>
+			<target>crwdns308170:0crwdne308170:0</target></trans-unit>
+      <trans-unit id="palette.fill" xml:space="preserve">
+				<source>Fill settings</source>
+			<target>crwdns308172:0crwdne308172:0</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icons" xml:space="preserve">
+				<source>Not needed. Will be removed in future</source>
+			<target>crwdns308174:0crwdne308174:0</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icons.gm" xml:space="preserve">
+				<source>Marker icon</source>
+			<target>crwdns308176:0crwdne308176:0</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icons.gm.description" xml:space="preserve">
+				<source>Here you can define your own marker icon for Google Maps. We prefer a svg file.</source>
+			<target>crwdns308178:0crwdne308178:0</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icons.osm" xml:space="preserve">
+				<source>Marker icon</source>
+			<target>crwdns308180:0crwdne308180:0</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icons.osm.description" xml:space="preserve">
+				<source>Here you can define your own marker icon for Open Street Map. We prefer a svg file.</source>
+			<target>crwdns308182:0crwdne308182:0</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_width" xml:space="preserve">
+				<source>Not needed. Will be removed in future</source>
+			<target>crwdns308184:0crwdne308184:0</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_width.gm" xml:space="preserve">
+				<source>Width of your marker icon</source>
+			<target>crwdns308186:0crwdne308186:0</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_width.gm.description" xml:space="preserve">
+				<source>Define width in pixels for your Google Maps marker icon. You can override this value individually in PoiCollection records.</source>
+			<target>crwdns308188:0crwdne308188:0</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_width.osm" xml:space="preserve">
+				<source>Width of your marker icon</source>
+			<target>crwdns308190:0crwdne308190:0</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_width.osm.description" xml:space="preserve">
+				<source>Define width in pixels for your Open Street Map marker icon. You can override this value individually in PoiCollection records.</source>
+			<target>crwdns308192:0crwdne308192:0</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_height" xml:space="preserve">
+				<source>Not needed. Will be removed in future</source>
+			<target>crwdns308194:0crwdne308194:0</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_height.gm" xml:space="preserve">
+				<source>Height of your marker icon</source>
+			<target>crwdns308196:0crwdne308196:0</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_height.gm.description" xml:space="preserve">
+				<source>Define height in pixels for your Google Maps marker icon. You can override this value individually in PoiCollection records.</source>
+			<target>crwdns308198:0crwdne308198:0</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_height.osm" xml:space="preserve">
+				<source>Height of your marker icon</source>
+			<target>crwdns308200:0crwdne308200:0</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_height.osm.description" xml:space="preserve">
+				<source>Define height in pixels for your Open Street Map marker icon. You can override this value individually in PoiCollection records.</source>
+			<target>crwdns308202:0crwdne308202:0</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_anchor_pos_x" xml:space="preserve">
+				<source>Not needed. Will be removed in future</source>
+			<target>crwdns308204:0crwdne308204:0</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_anchor_pos_x.gm" xml:space="preserve">
+				<source>Horizontal pixel for location</source>
+			<target>crwdns308206:0crwdne308206:0</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_anchor_pos_x.gm.description" xml:space="preserve">
+				<source>Which horizontal pixel on the marker icon points to the position on Google Maps. You can override this value individually in PoiCollection records.</source>
+			<target>crwdns308208:0crwdne308208:0</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_anchor_pos_x.osm" xml:space="preserve">
+				<source>Horizontal pixel for location</source>
+			<target>crwdns308210:0crwdne308210:0</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_anchor_pos_x.osm.description" xml:space="preserve">
+				<source>Which horizontal pixel on the marker icon points to the position on Open Street Map. You can override this value individually in PoiCollection records.</source>
+			<target>crwdns308212:0crwdne308212:0</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_anchor_pos_y" xml:space="preserve">
+				<source>Not needed. Will be removed in future</source>
+			<target>crwdns308214:0crwdne308214:0</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_anchor_pos_y.gm" xml:space="preserve">
+				<source>Vertical pixel for location</source>
+			<target>crwdns308216:0crwdne308216:0</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_anchor_pos_y.gm.description" xml:space="preserve">
+				<source>Which vertical pixel on the marker icon points to the position on Google Maps. You can override this value individually in PoiCollection records.</source>
+			<target>crwdns308218:0crwdne308218:0</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_anchor_pos_y.osm" xml:space="preserve">
+				<source>Vertical pixel for location</source>
+			<target>crwdns308220:0crwdne308220:0</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_anchor_pos_y.osm.description" xml:space="preserve">
+				<source>Which vertical pixel on the marker icon points to the position on Open Street Map. You can override this value individually in PoiCollection records.</source>
+			<target>crwdns308222:0crwdne308222:0</target></trans-unit>
+    </body>
+  </file>
+</xliff>
