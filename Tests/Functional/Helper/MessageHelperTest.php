@@ -59,7 +59,7 @@ class MessageHelperTest extends FunctionalTestCase
             'Hello',
             '',
             AbstractMessage::OK,
-            true
+            false
         );
 
         $this->subject->addFlashMessage('Hello');
@@ -79,7 +79,7 @@ class MessageHelperTest extends FunctionalTestCase
             'Hello',
             'Subject',
             AbstractMessage::OK,
-            true
+            false
         );
 
         $this->subject->addFlashMessage('Hello', 'Subject');
@@ -99,7 +99,7 @@ class MessageHelperTest extends FunctionalTestCase
             'Hello',
             'Subject',
             AbstractMessage::ERROR,
-            true
+            false
         );
 
         $this->subject->addFlashMessage('Hello', 'Subject', AbstractMessage::ERROR);
