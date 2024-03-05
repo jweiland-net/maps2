@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<xliff version="1.0">
+  <file source-language="en" datatype="plaintext" original="messages" date="2013-02-07T11:13:04Z" product-name="maps2" target-language="t3">
+    <header/>
+    <body>
+      <trans-unit id="mapProvider" xml:space="preserve">
+				<source>Choose Map Provider: Maps2 comes with currently two Map Providers. Choose your favorite.</source>
+			<target>crwdns307900:0crwdne307900:0</target></trans-unit>
+      <trans-unit id="mapProvider.both" xml:space="preserve">
+				<source>Both</source>
+			<target>crwdns307902:0crwdne307902:0</target></trans-unit>
+      <trans-unit id="defaultMapProvider" xml:space="preserve">
+				<source>Set default Map Provider: If you have chosen "Both" above you can define a default here. New map records will be created with this selected type of map provider.</source>
+			<target>crwdns307904:0crwdne307904:0</target></trans-unit>
+      <trans-unit id="defaultMapType" xml:space="preserve">
+				<source>Default map type: If desired, you can specify a default map type for new POI records. With the default "Empty", the editor must first select a type when creating a new POI.</source>
+			<target>crwdns307906:0crwdne307906:0</target></trans-unit>
+      <trans-unit id="defaultCountry" xml:space="preserve">
+				<source>Default Country: If someone searches for a postal code only, Google will search whole world for that postal code. If you want, you can assign a default country here to reduce that search to that country.</source>
+			<target>crwdns307908:0crwdne307908:0</target></trans-unit>
+      <trans-unit id="defaultLatitude" xml:space="preserve">
+				<source>Default Latitude: If you leave this empty Google Maps points to somewhere over the ocean on startup. So it's better to enter some coordinates: https://www.maps.ie/coordinates.html</source>
+			<target>crwdns307910:0crwdne307910:0</target></trans-unit>
+      <trans-unit id="defaultLongitude" xml:space="preserve">
+				<source>Default Longitude: If you leave this empty Google Maps points to somewhere over the ocean on startup. So it's better to enter some coordinates: https://www.maps.ie/coordinates.html</source>
+			<target>crwdns307912:0crwdne307912:0</target></trans-unit>
+      <trans-unit id="defaultRadius" xml:space="preserve">
+				<source>Default Radius (in meters): When using collection type "Radius" you should set a default radius. Else you just see one single point</source>
+			<target>crwdns307914:0crwdne307914:0</target></trans-unit>
+      <trans-unit id="explicitAllowMapProviderRequests" xml:space="preserve">
+				<source>Explicitly allow requests to the map provider: By displaying the map material in the frontend, the website visitor sends requests to the map provider via JavaScript. Through these requests, the map providers receive the IP address of the website visitor. This IP is so-called "personal information" in some EU countries and may not be passed on to third parties without the visitor's consent. After activating this option, the website visitor must explicitly agree to this data transfer. The consent is stored in a cookie, so that the user does not have to agree to the consent again even after restarting the browser.</source>
+			<target>crwdns307916:0crwdne307916:0</target></trans-unit>
+      <trans-unit id="explicitAllowMapProviderRequestsBySessionOnly" xml:space="preserve">
+				<source>Store consent of website visitor in session: Unlike "explicitAllowMapProviderRequests", with this option we do not store the consent in a COOKIE, but in the current PHP SESSION. After a browser restart, the consent that the "Personal Data" will be sent to third parties must be obtained again. If the browser can save the current PHP SESSION even after exiting the browser (e.g. Firefox), then this setting has no effect. The option "explicitAllowMapProviderRequests" must also be active for this option to take effect.</source>
+			<target>crwdns307918:0crwdne307918:0</target></trans-unit>
+      <trans-unit id="infoWindowContentTemplatePath" xml:space="preserve">
+				<source>Template path for info window: If you click on a marker a little info window will appear. With this setting you can change that template to your own needs.</source>
+			<target>crwdns307920:0crwdne307920:0</target></trans-unit>
+      <trans-unit id="googleMapsLibrary" xml:space="preserve">
+				<source>Link to Google Maps API: This setting is for TYPO3 Backend only. Visit your TypoScript-Templates if you want to change the library for Frontend. You only need to fill this field if you want to use an older or beta version.</source>
+			<target>crwdns307922:0crwdne307922:0</target></trans-unit>
+      <trans-unit id="googleMapsGeocodeUri" xml:space="preserve">
+				<source>Google Maps Geocode URI: If needed you can change the URI of Google Maps Geocode API here. It MUST have two %s placeholders.</source>
+			<target>crwdns307924:0%scrwdne307924:0</target></trans-unit>
+      <trans-unit id="googleMapsApiKey" xml:space="preserve">
+				<source>Google Maps JavaScript ApiKey: This setting is for TYPO3 Backend only. Visit your TypoScript-Templates if you want to change the library for Frontend. Visit https://console.developers.google.com Create a new project for Google Maps JavaScript API and insert the retrieved Browser ApiKey here.</source>
+			<target>crwdns307926:0crwdne307926:0</target></trans-unit>
+      <trans-unit id="googleGeocodeApiKey" xml:space="preserve">
+				<source>Google Maps Geocode ApiKey: Visit https://console.developers.google.com Create a new project for Google Maps Geocode API and insert here the retrieved Server ApiKey.</source>
+			<target>crwdns307928:0crwdne307928:0</target></trans-unit>
+      <trans-unit id="openStreetMapGeocodeUri" xml:space="preserve">
+				<source>OpenStreetMap Geocode URI: If needed you can change the URI of Open Street Map Geocode API here. It MUST have one %s placeholder for address.</source>
+			<target>crwdns307930:0%scrwdne307930:0</target></trans-unit>
+      <trans-unit id="strokeColor" xml:space="preserve">
+				<source>Stroke Color: You can set a border color for a overly here</source>
+			<target>crwdns307932:0crwdne307932:0</target></trans-unit>
+      <trans-unit id="strokeOpacity" xml:space="preserve">
+				<source>Stroke Opacity: If you set this to 1, you can't see th map behind the border. So it's better to find a value between 0.3 and 0.6</source>
+			<target>crwdns307934:0crwdne307934:0</target></trans-unit>
+      <trans-unit id="strokeWeight" xml:space="preserve">
+				<source>Stroke Weight (in pixel): How thick the border of the overlay should be? A good value is 1 or 2</source>
+			<target>crwdns307936:0crwdne307936:0</target></trans-unit>
+      <trans-unit id="fillColor" xml:space="preserve">
+				<source>Fill Color: Which color the overlay should have?</source>
+			<target>crwdns307938:0crwdne307938:0</target></trans-unit>
+      <trans-unit id="fillOpacity" xml:space="preserve">
+				<source>Fill Opacity: If you set this to 1, you can't see th map behind the overlay. So it's better to find a value between 0.3 and 0.6. But it should be less than the value of strokeOpacity</source>
+			<target>crwdns307940:0crwdne307940:0</target></trans-unit>
+      <trans-unit id="markerIconWidth" xml:space="preserve">
+				<source>Marker icon width: Define a default width for Marker Icons in pixel. You can override this value individually in sys_category and PoiCollection records.</source>
+			<target>crwdns307942:0crwdne307942:0</target></trans-unit>
+      <trans-unit id="markerIconHeight" xml:space="preserve">
+				<source>Marker icon height: Define a default height for Marker Icons in pixel. You can override this value individually in sys_category and PoiCollection records.</source>
+			<target>crwdns307944:0crwdne307944:0</target></trans-unit>
+      <trans-unit id="markerIconAnchorPosX" xml:space="preserve">
+				<source>Marker icon position X: Which horizontal pixel on the image points the position on the Google Maps. You can override this value individually in sys_category and PoiCollection records.</source>
+			<target>crwdns307946:0crwdne307946:0</target></trans-unit>
+      <trans-unit id="markerIconAnchorPosY" xml:space="preserve">
+				<source>Marker icon position Y: Which vertical pixel on the image points the position on the Google Maps. You can override this value individually in sys_category and PoiCollection records.</source>
+			<target>crwdns307948:0crwdne307948:0</target></trans-unit>
+    </body>
+  </file>
+</xliff>
