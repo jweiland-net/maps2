@@ -7,6 +7,11 @@
 ChangeLog
 =========
 
+Version 11.0.2
+==============
+
+*   BUGFIX: Do not store FlashMessages in BE session in CLI context
+
 Version 11.0.1
 ==============
 
