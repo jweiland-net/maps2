@@ -6,6 +6,14 @@
 ChangeLog
 =========
 
+**Version 9.3.14**
+
+- BUGFIX: Do not store FlashMessages in BE session in CLI context
+
+**Version 9.3.13**
+
+- BUGFIX: Add lazy annotation to prevent recursive validation
+
 **Version 9.3.12**
 
 - BUGFIX: Class ApplicationType not found. Repair TYPO3 9 compatibility.
