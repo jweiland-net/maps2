@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<xliff version="1.0">
+  <file source-language="en" datatype="plaintext" original="messages" date="2013-02-18T15:03:04Z" product-name="maps2" target-language="t3">
+    <header/>
+    <body>
+      <trans-unit id="sheetGeneral" xml:space="preserve">
+				<source>General</source>
+			<target>crwdns307950:0crwdne307950:0</target></trans-unit>
+      <trans-unit id="mapProvider" xml:space="preserve">
+				<source>Map Provider</source>
+			<target>crwdns307952:0crwdne307952:0</target></trans-unit>
+      <trans-unit id="poiCollection" xml:space="preserve">
+				<source>Which marking should be shown? If there is a marking defined in website uri, that one has priority.</source>
+			<target>crwdns307954:0crwdne307954:0</target></trans-unit>
+      <trans-unit id="categories" xml:space="preserve">
+				<source>Show all markings of given categories. This will only work, if there is no marking in website uri nor if a marking is selected above.</source>
+			<target>crwdns307956:0crwdne307956:0</target></trans-unit>
+      <trans-unit id="autoAppend" xml:space="preserve">
+				<source>Append a fixed string to search value. Maybe a cityname. That way the user has only to insert a streetname.</source>
+			<target>crwdns307958:0crwdne307958:0</target></trans-unit>
+      <trans-unit id="mapWidth" xml:space="preserve">
+				<source>Map width</source>
+			<target>crwdns307960:0crwdne307960:0</target></trans-unit>
+      <trans-unit id="mapHeight" xml:space="preserve">
+				<source>Map height</source>
+			<target>crwdns307962:0crwdne307962:0</target></trans-unit>
+      <trans-unit id="sheetMapOptions" xml:space="preserve">
+				<source>Map Options</source>
+			<target>crwdns307964:0crwdne307964:0</target></trans-unit>
+      <trans-unit id="zoom" xml:space="preserve">
+				<source>Default zoom</source>
+			<target>crwdns307966:0crwdne307966:0</target></trans-unit>
+      <trans-unit id="forceZoom" xml:space="preserve">
+				<source>Set a fix Zoomlevel if more than one POI will be displayed. Default: automatic zoomlevel to display all POIs.</source>
+			<target>crwdns307968:0crwdne307968:0</target></trans-unit>
+      <trans-unit id="zoomControl" xml:space="preserve">
+				<source>Show Zoom Control</source>
+			<target>crwdns307970:0crwdne307970:0</target></trans-unit>
+      <trans-unit id="fullScreenControl" xml:space="preserve">
+				<source>Show full screen Control</source>
+			<target>crwdns307972:0crwdne307972:0</target></trans-unit>
+      <trans-unit id="sheetGoogleMapsOptions" xml:space="preserve">
+				<source>Google Maps</source>
+			<target>crwdns307974:0crwdne307974:0</target></trans-unit>
+      <trans-unit id="mapTypeId" xml:space="preserve">
+				<source>Default map view</source>
+			<target>crwdns307976:0crwdne307976:0</target></trans-unit>
+      <trans-unit id="mapTypeId.Hybrid" xml:space="preserve">
+				<source>Hybrid</source>
+			<target>crwdns307978:0crwdne307978:0</target></trans-unit>
+      <trans-unit id="mapTypeId.RoadMap" xml:space="preserve">
+				<source>Road Map</source>
+			<target>crwdns307980:0crwdne307980:0</target></trans-unit>
+      <trans-unit id="mapTypeId.Satellite" xml:space="preserve">
+				<source>Satellite</source>
+			<target>crwdns307982:0crwdne307982:0</target></trans-unit>
+      <trans-unit id="mapTypeId.Terrain" xml:space="preserve">
+				<source>Terrain</source>
+			<target>crwdns307984:0crwdne307984:0</target></trans-unit>
+      <trans-unit id="mapTypeControl" xml:space="preserve">
+				<source>Show Map Type Control</source>
+			<target>crwdns307986:0crwdne307986:0</target></trans-unit>
+      <trans-unit id="scaleControl" xml:space="preserve">
+				<source>Show Scale Control</source>
+			<target>crwdns307988:0crwdne307988:0</target></trans-unit>
+      <trans-unit id="streetViewControl" xml:space="preserve">
+				<source>Show StreetView Control</source>
+			<target>crwdns307990:0crwdne307990:0</target></trans-unit>
+      <trans-unit id="activateScrollWheel" xml:space="preserve">
+				<source>Activate zoom with mouse scroll wheel</source>
+			<target>crwdns307992:0crwdne307992:0</target></trans-unit>
+      <trans-unit id="styles" xml:space="preserve">
+				<source>Map Style. Have a look at https://snazzymaps.com to copy some cool styles for you map</source>
+			<target>crwdns307994:0crwdne307994:0</target></trans-unit>
+      <trans-unit id="sheetOpenStreetMapOptions" xml:space="preserve">
+				<source>Open Street Map</source>
+			<target>crwdns307996:0crwdne307996:0</target></trans-unit>
+      <trans-unit id="mapTile" xml:space="preserve">
+				<source>Map Tile URI: Define another external provider to show map with another layout</source>
+			<target>crwdns307998:0crwdne307998:0</target></trans-unit>
+      <trans-unit id="mapTileAttribution" xml:space="preserve">
+				<source>Map Tile Attribution: Each map needs to show the author attribution. Please check which Attribution has to be used for defined map tile above</source>
+			<target>crwdns308000:0crwdne308000:0</target></trans-unit>
+    </body>
+  </file>
+</xliff>
