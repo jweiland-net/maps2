@@ -22,7 +22,6 @@
 		"typo3/cms-core": "^9.5.17 || ^10.4.2"
 	},
 	"require-dev": {
-		"roave/security-advisories": "dev-latest",
 		"friendsofphp/php-cs-fixer": "^3.4",
 		"nimut/testing-framework": "^6.0",
 		"phpunit/phpunit": "^9.5",
