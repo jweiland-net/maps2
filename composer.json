@@ -4,7 +4,7 @@
 	"description": "Create maps with Marker, Area, Routes or Radius based on Google Maps or OpenStreetMap",
 	"license": "GPL-2.0-or-later",
 	"keywords": ["typo3", "TYPO3 CMS", "google maps", "osm", "open street map", "openstreetmap", "maps2"],
-	"homepage": "http://www.jweiland.net",
+	"homepage": "https://jweiland.net",
 	"authors": [
 		{
 			"name": "Stefan Froemken",
