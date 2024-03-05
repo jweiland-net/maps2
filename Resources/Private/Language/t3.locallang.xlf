@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<xliff version="1.0">
+  <file source-language="en" target-language="t3" datatype="plaintext" original="messages" date="2013-02-07T11:13:04Z" product-name="maps2">
+    <header/>
+    <body>
+      <trans-unit id="gm.map" xml:space="preserve">
+				<source>Google Maps</source>
+			<target>crwdns308002:0crwdne308002:0</target></trans-unit>
+      <trans-unit id="gm.protectData" xml:space="preserve">
+				<source>The protection of your data is important for us.</source>
+			<target>crwdns308004:0crwdne308004:0</target></trans-unit>
+      <trans-unit id="gm.explainActivation" xml:space="preserve">
+				<source>Click on "Activate" to allow us requesting google servers to show Google Maps.</source>
+			<target>crwdns308006:0crwdne308006:0</target></trans-unit>
+      <trans-unit id="gm.activate" xml:space="preserve">
+				<source>Activate</source>
+			<target>crwdns308008:0crwdne308008:0</target></trans-unit>
+      <trans-unit id="osm.map" xml:space="preserve">
+				<source>Open Street Map</source>
+			<target>crwdns308010:0crwdne308010:0</target></trans-unit>
+      <trans-unit id="osm.protectData" xml:space="preserve">
+				<source>The protection of your data is important for us.</source>
+			<target>crwdns308012:0crwdne308012:0</target></trans-unit>
+      <trans-unit id="osm.explainActivation" xml:space="preserve">
+				<source>Click on "Activate" to allow us requesting Open Street Map servers to show map.</source>
+			<target>crwdns308014:0crwdne308014:0</target></trans-unit>
+      <trans-unit id="osm.activate" xml:space="preserve">
+				<source>Activate</source>
+			<target>crwdns308016:0crwdne308016:0</target></trans-unit>
+      <trans-unit id="backend.form.searchAddress" xml:space="preserve">
+				<source>Insert address to search for</source>
+			<target>crwdns308018:0crwdne308018:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poi.latitude" xml:space="preserve">
+				<source>latitude</source>
+			<target>crwdns308020:0crwdne308020:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poi.longitude" xml:space="preserve">
+				<source>longitude</source>
+			<target>crwdns308022:0crwdne308022:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection" xml:space="preserve">
+				<source>Marking</source>
+			<target>crwdns308024:0crwdne308024:0</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.title" xml:space="preserve">
+				<source>Title</source>
+			<target>crwdns308026:0crwdne308026:0</target></trans-unit>
+      <trans-unit id="rangeSearch.address" xml:space="preserve">
+				<source>Address</source>
+			<target>crwdns308028:0crwdne308028:0</target></trans-unit>
+      <trans-unit id="rangeSearch.radius" xml:space="preserve">
+				<source>Radius</source>
+			<target>crwdns308030:0crwdne308030:0</target></trans-unit>
+      <trans-unit id="rangeSearch.send" xml:space="preserve">
+				<source>Search</source>
+			<target>crwdns308032:0crwdne308032:0</target></trans-unit>
+      <trans-unit id="searchStreet" xml:space="preserve">
+				<source>Search for street</source>
+			<target>crwdns308034:0crwdne308034:0</target></trans-unit>
+      <trans-unit id="error.noPositionsFound.title" xml:space="preserve">
+				<source>No positions found</source>
+			<target>crwdns308036:0crwdne308036:0</target></trans-unit>
+      <trans-unit id="error.noPositionsFound.body" xml:space="preserve">
+				<source>%1$s can't find any position. Please check your input and try again</source>
+			<target>crwdns308038:0%1$scrwdne308038:0</target></trans-unit>
+    </body>
+  </file>
+</xliff>
