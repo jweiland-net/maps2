@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Helper;
 
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageQueue;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
@@ -40,7 +41,7 @@ class MessageHelper
             $message,
             $title,
             $severity,
-            true
+            !Environment::isCli()
         );
 
         $this->getFlashMessageQueue()->enqueue($flashMessage);

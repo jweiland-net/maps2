@@ -4,7 +4,7 @@
 	"description": "Create maps with Marker, Area, Routes or Radius based on Google Maps or OpenStreetMap",
 	"license": "GPL-2.0-or-later",
 	"keywords": ["typo3", "TYPO3 CMS", "google maps", "osm", "open street map", "openstreetmap", "maps2"],
-	"homepage": "http://www.jweiland.net",
+	"homepage": "https://jweiland.net",
 	"authors": [
 		{
 			"name": "Stefan Froemken",
@@ -22,7 +22,6 @@
 		"typo3/cms-core": "^9.5.17 || ^10.4.2"
 	},
 	"require-dev": {
-		"roave/security-advisories": "dev-latest",
 		"friendsofphp/php-cs-fixer": "^3.4",
 		"nimut/testing-framework": "^6.0",
 		"phpunit/phpunit": "^9.5",
@@ -39,8 +38,15 @@
 			"JWeiland\\Maps2\\Tests\\": "Tests"
 		}
 	},
+	"replace": {
+		"typo3-ter/maps2": "self.version"
+	},
 	"config": {
-		"vendor-dir": ".build/vendor"
+		"vendor-dir": ".build/vendor",
+		"allow-plugins": {
+			"typo3/class-alias-loader": true,
+			"typo3/cms-composer-installers": true
+		}
 	},
 	"extra": {
 		"typo3/cms": {
