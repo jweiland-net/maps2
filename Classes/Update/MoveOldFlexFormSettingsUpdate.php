@@ -73,15 +73,15 @@ class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
 
             try {
                 if (
-                ArrayUtility::getValueByPath(
-                    $valueFromDatabase,
-                    'data/sGoogleMapsOptions/lDEF/settings.activateScrollWheel'
-                )
+                    ArrayUtility::getValueByPath(
+                        $valueFromDatabase,
+                        'data/sGoogleMapsOptions/lDEF/settings.activateScrollWheel'
+                    )
                 ) {
                     return true;
                 }
             } catch (MissingArrayPathException $e) {
-                // If value does not exists, check further requirements
+                // If value does not exist, check further requirements
             } catch (\RuntimeException $e) {
                 // Some as above, but for TYPO3 8
             }
