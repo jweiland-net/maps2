@@ -3,29 +3,63 @@
   <file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2013-02-07T11:13:04Z" product-name="maps2">
     <header/>
     <body>
-			
-			
-			
-			
-			
-			
-			
-			
-			
-
-			
-			
-			
-			
-
-			
-			
-			
-
-			
-
-			
-			
-		</body>
+      <trans-unit id="gm.map" xml:space="preserve" approved="yes">
+				<source>Google Maps</source>
+			<target state="final">Google Maps</target></trans-unit>
+      <trans-unit id="gm.protectData" xml:space="preserve" approved="yes">
+				<source>The protection of your data is important for us.</source>
+			<target state="final">Der Schutz Ihrer Daten ist uns wichtig.</target></trans-unit>
+      <trans-unit id="gm.explainActivation" xml:space="preserve" approved="yes">
+				<source>Click on "Activate" to allow us requesting google servers to show Google Maps.</source>
+			<target state="final">Erst wenn Sie hier auf "Aktivieren" klicken, erlauben Sie uns Daten von Dritt-Anbieter-Servern (Google) zu laden.</target></trans-unit>
+      <trans-unit id="gm.activate" xml:space="preserve" approved="yes">
+				<source>Activate</source>
+			<target state="final">Aktivieren</target></trans-unit>
+      <trans-unit id="osm.map" xml:space="preserve" approved="yes">
+				<source>Open Street Map</source>
+			<target state="final">Open Street Map</target></trans-unit>
+      <trans-unit id="osm.protectData" xml:space="preserve" approved="yes">
+				<source>The protection of your data is important for us.</source>
+			<target state="final">Der Schutz Ihrer Daten ist uns wichtig.</target></trans-unit>
+      <trans-unit id="osm.explainActivation" xml:space="preserve" approved="yes">
+				<source>Click on "Activate" to allow us requesting Open Street Map servers to show map.</source>
+			<target state="final">Erst wenn Sie hier auf "Aktivieren" klicken, erlauben Sie uns Daten von Dritt-Anbieter-Servern (Open Street Map) zu laden.</target></trans-unit>
+      <trans-unit id="osm.activate" xml:space="preserve" approved="yes">
+				<source>Activate</source>
+			<target state="final">Aktivieren</target></trans-unit>
+      <trans-unit id="backend.form.searchAddress" xml:space="preserve" approved="yes">
+				<source>Insert address to search for</source>
+			<target state="final">Adresse einfügen, nach der gesucht werden soll</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poi.latitude" xml:space="preserve" approved="yes">
+				<source>latitude</source>
+			<target state="final">Latitude</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poi.longitude" xml:space="preserve" approved="yes">
+				<source>longitude</source>
+			<target state="final">Längengrad</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection" xml:space="preserve" approved="yes">
+				<source>Marking</source>
+			<target state="final">Markierung</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.title" xml:space="preserve" approved="yes">
+				<source>Title</source>
+			<target state="final">Titel</target></trans-unit>
+      <trans-unit id="rangeSearch.address" xml:space="preserve" approved="yes">
+				<source>Address</source>
+			<target state="final">Adresse</target></trans-unit>
+      <trans-unit id="rangeSearch.radius" xml:space="preserve" approved="yes">
+				<source>Radius</source>
+			<target state="final">Radius</target></trans-unit>
+      <trans-unit id="rangeSearch.send" xml:space="preserve" approved="yes">
+				<source>Search</source>
+			<target state="final">Suchen</target></trans-unit>
+      <trans-unit id="searchStreet" xml:space="preserve" approved="yes">
+				<source>Search for street</source>
+			<target state="final">Suche Straße</target></trans-unit>
+      <trans-unit id="error.noPositionsFound.title" xml:space="preserve" approved="yes">
+				<source>No positions found</source>
+			<target state="final">Keine Positionen gefunden</target></trans-unit>
+      <trans-unit id="error.noPositionsFound.body" xml:space="preserve" approved="yes">
+				<source>%1$s can't find any position. Please check your input and try again</source>
+			<target state="final">%1$s konnte zu Ihrer Eingabe keine Positionen finden. Bitte überprüfen Sie Eingaben und versuchen Sie es erneut</target></trans-unit>
+    </body>
   </file>
 </xliff>
