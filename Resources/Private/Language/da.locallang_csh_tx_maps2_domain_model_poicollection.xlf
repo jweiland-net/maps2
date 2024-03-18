@@ -3,18 +3,68 @@
   <file source-language="en" datatype="plaintext" original="messages" date="2013-02-45T11:31:45Z" product-name="maps2" target-language="da">
     <header/>
     <body>
+      <trans-unit id="hidden.description" approved="yes">
+        <source>Enable the checkbox to hide this record in Frontend and mark it as hidden in the Backend</source>
+        <target state="final">Aktivér checkbox for at skjule dette element i Frontend og markér det som skjult i Backend</target>
+      </trans-unit>
+      <trans-unit id="collection_type.description" approved="yes">
+        <source>We deliver different kinds of marker. Choose one and confirm the following message to switch into another type.</source>
+        <target state="final">Vi leverer forskellige typer markører. Vælg en og bekræft den efterfølgende besked for at skifte til en anden type.</target>
+      </trans-unit>
+      <trans-unit id="collection_type.details" approved="yes">
+        <source>For now we deliver 4 different kinds of Markers. Please select between Point, Range, Route and Area. Maybe you must confirm the message, that the fields will be changed while switching to another type.</source>
+        <target state="final">For øjeblikket leverer vi fire forskellige markører. Vælg venligst mellem Point, Range, Route og Area. Det er muligt at du skal bekræfter at feltet vil blive ændret, når der skiftes til en anden type.</target>
+      </trans-unit>
+      <trans-unit id="title.description" approved="yes">
+        <source>A title for better identifying this record in TYPO3 Backend</source>
+        <target state="final">En titel for bedre at identificere dette element i TYPO3 Backend</target>
+      </trans-unit>
+      <trans-unit id="title.syntax" approved="yes">
+        <source>The title is mandatory</source>
+        <target state="final">Titlen er obligatorisk</target>
+      </trans-unit>
+      <trans-unit id="address.description" approved="yes">
+        <source>Insert an address to search for. The map below will set the result as center after pressing "Update"</source>
+        <target state="final">Indsæt en adresse at søge efter. Kortet herunder vil angive resultatet som centrum, når der klikkes "opdatér"</target>
+      </trans-unit>
+      <trans-unit id="address.syntax" approved="yes">
+        <source>Type in as much information about the address as you have, to get the best results</source>
+        <target state="final">Skriv så meget information om adressen du har, for at opnå det bedste resultat</target>
+      </trans-unit>
+      <trans-unit id="address.details" approved="yes">
+        <source>
+					&lt;b&gt;Update&lt;/b&gt;
+					Press "Update" and the map below will move its center to the best result. All latitude and longitude including the backup fields will be set to this position. After that you can justify the center of the map a little bit by dragging the map with the mouse, if the position have not matched perfectly. Now only the values of latitude and longitude will update. The backup fields will be kept untouched.
 
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-		</body>
+					&lt;b&gt;Reset&lt;/b&gt;
+					Press "Reset" to center back the map to the last stored position after pressing "Update".
+
+					&lt;b&gt;Setting the Default center&lt;/b&gt;
+					Maps2 delivers an extension configuration where you can change the default center of the map. Please open the Extensionmanager, choose maps2 and open the configuration.
+				</source>
+        <target state="final">
+					&lt;b&gt;Opdatér&lt;/b&gt;
+					Klik "Opdatér" og kortet herunder vil flytte til dets centrum af det bedste resultat. Alle bredde- og længdegrader inklusiv backup felter vil blive sat til denne position. Herefter kan du justere centrum af kortet en lille smule ved at trække kortet med musen, hvis positionen ikke passer perfekt. Nu vil kun værdierne på bredde- og længdegrad blive opdateret. Backup felter vil forblive uberørt.
+
+					&lt;b&gt;Nulstil&lt;/b&gt;
+					Klik "Nulstil" for at centrere kortet tilbage til den sidst gemte position efter klik på "Opdatér".
+
+					&lt;b&gt;Indstilling af standard centrum&lt;/b&gt;
+					Maps2 leverer en udvidelses konfiguration, hvor du kan ændre standard centrum af kortet. Åben udvidelsesmanageren, vælg maps2 og åben konfigurationen.
+				</target>
+      </trans-unit>
+      <trans-unit id="latitude.description" approved="yes">
+        <source>Search for an address or drag the map manually to update this field. Of cause you can edit this field manually, too.</source>
+        <target state="final">Søg efter en adresse eller træk kortet manuelt for at opdatere dette felt. Du kan naturligvis også redigere feltet manuelt.</target>
+      </trans-unit>
+      <trans-unit id="longitude.description" approved="yes">
+        <source>Search for an address or drag the map manually to update this field. Of cause you can edit this field manually, too.</source>
+        <target state="final">Søg efter en adresse eller træk kortet manuelt for at opdatere dette felt. Du kan naturligvis også redigere feltet manuelt.</target>
+      </trans-unit>
+      <trans-unit id="radius.description" approved="yes">
+        <source>Pull the center marker on the map to change this field automatically. For sure you can change it manually, too.</source>
+        <target state="final">Træk centermarkøren på kortet for at ændre dette felt manuelt. Du kan naturligvis også ændre det manuelt.</target>
+      </trans-unit>
+    </body>
   </file>
 </xliff>
