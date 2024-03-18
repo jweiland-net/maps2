@@ -3,35 +3,84 @@
   <file source-language="en" datatype="plaintext" original="messages" date="2013-02-18T15:03:04Z" product-name="maps2" target-language="da">
     <header/>
     <body>
-			
-			
-			
-			
-			
-			
-			
-
-			
-			
-			
-			
-			
-
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-
-			
-			
-			
-		</body>
+      <trans-unit id="sheetGeneral" xml:space="preserve" approved="yes">
+				<source>General</source>
+			<target state="final">Generel</target></trans-unit>
+      <trans-unit id="mapProvider" xml:space="preserve" approved="yes">
+				<source>Map Provider</source>
+			<target state="final">Kortudbyder</target></trans-unit>
+      <trans-unit id="poiCollection" xml:space="preserve" approved="yes">
+				<source>Which marking should be shown? If there is a marking defined in website uri, that one has priority.</source>
+			<target state="final">Hvilken markering skal vises? Hvis der er en markering defineret i webside uri, har den prioritet.</target></trans-unit>
+      <trans-unit id="categories" xml:space="preserve" approved="yes">
+				<source>Show all markings of given categories. This will only work, if there is no marking in website uri nor if a marking is selected above.</source>
+			<target state="final">Vil alle markeringer for en given kategori. Dette vil kun virke hvis der ikke er nogen markering i website URI eller hvis en markering er valgt herover.</target></trans-unit>
+      <trans-unit id="autoAppend" xml:space="preserve" approved="yes">
+				<source>Append a fixed string to search value. Maybe a cityname. That way the user has only to insert a streetname.</source>
+			<target state="final">Tilføj en fastlagt streng til søgeværdi. Måske et bynavn. På den måde skal brugeren kun indsætte et gadenavn.</target></trans-unit>
+      <trans-unit id="mapWidth" xml:space="preserve" approved="yes">
+				<source>Map width</source>
+			<target state="final">Kort bredde</target></trans-unit>
+      <trans-unit id="mapHeight" xml:space="preserve" approved="yes">
+				<source>Map height</source>
+			<target state="final">Kort højde</target></trans-unit>
+      <trans-unit id="sheetMapOptions" xml:space="preserve" approved="yes">
+				<source>Map Options</source>
+			<target state="final">Kortindstillinger</target></trans-unit>
+      <trans-unit id="zoom" xml:space="preserve" approved="yes">
+				<source>Default zoom</source>
+			<target state="final">Standard zoom</target></trans-unit>
+      <trans-unit id="forceZoom" xml:space="preserve" approved="yes">
+				<source>Set a fix Zoomlevel if more than one POI will be displayed. Default: automatic zoomlevel to display all POIs.</source>
+			<target state="final">Angiv et fast zoomniveau hvis flere POIer vil blive vist. Standard: Automatisk zoomniveau for at vise alle POIer.</target></trans-unit>
+      <trans-unit id="zoomControl" xml:space="preserve" approved="yes">
+				<source>Show Zoom Control</source>
+			<target state="final">Vis zoom kontrol</target></trans-unit>
+      <trans-unit id="fullScreenControl" xml:space="preserve" approved="yes">
+				<source>Show full screen Control</source>
+			<target state="final">Vis fuld skærms kontrol</target></trans-unit>
+      <trans-unit id="sheetGoogleMapsOptions" xml:space="preserve" approved="yes">
+				<source>Google Maps</source>
+			<target state="final">Google Maps</target></trans-unit>
+      <trans-unit id="mapTypeId" xml:space="preserve" approved="yes">
+				<source>Default map view</source>
+			<target state="final">Standard kortvisning</target></trans-unit>
+      <trans-unit id="mapTypeId.Hybrid" xml:space="preserve" approved="yes">
+				<source>Hybrid</source>
+			<target state="final">Hybrid</target></trans-unit>
+      <trans-unit id="mapTypeId.RoadMap" xml:space="preserve" approved="yes">
+				<source>Road Map</source>
+			<target state="final">Vejkort</target></trans-unit>
+      <trans-unit id="mapTypeId.Satellite" xml:space="preserve" approved="yes">
+				<source>Satellite</source>
+			<target state="final">Satellit</target></trans-unit>
+      <trans-unit id="mapTypeId.Terrain" xml:space="preserve" approved="yes">
+				<source>Terrain</source>
+			<target state="final">Terræn</target></trans-unit>
+      <trans-unit id="mapTypeControl" xml:space="preserve" approved="yes">
+				<source>Show Map Type Control</source>
+			<target state="final">Vis korttype kontrol</target></trans-unit>
+      <trans-unit id="scaleControl" xml:space="preserve" approved="yes">
+				<source>Show Scale Control</source>
+			<target state="final">Vis størrelseskontrol</target></trans-unit>
+      <trans-unit id="streetViewControl" xml:space="preserve" approved="yes">
+				<source>Show StreetView Control</source>
+			<target state="final">Vis StreetView kontrol</target></trans-unit>
+      <trans-unit id="activateScrollWheel" xml:space="preserve" approved="yes">
+				<source>Activate zoom with mouse scroll wheel</source>
+			<target state="final">Aktivér zoom via mus scroll-hjul</target></trans-unit>
+      <trans-unit id="styles" xml:space="preserve" approved="yes">
+				<source>Map Style. Have a look at https://snazzymaps.com to copy some cool styles for you map</source>
+			<target state="final">Kortstil. Se mere på https://snazzymaps.com for at kopiere nogle smarte kortstile til dine kort</target></trans-unit>
+      <trans-unit id="sheetOpenStreetMapOptions" xml:space="preserve" approved="yes">
+				<source>Open Street Map</source>
+			<target state="final">Open Street Map</target></trans-unit>
+      <trans-unit id="mapTile" xml:space="preserve" approved="yes">
+				<source>Map Tile URI: Define another external provider to show map with another layout</source>
+			<target state="final">Kortudsnit URI: Definér en anden ekstern leverandør for at vise kort med andet layout</target></trans-unit>
+      <trans-unit id="mapTileAttribution" xml:space="preserve" approved="yes">
+				<source>Map Tile Attribution: Each map needs to show the author attribution. Please check which Attribution has to be used for defined map tile above</source>
+			<target state="final">Kortudsnit tilskrivning: Hvert kort skal tilskrives kortets forfatter. Tjek venligst hvilken tilskrivning der skal bruges for det valgte kortudsnit herover</target></trans-unit>
+    </body>
   </file>
 </xliff>
