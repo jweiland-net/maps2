@@ -3,35 +3,84 @@
   <file source-language="en" datatype="plaintext" original="messages" date="2013-02-18T15:03:04Z" product-name="maps2" target-language="de">
     <header/>
     <body>
-			
-			
-			
-			
-			
-			
-			
-
-			
-			
-			
-			
-			
-
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-
-			
-			
-			
-		</body>
+      <trans-unit id="sheetGeneral" xml:space="preserve" approved="yes">
+				<source>General</source>
+			<target state="final">Allgemein</target></trans-unit>
+      <trans-unit id="mapProvider" xml:space="preserve" approved="yes">
+				<source>Map Provider</source>
+			<target state="final">Kartenanbieter</target></trans-unit>
+      <trans-unit id="poiCollection" xml:space="preserve" approved="yes">
+				<source>Which marking should be shown? If there is a marking defined in website uri, that one has priority.</source>
+			<target state="final">Welche Markierung soll angezeigt werden? Falls über die Webseiten URI bereits eine Markierung angegeben wurde, dann hat diese Priorität</target></trans-unit>
+      <trans-unit id="categories" xml:space="preserve" approved="yes">
+				<source>Show all markings of given categories. This will only work, if there is no marking in website uri nor if a marking is selected above.</source>
+			<target state="final">Zeige alle Markierungen dieser Kategorien. Dies funktioniert nur, sofern keine Markierung über die URI angegeben wurde oder Sie eine individuelle Markierung oben ausgewählt haben.</target></trans-unit>
+      <trans-unit id="autoAppend" xml:space="preserve" approved="yes">
+				<source>Append a fixed string to search value. Maybe a cityname. That way the user has only to insert a streetname.</source>
+			<target state="final">Fügt den hier angegebenen Text an die Eingabe des Webseitenbesuchers an. Tragen Sie hier z.B. den Stadtnamen ein. Auf diese Weise braucht der Besucher nur noch den Straßennamen einzutragen.</target></trans-unit>
+      <trans-unit id="mapWidth" xml:space="preserve" approved="yes">
+				<source>Map width</source>
+			<target state="final">Breite der Karte</target></trans-unit>
+      <trans-unit id="mapHeight" xml:space="preserve" approved="yes">
+				<source>Map height</source>
+			<target state="final">Höhe der Karte</target></trans-unit>
+      <trans-unit id="sheetMapOptions" xml:space="preserve" approved="yes">
+				<source>Map Options</source>
+			<target state="final">Kartenoptionen</target></trans-unit>
+      <trans-unit id="zoom" xml:space="preserve" approved="yes">
+				<source>Default zoom</source>
+			<target state="final">Vorgegebener Zoomfaktor</target></trans-unit>
+      <trans-unit id="forceZoom" xml:space="preserve" approved="yes">
+				<source>Set a fix Zoomlevel if more than one POI will be displayed. Default: automatic zoomlevel to display all POIs.</source>
+			<target state="final">Zoomfaktor festsetzen bei Verwendung von mehreren Markierungen. Standard: Zoomfaktor variable, um alle POIs anzuzeigen.</target></trans-unit>
+      <trans-unit id="zoomControl" xml:space="preserve" approved="yes">
+				<source>Show Zoom Control</source>
+			<target state="final">Zeige Steuerelement: Zoom</target></trans-unit>
+      <trans-unit id="fullScreenControl" xml:space="preserve" approved="yes">
+				<source>Show full screen Control</source>
+			<target state="final">Zeige Steuerelement für Vollbild</target></trans-unit>
+      <trans-unit id="sheetGoogleMapsOptions" xml:space="preserve" approved="yes">
+				<source>Google Maps</source>
+			<target state="final">Google Maps</target></trans-unit>
+      <trans-unit id="mapTypeId" xml:space="preserve" approved="yes">
+				<source>Default map view</source>
+			<target state="final">Vorgegebene Kartenansicht</target></trans-unit>
+      <trans-unit id="mapTypeId.Hybrid" xml:space="preserve" approved="yes">
+				<source>Hybrid</source>
+			<target state="final">Hybrid</target></trans-unit>
+      <trans-unit id="mapTypeId.RoadMap" xml:space="preserve" approved="yes">
+				<source>Road Map</source>
+			<target state="final">Straßenansicht</target></trans-unit>
+      <trans-unit id="mapTypeId.Satellite" xml:space="preserve" approved="yes">
+				<source>Satellite</source>
+			<target state="final">Satellit</target></trans-unit>
+      <trans-unit id="mapTypeId.Terrain" xml:space="preserve" approved="yes">
+				<source>Terrain</source>
+			<target state="final">Gelände</target></trans-unit>
+      <trans-unit id="mapTypeControl" xml:space="preserve" approved="yes">
+				<source>Show Map Type Control</source>
+			<target state="final">Zeige Steuerelement zum Wechseln der Kartenansichten</target></trans-unit>
+      <trans-unit id="scaleControl" xml:space="preserve" approved="yes">
+				<source>Show Scale Control</source>
+			<target state="final">Zeige einen Maßstab unten rechts an</target></trans-unit>
+      <trans-unit id="streetViewControl" xml:space="preserve" approved="yes">
+				<source>Show StreetView Control</source>
+			<target state="final">Zeige Steuerelement für StreetView</target></trans-unit>
+      <trans-unit id="activateScrollWheel" xml:space="preserve" approved="yes">
+				<source>Activate zoom with mouse scroll wheel</source>
+			<target state="final">Zoom mit Hilfe des Mausrades aktivieren</target></trans-unit>
+      <trans-unit id="styles" xml:space="preserve" approved="yes">
+				<source>Map Style. Have a look at https://snazzymaps.com to copy some cool styles for you map</source>
+			<target state="final">Karten Stil: Schau mal bei https://snazzymaps.com vorbei und kopier den Quellcode eines Designs hier rein</target></trans-unit>
+      <trans-unit id="sheetOpenStreetMapOptions" xml:space="preserve" approved="yes">
+				<source>Open Street Map</source>
+			<target state="final">Open Street Map</target></trans-unit>
+      <trans-unit id="mapTile" xml:space="preserve" approved="yes">
+				<source>Map Tile URI: Define another external provider to show map with another layout</source>
+			<target state="final">Map Tile URI: Trage hier den externen Anbieter ein, um die Karte mit einem anderen Layout auszuliefern</target></trans-unit>
+      <trans-unit id="mapTileAttribution" xml:space="preserve" approved="yes">
+				<source>Map Tile Attribution: Each map needs to show the author attribution. Please check which Attribution has to be used for defined map tile above</source>
+			<target state="final">Map Tile Urheber: Jede Karte muss einen Urheber nennen. Prüft deshalb welcher Urheber bei welchem Tile Anbieter auszuwählen ist</target></trans-unit>
+    </body>
   </file>
 </xliff>
