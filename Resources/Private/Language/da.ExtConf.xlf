@@ -3,34 +3,81 @@
   <file source-language="en" datatype="plaintext" original="messages" date="2013-02-07T11:13:04Z" product-name="maps2" target-language="da">
     <header/>
     <body>
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-
-			
-			
-			
-			
-
-			
-
-			
-			
-			
-			
-			
-			
-			
-			
-			
-		</body>
+      <trans-unit id="mapProvider" xml:space="preserve" approved="yes">
+				<source>Choose Map Provider: Maps2 comes with currently two Map Providers. Choose your favorite.</source>
+			<target state="final">Vælg kort-udbyder: Maps2 er foreløbigt pakket med to kort-udbydere. Vælg din favorit.</target></trans-unit>
+      <trans-unit id="mapProvider.both" xml:space="preserve" approved="yes">
+				<source>Both</source>
+			<target state="final">Begge</target></trans-unit>
+      <trans-unit id="defaultMapProvider" xml:space="preserve" approved="yes">
+				<source>Set default Map Provider: If you have chosen "Both" above you can define a default here. New map records will be created with this selected type of map provider.</source>
+			<target state="final">Angiv standard kortleverandør. Hvis du har valgt "Begge" herover, kan du definere en standard her. Nye kortelementer vil blive oprettet med den valgte kortleverandør.</target></trans-unit>
+      <trans-unit id="defaultMapType" xml:space="preserve" approved="yes">
+				<source>Default map type: If desired, you can specify a default map type for new POI records. With the default "Empty", the editor must first select a type when creating a new POI.</source>
+			<target state="final">Standardkorttype: Hvis det ønskes, kan du angive en standardkorttype for nye POI-poster. Med standarden "Tom", skal editoren først vælge en type når du opretter en ny POI.</target></trans-unit>
+      <trans-unit id="defaultCountry" xml:space="preserve" approved="yes">
+				<source>Default Country: If someone searches for a postal code only, Google will search whole world for that postal code. If you want, you can assign a default country here to reduce that search to that country.</source>
+			<target state="final">Standard land: Hvis nogen kun søger efter postnumre, vil Google søge i hele verden efter det postnummer. Hvis du ønsker det, kan du tildele et standard land her, for at reducere søgningen til dette land.</target></trans-unit>
+      <trans-unit id="defaultLatitude" xml:space="preserve" approved="yes">
+				<source>Default Latitude: If you leave this empty Google Maps points to somewhere over the ocean on startup. So it's better to enter some coordinates: https://www.maps.ie/coordinates.html</source>
+			<target state="final">Standard breddegrad: Hvis du lader feltet være tomt, vil Google Maps vise et sted udover havet, når det indlæses. Så det er bedre at angive nogle koordinater: https://www.maps.ie/coordinates.html</target></trans-unit>
+      <trans-unit id="defaultLongitude" xml:space="preserve" approved="yes">
+				<source>Default Longitude: If you leave this empty Google Maps points to somewhere over the ocean on startup. So it's better to enter some coordinates: https://www.maps.ie/coordinates.html</source>
+			<target state="final">Standard længdegrad: Hvis du lader feltet være tomt, vil Google Maps vise et sted udover havet, når det indlæses. Så det er bedre at angive nogle koordinater: https://www.maps.ie/coordinates.html</target></trans-unit>
+      <trans-unit id="defaultRadius" xml:space="preserve" approved="yes">
+				<source>Default Radius (in meters): When using collection type "Radius" you should set a default radius. Else you just see one single point</source>
+			<target state="final">Standard radius (i meter): Når typen "Radius" anvendes, bør du angive en standard radius. Ellers vil du kun se et enkelt punkt</target></trans-unit>
+      <trans-unit id="explicitAllowMapProviderRequests" xml:space="preserve" approved="yes">
+				<source>Explicitly allow requests to the map provider: By displaying the map material in the frontend, the website visitor sends requests to the map provider via JavaScript. Through these requests, the map providers receive the IP address of the website visitor. This IP is so-called "personal information" in some EU countries and may not be passed on to third parties without the visitor's consent. After activating this option, the website visitor must explicitly agree to this data transfer. The consent is stored in a cookie, so that the user does not have to agree to the consent again even after restarting the browser.</source>
+			<target state="final">Tillad eksplicit forespørgsler til kortudbyderen: Ved at vise kortmaterialet i frontend, sender den besøgende anmodninger til kortudbyderen via JavaScript. Gennem disse forespørgsler modtager kortudbyderne IP-adressen på den besøgende på hjemmesiden. IP-adresser betragtes som "personlige oplysninger" i nogle EU-lande og kan ikke videregives til tredjepart uden besøgendes samtykke. Efter aktivering af denne indstilling, skal den besøgende på hjemmesiden udtrykkeligt acceptere denne dataoverførsel. Tilladelsen gemmes i en cookie, så brugeren ikke behøver at acceptere samtykke igen, selv efter genstart af browseren.</target></trans-unit>
+      <trans-unit id="explicitAllowMapProviderRequestsBySessionOnly" xml:space="preserve" approved="yes">
+				<source>Store consent of website visitor in session: Unlike "explicitAllowMapProviderRequests", with this option we do not store the consent in a COOKIE, but in the current PHP SESSION. After a browser restart, the consent that the "Personal Data" will be sent to third parties must be obtained again. If the browser can save the current PHP SESSION even after exiting the browser (e.g. Firefox), then this setting has no effect. The option "explicitAllowMapProviderRequests" must also be active for this option to take effect.</source>
+			<target state="final">Gem samtykke fra besøgende i session: I modsætning til "explicitAllowMapProviderRequests", gemmer vi ikke samtykke i en COOKIE med denne indstilling, men i den nuværende PHP SESSION. Efter en genstart af browseren, skal samtykket om, at "Personlige data" vil blive sendt til tredjepart, indhentes igen. Hvis browseren kan gemme den aktuelle PHP SESSION, selv efter at have afsluttet browseren (f.eks. Firefox), har denne indstilling ingen effekt. Muligheden "explicitAllowMapProviderRequests" skal også være aktiv for at denne mulighed træder i kraft.</target></trans-unit>
+      <trans-unit id="infoWindowContentTemplatePath" xml:space="preserve" approved="yes">
+				<source>Template path for info window: If you click on a marker a little info window will appear. With this setting you can change that template to your own needs.</source>
+			<target state="final">Skabelonsti til info-vindue: Hvis du klikker på en markør, vil et lille vindue dukke op. Med denne indstilling kan du ændre denne skabelon så den opfylder dine ønsker.</target></trans-unit>
+      <trans-unit id="googleMapsLibrary" xml:space="preserve" approved="yes">
+				<source>Link to Google Maps API: This setting is for TYPO3 Backend only. Visit your TypoScript-Templates if you want to change the library for Frontend. You only need to fill this field if you want to use an older or beta version.</source>
+			<target state="final">Link til Google Maps API: Denne indstilling bruges kun i TYPO3 Backend. Besøg din TypoScript skabelon hvis du vil ændre biblioteket til Frontend. Du behøver kun at udfylde dette felt, hvis du ønsker at benytte en ældre version eller en beta version.</target></trans-unit>
+      <trans-unit id="googleMapsGeocodeUri" xml:space="preserve" approved="yes">
+				<source>Google Maps Geocode URI: If needed you can change the URI of Google Maps Geocode API here. It MUST have two %s placeholders.</source>
+			<target state="final">Google Maps Geocode URI: Hvis nødvendigt kan du ændre URIen til Google Maps Geocode API her. Det SKAL have to %s placeholdere.</target></trans-unit>
+      <trans-unit id="googleMapsApiKey" xml:space="preserve" approved="yes">
+				<source>Google Maps JavaScript ApiKey: This setting is for TYPO3 Backend only. Visit your TypoScript-Templates if you want to change the library for Frontend. Visit https://console.developers.google.com Create a new project for Google Maps JavaScript API and insert the retrieved Browser ApiKey here.</source>
+			<target state="final">Google Maps JavaScript ApiKey: Denne indstilling er kun til TYPO3 Backend. Besøg din TypoScript skabelon hvis du vil ændre biblioteket til Frontend.Besøg https://console.developers.google.com, opret et nyt projekt for Google Maps JavaScript API og indsæt den browser ApiKey der dannes her.</target></trans-unit>
+      <trans-unit id="googleGeocodeApiKey" xml:space="preserve" approved="yes">
+				<source>Google Maps Geocode ApiKey: Visit https://console.developers.google.com Create a new project for Google Maps Geocode API and insert here the retrieved Server ApiKey.</source>
+			<target state="final">Google Maps Geocode ApiKey: Besøg https://console.developers.google.com, opret et nyt projekt for Google Maps JavaScript API og indsæt den server ApiKey der dannes her.</target></trans-unit>
+      <trans-unit id="openStreetMapGeocodeUri" xml:space="preserve" approved="yes">
+				<source>OpenStreetMap Geocode URI: If needed you can change the URI of Open Street Map Geocode API here. It MUST have one %s placeholder for address.</source>
+			<target state="final">OpenStreetMaps Geocode URI: Hvis nødvendigt kan du ændre URIen til OpenStreetMaps Geocode API her. Det SKAL have én %s placeholdere.</target></trans-unit>
+      <trans-unit id="strokeColor" xml:space="preserve" approved="yes">
+				<source>Stroke Color: You can set a border color for a overly here</source>
+			<target state="final">Stregfarve: Du kan angive en rammefarve her</target></trans-unit>
+      <trans-unit id="strokeOpacity" xml:space="preserve" approved="yes">
+				<source>Stroke Opacity: If you set this to 1, you can't see th map behind the border. So it's better to find a value between 0.3 and 0.6</source>
+			<target state="final">Streg gennemsigtighed: Hvis du angiver 1, kan du ikke se kortet bag ved rammen. Så det er bedre at finde en værdi mellem 0.3 og 0.6</target></trans-unit>
+      <trans-unit id="strokeWeight" xml:space="preserve" approved="yes">
+				<source>Stroke Weight (in pixel): How thick the border of the overlay should be? A good value is 1 or 2</source>
+			<target state="final">Steg vægt (i pixel): Hvor tyk skal rammen på overlejringen være? En god værdi er 1 eller 2</target></trans-unit>
+      <trans-unit id="fillColor" xml:space="preserve" approved="yes">
+				<source>Fill Color: Which color the overlay should have?</source>
+			<target state="final">Fyld-farve: Hvilken farve skal overlejringen have?</target></trans-unit>
+      <trans-unit id="fillOpacity" xml:space="preserve" approved="yes">
+				<source>Fill Opacity: If you set this to 1, you can't see th map behind the overlay. So it's better to find a value between 0.3 and 0.6. But it should be less than the value of strokeOpacity</source>
+			<target state="final">Fyld gennemsigtighed: Hvis du angiver 1, kan du ikke se kortet bag ved rammen. Så det er bedre at finde en værdi mellem 0.3 og 0.6. Men det bør være mindre end værdien ved streg gennemsigtighed</target></trans-unit>
+      <trans-unit id="markerIconWidth" xml:space="preserve" approved="yes">
+				<source>Marker icon width: Define a default width for Marker Icons in pixel. You can override this value individually in sys_category and PoiCollection records.</source>
+			<target state="final">Markør ikon bredde: Definér en standard bredde for markør-ikonet i pixel. Du kan overskrive denne værdi individuelt i sys_category og PoiCollection elementerne.</target></trans-unit>
+      <trans-unit id="markerIconHeight" xml:space="preserve" approved="yes">
+				<source>Marker icon height: Define a default height for Marker Icons in pixel. You can override this value individually in sys_category and PoiCollection records.</source>
+			<target state="final">Markør ikon højde: Definér en standard højde for markør-ikonet i pixel. Du kan overskrive denne værdi individuelt i sys_category og PoiCollection elementerne.</target></trans-unit>
+      <trans-unit id="markerIconAnchorPosX" xml:space="preserve" approved="yes">
+				<source>Marker icon position X: Which horizontal pixel on the image points the position on the Google Maps. You can override this value individually in sys_category and PoiCollection records.</source>
+			<target state="final">Markør ikon position X: Hvilken horisontal pixel på billedet udpeger positionen i Google Maps. Du kan overskrive denne værdi individuelt i sys_category og PoiCollection elementerne.</target></trans-unit>
+      <trans-unit id="markerIconAnchorPosY" xml:space="preserve" approved="yes">
+				<source>Marker icon position Y: Which vertical pixel on the image points the position on the Google Maps. You can override this value individually in sys_category and PoiCollection records.</source>
+			<target state="final">Markør ikon position Y: Hvilken vertikal pixel på billedet udpeger positionen i Google Maps. Du kan overskrive denne værdi individuelt i sys_category og PoiCollection elementerne.</target></trans-unit>
+    </body>
   </file>
 </xliff>
