@@ -3,93 +3,254 @@
   <file source-language="en" datatype="plaintext" original="messages" date="2013-02-07T11:13:04Z" product-name="maps2" target-language="de">
     <header/>
     <body>
-
-			
-			
-			
-
-			
-			
-
-			
-			
-			
-			
-
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-
-			
-			
-
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-		</body>
+      <trans-unit id="plugin.maps.title" approved="yes">
+        <source>Maps2: Show map</source>
+        <target state="final">Maps2: Kartenansicht</target>
+      </trans-unit>
+      <trans-unit id="plugin.radius.title" approved="yes">
+        <source>Maps2: Search Radius</source>
+        <target state="final">Maps2: Radiussuche</target>
+      </trans-unit>
+      <trans-unit id="plugin.cityMap.title" approved="yes">
+        <source>Maps2: City Map</source>
+        <target state="final">Maps2: Stadtplan</target>
+      </trans-unit>
+      <trans-unit id="plugin.maps2.title" approved="yes">
+        <source>Maps2: Show map</source>
+        <target state="final">Maps2: Kartenansicht</target>
+      </trans-unit>
+      <trans-unit id="plugin.maps2.description" approved="yes">
+        <source>Add a world map to your website</source>
+        <target state="final">Fügt eine Weltkarte Ihrer Webseite hinzu</target>
+      </trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poi" xml:space="preserve" approved="yes">
+				<source>Map Position</source>
+			<target state="final">Kartenposition</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poi.latitude" xml:space="preserve" approved="yes">
+				<source>Latitude</source>
+			<target state="final">Breitengrad</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poi.longitude" xml:space="preserve" approved="yes">
+				<source>Longitude</source>
+			<target state="final">Längengrad</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poi.posIndex" xml:space="preserve" approved="yes">
+				<source>Position Index</source>
+			<target state="final">Positionsindex</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection" xml:space="preserve" approved="yes">
+				<source>Marking</source>
+			<target state="final">Markierung</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.collectionType" xml:space="preserve" approved="yes">
+				<source>Type</source>
+			<target state="final">Typ</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.collectionType.empty" xml:space="preserve" approved="yes">
+				<source>Please choose a type</source>
+			<target state="final">Bitte wählen Sie einen Typ</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.collectionType.point" xml:space="preserve" approved="yes">
+				<source>Point of Interest</source>
+			<target state="final">Punkt</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.collectionType.area" xml:space="preserve" approved="yes">
+				<source>Area</source>
+			<target state="final">Bereich</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.collectionType.route" xml:space="preserve" approved="yes">
+				<source>Route</source>
+			<target state="final">Strecke</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.collectionType.radius" xml:space="preserve" approved="yes">
+				<source>Radius</source>
+			<target state="final">Radius</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.title" xml:space="preserve" approved="yes">
+				<source>Title</source>
+			<target state="final">Titel</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.map" xml:space="preserve" approved="yes">
+				<source>Map</source>
+			<target state="final">Karte</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.address" xml:space="preserve" approved="yes">
+				<source>Formatted address</source>
+			<target state="final">Formatierte Adresse</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.address" xml:space="preserve" approved="yes">
+				<source>Formatted address</source>
+			<target state="final">Formatierte Adresse</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.address.description" xml:space="preserve" approved="yes">
+				<source>Please enter an address in the search field near the map. If search was successfully a formatted version of your address will be inserted here automatically.</source>
+			<target state="final">Trage zunächst eine Adresse in das Suchfeld bei der Karte ein. Wenn die Suche erfolgreich war wird dieses Feld hier automatisch mit einer formattierten Fassung der Adresse befüllt.</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.mapProvider" xml:space="preserve" approved="yes">
+				<source>Choose a preferred Map Provider to render the map for this record.</source>
+			<target state="final">Wähle einen bevorzugten Kartenanbieter, um die Karte für diesen Datensatz darzustellen.</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.mapProvider.description" xml:space="preserve" approved="yes">
+				<source>This option is only valid for the TYPO3 backend and will reload the form, if you switch to another value.</source>
+			<target state="final">Diese Option ist nur für das TYPO3 Backend gültig und läd bei Wechsel das Formular neu.</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.mapProvider.gm" xml:space="preserve" approved="yes">
+				<source>Google Maps</source>
+			<target state="final">Google Maps</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.mapProvider.osm" xml:space="preserve" approved="yes">
+				<source>Open Street Map</source>
+			<target state="final">Open Street Map</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.configuration_map" xml:space="preserve" approved="yes">
+				<source>Configure position on Map</source>
+			<target state="final">Konfiguration der Kartenposition</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.configuration_map.description" xml:space="preserve" approved="yes">
+				<source>Please use the search field to move the pointer to your given address. With help of drag and drop you can finetune the position of the pointer.</source>
+			<target state="final">Verwende das Suchfeld, um den Marker auf die angegebende Adresse zu verschieben. Mittels Drag and Drop kann der Marker noch nachträglich versetzt werden</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.latitude" xml:space="preserve" approved="yes">
+				<source>Latitude for map position</source>
+			<target state="final">Breitengrad der Karte</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.longitude" xml:space="preserve" approved="yes">
+				<source>Longitude for map position</source>
+			<target state="final">Längengrad der Karte</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.radius" xml:space="preserve" approved="yes">
+				<source>Radius</source>
+			<target state="final">Radius</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.address.useSearchField" xml:space="preserve" approved="yes">
+				<source>Please use search field in map below to fill this field</source>
+			<target state="final">Bitte verwende das Suchfeld in der Google Karte, um dieses Feld zu befüllen</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.style" xml:space="preserve" approved="yes">
+				<source>Style</source>
+			<target state="final">Design</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.stroke_color" xml:space="preserve" approved="yes">
+				<source>Color</source>
+			<target state="final">Farbe</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.stroke_opacity" xml:space="preserve" approved="yes">
+				<source>Opacity</source>
+			<target state="final">Deckkraft</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.stroke_weight" xml:space="preserve" approved="yes">
+				<source>Weight</source>
+			<target state="final">Dicke</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.fill_color" xml:space="preserve" approved="yes">
+				<source>Color</source>
+			<target state="final">Farbe</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.fill_opacity" xml:space="preserve" approved="yes">
+				<source>Opacity</source>
+			<target state="final">Deckkraft)</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.info_window_address" xml:space="preserve" approved="yes">
+				<source>Info Window Content</source>
+			<target state="final">Inhalt des Infofensters</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.info_window_content" xml:space="preserve" approved="yes">
+				<source>Text within info window</source>
+			<target state="final">Text im Infofenster</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.info_window_images" xml:space="preserve" approved="yes">
+				<source>Images within info window</source>
+			<target state="final">Bilder im Infofenster</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.marker_icons" xml:space="preserve" approved="yes">
+				<source>Marker icon</source>
+			<target state="final">Marker Icon</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.marker_icon_width" xml:space="preserve" approved="yes">
+				<source>Width</source>
+			<target state="final">Breite</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.marker_icon_height" xml:space="preserve" approved="yes">
+				<source>Height</source>
+			<target state="final">Höhe</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.marker_icon_anchor_pos_x" xml:space="preserve" approved="yes">
+				<source>Horizontal pixel X</source>
+			<target state="final">Horizontaler Pixel X</target></trans-unit>
+      <trans-unit id="tx_maps2_domain_model_poicollection.marker_icon_anchor_pos_y" xml:space="preserve" approved="yes">
+				<source>Vertical pixel Y</source>
+			<target state="final">Verticaler Pixel Y</target></trans-unit>
+      <trans-unit id="tx_maps2_uid" xml:space="preserve" approved="yes">
+				<source>Connect this record to Google Maps record</source>
+			<target state="final">Verbinden Sie diesen Datensatz mit Google Maps</target></trans-unit>
+      <trans-unit id="info_window_content.preview" xml:space="preserve" approved="yes">
+				<source>Preview</source>
+			<target state="final">Vorschau</target></trans-unit>
+      <trans-unit id="tab.maps2" xml:space="preserve" approved="yes">
+				<source>Not needed. Will be removed in future</source>
+			<target state="final">Google Maps (maps2)</target></trans-unit>
+      <trans-unit id="tab.maps2.gm" xml:space="preserve" approved="yes">
+				<source>Google Maps (maps2)</source>
+			<target state="final">Google Maps (maps2)</target></trans-unit>
+      <trans-unit id="tab.maps2.osm" xml:space="preserve" approved="yes">
+				<source>Open Street Map (maps2)</source>
+			<target state="final">Offene Straßenkarte (Karten2)</target></trans-unit>
+      <trans-unit id="palette.language_hidden" xml:space="preserve" approved="yes">
+				<source>Visibility and Language</source>
+			<target state="final">Sichtbarkeit und Sprache</target></trans-unit>
+      <trans-unit id="palette.latitude_longitude" xml:space="preserve" approved="yes">
+				<source>Latitude and Longitude</source>
+			<target state="final">Breiten- und Längengrad</target></trans-unit>
+      <trans-unit id="palette.marker_icon_size" xml:space="preserve" approved="yes">
+				<source>Set size of marker icon in px</source>
+			<target state="final">Setzt die Größe des Marker Icons in Pixel</target></trans-unit>
+      <trans-unit id="palette.marker_icon_pos" xml:space="preserve" approved="yes">
+				<source>XY coordinate of the marker icon whose pixel will show the exact position on the map</source>
+			<target state="final">XY Koordinate des Marker Icons, das die exakte Position auf der Karte anzeigt</target></trans-unit>
+      <trans-unit id="palette.stroke" xml:space="preserve" approved="yes">
+				<source>Stroke settings</source>
+			<target state="final">Einstellungen für Linien</target></trans-unit>
+      <trans-unit id="palette.fill" xml:space="preserve" approved="yes">
+				<source>Fill settings</source>
+			<target state="final">Einstellungen für Füllungen</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icons" xml:space="preserve" approved="yes">
+				<source>Not needed. Will be removed in future</source>
+			<target state="final">Marker Icon für Google Maps (maps2)</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icons.gm" xml:space="preserve" approved="yes">
+				<source>Marker icon</source>
+			<target state="final">Marker Icon</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icons.gm.description" xml:space="preserve" approved="yes">
+				<source>Here you can define your own marker icon for Google Maps. We prefer a svg file.</source>
+			<target state="final">Hier können Sie Ihr eigenes Marker-Symbol für Google Maps definieren. Wir bevorzugen eine svg-Datei.</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icons.osm" xml:space="preserve" approved="yes">
+				<source>Marker icon</source>
+			<target state="final">Marker Icon</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icons.osm.description" xml:space="preserve" approved="yes">
+				<source>Here you can define your own marker icon for Open Street Map. We prefer a svg file.</source>
+			<target state="final">Hier können Sie Ihr eigenes Marker-Symbol für Open Street Map definieren. Wir bevorzugen eine svg-Datei.</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_width" xml:space="preserve" approved="yes">
+				<source>Not needed. Will be removed in future</source>
+			<target state="final">Setzt die Breite der Marker Icons in Pixel. Dieser Wert kann mit Angaben in PoiCollection Datensätzen überschrieben werden.</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_width.gm" xml:space="preserve" approved="yes">
+				<source>Width of your marker icon</source>
+			<target state="final">Breite des Marker-Symbols</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_width.gm.description" xml:space="preserve" approved="yes">
+				<source>Define width in pixels for your Google Maps marker icon. You can override this value individually in PoiCollection records.</source>
+			<target state="final">Definieren Sie die Breite in Pixeln für Ihr Google Maps Marker-Symbol. Sie können diesen Wert in PoiCollection Datensätzen individuell überschreiben.</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_width.osm" xml:space="preserve" approved="yes">
+				<source>Width of your marker icon</source>
+			<target state="final">Breite des Marker-Symbols</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_width.osm.description" xml:space="preserve" approved="yes">
+				<source>Define width in pixels for your Open Street Map marker icon. You can override this value individually in PoiCollection records.</source>
+			<target state="final">Definieren Sie die Breite in Pixeln für Ihr Open Street Map Marker-Symbol. Sie können diesen Wert individuell in PoiCollection Datensätzen überschreiben.</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_height" xml:space="preserve" approved="yes">
+				<source>Not needed. Will be removed in future</source>
+			<target state="final">Setzt die Höhe der Marker Icons in Pixel. Dieser Wert kann mit Angaben in PoiCollection Datensätzen überschrieben werden.</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_height.gm" xml:space="preserve" approved="yes">
+				<source>Height of your marker icon</source>
+			<target state="final">Höhe des Marker-Symbols</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_height.gm.description" xml:space="preserve" approved="yes">
+				<source>Define height in pixels for your Google Maps marker icon. You can override this value individually in PoiCollection records.</source>
+			<target state="final">Höhe in Pixeln für Ihr Google Maps Marker-Symbol festlegen. Sie können diesen Wert in PoiCollection Datensätzen individuell überschreiben.</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_height.osm" xml:space="preserve" approved="yes">
+				<source>Height of your marker icon</source>
+			<target state="final">Höhe des Marker-Symbols</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_height.osm.description" xml:space="preserve" approved="yes">
+				<source>Define height in pixels for your Open Street Map marker icon. You can override this value individually in PoiCollection records.</source>
+			<target state="final">Höhe in Pixeln für Ihr Open Street Map Symbol festlegen. Sie können diesen Wert in PoiCollection Datensätzen individuell überschreiben.</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_anchor_pos_x" xml:space="preserve" approved="yes">
+				<source>Not needed. Will be removed in future</source>
+			<target state="final">Welcher horizontale Pixel auf dem Bild zeigt die exakte Position auf der Google Karte? Dieser Wert kann mit Angaben und PoiCollection Datensätzen überschrieben werden.</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_anchor_pos_x.gm" xml:space="preserve" approved="yes">
+				<source>Horizontal pixel for location</source>
+			<target state="final">Horizontale Pixel für Standort</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_anchor_pos_x.gm.description" xml:space="preserve" approved="yes">
+				<source>Which horizontal pixel on the marker icon points to the position on Google Maps. You can override this value individually in PoiCollection records.</source>
+			<target state="final">Welche horizontalen Pixel auf dem Marker-Symbol auf die Position auf Google Maps verweisen. Sie können diesen Wert in PoiCollection Datensätzen individuell überschreiben.</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_anchor_pos_x.osm" xml:space="preserve" approved="yes">
+				<source>Horizontal pixel for location</source>
+			<target state="final">Horizontale Pixel für Standort</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_anchor_pos_x.osm.description" xml:space="preserve" approved="yes">
+				<source>Which horizontal pixel on the marker icon points to the position on Open Street Map. You can override this value individually in PoiCollection records.</source>
+			<target state="final">Welches horizontale Pixel auf dem Marker-Symbol auf die Position auf der Open Street Map zeigt. Sie können diesen Wert individuell in PoiCollection Datensätzen überschreiben.</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_anchor_pos_y" xml:space="preserve" approved="yes">
+				<source>Not needed. Will be removed in future</source>
+			<target state="final">Welcher verticale Pixel auf dem Bild zeigt die exakte Position auf der Google Karte? Dieser Wert kann mit Angaben und PoiCollection Datensätzen überschrieben werden.</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_anchor_pos_y.gm" xml:space="preserve" approved="yes">
+				<source>Vertical pixel for location</source>
+			<target state="final">Vertikale Pixel für Standort</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_anchor_pos_y.gm.description" xml:space="preserve" approved="yes">
+				<source>Which vertical pixel on the marker icon points to the position on Google Maps. You can override this value individually in PoiCollection records.</source>
+			<target state="final">Welche vertikalen Pixel auf dem Marker-Symbol auf die Position auf Google Maps verweisen. Sie können diesen Wert in PoiCollection Datensätzen individuell überschreiben.</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_anchor_pos_y.osm" xml:space="preserve" approved="yes">
+				<source>Vertical pixel for location</source>
+			<target state="final">Vertikale Pixel für Standort</target></trans-unit>
+      <trans-unit id="sys_category.maps2_marker_icon_anchor_pos_y.osm.description" xml:space="preserve" approved="yes">
+				<source>Which vertical pixel on the marker icon points to the position on Open Street Map. You can override this value individually in PoiCollection records.</source>
+			<target state="final">Welche vertikalen Pixel auf dem Marker-Symbol auf die Position auf der Open Street Map verweisen. Sie können diesen Wert in PoiCollection Datensätzen individuell überschreiben.</target></trans-unit>
+    </body>
   </file>
 </xliff>
