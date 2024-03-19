@@ -667,7 +667,7 @@ function initMap () {
 
     // Pass in the objects to merge as arguments.
     // For a deep extend, set the first argument to `true`.
-    const extend = () => {
+    const extend = (...arguments) => {
       let extended = {};
       let deep = false;
       let i = 0;
