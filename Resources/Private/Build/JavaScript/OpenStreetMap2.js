@@ -551,15 +551,15 @@ document.querySelectorAll(".maps2").forEach((element) => {
 
   // Pass in the objects to merge as arguments.
   // For a deep extend, set the first argument to `true`.
-  const extend = (...arguments) => {
+  const extend = (...args) => {
     let extended = {};
     let deep = false;
     let i = 0;
-    let length = arguments.length;
+    let length = args.length;
 
     // Check for deep merge
-    if (Object.prototype.toString.call(arguments[0]) === '[object Boolean]') {
-      deep = arguments[0];
+    if (Object.prototype.toString.call(args[0]) === '[object Boolean]') {
+      deep = args[0];
       i++;
     }
 
@@ -579,7 +579,7 @@ document.querySelectorAll(".maps2").forEach((element) => {
 
     // Loop through each object and conduct a merge
     for ( ; i < length; i++ ) {
-      var obj = arguments[i];
+      var obj = args[i];
       merge(obj);
     }
 
