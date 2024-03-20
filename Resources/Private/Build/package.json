@@ -3,6 +3,7 @@
     "@types/geojson": "^7946.0.13",
     "@types/leaflet": "^1.9.8",
     "@types/leaflet-editable": "^1.2.6",
+    "gulp": "^4.0.2",
     "gulp-concat": "^2.6.1",
     "gulp-sourcemaps": "^3.0.0",
     "gulp-uglify": "^3.0.2",

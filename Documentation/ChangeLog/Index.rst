@@ -7,6 +7,11 @@
 ChangeLog
 =========
 
+Version 11.0.3
+==============
+
+*   BUGFIX: Implement better `extend` function for JavaScript
+
 Version 11.0.2
 ==============
 

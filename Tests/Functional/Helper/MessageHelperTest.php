@@ -58,7 +58,7 @@ class MessageHelperTest extends FunctionalTestCase
             'Hello',
             '',
             ContextualFeedbackSeverity::OK,
-            true
+            false
         );
 
         $this->subject->addFlashMessage('Hello');
@@ -78,7 +78,7 @@ class MessageHelperTest extends FunctionalTestCase
             'Hello',
             'Subject',
             ContextualFeedbackSeverity::OK,
-            true
+            false
         );
 
         $this->subject->addFlashMessage('Hello', 'Subject');
@@ -98,7 +98,7 @@ class MessageHelperTest extends FunctionalTestCase
             'Hello',
             'Subject',
             ContextualFeedbackSeverity::ERROR,
-            true
+            false
         );
 
         $this->subject->addFlashMessage('Hello', 'Subject', ContextualFeedbackSeverity::ERROR);
