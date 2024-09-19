@@ -1,0 +1,7 @@
+parameters:
+		# Ignore specific errors:
+		ignoreErrors:
+			-
+				message: '#Call to an undefined method .*#'
+			#-
+			#	message: '#^Access to an undefined property TYPO3\\\\CMS\\\\Scheduler\\\\Task\\\\AbstractTask$#'

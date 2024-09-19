@@ -1,10 +1,17 @@
 {
 	"name": "jweiland/maps2",
-	"type": "typo3-cms-extension",
 	"description": "Create maps with Marker, Area, Routes or Radius based on Google Maps or OpenStreetMap",
 	"license": "GPL-2.0-or-later",
-	"keywords": ["typo3", "TYPO3 CMS", "google maps", "osm", "open street map", "openstreetmap", "maps2"],
-	"homepage": "https://jweiland.net/",
+	"type": "typo3-cms-extension",
+	"keywords": [
+		"typo3",
+		"TYPO3 CMS",
+		"google maps",
+		"osm",
+		"open street map",
+		"openstreetmap",
+		"maps2"
+	],
 	"authors": [
 		{
 			"name": "Stefan Froemken",
@@ -12,23 +19,26 @@
 			"role": "Lead Developer"
 		}
 	],
+	"homepage": "https://jweiland.net/",
 	"support": {
-		"docs": "https://docs.typo3.org/p/jweiland/maps2/main/en-us/",
 		"email": "projects@jweiland.net",
 		"issues": "https://github.com/jweiland-net/maps2/issues",
-		"source": "https://github.com/jweiland-net/maps2"
+		"source": "https://github.com/jweiland-net/maps2",
+		"docs": "https://docs.typo3.org/p/jweiland/maps2/main/en-us/"
 	},
 	"require": {
 		"ext-json": "*",
 		"typo3/cms-core": "^12.4.11"
 	},
 	"require-dev": {
-		"typo3/testing-framework": "^7.0.2",
-		"phpunit/phpunit": "^9.6",
-		"typo3/coding-standards": "^0.6",
+		"ergebnis/composer-normalize": "~2.42.0",
 		"friendsofphp/php-cs-fixer": "^3.14",
 		"jweiland/events2": "^9.0",
-		"sjbr/static-info-tables": "^12.4"
+		"phpstan/phpstan": "^1.10",
+		"phpunit/phpunit": "^9.6",
+		"sjbr/static-info-tables": "^12.4",
+		"typo3/coding-standards": "^0.6",
+		"typo3/testing-framework": "^7.0.2"
 	},
 	"suggest": {
 		"sjbr/static-info-tables": "Install this package, if you want to choose from contained contries instead of typing them"
@@ -44,17 +54,18 @@
 		}
 	},
 	"config": {
-		"vendor-dir": ".Build/vendor",
-		"bin-dir": ".Build/bin",
 		"allow-plugins": {
+			"ergebnis/composer-normalize": true,
 			"typo3/class-alias-loader": true,
 			"typo3/cms-composer-installers": true
-		}
+		},
+		"bin-dir": ".Build/bin",
+		"vendor-dir": ".Build/vendor"
 	},
 	"extra": {
 		"typo3/cms": {
-			"extension-key": "maps2",
 			"app-dir": ".Build",
+			"extension-key": "maps2",
 			"web-dir": ".Build/Web"
 		}
 	}
