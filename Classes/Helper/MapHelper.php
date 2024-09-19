@@ -102,7 +102,7 @@ class MapHelper
                         'latitude',
                         'longitude',
                     ],
-                    GeneralUtility::trimExplode(',', $poi)
+                    GeneralUtility::trimExplode(',', $poi),
                 );
             }
         } catch (\JsonException $jsonException) {

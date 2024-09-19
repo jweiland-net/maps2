@@ -35,7 +35,7 @@ class MapperFactory
     {
         /** @var MapperInterface $client */
         $client = GeneralUtility::makeInstance(
-            $this->mapping[$this->mapHelper->getMapProvider()]
+            $this->mapping[$this->mapHelper->getMapProvider()],
         );
 
         return $client;

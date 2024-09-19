@@ -96,7 +96,7 @@ class SettingsHelperTest extends FunctionalTestCase
     {
         unset(
             $this->subject,
-            $this->configurationManagerMock
+            $this->configurationManagerMock,
         );
 
         parent::tearDown();
@@ -127,7 +127,7 @@ class SettingsHelperTest extends FunctionalTestCase
 
         self::assertSame(
             $this->mergedScriptSettings,
-            $this->subject->getMergedSettings()
+            $this->subject->getMergedSettings(),
         );
     }
 
@@ -160,7 +160,7 @@ class SettingsHelperTest extends FunctionalTestCase
 
         self::assertSame(
             'EXT:maps2/Resources/Private/Templates/InfoWindowContent.html',
-            $this->subject->getMergedSettings()['infoWindowContentTemplatePath']
+            $this->subject->getMergedSettings()['infoWindowContentTemplatePath'],
         );
     }
 
@@ -192,7 +192,7 @@ class SettingsHelperTest extends FunctionalTestCase
 
         self::assertSame(
             '0',
-            $this->subject->getMergedSettings()['fullscreenMapControl']
+            $this->subject->getMergedSettings()['fullscreenMapControl'],
         );
     }
 
@@ -224,7 +224,7 @@ class SettingsHelperTest extends FunctionalTestCase
 
         self::assertSame(
             '1',
-            $this->subject->getMergedSettings()['streetViewControl']
+            $this->subject->getMergedSettings()['streetViewControl'],
         );
     }
 }

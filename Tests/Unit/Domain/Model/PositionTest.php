@@ -29,7 +29,7 @@ class PositionTest extends UnitTestCase
     protected function tearDown(): void
     {
         unset(
-            $this->subject
+            $this->subject,
         );
 
         parent::tearDown();
@@ -42,7 +42,7 @@ class PositionTest extends UnitTestCase
     {
         self::assertSame(
             '',
-            $this->subject->getFormattedAddress()
+            $this->subject->getFormattedAddress(),
         );
     }
 
@@ -55,7 +55,7 @@ class PositionTest extends UnitTestCase
 
         self::assertSame(
             'foo bar',
-            $this->subject->getFormattedAddress()
+            $this->subject->getFormattedAddress(),
         );
     }
 
@@ -66,7 +66,7 @@ class PositionTest extends UnitTestCase
     {
         self::assertSame(
             0.0,
-            $this->subject->getLatitude()
+            $this->subject->getLatitude(),
         );
     }
 
@@ -79,7 +79,7 @@ class PositionTest extends UnitTestCase
 
         self::assertSame(
             1234.56,
-            $this->subject->getLatitude()
+            $this->subject->getLatitude(),
         );
     }
 
@@ -90,7 +90,7 @@ class PositionTest extends UnitTestCase
     {
         self::assertSame(
             0.0,
-            $this->subject->getLongitude()
+            $this->subject->getLongitude(),
         );
     }
 
@@ -103,7 +103,7 @@ class PositionTest extends UnitTestCase
 
         self::assertSame(
             1234.56,
-            $this->subject->getLongitude()
+            $this->subject->getLongitude(),
         );
     }
 }

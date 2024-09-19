@@ -86,7 +86,7 @@ class OpenStreetMapElementTest extends FunctionalTestCase
 
         $this->subject = new OpenStreetMapElement(
             GeneralUtility::makeInstance(NodeFactory::class),
-            $this->data
+            $this->data,
         );
     }
 
@@ -97,7 +97,7 @@ class OpenStreetMapElementTest extends FunctionalTestCase
             $this->extConf,
             $this->pageRendererMock,
             $this->mapHelperMock,
-            $this->viewMock
+            $this->viewMock,
         );
 
         parent::tearDown();
@@ -115,7 +115,7 @@ class OpenStreetMapElementTest extends FunctionalTestCase
             ->expects(self::atLeastOnce())
             ->method('setTemplatePathAndFilename')
             ->with(
-                self::stringContains('Resources/Private/Templates/Tca/OpenStreetMap.html')
+                self::stringContains('Resources/Private/Templates/Tca/OpenStreetMap.html'),
             );
         $this->viewMock
             ->expects(self::atLeastOnce())

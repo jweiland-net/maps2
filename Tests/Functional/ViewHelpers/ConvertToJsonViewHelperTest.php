@@ -49,7 +49,7 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
     protected function tearDown(): void
     {
         unset(
-            $this->poiCollection
+            $this->poiCollection,
         );
 
         parent::tearDown();
@@ -75,7 +75,7 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
 
         self::assertStringContainsString(
             '&quot;simpleString&quot;',
-            $contentWithJson
+            $contentWithJson,
         );
     }
 
@@ -99,7 +99,7 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
 
         self::assertStringContainsString(
             '{&quot;foo&quot;:&quot;bar&quot;}',
-            $contentWithJson
+            $contentWithJson,
         );
     }
 
@@ -124,7 +124,7 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
         // a property of PoiCollection should be found in string
         self::assertStringContainsString(
             'address',
-            $contentWithJson
+            $contentWithJson,
         );
     }
 
@@ -149,7 +149,7 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
         // a property of PoiCollection should be found in string
         self::assertStringContainsString(
             'address',
-            $contentWithJson
+            $contentWithJson,
         );
 
         // we have set PoiCollection into an array, so JSON should start with [{
@@ -179,11 +179,11 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
 
         self::assertStringNotContainsString(
             'maps2MarkerIcons',
-            $contentWithJson
+            $contentWithJson,
         );
         self::assertStringNotContainsString(
             'parent',
-            $contentWithJson
+            $contentWithJson,
         );
     }
 
@@ -207,7 +207,7 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
 
         self::assertStringNotContainsString(
             'markerIcons',
-            $contentWithJson
+            $contentWithJson,
         );
     }
 }

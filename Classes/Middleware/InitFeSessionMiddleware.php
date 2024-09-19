@@ -59,7 +59,7 @@ class InitFeSessionMiddleware implements MiddlewareInterface
 
         // Store consent in COOKIE
         $cookieSameSite = $this->sanitizeSameSiteCookieValue(
-            strtolower($GLOBALS['TYPO3_CONF_VARS']['BE']['cookieSameSite'] ?? Cookie::SAMESITE_STRICT)
+            strtolower($GLOBALS['TYPO3_CONF_VARS']['BE']['cookieSameSite'] ?? Cookie::SAMESITE_STRICT),
         );
 
         // SameSite Cookie = None needs the secure option (only allowed on HTTPS)
@@ -74,7 +74,7 @@ class InitFeSessionMiddleware implements MiddlewareInterface
             $isSecure,
             false, // Should be false to allow JS based consent tools to delete this cookie
             false,
-            $cookieSameSite
+            $cookieSameSite,
         );
     }
 

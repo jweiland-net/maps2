@@ -40,7 +40,7 @@ class GetEnvironmentViewHelper extends AbstractViewHelper
     public static function renderStatic(
         array $arguments,
         \Closure $renderChildrenClosure,
-        RenderingContextInterface $renderingContext
+        RenderingContextInterface $renderingContext,
     ): string {
         $templateVariableContainer = $renderingContext->getVariableProvider();
         $extbaseRequest = self::getExtbaseRequest($renderingContext);
@@ -55,7 +55,7 @@ class GetEnvironmentViewHelper extends AbstractViewHelper
                 'extConf' => ObjectAccess::getGettableProperties(self::getExtConf()),
                 'id' => (int)($extbaseRequest->getQueryParams()['id'] ?? 0),
                 'contentRecord' => $extbaseRequest->getAttribute('currentContentObject')->data,
-            ]
+            ],
         );
 
         $content = $renderChildrenClosure();

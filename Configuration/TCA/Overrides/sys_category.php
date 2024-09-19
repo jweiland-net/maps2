@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * This file is part of the package jweiland/maps2.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE file that was distributed with this source code.
+ */
+
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Helper\MapHelper;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
@@ -14,12 +21,12 @@ call_user_func(static function (): void {
     // Use constructor arguments here to prevent DI. Else, some functions in InstallTool will not work.
     $extConf = GeneralUtility::makeInstance(
         ExtConf::class,
-        GeneralUtility::makeInstance(ExtensionConfiguration::class)
+        GeneralUtility::makeInstance(ExtensionConfiguration::class),
     );
 
     $mapHelper = GeneralUtility::makeInstance(
         MapHelper::class,
-        $extConf
+        $extConf,
     );
 
     $ll = 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:';
@@ -86,6 +93,6 @@ call_user_func(static function (): void {
     ExtensionManagementUtility::addTCAcolumns('sys_category', $newSysCategoryColumn);
     ExtensionManagementUtility::addToAllTCAtypes(
         'sys_category',
-        '--div--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tab.maps2.' . $mapHelper->getMapProvider() . ', maps2_marker_icons, maps2_marker_icon_width, maps2_marker_icon_height, maps2_marker_icon_anchor_pos_x, maps2_marker_icon_anchor_pos_y'
+        '--div--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tab.maps2.' . $mapHelper->getMapProvider() . ', maps2_marker_icons, maps2_marker_icon_width, maps2_marker_icon_height, maps2_marker_icon_anchor_pos_x, maps2_marker_icon_anchor_pos_y',
     );
 });

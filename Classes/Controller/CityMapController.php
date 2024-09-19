@@ -50,7 +50,7 @@ class CityMapController extends ActionController
         // Remove unneeded columns from tt_content array
         unset(
             $contentRecord['pi_flexform'],
-            $contentRecord['l18n_diffsource']
+            $contentRecord['l18n_diffsource'],
         );
 
         $view->assign('data', $contentRecord);
@@ -76,7 +76,7 @@ class CityMapController extends ActionController
                     FlashMessage::class,
                     'You have forgotten to add maps2 static template for either Google Maps or OpenStreetMap',
                     'Missing static template',
-                    ContextualFeedbackSeverity::ERROR
+                    ContextualFeedbackSeverity::ERROR,
                 ));
         }
 
@@ -91,7 +91,7 @@ class CityMapController extends ActionController
     public function searchAction(string $street): ResponseInterface
     {
         $position = $this->geoCodeService->getFirstFoundPositionByAddress(
-            strip_tags($street) . ' ' . $this->settings['autoAppend']
+            strip_tags($street) . ' ' . $this->settings['autoAppend'],
         );
 
         if ($position instanceof Position) {

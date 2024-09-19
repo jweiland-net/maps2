@@ -44,19 +44,19 @@ class RenderHiddenFieldsForGetViewHelper extends AbstractViewHelper
         $this->registerArgument(
             'pageUid',
             'int',
-            'The target page UID'
+            'The target page UID',
         );
 
         $this->registerArgument(
             'action',
             'string',
-            'Target action'
+            'Target action',
         );
 
         $this->registerArgument(
             'controller',
             'string',
-            'Target controller. If null current controllerName is used'
+            'Target controller. If null current controllerName is used',
         );
     }
 
@@ -66,7 +66,7 @@ class RenderHiddenFieldsForGetViewHelper extends AbstractViewHelper
     public static function renderStatic(
         array $arguments,
         \Closure $renderChildrenClosure,
-        RenderingContextInterface $renderingContext
+        RenderingContextInterface $renderingContext,
     ): string {
         $extensionService = GeneralUtility::makeInstance(ExtensionService::class);
         $cacheHashCalculator = GeneralUtility::makeInstance(CacheHashCalculator::class);
@@ -77,7 +77,7 @@ class RenderHiddenFieldsForGetViewHelper extends AbstractViewHelper
 
         $pluginNamespace = $extensionService->getPluginNamespace(
             $extbaseRequest->getControllerExtensionName(),
-            $extbaseRequest->getPluginName()
+            $extbaseRequest->getPluginName(),
         );
 
         // get pageUid
@@ -95,32 +95,32 @@ class RenderHiddenFieldsForGetViewHelper extends AbstractViewHelper
         $parameters[$pluginNamespace]['controller'] = $arguments['controller'];
         $parameters[$pluginNamespace]['action'] = $arguments['action'];
         $cacheHashArray = $cacheHashCalculator->getRelevantParameters(
-            GeneralUtility::implodeArrayForUrl('', $parameters)
+            GeneralUtility::implodeArrayForUrl('', $parameters),
         );
 
         // create array of hidden fields for GET forms
         $fields = [];
         $fields[] = sprintf(
             '<input type="hidden" name="id" value="%d" />',
-            $pageUid
+            $pageUid,
         );
         $fields[] = sprintf(
             '<input type="hidden" name="%s[controller]" value="%s" />',
             $pluginNamespace,
-            $arguments['controller']
+            $arguments['controller'],
         );
         $fields[] = sprintf(
             '<input type="hidden" name="%s[action]" value="%s" />',
             $pluginNamespace,
-            $arguments['action']
+            $arguments['action'],
         );
 
         // add cHash
         $fields[] = sprintf(
             '<input type="hidden" name="cHash" value="%s" />',
             $cacheHashCalculator->calculateCacheHash(
-                $cacheHashArray
-            )
+                $cacheHashArray,
+            ),
         );
 
         return implode(chr(10), $fields);

@@ -76,7 +76,7 @@ class ReadOnlyInputTextElement extends AbstractFormElement
 
         $itemValue = $parameterArray['itemFormElValue'];
         $width = $this->formMaxWidth(
-            MathUtility::forceIntegerInRange($config['size'] ?? $this->defaultInputWidth, $this->minimumInputWidth, $this->maxInputWidth)
+            MathUtility::forceIntegerInRange($config['size'] ?? $this->defaultInputWidth, $this->minimumInputWidth, $this->maxInputWidth),
         );
         $fieldId = StringUtility::getUniqueId('formengine-input-');
         $renderedLabel = $this->renderLabel($fieldId);
@@ -173,7 +173,7 @@ class ReadOnlyInputTextElement extends AbstractFormElement
                 [
                     'class' => 'form-select form-control-adapt',
                 ],
-                $this->getOnFieldChangeAttrs('change', $parameterArray['fieldChangeFunc'] ?? [])
+                $this->getOnFieldChangeAttrs('change', $parameterArray['fieldChangeFunc'] ?? []),
             );
 
             $valuePickerHtml[] = '<typo3-formengine-valuepicker ' . GeneralUtility::implodeAttributes($valuePickerConfiguration, true) . '>';
@@ -244,17 +244,17 @@ class ReadOnlyInputTextElement extends AbstractFormElement
                 if ($placeholder !== $shortenedPlaceholder) {
                     $overrideLabel = sprintf(
                         $languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.placeholder.override'),
-                        '<span title="' . htmlspecialchars($placeholder) . '">' . htmlspecialchars($shortenedPlaceholder) . '</span>'
+                        '<span title="' . htmlspecialchars($placeholder) . '">' . htmlspecialchars($shortenedPlaceholder) . '</span>',
                     );
                 } else {
                     $overrideLabel = sprintf(
                         $languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.placeholder.override'),
-                        htmlspecialchars($placeholder)
+                        htmlspecialchars($placeholder),
                     );
                 }
             } else {
                 $overrideLabel = $languageService->sL(
-                    'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.placeholder.override_not_available'
+                    'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.placeholder.override_not_available',
                 );
             }
             $fullElement = [];

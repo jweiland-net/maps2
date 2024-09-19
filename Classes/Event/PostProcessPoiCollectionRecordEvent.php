@@ -31,7 +31,7 @@ class PostProcessPoiCollectionRecordEvent
         int $poiCollectionUid,
         string $foreignTableName,
         array $foreignLocationRecord,
-        array $options
+        array $options,
     ) {
         $this->poiCollectionTableName = $poiCollectionTableName;
         $this->poiCollectionUid = $poiCollectionUid;

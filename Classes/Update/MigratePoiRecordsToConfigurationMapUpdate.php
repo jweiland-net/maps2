@@ -50,7 +50,7 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
             'This UpgradeWizards needs column "configuration_map" of table "tx_maps2_domain_model_poicollection" ' .
             'to be of type TEXT in database. Else it may happen that POIs will be stored as incomplete JSON string ' .
             'in configuration_map column. Further table "tx_maps2_domain_model_poi" should not be deleted.',
-            false
+            false,
         );
     }
 
@@ -90,23 +90,23 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
                     'p',
                     $queryBuilder->expr()->eq(
                         'pc.uid',
-                        $queryBuilder->quoteIdentifier('p.poicollection')
-                    )
+                        $queryBuilder->quoteIdentifier('p.poicollection'),
+                    ),
                 )
                 ->where(
                     $queryBuilder->expr()->isNotNull(
-                        'p.pid'
-                    )
+                        'p.pid',
+                    ),
                 )
                 ->orWhere(
                     $queryBuilder->expr()->eq(
                         'collection_type',
-                        $queryBuilder->createNamedParameter('Area')
+                        $queryBuilder->createNamedParameter('Area'),
                     ),
                     $queryBuilder->expr()->eq(
                         'collection_type',
-                        $queryBuilder->createNamedParameter('Route')
-                    )
+                        $queryBuilder->createNamedParameter('Route'),
+                    ),
                 )
                 ->executeQuery()
                 ->fetchOne();
@@ -138,14 +138,14 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
                     [
                         'configuration_map' => json_encode(
                             $this->migratePoiRecords(
-                                $poiCollectionRecord['uid']
+                                $poiCollectionRecord['uid'],
                             ),
-                            JSON_THROW_ON_ERROR
+                            JSON_THROW_ON_ERROR,
                         ),
                     ],
                     [
                         'uid' => (int)$poiCollectionRecord['uid'],
-                    ]
+                    ],
                 );
             }
         } catch (Exception $e) {
@@ -180,8 +180,8 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
                 ->where(
                     $queryBuilder->expr()->eq(
                         'poicollection',
-                        $queryBuilder->createNamedParameter($poiCollectionUid, Connection::PARAM_INT)
-                    )
+                        $queryBuilder->createNamedParameter($poiCollectionUid, Connection::PARAM_INT),
+                    ),
                 )
                 ->executeQuery();
 

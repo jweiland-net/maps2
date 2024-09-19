@@ -86,7 +86,7 @@ class GoogleMapsElementTest extends FunctionalTestCase
 
         $this->subject = new GoogleMapsElement(
             GeneralUtility::makeInstance(NodeFactory::class),
-            $this->data
+            $this->data,
         );
     }
 
@@ -97,7 +97,7 @@ class GoogleMapsElementTest extends FunctionalTestCase
             $this->extConf,
             $this->pageRendererMock,
             $this->mapHelperMock,
-            $this->viewMock
+            $this->viewMock,
         );
 
         parent::tearDown();
@@ -115,7 +115,7 @@ class GoogleMapsElementTest extends FunctionalTestCase
             ->expects(self::atLeastOnce())
             ->method('setTemplatePathAndFilename')
             ->with(
-                self::stringContains('Resources/Private/Templates/Tca/GoogleMaps.html')
+                self::stringContains('Resources/Private/Templates/Tca/GoogleMaps.html'),
             );
         $this->viewMock
             ->expects(self::atLeastOnce())

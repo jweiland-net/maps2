@@ -68,11 +68,11 @@ class OpenStreetMapElement extends AbstractFormElement
         $this->pageRenderer->loadJavaScriptModule('@jweiland/maps2/leaflet.min.js');
 
         $resultArray['stylesheetFiles'][] = PathUtility::getPublicResourceWebPath(
-            'EXT:maps2/Resources/Public/Css/Leaflet/Leaflet.css'
+            'EXT:maps2/Resources/Public/Css/Leaflet/Leaflet.css',
         );
 
         $resultArray['javaScriptModules'][] = JavaScriptModuleInstruction::create(
-            '@jweiland/maps2/OpenStreetMapModule.min.js'
+            '@jweiland/maps2/OpenStreetMapModule.min.js',
         );
 
         $fieldInformationResult = $this->renderFieldInformation();
@@ -113,7 +113,7 @@ class OpenStreetMapElement extends AbstractFormElement
         $resultArray['html'] = sprintf(
             '<div class="formengine-field-item t3js-formengine-field-item">%s%s</div>',
             $fieldInformationHtml,
-            implode(LF, $html)
+            implode(LF, $html),
         );
 
         return $resultArray;
@@ -143,7 +143,7 @@ class OpenStreetMapElement extends AbstractFormElement
         $view->assign('poiCollection', json_encode($poiCollectionRecord, JSON_THROW_ON_ERROR));
         $view->assign('extConf', json_encode(
             ObjectAccess::getGettableProperties($this->extConf),
-            JSON_THROW_ON_ERROR
+            JSON_THROW_ON_ERROR,
         ));
 
         return $view->render();

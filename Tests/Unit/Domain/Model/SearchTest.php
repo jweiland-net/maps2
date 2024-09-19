@@ -29,7 +29,7 @@ class SearchTest extends UnitTestCase
     protected function tearDown(): void
     {
         unset(
-            $this->subject
+            $this->subject,
         );
 
         parent::tearDown();
@@ -42,7 +42,7 @@ class SearchTest extends UnitTestCase
     {
         self::assertSame(
             '',
-            $this->subject->getAddress()
+            $this->subject->getAddress(),
         );
     }
 
@@ -55,7 +55,7 @@ class SearchTest extends UnitTestCase
 
         self::assertSame(
             'foo bar',
-            $this->subject->getAddress()
+            $this->subject->getAddress(),
         );
     }
 
@@ -66,7 +66,7 @@ class SearchTest extends UnitTestCase
     {
         self::assertSame(
             50,
-            $this->subject->getRadius()
+            $this->subject->getRadius(),
         );
     }
 
@@ -79,7 +79,7 @@ class SearchTest extends UnitTestCase
 
         self::assertSame(
             123456,
-            $this->subject->getRadius()
+            $this->subject->getRadius(),
         );
     }
 }

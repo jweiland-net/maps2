@@ -42,13 +42,13 @@ class RequestFactory
         $className = sprintf(
             '%s\\%s',
             $this->mapping[$this->mapHelper->getMapProvider()],
-            $this->sanitizeFilename($filename)
+            $this->sanitizeFilename($filename),
         );
 
         if (!class_exists($className)) {
             throw new \RuntimeException(sprintf(
                 'Class "%s" to create a new Request could not be found',
-                $className
+                $className,
             ));
         }
 

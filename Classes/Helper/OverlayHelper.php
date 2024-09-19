@@ -31,7 +31,7 @@ class OverlayHelper
         QueryBuilder $queryBuilder,
         string $tableName,
         string $tableAlias,
-        bool $useLangStrict = false
+        bool $useLangStrict = false,
     ): void {
         $this->addWhereForWorkspaces($queryBuilder, $tableName, $tableAlias);
         $this->addWhereForTranslation($queryBuilder, $tableName, $tableAlias, $useLangStrict);
@@ -41,7 +41,7 @@ class OverlayHelper
     {
         if ($GLOBALS['TCA'][$tableName]['ctrl']['versioningWS']) {
             $queryBuilder->andWhere(
-                $queryBuilder->expr()->eq($tableAlias . '.t3ver_oid', 0)
+                $queryBuilder->expr()->eq($tableAlias . '.t3ver_oid', 0),
             );
         }
     }
@@ -59,7 +59,7 @@ class OverlayHelper
         string $tableName,
         string $tableAlias,
         bool $useLangStrict = false,
-        int $overrideLanguageUid = -1
+        int $overrideLanguageUid = -1,
     ): void {
         // Column: sys_language_uid
         $languageField = $GLOBALS['TCA'][$tableName]['ctrl']['languageField'];
@@ -72,12 +72,12 @@ class OverlayHelper
             $queryBuilder->andWhere(
                 $queryBuilder->expr()->in(
                     $tableAlias . '.' . $languageField,
-                    [0, -1]
+                    [0, -1],
                 ),
                 $queryBuilder->expr()->eq(
                     $tableAlias . '.' . $transOrigPointerField,
-                    0
-                )
+                    0,
+                ),
             );
         } elseif ($useLangStrict && $overrideLanguageUid >= 0) {
             // Strict mode for f.e. backend (TCEFORM)
@@ -86,8 +86,8 @@ class OverlayHelper
             $queryBuilder->andWhere(
                 $queryBuilder->expr()->in(
                     $tableAlias . '.' . $languageField,
-                    [$overrideLanguageUid]
-                )
+                    [$overrideLanguageUid],
+                ),
             );
         } else {
             // strict mode
@@ -95,8 +95,8 @@ class OverlayHelper
             $queryBuilder->andWhere(
                 $queryBuilder->expr()->in(
                     $tableAlias . '.' . $languageField,
-                    [$this->getLanguageAspect()->getContentId(), -1]
-                )
+                    [$this->getLanguageAspect()->getContentId(), -1],
+                ),
             );
         }
     }

@@ -54,7 +54,7 @@ class GoogleMapsClientTest extends FunctionalTestCase
 
         $this->subject = new GoogleMapsClient(
             $this->messageHelperMock,
-            $this->requestFactoryMock
+            $this->requestFactoryMock,
         );
     }
 
@@ -64,7 +64,7 @@ class GoogleMapsClientTest extends FunctionalTestCase
             $this->subject,
             $this->extConf,
             $this->messageHelperMock,
-            $this->requestFactoryMock
+            $this->requestFactoryMock,
         );
 
         parent::tearDown();
@@ -84,12 +84,12 @@ class GoogleMapsClientTest extends FunctionalTestCase
             ->with(
                 'URI is empty or contains invalid chars. URI: ',
                 'Invalid request URI',
-                ContextualFeedbackSeverity::ERROR
+                ContextualFeedbackSeverity::ERROR,
             );
 
         self::assertSame(
             [],
-            $this->subject->processRequest($geocodeRequest)
+            $this->subject->processRequest($geocodeRequest),
         );
     }
 
@@ -107,12 +107,12 @@ class GoogleMapsClientTest extends FunctionalTestCase
             ->with(
                 'URI is empty or contains invalid chars. URI: https://www.jweiländ.net',
                 'Invalid request URI',
-                ContextualFeedbackSeverity::ERROR
+                ContextualFeedbackSeverity::ERROR,
             );
 
         self::assertSame(
             [],
-            $this->subject->processRequest($geocodeRequest)
+            $this->subject->processRequest($geocodeRequest),
         );
     }
 }

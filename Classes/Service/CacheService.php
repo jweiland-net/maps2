@@ -43,7 +43,7 @@ class CacheService
             $prefix,
             GeneralUtility::hmac(
                 \json_encode(array_diff_key($poiCollection, ['uid', 'pid', 'language', 'title', 'address'])),
-            )
+            ),
         );
     }
 
@@ -59,7 +59,7 @@ class CacheService
             [
                 'infoWindowPid' . ($poiCollection['pid'] ?? 0),
                 'infoWindowUid' . ($poiCollection['uid'] ?? 0),
-            ]
+            ],
         );
     }
 

@@ -33,7 +33,7 @@ class RequestUriForOverlayViewHelper extends AbstractViewHelper
             'int',
             'The tt_content UID of the record which shows the map',
             false,
-            0
+            0,
         );
     }
 
@@ -43,7 +43,7 @@ class RequestUriForOverlayViewHelper extends AbstractViewHelper
     public static function renderStatic(
         array $arguments,
         \Closure $renderChildrenClosure,
-        RenderingContextInterface $renderingContext
+        RenderingContextInterface $renderingContext,
     ): string {
         $uriBuilder = self::getUriBuilder()
             ->reset()

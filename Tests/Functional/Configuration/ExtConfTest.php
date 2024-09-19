@@ -36,7 +36,7 @@ class ExtConfTest extends FunctionalTestCase
     protected function tearDown(): void
     {
         unset(
-            $this->subject
+            $this->subject,
         );
 
         parent::tearDown();
@@ -49,7 +49,7 @@ class ExtConfTest extends FunctionalTestCase
     {
         self::assertSame(
             'both',
-            $this->subject->getMapProvider()
+            $this->subject->getMapProvider(),
         );
     }
 
@@ -62,7 +62,7 @@ class ExtConfTest extends FunctionalTestCase
 
         self::assertSame(
             'foo bar',
-            $this->subject->getMapProvider()
+            $this->subject->getMapProvider(),
         );
     }
 
@@ -73,7 +73,7 @@ class ExtConfTest extends FunctionalTestCase
     {
         self::assertSame(
             'gm',
-            $this->subject->getDefaultMapProvider()
+            $this->subject->getDefaultMapProvider(),
         );
     }
 
@@ -86,7 +86,7 @@ class ExtConfTest extends FunctionalTestCase
 
         self::assertSame(
             'foo bar',
-            $this->subject->getDefaultMapProvider()
+            $this->subject->getDefaultMapProvider(),
         );
     }
 
@@ -97,7 +97,7 @@ class ExtConfTest extends FunctionalTestCase
     {
         self::assertSame(
             '',
-            $this->subject->getDefaultCountry()
+            $this->subject->getDefaultCountry(),
         );
     }
 
@@ -110,7 +110,7 @@ class ExtConfTest extends FunctionalTestCase
 
         self::assertSame(
             'foo bar',
-            $this->subject->getDefaultCountry()
+            $this->subject->getDefaultCountry(),
         );
     }
 
@@ -121,7 +121,7 @@ class ExtConfTest extends FunctionalTestCase
     {
         self::assertSame(
             0.0,
-            $this->subject->getDefaultLatitude()
+            $this->subject->getDefaultLatitude(),
         );
     }
 
@@ -134,7 +134,7 @@ class ExtConfTest extends FunctionalTestCase
 
         self::assertSame(
             1234.56,
-            $this->subject->getDefaultLatitude()
+            $this->subject->getDefaultLatitude(),
         );
     }
 
@@ -145,7 +145,7 @@ class ExtConfTest extends FunctionalTestCase
     {
         self::assertSame(
             0.0,
-            $this->subject->getDefaultLongitude()
+            $this->subject->getDefaultLongitude(),
         );
     }
 
@@ -158,7 +158,7 @@ class ExtConfTest extends FunctionalTestCase
 
         self::assertSame(
             1234.56,
-            $this->subject->getDefaultLongitude()
+            $this->subject->getDefaultLongitude(),
         );
     }
 
@@ -169,7 +169,7 @@ class ExtConfTest extends FunctionalTestCase
     {
         self::assertSame(
             250,
-            $this->subject->getDefaultRadius()
+            $this->subject->getDefaultRadius(),
         );
     }
 
@@ -182,7 +182,7 @@ class ExtConfTest extends FunctionalTestCase
 
         self::assertSame(
             123456,
-            $this->subject->getDefaultRadius()
+            $this->subject->getDefaultRadius(),
         );
     }
 
@@ -195,7 +195,7 @@ class ExtConfTest extends FunctionalTestCase
 
         self::assertSame(
             123,
-            $this->subject->getDefaultRadius()
+            $this->subject->getDefaultRadius(),
         );
     }
 
@@ -208,7 +208,7 @@ class ExtConfTest extends FunctionalTestCase
 
         self::assertSame(
             1,
-            $this->subject->getDefaultRadius()
+            $this->subject->getDefaultRadius(),
         );
     }
 
@@ -218,7 +218,7 @@ class ExtConfTest extends FunctionalTestCase
     public function getExplicitAllowMapProviderRequestsInitiallyReturnsFalse(): void
     {
         self::assertFalse(
-            $this->subject->getExplicitAllowMapProviderRequests()
+            $this->subject->getExplicitAllowMapProviderRequests(),
         );
     }
 
@@ -229,7 +229,7 @@ class ExtConfTest extends FunctionalTestCase
     {
         $this->subject->setExplicitAllowMapProviderRequests(true);
         self::assertTrue(
-            $this->subject->getExplicitAllowMapProviderRequests()
+            $this->subject->getExplicitAllowMapProviderRequests(),
         );
     }
 
@@ -257,7 +257,7 @@ class ExtConfTest extends FunctionalTestCase
     public function getExplicitAllowMapProviderRequestsBySessionOnlyInitiallyReturnsFalse(): void
     {
         self::assertFalse(
-            $this->subject->getExplicitAllowMapProviderRequestsBySessionOnly()
+            $this->subject->getExplicitAllowMapProviderRequestsBySessionOnly(),
         );
     }
 
@@ -268,7 +268,7 @@ class ExtConfTest extends FunctionalTestCase
     {
         $this->subject->setExplicitAllowMapProviderRequestsBySessionOnly(true);
         self::assertTrue(
-            $this->subject->getExplicitAllowMapProviderRequestsBySessionOnly()
+            $this->subject->getExplicitAllowMapProviderRequestsBySessionOnly(),
         );
     }
 
@@ -279,7 +279,7 @@ class ExtConfTest extends FunctionalTestCase
     {
         $this->subject->setExplicitAllowMapProviderRequestsBySessionOnly('foo bar');
         self::assertTrue(
-            $this->subject->getExplicitAllowMapProviderRequestsBySessionOnly()
+            $this->subject->getExplicitAllowMapProviderRequestsBySessionOnly(),
         );
     }
 
@@ -290,7 +290,7 @@ class ExtConfTest extends FunctionalTestCase
     {
         $this->subject->setExplicitAllowMapProviderRequestsBySessionOnly(0);
         self::assertFalse(
-            $this->subject->getExplicitAllowMapProviderRequestsBySessionOnly()
+            $this->subject->getExplicitAllowMapProviderRequestsBySessionOnly(),
         );
     }
 
@@ -301,7 +301,7 @@ class ExtConfTest extends FunctionalTestCase
     {
         self::assertSame(
             'EXT:maps2/Resources/Private/Templates/InfoWindowContent.html',
-            $this->subject->getInfoWindowContentTemplatePath()
+            $this->subject->getInfoWindowContentTemplatePath(),
         );
     }
 
@@ -314,7 +314,7 @@ class ExtConfTest extends FunctionalTestCase
 
         self::assertSame(
             'foo bar',
-            $this->subject->getInfoWindowContentTemplatePath()
+            $this->subject->getInfoWindowContentTemplatePath(),
         );
     }
 
@@ -326,7 +326,7 @@ class ExtConfTest extends FunctionalTestCase
         $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');
         self::assertSame(
             'https://maps.googleapis.com/maps/api/js?key=myApiKey&libraries=places',
-            $this->subject->getGoogleMapsLibrary()
+            $this->subject->getGoogleMapsLibrary(),
         );
     }
 
@@ -340,7 +340,7 @@ class ExtConfTest extends FunctionalTestCase
 
         self::assertSame(
             '',
-            $this->subject->getGoogleMapsLibrary()
+            $this->subject->getGoogleMapsLibrary(),
         );
     }
 
@@ -354,7 +354,7 @@ class ExtConfTest extends FunctionalTestCase
 
         self::assertSame(
             '',
-            $this->subject->getGoogleMapsLibrary()
+            $this->subject->getGoogleMapsLibrary(),
         );
     }
 
@@ -368,7 +368,7 @@ class ExtConfTest extends FunctionalTestCase
 
         self::assertSame(
             'https://www.domain.de/api=myApiKey&mobile=1',
-            $this->subject->getGoogleMapsLibrary()
+            $this->subject->getGoogleMapsLibrary(),
         );
     }
 
@@ -382,7 +382,7 @@ class ExtConfTest extends FunctionalTestCase
 
         self::assertSame(
             'https://www.domain.de/api=myApiKey&mobile=1',
-            $this->subject->getGoogleMapsLibrary()
+            $this->subject->getGoogleMapsLibrary(),
         );
     }
 
@@ -396,7 +396,7 @@ class ExtConfTest extends FunctionalTestCase
 
         self::assertSame(
             'https://www.domain.de/api=myApiKey&mobile=1',
-            $this->subject->getGoogleMapsLibrary()
+            $this->subject->getGoogleMapsLibrary(),
         );
     }
 
@@ -407,7 +407,7 @@ class ExtConfTest extends FunctionalTestCase
     {
         self::assertSame(
             'https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=%s',
-            $this->subject->getGoogleMapsGeocodeUri()
+            $this->subject->getGoogleMapsGeocodeUri(),
         );
     }
 
@@ -420,7 +420,7 @@ class ExtConfTest extends FunctionalTestCase
 
         self::assertSame(
             'foo bar',
-            $this->subject->getGoogleMapsGeocodeUri()
+            $this->subject->getGoogleMapsGeocodeUri(),
         );
     }
 
@@ -433,7 +433,7 @@ class ExtConfTest extends FunctionalTestCase
 
         self::assertSame(
             'foo bar',
-            $this->subject->getGoogleMapsJavaScriptApiKey()
+            $this->subject->getGoogleMapsJavaScriptApiKey(),
         );
     }
 
@@ -447,7 +447,7 @@ class ExtConfTest extends FunctionalTestCase
 
         self::assertSame(
             'foo bar',
-            $this->subject->getGoogleMapsGeocodeApiKey()
+            $this->subject->getGoogleMapsGeocodeApiKey(),
         );
     }
 
@@ -458,7 +458,7 @@ class ExtConfTest extends FunctionalTestCase
     {
         self::assertSame(
             'https://nominatim.openstreetmap.org/search?q=%s&format=json&addressdetails=1',
-            $this->subject->getOpenStreetMapGeocodeUri()
+            $this->subject->getOpenStreetMapGeocodeUri(),
         );
     }
 
@@ -471,7 +471,7 @@ class ExtConfTest extends FunctionalTestCase
 
         self::assertSame(
             'foo bar',
-            $this->subject->getOpenStreetMapGeocodeUri()
+            $this->subject->getOpenStreetMapGeocodeUri(),
         );
     }
 
@@ -482,7 +482,7 @@ class ExtConfTest extends FunctionalTestCase
     {
         self::assertSame(
             '#FF0000',
-            $this->subject->getStrokeColor()
+            $this->subject->getStrokeColor(),
         );
     }
 
@@ -495,7 +495,7 @@ class ExtConfTest extends FunctionalTestCase
 
         self::assertSame(
             'foo bar',
-            $this->subject->getStrokeColor()
+            $this->subject->getStrokeColor(),
         );
     }
 
@@ -506,7 +506,7 @@ class ExtConfTest extends FunctionalTestCase
     {
         self::assertSame(
             0.8,
-            $this->subject->getStrokeOpacity()
+            $this->subject->getStrokeOpacity(),
         );
     }
 
@@ -519,7 +519,7 @@ class ExtConfTest extends FunctionalTestCase
 
         self::assertSame(
             1234.56,
-            $this->subject->getStrokeOpacity()
+            $this->subject->getStrokeOpacity(),
         );
     }
 
@@ -530,7 +530,7 @@ class ExtConfTest extends FunctionalTestCase
     {
         self::assertSame(
             2,
-            $this->subject->getStrokeWeight()
+            $this->subject->getStrokeWeight(),
         );
     }
 
@@ -543,7 +543,7 @@ class ExtConfTest extends FunctionalTestCase
 
         self::assertSame(
             123456,
-            $this->subject->getStrokeWeight()
+            $this->subject->getStrokeWeight(),
         );
     }
 
@@ -556,7 +556,7 @@ class ExtConfTest extends FunctionalTestCase
 
         self::assertSame(
             123,
-            $this->subject->getStrokeWeight()
+            $this->subject->getStrokeWeight(),
         );
     }
 
@@ -569,7 +569,7 @@ class ExtConfTest extends FunctionalTestCase
 
         self::assertSame(
             1,
-            $this->subject->getStrokeWeight()
+            $this->subject->getStrokeWeight(),
         );
     }
 
@@ -580,7 +580,7 @@ class ExtConfTest extends FunctionalTestCase
     {
         self::assertSame(
             '#FF0000',
-            $this->subject->getFillColor()
+            $this->subject->getFillColor(),
         );
     }
 
@@ -593,7 +593,7 @@ class ExtConfTest extends FunctionalTestCase
 
         self::assertSame(
             'foo bar',
-            $this->subject->getFillColor()
+            $this->subject->getFillColor(),
         );
     }
 
@@ -604,7 +604,7 @@ class ExtConfTest extends FunctionalTestCase
     {
         self::assertSame(
             0.35,
-            $this->subject->getFillOpacity()
+            $this->subject->getFillOpacity(),
         );
     }
 
@@ -617,7 +617,7 @@ class ExtConfTest extends FunctionalTestCase
 
         self::assertSame(
             1234.56,
-            $this->subject->getFillOpacity()
+            $this->subject->getFillOpacity(),
         );
     }
 
@@ -628,7 +628,7 @@ class ExtConfTest extends FunctionalTestCase
     {
         self::assertSame(
             25,
-            $this->subject->getMarkerIconWidth()
+            $this->subject->getMarkerIconWidth(),
         );
     }
 
@@ -641,7 +641,7 @@ class ExtConfTest extends FunctionalTestCase
 
         self::assertSame(
             123456,
-            $this->subject->getMarkerIconWidth()
+            $this->subject->getMarkerIconWidth(),
         );
     }
 
@@ -654,7 +654,7 @@ class ExtConfTest extends FunctionalTestCase
 
         self::assertSame(
             123,
-            $this->subject->getMarkerIconWidth()
+            $this->subject->getMarkerIconWidth(),
         );
     }
 
@@ -667,7 +667,7 @@ class ExtConfTest extends FunctionalTestCase
 
         self::assertSame(
             1,
-            $this->subject->getMarkerIconWidth()
+            $this->subject->getMarkerIconWidth(),
         );
     }
 
@@ -678,7 +678,7 @@ class ExtConfTest extends FunctionalTestCase
     {
         self::assertSame(
             40,
-            $this->subject->getMarkerIconHeight()
+            $this->subject->getMarkerIconHeight(),
         );
     }
 
@@ -691,7 +691,7 @@ class ExtConfTest extends FunctionalTestCase
 
         self::assertSame(
             123456,
-            $this->subject->getMarkerIconHeight()
+            $this->subject->getMarkerIconHeight(),
         );
     }
 
@@ -704,7 +704,7 @@ class ExtConfTest extends FunctionalTestCase
 
         self::assertSame(
             123,
-            $this->subject->getMarkerIconHeight()
+            $this->subject->getMarkerIconHeight(),
         );
     }
 
@@ -717,7 +717,7 @@ class ExtConfTest extends FunctionalTestCase
 
         self::assertSame(
             1,
-            $this->subject->getMarkerIconHeight()
+            $this->subject->getMarkerIconHeight(),
         );
     }
 
@@ -728,7 +728,7 @@ class ExtConfTest extends FunctionalTestCase
     {
         self::assertSame(
             13,
-            $this->subject->getMarkerIconAnchorPosX()
+            $this->subject->getMarkerIconAnchorPosX(),
         );
     }
 
@@ -741,7 +741,7 @@ class ExtConfTest extends FunctionalTestCase
 
         self::assertSame(
             123456,
-            $this->subject->getMarkerIconAnchorPosX()
+            $this->subject->getMarkerIconAnchorPosX(),
         );
     }
 
@@ -754,7 +754,7 @@ class ExtConfTest extends FunctionalTestCase
 
         self::assertSame(
             123,
-            $this->subject->getMarkerIconAnchorPosX()
+            $this->subject->getMarkerIconAnchorPosX(),
         );
     }
 
@@ -767,7 +767,7 @@ class ExtConfTest extends FunctionalTestCase
 
         self::assertSame(
             1,
-            $this->subject->getMarkerIconAnchorPosX()
+            $this->subject->getMarkerIconAnchorPosX(),
         );
     }
 
@@ -778,7 +778,7 @@ class ExtConfTest extends FunctionalTestCase
     {
         self::assertSame(
             40,
-            $this->subject->getMarkerIconAnchorPosY()
+            $this->subject->getMarkerIconAnchorPosY(),
         );
     }
 
@@ -791,7 +791,7 @@ class ExtConfTest extends FunctionalTestCase
 
         self::assertSame(
             123456,
-            $this->subject->getMarkerIconAnchorPosY()
+            $this->subject->getMarkerIconAnchorPosY(),
         );
     }
 
@@ -804,7 +804,7 @@ class ExtConfTest extends FunctionalTestCase
 
         self::assertSame(
             123,
-            $this->subject->getMarkerIconAnchorPosY()
+            $this->subject->getMarkerIconAnchorPosY(),
         );
     }
 
@@ -817,7 +817,7 @@ class ExtConfTest extends FunctionalTestCase
 
         self::assertSame(
             1,
-            $this->subject->getMarkerIconAnchorPosY()
+            $this->subject->getMarkerIconAnchorPosY(),
         );
     }
 }

@@ -46,7 +46,7 @@ class LinkHelper
         return (string)$router->generateUri(
             $this->getCurrentPageUid($request),
             $mergedParameters,
-            RouterInterface::ABSOLUTE_URL
+            RouterInterface::ABSOLUTE_URL,
         );
     }
 

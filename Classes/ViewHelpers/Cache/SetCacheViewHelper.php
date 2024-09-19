@@ -40,31 +40,31 @@ class SetCacheViewHelper extends AbstractViewHelper
             'string',
             'A prefix for the cache identifier.',
             false,
-            'infoWindow'
+            'infoWindow',
         );
         $this->registerArgument(
             'poiCollection',
             PoiCollection::class,
             'We need the PoiCollection to build a better language independent CacheIdentifier.',
-            true
+            true,
         );
         $this->registerArgument(
             'data',
             'string',
             'The data to be stored',
-            true
+            true,
         );
         $this->registerArgument(
             'tags',
             'array',
             'Tags to associate with this cache entry',
             false,
-            []
+            [],
         );
         $this->registerArgument(
             'lifetime',
             'int',
-            'Lifetime of this cache entry in seconds. If null is specified, the default lifetime is used. "0" means unlimited lifetime'
+            'Lifetime of this cache entry in seconds. If null is specified, the default lifetime is used. "0" means unlimited lifetime',
         );
     }
 
@@ -74,7 +74,7 @@ class SetCacheViewHelper extends AbstractViewHelper
     public static function renderStatic(
         array $arguments,
         \Closure $renderChildrenClosure,
-        RenderingContextInterface $renderingContext
+        RenderingContextInterface $renderingContext,
     ): void {
         $cacheService = GeneralUtility::makeInstance(CacheService::class);
         $poiCollection = $cacheService->preparePoiCollectionForCacheMethods($arguments['poiCollection']);
@@ -84,7 +84,7 @@ class SetCacheViewHelper extends AbstractViewHelper
             $cacheService->getCacheIdentifier($poiCollection, $arguments['prefix']),
             $arguments['data'],
             $cacheService->getCacheTags($poiCollection, $arguments['tags']),
-            ($arguments['lifetime'] === null ? null : (int)$arguments['lifetime'])
+            ($arguments['lifetime'] === null ? null : (int)$arguments['lifetime']),
         );
     }
 }

@@ -39,7 +39,7 @@ class OverlayTest extends FunctionalTestCase
             [
                 'EXT:maps2/Tests/Functional/Fixtures/TypoScript/setup.typoscript',
                 'EXT:maps2/Tests/Functional/Fixtures/TypoScript/activate-plugin-overlay.typoscript',
-            ]
+            ],
         );
     }
 
@@ -49,12 +49,12 @@ class OverlayTest extends FunctionalTestCase
     public function overlayWillAskForConsent(): void
     {
         $response = $this->executeFrontendSubRequest(
-            (new InternalRequest())->withPageId(1)
+            (new InternalRequest())->withPageId(1),
         );
 
         self::assertStringContainsString(
             'The protection of your data is important for us',
-            (string)$response->getBody()
+            (string)$response->getBody(),
         );
     }
 }

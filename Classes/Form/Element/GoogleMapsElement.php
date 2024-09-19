@@ -59,7 +59,7 @@ class GoogleMapsElement extends AbstractFormElement
         $resultArray['stylesheetFiles'][] = $publicResourcesPath . 'Css/GoogleMapsModule.css';
 
         $resultArray['javaScriptModules'][] = JavaScriptModuleInstruction::create(
-            '@jweiland/maps2/GoogleMapsModule.min.js'
+            '@jweiland/maps2/GoogleMapsModule.min.js',
         );
 
         $fieldInformationResult = $this->renderFieldInformation();
@@ -100,7 +100,7 @@ class GoogleMapsElement extends AbstractFormElement
         $resultArray['html'] = sprintf(
             '<div class="formengine-field-item t3js-formengine-field-item">%s%s</div>',
             $fieldInformationHtml,
-            implode(LF, $html)
+            implode(LF, $html),
         );
 
         return $resultArray;
@@ -131,7 +131,7 @@ class GoogleMapsElement extends AbstractFormElement
             $view->assign('poiCollection', json_encode($poiCollectionRecord, JSON_THROW_ON_ERROR));
             $view->assign('extConf', json_encode(
                 ObjectAccess::getGettableProperties($this->getExtConf()),
-                JSON_THROW_ON_ERROR
+                JSON_THROW_ON_ERROR,
             ));
 
             return $view->render();

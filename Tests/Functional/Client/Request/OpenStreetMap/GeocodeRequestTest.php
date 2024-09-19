@@ -36,7 +36,7 @@ class GeocodeRequestTest extends FunctionalTestCase
         $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
 
         $this->subject = new GeocodeRequest(
-            $this->extConf
+            $this->extConf,
         );
     }
 
@@ -44,7 +44,7 @@ class GeocodeRequestTest extends FunctionalTestCase
     {
         unset(
             $this->subject,
-            $this->extConf
+            $this->extConf,
         );
         parent::tearDown();
     }
@@ -58,7 +58,7 @@ class GeocodeRequestTest extends FunctionalTestCase
         $this->subject->setUri($uri);
         self::assertSame(
             $uri,
-            $this->subject->getUri()
+            $this->subject->getUri(),
         );
     }
 
@@ -74,7 +74,7 @@ class GeocodeRequestTest extends FunctionalTestCase
         $this->subject->setParameters($parameters);
         self::assertSame(
             $parameters,
-            $this->subject->getParameters()
+            $this->subject->getParameters(),
         );
     }
 
@@ -91,11 +91,11 @@ class GeocodeRequestTest extends FunctionalTestCase
         $this->subject->addParameter('city', 'Filderstadt');
         self::assertSame(
             'Filderstadt',
-            $this->subject->getParameter('city')
+            $this->subject->getParameter('city'),
         );
         self::assertCount(
             3,
-            $this->subject->getParameters()
+            $this->subject->getParameters(),
         );
     }
 
@@ -110,7 +110,7 @@ class GeocodeRequestTest extends FunctionalTestCase
         ];
         $this->subject->setParameters($parameters);
         self::assertTrue(
-            $this->subject->hasParameter('uri')
+            $this->subject->hasParameter('uri'),
         );
     }
 
@@ -125,7 +125,7 @@ class GeocodeRequestTest extends FunctionalTestCase
         ];
         $this->subject->setParameters($parameters);
         self::assertFalse(
-            $this->subject->hasParameter('city')
+            $this->subject->hasParameter('city'),
         );
     }
 
@@ -136,7 +136,7 @@ class GeocodeRequestTest extends FunctionalTestCase
     {
         $this->subject->setUri('  ');
         self::assertFalse(
-            $this->subject->isValidRequest()
+            $this->subject->isValidRequest(),
         );
     }
 
@@ -147,7 +147,7 @@ class GeocodeRequestTest extends FunctionalTestCase
     {
         $this->subject->setUri('nice try');
         self::assertFalse(
-            $this->subject->isValidRequest()
+            $this->subject->isValidRequest(),
         );
     }
 
@@ -158,7 +158,7 @@ class GeocodeRequestTest extends FunctionalTestCase
     {
         $this->subject->setUri('https://www.jweiland.net/what/ever/%s.html');
         self::assertTrue(
-            $this->subject->isValidRequest()
+            $this->subject->isValidRequest(),
         );
     }
 
@@ -172,7 +172,7 @@ class GeocodeRequestTest extends FunctionalTestCase
         $this->subject->addParameter('address', 'My Address');
         self::assertSame(
             'https://www.jweiland.net/what/ever/My%20Address.html',
-            $this->subject->getUri()
+            $this->subject->getUri(),
         );
     }
 
@@ -185,7 +185,7 @@ class GeocodeRequestTest extends FunctionalTestCase
         $this->subject->setUri('nice try');
         $this->subject->addParameter('address', 'My Address');
         self::assertFalse(
-            $this->subject->isValidRequest()
+            $this->subject->isValidRequest(),
         );
     }
 }

@@ -60,13 +60,13 @@ class PoiCollectionRepository extends Repository
             $queryBuilder->andWhere(
                 $queryBuilder->expr()->eq(
                     'pc.uid',
-                    $queryBuilder->createNamedParameter($poiCollectionUid, Connection::PARAM_INT)
-                )
+                    $queryBuilder->createNamedParameter($poiCollectionUid, Connection::PARAM_INT),
+                ),
             );
         } elseif (array_key_exists('categories', $settings) && $settings['categories'] !== '') {
             $this->addConstraintForCategories(
                 $queryBuilder,
-                GeneralUtility::intExplode(',', $settings['categories'], true)
+                GeneralUtility::intExplode(',', $settings['categories'], true),
             );
         }
 
@@ -74,8 +74,8 @@ class PoiCollectionRepository extends Repository
             new ModifyQueryOfFindPoiCollectionsEvent(
                 $queryBuilder,
                 $settings,
-                $poiCollectionUid
-            )
+                $poiCollectionUid,
+            ),
         );
 
         return $extbaseQuery->statement($queryBuilder)->execute();
@@ -100,13 +100,13 @@ class PoiCollectionRepository extends Repository
 
         return $query->statement(
             $sql,
-            [$latitude, $latitude, $longitude, $radiusOfEarth, $radius]
+            [$latitude, $latitude, $longitude, $radiusOfEarth, $radius],
         )->execute();
     }
 
     protected function addConstraintForCategories(
         QueryBuilder $queryBuilder,
-        array $categories
+        array $categories,
     ): void {
         $queryBuilder->leftJoin(
             'pc',
@@ -115,21 +115,21 @@ class PoiCollectionRepository extends Repository
             (string)$queryBuilder->expr()->and(
                 $queryBuilder->expr()->eq(
                     'pc.uid',
-                    $queryBuilder->quoteIdentifier('category_mm.uid_foreign')
+                    $queryBuilder->quoteIdentifier('category_mm.uid_foreign'),
                 ),
                 $queryBuilder->expr()->eq(
                     'category_mm.tablenames',
                     $queryBuilder->createNamedParameter(
-                        'tx_maps2_domain_model_poicollection'
-                    )
+                        'tx_maps2_domain_model_poicollection',
+                    ),
                 ),
                 $queryBuilder->expr()->eq(
                     'category_mm.fieldname',
                     $queryBuilder->createNamedParameter(
-                        'categories'
-                    )
-                )
-            )
+                        'categories',
+                    ),
+                ),
+            ),
         );
 
         $queryBuilder->andWhere(
@@ -137,9 +137,9 @@ class PoiCollectionRepository extends Repository
                 'category_mm.uid_local',
                 $queryBuilder->createNamedParameter(
                     $categories,
-                    Connection::PARAM_INT_ARRAY
-                )
-            )
+                    Connection::PARAM_INT_ARRAY,
+                ),
+            ),
         );
 
         $queryBuilder->addGroupBy(...$this->getColumnsForPoiCollectionTable());
@@ -158,9 +158,9 @@ class PoiCollectionRepository extends Repository
                     'pid',
                     $queryBuilder->createNamedParameter(
                         $extbaseQuery->getQuerySettings()->getStoragePageIds(),
-                        Connection::PARAM_INT_ARRAY
-                    )
-                )
+                        Connection::PARAM_INT_ARRAY,
+                    ),
+                ),
             );
 
         $this->overlayHelper->addWhereForOverlay($queryBuilder, $table, $alias, $useLangStrict);
@@ -182,8 +182,8 @@ class PoiCollectionRepository extends Repository
             $columns = array_map(
                 static fn($column): string => 'pc.' . $column,
                 array_keys(
-                    $schemaManager->listTableColumns('tx_maps2_domain_model_poicollection') ?? []
-                )
+                    $schemaManager->listTableColumns('tx_maps2_domain_model_poicollection') ?? [],
+                ),
             );
         } catch (Exception $e) {
         }

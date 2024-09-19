@@ -39,15 +39,15 @@ class RequestFactoryTest extends FunctionalTestCase
 
         $this->subject = new RequestFactory(
             new MapHelper(
-                $this->extConf
-            )
+                $this->extConf,
+            ),
         );
     }
 
     protected function tearDown(): void
     {
         unset(
-            $this->subject
+            $this->subject,
         );
         parent::tearDown();
     }
@@ -62,7 +62,7 @@ class RequestFactoryTest extends FunctionalTestCase
 
         self::assertInstanceOf(
             GeocodeRequest::class,
-            $this->subject->create('GeocodeRequest')
+            $this->subject->create('GeocodeRequest'),
         );
     }
 
@@ -76,7 +76,7 @@ class RequestFactoryTest extends FunctionalTestCase
 
         self::assertInstanceOf(
             \JWeiland\Maps2\Client\Request\OpenStreetMap\GeocodeRequest::class,
-            $this->subject->create('GeocodeRequest')
+            $this->subject->create('GeocodeRequest'),
         );
     }
 
@@ -90,7 +90,7 @@ class RequestFactoryTest extends FunctionalTestCase
 
         self::assertInstanceOf(
             GeocodeRequest::class,
-            $this->subject->create('GeocodeRequest.php')
+            $this->subject->create('GeocodeRequest.php'),
         );
     }
 
@@ -104,7 +104,7 @@ class RequestFactoryTest extends FunctionalTestCase
 
         self::assertInstanceOf(
             GeocodeRequest::class,
-            $this->subject->create('geocodeRequest')
+            $this->subject->create('geocodeRequest'),
         );
     }
 

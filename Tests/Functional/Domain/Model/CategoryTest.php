@@ -47,7 +47,7 @@ class CategoryTest extends FunctionalTestCase
     {
         unset(
             $this->subject,
-            $this->extConf
+            $this->extConf,
         );
 
         parent::tearDown();
@@ -60,7 +60,7 @@ class CategoryTest extends FunctionalTestCase
     {
         self::assertEquals(
             new ObjectStorage(),
-            $this->subject->getMaps2MarkerIcons()
+            $this->subject->getMaps2MarkerIcons(),
         );
     }
 
@@ -77,7 +77,7 @@ class CategoryTest extends FunctionalTestCase
 
         self::assertSame(
             $objectStorage,
-            $this->subject->getMaps2MarkerIcons()
+            $this->subject->getMaps2MarkerIcons(),
         );
     }
 
@@ -88,7 +88,7 @@ class CategoryTest extends FunctionalTestCase
     {
         self::assertSame(
             '',
-            $this->subject->getMaps2MarkerIcon()
+            $this->subject->getMaps2MarkerIcon(),
         );
     }
 
@@ -108,7 +108,7 @@ class CategoryTest extends FunctionalTestCase
 
         self::assertSame(
             '',
-            $this->subject->getMaps2MarkerIcon()
+            $this->subject->getMaps2MarkerIcon(),
         );
     }
 
@@ -121,7 +121,7 @@ class CategoryTest extends FunctionalTestCase
 
         self::assertSame(
             '',
-            $this->subject->getMaps2MarkerIcon()
+            $this->subject->getMaps2MarkerIcon(),
         );
     }
 
@@ -153,7 +153,7 @@ class CategoryTest extends FunctionalTestCase
 
         self::assertStringEndsWith(
             'ImagePath',
-            $this->subject->getMaps2MarkerIcon()
+            $this->subject->getMaps2MarkerIcon(),
         );
     }
 
@@ -164,7 +164,7 @@ class CategoryTest extends FunctionalTestCase
     {
         self::assertSame(
             25,
-            $this->subject->getMaps2MarkerIconWidth()
+            $this->subject->getMaps2MarkerIconWidth(),
         );
     }
 
@@ -182,7 +182,7 @@ class CategoryTest extends FunctionalTestCase
 
         self::assertSame(
             123,
-            $this->subject->getMaps2MarkerIconWidth()
+            $this->subject->getMaps2MarkerIconWidth(),
         );
     }
 
@@ -195,7 +195,7 @@ class CategoryTest extends FunctionalTestCase
         $this->extConf->setMarkerIconWidth(321);
         self::assertSame(
             321,
-            $this->subject->getMaps2MarkerIconWidth()
+            $this->subject->getMaps2MarkerIconWidth(),
         );
     }
 
@@ -212,7 +212,7 @@ class CategoryTest extends FunctionalTestCase
         $this->subject->setMaps2MarkerIconWidth(123456);
         self::assertSame(
             123456,
-            $this->subject->getMaps2MarkerIconWidth()
+            $this->subject->getMaps2MarkerIconWidth(),
         );
     }
 
@@ -223,7 +223,7 @@ class CategoryTest extends FunctionalTestCase
     {
         self::assertSame(
             40,
-            $this->subject->getMaps2MarkerIconHeight()
+            $this->subject->getMaps2MarkerIconHeight(),
         );
     }
 
@@ -240,7 +240,7 @@ class CategoryTest extends FunctionalTestCase
         $this->extConf->setMarkerIconHeight(123);
         self::assertSame(
             123,
-            $this->subject->getMaps2MarkerIconHeight()
+            $this->subject->getMaps2MarkerIconHeight(),
         );
     }
 
@@ -253,7 +253,7 @@ class CategoryTest extends FunctionalTestCase
         $this->extConf->setMarkerIconHeight(321);
         self::assertSame(
             321,
-            $this->subject->getMaps2MarkerIconHeight()
+            $this->subject->getMaps2MarkerIconHeight(),
         );
     }
 
@@ -270,7 +270,7 @@ class CategoryTest extends FunctionalTestCase
         $this->subject->setMaps2MarkerIconHeight(123456);
         self::assertSame(
             123456,
-            $this->subject->getMaps2MarkerIconHeight()
+            $this->subject->getMaps2MarkerIconHeight(),
         );
     }
 
@@ -281,7 +281,7 @@ class CategoryTest extends FunctionalTestCase
     {
         self::assertSame(
             13,
-            $this->subject->getMaps2MarkerIconAnchorPosX()
+            $this->subject->getMaps2MarkerIconAnchorPosX(),
         );
     }
 
@@ -298,7 +298,7 @@ class CategoryTest extends FunctionalTestCase
         $this->extConf->setMarkerIconAnchorPosX(123);
         self::assertSame(
             123,
-            $this->subject->getMaps2MarkerIconAnchorPosX()
+            $this->subject->getMaps2MarkerIconAnchorPosX(),
         );
     }
 
@@ -311,7 +311,7 @@ class CategoryTest extends FunctionalTestCase
         $this->extConf->setMarkerIconAnchorPosX(321);
         self::assertSame(
             321,
-            $this->subject->getMaps2MarkerIconAnchorPosX()
+            $this->subject->getMaps2MarkerIconAnchorPosX(),
         );
     }
 
@@ -328,7 +328,7 @@ class CategoryTest extends FunctionalTestCase
         $this->subject->setMaps2MarkerIconAnchorPosX(123456);
         self::assertSame(
             123456,
-            $this->subject->getMaps2MarkerIconAnchorPosX()
+            $this->subject->getMaps2MarkerIconAnchorPosX(),
         );
     }
 
@@ -339,7 +339,7 @@ class CategoryTest extends FunctionalTestCase
     {
         self::assertSame(
             40,
-            $this->subject->getMaps2MarkerIconAnchorPosY()
+            $this->subject->getMaps2MarkerIconAnchorPosY(),
         );
     }
 
@@ -356,7 +356,7 @@ class CategoryTest extends FunctionalTestCase
         $this->extConf->setMarkerIconAnchorPosY(123);
         self::assertSame(
             123,
-            $this->subject->getMaps2MarkerIconAnchorPosY()
+            $this->subject->getMaps2MarkerIconAnchorPosY(),
         );
     }
 
@@ -369,7 +369,7 @@ class CategoryTest extends FunctionalTestCase
         $this->extConf->setMarkerIconAnchorPosY(321);
         self::assertSame(
             321,
-            $this->subject->getMaps2MarkerIconAnchorPosY()
+            $this->subject->getMaps2MarkerIconAnchorPosY(),
         );
     }
 
@@ -386,7 +386,7 @@ class CategoryTest extends FunctionalTestCase
         $this->subject->setMaps2MarkerIconAnchorPosY(123456);
         self::assertSame(
             123456,
-            $this->subject->getMaps2MarkerIconAnchorPosY()
+            $this->subject->getMaps2MarkerIconAnchorPosY(),
         );
     }
 
@@ -397,7 +397,7 @@ class CategoryTest extends FunctionalTestCase
     {
         self::assertSame(
             0,
-            $this->subject->getSorting()
+            $this->subject->getSorting(),
         );
     }
 
@@ -410,7 +410,7 @@ class CategoryTest extends FunctionalTestCase
 
         self::assertSame(
             123456,
-            $this->subject->getSorting()
+            $this->subject->getSorting(),
         );
     }
 }
