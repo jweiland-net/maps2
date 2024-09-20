@@ -50,7 +50,7 @@ class PoiCollectionTest extends FunctionalTestCase
     {
         unset(
             $this->subject,
-            $this->extConf
+            $this->extConf,
         );
 
         parent::tearDown();
@@ -63,7 +63,7 @@ class PoiCollectionTest extends FunctionalTestCase
     {
         self::assertSame(
             '',
-            $this->subject->getCollectionType()
+            $this->subject->getCollectionType(),
         );
     }
 
@@ -76,7 +76,7 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             'foo bar',
-            $this->subject->getCollectionType()
+            $this->subject->getCollectionType(),
         );
     }
 
@@ -87,7 +87,7 @@ class PoiCollectionTest extends FunctionalTestCase
     {
         self::assertSame(
             '',
-            $this->subject->getTitle()
+            $this->subject->getTitle(),
         );
     }
 
@@ -100,7 +100,7 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             'foo bar',
-            $this->subject->getTitle()
+            $this->subject->getTitle(),
         );
     }
 
@@ -111,7 +111,7 @@ class PoiCollectionTest extends FunctionalTestCase
     {
         self::assertSame(
             '',
-            $this->subject->getAddress()
+            $this->subject->getAddress(),
         );
     }
 
@@ -124,7 +124,7 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             'foo bar',
-            $this->subject->getAddress()
+            $this->subject->getAddress(),
         );
     }
 
@@ -135,7 +135,7 @@ class PoiCollectionTest extends FunctionalTestCase
     {
         self::assertSame(
             0.0,
-            $this->subject->getLatitude()
+            $this->subject->getLatitude(),
         );
     }
 
@@ -148,7 +148,7 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             1234.56,
-            $this->subject->getLatitude()
+            $this->subject->getLatitude(),
         );
     }
 
@@ -159,7 +159,7 @@ class PoiCollectionTest extends FunctionalTestCase
     {
         self::assertSame(
             0.0,
-            $this->subject->getLongitude()
+            $this->subject->getLongitude(),
         );
     }
 
@@ -172,7 +172,7 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             1234.56,
-            $this->subject->getLongitude()
+            $this->subject->getLongitude(),
         );
     }
 
@@ -183,7 +183,7 @@ class PoiCollectionTest extends FunctionalTestCase
     {
         self::assertSame(
             0,
-            $this->subject->getRadius()
+            $this->subject->getRadius(),
         );
     }
 
@@ -196,7 +196,7 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             123456,
-            $this->subject->getRadius()
+            $this->subject->getRadius(),
         );
     }
 
@@ -207,7 +207,7 @@ class PoiCollectionTest extends FunctionalTestCase
     {
         self::assertSame(
             [],
-            $this->subject->getPois()
+            $this->subject->getPois(),
         );
     }
 
@@ -218,7 +218,7 @@ class PoiCollectionTest extends FunctionalTestCase
     {
         self::assertSame(
             '',
-            $this->subject->getStrokeColor()
+            $this->subject->getStrokeColor(),
         );
     }
 
@@ -231,7 +231,7 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             'foo bar',
-            $this->subject->getStrokeColor()
+            $this->subject->getStrokeColor(),
         );
     }
 
@@ -242,7 +242,7 @@ class PoiCollectionTest extends FunctionalTestCase
     {
         self::assertSame(
             '',
-            $this->subject->getStrokeOpacity()
+            $this->subject->getStrokeOpacity(),
         );
     }
 
@@ -255,7 +255,7 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             'foo bar',
-            $this->subject->getStrokeOpacity()
+            $this->subject->getStrokeOpacity(),
         );
     }
 
@@ -266,7 +266,7 @@ class PoiCollectionTest extends FunctionalTestCase
     {
         self::assertSame(
             '',
-            $this->subject->getStrokeWeight()
+            $this->subject->getStrokeWeight(),
         );
     }
 
@@ -279,7 +279,7 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             'foo bar',
-            $this->subject->getStrokeWeight()
+            $this->subject->getStrokeWeight(),
         );
     }
 
@@ -290,7 +290,7 @@ class PoiCollectionTest extends FunctionalTestCase
     {
         self::assertSame(
             '',
-            $this->subject->getFillColor()
+            $this->subject->getFillColor(),
         );
     }
 
@@ -303,7 +303,7 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             'foo bar',
-            $this->subject->getFillColor()
+            $this->subject->getFillColor(),
         );
     }
 
@@ -314,7 +314,7 @@ class PoiCollectionTest extends FunctionalTestCase
     {
         self::assertSame(
             '',
-            $this->subject->getFillOpacity()
+            $this->subject->getFillOpacity(),
         );
     }
 
@@ -327,7 +327,7 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             'foo bar',
-            $this->subject->getFillOpacity()
+            $this->subject->getFillOpacity(),
         );
     }
 
@@ -338,7 +338,7 @@ class PoiCollectionTest extends FunctionalTestCase
     {
         self::assertSame(
             '',
-            $this->subject->getInfoWindowContent()
+            $this->subject->getInfoWindowContent(),
         );
     }
 
@@ -351,7 +351,7 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             'foo bar',
-            $this->subject->getInfoWindowContent()
+            $this->subject->getInfoWindowContent(),
         );
     }
 
@@ -362,7 +362,7 @@ class PoiCollectionTest extends FunctionalTestCase
     {
         self::assertEquals(
             new ObjectStorage(),
-            $this->subject->getInfoWindowImages()
+            $this->subject->getInfoWindowImages(),
         );
     }
 
@@ -379,7 +379,7 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             $objectStorage,
-            $this->subject->getInfoWindowImages()
+            $this->subject->getInfoWindowImages(),
         );
     }
 
@@ -398,7 +398,7 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             $objectStorage,
-            $this->subject->getInfoWindowImages()
+            $this->subject->getInfoWindowImages(),
         );
     }
 
@@ -418,7 +418,7 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             $objectStorage,
-            $this->subject->getInfoWindowImages()
+            $this->subject->getInfoWindowImages(),
         );
     }
 
@@ -429,7 +429,7 @@ class PoiCollectionTest extends FunctionalTestCase
     {
         self::assertEquals(
             new ObjectStorage(),
-            $this->subject->getMarkerIcons()
+            $this->subject->getMarkerIcons(),
         );
     }
 
@@ -446,7 +446,7 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             $objectStorage,
-            $this->subject->getMarkerIcons()
+            $this->subject->getMarkerIcons(),
         );
     }
 
@@ -466,7 +466,7 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             $objectStorage,
-            $this->subject->getMarkerIcons()
+            $this->subject->getMarkerIcons(),
         );
     }
 
@@ -486,7 +486,7 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             $objectStorage,
-            $this->subject->getMarkerIcons()
+            $this->subject->getMarkerIcons(),
         );
     }
 
@@ -497,7 +497,7 @@ class PoiCollectionTest extends FunctionalTestCase
     {
         self::assertSame(
             25,
-            $this->subject->getMarkerIconWidth()
+            $this->subject->getMarkerIconWidth(),
         );
     }
 
@@ -515,7 +515,7 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             123456,
-            $this->subject->getMarkerIconWidth()
+            $this->subject->getMarkerIconWidth(),
         );
     }
 
@@ -534,7 +534,7 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             123456,
-            $this->subject->getMarkerIconWidth()
+            $this->subject->getMarkerIconWidth(),
         );
     }
 
@@ -554,7 +554,7 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             654321,
-            $this->subject->getMarkerIconWidth()
+            $this->subject->getMarkerIconWidth(),
         );
     }
 
@@ -567,7 +567,7 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             123456,
-            $this->subject->getMarkerIconWidth()
+            $this->subject->getMarkerIconWidth(),
         );
     }
 
@@ -581,7 +581,7 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             654321,
-            $this->subject->getMarkerIconWidth()
+            $this->subject->getMarkerIconWidth(),
         );
     }
 
@@ -592,7 +592,7 @@ class PoiCollectionTest extends FunctionalTestCase
     {
         self::assertSame(
             40,
-            $this->subject->getMarkerIconHeight()
+            $this->subject->getMarkerIconHeight(),
         );
     }
 
@@ -610,7 +610,7 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             123456,
-            $this->subject->getMarkerIconHeight()
+            $this->subject->getMarkerIconHeight(),
         );
     }
 
@@ -629,7 +629,7 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             123456,
-            $this->subject->getMarkerIconHeight()
+            $this->subject->getMarkerIconHeight(),
         );
     }
 
@@ -649,7 +649,7 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             654321,
-            $this->subject->getMarkerIconHeight()
+            $this->subject->getMarkerIconHeight(),
         );
     }
 
@@ -662,7 +662,7 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             123456,
-            $this->subject->getMarkerIconHeight()
+            $this->subject->getMarkerIconHeight(),
         );
     }
 
@@ -673,7 +673,7 @@ class PoiCollectionTest extends FunctionalTestCase
     {
         self::assertSame(
             13,
-            $this->subject->getMarkerIconAnchorPosX()
+            $this->subject->getMarkerIconAnchorPosX(),
         );
     }
 
@@ -692,7 +692,7 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             123456,
-            $this->subject->getMarkerIconAnchorPosX()
+            $this->subject->getMarkerIconAnchorPosX(),
         );
     }
 
@@ -711,7 +711,7 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             123456,
-            $this->subject->getMarkerIconAnchorPosX()
+            $this->subject->getMarkerIconAnchorPosX(),
         );
     }
 
@@ -731,7 +731,7 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             654321,
-            $this->subject->getMarkerIconAnchorPosX()
+            $this->subject->getMarkerIconAnchorPosX(),
         );
     }
 
@@ -744,7 +744,7 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             123456,
-            $this->subject->getMarkerIconAnchorPosX()
+            $this->subject->getMarkerIconAnchorPosX(),
         );
     }
 
@@ -758,7 +758,7 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             654321,
-            $this->subject->getMarkerIconAnchorPosX()
+            $this->subject->getMarkerIconAnchorPosX(),
         );
     }
 
@@ -772,7 +772,7 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             654321,
-            $this->subject->getMarkerIconHeight()
+            $this->subject->getMarkerIconHeight(),
         );
     }
 
@@ -783,7 +783,7 @@ class PoiCollectionTest extends FunctionalTestCase
     {
         self::assertSame(
             40,
-            $this->subject->getMarkerIconAnchorPosY()
+            $this->subject->getMarkerIconAnchorPosY(),
         );
     }
 
@@ -802,7 +802,7 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             123456,
-            $this->subject->getMarkerIconAnchorPosY()
+            $this->subject->getMarkerIconAnchorPosY(),
         );
     }
 
@@ -821,7 +821,7 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             123456,
-            $this->subject->getMarkerIconAnchorPosY()
+            $this->subject->getMarkerIconAnchorPosY(),
         );
     }
 
@@ -841,7 +841,7 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             654321,
-            $this->subject->getMarkerIconAnchorPosY()
+            $this->subject->getMarkerIconAnchorPosY(),
         );
     }
 
@@ -854,7 +854,7 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             123456,
-            $this->subject->getMarkerIconAnchorPosY()
+            $this->subject->getMarkerIconAnchorPosY(),
         );
     }
 
@@ -868,7 +868,7 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             654321,
-            $this->subject->getMarkerIconAnchorPosY()
+            $this->subject->getMarkerIconAnchorPosY(),
         );
     }
 
@@ -879,7 +879,7 @@ class PoiCollectionTest extends FunctionalTestCase
     {
         self::assertEquals(
             new ObjectStorage(),
-            $this->subject->getCategories()
+            $this->subject->getCategories(),
         );
     }
 
@@ -896,7 +896,7 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             $objectStorage,
-            $this->subject->getCategories()
+            $this->subject->getCategories(),
         );
     }
 
@@ -916,7 +916,7 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             $objectStorage,
-            $this->subject->getCategories()
+            $this->subject->getCategories(),
         );
     }
 
@@ -937,7 +937,7 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             $objectStorage,
-            $this->subject->getCategories()
+            $this->subject->getCategories(),
         );
     }
 
@@ -948,7 +948,7 @@ class PoiCollectionTest extends FunctionalTestCase
     {
         self::assertSame(
             0.0,
-            $this->subject->getDistance()
+            $this->subject->getDistance(),
         );
     }
 
@@ -961,7 +961,7 @@ class PoiCollectionTest extends FunctionalTestCase
 
         self::assertSame(
             1234.56,
-            $this->subject->getDistance()
+            $this->subject->getDistance(),
         );
     }
 
@@ -972,7 +972,7 @@ class PoiCollectionTest extends FunctionalTestCase
     {
         self::assertSame(
             [],
-            $this->subject->getForeignRecords()
+            $this->subject->getForeignRecords(),
         );
     }
 
@@ -986,7 +986,7 @@ class PoiCollectionTest extends FunctionalTestCase
                 [
                     'uid' => 12,
                 ],
-            ]
+            ],
         );
 
         self::assertSame(
@@ -995,7 +995,7 @@ class PoiCollectionTest extends FunctionalTestCase
                     'uid' => 12,
                 ],
             ],
-            $this->subject->getForeignRecords()
+            $this->subject->getForeignRecords(),
         );
     }
 
@@ -1007,7 +1007,7 @@ class PoiCollectionTest extends FunctionalTestCase
         $this->subject->addForeignRecord(
             [
                 'uid' => 12,
-            ]
+            ],
         );
 
         self::assertSame(
@@ -1016,7 +1016,7 @@ class PoiCollectionTest extends FunctionalTestCase
                     'uid' => 12,
                 ],
             ],
-            $this->subject->getForeignRecords()
+            $this->subject->getForeignRecords(),
         );
     }
 
@@ -1030,18 +1030,18 @@ class PoiCollectionTest extends FunctionalTestCase
                 [
                     'uid' => 12,
                 ],
-            ]
+            ],
         );
 
         $this->subject->removeForeignRecord(
             [
                 'uid' => 12,
-            ]
+            ],
         );
 
         self::assertSame(
             [],
-            $this->subject->getForeignRecords()
+            $this->subject->getForeignRecords(),
         );
     }
 }

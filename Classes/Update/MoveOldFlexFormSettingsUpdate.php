@@ -75,7 +75,7 @@ class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
                 if (
                     ArrayUtility::getValueByPath(
                         $valueFromDatabase,
-                        'data/sGoogleMapsOptions/lDEF/settings.activateScrollWheel'
+                        'data/sGoogleMapsOptions/lDEF/settings.activateScrollWheel',
                     )
                 ) {
                     return true;
@@ -143,7 +143,7 @@ class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
                 ],
                 [
                     'pi_flexform' => Connection::PARAM_STR,
-                ]
+                ],
             );
         }
 
@@ -175,22 +175,22 @@ class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
                 ->where(
                     $queryBuilder->expr()->eq(
                         'CType',
-                        $queryBuilder->createNamedParameter('list')
+                        $queryBuilder->createNamedParameter('list'),
                     ),
                     $queryBuilder->expr()->or(
                         $queryBuilder->expr()->eq(
                             'list_type',
-                            $queryBuilder->createNamedParameter('maps2_citymap')
+                            $queryBuilder->createNamedParameter('maps2_citymap'),
                         ),
                         $queryBuilder->expr()->eq(
                             'list_type',
-                            $queryBuilder->createNamedParameter('maps2_maps2')
+                            $queryBuilder->createNamedParameter('maps2_maps2'),
                         ),
                         $queryBuilder->expr()->eq(
                             'list_type',
-                            $queryBuilder->createNamedParameter('maps2_searchwithinradius')
-                        )
-                    )
+                            $queryBuilder->createNamedParameter('maps2_searchwithinradius'),
+                        ),
+                    ),
                 )
                 ->executeQuery();
 
@@ -227,7 +227,7 @@ class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
         array &$valueFromDatabase,
         string $field,
         string $oldSheet,
-        string $newSheet
+        string $newSheet,
     ): void {
         try {
             $value = ArrayUtility::getValueByPath(
@@ -235,8 +235,8 @@ class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
                 sprintf(
                     'data/%s/lDEF/%s',
                     $oldSheet,
-                    $field
-                )
+                    $field,
+                ),
             );
 
             // Create base sheet, if not exist

@@ -54,7 +54,7 @@ class Maps2Registry implements SingletonInterface
                     file_get_contents($this->configurationFile),
                     true,
                     512,
-                    JSON_THROW_ON_ERROR
+                    JSON_THROW_ON_ERROR,
                 );
 
                 if (
@@ -103,7 +103,7 @@ class Maps2Registry implements SingletonInterface
         string $tableName,
         array $options = [],
         string $fieldName = 'tx_maps2_uid',
-        bool $override = false
+        bool $override = false,
     ): bool {
         $this->initialize();
         $didRegister = false;
@@ -129,7 +129,7 @@ class Maps2Registry implements SingletonInterface
                 json_encode([
                     'registry' => $this->registry,
                     'extensions' => $this->extensions,
-                ], JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT)
+                ], JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT),
             );
             $didRegister = true;
         }
@@ -152,7 +152,7 @@ class Maps2Registry implements SingletonInterface
                     file_get_contents($this->configurationFile),
                     true,
                     512,
-                    JSON_THROW_ON_ERROR
+                    JSON_THROW_ON_ERROR,
                 );
             } catch (\JsonException $jsonException) {
                 $configuration = [];
@@ -364,7 +364,7 @@ class Maps2Registry implements SingletonInterface
         if (!empty($fieldConfigurationOverride)) {
             ArrayUtility::mergeRecursiveWithOverrule(
                 $fieldConfiguration,
-                $fieldConfigurationOverride
+                $fieldConfigurationOverride,
             );
         }
 
@@ -388,7 +388,7 @@ class Maps2Registry implements SingletonInterface
      * various extensions to the table definition string
      */
     public function addMaps2DatabaseSchemasToTablesDefinition(
-        AlterTableDefinitionStatementsEvent $alterTableDefinitionStatementsEvent
+        AlterTableDefinitionStatementsEvent $alterTableDefinitionStatementsEvent,
     ): void {
         $this->initialize();
         $alterTableDefinitionStatementsEvent->addSqlData($this->getDatabaseTableDefinitions());

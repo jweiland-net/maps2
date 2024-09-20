@@ -25,7 +25,7 @@ class PreAddForeignRecordEvent
     public function __construct(
         array $foreignRecord,
         string $tableName,
-        string $columnName
+        string $columnName,
     ) {
         $this->foreignRecord = $foreignRecord;
         $this->tableName = $tableName;

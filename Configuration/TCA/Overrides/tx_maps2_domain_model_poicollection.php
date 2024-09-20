@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * This file is part of the package jweiland/maps2.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE file that was distributed with this source code.
+ */
+
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Helper\MapHelper;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
@@ -13,7 +20,7 @@ if (!defined('TYPO3')) {
 call_user_func(static function (): void {
     $extConf = GeneralUtility::makeInstance(
         ExtConf::class,
-        GeneralUtility::makeInstance(ExtensionConfiguration::class)
+        GeneralUtility::makeInstance(ExtensionConfiguration::class),
     );
     $mapHelper = GeneralUtility::makeInstance(MapHelper::class, $extConf);
 
@@ -28,11 +35,11 @@ call_user_func(static function (): void {
     // Set latitude/longitude to float representation of extension configuration
     $GLOBALS['TCA']['tx_maps2_domain_model_poicollection']['columns']['latitude']['config']['default'] = number_format(
         $extConf->getDefaultLatitude(),
-        6
+        6,
     );
     $GLOBALS['TCA']['tx_maps2_domain_model_poicollection']['columns']['longitude']['config']['default'] = number_format(
         $extConf->getDefaultLongitude(),
-        6
+        6,
     );
 
     // If both map providers are allowed in ExtensionManager we have to add a selectbox for map provider to TCA
@@ -41,7 +48,7 @@ call_user_func(static function (): void {
             'tx_maps2_domain_model_poicollection',
             'map_provider',
             '',
-            'before:configuration_map'
+            'before:configuration_map',
         );
     }
 });

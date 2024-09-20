@@ -46,9 +46,9 @@ class GeocodeRequest extends AbstractRequest
         return sprintf(
             $this->uri,
             $this->updateAddressForUri(
-                (string)$this->getParameter('address')
+                (string)$this->getParameter('address'),
             ),
-            $this->extConf->getGoogleMapsGeocodeApiKey()
+            $this->extConf->getGoogleMapsGeocodeApiKey(),
         );
     }
 }

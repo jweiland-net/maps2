@@ -40,13 +40,13 @@ class GetCacheViewHelper extends AbstractViewHelper
             'string',
             'A prefix for the cache identifier.',
             false,
-            'infoWindow'
+            'infoWindow',
         );
         $this->registerArgument(
             'poiCollection',
             PoiCollection::class,
             'We need the PoiCollection to build a better language independent CacheIdentifier.',
-            true
+            true,
         );
     }
 
@@ -57,7 +57,7 @@ class GetCacheViewHelper extends AbstractViewHelper
     public static function renderStatic(
         array $arguments,
         \Closure $renderChildrenClosure,
-        RenderingContextInterface $renderingContext
+        RenderingContextInterface $renderingContext,
     ): string {
         $cacheService = GeneralUtility::makeInstance(CacheService::class);
         $poiCollection = $cacheService->preparePoiCollectionForCacheMethods($arguments['poiCollection']);
@@ -66,8 +66,8 @@ class GetCacheViewHelper extends AbstractViewHelper
         return $cache->get(
             $cacheService->getCacheIdentifier(
                 $poiCollection,
-                $arguments['prefix']
-            )
+                $arguments['prefix'],
+            ),
         );
     }
 }

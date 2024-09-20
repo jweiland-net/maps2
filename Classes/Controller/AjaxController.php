@@ -43,7 +43,7 @@ class AjaxController extends ActionController
             && array_key_exists('poiCollection', $postData)
         ) {
             $response['content'] = $this->renderInfoWindowContentAction(
-                (int)$postData['poiCollection']
+                (int)$postData['poiCollection'],
             );
         } else {
             $this->errors[] = 'Given method "' . $method . '" is not allowed here.';
@@ -72,7 +72,7 @@ class AjaxController extends ActionController
         if (!$poiCollection instanceof PoiCollection) {
             $this->errors[] = sprintf(
                 'PoiCollection with UID %d could not be found in AjaxController',
-                $poiCollectionUid
+                $poiCollectionUid,
             );
             return '';
         }
@@ -99,8 +99,8 @@ class AjaxController extends ActionController
             new RenderInfoWindowContentEvent(
                 $poiCollectionUid,
                 '',
-                $this->getContentObjectRenderer()
-            )
+                $this->getContentObjectRenderer(),
+            ),
         );
 
         return $event->getInfoWindowContent();

@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
+use PhpCsFixer\Config;
+use PhpCsFixer\Finder;
+
 /*
  * This file is part of the package jweiland/maps2.
  *
  * For the full copyright and license information, please read the
  * LICENSE file that was distributed with this source code.
  */
-
-use PhpCsFixer\Config;
-use PhpCsFixer\Finder;
 
 if (PHP_SAPI !== 'cli') {
     die('This script supports command line usage only. Please check your command.');
@@ -23,35 +23,39 @@ For the full copyright and license information, please read the
 LICENSE file that was distributed with this source code.
 COMMENT;
 
-$finder = Finder::create()
-    ->name('*.php')
-    ->exclude('.Build')
-    ->ignoreVCSIgnored(true)
-    ->in([
-        __DIR__ . '/../../Classes/',
-        __DIR__ . '/../../Tests/',
-    ]);
-
 return (new Config())
-    ->setFinder($finder)
-    ->setUsingCache(false)
+    ->setFinder(
+        (new Finder())
+            ->in(__DIR__ . '/../../')
+            ->exclude(__DIR__ . '/../../.Build')
+            ->exclude(__DIR__ . '/../../var')
+    )
     ->setRiskyAllowed(true)
     ->setRules([
         '@DoctrineAnnotation' => true,
-        '@PER' => true,
         'header_comment' => [
             'header' => $headerComment,
         ],
+        // @todo: Switch to @PER-CS2.0 once php-cs-fixer's todo list is done: https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/issues/7247
+        '@PER-CS1.0' => true,
+        'array_indentation' => true,
         'array_syntax' => ['syntax' => 'short'],
         'cast_spaces' => ['space' => 'none'],
+        // @todo: Can be dropped once we enable @PER-CS2.0
         'concat_space' => ['spacing' => 'one'],
         'declare_equal_normalize' => ['space' => 'none'],
         'declare_parentheses' => true,
         'dir_constant' => true,
+        // @todo: Can be dropped once we enable @PER-CS2.0
+        'function_declaration' => [
+            'closure_fn_spacing' => 'none',
+        ],
         'function_to_constant' => ['functions' => ['get_called_class', 'get_class', 'get_class_this', 'php_sapi_name', 'phpversion', 'pi']],
         'type_declaration_spaces' => true,
         'global_namespace_import' => ['import_classes' => false, 'import_constants' => false, 'import_functions' => false],
         'list_syntax' => ['syntax' => 'short'],
+        // @todo: Can be dropped once we enable @PER-CS2.0
+        'method_argument_space' => true,
         'modernize_strpos' => true,
         'modernize_types_casting' => true,
         'native_function_casing' => true,
@@ -68,7 +72,6 @@ return (new Config())
         'no_trailing_comma_in_singleline' => true,
         'no_unneeded_control_parentheses' => true,
         'no_unused_imports' => true,
-        'no_useless_else' => true,
         'no_useless_nullsafe_operator' => true,
         'ordered_imports' => ['imports_order' => ['class', 'function', 'const'], 'sort_algorithm' => 'alpha'],
         'php_unit_construct' => ['assertions' => ['assertEquals', 'assertSame', 'assertNotEquals', 'assertNotSame']],
@@ -85,7 +88,15 @@ return (new Config())
         'single_quote' => true,
         'single_space_around_construct' => true,
         'single_line_comment_style' => ['comment_types' => ['hash']],
-        'trailing_comma_in_multiline' => ['elements' => ['arrays']],
+        // @todo: Can be dropped once we enable @PER-CS2.0
+        'single_line_empty_body' => true,
+        'trailing_comma_in_multiline' => ['elements' => ['arguments', 'arrays', 'match', 'parameters']],
         'whitespace_after_comma_in_array' => ['ensure_single_space' => true],
         'yoda_style' => ['equal' => false, 'identical' => false, 'less_and_greater' => false],
+
+        // We need this for documentation!
+        'no_useless_else' => false, // We want to preserve else with comments only
+
+        // Add this rule to convert FQCN to use statements
+        'full_opening_tag' => true,
     ]);

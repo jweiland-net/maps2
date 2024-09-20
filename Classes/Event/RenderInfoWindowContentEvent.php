@@ -30,7 +30,7 @@ class RenderInfoWindowContentEvent
     public function __construct(
         int $poiCollectionUid,
         string $infoWindowContent,
-        ?ContentObjectRenderer $contentObjectRenderer
+        ?ContentObjectRenderer $contentObjectRenderer,
     ) {
         $this->poiCollectionUid = $poiCollectionUid;
         $this->infoWindowContent = $infoWindowContent;

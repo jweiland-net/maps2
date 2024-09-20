@@ -40,7 +40,7 @@ class StoragePidHelper
         if (empty($defaultStoragePid)) {
             $this->messageHelper->addFlashMessage(
                 'No PID found to store POI collection. Please check various places like pageTSconfig, Maps2 Registry and PID of this currently saved record.',
-                'Can not find a valid PID to store EXT:maps2 records'
+                'Can not find a valid PID to store EXT:maps2 records',
             );
         }
 
@@ -53,7 +53,7 @@ class StoragePidHelper
      */
     protected function updateStoragePidFromForeignLocationRecord(
         int &$defaultStoragePid,
-        array $foreignLocationRecord
+        array $foreignLocationRecord,
     ): void {
         if (!array_key_exists('pid', $foreignLocationRecord)) {
             return;
@@ -72,7 +72,7 @@ class StoragePidHelper
     protected function updateStoragePidFromMaps2Registry(
         int &$defaultStoragePid,
         array $options,
-        array $foreignLocationRecord
+        array $foreignLocationRecord,
     ): void {
         if (array_key_exists('defaultStoragePid', $options)) {
             $storagePid = $this->getHardCodedStoragePidFromMaps2Registry($options);
@@ -84,7 +84,7 @@ class StoragePidHelper
                 $this->messageHelper->addFlashMessage(
                     'You have configured a defaultStoragePid in maps2 registration, but returned value is still 0. Please check Maps2 Registry',
                     'Invalid defaultStoragePid configuration found',
-                    ContextualFeedbackSeverity::WARNING
+                    ContextualFeedbackSeverity::WARNING,
                 );
             } else {
                 $defaultStoragePid = $storagePid;
@@ -136,7 +136,7 @@ class StoragePidHelper
                     if (empty($defaultStoragePid)) {
                         $defaultStoragePid = $this->getDynamicStoragePidBySingleArray(
                             $configuration,
-                            $foreignLocationRecord
+                            $foreignLocationRecord,
                         );
                     }
                 }
@@ -201,7 +201,7 @@ class StoragePidHelper
                         $defaultStoragePid,
                         $foreignLocationRecord,
                         $extKey,
-                        $property
+                        $property,
                     );
             }
         }
@@ -216,7 +216,7 @@ class StoragePidHelper
         int &$defaultStoragePid,
         array $foreignLocationRecord,
         string $extKey = 'maps2',
-        string $property = 'defaultStoragePid'
+        string $property = 'defaultStoragePid',
     ): void {
         $tsConfig = $this->getTsConfig($foreignLocationRecord, $extKey);
         if (!array_key_exists($property, $tsConfig)) {

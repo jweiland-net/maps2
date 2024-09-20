@@ -31,7 +31,7 @@ class AllowCreationOfPoiCollectionEvent
         string $foreignTableName,
         string $foreignColumnName,
         array $options,
-        bool $isValid
+        bool $isValid,
     ) {
         $this->foreignLocationRecord = $foreignLocationRecord;
         $this->foreignTableName = $foreignTableName;

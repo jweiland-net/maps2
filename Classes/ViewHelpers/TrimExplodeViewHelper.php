@@ -30,7 +30,7 @@ class TrimExplodeViewHelper extends AbstractViewHelper
             'string',
             'The delimiter where the string should be exploded',
             false,
-            ','
+            ',',
         );
     }
 
@@ -42,7 +42,7 @@ class TrimExplodeViewHelper extends AbstractViewHelper
     public static function renderStatic(
         array $arguments,
         \Closure $renderChildrenClosure,
-        RenderingContextInterface $renderingContext
+        RenderingContextInterface $renderingContext,
     ): array {
         return GeneralUtility::trimExplode($arguments['delimiter'], $renderChildrenClosure());
     }

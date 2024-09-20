@@ -70,7 +70,7 @@ class GeoCodeServiceTest extends UnitTestCase
         $this->subject = new GeoCodeService(
             $this->clientFactoryMock,
             $this->requestFactoryMock,
-            $this->mapperFactoryMock
+            $this->mapperFactoryMock,
         );
     }
 
@@ -82,7 +82,7 @@ class GeoCodeServiceTest extends UnitTestCase
             $this->googleMapsClientMock,
             $this->requestFactoryMock,
             $this->mapperFactoryMock,
-            $this->gmGeocodeRequestMock
+            $this->gmGeocodeRequestMock,
         );
 
         GeneralUtility::purgeInstances();
@@ -101,12 +101,12 @@ class GeoCodeServiceTest extends UnitTestCase
 
         self::assertInstanceOf(
             ObjectStorage::class,
-            $positions
+            $positions,
         );
 
         self::assertSame(
             $objectStorage->toArray(),
-            $positions->toArray()
+            $positions->toArray(),
         );
     }
 
@@ -121,12 +121,12 @@ class GeoCodeServiceTest extends UnitTestCase
 
         self::assertInstanceOf(
             ObjectStorage::class,
-            $positions
+            $positions,
         );
 
         self::assertSame(
             $objectStorage->toArray(),
-            $positions->toArray()
+            $positions->toArray(),
         );
     }
 
@@ -145,7 +145,7 @@ class GeoCodeServiceTest extends UnitTestCase
             ->method('addParameter')
             ->with(
                 'address',
-                $address
+                $address,
             );
 
         $this->requestFactoryMock
@@ -164,12 +164,12 @@ class GeoCodeServiceTest extends UnitTestCase
 
         self::assertInstanceOf(
             ObjectStorage::class,
-            $positions
+            $positions,
         );
 
         self::assertSame(
             $objectStorage->toArray(),
-            $positions->toArray()
+            $positions->toArray(),
         );
     }
 
@@ -195,7 +195,7 @@ class GeoCodeServiceTest extends UnitTestCase
             ->method('addParameter')
             ->with(
                 'address',
-                'My private address'
+                'My private address',
             );
 
         $this->requestFactoryMock
@@ -219,7 +219,7 @@ class GeoCodeServiceTest extends UnitTestCase
 
         self::assertCount(
             1,
-            $this->subject->getPositionsByAddress('My private address')
+            $this->subject->getPositionsByAddress('My private address'),
         );
     }
 
@@ -233,7 +233,7 @@ class GeoCodeServiceTest extends UnitTestCase
         GeneralUtility::addInstance(ObjectStorage::class, $objectStorage);
 
         self::assertNull(
-            $this->subject->getFirstFoundPositionByAddress('')
+            $this->subject->getFirstFoundPositionByAddress(''),
         );
     }
 
@@ -247,7 +247,7 @@ class GeoCodeServiceTest extends UnitTestCase
         GeneralUtility::addInstance(ObjectStorage::class, $objectStorage);
 
         self::assertNull(
-            $this->subject->getFirstFoundPositionByAddress('     ')
+            $this->subject->getFirstFoundPositionByAddress('     '),
         );
     }
 
@@ -265,7 +265,7 @@ class GeoCodeServiceTest extends UnitTestCase
             ->method('addParameter')
             ->with(
                 'address',
-                'My private address'
+                'My private address',
             );
 
         $this->requestFactoryMock
@@ -281,7 +281,7 @@ class GeoCodeServiceTest extends UnitTestCase
             ->willReturn([]);
 
         self::assertNull(
-            $this->subject->getFirstFoundPositionByAddress('My private address')
+            $this->subject->getFirstFoundPositionByAddress('My private address'),
         );
     }
 
@@ -310,7 +310,7 @@ class GeoCodeServiceTest extends UnitTestCase
             ->method('addParameter')
             ->with(
                 'address',
-                'My private address'
+                'My private address',
             );
 
         $this->requestFactoryMock
@@ -334,7 +334,7 @@ class GeoCodeServiceTest extends UnitTestCase
 
         self::assertEquals(
             $expectedPosition,
-            $this->subject->getFirstFoundPositionByAddress('My private address')
+            $this->subject->getFirstFoundPositionByAddress('My private address'),
         );
     }
 }

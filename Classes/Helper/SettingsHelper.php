@@ -39,12 +39,12 @@ class SettingsHelper
         $typoScriptSettings = $this->configurationManager->getConfiguration(
             ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,
             'maps2',
-            'invalid' // invalid plugin name, to get fresh unmerged settings
+            'invalid', // invalid plugin name, to get fresh unmerged settings
         );
 
         // In context of a maps2 plugin this will return the merged (TS and FlexForm) settings
         $mergedSettings = $this->configurationManager->getConfiguration(
-            ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS
+            ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
         );
 
         foreach ($mergedSettings as $setting => $value) {
@@ -72,7 +72,7 @@ class SettingsHelper
             $settings['mapTile'] = str_replace(
                 ['${s}', '${x}', '${y}', '${z}'],
                 ['{s}', '{x}', '{y}', '{z}'],
-                $settings['mapTile']
+                $settings['mapTile'],
             );
         }
 
@@ -86,8 +86,8 @@ class SettingsHelper
             } else {
                 $settings['markerClusterer']['imagePath'] = PathUtility::getAbsoluteWebPath(
                     GeneralUtility::getFileAbsFileName(
-                        $settings['markerClusterer']['imagePath']
-                    )
+                        $settings['markerClusterer']['imagePath'],
+                    ),
                 );
             }
         }
@@ -100,7 +100,7 @@ class SettingsHelper
         return $this->configurationManager->getConfiguration(
             ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
             'Maps2',
-            'Maps2'
+            'Maps2',
         ) ?? [];
     }
 }

@@ -40,7 +40,7 @@ class MessageHelper
             $message,
             $title,
             $severity,
-            !Environment::isCli()
+            !Environment::isCli(),
         );
 
         $this->getFlashMessageQueue()->enqueue($flashMessage);

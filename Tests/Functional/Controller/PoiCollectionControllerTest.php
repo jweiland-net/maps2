@@ -45,7 +45,7 @@ class PoiCollectionControllerTest extends FunctionalTestCase
     protected function tearDown(): void
     {
         unset(
-            $this->subject
+            $this->subject,
         );
 
         parent::tearDown();
@@ -59,7 +59,7 @@ class PoiCollectionControllerTest extends FunctionalTestCase
         $this->importCSVDataSet(__DIR__ . '/../Fixtures/tt_content-with-poicollection.csv');
 
         $response = $this->executeFrontendSubRequest(
-            (new InternalRequest())->withPageId(1)
+            (new InternalRequest())->withPageId(1),
         );
 
         self::assertSame(200, $response->getStatusCode());
@@ -68,12 +68,12 @@ class PoiCollectionControllerTest extends FunctionalTestCase
 
         self::assertStringContainsString(
             '&quot;title&quot;:&quot;Jochen&quot;',
-            $content
+            $content,
         );
 
         self::assertStringNotContainsString(
             'data-pois="{}"',
-            $content
+            $content,
         );
     }
 
@@ -85,7 +85,7 @@ class PoiCollectionControllerTest extends FunctionalTestCase
         $this->importCSVDataSet(__DIR__ . '/../Fixtures/tt_content-with-category-uid-2.csv');
 
         $response = $this->executeFrontendSubRequest(
-            (new InternalRequest())->withPageId(1)
+            (new InternalRequest())->withPageId(1),
         );
 
         self::assertSame(200, $response->getStatusCode());
@@ -94,7 +94,7 @@ class PoiCollectionControllerTest extends FunctionalTestCase
 
         self::assertStringContainsString(
             'data-pois="{}"',
-            $content
+            $content,
         );
     }
 
@@ -108,7 +108,7 @@ class PoiCollectionControllerTest extends FunctionalTestCase
         $this->importCSVDataSet(__DIR__ . '/../Fixtures/tt_content-with-category-uid-1.csv');
 
         $response = $this->executeFrontendSubRequest(
-            (new InternalRequest())->withPageId(1)
+            (new InternalRequest())->withPageId(1),
         );
 
         self::assertSame(200, $response->getStatusCode());
@@ -117,12 +117,12 @@ class PoiCollectionControllerTest extends FunctionalTestCase
 
         self::assertStringContainsString(
             '&quot;title&quot;:&quot;Jochen&quot;',
-            $content
+            $content,
         );
 
         self::assertStringNotContainsString(
             'data-pois="{}"',
-            $content
+            $content,
         );
     }
 
@@ -134,7 +134,7 @@ class PoiCollectionControllerTest extends FunctionalTestCase
         $this->importCSVDataSet(__DIR__ . '/../Fixtures/tt_content-with-pages.csv');
 
         $response = $this->executeFrontendSubRequest(
-            (new InternalRequest())->withPageId(1)
+            (new InternalRequest())->withPageId(1),
         );
 
         self::assertSame(200, $response->getStatusCode());
@@ -143,16 +143,16 @@ class PoiCollectionControllerTest extends FunctionalTestCase
 
         self::assertStringContainsString(
             '&quot;title&quot;:&quot;Jochen&quot;',
-            $content
+            $content,
         );
         self::assertStringContainsString(
             '&quot;title&quot;:&quot;Stefan&quot;',
-            $content
+            $content,
         );
 
         self::assertStringNotContainsString(
             'data-pois="{}"',
-            $content
+            $content,
         );
     }
 }

@@ -80,12 +80,12 @@ class Maps2PluginPreview extends StandardContentPreviewRenderer
 
         $langKey = sprintf(
             'plugin.%s.title',
-            $pluginName
+            $pluginName,
         );
 
         $view->assign(
             'pluginName',
-            LocalizationUtility::translate('LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:' . $langKey)
+            LocalizationUtility::translate('LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:' . $langKey),
         );
     }
 
@@ -121,7 +121,7 @@ class Maps2PluginPreview extends StandardContentPreviewRenderer
                 'tx_maps2_domain_model_poicollection',
                 [
                     'uid' => (int)$piFlexformData['settings']['poiCollection'],
-                ]
+                ],
             );
             $poiCollectionRecord = $statement->fetchAssociative() ?: [];
             if ($poiCollectionRecord !== []) {

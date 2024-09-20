@@ -52,7 +52,7 @@ class AddressHelperTest extends FunctionalTestCase
 
         $this->subject = new AddressHelper(
             $this->messageHelperMock,
-            $this->extConf
+            $this->extConf,
         );
     }
 
@@ -61,7 +61,7 @@ class AddressHelperTest extends FunctionalTestCase
         unset(
             $this->subject,
             $this->messageHelperMock,
-            $this->extConf
+            $this->extConf,
         );
 
         parent::tearDown();
@@ -78,7 +78,7 @@ class AddressHelperTest extends FunctionalTestCase
             ->with(
                 self::stringContains('addressColumns'),
                 'Key addressColumns is missing',
-                ContextualFeedbackSeverity::ERROR
+                ContextualFeedbackSeverity::ERROR,
             );
 
         $record = [
@@ -89,7 +89,7 @@ class AddressHelperTest extends FunctionalTestCase
 
         self::assertSame(
             '',
-            $this->subject->getAddress($record, $options)
+            $this->subject->getAddress($record, $options),
         );
     }
 
@@ -104,7 +104,7 @@ class AddressHelperTest extends FunctionalTestCase
             ->with(
                 self::stringContains('required field'),
                 'Key addressColumns is empty',
-                ContextualFeedbackSeverity::ERROR
+                ContextualFeedbackSeverity::ERROR,
             );
 
         $record = [
@@ -117,7 +117,7 @@ class AddressHelperTest extends FunctionalTestCase
 
         self::assertSame(
             '',
-            $this->subject->getAddress($record, $options)
+            $this->subject->getAddress($record, $options),
         );
     }
 
@@ -162,7 +162,7 @@ class AddressHelperTest extends FunctionalTestCase
 
         self::assertSame(
             'Mainstreet 17 23145 Munich',
-            $this->subject->getAddress($record, $options)
+            $this->subject->getAddress($record, $options),
         );
     }
 
@@ -177,7 +177,7 @@ class AddressHelperTest extends FunctionalTestCase
             ->with(
                 self::stringContains('We can not find any country information within your extension'),
                 'No country information found',
-                ContextualFeedbackSeverity::WARNING
+                ContextualFeedbackSeverity::WARNING,
             );
 
         $this->extConf->setDefaultCountry('Germany');
@@ -196,7 +196,7 @@ class AddressHelperTest extends FunctionalTestCase
 
         self::assertSame(
             'Mainstreet 17 23145 Munich Germany',
-            $this->subject->getAddress($record, $options)
+            $this->subject->getAddress($record, $options),
         );
     }
 
@@ -219,7 +219,7 @@ class AddressHelperTest extends FunctionalTestCase
 
         self::assertSame(
             'Mainstreet 17 23145 Paris France',
-            $this->subject->getAddress($record, $options)
+            $this->subject->getAddress($record, $options),
         );
     }
 
@@ -244,7 +244,7 @@ class AddressHelperTest extends FunctionalTestCase
             ->with(
                 self::stringContains('We can not find any country information within your extension'),
                 'No country information found',
-                ContextualFeedbackSeverity::WARNING
+                ContextualFeedbackSeverity::WARNING,
             );
 
         /** @var PackageManager|MockObject $packageManagerMock */
@@ -271,7 +271,7 @@ class AddressHelperTest extends FunctionalTestCase
 
         self::assertSame(
             'Mainstreet 17 23145 Filderstadt Germany',
-            $this->subject->getAddress($record, $options)
+            $this->subject->getAddress($record, $options),
         );
     }
 
@@ -295,7 +295,7 @@ class AddressHelperTest extends FunctionalTestCase
             ->with(
                 self::stringContains('static_countries table'),
                 'Country not found in DB',
-                ContextualFeedbackSeverity::WARNING
+                ContextualFeedbackSeverity::WARNING,
             );
 
         $record = [
@@ -313,7 +313,7 @@ class AddressHelperTest extends FunctionalTestCase
 
         self::assertSame(
             'Mainstreet 17 23145 Warschau',
-            $this->subject->getAddress($record, $options)
+            $this->subject->getAddress($record, $options),
         );
     }
 
@@ -337,7 +337,7 @@ class AddressHelperTest extends FunctionalTestCase
 
         self::assertSame(
             'Mainstreet 17 23145 Madrid Spain',
-            $this->subject->getAddress($record, $options)
+            $this->subject->getAddress($record, $options),
         );
     }
 
@@ -361,7 +361,7 @@ class AddressHelperTest extends FunctionalTestCase
 
         self::assertSame(
             'Mainstreet 17 23145 Madrid Spain',
-            $this->subject->getAddress($record, $options)
+            $this->subject->getAddress($record, $options),
         );
     }
 
@@ -386,7 +386,7 @@ class AddressHelperTest extends FunctionalTestCase
 
         self::assertSame(
             'Mainstreet 23 00367 Madrid Spain',
-            $this->subject->getAddress($record, $options)
+            $this->subject->getAddress($record, $options),
         );
     }
 
@@ -428,7 +428,7 @@ class AddressHelperTest extends FunctionalTestCase
         ];
 
         self::assertTrue(
-            $this->subject->isSameAddress($address, $foreignLocationRecord, $options)
+            $this->subject->isSameAddress($address, $foreignLocationRecord, $options),
         );
     }
 }

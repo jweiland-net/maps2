@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * This file is part of the package jweiland/maps2.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE file that was distributed with this source code.
+ */
+
 use JWeiland\Maps2\Controller\AjaxController;
 use JWeiland\Maps2\Controller\CityMapController;
 use JWeiland\Maps2\Controller\PoiCollectionController;
@@ -10,7 +17,6 @@ use JWeiland\Maps2\Hook\CreateMaps2RecordHook;
 use JWeiland\Maps2\Update\MigratePoiRecordsToConfigurationMapUpdate;
 use JWeiland\Maps2\Update\MoveOldFlexFormSettingsUpdate;
 use JWeiland\Maps2\Update\NewGeocodeUriForOsmUpdate;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
 if (!defined('TYPO3')) {
@@ -24,7 +30,7 @@ call_user_func(static function (): void {
         [
             PoiCollectionController::class => 'show',
             AjaxController::class => 'process',
-        ]
+        ],
     );
 
     ExtensionUtility::configurePlugin(
@@ -36,7 +42,7 @@ call_user_func(static function (): void {
         // non-cacheable actions
         [
             PoiCollectionController::class => 'overlay',
-        ]
+        ],
     );
 
     ExtensionUtility::configurePlugin(
@@ -48,7 +54,7 @@ call_user_func(static function (): void {
         // non-cacheable actions
         [
             PoiCollectionController::class => 'listRadius',
-        ]
+        ],
     );
 
     ExtensionUtility::configurePlugin(
@@ -60,7 +66,7 @@ call_user_func(static function (): void {
         // non-cacheable actions
         [
             CityMapController::class => 'search',
-        ]
+        ],
     );
 
     // Activate caching for info window content

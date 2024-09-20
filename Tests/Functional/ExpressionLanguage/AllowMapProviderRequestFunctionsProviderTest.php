@@ -46,7 +46,7 @@ class AllowMapProviderRequestFunctionsProviderTest extends FunctionalTestCase
     {
         unset(
             $this->subject,
-            $this->mapHelperMock
+            $this->mapHelperMock,
         );
 
         parent::tearDown();
@@ -78,15 +78,15 @@ class AllowMapProviderRequestFunctionsProviderTest extends FunctionalTestCase
 
         self::assertSame(
             'isRequestToMapProviderAllowed',
-            $expressionFunction->getName()
+            $expressionFunction->getName(),
         );
 
         self::assertNull(
-            call_user_func($expressionFunction->getCompiler())
+            call_user_func($expressionFunction->getCompiler()),
         );
 
         self::assertTrue(
-            call_user_func($expressionFunction->getEvaluator(), ['foo' => 'bar'])
+            call_user_func($expressionFunction->getEvaluator(), ['foo' => 'bar']),
         );
     }
 }

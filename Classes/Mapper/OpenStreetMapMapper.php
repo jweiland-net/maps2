@@ -54,7 +54,7 @@ class OpenStreetMapMapper implements MapperInterface
                 $data['address']['house_number'] ?? '',
                 $data['address']['postcode'] ?? '',
                 $data['address']['city'],
-                $data['address']['country'] ?? ''
+                $data['address']['country'] ?? '',
             );
         } else {
             // 'display_name' can be a very long name.

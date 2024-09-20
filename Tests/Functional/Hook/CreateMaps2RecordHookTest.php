@@ -130,10 +130,10 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
                 $this->messageHelperMock,
                 $this->maps2RegistryMock,
                 GeneralUtility::makeInstance(ExtConf::class),
-                GeneralUtility::makeInstance(EventDispatcher::class)
+                GeneralUtility::makeInstance(EventDispatcher::class),
             ),
             $this->maps2RegistryMock,
-            $this->eventDispatcherMock
+            $this->eventDispatcherMock,
         );
     }
 
@@ -146,7 +146,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
             $this->mapService,
             $this->eventDispatcher,
             $this->maps2RegistryMock,
-            $this->eventDispatcherMock
+            $this->eventDispatcherMock,
         );
 
         parent::tearDown();
@@ -183,7 +183,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
             ->method('dispatch');
 
         $this->subject->processDatamap_afterAllOperations(
-            new DataHandler()
+            new DataHandler(),
         );
     }
 
@@ -199,7 +199,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
             ->method('flushByTag')
             ->with(self::logicalOr(
                 self::equalTo('infoWindowUid123'),
-                self::equalTo('infoWindowUid234')
+                self::equalTo('infoWindowUid234'),
             ));
 
         $cacheManagerMock = $this->createMock(CacheManager::class);
@@ -313,7 +313,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
      */
     public function processDatamapInvalidForeignRecordBecauseExpressionsAreNotEqual(
         array $columnMatch,
-        bool $isValid
+        bool $isValid,
     ): void {
         $this->creationAllowed = $isValid;
 

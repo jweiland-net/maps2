@@ -27,7 +27,7 @@ class OpenStreetMapClient extends AbstractClient
             $this->messageHelper->addFlashMessage(
                 'The response of Open Street Map was not a valid JSON response.',
                 'Invalid JSON response',
-                ContextualFeedbackSeverity::ERROR
+                ContextualFeedbackSeverity::ERROR,
             );
         } elseif ($processedResponse === []) {
             $this->messageHelper->addFlashMessage(
@@ -36,13 +36,13 @@ class OpenStreetMapClient extends AbstractClient
                     'maps2',
                     [
                         0 => $this->title,
-                    ]
+                    ],
                 ),
                 LocalizationUtility::translate(
                     'error.noPositionsFound.title',
-                    'maps2'
+                    'maps2',
                 ),
-                ContextualFeedbackSeverity::ERROR
+                ContextualFeedbackSeverity::ERROR,
             );
         }
     }

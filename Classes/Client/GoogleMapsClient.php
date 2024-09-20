@@ -27,7 +27,7 @@ class GoogleMapsClient extends AbstractClient
             $this->messageHelper->addFlashMessage(
                 'The response of Google Maps was not a valid JSON response.',
                 'Invalid JSON response',
-                ContextualFeedbackSeverity::ERROR
+                ContextualFeedbackSeverity::ERROR,
             );
         } elseif ($processedResponse['status'] !== 'OK') {
             if ($processedResponse['status'] === 'ZERO_RESULTS') {
@@ -37,19 +37,19 @@ class GoogleMapsClient extends AbstractClient
                         'maps2',
                         [
                             0 => $this->title,
-                        ]
+                        ],
                     ),
                     LocalizationUtility::translate(
                         'error.noPositionsFound.title',
-                        'maps2'
+                        'maps2',
                     ),
-                    ContextualFeedbackSeverity::ERROR
+                    ContextualFeedbackSeverity::ERROR,
                 );
             } else {
                 $this->messageHelper->addFlashMessage(
                     $processedResponse['error_message'],
                     'Error',
-                    ContextualFeedbackSeverity::ERROR
+                    ContextualFeedbackSeverity::ERROR,
                 );
             }
         }

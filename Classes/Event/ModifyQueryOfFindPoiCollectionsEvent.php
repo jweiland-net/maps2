@@ -28,7 +28,7 @@ class ModifyQueryOfFindPoiCollectionsEvent
     public function __construct(
         QueryBuilder $queryBuilder,
         array $settings,
-        int $poiCollectionUid
+        int $poiCollectionUid,
     ) {
         $this->queryBuilder = $queryBuilder;
         $this->settings = $settings;

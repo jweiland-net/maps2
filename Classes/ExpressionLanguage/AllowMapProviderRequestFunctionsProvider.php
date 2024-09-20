@@ -50,7 +50,7 @@ class AllowMapProviderRequestFunctionsProvider implements ExpressionFunctionProv
             },
             static function ($existingVariables) use ($mapHelper) {
                 return $mapHelper->isRequestToMapProviderAllowed();
-            }
+            },
         );
     }
 }

@@ -88,7 +88,7 @@ class MapServiceTest extends FunctionalTestCase
             $this->messageHelperMock,
             $this->maps2RegistryMock,
             $this->extConfMock,
-            $this->eventDispatcherMock
+            $this->eventDispatcherMock,
         );
     }
 
@@ -100,7 +100,7 @@ class MapServiceTest extends FunctionalTestCase
             $this->messageHelperMock,
             $this->maps2RegistryMock,
             $this->extConfMock,
-            $this->eventDispatcherMock
+            $this->eventDispatcherMock,
         );
 
         parent::tearDown();
@@ -147,7 +147,7 @@ class MapServiceTest extends FunctionalTestCase
 
         self::assertStringContainsString(
             'Test 123',
-            $this->subject->renderInfoWindow($poiCollection)
+            $this->subject->renderInfoWindow($poiCollection),
         );
     }
 
@@ -191,7 +191,7 @@ class MapServiceTest extends FunctionalTestCase
 
         self::assertStringContainsString(
             'Test 123',
-            $this->subject->renderInfoWindow($poiCollection)
+            $this->subject->renderInfoWindow($poiCollection),
         );
     }
 
@@ -238,20 +238,20 @@ class MapServiceTest extends FunctionalTestCase
 
         self::assertStringContainsString(
             'Echterdinger Straße 57',
-            $renderedContent
+            $renderedContent,
         );
         self::assertStringContainsString(
             'Gebäude 9',
-            $renderedContent
+            $renderedContent,
         );
         self::assertStringContainsString(
             '70794 Filderstadt',
-            $renderedContent
+            $renderedContent,
         );
 
         self::assertStringNotContainsString(
             'Germany',
-            $renderedContent
+            $renderedContent,
         );
     }
 
@@ -296,7 +296,7 @@ class MapServiceTest extends FunctionalTestCase
 
         self::assertStringContainsString(
             'Hello all together',
-            $this->subject->renderInfoWindow($poiCollection)
+            $this->subject->renderInfoWindow($poiCollection),
         );
     }
 
@@ -309,8 +309,8 @@ class MapServiceTest extends FunctionalTestCase
             0,
             $this->subject->createNewPoiCollection(
                 1,
-                new Position()
-            )
+                new Position(),
+            ),
         );
     }
 
@@ -328,8 +328,8 @@ class MapServiceTest extends FunctionalTestCase
             1,
             $this->subject->createNewPoiCollection(
                 1,
-                $position
-            )
+                $position,
+            ),
         );
     }
 
@@ -348,7 +348,7 @@ class MapServiceTest extends FunctionalTestCase
             $position,
             [
                 'longitude' => 12.3,
-            ]
+            ],
         );
 
         $poiCollectionRecord = $this->getConnectionPool()
@@ -358,7 +358,7 @@ class MapServiceTest extends FunctionalTestCase
 
         $poiCollectionRecord = array_intersect_key(
             $poiCollectionRecord,
-            ['uid' => 1, 'longitude' => 1]
+            ['uid' => 1, 'longitude' => 1],
         );
 
         // DB systems other than MySQL collect float values as string. Convert them back to float.
@@ -369,7 +369,7 @@ class MapServiceTest extends FunctionalTestCase
                 'uid' => 1,
                 'longitude' => 12.3,
             ],
-            $poiCollectionRecord
+            $poiCollectionRecord,
         );
     }
 
@@ -384,7 +384,7 @@ class MapServiceTest extends FunctionalTestCase
             ->with(
                 self::stringContains('PoiCollection UID can not be empty'),
                 'PoiCollection empty',
-                ContextualFeedbackSeverity::ERROR
+                ContextualFeedbackSeverity::ERROR,
             );
 
         $foreignRecord = [
@@ -394,7 +394,7 @@ class MapServiceTest extends FunctionalTestCase
         $this->subject->assignPoiCollectionToForeignRecord(
             0,
             $foreignRecord,
-            'tx_events2_domain_model_location'
+            'tx_events2_domain_model_location',
         );
     }
 
@@ -424,7 +424,7 @@ class MapServiceTest extends FunctionalTestCase
         $this->subject->assignPoiCollectionToForeignRecord(
             1,
             $foreignRecord,
-            'tx_events2_domain_model_location'
+            'tx_events2_domain_model_location',
         );
     }
 
@@ -439,7 +439,7 @@ class MapServiceTest extends FunctionalTestCase
             ->with(
                 self::stringContains('Foreign table name is a must have value'),
                 'Foreign table name empty',
-                ContextualFeedbackSeverity::ERROR
+                ContextualFeedbackSeverity::ERROR,
             );
 
         $foreignRecord = [
@@ -449,7 +449,7 @@ class MapServiceTest extends FunctionalTestCase
         $this->subject->assignPoiCollectionToForeignRecord(
             1,
             $foreignRecord,
-            ''
+            '',
         );
     }
 
@@ -464,7 +464,7 @@ class MapServiceTest extends FunctionalTestCase
             ->with(
                 self::stringContains('Foreign field name is a must have value'),
                 'Foreign field name empty',
-                ContextualFeedbackSeverity::ERROR
+                ContextualFeedbackSeverity::ERROR,
             );
 
         $foreignRecord = [
@@ -475,7 +475,7 @@ class MapServiceTest extends FunctionalTestCase
             1,
             $foreignRecord,
             'tx_events2_domain_model_location',
-            '  '
+            '  ',
         );
     }
 
@@ -490,7 +490,7 @@ class MapServiceTest extends FunctionalTestCase
             ->with(
                 self::stringContains('Table "invalidTable" is not configured in TCA'),
                 'Table not found',
-                ContextualFeedbackSeverity::ERROR
+                ContextualFeedbackSeverity::ERROR,
             );
 
         $foreignRecord = [
@@ -500,7 +500,7 @@ class MapServiceTest extends FunctionalTestCase
         $this->subject->assignPoiCollectionToForeignRecord(
             1,
             $foreignRecord,
-            'invalidTable'
+            'invalidTable',
         );
     }
 
@@ -515,7 +515,7 @@ class MapServiceTest extends FunctionalTestCase
             ->with(
                 self::stringContains('Field "invalidField" is not configured in TCA'),
                 'Field not found',
-                ContextualFeedbackSeverity::ERROR
+                ContextualFeedbackSeverity::ERROR,
             );
 
         $foreignRecord = [
@@ -526,7 +526,7 @@ class MapServiceTest extends FunctionalTestCase
             1,
             $foreignRecord,
             'tx_events2_domain_model_location',
-            'invalidField'
+            'invalidField',
         );
     }
 
@@ -542,7 +542,7 @@ class MapServiceTest extends FunctionalTestCase
 
         $newUid = $this->subject->createNewPoiCollection(
             12,
-            $position
+            $position,
         );
 
         $this->messageHelperMock
@@ -556,12 +556,12 @@ class MapServiceTest extends FunctionalTestCase
         $this->subject->assignPoiCollectionToForeignRecord(
             1,
             $foreignRecord,
-            'tx_events2_domain_model_location'
+            'tx_events2_domain_model_location',
         );
 
         self::assertSame(
             $foreignRecord['tx_maps2_uid'],
-            $newUid
+            $newUid,
         );
 
         $locationRecord = $this->getConnectionPool()
@@ -571,7 +571,7 @@ class MapServiceTest extends FunctionalTestCase
 
         self::assertSame(
             $locationRecord['tx_maps2_uid'],
-            $newUid
+            $newUid,
         );
     }
 
@@ -635,19 +635,19 @@ class MapServiceTest extends FunctionalTestCase
 
         $newUid = $this->subject->createNewPoiCollection(
             12,
-            $position
+            $position,
         );
         $foreignRecord = ['uid' => 1];
         $this->subject->assignPoiCollectionToForeignRecord(
             $newUid,
             $foreignRecord,
-            'tx_events2_domain_model_location'
+            'tx_events2_domain_model_location',
         );
 
         $event = new PreAddForeignRecordEvent(
             $foreignRecord,
             'tx_events2_domain_model_location',
-            'tx_maps2_uid'
+            'tx_maps2_uid',
         );
 
         $this->eventDispatcherMock

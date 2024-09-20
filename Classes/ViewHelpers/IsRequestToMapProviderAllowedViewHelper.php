@@ -30,7 +30,7 @@ class IsRequestToMapProviderAllowedViewHelper extends AbstractConditionViewHelpe
     public static function renderStatic(
         array $arguments,
         \Closure $renderChildrenClosure,
-        RenderingContextInterface $renderingContext
+        RenderingContextInterface $renderingContext,
     ): bool {
         return GeneralUtility::makeInstance(MapHelper::class)
             ->isRequestToMapProviderAllowed();

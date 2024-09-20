@@ -61,7 +61,7 @@ class CreateMaps2RecordHook
         StoragePidHelper $storagePidHelper,
         MapService $mapService,
         Maps2Registry $maps2Registry,
-        EventDispatcher $eventDispatcher
+        EventDispatcher $eventDispatcher,
     ) {
         $this->geoCodeService = $geoCodeService;
         $this->addressHelper = $addressHelper;
@@ -95,7 +95,7 @@ class CreateMaps2RecordHook
 
                 $foreignLocationRecord = $this->getForeignLocationRecord(
                     $foreignTableName,
-                    $this->getRealUid($uid, $dataHandler)
+                    $this->getRealUid($uid, $dataHandler),
                 );
                 if (empty($foreignLocationRecord)) {
                     continue;
@@ -124,7 +124,7 @@ class CreateMaps2RecordHook
                             $this->synchronizeColumnsFromForeignRecordWithPoiCollection($foreignLocationRecord, $foreignTableName, $foreignColumnName, $options);
                             $this->messageHelper->addFlashMessage(
                                 'While creating this record, we have automatically inserted a new maps2 record, too',
-                                'Maps2 record creation successful'
+                                'Maps2 record creation successful',
                             );
                         }
                     } else {
@@ -132,7 +132,7 @@ class CreateMaps2RecordHook
                         $this->synchronizeColumnsFromForeignRecordWithPoiCollection($foreignLocationRecord, $foreignTableName, $foreignColumnName, $options);
                         $this->messageHelper->addFlashMessage(
                             'While updating this record, we have automatically updated the related maps2 record, too',
-                            'Maps2 record update successful'
+                            'Maps2 record update successful',
                         );
                     }
 
@@ -141,7 +141,7 @@ class CreateMaps2RecordHook
                         (int)$foreignLocationRecord[$foreignColumnName],
                         $foreignTableName,
                         $foreignLocationRecord,
-                        $options
+                        $options,
                     );
 
                     $this->clearHtmlCache((int)$foreignLocationRecord[$foreignColumnName]);
@@ -180,7 +180,7 @@ class CreateMaps2RecordHook
         array $foreignLocationRecord,
         string $foreignTableName,
         string $foreignColumnName,
-        array $options
+        array $options,
     ): bool {
         $isValid = true;
 
@@ -231,7 +231,7 @@ class CreateMaps2RecordHook
                             if (!in_array(
                                 $foreignValue,
                                 GeneralUtility::trimExplode(',', $configuration['value'], true),
-                                true
+                                true,
                             )) {
                                 $isValid = false;
                             }
@@ -253,7 +253,7 @@ class CreateMaps2RecordHook
             $foreignTableName,
             $foreignColumnName,
             $options,
-            $isValid
+            $isValid,
         );
 
         return $isValid;
@@ -308,7 +308,7 @@ class CreateMaps2RecordHook
     protected function updateAddressInPoiCollectionIfNecessary(
         array $foreignLocationRecord,
         string $foreignColumnName,
-        array $options
+        array $options,
     ): void {
         $poiCollection = $this->getPoiCollection((int)$foreignLocationRecord[$foreignColumnName]);
         if (!$this->addressHelper->isSameAddress($poiCollection['address'], $foreignLocationRecord, $options)) {
@@ -326,7 +326,7 @@ class CreateMaps2RecordHook
                     ],
                     [
                         'uid' => (int)$foreignLocationRecord[$foreignColumnName],
-                    ]
+                    ],
                 );
             }
         }
@@ -339,7 +339,7 @@ class CreateMaps2RecordHook
      */
     protected function updateForeignLocationRecordIfPoiCollectionDoesNotExist(
         array &$foreignLocationRecord,
-        string $foreignColumnName
+        string $foreignColumnName,
     ): void {
         $poiCollection = $this->getPoiCollection((int)$foreignLocationRecord[$foreignColumnName], ['uid']);
         if (empty($poiCollection)) {
@@ -352,7 +352,7 @@ class CreateMaps2RecordHook
     {
         $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable('tx_maps2_domain_model_poicollection');
         $queryBuilder->getRestrictions()->removeAll()->add(
-            GeneralUtility::makeInstance(DeletedRestriction::class)
+            GeneralUtility::makeInstance(DeletedRestriction::class),
         );
 
         try {
@@ -362,8 +362,8 @@ class CreateMaps2RecordHook
                 ->where(
                     $queryBuilder->expr()->eq(
                         'uid',
-                        $queryBuilder->createNamedParameter($poiCollectionUid, Connection::PARAM_INT)
-                    )
+                        $queryBuilder->createNamedParameter($poiCollectionUid, Connection::PARAM_INT),
+                    ),
                 )
                 ->executeQuery()
                 ->fetchAssociative();
@@ -386,11 +386,11 @@ class CreateMaps2RecordHook
         array &$foreignLocationRecord,
         string $foreignTableName,
         string $foreignColumnName,
-        array $options
+        array $options,
     ): bool {
         $defaultStoragePid = $this->storagePidHelper->getDefaultStoragePidForNewPoiCollection(
             $foreignLocationRecord,
-            $options
+            $options,
         );
         if (empty($defaultStoragePid)) {
             return false;
@@ -404,7 +404,7 @@ class CreateMaps2RecordHook
                 $this->mapService->createNewPoiCollection($defaultStoragePid, $position),
                 $foreignLocationRecord,
                 $foreignTableName,
-                $foreignColumnName
+                $foreignColumnName,
             );
 
             return true;
@@ -413,7 +413,7 @@ class CreateMaps2RecordHook
         $this->messageHelper->addFlashMessage(
             'While saving this record, we tried to automatically create a new maps2 record, but Map Providers GeoCode API can not find your address: ' . $address,
             'Map Provider has not found your address',
-            ContextualFeedbackSeverity::ERROR
+            ContextualFeedbackSeverity::ERROR,
         );
 
         return false;
@@ -432,7 +432,7 @@ class CreateMaps2RecordHook
 
         $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable($foreignTableName);
         $queryBuilder->getRestrictions()->removeAll()->add(
-            GeneralUtility::makeInstance(DeletedRestriction::class)
+            GeneralUtility::makeInstance(DeletedRestriction::class),
         );
 
         try {
@@ -442,8 +442,8 @@ class CreateMaps2RecordHook
                 ->where(
                     $queryBuilder->expr()->eq(
                         'uid',
-                        $queryBuilder->createNamedParameter($uid, Connection::PARAM_INT)
-                    )
+                        $queryBuilder->createNamedParameter($uid, Connection::PARAM_INT),
+                    ),
                 )
                 ->executeQuery()
                 ->fetchAssociative();
@@ -480,13 +480,13 @@ class CreateMaps2RecordHook
         array $foreignLocationRecord,
         string $foreignTableName,
         string $maps2ColumnName,
-        array $columnOptions = []
+        array $columnOptions = [],
     ): bool {
         if (!array_key_exists('synchronizeColumns', $columnOptions)) {
             $this->messageHelper->addFlashMessage(
                 'There are no synchronizationColumns configured in your maps2 registration, so we are using the address as maps2 title',
                 'Using address as record title',
-                ContextualFeedbackSeverity::INFO
+                ContextualFeedbackSeverity::INFO,
             );
 
             return false;
@@ -499,8 +499,8 @@ class CreateMaps2RecordHook
             ->where(
                 $queryBuilder->expr()->eq(
                     'uid',
-                    $queryBuilder->createNamedParameter($foreignLocationRecord[$maps2ColumnName], Connection::PARAM_INT)
-                )
+                    $queryBuilder->createNamedParameter($foreignLocationRecord[$maps2ColumnName], Connection::PARAM_INT),
+                ),
             );
 
         $tableNeedsUpdate = false;
@@ -511,7 +511,7 @@ class CreateMaps2RecordHook
 
             $queryBuilder = $queryBuilder->set(
                 $synchronizeColumns['poiCollectionColumnName'],
-                $foreignLocationRecord[$synchronizeColumns['foreignColumnName']]
+                $foreignLocationRecord[$synchronizeColumns['foreignColumnName']],
             );
             $tableNeedsUpdate = true;
         }
@@ -542,7 +542,7 @@ class CreateMaps2RecordHook
             $this->messageHelper->addFlashMessage(
                 'Please check your Maps registration. The keys foreignColumnName and poiCollectionColumnName have to be set.',
                 'Missing registration keys',
-                ContextualFeedbackSeverity::ERROR
+                ContextualFeedbackSeverity::ERROR,
             );
 
             return false;
@@ -558,7 +558,7 @@ class CreateMaps2RecordHook
             $this->messageHelper->addFlashMessage(
                 'Error while trying to synchronize columns of your record with maps2 record. It seems that "' . $foreignTableName . '" is not registered as table or "' . $foreignColumnName . '" is not a valid column in ' . $foreignTableName,
                 'Missing table/column in TCA',
-                ContextualFeedbackSeverity::ERROR
+                ContextualFeedbackSeverity::ERROR,
             );
 
             return false;
@@ -576,7 +576,7 @@ class CreateMaps2RecordHook
         int $poiCollectionUid,
         string $foreignTableName,
         array $foreignLocationRecord,
-        array $options
+        array $options,
     ): void {
         $this->eventDispatcher->dispatch(
             new PostProcessPoiCollectionRecordEvent(
@@ -584,7 +584,7 @@ class CreateMaps2RecordHook
                 $poiCollectionUid,
                 $foreignTableName,
                 $foreignLocationRecord,
-                $options
+                $options,
             ),
         );
     }
@@ -597,14 +597,14 @@ class CreateMaps2RecordHook
         string $foreignTableName,
         string $foreignColumnName,
         array $options,
-        bool &$isValid
+        bool &$isValid,
     ): void {
         $event = new AllowCreationOfPoiCollectionEvent(
             $foreignLocationRecord,
             $foreignTableName,
             $foreignColumnName,
             $options,
-            $isValid
+            $isValid,
         );
         /** @var AllowCreationOfPoiCollectionEvent $event */
         $event = $this->eventDispatcher->dispatch($event);

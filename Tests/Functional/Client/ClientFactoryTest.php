@@ -40,8 +40,8 @@ class ClientFactoryTest extends FunctionalTestCase
 
         $this->subject = new ClientFactory(
             new MapHelper(
-                $this->extConf
-            )
+                $this->extConf,
+            ),
         );
     }
 
@@ -49,7 +49,7 @@ class ClientFactoryTest extends FunctionalTestCase
     {
         unset(
             $this->subject,
-            $this->extConf
+            $this->extConf,
         );
 
         parent::tearDown();
@@ -65,7 +65,7 @@ class ClientFactoryTest extends FunctionalTestCase
 
         self::assertInstanceOf(
             GoogleMapsClient::class,
-            $this->subject->create()
+            $this->subject->create(),
         );
     }
 
@@ -79,7 +79,7 @@ class ClientFactoryTest extends FunctionalTestCase
 
         self::assertInstanceOf(
             OpenStreetMapClient::class,
-            $this->subject->create()
+            $this->subject->create(),
         );
     }
 }
