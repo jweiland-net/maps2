@@ -36,10 +36,6 @@ jobs:
       - name: 'CGL'
         run: Build/Scripts/runTests.sh -n -p ${{ matrix.php }} -s cgl
 
-      # Disabled phpstan as the level-6 needs a lot of fixes
-      #- name: 'phpstan'
-      #  run: Build/Scripts/runTests.sh -n -p ${{ matrix.php }} -s phpstan
-
       - name: 'Execute unit tests'
         run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s unit
 

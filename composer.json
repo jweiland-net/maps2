@@ -34,7 +34,6 @@
 		"ergebnis/composer-normalize": "~2.42.0",
 		"friendsofphp/php-cs-fixer": "^3.14",
 		"jweiland/events2": "^9.0",
-		"phpstan/phpstan": "^1.10",
 		"phpunit/phpunit": "^9.6",
 		"sjbr/static-info-tables": "^12.4",
 		"typo3/coding-standards": "^0.6",
