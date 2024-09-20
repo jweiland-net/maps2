@@ -40,7 +40,7 @@
 		"typo3/testing-framework": "^7.0.2"
 	},
 	"suggest": {
-		"sjbr/static-info-tables": "Install this package, if you want to choose from contained contries instead of typing them"
+		"sjbr/static-info-tables": "Install this package, if you want to choose from contained countries instead of typing them"
 	},
 	"autoload": {
 		"psr-4": {
