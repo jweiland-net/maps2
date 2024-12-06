@@ -13,23 +13,21 @@ namespace JWeiland\Maps2\ViewHelpers\Cache;
 
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Service\CacheService;
-use TYPO3\CMS\Core\Cache\CacheManager;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
+use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
-use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
 /**
  * A ViewHelper to set a value to maps2 cache
  */
 class SetCacheViewHelper extends AbstractViewHelper
 {
-    use CompileWithRenderStatic;
+    public function __construct(
+        private readonly CacheService $cacheService,
+        private readonly FrontendInterface $cache
+    ) {}
 
     /**
      * The result of this ViewHelper should not be escaped
-     *
-     * @var bool
      */
     protected $escapeOutput = false;
 
@@ -71,20 +69,20 @@ class SetCacheViewHelper extends AbstractViewHelper
     /**
      * Saves data in a cache file.
      */
-    public static function renderStatic(
-        array $arguments,
-        \Closure $renderChildrenClosure,
-        RenderingContextInterface $renderingContext,
-    ): void {
-        $cacheService = GeneralUtility::makeInstance(CacheService::class);
-        $poiCollection = $cacheService->preparePoiCollectionForCacheMethods($arguments['poiCollection']);
-        $cache = GeneralUtility::makeInstance(CacheManager::class)->getCache('maps2_cachedhtml');
-
-        $cache->set(
-            $cacheService->getCacheIdentifier($poiCollection, $arguments['prefix']),
-            $arguments['data'],
-            $cacheService->getCacheTags($poiCollection, $arguments['tags']),
-            ($arguments['lifetime'] === null ? null : (int)$arguments['lifetime']),
+    public function render(): void
+    {
+        $poiCollection = $this->cacheService->preparePoiCollectionForCacheMethods(
+            $this->arguments['poiCollection']
         );
+
+        try {
+            $this->cache->set(
+                $this->cacheService->getCacheIdentifier($poiCollection, $this->arguments['prefix']),
+                $this->arguments['data'],
+                $this->cacheService->getCacheTags($poiCollection, $this->arguments['tags']),
+                ($this->arguments['lifetime'] === null ? null : (int)$this->arguments['lifetime'])
+            );
+        } catch (\Exception) {
+        }
     }
 }

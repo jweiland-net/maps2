@@ -13,18 +13,18 @@ namespace JWeiland\Maps2\ViewHelpers\Cache;
 
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Service\CacheService;
-use TYPO3\CMS\Core\Cache\CacheManager;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
+use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
-use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
 /**
  * A ViewHelper to check, if a cache entry exists in maps2 cache
  */
 class HasCacheViewHelper extends AbstractViewHelper
 {
-    use CompileWithRenderStatic;
+    public function __construct(
+        private readonly CacheService $cacheService,
+        private readonly FrontendInterface $cache
+    ) {}
 
     public function initializeArguments(): void
     {
@@ -46,20 +46,22 @@ class HasCacheViewHelper extends AbstractViewHelper
     /**
      * Checks if caching framework has the requested cache entry
      */
-    public static function renderStatic(
-        array $arguments,
-        \Closure $renderChildrenClosure,
-        RenderingContextInterface $renderingContext,
-    ): bool {
-        $cacheService = GeneralUtility::makeInstance(CacheService::class);
-        $poiCollection = $cacheService->preparePoiCollectionForCacheMethods($arguments['poiCollection']);
-        $cache = GeneralUtility::makeInstance(CacheManager::class)->getCache('maps2_cachedhtml');
-
-        return $cache->has(
-            $cacheService->getCacheIdentifier(
-                $poiCollection,
-                $arguments['prefix'],
-            ),
+    public function render(): bool
+    {
+        $poiCollection = $this->cacheService->preparePoiCollectionForCacheMethods(
+            $this->arguments['poiCollection']
         );
+
+        try {
+            return $this->cache->has(
+                $this->cacheService->getCacheIdentifier(
+                    $poiCollection,
+                    $this->arguments['prefix']
+                )
+            );
+        } catch (\Exception) {
+        }
+
+        return false;
     }
 }

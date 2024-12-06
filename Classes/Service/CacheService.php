@@ -13,6 +13,7 @@ namespace JWeiland\Maps2\Service;
 
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Crypto\HashService;
 use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -20,8 +21,10 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * A global accessible class to build Cache Identifier and Tags for Cache Entries.
  * Used in Cache ViewHelpers and after storing PoiCollections in Backend: CreateMaps2RecordHook
  */
-class CacheService
+readonly class CacheService
 {
+    public function __construct(protected HashService $hashService) {}
+
     /**
      * In previous versions our CacheIdentifier was infoWindow{PoiCollectionUid}.
      * In multilingual environments, where UID is always the same, we have to build a more unique
@@ -44,9 +47,10 @@ class CacheService
         return sprintf(
             '%s%s',
             $prefix,
-            GeneralUtility::hmac(
+            $this->hashService->hmac(
                 \json_encode(array_diff_key($poiCollection, ['uid', 'pid', 'language', 'title', 'address'])),
-            ),
+                $prefix
+            )
         );
     }
 
