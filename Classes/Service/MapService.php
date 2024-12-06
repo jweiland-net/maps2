@@ -27,22 +27,22 @@ use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\View\ViewFactoryData;
+use TYPO3\CMS\Core\View\ViewFactoryInterface;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
-use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
  * This class contains recurring methods for both map providers.
  */
 class MapService
 {
-    protected array $settings = [];
-
     public function __construct(
         protected ConfigurationManagerInterface $configurationManager,
         protected MessageHelper $messageHelper,
         protected Maps2Registry $maps2Registry,
         protected ExtConf $extConf,
-        protected EventDispatcherInterface $eventDispatcher
+        protected EventDispatcherInterface $eventDispatcher,
+        protected ViewFactoryInterface $viewFactory
     ) {}
 
     /**
@@ -56,16 +56,15 @@ class MapService
             'Maps2',
         );
 
-        $view = GeneralUtility::makeInstance(StandaloneView::class);
-        $view->setLayoutRootPaths($typoScriptConfiguration['view']['layoutRootPaths'] ?? []);
-        $view->setPartialRootPaths($typoScriptConfiguration['view']['partialRootPaths'] ?? []);
+        $view = $this->viewFactory->create(new ViewFactoryData(
+            partialRootPaths: $typoScriptConfiguration['view']['partialRootPaths'] ?? [],
+            layoutRootPaths: $typoScriptConfiguration['view']['layoutRootPaths'] ?? [],
+            templatePathAndFilename: GeneralUtility::getFileAbsFileName(
+                $this->getInfoWindowContentTemplatePath()
+            )
+        ));
         $view->assign('settings', $this->getSettings());
         $view->assign('poiCollection', $poiCollection);
-        $view->setTemplatePathAndFilename(
-            GeneralUtility::getFileAbsFileName(
-                $this->getInfoWindowContentTemplatePath(),
-            ),
-        );
 
         return $view->render();
     }
