@@ -12,19 +12,19 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\ViewHelpers;
 
 use JWeiland\Maps2\Helper\SettingsHelper;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
-use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
-use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
-/*
+/**
  * In overlay template we need a link to allow requests for map providers.
  * Use this ViewHelper to build that URI.
  */
 class RequestUriForOverlayViewHelper extends AbstractViewHelper
 {
-    use CompileWithRenderStatic;
+    public function __construct(
+        private readonly SettingsHelper $settingsHelper,
+        private readonly UriBuilder $uriBuilder
+    ) {}
 
     public function initializeArguments(): void
     {
@@ -40,12 +40,9 @@ class RequestUriForOverlayViewHelper extends AbstractViewHelper
     /**
      * Convert all array and object types into a json string. Useful for data-Attributes
      */
-    public static function renderStatic(
-        array $arguments,
-        \Closure $renderChildrenClosure,
-        RenderingContextInterface $renderingContext,
-    ): string {
-        $uriBuilder = self::getUriBuilder()
+    public function render(): string
+    {
+        $uriBuilder = $this->uriBuilder
             ->reset()
             ->setAddQueryString(true)
             ->setArguments([
@@ -55,7 +52,7 @@ class RequestUriForOverlayViewHelper extends AbstractViewHelper
             ])
             ->setArgumentsToBeExcludedFromQueryString(['cHash']);
 
-        if ((self::getSettingsHelper()->getPreparedSettings()['overlay']['link']['addSection'] ?? '') === '1') {
+        if (($this->settingsHelper->getPreparedSettings()['overlay']['link']['addSection'] ?? '') === '1') {
             $ttContentUid = (int)($arguments['ttContentUid'] ?? 0);
             if ($ttContentUid) {
                 $uriBuilder->setSection('c' . $ttContentUid);
@@ -63,15 +60,5 @@ class RequestUriForOverlayViewHelper extends AbstractViewHelper
         }
 
         return $uriBuilder->build();
-    }
-
-    protected static function getSettingsHelper(): SettingsHelper
-    {
-        return GeneralUtility::makeInstance(SettingsHelper::class);
-    }
-
-    protected static function getUriBuilder(): UriBuilder
-    {
-        return GeneralUtility::makeInstance(UriBuilder::class);
     }
 }
