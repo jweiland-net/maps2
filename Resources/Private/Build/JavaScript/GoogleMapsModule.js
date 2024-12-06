@@ -96,7 +96,7 @@ class GoogleMapsModule {
     }
 
     // if maps2 was inserted in (bootstrap) tabs, we have to re-render the map
-    document.querySelector("ul.t3js-tabs li:nth-of-type(2) a[data-bs-toggle='tab']").addEventListener("shown.bs.tab", () => {
+    document.querySelector("ul.t3js-tabs li:nth-of-type(2) button[data-bs-toggle='tab']").addEventListener("shown.bs.tab", () => {
       google.maps.event.trigger(this.map, "resize");
       if (poiCollection.latitude && poiCollection.longitude) {
         this.map.setCenter(new google.maps.LatLng(poiCollection.latitude, poiCollection.longitude));
