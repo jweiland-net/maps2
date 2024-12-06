@@ -30,7 +30,7 @@ use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
  */
 class OpenStreetMapElement extends AbstractFormElement
 {
-    private const string ELEMENT_TEMPLATE = 'EXT:maps2/Resources/Private/Templates/Tca/OpenStreetMap.html';
+    private const ELEMENT_TEMPLATE = 'EXT:maps2/Resources/Private/Templates/Tca/OpenStreetMap.html';
 
     private ExtConf $extConf;
 

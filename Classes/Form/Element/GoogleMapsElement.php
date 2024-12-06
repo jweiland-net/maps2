@@ -29,7 +29,7 @@ use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
  */
 class GoogleMapsElement extends AbstractFormElement
 {
-    private const string ELEMENT_TEMPLATE = 'EXT:maps2/Resources/Private/Templates/Tca/GoogleMaps.html';
+    private const ELEMENT_TEMPLATE = 'EXT:maps2/Resources/Private/Templates/Tca/GoogleMaps.html';
 
     private ViewFactoryInterface $viewFactory;
 

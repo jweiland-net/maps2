@@ -23,7 +23,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class PoiCollectionService
 {
-    private const string TABLE = 'tx_maps2_domain_model_poicollection';
+    private const TABLE = 'tx_maps2_domain_model_poicollection';
 
     public function __construct(
         protected QueryBuilder $queryBuilder

@@ -27,7 +27,7 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  */
 class Maps2PluginPreview extends StandardContentPreviewRenderer
 {
-    protected const string PREVIEW_TEMPLATE = 'EXT:maps2/Resources/Private/Templates/PluginPreview/Maps2.html';
+    protected const PREVIEW_TEMPLATE = 'EXT:maps2/Resources/Private/Templates/PluginPreview/Maps2.html';
 
     public function __construct(
         protected FlexFormService $flexFormService,
