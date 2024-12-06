@@ -12,51 +12,123 @@ use TYPO3\CMS\Core\Security\ContentSecurityPolicy\SourceScheme;
 use TYPO3\CMS\Core\Security\ContentSecurityPolicy\UriValue;
 use TYPO3\CMS\Core\Type\Map;
 
-return Map::fromEntries([
-    Scope::backend(),
-    // NOTICE: When using `MutationMode::Set` existing declarations will be overridden
-
-    new MutationCollection(
-        new Mutation(
-            MutationMode::Set,
-            Directive::DefaultSrc,
-            SourceKeyword::self,
+return Map::fromEntries(
+    [
+        Scope::backend(),
+        new MutationCollection(
+            new Mutation(
+                MutationMode::Set,
+                Directive::DefaultSrc,
+                SourceKeyword::self,
+            ),
+            new Mutation(
+                MutationMode::Extend,
+                Directive::ScriptSrc,
+                SourceKeyword::nonceProxy,
+                SourceScheme::https,
+                SourceKeyword::strictDynamic,
+                SourceKeyword::unsafeEval,
+                SourceScheme::blob,
+            ),
+            new Mutation(
+                MutationMode::Extend,
+                Directive::ImgSrc,
+                SourceKeyword::self,
+                new UriValue('https://*.googleapis.com'),
+                new UriValue('https://*.gstatic.com'),
+                new UriValue('*.google.com'),
+                new UriValue('*.googleusercontent.com'),
+                SourceScheme::data
+            ),
+            new Mutation(
+                MutationMode::Extend,
+                Directive::FrameSrc,
+                new UriValue('*.google.com'),
+            ),
+            new Mutation(
+                MutationMode::Extend,
+                Directive::ConnectSrc,
+                new UriValue('https://*.googleapis.com'),
+                new UriValue('*.google.com'),
+                new UriValue('https://*.gstatic.com'),
+                SourceScheme::data,
+                SourceScheme::blob
+            ),
+            new Mutation(
+                MutationMode::Extend,
+                Directive::FontSrc,
+                new UriValue('https://fonts.gstatic.com'),
+            ),
+            new Mutation(
+                MutationMode::Extend,
+                Directive::StyleSrc,
+                SourceKeyword::nonceProxy,
+                new UriValue('https://fonts.googleapis.com')
+            ),
+            new Mutation(
+                MutationMode::Extend,
+                Directive::WorkerSrc,
+                SourceScheme::blob,
+            ),
         ),
-        new Mutation(
-            MutationMode::Extend,
-            Directive::ScriptSrc,
-            SourceScheme::https,
-            new UriValue('https://maps.googleapis.com'),
+    ],
+    [
+        Scope::frontend(),
+        new MutationCollection(
+            new Mutation(
+                MutationMode::Set,
+                Directive::DefaultSrc,
+                SourceKeyword::self,
+            ),
+            new Mutation(
+                MutationMode::Extend,
+                Directive::ScriptSrc,
+                SourceKeyword::nonceProxy,
+                SourceScheme::https,
+                SourceKeyword::strictDynamic,
+                SourceKeyword::unsafeEval,
+                SourceScheme::blob,
+            ),
+            new Mutation(
+                MutationMode::Extend,
+                Directive::ImgSrc,
+                SourceKeyword::self,
+                new UriValue('https://*.googleapis.com'),
+                new UriValue('https://*.gstatic.com'),
+                new UriValue('*.google.com'),
+                new UriValue('*.googleusercontent.com'),
+                SourceScheme::data
+            ),
+            new Mutation(
+                MutationMode::Extend,
+                Directive::FrameSrc,
+                new UriValue('*.google.com'),
+            ),
+            new Mutation(
+                MutationMode::Extend,
+                Directive::ConnectSrc,
+                new UriValue('https://*.googleapis.com'),
+                new UriValue('*.google.com'),
+                new UriValue('https://*.gstatic.com'),
+                SourceScheme::data,
+                SourceScheme::blob
+            ),
+            new Mutation(
+                MutationMode::Extend,
+                Directive::FontSrc,
+                new UriValue('https://fonts.gstatic.com'),
+            ),
+            new Mutation(
+                MutationMode::Extend,
+                Directive::StyleSrc,
+                SourceKeyword::nonceProxy,
+                new UriValue('https://fonts.googleapis.com')
+            ),
+            new Mutation(
+                MutationMode::Extend,
+                Directive::WorkerSrc,
+                SourceScheme::blob,
+            ),
         ),
-        new Mutation(
-            MutationMode::Extend,
-            Directive::ConnectSrc,
-            SourceScheme::https,
-            new UriValue('https://maps.googleapis.com'),
-        ),
-        new Mutation(
-            MutationMode::Extend,
-            Directive::FontSrc,
-            SourceScheme::https,
-            new UriValue('https://maps.gstatic.com'),
-        ),
-        new Mutation(
-            MutationMode::Extend,
-            Directive::ImgSrc,
-            SourceScheme::https,
-            new UriValue('https://maps.gstatic.com'),
-        ),
-        new Mutation(
-            MutationMode::Extend,
-            Directive::ImgSrc,
-            SourceScheme::https,
-            new UriValue('https://maps.googleapis.com'),
-        ),
-        new Mutation(
-            MutationMode::Extend,
-            Directive::StyleSrcElem,
-            SourceScheme::https,
-            new UriValue('https://fonts.googleapis.com'),
-        ),
-    ),
-]);
+    ]
+);

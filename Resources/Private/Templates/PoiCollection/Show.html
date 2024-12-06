@@ -9,6 +9,14 @@
     <f:flashMessages/>
     <f:flashMessages queueIdentifier="extbase.flashmessages.maps2"/>
 
+    <f:comment><!-- What a dump solution to add the nonce attribute to all dynamically generated style tags by Google Maps API --></f:comment>
+    <f:asset.css identifier="maps2-google-maps" useNonce="1" priority="1">;</f:asset.css>
+    <f:asset.script identifier="maps2-google-maps"
+                    src="https://maps.googleapis.com/maps/api/js?key={environment.settings.googleMapsJavaScriptApiKey}&libraries=places&callback=initMap"
+                    async="1"
+                    inline="0"
+                    useNonce="1"/>
+
     <div id="maps2-{data.uid}"
          class="maps2"
          data-environment="{environment -> maps2:convertToJson()}"

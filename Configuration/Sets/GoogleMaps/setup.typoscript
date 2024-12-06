@@ -8,12 +8,7 @@ page.includeJSFooterlibs.googleMapsForMaps2 >
     maps2 = EXT:maps2/Resources/Public/JavaScript/GoogleMaps2.min.js
 
     markerClustererForMaps2 = EXT:maps2/Resources/Public/JavaScript/MarkerClusterer.js
-    markerClustererForMaps2.if.isTrue = {$plugin.tx_maps2.view.enableMarkerClusterer}
-
-    googleMapsForMaps2 = https://maps.googleapis.com/maps/api/js?key={$plugin.tx_maps2.view.googleMapsJavaScriptApiKey}&libraries=places&callback=initMap
-    googleMapsForMaps2.external = 1
-    googleMapsForMaps2.disableCompression = 1
-    googleMapsForMaps2.excludeFromConcatenation = 1
+    markerClustererForMaps2.if.isTrue = {$maps2.enableMarkerClusterer}
   }
 [ELSE]
   # Requests to Google Maps are not allowed. Inform the user about cookies and request permissions for 3rd party.
@@ -28,9 +23,10 @@ plugin.tx_maps2 {
     scaleControl = 1
     streetViewControl = 1
     fullscreenMapControl = 1
+    googleMapsJavaScriptApiKey = {$maps2.googleMapsJavaScriptApiKey}
     mapTypeId = google.maps.MapTypeId.ROADMAP
     markerClusterer {
-      enable = {$plugin.tx_maps2.view.enableMarkerClusterer}
+      enable = {$maps2.enableMarkerClusterer}
       imagePath = EXT:maps2/Resources/Public/Icons/MarkerClusterer/m
     }
   }
