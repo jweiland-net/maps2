@@ -28,16 +28,14 @@
 	},
 	"require": {
 		"ext-json": "*",
-		"typo3/cms-core": "^12.4.11"
+		"typo3/cms-core": "^12.4.0 || ^13.4.0"
 	},
 	"require-dev": {
-		"ergebnis/composer-normalize": "~2.42.0",
-		"friendsofphp/php-cs-fixer": "^3.14",
-		"jweiland/events2": "^9.0",
+		"typo3/testing-framework": "^7.0.2",
 		"phpunit/phpunit": "^9.6",
-		"sjbr/static-info-tables": "^12.4",
 		"typo3/coding-standards": "^0.6",
-		"typo3/testing-framework": "^7.0.2"
+		"jweiland/events2": "^9.0",
+		"sjbr/static-info-tables": "^13.4"
 	},
 	"suggest": {
 		"sjbr/static-info-tables": "Install this package, if you want to choose from contained countries instead of typing them"
