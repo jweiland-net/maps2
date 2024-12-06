@@ -15,40 +15,67 @@ if (!defined('TYPO3')) {
     die('Access denied.');
 }
 
-$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['maps2_maps2'] = 'pi_flexform';
-ExtensionManagementUtility::addPiFlexFormValue(
+ExtensionManagementUtility::addToAllTCAtypes(
+    'tt_content',
+    '--div--;Configuration,pi_flexform',
     'maps2_maps2',
+    'after:subheader'
+);
+ExtensionManagementUtility::addPiFlexFormValue(
+    '*',
     'FILE:EXT:maps2/Configuration/FlexForms/Maps2.xml',
+    'maps2_maps2'
 );
 
-$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['maps2_searchwithinradius'] = 'pi_flexform';
-ExtensionManagementUtility::addPiFlexFormValue(
+ExtensionManagementUtility::addToAllTCAtypes(
+    'tt_content',
+    '--div--;Configuration,pi_flexform',
     'maps2_searchwithinradius',
+    'after:subheader'
+);
+ExtensionManagementUtility::addPiFlexFormValue(
+    '*',
     'FILE:EXT:maps2/Configuration/FlexForms/Radius.xml',
+    'maps2_searchwithinradius'
 );
 
-$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['maps2_citymap'] = 'pi_flexform';
-ExtensionManagementUtility::addPiFlexFormValue(
+ExtensionManagementUtility::addToAllTCAtypes(
+    'tt_content',
+    '--div--;Configuration,pi_flexform',
     'maps2_citymap',
+    'after:subheader'
+);
+ExtensionManagementUtility::addPiFlexFormValue(
+    '*',
     'FILE:EXT:maps2/Configuration/FlexForms/CityMap.xml',
+    'maps2_citymap'
 );
 
 ExtensionUtility::registerPlugin(
     'maps2',
     'Maps2',
-    'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.maps.title',
+    'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.maps2.title',
+    'ext-maps2-wizard-icon',
+    'plugins',
+    'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.maps2.description'
 );
 
 ExtensionUtility::registerPlugin(
     'maps2',
     'SearchWithinRadius',
-    'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.radius.title',
+    'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.searchwithinradius.title',
+    'ext-maps2-wizard-icon',
+    'plugins',
+    'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.searchwithinradius.description'
 );
 
 ExtensionUtility::registerPlugin(
     'maps2',
     'CityMap',
-    'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.cityMap.title',
+    'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.citymap.title',
+    'ext-maps2-wizard-icon',
+    'plugins',
+    'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.citymap.description'
 );
 
 $GLOBALS['TCA']['tt_content']['types']['list']['previewRenderer']['maps2_maps2']
