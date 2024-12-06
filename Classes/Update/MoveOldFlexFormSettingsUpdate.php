@@ -173,24 +173,20 @@ class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
                 ->select('uid', 'pi_flexform')
                 ->from('tt_content')
                 ->where(
-                    $queryBuilder->expr()->eq(
-                        'CType',
-                        $queryBuilder->createNamedParameter('list'),
-                    ),
                     $queryBuilder->expr()->or(
                         $queryBuilder->expr()->eq(
-                            'list_type',
-                            $queryBuilder->createNamedParameter('maps2_citymap'),
+                            'CType',
+                            $queryBuilder->createNamedParameter('maps2_citymap')
                         ),
                         $queryBuilder->expr()->eq(
-                            'list_type',
-                            $queryBuilder->createNamedParameter('maps2_maps2'),
+                            'CType',
+                            $queryBuilder->createNamedParameter('maps2_maps2')
                         ),
                         $queryBuilder->expr()->eq(
-                            'list_type',
-                            $queryBuilder->createNamedParameter('maps2_searchwithinradius'),
-                        ),
-                    ),
+                            'CType',
+                            $queryBuilder->createNamedParameter('maps2_searchwithinradius')
+                        )
+                    )
                 )
                 ->executeQuery();
 

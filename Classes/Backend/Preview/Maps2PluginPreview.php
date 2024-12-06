@@ -26,7 +26,13 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  */
 class Maps2PluginPreview extends StandardContentPreviewRenderer
 {
-    protected const PREVIEW_TEMPLATE = 'EXT:maps2/Resources/Private/Templates/PluginPreview/Maps2.html';
+    private const PREVIEW_TEMPLATE = 'EXT:maps2/Resources/Private/Templates/PluginPreview/Maps2.html';
+
+    private const ALLOWED_PLUGINS = [
+        'maps2_maps2',
+        'maps2_citymap',
+        'maps2_searchwithinradius',
+    ];
 
     public function __construct(
         protected FlexFormService $flexFormService,
@@ -54,7 +60,7 @@ class Maps2PluginPreview extends StandardContentPreviewRenderer
             $view->assign('pi_flexform_transformed', $piFlexformData);
         }
 
-        if ($ttContentRecord['list_type'] === 'maps2_maps2') {
+        if ($ttContentRecord['CType'] === 'maps2_maps2') {
             $this->addPoiCollection($view, $piFlexformData);
         }
 
@@ -67,7 +73,7 @@ class Maps2PluginPreview extends StandardContentPreviewRenderer
             return false;
         }
 
-        if (!in_array($ttContentRecord['CType'], ['maps2_maps2', 'maps2_citymap', 'maps2_searchwithinradius'], true)) {
+        if (!in_array($ttContentRecord['CType'], self::ALLOWED_PLUGINS, true)) {
             return false;
         }
 
@@ -76,15 +82,9 @@ class Maps2PluginPreview extends StandardContentPreviewRenderer
 
     protected function addPluginName(ViewInterface $view, array $ttContentRecord): void
     {
-        $pluginName = match ($ttContentRecord['list_type']) {
-            'maps2_citymap' => 'cityMap',
-            'maps2_searchwithinradius' => 'radius',
-            default => 'maps',
-        };
-
         $langKey = sprintf(
             'plugin.%s.title',
-            $pluginName,
+            str_replace('maps2_', '', $ttContentRecord['CType'])
         );
 
         $view->assign(
