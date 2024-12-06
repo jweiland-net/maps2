@@ -44,6 +44,18 @@ services:
   JWeiland\Maps2\Service\MapService:
     public: true
 
+  querybuilder.tx_maps2_domain_model_poicollection:
+    class: 'TYPO3\CMS\Core\Database\Query\QueryBuilder'
+    factory:
+      - '@TYPO3\CMS\Core\Database\ConnectionPool'
+      - 'getQueryBuilderForTable'
+    arguments:
+      - 'tx_maps2_domain_model_poicollection'
+
+  JWeiland\Maps2\Service\PoiCollectionService:
+    arguments:
+      $queryBuilder: '@querybuilder.tx_maps2_domain_model_poicollection'
+
   JWeiland\Maps2\Tca\Maps2Registry:
     tags:
       - name: event.listener

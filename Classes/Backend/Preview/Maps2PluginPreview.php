@@ -11,9 +11,9 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Backend\Preview;
 
+use JWeiland\Maps2\Service\PoiCollectionService;
 use TYPO3\CMS\Backend\Preview\StandardContentPreviewRenderer;
 use TYPO3\CMS\Backend\View\BackendLayout\Grid\GridColumnItem;
-use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Service\FlexFormService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
@@ -25,7 +25,12 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
  */
 class Maps2PluginPreview extends StandardContentPreviewRenderer
 {
-    protected string $template = 'EXT:maps2/Resources/Private/Templates/PluginPreview/Maps2.html';
+    protected const string PREVIEW_TEMPLATE = 'EXT:maps2/Resources/Private/Templates/PluginPreview/Maps2.html';
+
+    public function __construct(
+        protected FlexFormService $flexFormService,
+        protected PoiCollectionService $poiCollectionService
+    ) {}
 
     public function renderPageModulePreviewContent(GridColumnItem $item): string
     {
@@ -87,7 +92,7 @@ class Maps2PluginPreview extends StandardContentPreviewRenderer
     protected function getStandaloneView(): StandaloneView
     {
         $view = GeneralUtility::makeInstance(StandaloneView::class);
-        $view->setTemplatePathAndFilename($this->template);
+        $view->setTemplatePathAndFilename(self::PREVIEW_TEMPLATE);
 
         return $view;
     }
@@ -96,8 +101,7 @@ class Maps2PluginPreview extends StandardContentPreviewRenderer
     {
         $data = [];
         if (!empty($ttContentRecord['pi_flexform'] ?? '')) {
-            $flexFormService = GeneralUtility::makeInstance(FlexFormService::class);
-            $data = $flexFormService->convertFlexFormContentToArray($ttContentRecord['pi_flexform']);
+            $data = $this->flexFormService->convertFlexFormContentToArray($ttContentRecord['pi_flexform']);
         }
 
         return $data;
@@ -110,23 +114,12 @@ class Maps2PluginPreview extends StandardContentPreviewRenderer
             && $piFlexformData['settings']['poiCollection'] !== '0'
             && MathUtility::canBeInterpretedAsInteger($piFlexformData['settings']['poiCollection'])
         ) {
-            $connection = $this->getConnectionPool()->getConnectionForTable('tx_maps2_domain_model_poicollection');
-            $statement = $connection->select(
-                ['*'],
-                'tx_maps2_domain_model_poicollection',
-                [
-                    'uid' => (int)$piFlexformData['settings']['poiCollection'],
-                ],
+            $poiCollectionRecord = $this->poiCollectionService->findByUid(
+                (int)$piFlexformData['settings']['poiCollection']
             );
-            $poiCollectionRecord = $statement->fetchAssociative() ?: [];
-            if ($poiCollectionRecord !== []) {
+            if ($poiCollectionRecord !== null) {
                 $view->assign('poiCollectionRecord', $poiCollectionRecord);
             }
         }
-    }
-
-    protected function getConnectionPool(): ConnectionPool
-    {
-        return GeneralUtility::makeInstance(ConnectionPool::class);
     }
 }
