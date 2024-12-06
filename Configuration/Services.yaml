@@ -28,6 +28,18 @@ services:
   JWeiland\Maps2\ExpressionLanguage\AllowMapProviderRequestFunctionsProvider:
     public: true
 
+  # Called by makeInstance in TYPO3's NodeRegistry
+  JWeiland\Maps2\Form\Element\ReadOnlyInputTextElement:
+    public: true
+
+  # Called by makeInstance in TYPO3's NodeRegistry
+  JWeiland\Maps2\Form\FieldInformation\InfoWindowContent:
+    public: true
+
+  # Called by makeInstance in TYPO3's NodeRegistry
+  JWeiland\Maps2\Form\Resolver\MapProviderResolver:
+    public: true
+
   # Called by makeInstance in our PoiCollection
   JWeiland\Maps2\Helper\MapHelper:
     public: true
