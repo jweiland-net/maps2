@@ -15,7 +15,6 @@ use JWeiland\Maps2\Service\PoiCollectionService;
 use TYPO3\CMS\Backend\Preview\StandardContentPreviewRenderer;
 use TYPO3\CMS\Backend\View\BackendLayout\Grid\GridColumnItem;
 use TYPO3\CMS\Core\Service\FlexFormService;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Core\View\ViewFactoryData;
 use TYPO3\CMS\Core\View\ViewFactoryInterface;
@@ -64,11 +63,11 @@ class Maps2PluginPreview extends StandardContentPreviewRenderer
 
     protected function isValidPlugin(array $ttContentRecord): bool
     {
-        if (!isset($ttContentRecord['list_type'])) {
+        if (!isset($ttContentRecord['CType'])) {
             return false;
         }
 
-        if (!in_array($ttContentRecord['list_type'], ['maps2_maps2', 'maps2_citymap', 'maps2_searchwithinradius'], true)) {
+        if (!in_array($ttContentRecord['CType'], ['maps2_maps2', 'maps2_citymap', 'maps2_searchwithinradius'], true)) {
             return false;
         }
 

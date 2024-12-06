@@ -78,11 +78,6 @@ ExtensionUtility::registerPlugin(
     'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.citymap.description'
 );
 
-$GLOBALS['TCA']['tt_content']['types']['list']['previewRenderer']['maps2_maps2']
-    = Maps2PluginPreview::class;
-
-$GLOBALS['TCA']['tt_content']['types']['list']['previewRenderer']['maps2_searchwithinradius']
-    = Maps2PluginPreview::class;
-
-$GLOBALS['TCA']['tt_content']['types']['list']['previewRenderer']['maps2_citymap']
-    = Maps2PluginPreview::class;
+$GLOBALS['TCA']['tt_content']['types']['maps2_maps2']['previewRenderer'] = Maps2PluginPreview::class;
+$GLOBALS['TCA']['tt_content']['types']['maps2_searchwithinradius']['previewRenderer'] = Maps2PluginPreview::class;
+$GLOBALS['TCA']['tt_content']['types']['maps2_citymap']['previewRenderer'] = Maps2PluginPreview::class;
