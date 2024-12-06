@@ -37,7 +37,7 @@ class PoiCollectionService
 
         try {
             $poiCollectionRecord = $this->queryBuilder
-                ->select()
+                ->select('*')
                 ->from(self::TABLE)
                 ->where(
                     $this->queryBuilder->expr()->eq(
