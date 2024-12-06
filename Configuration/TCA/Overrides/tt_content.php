@@ -15,6 +15,33 @@ if (!defined('TYPO3')) {
     die('Access denied.');
 }
 
+ExtensionUtility::registerPlugin(
+    'maps2',
+    'Maps2',
+    'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.maps2.title',
+    'ext-maps2-wizard-icon',
+    'plugins',
+    'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.maps2.description'
+);
+
+ExtensionUtility::registerPlugin(
+    'maps2',
+    'SearchWithinRadius',
+    'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.searchwithinradius.title',
+    'ext-maps2-wizard-icon',
+    'plugins',
+    'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.searchwithinradius.description'
+);
+
+ExtensionUtility::registerPlugin(
+    'maps2',
+    'CityMap',
+    'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.citymap.title',
+    'ext-maps2-wizard-icon',
+    'plugins',
+    'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.citymap.description'
+);
+
 ExtensionManagementUtility::addToAllTCAtypes(
     'tt_content',
     '--div--;Configuration,pi_flexform',
@@ -49,33 +76,6 @@ ExtensionManagementUtility::addPiFlexFormValue(
     '*',
     'FILE:EXT:maps2/Configuration/FlexForms/CityMap.xml',
     'maps2_citymap'
-);
-
-ExtensionUtility::registerPlugin(
-    'maps2',
-    'Maps2',
-    'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.maps2.title',
-    'ext-maps2-wizard-icon',
-    'plugins',
-    'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.maps2.description'
-);
-
-ExtensionUtility::registerPlugin(
-    'maps2',
-    'SearchWithinRadius',
-    'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.searchwithinradius.title',
-    'ext-maps2-wizard-icon',
-    'plugins',
-    'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.searchwithinradius.description'
-);
-
-ExtensionUtility::registerPlugin(
-    'maps2',
-    'CityMap',
-    'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.citymap.title',
-    'ext-maps2-wizard-icon',
-    'plugins',
-    'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.citymap.description'
 );
 
 $GLOBALS['TCA']['tt_content']['types']['maps2_maps2']['previewRenderer'] = Maps2PluginPreview::class;

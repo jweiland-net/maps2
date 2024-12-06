@@ -24,10 +24,7 @@ call_user_func(static function (): void {
         GeneralUtility::makeInstance(ExtensionConfiguration::class),
     );
 
-    $mapHelper = GeneralUtility::makeInstance(
-        MapHelper::class,
-        $extConf,
-    );
+    $mapHelper = GeneralUtility::makeInstance(MapHelper::class, $extConf);
 
     $ll = 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:';
     $mapProvider = $mapHelper->getMapProvider();
