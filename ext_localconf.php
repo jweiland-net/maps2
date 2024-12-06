@@ -31,6 +31,9 @@ call_user_func(static function (): void {
             PoiCollectionController::class => 'show',
             AjaxController::class => 'process',
         ],
+        // non-cacheable actions
+        [],
+        ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
     );
 
     ExtensionUtility::configurePlugin(
@@ -43,6 +46,7 @@ call_user_func(static function (): void {
         [
             PoiCollectionController::class => 'overlay',
         ],
+        ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
     );
 
     ExtensionUtility::configurePlugin(
@@ -55,6 +59,7 @@ call_user_func(static function (): void {
         [
             PoiCollectionController::class => 'listRadius',
         ],
+        ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
     );
 
     ExtensionUtility::configurePlugin(
@@ -67,6 +72,7 @@ call_user_func(static function (): void {
         [
             CityMapController::class => 'search',
         ],
+        ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
     );
 
     // Activate caching for info window content
