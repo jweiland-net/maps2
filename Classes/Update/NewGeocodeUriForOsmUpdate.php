@@ -66,7 +66,7 @@ class NewGeocodeUriForOsmUpdate implements UpgradeWizardInterface
                 }
 
                 return true;
-            } catch (ExtensionConfigurationExtensionNotConfiguredException | ExtensionConfigurationPathDoesNotExistException $e) {
+            } catch (ExtensionConfigurationExtensionNotConfiguredException | ExtensionConfigurationPathDoesNotExistException) {
             }
         }
 
@@ -77,7 +77,7 @@ class NewGeocodeUriForOsmUpdate implements UpgradeWizardInterface
     {
         try {
             return $this->getExtensionConfiguration()->get('maps2', 'openStreetMapGeocodeUri');
-        } catch (ExtensionConfigurationExtensionNotConfiguredException | ExtensionConfigurationPathDoesNotExistException $e) {
+        } catch (ExtensionConfigurationExtensionNotConfiguredException | ExtensionConfigurationPathDoesNotExistException) {
             return '';
         }
     }

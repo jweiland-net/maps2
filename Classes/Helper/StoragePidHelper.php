@@ -23,12 +23,7 @@ use TYPO3\CMS\Core\Utility\MathUtility;
  */
 class StoragePidHelper
 {
-    protected MessageHelper $messageHelper;
-
-    public function __construct(MessageHelper $messageHelper)
-    {
-        $this->messageHelper = $messageHelper;
-    }
+    public function __construct(protected MessageHelper $messageHelper) {}
 
     public function getDefaultStoragePidForNewPoiCollection(array $foreignLocationRecord, array $options): int
     {
@@ -166,9 +161,9 @@ class StoragePidHelper
             if (
                 array_key_exists('type', $configuration)
                 && !empty($configuration['type'])
-                && in_array(strtolower($configuration['type']), ['extensionmanager', 'pagetsconfig'])
+                && in_array(strtolower((string)$configuration['type']), ['extensionmanager', 'pagetsconfig'])
             ) {
-                $type = strtolower($configuration['type']);
+                $type = strtolower((string)$configuration['type']);
             }
 
             $extKey = $configuration['extKey'];
@@ -183,7 +178,7 @@ class StoragePidHelper
                     try {
                         $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class);
                         $extConf = (array)$extensionConfiguration->get($extKey);
-                    } catch (\Exception $exception) {
+                    } catch (\Exception) {
                         return $defaultStoragePid;
                     }
 

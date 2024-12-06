@@ -31,18 +31,12 @@ class GeoCodeService implements SingletonInterface
      */
     protected ClientInterface $client;
 
-    protected RequestFactory $requestFactory;
-
-    protected MapperFactory $mapperFactory;
-
     public function __construct(
-        ClientFactory $clientFactory,
-        RequestFactory $requestFactory,
-        MapperFactory $mapperFactory,
+        protected ClientFactory $clientFactory,
+        protected RequestFactory $requestFactory,
+        protected MapperFactory $mapperFactory
     ) {
         $this->client = $clientFactory->create();
-        $this->requestFactory = $requestFactory;
-        $this->mapperFactory = $mapperFactory;
     }
 
     /**

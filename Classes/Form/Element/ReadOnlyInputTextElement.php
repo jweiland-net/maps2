@@ -27,8 +27,6 @@ class ReadOnlyInputTextElement extends AbstractFormElement
 {
     /**
      * Default field information enabled for this element.
-     *
-     * @var array
      */
     protected $defaultFieldInformation = [
         'tcaDescription' => [
@@ -38,8 +36,6 @@ class ReadOnlyInputTextElement extends AbstractFormElement
 
     /**
      * Default field wizards enabled for this element.
-     *
-     * @var array
      */
     protected $defaultFieldWizard = [
         'localizationStateSelector' => [
@@ -157,7 +153,7 @@ class ReadOnlyInputTextElement extends AbstractFormElement
             $attributes['minlength'] = (string)$minLength;
         }
         if (!empty($config['placeholder'])) {
-            $attributes['placeholder'] = trim($config['placeholder']);
+            $attributes['placeholder'] = trim($config['placeholder'] ?? '');
         }
         if (isset($config['autocomplete'])) {
             $attributes['autocomplete'] = empty($config['autocomplete']) ? 'new-' . $fieldName : 'on';
@@ -180,7 +176,7 @@ class ReadOnlyInputTextElement extends AbstractFormElement
             $valuePickerHtml[] = '<select ' . GeneralUtility::implodeAttributes($valuePickerAttributes, true) . '>';
             $valuePickerHtml[] = '<option></option>';
             foreach ($config['valuePicker']['items'] as $item) {
-                $valuePickerHtml[] = '<option value="' . htmlspecialchars($item[1]) . '">' . htmlspecialchars($languageService->sL($item[0])) . '</option>';
+                $valuePickerHtml[] = '<option value="' . htmlspecialchars((string)$item[1]) . '">' . htmlspecialchars((string)$languageService->sL((string)$item[0])) . '</option>';
             }
             $valuePickerHtml[] = '</select>';
             $valuePickerHtml[] = '</typo3-formengine-valuepicker>';
@@ -238,7 +234,7 @@ class ReadOnlyInputTextElement extends AbstractFormElement
             $fullElement = implode(LF, $fullElement);
         } elseif ($this->hasNullCheckboxWithPlaceholder()) {
             $checked = $itemValue !== null ? ' checked="checked"' : '';
-            $placeholder = $shortenedPlaceholder = trim((string)($config['placeholder'] ?? ''));
+            $placeholder = $shortenedPlaceholder = trim($config['placeholder'] ?? '');
             if ($placeholder !== '') {
                 $shortenedPlaceholder = GeneralUtility::fixed_lgd_cs($placeholder, 20);
                 if ($placeholder !== $shortenedPlaceholder) {

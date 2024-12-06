@@ -19,6 +19,7 @@ use JWeiland\Maps2\Helper\MessageHelper;
 use JWeiland\Maps2\Service\MapService;
 use JWeiland\Maps2\Tca\Maps2Registry;
 use PHPUnit\Framework\MockObject\MockObject;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
 use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
 use TYPO3\CMS\Core\Http\ServerRequest;
@@ -55,7 +56,7 @@ class MapServiceTest extends FunctionalTestCase
     protected $extConfMock;
 
     /**
-     * @var EventDispatcher|MockObject
+     * @var EventDispatcherInterface|MockObject
      */
     protected $eventDispatcherMock;
 

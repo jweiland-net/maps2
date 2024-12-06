@@ -22,6 +22,7 @@ use JWeiland\Maps2\Service\GeoCodeService;
 use JWeiland\Maps2\Service\MapService;
 use JWeiland\Maps2\Tca\Maps2Registry;
 use PHPUnit\Framework\MockObject\MockObject;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Cache\Frontend\VariableFrontend;
@@ -56,7 +57,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
     protected bool $creationAllowed = true;
 
     /**
-     * @var EventDispatcher|MockObject
+     * @var EventDispatcherInterface|MockObject
      */
     protected $eventDispatcherMock;
 

@@ -25,15 +25,10 @@ use TYPO3\CMS\Core\Utility\MathUtility;
  */
 class AddressHelper
 {
-    protected MessageHelper $messageHelper;
-
-    protected ExtConf $extConf;
-
-    public function __construct(MessageHelper $messageHelper, ExtConf $extConf)
-    {
-        $this->messageHelper = $messageHelper;
-        $this->extConf = $extConf;
-    }
+    public function __construct(
+        protected MessageHelper $messageHelper,
+        protected ExtConf $extConf
+    ) {}
 
     /**
      * Get address for Map Providers GeoCode requests
@@ -45,9 +40,9 @@ class AddressHelper
         }
 
         $this->unifyOptionConfiguration($options);
-        $locationRecordToSave = array_map(static function ($value) {
-            return is_string($value) ? trim($value) : $value;
-        }, $locationRecordToSave);
+        $locationRecordToSave = array_map(
+            static fn($value) => is_string($value) ? trim($value) : $value, $locationRecordToSave
+        );
 
         $addressParts = [];
         foreach ($options['addressColumns'] as $addressColumn) {
@@ -73,7 +68,7 @@ class AddressHelper
         );
         foreach ($options['addressColumns'] as $addressColumn) {
             if (in_array(
-                strtolower($foreignLocationRecord[$addressColumn]),
+                strtolower((string)$foreignLocationRecord[$addressColumn]),
                 $poiCollectionAddressParts,
                 true,
             )) {
@@ -111,7 +106,7 @@ class AddressHelper
     {
         // try to get defaultCountry from maps2 registry
         if (array_key_exists('defaultCountry', $options) && !empty($options['defaultCountry'])) {
-            return trim($options['defaultCountry']);
+            return trim((string)$options['defaultCountry']);
         }
 
         $this->messageHelper->addFlashMessage(
@@ -149,7 +144,7 @@ class AddressHelper
                 )
                 ->executeQuery()
                 ->fetchAssociative();
-        } catch (Exception $e) {
+        } catch (Exception) {
             $countryRecord = [];
         }
 
@@ -199,7 +194,9 @@ class AddressHelper
         }
 
         // unify countryColumn
-        $options['countryColumn'] = array_key_exists('countryColumn', $options) ? trim($options['countryColumn']) : '';
+        $options['countryColumn'] = array_key_exists('countryColumn', $options)
+            ? trim((string)$options['countryColumn'])
+            : '';
 
         // remove countryColumn from addressColumns
         if (!empty($options['countryColumn'])) {

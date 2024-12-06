@@ -58,7 +58,7 @@ class AjaxController extends ActionController
     {
         try {
             $payload = json_decode((string)$this->request->getBody(), true, 512, JSON_THROW_ON_ERROR);
-        } catch (\JsonException $e) {
+        } catch (\JsonException) {
             $this->errors[] = 'Given post stream does not contain valid JSON string';
             $payload = [];
         }

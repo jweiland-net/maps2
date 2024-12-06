@@ -61,7 +61,7 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
             $connection = $this
                 ->getConnectionPool()
                 ->getConnectionByName(ConnectionPool::DEFAULT_CONNECTION_NAME);
-        } catch (Exception $exception) {
+        } catch (Exception) {
             return false;
         }
 
@@ -71,7 +71,7 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
             if (!$schemaManager->tablesExist(['tx_maps2_domain_model_poi'])) {
                 return false;
             }
-        } catch (Exception $e) {
+        } catch (Exception) {
             return false;
         }
 
@@ -110,7 +110,7 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
                 )
                 ->executeQuery()
                 ->fetchOne();
-        } catch (Exception $e) {
+        } catch (Exception) {
             $amountOfRows = 0;
         }
 
@@ -148,7 +148,7 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
                     ],
                 );
             }
-        } catch (Exception $e) {
+        } catch (Exception) {
             return false;
         }
 
@@ -189,7 +189,7 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
             while ($poiRecord = $queryResult->fetchAssociative()) {
                 $poiRecords[] = $poiRecord;
             }
-        } catch (Exception $e) {
+        } catch (Exception) {
             $poiRecords = [];
         }
 

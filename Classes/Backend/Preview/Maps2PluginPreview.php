@@ -67,16 +67,11 @@ class Maps2PluginPreview extends StandardContentPreviewRenderer
 
     protected function addPluginName(StandaloneView $view, array $ttContentRecord): void
     {
-        switch ($ttContentRecord['list_type']) {
-            case 'maps2_citymap':
-                $pluginName = 'cityMap';
-                break;
-            case 'maps2_searchwithinradius':
-                $pluginName = 'radius';
-                break;
-            default:
-                $pluginName = 'maps';
-        }
+        $pluginName = match ($ttContentRecord['list_type']) {
+            'maps2_citymap' => 'cityMap',
+            'maps2_searchwithinradius' => 'radius',
+            default => 'maps',
+        };
 
         $langKey = sprintf(
             'plugin.%s.title',

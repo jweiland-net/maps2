@@ -39,7 +39,7 @@ class GoogleMapsMapper implements MapperInterface
         try {
             $position->setLatitude((float)ArrayUtility::getValueByPath($data, 'geometry/location/lat'));
             $position->setLongitude((float)ArrayUtility::getValueByPath($data, 'geometry/location/lng'));
-        } catch (\RuntimeException $runtimeException) {
+        } catch (\RuntimeException) {
             // Path of ArrayUtility does not exist
             $position->setLatitude(0.0);
             $position->setLongitude(0.0);

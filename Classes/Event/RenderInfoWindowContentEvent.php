@@ -18,24 +18,14 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
  */
 class RenderInfoWindowContentEvent
 {
-    protected int $poiCollectionUid = 0;
-
-    protected string $infoWindowContent = '';
-
-    protected ?ContentObjectRenderer $contentObjectRenderer = null;
-
     /**
      * In some rare cases ContentObjectRenderer can be null. So please keep it nullable
      */
     public function __construct(
-        int $poiCollectionUid,
-        string $infoWindowContent,
-        ?ContentObjectRenderer $contentObjectRenderer,
-    ) {
-        $this->poiCollectionUid = $poiCollectionUid;
-        $this->infoWindowContent = $infoWindowContent;
-        $this->contentObjectRenderer = $contentObjectRenderer;
-    }
+        protected int $poiCollectionUid,
+        protected string $infoWindowContent,
+        protected ?ContentObjectRenderer $contentObjectRenderer
+    ) {}
 
     public function getPoiCollectionUid(): int
     {

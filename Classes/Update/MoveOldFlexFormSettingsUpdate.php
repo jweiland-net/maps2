@@ -80,7 +80,7 @@ class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
                 ) {
                     return true;
                 }
-            } catch (MissingArrayPathException $missingArrayPathException) {
+            } catch (MissingArrayPathException) {
                 // If value does not exist, check further requirements
             }
 
@@ -198,7 +198,7 @@ class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
             while ($record = $statement->fetchAssociative()) {
                 $records[] = $record;
             }
-        } catch (Exception $e) {
+        } catch (Exception) {
             $records = [];
         }
 
@@ -253,7 +253,7 @@ class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
 
             // Remove old reference
             unset($valueFromDatabase['data'][$oldSheet]['lDEF'][$field]);
-        } catch (MissingArrayPathException $missingArrayPathException) {
+        } catch (MissingArrayPathException) {
             // Path does not exist in Array. Do not update anything
         }
     }

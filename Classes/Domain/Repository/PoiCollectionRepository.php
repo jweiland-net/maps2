@@ -14,12 +14,12 @@ namespace JWeiland\Maps2\Domain\Repository;
 use Doctrine\DBAL\Exception;
 use JWeiland\Maps2\Event\ModifyQueryOfFindPoiCollectionsEvent;
 use JWeiland\Maps2\Helper\OverlayHelper;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Database\Query\Restriction\FrontendRestrictionContainer;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
-use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Query;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
@@ -35,7 +35,7 @@ class PoiCollectionRepository extends Repository
         'title' => QueryInterface::ORDER_ASCENDING,
     ];
 
-    protected EventDispatcher $eventDispatcher;
+    protected EventDispatcherInterface $eventDispatcher;
 
     protected OverlayHelper $overlayHelper;
 
@@ -44,7 +44,7 @@ class PoiCollectionRepository extends Repository
         $this->overlayHelper = $overlayHelper;
     }
 
-    public function injectEventDispatcher(EventDispatcher $eventDispatcher): void
+    public function injectEventDispatcher(EventDispatcherInterface $eventDispatcher): void
     {
         $this->eventDispatcher = $eventDispatcher;
     }
@@ -185,7 +185,7 @@ class PoiCollectionRepository extends Repository
                     $schemaManager->listTableColumns('tx_maps2_domain_model_poicollection') ?? [],
                 ),
             );
-        } catch (Exception $e) {
+        } catch (Exception) {
         }
 
         return $columns;

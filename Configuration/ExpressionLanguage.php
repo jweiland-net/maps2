@@ -7,8 +7,10 @@
  * LICENSE file that was distributed with this source code.
  */
 
+use JWeiland\Maps2\ExpressionLanguage\AllowMapProviderRequestConditionProvider;
+
 return [
     'typoscript' => [
-        \JWeiland\Maps2\ExpressionLanguage\AllowMapProviderRequestConditionProvider::class,
+        AllowMapProviderRequestConditionProvider::class,
     ],
 ];

@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use \JWeiland\Maps2\Domain\Model\Category;
+
 /*
  * This file is part of the package jweiland/maps2.
  *
@@ -10,7 +12,7 @@ declare(strict_types=1);
  */
 
 return [
-    \JWeiland\Maps2\Domain\Model\Category::class => [
+    Category::class => [
         'tableName' => 'sys_category',
         'properties' => [],
     ],

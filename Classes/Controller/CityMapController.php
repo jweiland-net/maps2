@@ -65,7 +65,7 @@ class CityMapController extends ActionController
     protected function getPreparedSettings(): array
     {
         if (array_key_exists('infoWindowContentTemplatePath', $this->settings)) {
-            $this->settings['infoWindowContentTemplatePath'] = trim($this->settings['infoWindowContentTemplatePath']);
+            $this->settings['infoWindowContentTemplatePath'] = trim($this->settings['infoWindowContentTemplatePath'] ?? '');
         } else {
             $this->addFlashMessage('Dear Admin: Please add default static template of maps2 into your TS-Template.');
         }

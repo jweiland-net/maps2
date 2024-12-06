@@ -19,16 +19,11 @@ use TYPO3\CMS\Core\Utility\MathUtility;
  */
 abstract class AbstractRequest implements RequestInterface
 {
-    protected ExtConf $extConf;
-
     protected string $uri = '';
 
     protected array $parameters = [];
 
-    public function __construct(ExtConf $extConf)
-    {
-        $this->extConf = $extConf;
-    }
+    public function __construct(protected ExtConf $extConf) {}
 
     public function getUri(): string
     {

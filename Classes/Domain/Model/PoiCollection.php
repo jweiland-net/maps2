@@ -37,9 +37,7 @@ class PoiCollection extends AbstractEntity
 
     protected string $collectionType = '';
 
-    /**
-     * @Extbase\Validate("NotEmpty")
-     */
+    #[Extbase\Validate(['validator' => 'NotEmpty'])]
     protected string $title = '';
 
     /**
@@ -116,9 +114,9 @@ class PoiCollection extends AbstractEntity
      */
     public function initializeObject(): void
     {
-        $this->infoWindowImages = $this->infoWindowImages ?? new ObjectStorage();
-        $this->markerIcons = $this->markerIcons ?? new ObjectStorage();
-        $this->categories = $this->categories ?? new ObjectStorage();
+        $this->infoWindowImages ??= new ObjectStorage();
+        $this->markerIcons ??= new ObjectStorage();
+        $this->categories ??= new ObjectStorage();
     }
 
     public function getSysLanguageUid(): int

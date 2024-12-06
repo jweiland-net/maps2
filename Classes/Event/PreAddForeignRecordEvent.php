@@ -16,21 +16,11 @@ namespace JWeiland\Maps2\Event;
  */
 class PreAddForeignRecordEvent
 {
-    protected array $foreignRecord = [];
-
-    protected string $tableName = '';
-
-    protected string $columnName = '';
-
     public function __construct(
-        array $foreignRecord,
-        string $tableName,
-        string $columnName,
-    ) {
-        $this->foreignRecord = $foreignRecord;
-        $this->tableName = $tableName;
-        $this->columnName = $columnName;
-    }
+        protected array $foreignRecord,
+        protected string $tableName,
+        protected string $columnName
+    ) {}
 
     public function getForeignRecord(): array
     {

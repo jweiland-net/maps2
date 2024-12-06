@@ -49,7 +49,7 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
      */
     public function initializeObject(): void
     {
-        $this->maps2MarkerIcons = $this->maps2MarkerIcons ?? new ObjectStorage();
+        $this->maps2MarkerIcons ??= new ObjectStorage();
     }
 
     public function getMaps2MarkerIcons(): ObjectStorage

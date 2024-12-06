@@ -19,10 +19,10 @@ use JWeiland\Maps2\Event\PreAddForeignRecordEvent;
 use JWeiland\Maps2\Helper\MessageHelper;
 use JWeiland\Maps2\Tca\Maps2Registry;
 use JWeiland\Maps2\Utility\DatabaseUtility;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\FrontendRestrictionContainer;
-use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
 use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
@@ -35,31 +35,15 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
  */
 class MapService
 {
-    protected ConfigurationManagerInterface $configurationManager;
-
-    protected MessageHelper $messageHelper;
-
-    protected Maps2Registry $maps2Registry;
-
-    protected ExtConf $extConf;
-
-    protected EventDispatcher $eventDispatcher;
-
     protected array $settings = [];
 
     public function __construct(
-        ConfigurationManagerInterface $configurationManager,
-        MessageHelper $messageHelper,
-        Maps2Registry $maps2Registry,
-        ExtConf $extConf,
-        EventDispatcher $eventDispatcher,
-    ) {
-        $this->configurationManager = $configurationManager;
-        $this->messageHelper = $messageHelper;
-        $this->maps2Registry = $maps2Registry;
-        $this->extConf = $extConf;
-        $this->eventDispatcher = $eventDispatcher;
-    }
+        protected ConfigurationManagerInterface $configurationManager,
+        protected MessageHelper $messageHelper,
+        protected Maps2Registry $maps2Registry,
+        protected ExtConf $extConf,
+        protected EventDispatcherInterface $eventDispatcher
+    ) {}
 
     /**
      * Render InfoWindow for marker
@@ -97,11 +81,11 @@ class MapService
             return $this->extConf->getInfoWindowContentTemplatePath();
         }
 
-        if (trim($settings['infoWindowContentTemplatePath']) === '') {
+        if (trim($settings['infoWindowContentTemplatePath'] ?? '') === '') {
             return $this->extConf->getInfoWindowContentTemplatePath();
         }
 
-        return trim($settings['infoWindowContentTemplatePath']);
+        return trim($settings['infoWindowContentTemplatePath'] ?? '');
     }
 
     protected function getSettings(): array
@@ -322,7 +306,7 @@ class MapService
 
                         $poiCollection->addForeignRecord($foreignRecord);
                     }
-                } catch (DBALException $exception) {
+                } catch (DBALException) {
                     continue;
                 }
             }

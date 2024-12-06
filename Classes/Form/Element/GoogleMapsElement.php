@@ -92,7 +92,7 @@ class GoogleMapsElement extends AbstractFormElement
         $html[] =         '<div class="form-wizards-element">';
         $html[] =             $this->getMapHtml($this->cleanUpPoiCollectionRecord($this->data['databaseRow']));
         $html[] =             '<input type="text" ' . GeneralUtility::implodeAttributes($attributes, true) . ' />';
-        $html[] =             '<input type="hidden" name="' . ($parameterArray['itemFormElName'] ?? '') . '" value="' . htmlspecialchars($itemValue) . '" />';
+        $html[] =             '<input type="hidden" name="' . ($parameterArray['itemFormElName'] ?? '') . '" value="' . htmlspecialchars((string)$itemValue) . '" />';
         $html[] =         '</div>';
         $html[] =     '</div>';
         $html[] = '</div>';
@@ -135,7 +135,7 @@ class GoogleMapsElement extends AbstractFormElement
             ));
 
             return $view->render();
-        } catch (\JsonException $jsonException) {
+        } catch (\JsonException) {
             return '';
         }
     }
