@@ -18,6 +18,7 @@ use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\Exception\MissingArrayPathException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Install\Attribute\UpgradeWizard;
 use TYPO3\CMS\Install\Updates\DatabaseUpdatedPrerequisite;
 use TYPO3\CMS\Install\Updates\UpgradeWizardInterface;
 
@@ -28,13 +29,9 @@ use TYPO3\CMS\Install\Updates\UpgradeWizardInterface;
  * With maps2 10.0.0 we have renamed sDEFAULT of CityMap and SearchWithinRadius to sDEF.
  * To prevent duplicates in DB, this update wizard removes old settings from FlexForm.
  */
+#[UpgradeWizard('maps2MoveFlexFormFields')]
 class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
 {
-    public function getIdentifier(): string
-    {
-        return 'maps2MoveFlexFormFields';
-    }
-
     public function getTitle(): string
     {
         return '[maps2] Move old FlexForm fields to new FlexForm sheet';

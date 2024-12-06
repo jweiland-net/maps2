@@ -89,16 +89,6 @@ call_user_func(static function (): void {
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass']['createMaps2Record']
         = CreateMaps2RecordHook::class;
 
-    // Move old flex form settings to new location before saving to DB
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['maps2MoveFlexFormFields']
-        = MoveOldFlexFormSettingsUpdate::class;
-    // Migrate old POI record into configuration_map of poicollection table
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['maps2MigratePoiRecord']
-        = MigratePoiRecordsToConfigurationMapUpdate::class;
-    // Migrate to new OSM Geocode URI in extension settings
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['maps2NewOsmGeocodeUriExtConf']
-        = NewGeocodeUriForOsmUpdate::class;
-
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1530778687] = [
         'nodeName' => 'maps2InfoWindowContent',
         'priority' => 40,

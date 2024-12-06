@@ -16,22 +16,19 @@ use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExis
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Install\Attribute\UpgradeWizard;
 use TYPO3\CMS\Install\Updates\UpgradeWizardInterface;
 
 /**
  * Somewhere in october 2023 OSM has deprecated/removed the use of addresses as path segment in Geocode URI.
  * This UpgradeWizard migrates extension settings to new URI where address is a query parameter now.
  */
+#[UpgradeWizard('maps2NewOsmGeocodeUriExtConf')]
 class NewGeocodeUriForOsmUpdate implements UpgradeWizardInterface
 {
     private string $oldOsmGeocodeUri = 'https://nominatim.openstreetmap.org/search/%s?format=json&addressdetails=1';
 
     private string $newOsmGeocodeUri = 'https://nominatim.openstreetmap.org/search?q=%s&format=json&addressdetails=1';
-
-    public function getIdentifier(): string
-    {
-        return 'maps2NewOsmGeocodeUriExtConf';
-    }
 
     public function getTitle(): string
     {
