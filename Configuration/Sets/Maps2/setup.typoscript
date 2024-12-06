@@ -1,20 +1,20 @@
 plugin.tx_maps2 {
   view {
     templateRootPaths {
-      0 = {$plugin.tx_maps2.view.templateRootPath}
+      0 = {$maps2.templateRootPath}
       10 =
     }
     partialRootPaths {
-      0 = {$plugin.tx_maps2.view.partialRootPath}
+      0 = {$maps2.partialRootPath}
       10 =
     }
     layoutRootPaths {
-      0 = {$plugin.tx_maps2.view.layoutRootPath}
+      0 = {$maps2.layoutRootPath}
       10 =
     }
   }
   persistence {
-    storagePid = {$plugin.tx_maps2.persistence.storagePid}
+    storagePid = {$maps2.storagePid}
     classes {
       JWeiland\Maps2\Domain\Model\PoiCollection {
         mapping.columns {

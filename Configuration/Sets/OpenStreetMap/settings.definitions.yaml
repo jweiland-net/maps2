@@ -1,0 +1,18 @@
+categories:
+  Maps2.openstreetmap:
+    label: 'OpenStreetMap'
+    parent: Maps2
+
+settings:
+  maps2.mapTile:
+    label: 'Map Tile URL'
+    category: Maps2.openstreetmap
+    description: 'Define map tile: Please visit https://wiki.openstreetmap.org/wiki/Tile_servers to see all available map tiles. Be careful: If you switch a tile you may have to update the tile attribution, too'
+    type: string
+    default: 'https://{s}.tile.openstreetmap.org/${z}/${x}/${y}.png'
+  maps2.mapTileAttribution:
+    label: 'Map Tile Attribution'
+    category: Maps2.openstreetmap
+    description: 'Map tile attribution: OpenStreetMap license requires a correct map tile attribution. If you update map tile you may need to update this value, too'
+    type: string
+    default: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

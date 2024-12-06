@@ -25,7 +25,7 @@ plugin.tx_maps2.settings.markerClusterer >
 plugin.tx_maps2 {
   settings {
     mapProvider = osm
-    mapTile = {$plugin.tx_maps2.settings.mapTile}
-    mapTileAttribution = {$plugin.tx_maps2.settings.mapTileAttribution}
+    mapTile = {$maps2.mapTile}
+    mapTileAttribution = {$maps2.mapTileAttribution}
   }
 }

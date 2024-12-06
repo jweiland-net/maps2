@@ -1,0 +1,36 @@
+categories:
+  Maps2:
+    label: 'Maps2'
+  Maps2.templates:
+    label: 'Templates'
+    parent: Maps2
+  Maps2.pages:
+    label: 'Pages'
+    parent: Maps2
+
+settings:
+  maps2.templateRootPath:
+    label: 'Templates'
+    category: Maps2.templates
+    description: 'Path to template root'
+    type: string
+    default: 'EXT:maps2/Resources/Private/Templates/'
+  maps2.partialRootPath:
+    label: 'Partials'
+    category: Maps2.templates
+    description: 'Path to partial root'
+    type: string
+    default: 'EXT:maps2/Resources/Private/Partials/'
+  maps2.layoutRootPath:
+    label: 'Layouts'
+    category: Maps2.templates
+    description: 'Path to layout root'
+    type: string
+    default: 'EXT:maps2/Resources/Private/Layouts/'
+
+  maps2.storagePid:
+    label: 'Default storage PID'
+    category: Maps2.pages
+    description: 'Folder that stores all POIs'
+    type: int
+    default: 0
