@@ -305,10 +305,13 @@ class OpenStreetMapModule {
    * @param {string | number} value
    */
   setFieldValue = (poiCollection, field, value) => {
+    /* getFieldName returns a jquery object via FormEngine */
     let $fieldElement = this.getFieldElement(poiCollection, field);
+
     if ($fieldElement && $fieldElement.length) {
-      $fieldElement.val(value);
-      $fieldElement.triggerHandler("change");
+      let humanReadableField = $fieldElement.get(0);
+      humanReadableField.value = value;
+      humanReadableField.dispatchEvent(new Event('change'));
     }
   };
 

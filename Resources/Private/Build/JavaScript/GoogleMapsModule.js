@@ -414,8 +414,9 @@ class GoogleMapsModule {
     let $fieldElement = this.getFieldElement(field);
 
     if ($fieldElement && $fieldElement.length) {
-      $fieldElement.val(value);
-      $fieldElement.triggerHandler("change");
+      let humanReadableField = $fieldElement.get(0);
+      humanReadableField.value = value;
+      humanReadableField.dispatchEvent(new Event('change'));
     }
   };
 
