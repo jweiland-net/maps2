@@ -162,7 +162,7 @@ class GoogleMapsModule {
   };
 
   createMarker = function(record) {
-    this.marker = new google.maps.Marker({
+    this.marker = new google.maps.marker.AdvancedMarkerElement({
       position: new google.maps.LatLng(record.latitude, record.longitude),
       map: this.map,
       draggable: true
