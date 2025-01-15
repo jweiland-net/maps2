@@ -73,11 +73,7 @@ class Maps2PluginPreview extends StandardContentPreviewRenderer
             return false;
         }
 
-        if (!in_array($ttContentRecord['CType'], self::ALLOWED_PLUGINS, true)) {
-            return false;
-        }
-
-        return true;
+        return in_array($ttContentRecord['CType'], self::ALLOWED_PLUGINS, true);
     }
 
     protected function addPluginName(ViewInterface $view, array $ttContentRecord): void
