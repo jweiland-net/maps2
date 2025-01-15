@@ -18,12 +18,12 @@ $EM_CONF[$_EXTKEY] = [
     'author_company' => 'jweiland.net',
     'constraints' => [
         'depends' => [
-            'typo3' => '12.4.15-13.4.99',
+            'typo3' => '13.4.0-13.4.99',
         ],
         'conflicts' => [
         ],
         'suggests' => [
-            'static_info_tables' => '12.4.0-13.99.99',
+            'static_info_tables' => '13.4.0-13.99.99',
         ],
     ],
 ];
