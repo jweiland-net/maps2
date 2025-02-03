@@ -132,8 +132,6 @@ class GeoCodeServiceTest extends UnitTestCase
 
     /**
      * @test
-     *
-     * @datProvider dataProviderForGeocodeRequests
      */
     public function getPositionsByAddressWithEmptyResponseWillReturnEmptyObjectStorage(): void
     {

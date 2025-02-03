@@ -84,10 +84,8 @@ class GoogleMapsElementTest extends FunctionalTestCase
         $this->viewMock = $this->createMock(StandaloneView::class);
         GeneralUtility::addInstance(StandaloneView::class, $this->viewMock);
 
-        $this->subject = new GoogleMapsElement(
-            GeneralUtility::makeInstance(NodeFactory::class),
-            $this->data,
-        );
+        $this->subject = new GoogleMapsElement();
+        $this->subject->setData($this->data);
     }
 
     protected function tearDown(): void

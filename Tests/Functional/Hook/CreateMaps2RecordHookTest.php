@@ -92,6 +92,8 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
 
     protected function setUp(): void
     {
+        parent::markTestIncomplete('Tests requires jweiland/events which is not TYPO3 13 compatible right now');
+
         parent::setUp();
 
         $this->importCSVDataSet(__DIR__ . '/../Fixtures/be_users.csv');
@@ -289,7 +291,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
      *
      * @return array<string, array<array<string, array<string, string>>|bool>>
      */
-    public function dataProcessorForExpressions(): array
+    public static function dataProcessorForExpressions(): array
     {
         return [
             'Record invalid if pid is 432' => [['pid' => ['expr' => 'eq', 'value' => '432']], false],

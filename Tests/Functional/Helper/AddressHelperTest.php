@@ -393,7 +393,7 @@ class AddressHelperTest extends FunctionalTestCase
     /**
      * @return array<string, array<string>>
      */
-    public function addressDataProvider(): array
+    public static function addressDataProvider(): array
     {
         return [
             'address with commas and spaces' => ['Mainstreet 15, 51324 Cologne, Germany'],

@@ -84,10 +84,8 @@ class OpenStreetMapElementTest extends FunctionalTestCase
         $this->viewMock = $this->createMock(StandaloneView::class);
         GeneralUtility::addInstance(StandaloneView::class, $this->viewMock);
 
-        $this->subject = new OpenStreetMapElement(
-            GeneralUtility::makeInstance(NodeFactory::class),
-            $this->data,
-        );
+        $this->subject = new OpenStreetMapElement();
+        $this->subject->setData($this->data);
     }
 
     protected function tearDown(): void
