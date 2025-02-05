@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * This file is part of the package jweiland/maps2.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE file that was distributed with this source code.
+ */
+
 use JWeiland\Maps2\Controller\CityMapController;
 use JWeiland\Maps2\Controller\PoiCollectionController;
 use JWeiland\Maps2\Form\Element\ReadOnlyInputTextElement;
@@ -20,7 +27,7 @@ call_user_func(static function (): void {
             PoiCollectionController::class => 'show',
         ],
         [],
-        ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
+        ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT,
     );
 
     ExtensionUtility::configurePlugin(
@@ -32,7 +39,7 @@ call_user_func(static function (): void {
         [
             PoiCollectionController::class => 'overlay',
         ],
-        ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
+        ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT,
     );
 
     ExtensionUtility::configurePlugin(
@@ -44,7 +51,7 @@ call_user_func(static function (): void {
         [
             PoiCollectionController::class => 'listRadius',
         ],
-        ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
+        ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT,
     );
 
     ExtensionUtility::configurePlugin(
@@ -56,7 +63,7 @@ call_user_func(static function (): void {
         [
             CityMapController::class => 'search',
         ],
-        ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
+        ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT,
     );
 
     // Activate caching for info window content

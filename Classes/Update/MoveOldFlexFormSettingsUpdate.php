@@ -173,17 +173,17 @@ class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
                     $queryBuilder->expr()->or(
                         $queryBuilder->expr()->eq(
                             'CType',
-                            $queryBuilder->createNamedParameter('maps2_citymap')
+                            $queryBuilder->createNamedParameter('maps2_citymap'),
                         ),
                         $queryBuilder->expr()->eq(
                             'CType',
-                            $queryBuilder->createNamedParameter('maps2_maps2')
+                            $queryBuilder->createNamedParameter('maps2_maps2'),
                         ),
                         $queryBuilder->expr()->eq(
                             'CType',
-                            $queryBuilder->createNamedParameter('maps2_searchwithinradius')
-                        )
-                    )
+                            $queryBuilder->createNamedParameter('maps2_searchwithinradius'),
+                        ),
+                    ),
                 )
                 ->executeQuery();
 

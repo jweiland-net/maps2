@@ -47,7 +47,7 @@ class CreateMaps2RecordHook
         protected StoragePidHelper $storagePidHelper,
         protected MapService $mapService,
         protected Maps2Registry $maps2Registry,
-        protected EventDispatcherInterface $eventDispatcher
+        protected EventDispatcherInterface $eventDispatcher,
     ) {}
 
     /**

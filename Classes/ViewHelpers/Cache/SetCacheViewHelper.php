@@ -22,7 +22,7 @@ class SetCacheViewHelper extends AbstractViewHelper
 {
     public function __construct(
         private readonly CacheService $cacheService,
-        private readonly FrontendInterface $cache
+        private readonly FrontendInterface $cache,
     ) {}
 
     /**
@@ -37,31 +37,31 @@ class SetCacheViewHelper extends AbstractViewHelper
             'string',
             'A prefix for the cache identifier.',
             false,
-            'infoWindow'
+            'infoWindow',
         );
         $this->registerArgument(
             'poiCollection',
             'array',
             'We need the PoiCollection record to build a better language independent CacheIdentifier.',
-            true
+            true,
         );
         $this->registerArgument(
             'data',
             'string',
             'The data to be stored',
-            true
+            true,
         );
         $this->registerArgument(
             'tags',
             'array',
             'Tags to associate with this cache entry',
             false,
-            []
+            [],
         );
         $this->registerArgument(
             'lifetime',
             'int',
-            'Lifetime of this cache entry in seconds. If null is specified, the default lifetime is used. "0" means unlimited lifetime'
+            'Lifetime of this cache entry in seconds. If null is specified, the default lifetime is used. "0" means unlimited lifetime',
         );
     }
 
@@ -77,7 +77,7 @@ class SetCacheViewHelper extends AbstractViewHelper
                 $this->cacheService->getCacheIdentifier($poiCollectionRecord, $this->arguments['prefix']),
                 $this->arguments['data'],
                 $this->cacheService->getCacheTags($poiCollectionRecord, $this->arguments['tags']),
-                ($this->arguments['lifetime'] === null ? null : (int)$this->arguments['lifetime'])
+                ($this->arguments['lifetime'] === null ? null : (int)$this->arguments['lifetime']),
             );
         } catch (\Exception) {
         }

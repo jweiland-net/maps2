@@ -23,7 +23,7 @@ class RequestUriForOverlayViewHelper extends AbstractViewHelper
 {
     public function __construct(
         private readonly SettingsHelper $settingsHelper,
-        private readonly UriBuilder $uriBuilder
+        private readonly UriBuilder $uriBuilder,
     ) {}
 
     public function initializeArguments(): void

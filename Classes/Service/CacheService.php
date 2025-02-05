@@ -36,7 +36,7 @@ readonly class CacheService
         if (!$this->isFrontendEnvironment()) {
             throw new \RuntimeException(
                 'getCacheIdentifier can only be called from FE, as we have to add the true language ID to PoiCollection',
-                1733471017
+                1733471017,
             );
         }
 
@@ -48,8 +48,8 @@ readonly class CacheService
             $prefix,
             $this->hashService->hmac(
                 \json_encode(array_diff_key($poiCollection, ['uid', 'pid', 'language', 'title', 'address'])),
-                $prefix
-            )
+                $prefix,
+            ),
         );
     }
 
@@ -79,7 +79,7 @@ readonly class CacheService
         if (!$this->isFrontendEnvironment()) {
             throw new \RuntimeException(
                 'getLanguageId can only be called from FE, as we have to add the true language ID to PoiCollection',
-                1733470968
+                1733470968,
             );
         }
 

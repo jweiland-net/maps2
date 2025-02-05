@@ -33,7 +33,7 @@ class GetEnvironmentViewHelper extends AbstractViewHelper
 
     public function __construct(
         private readonly SettingsHelper $settingsHelper,
-        private readonly ExtConf $extConf
+        private readonly ExtConf $extConf,
     ) {}
 
     /**

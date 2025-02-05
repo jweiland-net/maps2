@@ -22,7 +22,7 @@ class HasCacheViewHelper extends AbstractViewHelper
 {
     public function __construct(
         private readonly CacheService $cacheService,
-        private readonly FrontendInterface $cache
+        private readonly FrontendInterface $cache,
     ) {}
 
     public function initializeArguments(): void
@@ -32,13 +32,13 @@ class HasCacheViewHelper extends AbstractViewHelper
             'string',
             'A prefix for the cache identifier.',
             false,
-            'infoWindow'
+            'infoWindow',
         );
         $this->registerArgument(
             'poiCollection',
             'array',
             'We need the PoiCollection record to build a better language independent CacheIdentifier.',
-            true
+            true,
         );
     }
 
@@ -53,8 +53,8 @@ class HasCacheViewHelper extends AbstractViewHelper
             return $this->cache->has(
                 $this->cacheService->getCacheIdentifier(
                     $poiCollectionRecord,
-                    $this->arguments['prefix']
-                )
+                    $this->arguments['prefix'],
+                ),
             );
         } catch (\Exception) {
         }

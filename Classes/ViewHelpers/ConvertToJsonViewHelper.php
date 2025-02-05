@@ -37,7 +37,8 @@ class ConvertToJsonViewHelper extends AbstractViewHelper
     /**
      * Convert all array and object types into a json string. Useful for data-Attributes
      */
-    public function render(): string {
+    public function render(): string
+    {
         $poiCollections = $this->renderChildren();
 
         if ($poiCollections instanceof PoiCollection) {

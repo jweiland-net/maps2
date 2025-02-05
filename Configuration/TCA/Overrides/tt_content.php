@@ -21,7 +21,7 @@ ExtensionUtility::registerPlugin(
     'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.maps2.title',
     'ext-maps2-wizard-icon',
     'plugins',
-    'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.maps2.description'
+    'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.maps2.description',
 );
 
 ExtensionUtility::registerPlugin(
@@ -30,7 +30,7 @@ ExtensionUtility::registerPlugin(
     'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.searchwithinradius.title',
     'ext-maps2-wizard-icon',
     'plugins',
-    'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.searchwithinradius.description'
+    'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.searchwithinradius.description',
 );
 
 ExtensionUtility::registerPlugin(
@@ -39,43 +39,43 @@ ExtensionUtility::registerPlugin(
     'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.citymap.title',
     'ext-maps2-wizard-icon',
     'plugins',
-    'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.citymap.description'
+    'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.citymap.description',
 );
 
 ExtensionManagementUtility::addToAllTCAtypes(
     'tt_content',
     '--div--;Configuration,pi_flexform',
     'maps2_maps2',
-    'after:subheader'
+    'after:subheader',
 );
 ExtensionManagementUtility::addPiFlexFormValue(
     '*',
     'FILE:EXT:maps2/Configuration/FlexForms/Maps2.xml',
-    'maps2_maps2'
+    'maps2_maps2',
 );
 
 ExtensionManagementUtility::addToAllTCAtypes(
     'tt_content',
     '--div--;Configuration,pi_flexform',
     'maps2_searchwithinradius',
-    'after:subheader'
+    'after:subheader',
 );
 ExtensionManagementUtility::addPiFlexFormValue(
     '*',
     'FILE:EXT:maps2/Configuration/FlexForms/Radius.xml',
-    'maps2_searchwithinradius'
+    'maps2_searchwithinradius',
 );
 
 ExtensionManagementUtility::addToAllTCAtypes(
     'tt_content',
     '--div--;Configuration,pi_flexform',
     'maps2_citymap',
-    'after:subheader'
+    'after:subheader',
 );
 ExtensionManagementUtility::addPiFlexFormValue(
     '*',
     'FILE:EXT:maps2/Configuration/FlexForms/CityMap.xml',
-    'maps2_citymap'
+    'maps2_citymap',
 );
 
 $GLOBALS['TCA']['tt_content']['types']['maps2_maps2']['previewRenderer'] = Maps2PluginPreview::class;

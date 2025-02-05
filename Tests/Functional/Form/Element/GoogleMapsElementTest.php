@@ -15,7 +15,6 @@ use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Form\Element\GoogleMapsElement;
 use JWeiland\Maps2\Helper\MapHelper;
 use PHPUnit\Framework\MockObject\MockObject;
-use TYPO3\CMS\Backend\Form\NodeFactory;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;

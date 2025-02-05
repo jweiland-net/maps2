@@ -40,7 +40,7 @@ class MapService
         protected Maps2Registry $maps2Registry,
         protected ExtConf $extConf,
         protected EventDispatcherInterface $eventDispatcher,
-        protected ViewFactoryInterface $viewFactory
+        protected ViewFactoryInterface $viewFactory,
     ) {}
 
     protected function getColumnRegistry(): array
@@ -63,7 +63,7 @@ class MapService
             $this->messageHelper->addFlashMessage(
                 'The is no latitude or longitude in Response of Map Provider.',
                 'Missing Lat or Lng',
-                ContextualFeedbackSeverity::ERROR
+                ContextualFeedbackSeverity::ERROR,
             );
             return 0;
         }
@@ -89,13 +89,13 @@ class MapService
         // remove all fields, which are not set in DB
         $fieldValues = array_intersect_key(
             $fieldValues,
-            DatabaseUtility::getColumnsFromTable('tx_maps2_domain_model_poicollection')
+            DatabaseUtility::getColumnsFromTable('tx_maps2_domain_model_poicollection'),
         );
 
         $connection = $this->getConnectionPool()->getConnectionForTable('tx_maps2_domain_model_poicollection');
         $connection->insert(
             'tx_maps2_domain_model_poicollection',
-            $fieldValues
+            $fieldValues,
         );
 
         return (int)$connection->lastInsertId();
@@ -115,7 +115,7 @@ class MapService
         int $poiCollectionUid,
         array &$foreignRecord,
         string $foreignTableName,
-        string $foreignFieldName = 'tx_maps2_uid'
+        string $foreignFieldName = 'tx_maps2_uid',
     ): void {
         $hasErrors = false;
 
@@ -124,7 +124,7 @@ class MapService
             $this->messageHelper->addFlashMessage(
                 'PoiCollection UID can not be empty. Please check your values near method assignPoiCollectionToForeignRecord',
                 'PoiCollection empty',
-                ContextualFeedbackSeverity::ERROR
+                ContextualFeedbackSeverity::ERROR,
             );
         }
 
@@ -133,7 +133,7 @@ class MapService
             $this->messageHelper->addFlashMessage(
                 'Foreign record can not be empty. Please check your values near method assignPoiCollectionToForeignRecord',
                 'Foreign record empty',
-                ContextualFeedbackSeverity::ERROR
+                ContextualFeedbackSeverity::ERROR,
             );
         }
 
@@ -142,7 +142,7 @@ class MapService
             $this->messageHelper->addFlashMessage(
                 'Foreign record must have the array key "uid" which is currently not present. Please check your values near method assignPoiCollectionToForeignRecord',
                 'UID not filled',
-                ContextualFeedbackSeverity::ERROR
+                ContextualFeedbackSeverity::ERROR,
             );
         }
 
@@ -151,7 +151,7 @@ class MapService
             $this->messageHelper->addFlashMessage(
                 'Foreign table name is a must have value, which is currently not present. Please check your values near method assignPoiCollectionToForeignRecord',
                 'Foreign table name empty',
-                ContextualFeedbackSeverity::ERROR
+                ContextualFeedbackSeverity::ERROR,
             );
         }
 
@@ -160,7 +160,7 @@ class MapService
             $this->messageHelper->addFlashMessage(
                 'Foreign field name is a must have value, which is currently not present. Please check your values near method assignPoiCollectionToForeignRecord',
                 'Foreign field name empty',
-                ContextualFeedbackSeverity::ERROR
+                ContextualFeedbackSeverity::ERROR,
             );
         }
 
@@ -172,7 +172,7 @@ class MapService
             $this->messageHelper->addFlashMessage(
                 'Table "' . $foreignTableName . '" is not configured in TCA',
                 'Table not found',
-                ContextualFeedbackSeverity::ERROR
+                ContextualFeedbackSeverity::ERROR,
             );
             return;
         }
@@ -181,7 +181,7 @@ class MapService
             $this->messageHelper->addFlashMessage(
                 'Field "' . $foreignFieldName . '" is not configured in TCA',
                 'Field not found',
-                ContextualFeedbackSeverity::ERROR
+                ContextualFeedbackSeverity::ERROR,
             );
             return;
         }
@@ -190,7 +190,7 @@ class MapService
         $connection->update(
             $foreignTableName,
             [$foreignFieldName => $poiCollectionUid],
-            ['uid' => (int)$foreignRecord['uid']]
+            ['uid' => (int)$foreignRecord['uid']],
         );
 
         $foreignRecord[$foreignFieldName] = $poiCollectionUid;
@@ -215,7 +215,7 @@ class MapService
             foreach ($columns as $columnName => $configuration) {
                 $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable($tableName);
                 $queryBuilder->setRestrictions(
-                    GeneralUtility::makeInstance(FrontendRestrictionContainer::class)
+                    GeneralUtility::makeInstance(FrontendRestrictionContainer::class),
                 );
 
                 try {
@@ -225,8 +225,8 @@ class MapService
                         ->where(
                             $queryBuilder->expr()->eq(
                                 $columnName,
-                                $queryBuilder->createNamedParameter($poiCollection->getUid(), Connection::PARAM_INT)
-                            )
+                                $queryBuilder->createNamedParameter($poiCollection->getUid(), Connection::PARAM_INT),
+                            ),
                         )
                         ->executeQuery();
 
@@ -240,7 +240,7 @@ class MapService
                         $foreignRecord = $this->emitPreAddForeignRecordToPoiCollectionEvent(
                             $foreignRecord,
                             $tableName,
-                            $columnName
+                            $columnName,
                         );
 
                         $poiCollection->addForeignRecord($foreignRecord);
@@ -259,13 +259,13 @@ class MapService
     protected function emitPreAddForeignRecordToPoiCollectionEvent(
         array $foreignRecord,
         string $tableName,
-        string $columnName
+        string $columnName,
     ): array {
         /** @var PreAddForeignRecordEvent $event */
         $event = $this->eventDispatcher->dispatch(new PreAddForeignRecordEvent(
             $foreignRecord,
             $tableName,
-            $columnName
+            $columnName,
         ));
 
         return $event->getForeignRecord();

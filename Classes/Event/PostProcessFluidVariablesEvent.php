@@ -22,7 +22,7 @@ class PostProcessFluidVariablesEvent implements ControllerActionEventInterface
     public function __construct(
         protected Request $request,
         protected array $settings,
-        protected array $fluidVariables
+        protected array $fluidVariables,
     ) {}
 
     public function getRequest(): Request

@@ -37,7 +37,7 @@ class Maps2PluginPreview extends StandardContentPreviewRenderer
     public function __construct(
         protected FlexFormService $flexFormService,
         protected PoiCollectionService $poiCollectionService,
-        protected ViewFactoryInterface $viewFactory
+        protected ViewFactoryInterface $viewFactory,
     ) {}
 
     public function renderPageModulePreviewContent(GridColumnItem $item): string
@@ -48,7 +48,7 @@ class Maps2PluginPreview extends StandardContentPreviewRenderer
         }
 
         $view = $this->viewFactory->create(new ViewFactoryData(
-            templatePathAndFilename: self::PREVIEW_TEMPLATE
+            templatePathAndFilename: self::PREVIEW_TEMPLATE,
         ));
         $view->assignMultiple($ttContentRecord);
 
@@ -84,7 +84,7 @@ class Maps2PluginPreview extends StandardContentPreviewRenderer
     {
         $langKey = sprintf(
             'plugin.%s.title',
-            str_replace('maps2_', '', $ttContentRecord['CType'])
+            str_replace('maps2_', '', $ttContentRecord['CType']),
         );
 
         $view->assign(
@@ -112,7 +112,7 @@ class Maps2PluginPreview extends StandardContentPreviewRenderer
         ) {
             $poiCollectionRecord = $this->poiCollectionService->findByUid(
                 (int)$piFlexformData['settings']['poiCollection'],
-                $GLOBALS['TYPO3_REQUEST'] ?? null
+                $GLOBALS['TYPO3_REQUEST'] ?? null,
             );
             if ($poiCollectionRecord !== null) {
                 $view->assign('poiCollectionRecord', $poiCollectionRecord);

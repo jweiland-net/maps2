@@ -22,7 +22,7 @@ class ModifyQueryOfFindPoiCollectionsEvent
     public function __construct(
         protected QueryBuilder $queryBuilder,
         protected array $settings,
-        protected int $poiCollectionUid
+        protected int $poiCollectionUid,
     ) {}
 
     public function getQueryBuilder(): QueryBuilder

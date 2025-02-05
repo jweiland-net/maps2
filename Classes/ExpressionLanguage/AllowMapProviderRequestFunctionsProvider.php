@@ -43,7 +43,7 @@ class AllowMapProviderRequestFunctionsProvider implements ExpressionFunctionProv
             static function (): void {
                 // Not implemented, we only use the evaluator
             },
-            static fn($existingVariables) => $mapHelper->isRequestToMapProviderAllowed()
+            static fn($existingVariables) => $mapHelper->isRequestToMapProviderAllowed(),
         );
     }
 }

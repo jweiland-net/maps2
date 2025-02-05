@@ -54,7 +54,7 @@ readonly class InfoWindowContentService
             partialRootPaths: [$siteSettings['partialRootPath']],
             layoutRootPaths: [$siteSettings['layoutRootPath']],
             templatePathAndFilename: GeneralUtility::getFileAbsFileName(
-                $siteSettings['infoWindowContent']['templatePath']
+                $siteSettings['infoWindowContent']['templatePath'],
             ),
             request: $request,
         ));
@@ -92,7 +92,7 @@ readonly class InfoWindowContentService
                     ],
                 ],
             ],
-            $variables
+            $variables,
         );
     }
 
@@ -122,14 +122,14 @@ readonly class InfoWindowContentService
      */
     private function getInfoWindowContentFromEventListener(
         array $poiCollectionRecord,
-        ServerRequestInterface $request
+        ServerRequestInterface $request,
     ): string {
         /** @var RenderInfoWindowContentEvent $event */
         $event = $this->eventDispatcher->dispatch(
             new RenderInfoWindowContentEvent(
                 $poiCollectionRecord,
                 $request,
-            )
+            ),
         );
 
         return $event->getInfoWindowContent();

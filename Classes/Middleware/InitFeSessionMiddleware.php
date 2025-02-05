@@ -31,9 +31,8 @@ class InitFeSessionMiddleware implements MiddlewareInterface
 
     public function __construct(
         protected ExtConf $extConf,
-        protected MapHelper $mapHelper
-    ) {
-    }
+        protected MapHelper $mapHelper,
+    ) {}
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {

@@ -51,7 +51,6 @@ class OpenStreetMapElement extends AbstractFormElement
         ],
     ];
 
-
     public function injectExtConf(ExtConf $extConf): void
     {
         $this->extConf = $extConf;
@@ -161,7 +160,7 @@ class OpenStreetMapElement extends AbstractFormElement
     protected function getMapHtml(array $poiCollectionRecord): string
     {
         $view = $this->viewFactory->create(new ViewFactoryData(
-            templatePathAndFilename: self::ELEMENT_TEMPLATE
+            templatePathAndFilename: self::ELEMENT_TEMPLATE,
         ));
 
         $view->assign('poiCollection', json_encode($poiCollectionRecord, JSON_THROW_ON_ERROR));

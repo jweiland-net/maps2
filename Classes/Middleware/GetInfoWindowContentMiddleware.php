@@ -75,7 +75,7 @@ readonly class GetInfoWindowContentMiddleware implements MiddlewareInterface
         } catch (\JsonException) {
             $payload = [
                 'errors' => [
-                    'Given post stream does not contain valid JSON string'
+                    'Given post stream does not contain valid JSON string',
                 ],
             ];
         }

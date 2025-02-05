@@ -45,8 +45,8 @@ class PoiCollectionService
                 ->where(
                     $queryBuilder->expr()->eq(
                         'uid',
-                        $queryBuilder->createNamedParameter($poiCollectionUid, Connection::PARAM_INT)
-                    )
+                        $queryBuilder->createNamedParameter($poiCollectionUid, Connection::PARAM_INT),
+                    ),
                 )
                 ->executeQuery()
                 ->fetchAssociative();

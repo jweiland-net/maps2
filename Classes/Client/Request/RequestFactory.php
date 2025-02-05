@@ -43,7 +43,7 @@ class RequestFactory
         if (!class_exists($className)) {
             throw new \RuntimeException(
                 sprintf('Class "%s" to create a new Request could not be found', $className),
-                1733471535
+                1733471535,
             );
         }
 

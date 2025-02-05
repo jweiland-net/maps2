@@ -21,7 +21,7 @@ class PostProcessPoiCollectionRecordEvent
         protected int $poiCollectionUid,
         protected string $foreignTableName,
         protected array $foreignLocationRecord,
-        protected array $options
+        protected array $options,
     ) {}
 
     public function getPoiCollectionTableName(): string

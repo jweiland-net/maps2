@@ -24,7 +24,7 @@ abstract class AbstractClient implements ClientInterface
 {
     public function __construct(
         protected MessageHelper $messageHelper,
-        protected RequestFactory $requestFactory
+        protected RequestFactory $requestFactory,
     ) {}
 
     public function processRequest(RequestInterface $request): array

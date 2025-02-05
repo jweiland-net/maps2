@@ -19,7 +19,7 @@ class PreAddForeignRecordEvent
     public function __construct(
         protected array $foreignRecord,
         protected string $tableName,
-        protected string $columnName
+        protected string $columnName,
     ) {}
 
     public function getForeignRecord(): array

@@ -34,7 +34,7 @@ class GeoCodeService implements SingletonInterface
     public function __construct(
         protected ClientFactory $clientFactory,
         protected RequestFactory $requestFactory,
-        protected MapperFactory $mapperFactory
+        protected MapperFactory $mapperFactory,
     ) {
         $this->client = $clientFactory->create();
     }

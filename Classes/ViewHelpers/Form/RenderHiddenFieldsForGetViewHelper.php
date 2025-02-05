@@ -60,7 +60,7 @@ class RenderHiddenFieldsForGetViewHelper extends AbstractViewHelper
 
     public function __construct(
         private readonly ExtensionService $extensionService,
-        private readonly CacheHashCalculator $cacheHashCalculator
+        private readonly CacheHashCalculator $cacheHashCalculator,
     ) {}
 
     /**
@@ -93,7 +93,7 @@ class RenderHiddenFieldsForGetViewHelper extends AbstractViewHelper
         $parameters[$pluginNamespace]['controller'] = $this->arguments['controller'];
         $parameters[$pluginNamespace]['action'] = $this->arguments['action'];
         $cacheHashArray = $this->cacheHashCalculator->getRelevantParameters(
-            GeneralUtility::implodeArrayForUrl('', $parameters)
+            GeneralUtility::implodeArrayForUrl('', $parameters),
         );
 
         // create array of hidden fields for GET forms
@@ -105,20 +105,20 @@ class RenderHiddenFieldsForGetViewHelper extends AbstractViewHelper
         $fields[] = sprintf(
             '<input type="hidden" name="%s[controller]" value="%s" />',
             $pluginNamespace,
-            $this->arguments['controller']
+            $this->arguments['controller'],
         );
         $fields[] = sprintf(
             '<input type="hidden" name="%s[action]" value="%s" />',
             $pluginNamespace,
-            $this->arguments['action']
+            $this->arguments['action'],
         );
 
         // add cHash
         $fields[] = sprintf(
             '<input type="hidden" name="cHash" value="%s" />',
             $this->cacheHashCalculator->calculateCacheHash(
-                $cacheHashArray
-            )
+                $cacheHashArray,
+            ),
         );
 
         return implode(chr(10), $fields);

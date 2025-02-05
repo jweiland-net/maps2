@@ -21,7 +21,7 @@ class AllowCreationOfPoiCollectionEvent
         protected string $foreignTableName,
         protected string $foreignColumnName,
         protected array $options,
-        protected bool $isValid
+        protected bool $isValid,
     ) {}
 
     public function getForeignLocationRecord(): array

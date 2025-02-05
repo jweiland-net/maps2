@@ -27,7 +27,7 @@ class AddressHelper
 {
     public function __construct(
         protected MessageHelper $messageHelper,
-        protected ExtConf $extConf
+        protected ExtConf $extConf,
     ) {}
 
     /**
@@ -41,7 +41,8 @@ class AddressHelper
 
         $this->unifyOptionConfiguration($options);
         $locationRecordToSave = array_map(
-            static fn($value) => is_string($value) ? trim($value) : $value, $locationRecordToSave
+            static fn($value) => is_string($value) ? trim($value) : $value,
+            $locationRecordToSave,
         );
 
         $addressParts = [];
