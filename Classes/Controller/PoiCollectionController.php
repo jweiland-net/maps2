@@ -48,24 +48,14 @@ class PoiCollectionController extends ActionController
         // Remove unneeded columns from tt_content array
         unset(
             $contentRecord['pi_flexform'],
-            $contentRecord['l18n_diffsource'],
+            $contentRecord['l18n_diffsource']
         );
 
         $view->assign('data', $contentRecord);
         $view->assign('environment', [
             'settings' => $this->getPreparedSettings(),
             'extConf' => ObjectAccess::getGettableProperties($this->extConf),
-            'ajaxUrl' => $this->linkHelper->buildUriToCurrentPage(
-                [
-                    'type' => '1614075471',
-                    'tx_maps2_maps2' => [
-                        'controller' => 'Ajax',
-                        'action' => 'process',
-                        'method' => 'renderInfoWindowContent',
-                    ],
-                ],
-                $this->request,
-            ),
+            'ajaxUrl' => $this->linkHelper->buildUriToCurrentPage([], $this->request),
             'contentRecord' => $contentRecord,
         ]);
     }
@@ -84,7 +74,7 @@ class PoiCollectionController extends ActionController
                     FlashMessage::class,
                     'You have forgotten to add maps2 static template for either Google Maps or OpenStreetMap',
                     'Missing static template',
-                    ContextualFeedbackSeverity::ERROR,
+                    ContextualFeedbackSeverity::ERROR
                 ));
         }
 
@@ -136,7 +126,7 @@ class PoiCollectionController extends ActionController
             $poiCollections = $this->poiCollectionRepository->searchWithinRadius(
                 $position->getLatitude(),
                 $position->getLongitude(),
-                $search->getRadius(),
+                $search->getRadius()
             );
         }
 
@@ -155,8 +145,8 @@ class PoiCollectionController extends ActionController
             new PostProcessFluidVariablesEvent(
                 $this->request,
                 $this->settings,
-                $variables,
-            ),
+                $variables
+            )
         );
 
         $this->view->assignMultiple($event->getFluidVariables());

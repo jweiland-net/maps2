@@ -11,7 +11,6 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\ViewHelpers\Cache;
 
-use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Service\CacheService;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
@@ -38,13 +37,13 @@ class GetCacheViewHelper extends AbstractViewHelper
             'string',
             'A prefix for the cache identifier.',
             false,
-            'infoWindow',
+            'infoWindow'
         );
         $this->registerArgument(
             'poiCollection',
-            PoiCollection::class,
-            'We need the PoiCollection to build a better language independent CacheIdentifier.',
-            true,
+            'array',
+            'We need the PoiCollection record to build a better language independent CacheIdentifier.',
+            true
         );
     }
 
@@ -54,14 +53,12 @@ class GetCacheViewHelper extends AbstractViewHelper
      */
     public function render(): string
     {
-        $poiCollection = $this->cacheService->preparePoiCollectionForCacheMethods(
-            $this->arguments['poiCollection']
-        );
+        $poiCollectionRecord = $this->arguments['poiCollection'];
 
         try {
             return $this->cache->get(
                 $this->cacheService->getCacheIdentifier(
-                    $poiCollection,
+                    $poiCollectionRecord,
                     $this->arguments['prefix']
                 )
             );

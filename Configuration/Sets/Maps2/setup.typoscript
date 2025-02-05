@@ -33,12 +33,5 @@ plugin.tx_maps2 {
         addSection = 1
       }
     }
-    infoWindowContentTemplatePath =
-    infoWindow {
-      image {
-        width = 150c
-        height = 150c
-      }
-    }
   }
 }

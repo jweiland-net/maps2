@@ -1,22 +1,11 @@
 <?php
 
-/*
- * This file is part of the package jweiland/maps2.
- *
- * For the full copyright and license information, please read the
- * LICENSE file that was distributed with this source code.
- */
-
-use JWeiland\Maps2\Controller\AjaxController;
 use JWeiland\Maps2\Controller\CityMapController;
 use JWeiland\Maps2\Controller\PoiCollectionController;
 use JWeiland\Maps2\Form\Element\ReadOnlyInputTextElement;
 use JWeiland\Maps2\Form\FieldInformation\InfoWindowContent;
 use JWeiland\Maps2\Form\Resolver\MapProviderResolver;
 use JWeiland\Maps2\Hook\CreateMaps2RecordHook;
-use JWeiland\Maps2\Update\MigratePoiRecordsToConfigurationMapUpdate;
-use JWeiland\Maps2\Update\MoveOldFlexFormSettingsUpdate;
-use JWeiland\Maps2\Update\NewGeocodeUriForOsmUpdate;
 use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
 if (!defined('TYPO3')) {
@@ -29,9 +18,7 @@ call_user_func(static function (): void {
         'Maps2',
         [
             PoiCollectionController::class => 'show',
-            AjaxController::class => 'process',
         ],
-        // non-cacheable actions
         [],
         ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
     );
@@ -42,7 +29,6 @@ call_user_func(static function (): void {
         [
             PoiCollectionController::class => 'overlay',
         ],
-        // non-cacheable actions
         [
             PoiCollectionController::class => 'overlay',
         ],
@@ -55,7 +41,6 @@ call_user_func(static function (): void {
         [
             PoiCollectionController::class => 'search, listRadius',
         ],
-        // non-cacheable actions
         [
             PoiCollectionController::class => 'listRadius',
         ],
@@ -68,7 +53,6 @@ call_user_func(static function (): void {
         [
             CityMapController::class => 'show, search',
         ],
-        // non-cacheable actions
         [
             CityMapController::class => 'search',
         ],

@@ -2,16 +2,10 @@
       xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
       data-namespace-typo3-fluid="true">
 
-<input id="pac-input"
-       class="controls"
-       type="text"
+<input id="pac-input" class="controls" type="text"
        placeholder="{f:translate(key: 'backend.form.searchAddress', extensionName: 'Maps2')}">
-
-<div id="maps2ConfigurationMap"
-     data-poi-collection="{poiCollection}"
-     data-ext-conf="{extConf}"
+<div id="maps2ConfigurationMap" data-poi-collection="{poiCollection}" data-ext-conf="{extConf}"
      style="height: 400px; width: 100%"></div>
-
 <div id="infowindow-content">
     <span id="place-name" class="title"></span><br>
     Place ID <span id="place-id"></span><br>

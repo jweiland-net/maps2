@@ -11,25 +11,32 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Event;
 
-use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
- * Event to render the content of the info window on yourselves
+ * Event to render the content of the info window on your own.
  */
 class RenderInfoWindowContentEvent
 {
-    /**
-     * In some rare cases ContentObjectRenderer can be null. So please keep it nullable
-     */
+    private string $infoWindowContent = '';
+
     public function __construct(
-        protected int $poiCollectionUid,
-        protected string $infoWindowContent,
-        protected ?ContentObjectRenderer $contentObjectRenderer
+        private readonly array $poiCollectionRecord,
+        private readonly ServerRequestInterface $request,
     ) {}
 
-    public function getPoiCollectionUid(): int
+    public function getPoiCollectionRecord(): array
     {
-        return $this->poiCollectionUid;
+        return $this->poiCollectionRecord;
+    }
+
+    /**
+     * Keep in mind: This event was called by a Middleware. The request object is not fully compiled!
+     * Attributes like ContentObjectRenderer are not defined until now.
+     */
+    public function getRequest(): ServerRequestInterface
+    {
+        return $this->request;
     }
 
     public function getInfoWindowContent(): string
@@ -40,13 +47,5 @@ class RenderInfoWindowContentEvent
     public function setInfoWindowContent(string $infoWindowContent): void
     {
         $this->infoWindowContent = $infoWindowContent;
-    }
-
-    /**
-     * Please test return value against ContentObjectRenderer before using
-     */
-    public function getContentObjectRenderer(): ?ContentObjectRenderer
-    {
-        return $this->contentObjectRenderer;
     }
 }

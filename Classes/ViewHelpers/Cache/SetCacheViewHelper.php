@@ -11,7 +11,6 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\ViewHelpers\Cache;
 
-use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Service\CacheService;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
@@ -38,31 +37,31 @@ class SetCacheViewHelper extends AbstractViewHelper
             'string',
             'A prefix for the cache identifier.',
             false,
-            'infoWindow',
+            'infoWindow'
         );
         $this->registerArgument(
             'poiCollection',
-            PoiCollection::class,
-            'We need the PoiCollection to build a better language independent CacheIdentifier.',
-            true,
+            'array',
+            'We need the PoiCollection record to build a better language independent CacheIdentifier.',
+            true
         );
         $this->registerArgument(
             'data',
             'string',
             'The data to be stored',
-            true,
+            true
         );
         $this->registerArgument(
             'tags',
             'array',
             'Tags to associate with this cache entry',
             false,
-            [],
+            []
         );
         $this->registerArgument(
             'lifetime',
             'int',
-            'Lifetime of this cache entry in seconds. If null is specified, the default lifetime is used. "0" means unlimited lifetime',
+            'Lifetime of this cache entry in seconds. If null is specified, the default lifetime is used. "0" means unlimited lifetime'
         );
     }
 
@@ -71,15 +70,13 @@ class SetCacheViewHelper extends AbstractViewHelper
      */
     public function render(): void
     {
-        $poiCollection = $this->cacheService->preparePoiCollectionForCacheMethods(
-            $this->arguments['poiCollection']
-        );
+        $poiCollectionRecord = $this->arguments['poiCollection'];
 
         try {
             $this->cache->set(
-                $this->cacheService->getCacheIdentifier($poiCollection, $this->arguments['prefix']),
+                $this->cacheService->getCacheIdentifier($poiCollectionRecord, $this->arguments['prefix']),
                 $this->arguments['data'],
-                $this->cacheService->getCacheTags($poiCollection, $this->arguments['tags']),
+                $this->cacheService->getCacheTags($poiCollectionRecord, $this->arguments['tags']),
                 ($this->arguments['lifetime'] === null ? null : (int)$this->arguments['lifetime'])
             );
         } catch (\Exception) {

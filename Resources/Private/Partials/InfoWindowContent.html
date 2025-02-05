@@ -3,17 +3,16 @@
       xmlns:m="http://typo3.org/ns/JWeiland/Maps2/ViewHelpers"
       data-namespace-typo3-fluid="true">
 
-<f:if condition="{poiCollection.infoWindowImages}">
+<f:if condition="{infoWindowImages}">
     <div class="imagesWrapper">
-        <f:for each="{poiCollection.infoWindowImages}" as="image">
-            <f:if condition="{image.originalResource}">
-                <f:if condition="{image.originalResource.originalFile}">
-                    <f:image image="{image.originalResource}"
-                             width="{settings.infoWindow.image.width}"
-                             height="{settings.infoWindow.image.height}"
-                             alt="{image.originalResource.properties.alternative}"
-                             title="{image.originalResource.properties.title}"/>
-                </f:if>
+        <f:for each="{infoWindowImages}" as="infoWindowImage">
+            <f:if condition="{infoWindowImage.originalFile}">
+                <f:image image="{infoWindowImage}"
+                         absolute="1"
+                         width="{settings.infoWindowContent.imageWidth}"
+                         height="{settings.infoWindowContent.imageHeight}"
+                         alt="{infoWindowImage.properties.alternative}"
+                         title="{infoWindowImage.properties.title}"/>
             </f:if>
         </f:for>
     </div>
@@ -31,8 +30,8 @@
     </f:for>
 </div>
 
-<f:if condition="{poiCollection}">
+<f:if condition="{poiCollection.info_window_content}">
     <br/>
-    <div class="infoWindowContent">{poiCollection.infoWindowContent -> f:format.html()}</div>
+    <div class="infoWindowContent">{poiCollection.info_window_content -> f:transform.html()}</div>
 </f:if>
 </html>

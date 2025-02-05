@@ -59,7 +59,7 @@ class OpenStreetMapModule {
     }
 
     // If maps2 was inserted in (bootstrap) tabs, we have to re-render the map
-    document.querySelector("ul.t3js-tabs li:nth-of-type(2) a[data-bs-toggle='tab']").addEventListener("shown.bs.tab", () => {
+    document.querySelector("ul.t3js-tabs li:nth-of-type(2) button[data-bs-toggle='tab']").addEventListener("shown.bs.tab", () => {
       this.map.invalidateSize();
       if (poiCollection.latitude && poiCollection.longitude) {
         this.map.panTo([poiCollection.latitude, poiCollection.longitude]);
@@ -339,6 +339,7 @@ class OpenStreetMapModule {
     // Prevent submitting the BE form on enter
     pacSearch.addEventListener("keydown", event => {
       if (event.keyCode === 13 && event.target.value) {
+        event.preventDefault();
         fetch("https://nominatim.openstreetmap.org/search?q=" + encodeURI(event.target.value) + "&format=json&addressdetails=1", {
           method: "GET",
           headers: {

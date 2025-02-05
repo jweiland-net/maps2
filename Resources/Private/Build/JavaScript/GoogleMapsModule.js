@@ -106,14 +106,14 @@ class GoogleMapsModule {
     });
   };
 
-  createMapOptions = () => {
+  createMapOptions = function() {
     return {
       zoom: 14,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     };
   };
 
-  createCircleOptions = (map, record, extConf) => {
+  createCircleOptions = function(map, record, extConf) {
     let circleOptions = {
       map: map,
       center: new google.maps.LatLng(record.latitude, record.longitude),
@@ -132,7 +132,7 @@ class GoogleMapsModule {
     return circleOptions;
   };
 
-  createPolygonOptions = (paths, extConf) => {
+  createPolygonOptions = function(paths, extConf) {
     return {
       paths: paths,
       strokeColor: extConf.strokeColor,
@@ -144,7 +144,7 @@ class GoogleMapsModule {
     };
   };
 
-  createPolylineOptions = (paths, extConf) => {
+  createPolylineOptions = function(paths, extConf) {
     return {
       path: paths,
       strokeColor: extConf.strokeColor,
@@ -154,15 +154,15 @@ class GoogleMapsModule {
     };
   };
 
-  createMap = element => {
+  createMap = function(element) {
     return new google.maps.Map(
       element,
       this.createMapOptions()
     );
   };
 
-  createMarker = record => {
-    let marker = new google.maps.Marker({
+  createMarker = function(record) {
+    this.marker = new google.maps.Marker({
       position: new google.maps.LatLng(record.latitude, record.longitude),
       map: this.map,
       draggable: true
@@ -172,40 +172,38 @@ class GoogleMapsModule {
 
     // open InfoWindow, if marker was clicked.
     this.marker.addListener("click", () => {
-      this.infoWindow.open(this.map, marker);
+      this.infoWindow.open(this.map, this.marker);
     });
 
     // update fields and marker while dragging
-    google.maps.event.addListener(marker, 'dragend', () => {
+    google.maps.event.addListener(this.marker, 'dragend', () => {
       this.setLatLngFields(
-        marker.getPosition().lat().toFixed(6),
-        marker.getPosition().lng().toFixed(6),
+        this.marker.getPosition().lat().toFixed(6),
+        this.marker.getPosition().lng().toFixed(6),
         0
       );
     });
 
     // update fields and marker when clicking on the map
     google.maps.event.addListener(this.map, 'click', event => {
-      marker.setPosition(event.latLng);
+      this.marker.setPosition(event.latLng);
       this.setLatLngFields(
         event.latLng.lat().toFixed(6),
         event.latLng.lng().toFixed(6),
         0
       );
     });
-
-    this.marker = marker;
   };
 
-  createArea = record => {
+  createArea = function(record) {
     let coordinatesArray = [];
 
-    if (record.configuration_map) {
-      for (let i = 0; i < record.configuration_map.length; i++) {
+    if (record.configurationMap) {
+      for (let i = 0; i < record.configurationMap.length; i++) {
         coordinatesArray.push(
           new google.maps.LatLng(
-            record.configuration_map[i].latitude,
-            record.configuration_map[i].longitude
+            record.configurationMap[i].latitude,
+            record.configurationMap[i].longitude
           )
         );
       }
@@ -254,15 +252,15 @@ class GoogleMapsModule {
     });
   };
 
-  createRoute = record => {
+  createRoute = function(record) {
     let coordinatesArray = [];
 
-    if (record.configuration_map) {
-      for (let i = 0; i < record.configuration_map.length; i++) {
+    if (record.configurationMap) {
+      for (let i = 0; i < record.configurationMap.length; i++) {
         coordinatesArray.push(
           new google.maps.LatLng(
-            record.configuration_map[i].latitude,
-            record.configuration_map[i].longitude
+            record.configurationMap[i].latitude,
+            record.configurationMap[i].longitude
           )
         );
       }
@@ -312,32 +310,32 @@ class GoogleMapsModule {
     });
   };
 
-  createRadius = record => {
-    let marker = new google.maps.Circle(
+  createRadius = function(record) {
+    this.marker = new google.maps.Circle(
       this.createCircleOptions(this.map, record, this.extConf)
     );
 
     // update fields and marker while dragging
-    google.maps.event.addListener(marker, 'center_changed', () => {
+    google.maps.event.addListener(this.marker, 'center_changed', () => {
       this.setLatLngFields(
-        marker.getCenter().lat().toFixed(6),
-        marker.getCenter().lng().toFixed(6),
-        marker.getRadius()
+        this.marker.getCenter().lat().toFixed(6),
+        this.marker.getCenter().lng().toFixed(6),
+        this.marker.getRadius()
       );
     });
 
     // update fields and marker while resizing the radius
-    google.maps.event.addListener(marker, 'radius_changed', () => {
+    google.maps.event.addListener(this.marker, 'radius_changed', () => {
       this.setLatLngFields(
-        marker.getCenter().lat().toFixed(6),
-        marker.getCenter().lng().toFixed(6),
-        marker.getRadius()
+        this.marker.getCenter().lat().toFixed(6),
+        this.marker.getCenter().lng().toFixed(6),
+        this.marker.getRadius()
       );
     });
 
     // update fields and marker when clicking on the map
     google.maps.event.addListener(this.map, 'click', event => {
-      marker.setCenter(event.latLng);
+      this.marker.setCenter(event.latLng);
       this.setLatLngFields(
         event.latLng.lat().toFixed(6),
         event.latLng.lng().toFixed(6),
@@ -346,8 +344,6 @@ class GoogleMapsModule {
     });
 
     this.setLatLngFields(record.latitude, record.longitude, record.radius);
-
-    this.marker = marker;
   };
 
   /**

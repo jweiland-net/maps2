@@ -12,9 +12,13 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Service;
 
 use Doctrine\DBAL\Exception;
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
+use TYPO3\CMS\Core\Database\Query\Restriction\FrontendRestrictionContainer;
+use TYPO3\CMS\Core\Domain\Repository\PageRepository;
+use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -26,23 +30,22 @@ class PoiCollectionService
     private const TABLE = 'tx_maps2_domain_model_poicollection';
 
     public function __construct(
-        protected QueryBuilder $queryBuilder
+        protected readonly QueryBuilder $queryBuilder,
+        protected readonly PageRepository $pageRepository,
     ) {}
 
-    public function findByUid(int $poiCollectionUid): ?array
+    public function findByUid(int $poiCollectionUid, ServerRequestInterface $request): ?array
     {
-        // Will be called by TYPO3 backend, so remove check for hidden, starttime, endtime
-        $this->queryBuilder->getRestrictions()->removeAll();
-        $this->queryBuilder->getRestrictions()->add(GeneralUtility::makeInstance(DeletedRestriction::class));
+        $queryBuilder = $this->getQueryBuilder($request);
 
         try {
-            $poiCollectionRecord = $this->queryBuilder
+            $poiCollectionRecord = $queryBuilder
                 ->select('*')
                 ->from(self::TABLE)
                 ->where(
-                    $this->queryBuilder->expr()->eq(
+                    $queryBuilder->expr()->eq(
                         'uid',
-                        $this->queryBuilder->createNamedParameter($poiCollectionUid, Connection::PARAM_INT)
+                        $queryBuilder->createNamedParameter($poiCollectionUid, Connection::PARAM_INT)
                     )
                 )
                 ->executeQuery()
@@ -51,6 +54,32 @@ class PoiCollectionService
             return null;
         }
 
+        if (is_array($poiCollectionRecord)) {
+            $this->pageRepository->versionOL(self::TABLE, $poiCollectionRecord);
+            if (is_array($poiCollectionRecord)) {
+                $poiCollectionRecord = $this->pageRepository->getLanguageOverlay(
+                    self::TABLE,
+                    $poiCollectionRecord,
+                );
+            }
+        }
+
         return is_array($poiCollectionRecord) ? $poiCollectionRecord : null;
+    }
+
+    private function getQueryBuilder(ServerRequestInterface $request): QueryBuilder
+    {
+        $queryBuilder = $this->queryBuilder;
+
+        if (ApplicationType::fromRequest($request)->isFrontend()) {
+            $queryBuilder->setRestrictions(GeneralUtility::makeInstance(FrontendRestrictionContainer::class));
+        } else {
+            $queryBuilder
+                ->getRestrictions()
+                ->removeAll()
+                ->add(GeneralUtility::makeInstance(DeletedRestriction::class));
+        }
+
+        return $queryBuilder;
     }
 }

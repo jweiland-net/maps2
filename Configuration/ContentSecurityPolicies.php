@@ -38,6 +38,7 @@ return Map::fromEntries(
                 new UriValue('https://*.gstatic.com'),
                 new UriValue('*.google.com'),
                 new UriValue('*.googleusercontent.com'),
+                new UriValue('*.openstreetmap.org'),
                 SourceScheme::data
             ),
             new Mutation(
@@ -51,6 +52,7 @@ return Map::fromEntries(
                 new UriValue('https://*.googleapis.com'),
                 new UriValue('*.google.com'),
                 new UriValue('https://*.gstatic.com'),
+                new UriValue('https://nominatim.openstreetmap.org'),
                 SourceScheme::data,
                 SourceScheme::blob
             ),
@@ -97,6 +99,7 @@ return Map::fromEntries(
                 new UriValue('https://*.gstatic.com'),
                 new UriValue('*.google.com'),
                 new UriValue('*.googleusercontent.com'),
+                new UriValue('*.openstreetmap.org'),
                 SourceScheme::data
             ),
             new Mutation(
@@ -110,6 +113,7 @@ return Map::fromEntries(
                 new UriValue('https://*.googleapis.com'),
                 new UriValue('*.google.com'),
                 new UriValue('https://*.gstatic.com'),
+                new UriValue('https://nominatim.openstreetmap.org'),
                 SourceScheme::data,
                 SourceScheme::blob
             ),

@@ -111,7 +111,8 @@ class Maps2PluginPreview extends StandardContentPreviewRenderer
             && MathUtility::canBeInterpretedAsInteger($piFlexformData['settings']['poiCollection'])
         ) {
             $poiCollectionRecord = $this->poiCollectionService->findByUid(
-                (int)$piFlexformData['settings']['poiCollection']
+                (int)$piFlexformData['settings']['poiCollection'],
+                $GLOBALS['TYPO3_REQUEST'] ?? null
             );
             if ($poiCollectionRecord !== null) {
                 $view->assign('poiCollectionRecord', $poiCollectionRecord);

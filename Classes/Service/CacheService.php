@@ -11,7 +11,6 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Service;
 
-use JWeiland\Maps2\Domain\Model\PoiCollection;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Crypto\HashService;
 use TYPO3\CMS\Core\Http\ApplicationType;
@@ -68,21 +67,6 @@ readonly class CacheService
                 'infoWindowUid' . ($poiCollection['uid'] ?? 0),
             ],
         );
-    }
-
-    /**
-     * In case of hooks where we have PoiCollection as array, we can assign PoiCollection directly
-     * to getCacheIdentifier. But in case of ViewHelpers we have a PoiCollection object. You can use
-     * this method to prepare/sanitize PoiCollection objects for use with getCacheIdentifier/getCacheTags.
-     */
-    public function preparePoiCollectionForCacheMethods(PoiCollection $poiCollection): array
-    {
-        return [
-            'uid' => $poiCollection->getUid(),
-            'pid' => $poiCollection->getUid(),
-            'title' => $poiCollection->getTitle(),
-            'address' => $poiCollection->getAddress(),
-        ];
     }
 
     /**

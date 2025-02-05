@@ -577,6 +577,7 @@ class GoogleMaps2 {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "ext-maps2": "infoWindowContent"
         },
         body: JSON.stringify({
           poiCollection: poiCollection.uid

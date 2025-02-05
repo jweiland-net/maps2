@@ -7,12 +7,22 @@
  * LICENSE file that was distributed with this source code.
  */
 
+use JWeiland\Maps2\Middleware\GetInfoWindowContentMiddleware;
 use JWeiland\Maps2\Middleware\InitFeSessionMiddleware;
 
 return [
     'frontend' => [
         'jweiland/maps2/initialize-fe-session' => [
             'target' => InitFeSessionMiddleware::class,
+            'after' => [
+                'typo3/cms-frontend/tsfe',
+            ],
+            'before' => [
+                'typo3/cms-frontend/prepare-tsfe-rendering',
+            ],
+        ],
+        'jweiland/maps2/info-window-content' => [
+            'target' => GetInfoWindowContentMiddleware::class,
             'after' => [
                 'typo3/cms-frontend/tsfe',
             ],
