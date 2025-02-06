@@ -55,27 +55,11 @@ class CityMapController extends ActionController
 
         $view->assign('data', $contentRecord);
         $view->assign('environment', [
-            'settings' => $this->getPreparedSettings(),
+            'settings' => $this->settingsHelper->getPreparedSettings($this->settings),
             'extConf' => ObjectAccess::getGettableProperties($this->extConf),
             'id' => $this->getPageArguments()->getPageId(),
             'contentRecord' => $contentRecord,
         ]);
-    }
-
-    protected function getPreparedSettings(): array
-    {
-        if (!array_key_exists('mapProvider', $this->settings)) {
-            $this
-                ->getFlashMessageQueue()
-                ->enqueue(GeneralUtility::makeInstance(
-                    FlashMessage::class,
-                    'You have forgotten to add maps2 static template for either Google Maps or OpenStreetMap',
-                    'Missing static template',
-                    ContextualFeedbackSeverity::ERROR,
-                ));
-        }
-
-        return $this->settingsHelper->getPreparedSettings($this->settings);
     }
 
     public function showAction(): ResponseInterface
