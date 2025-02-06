@@ -1,7 +1,7 @@
 class OpenStreetMap2 {
   element = {};
   environment = {};
-  editable = false;;
+  editable = false;
   bounds = {};
 
   allMarkers = [];

@@ -5,8 +5,6 @@ page.includeJSFooterlibs.googleMapsForMaps2 >
 
 [isRequestToMapProviderAllowed()]
   page.includeJSFooterlibs {
-    maps2 = EXT:maps2/Resources/Public/JavaScript/GoogleMaps2.min.js
-
     markerClustererForMaps2 = EXT:maps2/Resources/Public/JavaScript/MarkerClusterer.js
     markerClustererForMaps2.if.isTrue = {$maps2.enableMarkerClusterer}
   }
