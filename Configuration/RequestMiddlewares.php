@@ -24,10 +24,10 @@ return [
         'jweiland/maps2/info-window-content' => [
             'target' => GetInfoWindowContentMiddleware::class,
             'after' => [
-                'typo3/cms-frontend/tsfe',
+                'typo3/cms-frontend/prepare-tsfe-rendering',
             ],
             'before' => [
-                'typo3/cms-frontend/prepare-tsfe-rendering',
+                'typo3/cms-frontend/output-compression',
             ],
         ],
     ],

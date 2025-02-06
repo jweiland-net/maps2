@@ -4,15 +4,18 @@ plugin.tx_maps2 {
       0 = {$maps2.templateRootPath}
       10 =
     }
+
     partialRootPaths {
       0 = {$maps2.partialRootPath}
       10 =
     }
+
     layoutRootPaths {
       0 = {$maps2.layoutRootPath}
       10 =
     }
   }
+
   persistence {
     storagePid = {$maps2.storagePid}
     classes {
@@ -25,12 +28,33 @@ plugin.tx_maps2 {
       }
     }
   }
+
   settings {
     zoom = 10
     zoomControl = 1
     overlay {
       link {
         addSection = 1
+      }
+    }
+
+    infoWindowContent {
+      view {
+        dataProcessing {
+          10 = files
+          10 {
+            as = infoWindowImages
+            references {
+              fieldName = info_window_images
+              table = tx_maps2_domain_model_poicollection
+            }
+          }
+        }
+      }
+
+      image {
+        width = {$maps2.infoWindowContent.imageWidth}
+        height = {$maps2.infoWindowContent.imageHeight}
       }
     }
   }
