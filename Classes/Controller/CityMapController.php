@@ -64,14 +64,9 @@ class CityMapController extends ActionController
 
     protected function getPreparedSettings(): array
     {
-        if (array_key_exists('infoWindowContentTemplatePath', $this->settings)) {
-            $this->settings['infoWindowContentTemplatePath'] = trim($this->settings['infoWindowContentTemplatePath'] ?? '');
-        } else {
-            $this->addFlashMessage('Dear Admin: Please add default static template of maps2 into your TS-Template.');
-        }
-
         if (!array_key_exists('mapProvider', $this->settings)) {
-            $this->getFlashMessageQueue()
+            $this
+                ->getFlashMessageQueue()
                 ->enqueue(GeneralUtility::makeInstance(
                     FlashMessage::class,
                     'You have forgotten to add maps2 static template for either Google Maps or OpenStreetMap',
