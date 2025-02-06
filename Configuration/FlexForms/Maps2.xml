@@ -19,6 +19,7 @@
                             <suggestOptions>
                                 <default>
                                     <searchWholePhrase>TRUE</searchWholePhrase>
+                                    <addWhere>AND tx_maps2_domain_model_poicollection.sys_language_uid IN (0,-1)</addWhere>
                                 </default>
                             </suggestOptions>
                         </config>
