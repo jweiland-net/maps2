@@ -56,6 +56,8 @@ class GeoCodeServiceTest extends UnitTestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
+
         $this->clientFactoryMock = $this->createMock(Client\ClientFactory::class);
         $this->googleMapsClientMock = $this->createMock(Client\GoogleMapsClient::class);
         $this->requestFactoryMock = $this->createMock(Request\RequestFactory::class);
