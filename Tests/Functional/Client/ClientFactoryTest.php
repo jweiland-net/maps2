@@ -16,7 +16,7 @@ use JWeiland\Maps2\Client\GoogleMapsClient;
 use JWeiland\Maps2\Client\OpenStreetMapClient;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Helper\MapHelper;
-use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 /**
@@ -47,9 +47,7 @@ class ClientFactoryTest extends FunctionalTestCase
         parent::tearDown();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createCreatesGoogleMapsClient(): void
     {
         $config = [
@@ -71,9 +69,7 @@ class ClientFactoryTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createCreatesOpenStreetMapClient(): void
     {
         $config = [

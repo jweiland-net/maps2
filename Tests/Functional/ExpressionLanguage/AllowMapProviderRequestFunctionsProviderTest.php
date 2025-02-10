@@ -13,6 +13,7 @@ namespace JWeiland\Maps2\Tests\Functional\ExpressionLanguage;
 
 use JWeiland\Maps2\ExpressionLanguage\AllowMapProviderRequestFunctionsProvider;
 use JWeiland\Maps2\Helper\MapHelper;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\ExpressionLanguage\ExpressionFunction;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
@@ -52,9 +53,7 @@ class AllowMapProviderRequestFunctionsProviderTest extends FunctionalTestCase
         parent::tearDown();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getFunctionsWillReturnArrayWithExpressionFunction(): void
     {
         $expressionFunctions = $this->subject->getFunctions();
@@ -64,9 +63,7 @@ class AllowMapProviderRequestFunctionsProviderTest extends FunctionalTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getFunctionsWillReturnSpecificExpressionFunction(): void
     {
         $this->mapHelperMock

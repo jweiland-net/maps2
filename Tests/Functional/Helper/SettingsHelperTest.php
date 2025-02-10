@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Tests\Functional\Helper;
 
 use JWeiland\Maps2\Helper\SettingsHelper;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
@@ -102,9 +103,7 @@ class SettingsHelperTest extends FunctionalTestCase
         parent::tearDown();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getMergedSettingsWillNotChangeAnySettings(): void
     {
         $this->configurationManagerMock
@@ -131,9 +130,7 @@ class SettingsHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getMergedSettingsWillOverrideEmptyInfoWindowContentTemplateWithTypoScriptValue(): void
     {
         $typoScriptSettings = $this->typoScriptSettings;
@@ -164,9 +161,7 @@ class SettingsHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getMergedSettingsWithDeactivatedFullscreenMapControlWillKeepFlexFormSetting(): void
     {
         $mergedSettings = $this->mergedScriptSettings;
@@ -196,9 +191,7 @@ class SettingsHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getMergedSettingsWithActivatedStreetViewControlWillKeepFlexFormSetting(): void
     {
         $mergedSettings = $this->mergedScriptSettings;

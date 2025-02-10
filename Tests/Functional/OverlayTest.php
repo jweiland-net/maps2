@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Tests\Functional;
 
 use JWeiland\Maps2\Tests\Functional\Traits\SetUpFrontendSiteTrait;
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\InternalRequest;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
@@ -43,9 +44,7 @@ class OverlayTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function overlayWillAskForConsent(): void
     {
         $response = $this->executeFrontendSubRequest(

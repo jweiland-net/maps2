@@ -13,6 +13,7 @@ namespace JWeiland\Maps2\Tests\Functional\Helper;
 
 use JWeiland\Maps2\Helper\MessageHelper;
 use JWeiland\Maps2\Helper\StoragePidHelper;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\VariableFrontend;
@@ -61,9 +62,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         parent::tearDown();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getStoragePidWithoutPidAndNoRegistryConfigurationWillAddFlashMessage(): void
     {
         $this->messageHelperMock
@@ -86,9 +85,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getStoragePidWithPidInForeignRecordWillReturnStoragePid(): void
     {
         $subject = $this->get(PageTsConfigFactory::class);
@@ -126,9 +123,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getStoragePidWithHardCodedMaps2RegistryWillReturnStoragePid(): void
     {
         $subject = $this->get(PageTsConfigFactory::class);
@@ -168,9 +163,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getStoragePidWithHardCodedMaps2RegistryWillReturnUnifiedStoragePid(): void
     {
         $subject = $this->get(PageTsConfigFactory::class);
@@ -210,9 +203,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getStoragePidWithoutPidWillReturnPidFromExtensionManager(): void
     {
         $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['foreign_ext'] = [
@@ -245,9 +236,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getStoragePidWithPidWillReturnPidFromExtensionManager(): void
     {
         $subject = $this->get(PageTsConfigFactory::class);
@@ -303,9 +292,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getStoragePidWithPidAndTypeWillReturnPidFromExtensionManager(): void
     {
         $subject = $this->get(PageTsConfigFactory::class);
@@ -362,9 +349,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getStoragePidWithPidWillReturnPidFromDefaultPageTsConfigPath(): void
     {
         $rootLine = [
@@ -408,9 +393,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getStoragePidWithPidWillReturnPidFromConfiguredPageTsConfigPath(): void
     {
         $rootLine = [
@@ -460,9 +443,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getStoragePidWithPidWillOverridePidOfForeignExtWithPidOfDefaultPageTsConfig(): void
     {
         $rootLine = [
@@ -512,9 +493,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getStoragePidWithPidWillOverridePidOfExtensionManagerWithPidOfPageTsConfig(): void
     {
         $rootLine = [
@@ -560,9 +539,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getStoragePidWithPidWillProcessVariousRegistryConfiguration(): void
     {
         $rootLine = [
@@ -647,9 +624,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getStoragePidWithPidWillProcessTwoRegistryConfiguration(): void
     {
         $rootLine = [
@@ -734,9 +709,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getStoragePidWithPidWillOverrideForeignPidWithPidOfDefaultPageTsConfig(): void
     {
         $rootLine = [

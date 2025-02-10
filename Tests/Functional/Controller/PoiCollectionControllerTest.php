@@ -13,6 +13,7 @@ namespace JWeiland\Maps2\Tests\Functional\Controller;
 
 use JWeiland\Maps2\Controller\PoiCollectionController;
 use JWeiland\Maps2\Tests\Functional\Traits\SetUpFrontendSiteTrait;
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\InternalRequest;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
@@ -51,9 +52,7 @@ class PoiCollectionControllerTest extends FunctionalTestCase
         parent::tearDown();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function showActionWillShowPoiCollectionDefinedInPlugin(): void
     {
         $this->importCSVDataSet(__DIR__ . '/../Fixtures/tt_content-with-poicollection.csv');
@@ -77,9 +76,7 @@ class PoiCollectionControllerTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function showActionWithCategoriesButWithoutPoiCollectionsAddsEmptyPois(): void
     {
         $this->importCSVDataSet(__DIR__ . '/../Fixtures/tt_content-with-category-uid-2.csv');
@@ -100,9 +97,8 @@ class PoiCollectionControllerTest extends FunctionalTestCase
 
     /**
      * Will show only ONE PoiCollection, because the other PoiCollection is in pid 12 (not 1 (TS))
-     *
-     * @test
      */
+    #[Test]
     public function showActionWithCategoriesWillShowPoiCollection(): void
     {
         $this->importCSVDataSet(__DIR__ . '/../Fixtures/tt_content-with-category-uid-1.csv');
@@ -126,9 +122,7 @@ class PoiCollectionControllerTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function showActionWithStorageFoldersWithPoiCollections(): void
     {
         $this->importCSVDataSet(__DIR__ . '/../Fixtures/tt_content-with-pages.csv');

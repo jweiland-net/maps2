@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Tests\Unit\Domain\Model;
 
 use JWeiland\Maps2\Domain\Model\Search;
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 /**
@@ -37,9 +38,7 @@ class SearchTest extends UnitTestCase
         parent::tearDown();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getAddressInitiallyReturnsEmptyString(): void
     {
         self::assertSame(
@@ -48,9 +47,7 @@ class SearchTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setAddressSetsAddress(): void
     {
         $this->subject->setAddress('foo bar');
@@ -61,9 +58,7 @@ class SearchTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getRadiusInitiallyReturnsZero(): void
     {
         self::assertSame(
@@ -72,9 +67,7 @@ class SearchTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setRadiusSetsRadius(): void
     {
         $this->subject->setRadius(123456);

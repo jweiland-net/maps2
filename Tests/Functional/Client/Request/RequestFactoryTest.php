@@ -15,6 +15,7 @@ use JWeiland\Maps2\Client\Request\GoogleMaps\GeocodeRequest;
 use JWeiland\Maps2\Client\Request\RequestFactory;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Helper\MapHelper;
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
@@ -52,9 +53,7 @@ class RequestFactoryTest extends FunctionalTestCase
         parent::tearDown();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createCreatesGoogleMapsGeocodeRequest(): void
     {
         $this->extConf->setMapProvider('both');
@@ -66,9 +65,7 @@ class RequestFactoryTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createCreatesOpenStreetMapGeocodeRequest(): void
     {
         $this->extConf->setMapProvider('both');
@@ -80,9 +77,7 @@ class RequestFactoryTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createSanitizesFilenameWithExtension(): void
     {
         $this->extConf->setMapProvider('both');
@@ -94,9 +89,7 @@ class RequestFactoryTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createSanitizesFilenameWithLowerCamelCase(): void
     {
         $this->extConf->setMapProvider('both');
@@ -108,9 +101,7 @@ class RequestFactoryTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createWithNonExistingClassThrowsException(): void
     {
         $this->expectExceptionMessage('Class "JWeiland\\Maps2\\Client\\Request\\GoogleMaps\\NonExistingClass" to create a new Request could not be found');

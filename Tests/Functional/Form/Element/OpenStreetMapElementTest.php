@@ -14,6 +14,7 @@ namespace JWeiland\Maps2\Tests\Functional\Form\Element;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Form\Element\OpenStreetMapElement;
 use JWeiland\Maps2\Helper\MapHelper;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -99,9 +100,7 @@ class OpenStreetMapElementTest extends FunctionalTestCase
         parent::tearDown();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function renderWillCleanUpCurrentRecord(): void
     {
         $record = $this->data['databaseRow'];

@@ -18,6 +18,7 @@ use JWeiland\Maps2\Event\PreAddForeignRecordEvent;
 use JWeiland\Maps2\Helper\MessageHelper;
 use JWeiland\Maps2\Service\MapService;
 use JWeiland\Maps2\Tca\Maps2Registry;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
@@ -107,9 +108,7 @@ class MapServiceTest extends FunctionalTestCase
         parent::tearDown();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function renderInfoWindowWillLoadTemplatePathFromTypoScript(): void
     {
         $this->configurationManagerMock
@@ -152,9 +151,7 @@ class MapServiceTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function renderInfoWindowWillRenderPoiCollectionTitle(): void
     {
         $this->configurationManagerMock
@@ -196,9 +193,7 @@ class MapServiceTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function renderInfoWindowWillRenderPoiCollectionAddress(): void
     {
         $this->configurationManagerMock
@@ -256,9 +251,7 @@ class MapServiceTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function renderInfoWindowWillRenderPoiCollectionInfoWindowContent(): void
     {
         $this->configurationManagerMock
@@ -301,9 +294,7 @@ class MapServiceTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createNewPoiCollectionWithEmptyLatitudeReturnsZero(): void
     {
         self::assertSame(
@@ -315,9 +306,7 @@ class MapServiceTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createNewPoiCollectionWillCreateNewPoiCollectionRecord(): void
     {
         $position = new Position();
@@ -334,9 +323,7 @@ class MapServiceTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createNewPoiCollectionWithOverrideWillCreateNewPoiCollectionRecord(): void
     {
         $position = new Position();
@@ -374,9 +361,7 @@ class MapServiceTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function assignPoiCollectionToForeignRecordWithEmptyPoiCollectionUidAddsFlashMessage(): void
     {
         $this->messageHelperMock
@@ -399,9 +384,7 @@ class MapServiceTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function assignPoiCollectionToForeignRecordWithEmptyForeignRecordAddsFlashMessages(): void
     {
         $this->messageHelperMock
@@ -429,9 +412,7 @@ class MapServiceTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function assignPoiCollectionToForeignRecordWithEmptyForeignTableNameAddsFlashMessage(): void
     {
         $this->messageHelperMock
@@ -454,9 +435,7 @@ class MapServiceTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function assignPoiCollectionToForeignRecordWithEmptyForeignFieldNameAddsFlashMessage(): void
     {
         $this->messageHelperMock
@@ -480,9 +459,7 @@ class MapServiceTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function assignPoiCollectionToForeignRecordWithInvalidTableNameAddsFlashMessage(): void
     {
         $this->messageHelperMock
@@ -505,9 +482,7 @@ class MapServiceTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function assignPoiCollectionToForeignRecordWithInvalidFieldNameAddsFlashMessage(): void
     {
         $this->messageHelperMock
@@ -531,9 +506,7 @@ class MapServiceTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function assignPoiCollectionToForeignRecordWillUpdateForeignRecord(): void
     {
         $position = new Position();

@@ -13,6 +13,7 @@ namespace JWeiland\Maps2\Tests\Functional\Client\Request\GoogleMaps;
 
 use JWeiland\Maps2\Client\Request\GoogleMaps\GeocodeRequest;
 use JWeiland\Maps2\Configuration\ExtConf;
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
@@ -50,9 +51,7 @@ class GeocodeRequestTest extends FunctionalTestCase
         parent::tearDown();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setUriSetsUri(): void
     {
         $uri = 'https://www.jweiland.net';
@@ -63,9 +62,7 @@ class GeocodeRequestTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setParametersSetsParameters(): void
     {
         $parameters = [
@@ -79,9 +76,7 @@ class GeocodeRequestTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function addParameterSetsParameter(): void
     {
         $parameters = [
@@ -100,9 +95,7 @@ class GeocodeRequestTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function hasParameterReturnsTrue(): void
     {
         $parameters = [
@@ -115,9 +108,7 @@ class GeocodeRequestTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function hasParameterReturnsFalse(): void
     {
         $parameters = [
@@ -130,9 +121,7 @@ class GeocodeRequestTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isValidRequestWithEmptyUriReturnsFalse(): void
     {
         $this->subject->setUri('  ');
@@ -141,9 +130,7 @@ class GeocodeRequestTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isValidRequestWithInvalidUriReturnsFalse(): void
     {
         $this->subject->setUri('nice try');
@@ -152,9 +139,7 @@ class GeocodeRequestTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isValidRequestWithValidUriReturnsTrue(): void
     {
         $this->subject->setUri('https://www.jweiland.net/%s/what/ever/%s.html');
@@ -163,12 +148,11 @@ class GeocodeRequestTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     * @throws \Exception
-     */
+    #[Test]
     public function getUriWillAddAddressAndApiKeyToUri(): void
     {
+        $this->expectException(\Exception::class);
+
         $this->extConf->setGoogleMapsGeocodeApiKey('MyApiKey');
         $this->subject->setUri('%s:%s');
         $this->subject->addParameter('address', 'My Address');
@@ -178,12 +162,11 @@ class GeocodeRequestTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     * @throws \Exception
-     */
+    #[Test]
     public function getUriAddsAddressAndApiKeyToUriButUriIsInvalid(): void
     {
+        $this->expectException(\Exception::class);
+
         $this->extConf->setGoogleMapsGeocodeApiKey('MyApiKey');
         $this->subject->setUri('%s:%s');
         $this->subject->addParameter('address', 'My Address');
