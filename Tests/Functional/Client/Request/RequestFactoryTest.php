@@ -16,7 +16,6 @@ use JWeiland\Maps2\Client\Request\RequestFactory;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Helper\MapHelper;
 use PHPUnit\Framework\Attributes\Test;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 /**
@@ -35,69 +34,94 @@ class RequestFactoryTest extends FunctionalTestCase
     protected function setUp(): void
     {
         parent::setUp();
-
-        $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
-
-        $this->subject = new RequestFactory(
-            new MapHelper(
-                $this->extConf,
-            ),
-        );
     }
 
     protected function tearDown(): void
     {
-        unset(
-            $this->subject,
-        );
         parent::tearDown();
     }
 
     #[Test]
     public function createCreatesGoogleMapsGeocodeRequest(): void
     {
-        $this->extConf->setMapProvider('both');
-        $this->extConf->setDefaultMapProvider('gm');
+        $config = [
+            'mapProvider' => 'both',
+            'defaultMapProvider' => 'gm',
+        ];
+        $extConf = new ExtConf(...$config);
+
+        $subject = new RequestFactory(
+            new MapHelper(
+                $extConf,
+            ),
+        );
 
         self::assertInstanceOf(
             GeocodeRequest::class,
-            $this->subject->create('GeocodeRequest'),
+            $subject->create('GeocodeRequest'),
         );
     }
 
     #[Test]
     public function createCreatesOpenStreetMapGeocodeRequest(): void
     {
-        $this->extConf->setMapProvider('both');
-        $this->extConf->setDefaultMapProvider('osm');
+        $config = [
+            'mapProvider' => 'both',
+            'defaultMapProvider' => 'osm',
+        ];
+        $extConf = new ExtConf(...$config);
+
+        $subject = new RequestFactory(
+            new MapHelper(
+                $extConf,
+            ),
+        );
 
         self::assertInstanceOf(
             \JWeiland\Maps2\Client\Request\OpenStreetMap\GeocodeRequest::class,
-            $this->subject->create('GeocodeRequest'),
+            $subject->create('GeocodeRequest'),
         );
     }
 
     #[Test]
     public function createSanitizesFilenameWithExtension(): void
     {
-        $this->extConf->setMapProvider('both');
-        $this->extConf->setDefaultMapProvider('gm');
+        $config = [
+            'mapProvider' => 'both',
+            'defaultMapProvider' => 'gm',
+        ];
+        $extConf = new ExtConf(...$config);
+
+        $subject = new RequestFactory(
+            new MapHelper(
+                $extConf,
+            ),
+        );
 
         self::assertInstanceOf(
             GeocodeRequest::class,
-            $this->subject->create('GeocodeRequest.php'),
+            $subject->create('GeocodeRequest.php'),
         );
     }
 
     #[Test]
     public function createSanitizesFilenameWithLowerCamelCase(): void
     {
-        $this->extConf->setMapProvider('both');
-        $this->extConf->setDefaultMapProvider('gm');
+        $config = [
+            'mapProvider' => 'both',
+            'defaultMapProvider' => 'gm',
+        ];
+        $extConf = new ExtConf(...$config);
+
+        $subject = new RequestFactory(
+            new MapHelper(
+                $extConf,
+            ),
+        );
 
         self::assertInstanceOf(
             GeocodeRequest::class,
-            $this->subject->create('geocodeRequest'),
+            $subject->create('geocodeRequest'),
         );
     }
 
@@ -106,9 +130,18 @@ class RequestFactoryTest extends FunctionalTestCase
     {
         $this->expectExceptionMessage('Class "JWeiland\\Maps2\\Client\\Request\\GoogleMaps\\NonExistingClass" to create a new Request could not be found');
 
-        $this->extConf->setMapProvider('both');
-        $this->extConf->setDefaultMapProvider('gm');
+        $config = [
+            'mapProvider' => 'both',
+            'defaultMapProvider' => 'gm',
+        ];
+        $extConf = new ExtConf(...$config);
 
-        $this->subject->create('NonExistingClass');
+        $subject = new RequestFactory(
+            new MapHelper(
+                $extConf,
+            ),
+        );
+
+        $subject->create('NonExistingClass');
     }
 }
