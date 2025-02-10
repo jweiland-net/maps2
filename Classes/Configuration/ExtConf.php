@@ -26,7 +26,7 @@ final readonly class ExtConf
 
     private const DEFAULT_SETTINGS = [
         // general
-        'mapProvider' => '',
+        'mapProvider' => 'both',
         'defaultMapProvider' => 'gm',
         'defaultMapType' => 'Empty',
         'defaultCountry' => '',
@@ -37,7 +37,7 @@ final readonly class ExtConf
         'explicitAllowMapProviderRequestsBySessionOnly' => false,
 
         // Google Maps
-        'googleMapsLibrary' => '',
+        'googleMapsLibrary' => 'https://maps.googleapis.com/maps/api/js?key=|&libraries=places',
         'googleMapsGeocodeUri' => 'https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=%s',
         'googleMapsJavaScriptApiKey' => '',
         'googleMapsGeocodeApiKey' => '',
@@ -51,43 +51,43 @@ final readonly class ExtConf
         'strokeWeight' => 2,
         'fillColor' => '#FF0000',
         'fillOpacity' => 0.35,
-        'markerIconWidth' => 0,
-        'markerIconHeight' => 0,
-        'markerIconAnchorPosX' => 0,
-        'markerIconAnchorPosY' => 0,
+        'markerIconWidth' => 25,
+        'markerIconHeight' => 40,
+        'markerIconAnchorPosX' => 13,
+        'markerIconAnchorPosY' => 40,
     ];
 
     public function __construct(
         // general
-        private string $mapProvider,
-        private string $defaultMapProvider,
-        private string $defaultMapType,
-        private string $defaultCountry,
-        private float $defaultLatitude,
-        private float $defaultLongitude,
-        private int $defaultRadius,
-        private bool $explicitAllowMapProviderRequests,
-        private bool $explicitAllowMapProviderRequestsBySessionOnly,
+        private string $mapProvider = self::DEFAULT_SETTINGS['mapProvider'],
+        private string $defaultMapProvider = self::DEFAULT_SETTINGS['defaultMapProvider'],
+        private string $defaultMapType = self::DEFAULT_SETTINGS['defaultMapType'],
+        private string $defaultCountry = self::DEFAULT_SETTINGS['defaultCountry'],
+        private float $defaultLatitude = self::DEFAULT_SETTINGS['defaultLatitude'],
+        private float $defaultLongitude = self::DEFAULT_SETTINGS['defaultLongitude'],
+        private int $defaultRadius = self::DEFAULT_SETTINGS['defaultRadius'],
+        private bool $explicitAllowMapProviderRequests = self::DEFAULT_SETTINGS['explicitAllowMapProviderRequests'],
+        private bool $explicitAllowMapProviderRequestsBySessionOnly = self::DEFAULT_SETTINGS['explicitAllowMapProviderRequestsBySessionOnly'],
 
         // Google Maps
-        private string $googleMapsLibrary,
-        private string $googleMapsGeocodeUri,
-        private string $googleMapsJavaScriptApiKey,
-        private string $googleMapsGeocodeApiKey,
+        private string $googleMapsLibrary = self::DEFAULT_SETTINGS['googleMapsLibrary'],
+        private string $googleMapsGeocodeUri = self::DEFAULT_SETTINGS['googleMapsGeocodeUri'],
+        private string $googleMapsJavaScriptApiKey = self::DEFAULT_SETTINGS['googleMapsJavaScriptApiKey'],
+        private string $googleMapsGeocodeApiKey = self::DEFAULT_SETTINGS['googleMapsGeocodeApiKey'],
 
         // Open Street Map
-        private string $openStreetMapGeocodeUri,
+        private string $openStreetMapGeocodeUri = self::DEFAULT_SETTINGS['openStreetMapGeocodeUri'],
 
         // Design/Color
-        private string $strokeColor,
-        private float $strokeOpacity,
-        private int $strokeWeight,
-        private string $fillColor,
-        private float $fillOpacity,
-        private int $markerIconWidth,
-        private int $markerIconHeight,
-        private int $markerIconAnchorPosX,
-        private int $markerIconAnchorPosY,
+        private string $strokeColor = self::DEFAULT_SETTINGS['strokeColor'],
+        private float $strokeOpacity = self::DEFAULT_SETTINGS['strokeOpacity'],
+        private int $strokeWeight = self::DEFAULT_SETTINGS['strokeWeight'],
+        private string $fillColor = self::DEFAULT_SETTINGS['fillColor'],
+        private float $fillOpacity = self::DEFAULT_SETTINGS['fillOpacity'],
+        private int $markerIconWidth = self::DEFAULT_SETTINGS['markerIconWidth'],
+        private int $markerIconHeight = self::DEFAULT_SETTINGS['markerIconHeight'],
+        private int $markerIconAnchorPosX = self::DEFAULT_SETTINGS['markerIconAnchorPosX'],
+        private int $markerIconAnchorPosY  = self::DEFAULT_SETTINGS['markerIconAnchorPosY'],
     ) {}
 
     public static function create(ExtensionConfiguration $extensionConfiguration): self
@@ -199,7 +199,7 @@ final readonly class ExtConf
             return 'https://' . $parts[2];
         }
 
-        return self::DEFAULT_SETTINGS['googleMapsLibrary'];
+        return '';
     }
 
     public function getGoogleMapsGeocodeUri(): string
