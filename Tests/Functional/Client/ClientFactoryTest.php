@@ -16,7 +16,7 @@ use JWeiland\Maps2\Client\GoogleMapsClient;
 use JWeiland\Maps2\Client\OpenStreetMapClient;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Helper\MapHelper;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 /**
@@ -35,14 +35,6 @@ class ClientFactoryTest extends FunctionalTestCase
     protected function setUp(): void
     {
         parent::setUp();
-
-        $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
-
-        $this->subject = new ClientFactory(
-            new MapHelper(
-                $this->extConf,
-            ),
-        );
     }
 
     protected function tearDown(): void
@@ -60,8 +52,18 @@ class ClientFactoryTest extends FunctionalTestCase
      */
     public function createCreatesGoogleMapsClient(): void
     {
-        $this->extConf->setMapProvider('both');
-        $this->extConf->setDefaultMapProvider('gm');
+        $config = [
+            'mapProvider' => 'both',
+            'defaultMapProvider' => 'gm',
+        ];
+
+        $this->extConf = new ExtConf(...$config);
+
+        $this->subject = new ClientFactory(
+            new MapHelper(
+                $this->extConf,
+            ),
+        );
 
         self::assertInstanceOf(
             GoogleMapsClient::class,
@@ -74,8 +76,18 @@ class ClientFactoryTest extends FunctionalTestCase
      */
     public function createCreatesOpenStreetMapClient(): void
     {
-        $this->extConf->setMapProvider('both');
-        $this->extConf->setDefaultMapProvider('osm');
+        $config = [
+            'mapProvider' => 'both',
+            'defaultMapProvider' => 'osm',
+        ];
+
+        $this->extConf = new ExtConf(...$config);
+
+        $this->subject = new ClientFactory(
+            new MapHelper(
+                $this->extConf,
+            ),
+        );
 
         self::assertInstanceOf(
             OpenStreetMapClient::class,

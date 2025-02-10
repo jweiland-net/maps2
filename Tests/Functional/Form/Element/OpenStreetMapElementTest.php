@@ -72,7 +72,6 @@ class OpenStreetMapElementTest extends FunctionalTestCase
         ];
 
         $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
-        GeneralUtility::setSingletonInstance(ExtConf::class, $this->extConf);
 
         $this->pageRendererMock = $this->createMock(PageRenderer::class);
         GeneralUtility::setSingletonInstance(PageRenderer::class, $this->pageRendererMock);

@@ -37,8 +37,6 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
         parent::setUp();
 
         $extConf = GeneralUtility::makeInstance(ExtConf::class);
-        GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
-
         $mapHelper = new MapHelper($extConf);
         GeneralUtility::addInstance(MapHelper::class, $mapHelper);
         $this->poiCollection = new PoiCollection();

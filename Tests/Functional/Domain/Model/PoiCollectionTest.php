@@ -38,7 +38,6 @@ class PoiCollectionTest extends FunctionalTestCase
         parent::setUp();
 
         $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
-        GeneralUtility::setSingletonInstance(ExtConf::class, $this->extConf);
 
         $this->mapHelper = new MapHelper($this->extConf);
         GeneralUtility::addInstance(MapHelper::class, $this->mapHelper);
