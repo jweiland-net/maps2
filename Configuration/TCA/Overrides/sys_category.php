@@ -7,9 +7,7 @@
  * LICENSE file that was distributed with this source code.
  */
 
-use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Helper\MapHelper;
-use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -18,13 +16,7 @@ if (!defined('TYPO3')) {
 }
 
 call_user_func(static function (): void {
-    // Use constructor arguments here to prevent DI. Else, some functions in InstallTool will not work.
-    $extConf = GeneralUtility::makeInstance(
-        ExtConf::class,
-        GeneralUtility::makeInstance(ExtensionConfiguration::class),
-    );
-
-    $mapHelper = GeneralUtility::makeInstance(MapHelper::class, $extConf);
+    $mapHelper = GeneralUtility::makeInstance(MapHelper::class);
 
     $ll = 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:';
     $mapProvider = $mapHelper->getMapProvider();

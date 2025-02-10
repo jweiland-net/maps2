@@ -41,6 +41,10 @@ services:
   JWeiland\Maps2\Client\OpenStreetMapClient:
     public: true
 
+  # Called by makeInstance in various TCA files
+  JWeiland\Maps2\Configuration\ExtConf:
+    public: true
+
   # Called by makeInstance in TYPO3's AbstractConditionMatcher
   JWeiland\Maps2\ExpressionLanguage\AllowMapProviderRequestFunctionsProvider:
     public: true
