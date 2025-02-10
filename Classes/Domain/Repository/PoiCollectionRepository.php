@@ -22,6 +22,7 @@ use TYPO3\CMS\Core\Database\Query\Restriction\FrontendRestrictionContainer;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Query;
+use TYPO3\CMS\Extbase\Persistence\Generic\Storage\Typo3DbQueryParser;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Persistence\Repository;
@@ -31,6 +32,8 @@ use TYPO3\CMS\Extbase\Persistence\Repository;
  */
 class PoiCollectionRepository extends Repository
 {
+    private const TABLE = 'tx_maps2_domain_model_poicollection';
+
     protected $defaultOrderings = [
         'title' => QueryInterface::ORDER_ASCENDING,
     ];
@@ -39,9 +42,16 @@ class PoiCollectionRepository extends Repository
 
     protected OverlayHelper $overlayHelper;
 
+    protected Typo3DbQueryParser $typo3DbQueryParser;
+
     public function injectOverlayHelper(OverlayHelper $overlayHelper): void
     {
         $this->overlayHelper = $overlayHelper;
+    }
+
+    public function injectTypo3DbQueryParser(Typo3DbQueryParser $typo3DbQueryParser): void
+    {
+        $this->typo3DbQueryParser = $typo3DbQueryParser;
     }
 
     public function injectEventDispatcher(EventDispatcherInterface $eventDispatcher): void
@@ -52,14 +62,14 @@ class PoiCollectionRepository extends Repository
     public function findPoiCollections(array $settings, int $poiCollectionUid = 0): QueryResultInterface
     {
         $extbaseQuery = $this->createQuery();
-        $queryBuilder = $this->getQueryBuilderForTable('tx_maps2_domain_model_poicollection', 'pc');
+        $queryBuilder = $this->typo3DbQueryParser->convertQueryToDoctrineQueryBuilder($extbaseQuery);
         $queryBuilder->select(...$this->getColumnsForPoiCollectionTable());
 
         $poiCollectionUid = $poiCollectionUid ?: (int)($settings['poiCollection'] ?? 0);
         if ($poiCollectionUid !== 0) {
             $queryBuilder->andWhere(
                 $queryBuilder->expr()->eq(
-                    'pc.uid',
+                    self::TABLE . '.uid',
                     $queryBuilder->createNamedParameter($poiCollectionUid, Connection::PARAM_INT),
                 ),
             );
@@ -104,17 +114,15 @@ class PoiCollectionRepository extends Repository
         )->execute();
     }
 
-    protected function addConstraintForCategories(
-        QueryBuilder $queryBuilder,
-        array $categories,
-    ): void {
+    protected function addConstraintForCategories(QueryBuilder $queryBuilder, array $categories): void
+    {
         $queryBuilder->leftJoin(
-            'pc',
+            self::TABLE,
             'sys_category_record_mm',
             'category_mm',
             (string)$queryBuilder->expr()->and(
                 $queryBuilder->expr()->eq(
-                    'pc.uid',
+                    self::TABLE . '.uid',
                     $queryBuilder->quoteIdentifier('category_mm.uid_foreign'),
                 ),
                 $queryBuilder->expr()->eq(
@@ -180,7 +188,7 @@ class PoiCollectionRepository extends Repository
         try {
             $schemaManager = $connection->createSchemaManager();
             $columns = array_map(
-                static fn($column): string => 'pc.' . $column,
+                static fn($column): string => self::TABLE . '.' . $column,
                 array_keys(
                     $schemaManager->listTableColumns('tx_maps2_domain_model_poicollection') ?? [],
                 ),
