@@ -86,7 +86,7 @@ readonly class InfoWindowContentService
     private function createView(
         array $maps2TypoScript,
         array $siteSettings,
-        ServerRequestInterface $request
+        ServerRequestInterface $request,
     ): ViewInterface {
         return $this->viewFactory->create(new ViewFactoryData(
             partialRootPaths: $maps2TypoScript['view.']['partialRootPaths.'],

@@ -102,7 +102,7 @@ class CategoryTest extends FunctionalTestCase
         $fileReferenceMock
             ->expects(self::atLeastOnce())
             ->method('getOriginalResource')
-            ->willReturn(null);
+            ->willReturn($this->createMock(FileReference::class));
 
         $this->subject->getMaps2MarkerIcons()->attach($fileReferenceMock);
 

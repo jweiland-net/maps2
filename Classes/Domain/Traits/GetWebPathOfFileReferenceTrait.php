@@ -20,19 +20,14 @@ use TYPO3\CMS\Extbase\Domain\Model\FileReference as ExtbaseFileReference;
  */
 trait GetWebPathOfFileReferenceTrait
 {
-    /**
-     * ToDo: Add both types to method while removing TYPO3 11 compatibility
-     *
-     * @param CoreFileReference|ExtbaseFileReference|null $fileReference
-     */
-    private function getWebPathOfFileReference($fileReference): string
+    private function getWebPathOfFileReference(CoreFileReference|ExtbaseFileReference|null $fileReference): string
     {
         $coreFileReference = $fileReference;
         if ($fileReference instanceof ExtbaseFileReference) {
             $coreFileReference = $fileReference->getOriginalResource();
         }
 
-        if ($coreFileReference instanceof CoreFileReference) {
+        if ($coreFileReference instanceof CoreFileReference && $coreFileReference->getPublicUrl() !== null) {
             return GeneralUtility::locationHeaderUrl($coreFileReference->getPublicUrl());
         }
 

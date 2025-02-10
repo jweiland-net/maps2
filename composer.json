@@ -32,9 +32,9 @@
 	},
 	"require-dev": {
 		"ergebnis/composer-normalize": "^2.44",
-		"typo3/testing-framework": "^9.0.1",
+		"sjbr/static-info-tables": "^13.4",
 		"typo3/coding-standards": "^0.8",
-		"sjbr/static-info-tables": "^13.4"
+		"typo3/testing-framework": "^9.0.1"
 	},
 	"suggest": {
 		"sjbr/static-info-tables": "Install this package, if you want to choose from contained countries instead of typing them"
