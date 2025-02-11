@@ -95,7 +95,7 @@ class CategoryTest extends FunctionalTestCase
         $fileReferenceMock
             ->expects(self::atLeastOnce())
             ->method('getOriginalResource')
-            ->willReturn($this->createMock(FileReference::class));
+            ->willReturn(GeneralUtility::makeInstance(FileReference::class));
 
         $this->subject->getMaps2MarkerIcons()->attach($fileReferenceMock);
 
@@ -158,17 +158,17 @@ class CategoryTest extends FunctionalTestCase
     #[Test]
     public function getMaps2MarkerIconWidthReturnsValueFromExtConfIfEmpty(): void
     {
+        $config = [
+            'markerIconWidth' => 123
+        ];
+        $this->extConf = new ExtConf(...$config);
+        GeneralUtility::addInstance(ExtConf::class, $this->extConf);
+
         $imageMock = $this->createMock(FileReference::class);
         $images = new ObjectStorage();
         $images->attach($imageMock);
 
         $this->subject->setMaps2MarkerIcons($images);
-
-        $config = [
-            'markerIconWidth' => 123
-        ];
-        $this->extConf = new ExtConf(...$config);
-
         self::assertSame(
             123,
             $this->subject->getMaps2MarkerIconWidth(),
@@ -184,6 +184,7 @@ class CategoryTest extends FunctionalTestCase
             'markerIconWidth' => 321
         ];
         $this->extConf = new ExtConf(...$config);
+        GeneralUtility::addInstance(ExtConf::class, $this->extConf);
 
         self::assertSame(
             321,
@@ -228,6 +229,8 @@ class CategoryTest extends FunctionalTestCase
             'markerIconHeight' => 123
         ];
         $this->extConf = new ExtConf(...$config);
+        GeneralUtility::addInstance(ExtConf::class, $this->extConf);
+
         self::assertSame(
             123,
             $this->subject->getMaps2MarkerIconHeight(),
@@ -243,6 +246,8 @@ class CategoryTest extends FunctionalTestCase
             'markerIconHeight' => 321
         ];
         $this->extConf = new ExtConf(...$config);
+        GeneralUtility::addInstance(ExtConf::class, $this->extConf);
+
         self::assertSame(
             321,
             $this->subject->getMaps2MarkerIconHeight(),
@@ -286,6 +291,7 @@ class CategoryTest extends FunctionalTestCase
             'markerIconAnchorPosX' => 123
         ];
         $this->extConf = new ExtConf(...$config);
+        GeneralUtility::addInstance(ExtConf::class, $this->extConf);
 
         self::assertSame(
             123,
@@ -300,6 +306,8 @@ class CategoryTest extends FunctionalTestCase
             'markerIconAnchorPosX' => 321
         ];
         $this->extConf = new ExtConf(...$config);
+        GeneralUtility::addInstance(ExtConf::class, $this->extConf);
+
         $this->subject->setMaps2MarkerIconAnchorPosX(123);
         self::assertSame(
             321,
@@ -342,6 +350,7 @@ class CategoryTest extends FunctionalTestCase
             'markerIconAnchorPosY' => 123
         ];
         $this->extConf = new ExtConf(...$config);
+        GeneralUtility::addInstance(ExtConf::class, $this->extConf);
 
         $this->subject->setMaps2MarkerIcons($images);
         self::assertSame(
@@ -357,6 +366,8 @@ class CategoryTest extends FunctionalTestCase
             'markerIconAnchorPosY' => 321
         ];
         $this->extConf = new ExtConf(...$config);
+        GeneralUtility::addInstance(ExtConf::class, $this->extConf);
+
         $this->subject->setMaps2MarkerIconAnchorPosY(123);
         self::assertSame(
             321,

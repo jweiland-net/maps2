@@ -487,7 +487,11 @@ class PoiCollectionTest extends FunctionalTestCase
     #[Test]
     public function setMarkerIconWidthWillGetValueFromExtConfIfEmpty(): void
     {
-        $this->extConf->setMarkerIconWidth(123456);
+        $config = [
+            'markerIconWidth' => 123456,
+        ];
+        $this->extConf = new ExtConf(...$config);
+        GeneralUtility::addInstance(ExtConf::class, $this->extConf);
 
         self::assertSame(
             123456,
@@ -499,7 +503,12 @@ class PoiCollectionTest extends FunctionalTestCase
     public function setMarkerIconWidthWillGetValueFromExtConfIfImageIsEmpty(): void
     {
         $this->subject->setMarkerIconWidth(123456);
-        $this->extConf->setMarkerIconWidth(654321);
+
+        $config = [
+            'markerIconWidth' => 654321,
+        ];
+        $this->extConf = new ExtConf(...$config);
+        GeneralUtility::addInstance(ExtConf::class, $this->extConf);
 
         self::assertSame(
             654321,
@@ -570,7 +579,11 @@ class PoiCollectionTest extends FunctionalTestCase
     #[Test]
     public function setMarkerIconHeightWillGetValueFromExtConfIfEmpty(): void
     {
-        $this->extConf->setMarkerIconHeight(123456);
+        $config = [
+            'markerIconHeight' => 123456,
+        ];
+        $this->extConf = new ExtConf(...$config);
+        GeneralUtility::addInstance(ExtConf::class, $this->extConf);
 
         self::assertSame(
             123456,
@@ -642,7 +655,11 @@ class PoiCollectionTest extends FunctionalTestCase
     #[Test]
     public function setMarkerIconAnchorPosXWillGetValueFromExtConfIfEmpty(): void
     {
-        $this->extConf->setMarkerIconAnchorPosX(123456);
+        $config = [
+            'markerIconAnchorPosX' => 123456,
+        ];
+        $this->extConf = new ExtConf(...$config);
+        GeneralUtility::addInstance(ExtConf::class, $this->extConf);
 
         self::assertSame(
             123456,
@@ -654,7 +671,12 @@ class PoiCollectionTest extends FunctionalTestCase
     public function setMarkerIconAnchorPosXWillGetValueFromExtConfIfImageIsEmpty(): void
     {
         $this->subject->setMarkerIconAnchorPosX(123456);
-        $this->extConf->setMarkerIconAnchorPosX(654321);
+
+        $config = [
+            'markerIconAnchorPosX' => 654321,
+        ];
+        $this->extConf = new ExtConf(...$config);
+        GeneralUtility::addInstance(ExtConf::class, $this->extConf);
 
         self::assertSame(
             654321,
@@ -666,7 +688,12 @@ class PoiCollectionTest extends FunctionalTestCase
     public function setMarkerIconHeightWillGetValueFromExtConfIfImageIsEmpty(): void
     {
         $this->subject->setMarkerIconHeight(123456);
-        $this->extConf->setMarkerIconHeight(654321);
+
+        $config = [
+            'markerIconHeight' => 654321,
+        ];
+        $this->extConf = new ExtConf(...$config);
+        GeneralUtility::addInstance(ExtConf::class, $this->extConf);
 
         self::assertSame(
             654321,
@@ -738,7 +765,11 @@ class PoiCollectionTest extends FunctionalTestCase
     #[Test]
     public function setMarkerIconAnchorPosYWillGetValueFromExtConfIfEmpty(): void
     {
-        $this->extConf->setMarkerIconAnchorPosY(123456);
+        $config = [
+            'markerIconAnchorPosY' => 123456,
+        ];
+        $this->extConf = new ExtConf(...$config);
+        GeneralUtility::addInstance(ExtConf::class, $this->extConf);
 
         self::assertSame(
             123456,
@@ -750,11 +781,17 @@ class PoiCollectionTest extends FunctionalTestCase
     public function setMarkerIconAnchorPosYWillGetValueFromExtConfIfImageIsEmpty(): void
     {
         $this->subject->setMarkerIconAnchorPosY(123456);
-        $this->extConf->setMarkerIconAnchorPosY(654321);
 
+        $config = [
+            'markerIconAnchorPosY' => 654321,
+        ];
+        $this->extConf = new ExtConf(...$config);
+        GeneralUtility::addInstance(ExtConf::class, $this->extConf);
+
+        $subject = new PoiCollection();
         self::assertSame(
             654321,
-            $this->subject->getMarkerIconAnchorPosY(),
+            $subject->getMarkerIconAnchorPosY(),
         );
     }
 
