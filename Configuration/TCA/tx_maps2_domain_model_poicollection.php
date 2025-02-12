@@ -299,10 +299,8 @@ return [
             'exclude' => true,
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.stroke_color',
             'config' => [
-                'type' => 'input',
-                'size' => 7,
+                'type' => 'color',
                 'placeholder' => '#FF0000',
-                'eval' => 'trim',
             ],
         ],
         'stroke_opacity' => [
@@ -329,10 +327,8 @@ return [
             'exclude' => true,
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.fill_color',
             'config' => [
-                'type' => 'input',
-                'size' => 7,
+                'type' => 'color',
                 'placeholder' => '#FF0000',
-                'eval' => 'trim',
             ],
         ],
         'fill_opacity' => [
