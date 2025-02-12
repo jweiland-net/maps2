@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\ViewHelpers;
 
 use JWeiland\Maps2\Helper\SettingsHelper;
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
@@ -58,6 +59,9 @@ class RequestUriForOverlayViewHelper extends AbstractViewHelper
                 $uriBuilder->setSection('c' . $ttContentUid);
             }
         }
+
+        $request = $this->renderingContext->getAttribute(ServerRequestInterface::class);
+        $this->uriBuilder->setRequest($request);
 
         return $uriBuilder->build();
     }

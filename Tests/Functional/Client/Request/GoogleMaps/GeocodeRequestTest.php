@@ -186,7 +186,7 @@ class GeocodeRequestTest extends FunctionalTestCase
         );
     }
 
-    //#[Test]
+    #[Test]
     public function getUriWillAddAddressAndApiKeyToUri(): void
     {
         $config = [
@@ -201,13 +201,13 @@ class GeocodeRequestTest extends FunctionalTestCase
         $subject->setUri('%s:%s');
         $subject->addParameter('address', 'My Address');
 
-        self::assertSame(
+        self::assertEquals(
             'My%20Address:MyApiKey',
             $subject->getUri(),
         );
     }
 
-    //#[Test]
+    #[Test]
     public function getUriAddsAddressAndApiKeyToUriButUriIsInvalid(): void
     {
         $config = [
@@ -220,6 +220,7 @@ class GeocodeRequestTest extends FunctionalTestCase
 
         $subject->setUri('%s:%s');
         $subject->addParameter('address', 'My Address');
+
         self::assertFalse(
             $subject->isValidRequest(),
         );

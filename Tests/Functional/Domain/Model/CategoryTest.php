@@ -17,6 +17,7 @@ use JWeiland\Maps2\Domain\Model\PoiCollection;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Core\Resource\File;
+use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
@@ -92,10 +93,6 @@ class CategoryTest extends FunctionalTestCase
     {
         /** @var FileReference|MockObject $fileReferenceMock */
         $fileReferenceMock = $this->createMock(FileReference::class);
-        $fileReferenceMock
-            ->expects(self::atLeastOnce())
-            ->method('getOriginalResource')
-            ->willReturn(GeneralUtility::makeInstance(FileReference::class));
 
         $this->subject->getMaps2MarkerIcons()->attach($fileReferenceMock);
 

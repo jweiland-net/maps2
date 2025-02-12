@@ -14,6 +14,7 @@ namespace JWeiland\Maps2\Form\Element;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Helper\MapHelper;
 use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
+use TYPO3\CMS\Backend\Form\NodeFactory;
 use TYPO3\CMS\Core\Page\JavaScriptModuleInstruction;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -32,14 +33,6 @@ class OpenStreetMapElement extends AbstractFormElement
 {
     private const ELEMENT_TEMPLATE = 'EXT:maps2/Resources/Private/Templates/Tca/OpenStreetMap.html';
 
-    private ExtConf $extConf;
-
-    private PageRenderer $pageRenderer;
-
-    private MapHelper $mapHelper;
-
-    private ViewFactoryInterface $viewFactory;
-
     /**
      * Default field information enabled for this element.
      *
@@ -51,25 +44,14 @@ class OpenStreetMapElement extends AbstractFormElement
         ],
     ];
 
-    public function injectExtConf(ExtConf $extConf): void
-    {
-        $this->extConf = $extConf;
-    }
+    public function __construct(
+        protected readonly ExtConf $extConf,
+        protected readonly PageRenderer $pageRenderer,
+        protected readonly MapHelper $mapHelper,
+        protected readonly ViewFactoryInterface $viewFactory,
+        protected NodeFactory $nodeFactory
 
-    public function injectPageRenderer(PageRenderer $pageRenderer): void
-    {
-        $this->pageRenderer = $pageRenderer;
-    }
-
-    public function injectMapHelper(MapHelper $mapHelper): void
-    {
-        $this->mapHelper = $mapHelper;
-    }
-
-    public function injectViewFactory(ViewFactoryInterface $viewFactory): void
-    {
-        $this->viewFactory = $viewFactory;
-    }
+    ) {}
 
     /**
      * This will render Google Maps within PoiCollection records with a marker you can drag and drop
@@ -97,7 +79,7 @@ class OpenStreetMapElement extends AbstractFormElement
         );
 
         $fieldInformationResult = $this->renderFieldInformation();
-        $fieldInformationHtml = $fieldInformationResult['html'];
+        $fieldInformationHtml = $fieldInformationResult['html'] ?? '';
 
         $attributes = [
             'value' => '',

@@ -16,6 +16,7 @@ use JWeiland\Maps2\Form\Element\GoogleMapsElement;
 use JWeiland\Maps2\Helper\MapHelper;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
+use TYPO3\CMS\Backend\Form\NodeFactory;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
@@ -46,6 +47,8 @@ class GoogleMapsElementTest extends FunctionalTestCase
      * @var StandaloneView|MockObject
      */
     protected $viewMock;
+
+    protected NodeFactory $nodeFactoryMock;
 
     protected array $testExtensionsToLoad = [
         'jweiland/maps2',
@@ -83,7 +86,10 @@ class GoogleMapsElementTest extends FunctionalTestCase
         $this->viewMock = $this->createMock(StandaloneView::class);
         GeneralUtility::addInstance(StandaloneView::class, $this->viewMock);
 
-        $this->subject = new GoogleMapsElement();
+        $this->nodeFactoryMock = $this->createMock(NodeFactory::class);
+        GeneralUtility::addInstance(NodeFactory::class, $this->nodeFactoryMock);
+
+        $this->subject = new GoogleMapsElement($this->nodeFactoryMock);
         $this->subject->setData($this->data);
     }
 

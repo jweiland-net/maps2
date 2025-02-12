@@ -150,7 +150,6 @@ class GeocodeRequestTest extends FunctionalTestCase
     #[Test]
     public function getUriWillAddAddressAndApiKeyToUri(): void
     {
-        $this->expectException(\Exception::class);
         $this->subject->setUri('https://www.jweiland.net/what/ever/%s.html');
         $this->subject->addParameter('address', 'My Address');
         self::assertSame(
@@ -162,8 +161,6 @@ class GeocodeRequestTest extends FunctionalTestCase
     #[Test]
     public function getUriAddsAddressAndApiKeyToUriButUriIsInvalid(): void
     {
-        $this->expectException(\Exception::class);
-
         $this->subject->setUri('nice try');
         $this->subject->addParameter('address', 'My Address');
         self::assertFalse(

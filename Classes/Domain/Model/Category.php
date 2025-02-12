@@ -60,6 +60,9 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
     public function getMaps2MarkerIcon(): string
     {
         $this->maps2MarkerIcons->rewind();
+        if ($this->maps2MarkerIcons->current() instanceof PoiCollection) {
+            return $this->maps2MarkerIcons->current()->getMarkerIcon();
+        }
 
         return $this->getWebPathOfFileReference($this->maps2MarkerIcons->current());
     }
