@@ -75,7 +75,7 @@ class MapServiceTest extends FunctionalTestCase
     protected function setUp(): void
     {
         // @todo : Remove this once events2 is fixed
-        $this->markTestSkipped('Required test extensions are not available.');
+        self::markTestSkipped('Required test extensions are not available.');
 
         parent::setUp();
 

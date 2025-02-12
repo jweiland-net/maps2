@@ -17,7 +17,6 @@ use JWeiland\Maps2\Domain\Model\PoiCollection;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Core\Resource\File;
-use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
@@ -156,7 +155,7 @@ class CategoryTest extends FunctionalTestCase
     public function getMaps2MarkerIconWidthReturnsValueFromExtConfIfEmpty(): void
     {
         $config = [
-            'markerIconWidth' => 123
+            'markerIconWidth' => 123,
         ];
         $this->extConf = new ExtConf(...$config);
         GeneralUtility::addInstance(ExtConf::class, $this->extConf);
@@ -178,7 +177,7 @@ class CategoryTest extends FunctionalTestCase
         $this->subject->setMaps2MarkerIconWidth(123);
 
         $config = [
-            'markerIconWidth' => 321
+            'markerIconWidth' => 321,
         ];
         $this->extConf = new ExtConf(...$config);
         GeneralUtility::addInstance(ExtConf::class, $this->extConf);
@@ -223,7 +222,7 @@ class CategoryTest extends FunctionalTestCase
         $this->subject->setMaps2MarkerIcons($images);
 
         $config = [
-            'markerIconHeight' => 123
+            'markerIconHeight' => 123,
         ];
         $this->extConf = new ExtConf(...$config);
         GeneralUtility::addInstance(ExtConf::class, $this->extConf);
@@ -240,7 +239,7 @@ class CategoryTest extends FunctionalTestCase
         $this->subject->setMaps2MarkerIconHeight(123);
 
         $config = [
-            'markerIconHeight' => 321
+            'markerIconHeight' => 321,
         ];
         $this->extConf = new ExtConf(...$config);
         GeneralUtility::addInstance(ExtConf::class, $this->extConf);
@@ -285,7 +284,7 @@ class CategoryTest extends FunctionalTestCase
         $this->subject->setMaps2MarkerIcons($images);
 
         $config = [
-            'markerIconAnchorPosX' => 123
+            'markerIconAnchorPosX' => 123,
         ];
         $this->extConf = new ExtConf(...$config);
         GeneralUtility::addInstance(ExtConf::class, $this->extConf);
@@ -300,7 +299,7 @@ class CategoryTest extends FunctionalTestCase
     public function getMaps2MarkerIconAnchorPosXReturnsValueFromExtConfIfImageIsEmpty(): void
     {
         $config = [
-            'markerIconAnchorPosX' => 321
+            'markerIconAnchorPosX' => 321,
         ];
         $this->extConf = new ExtConf(...$config);
         GeneralUtility::addInstance(ExtConf::class, $this->extConf);
@@ -344,7 +343,7 @@ class CategoryTest extends FunctionalTestCase
         $images->attach($imageMock);
 
         $config = [
-            'markerIconAnchorPosY' => 123
+            'markerIconAnchorPosY' => 123,
         ];
         $this->extConf = new ExtConf(...$config);
         GeneralUtility::addInstance(ExtConf::class, $this->extConf);
@@ -360,7 +359,7 @@ class CategoryTest extends FunctionalTestCase
     public function getMaps2MarkerIconAnchorPosYWidthReturnsValueFromExtConfIfImageIsEmpty(): void
     {
         $config = [
-            'markerIconAnchorPosY' => 321
+            'markerIconAnchorPosY' => 321,
         ];
         $this->extConf = new ExtConf(...$config);
         GeneralUtility::addInstance(ExtConf::class, $this->extConf);

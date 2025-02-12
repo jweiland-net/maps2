@@ -610,7 +610,7 @@ class ExtConfTest extends FunctionalTestCase
             ->method('get')
             ->with('maps2')
             ->willReturn([
-                'strokeWeight' => '123Test'
+                'strokeWeight' => '123Test',
             ]);
 
         $subject = ExtConf::create($this->extensionConfigurationMock);

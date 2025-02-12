@@ -49,8 +49,7 @@ class OpenStreetMapElement extends AbstractFormElement
         protected readonly PageRenderer $pageRenderer,
         protected readonly MapHelper $mapHelper,
         protected readonly ViewFactoryInterface $viewFactory,
-        protected NodeFactory $nodeFactory
-
+        protected NodeFactory $nodeFactory,
     ) {}
 
     /**

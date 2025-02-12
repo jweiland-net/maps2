@@ -11,7 +11,6 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Tests\Functional\Client\Request\GoogleMaps;
 
-use Exception;
 use JWeiland\Maps2\Client\Request\GoogleMaps\GeocodeRequest;
 use JWeiland\Maps2\Configuration\ExtConf;
 use PHPUnit\Framework\Attributes\Test;

@@ -98,7 +98,7 @@ final readonly class ExtConf
         try {
             $extensionSettings = array_merge(
                 $extensionSettings,
-                $extensionConfiguration->get(self::EXT_KEY)
+                $extensionConfiguration->get(self::EXT_KEY),
             );
         } catch (ExtensionConfigurationExtensionNotConfiguredException|ExtensionConfigurationPathDoesNotExistException) {
         }
