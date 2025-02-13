@@ -38,10 +38,8 @@ call_user_func(static function (): void {
             'label' => $ll . 'sys_category.maps2_marker_icon_width.' . $mapProvider,
             'description' => $ll . 'sys_category.maps2_marker_icon_width.' . $mapProvider . '.description',
             'config' => [
-                'type' => 'input',
-                'size' => 5,
-                'default' => 0,
-                'eval' => 'trim',
+                'type' => 'number',
+                'format' => 'integer',
             ],
         ],
         'maps2_marker_icon_height' => [
@@ -49,10 +47,8 @@ call_user_func(static function (): void {
             'label' => $ll . 'sys_category.maps2_marker_icon_height.' . $mapProvider,
             'description' => $ll . 'sys_category.maps2_marker_icon_height.' . $mapProvider . '.description',
             'config' => [
-                'type' => 'input',
-                'size' => 5,
-                'default' => 0,
-                'eval' => 'trim',
+                'type' => 'number',
+                'format' => 'integer',
             ],
         ],
         'maps2_marker_icon_anchor_pos_x' => [
@@ -60,10 +56,8 @@ call_user_func(static function (): void {
             'label' => $ll . 'sys_category.maps2_marker_icon_anchor_pos_x.' . $mapProvider,
             'description' => $ll . 'sys_category.maps2_marker_icon_anchor_pos_x.' . $mapProvider . '.description',
             'config' => [
-                'type' => 'input',
-                'size' => 5,
-                'default' => 0,
-                'eval' => 'trim',
+                'type' => 'number',
+                'format' => 'integer',
             ],
         ],
         'maps2_marker_icon_anchor_pos_y' => [
@@ -71,10 +65,8 @@ call_user_func(static function (): void {
             'label' => $ll . 'sys_category.maps2_marker_icon_anchor_pos_y.' . $mapProvider,
             'description' => $ll . 'sys_category.maps2_marker_icon_anchor_pos_y.' . $mapProvider . '.description',
             'config' => [
-                'type' => 'input',
-                'size' => 5,
-                'default' => 0,
-                'eval' => 'trim',
+                'type' => 'number',
+                'format' => 'integer',
             ],
         ],
     ];
