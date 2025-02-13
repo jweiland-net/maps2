@@ -133,6 +133,6 @@ class OpenStreetMapElementTest extends FunctionalTestCase
             ->method('render')
             ->willReturn('foo');
 
-        $output = $this->subject->render();
+        $this->subject->render();
     }
 }
