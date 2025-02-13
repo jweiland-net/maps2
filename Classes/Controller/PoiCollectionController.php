@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Controller;
 
 use JWeiland\Maps2\Controller\Traits\InjectExtConfTrait;
+use JWeiland\Maps2\Controller\Traits\InjectGeoCodeServiceTrait;
 use JWeiland\Maps2\Controller\Traits\InjectLinkHelperTrait;
 use JWeiland\Maps2\Controller\Traits\InjectPoiCollectionRepositoryTrait;
 use JWeiland\Maps2\Controller\Traits\InjectSettingsHelperTrait;
@@ -30,6 +31,7 @@ use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 class PoiCollectionController extends ActionController
 {
     use InjectExtConfTrait;
+    use InjectGeoCodeServiceTrait;
     use InjectLinkHelperTrait;
     use InjectSettingsHelperTrait;
     use InjectPoiCollectionRepositoryTrait;
@@ -95,10 +97,8 @@ class PoiCollectionController extends ActionController
 
     public function listRadiusAction(Search $search): ResponseInterface
     {
-        $geoCodeService = GeneralUtility::makeInstance(GeoCodeService::class);
-
         $poiCollections = new \SplObjectStorage();
-        $position = $geoCodeService->getFirstFoundPositionByAddress($search->getAddress());
+        $position = $this->geoCodeService->getFirstFoundPositionByAddress($search->getAddress());
         if ($position instanceof Position) {
             $poiCollections = $this->poiCollectionRepository->searchWithinRadius(
                 $position->getLatitude(),
