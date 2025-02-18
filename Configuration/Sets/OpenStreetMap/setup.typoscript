@@ -1,8 +1,5 @@
 # Prevent including both static maps of map providers on one page
-page.includeCSS.leaflet >
-page.includeJSFooterlibs.maps2Leaflet >
-page.includeJSFooterlibs.maps2 >
-plugin.tx_maps2.settings.markerClusterer >
+page.includeJSFooterlibs.markerClustererForMaps2 >
 
 [isRequestToMapProviderAllowed()]
 [ELSE]

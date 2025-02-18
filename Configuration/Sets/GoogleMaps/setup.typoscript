@@ -1,7 +1,5 @@
 # Prevent including both static maps of map providers on one page
-page.includeJSFooterlibs.maps2 >
 page.includeJSFooterlibs.markerClustererForMaps2 >
-page.includeJSFooterlibs.googleMapsForMaps2 >
 
 [isRequestToMapProviderAllowed()]
   page.includeJSFooterlibs {
