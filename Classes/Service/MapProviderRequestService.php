@@ -21,12 +21,7 @@ use JWeiland\Maps2\Helper\MapHelper;
  */
 class MapProviderRequestService
 {
-    protected MapHelper $mapHelper;
-
-    public function __construct(MapHelper $mapHelper)
-    {
-        $this->mapHelper = $mapHelper;
-    }
+    public function __construct(protected MapHelper $mapHelper) {}
 
     /**
      * @deprecated

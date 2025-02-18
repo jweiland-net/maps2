@@ -25,12 +25,7 @@ class RequestFactory
         'osm' => 'JWeiland\\Maps2\\Client\\Request\\OpenStreetMap',
     ];
 
-    protected MapHelper $mapHelper;
-
-    public function __construct(MapHelper $mapHelper)
-    {
-        $this->mapHelper = $mapHelper;
-    }
+    public function __construct(protected MapHelper $mapHelper) {}
 
     /**
      * Create a new Request by its filename
@@ -46,10 +41,10 @@ class RequestFactory
         );
 
         if (!class_exists($className)) {
-            throw new \RuntimeException(sprintf(
-                'Class "%s" to create a new Request could not be found',
-                $className,
-            ));
+            throw new \RuntimeException(
+                sprintf('Class "%s" to create a new Request could not be found', $className),
+                1733471535,
+            );
         }
 
         /** @var RequestInterface $request */

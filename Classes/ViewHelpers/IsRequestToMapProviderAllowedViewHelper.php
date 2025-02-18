@@ -12,32 +12,20 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\ViewHelpers;
 
 use JWeiland\Maps2\Helper\MapHelper;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractConditionViewHelper;
-use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
-/*
+/**
  * Check, if selected map provider is allowed to be requested.
  */
 class IsRequestToMapProviderAllowedViewHelper extends AbstractConditionViewHelper
 {
-    use CompileWithRenderStatic;
+    public function __construct(private readonly MapHelper $mapHelper) {}
 
     /**
      * Convert all array and object types into a json string. Useful for data-Attributes
      */
-    public static function renderStatic(
-        array $arguments,
-        \Closure $renderChildrenClosure,
-        RenderingContextInterface $renderingContext,
-    ): bool {
-        return GeneralUtility::makeInstance(MapHelper::class)
-            ->isRequestToMapProviderAllowed();
-    }
-
-    protected static function getMapHelper(): MapHelper
+    public function render(): bool
     {
-        return GeneralUtility::makeInstance(MapHelper::class);
+        return $this->mapHelper->isRequestToMapProviderAllowed();
     }
 }

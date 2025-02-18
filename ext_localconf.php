@@ -7,16 +7,12 @@
  * LICENSE file that was distributed with this source code.
  */
 
-use JWeiland\Maps2\Controller\AjaxController;
 use JWeiland\Maps2\Controller\CityMapController;
 use JWeiland\Maps2\Controller\PoiCollectionController;
 use JWeiland\Maps2\Form\Element\ReadOnlyInputTextElement;
 use JWeiland\Maps2\Form\FieldInformation\InfoWindowContent;
 use JWeiland\Maps2\Form\Resolver\MapProviderResolver;
 use JWeiland\Maps2\Hook\CreateMaps2RecordHook;
-use JWeiland\Maps2\Update\MigratePoiRecordsToConfigurationMapUpdate;
-use JWeiland\Maps2\Update\MoveOldFlexFormSettingsUpdate;
-use JWeiland\Maps2\Update\NewGeocodeUriForOsmUpdate;
 use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
 if (!defined('TYPO3')) {
@@ -29,8 +25,9 @@ call_user_func(static function (): void {
         'Maps2',
         [
             PoiCollectionController::class => 'show',
-            AjaxController::class => 'process',
         ],
+        [],
+        ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT,
     );
 
     ExtensionUtility::configurePlugin(
@@ -39,10 +36,10 @@ call_user_func(static function (): void {
         [
             PoiCollectionController::class => 'overlay',
         ],
-        // non-cacheable actions
         [
             PoiCollectionController::class => 'overlay',
         ],
+        ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT,
     );
 
     ExtensionUtility::configurePlugin(
@@ -51,10 +48,10 @@ call_user_func(static function (): void {
         [
             PoiCollectionController::class => 'search, listRadius',
         ],
-        // non-cacheable actions
         [
             PoiCollectionController::class => 'listRadius',
         ],
+        ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT,
     );
 
     ExtensionUtility::configurePlugin(
@@ -63,10 +60,10 @@ call_user_func(static function (): void {
         [
             CityMapController::class => 'show, search',
         ],
-        // non-cacheable actions
         [
             CityMapController::class => 'search',
         ],
+        ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT,
     );
 
     // Activate caching for info window content
@@ -82,16 +79,6 @@ call_user_func(static function (): void {
     // Create maps2 records while saving foreign records
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass']['createMaps2Record']
         = CreateMaps2RecordHook::class;
-
-    // Move old flex form settings to new location before saving to DB
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['maps2MoveFlexFormFields']
-        = MoveOldFlexFormSettingsUpdate::class;
-    // Migrate old POI record into configuration_map of poicollection table
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['maps2MigratePoiRecord']
-        = MigratePoiRecordsToConfigurationMapUpdate::class;
-    // Migrate to new OSM Geocode URI in extension settings
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['maps2NewOsmGeocodeUriExtConf']
-        = NewGeocodeUriForOsmUpdate::class;
 
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1530778687] = [
         'nodeName' => 'maps2InfoWindowContent',

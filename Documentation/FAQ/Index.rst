@@ -10,22 +10,24 @@ FAQ
 DB compatibility
 ================
 
-In most cases EXT:maps2 uses the QueryBuilder to query data, but in case of Plugin `maps2_searchwithinradius`
-we need to execute a native MySQL query without QueryBuilder to find the related POIs. In that special case
+In most cases EXT:maps2 uses the QueryBuilder to query data, but in case of
+Plugin `maps2_searchwithinradius` we need to execute a native MySQL query
+without QueryBuilder to find the related POIs. In that special case
 MySQL/MariaDB is mandatory.
 
 Consent Tools
 =============
 
 If you want to use external consent tools you should deactivate both options
-`explicitAllowMapProviderRequests` and `explicitAllowMapProviderRequestsBySessionOnly` in
-extension manager.
+`explicitAllowMapProviderRequests` and
+`explicitAllowMapProviderRequestsBySessionOnly` in extension manager.
 
 Klaro
 -----
 
-Overwrite Templates path with help of TypoScript and copy `Templates/PoiCollection/Show.html` into your
-SitePackage extension. Add `data-name` attribute to existing div-tag.
+Overwrite Templates path with help of TypoScript and copy
+`Templates/PoiCollection/Show.html` into your SitePackage extension. Add
+`data-name` attribute to existing div-tag.
 
 ..  code-block:: html
 
@@ -36,7 +38,8 @@ SitePackage extension. Add `data-name` attribute to existing div-tag.
          data-pois="{poiCollections -> maps2:convertToJson()}"></div>
 
 
-In this example the `data-name` is `maps2`, so we have to create a service with name `maps2`:
+In this example the `data-name` is `maps2`, so we have to create a service with
+name `maps2`:
 
 ..  code-block:: javascript
 
@@ -51,9 +54,10 @@ In this example the `data-name` is `maps2`, so we have to create a service with 
     },
 
 
-In some cases it may happen, that the map will be displayed partly. To prevent that problem a reload after accepting
-the consent may help. Create a new js file which will be loaded AFTER `klaro.js`. Keep the name of
-`data-name`, in this case `maps2` here, too:
+In some cases it may happen, that the map will be displayed partly. To prevent
+that problem a reload after accepting the consent may help. Create a new JS
+file which will be loaded AFTER `klaro.js`. Keep the name of `data-name`,
+in this case `maps2` here, too:
 
 ..  code-block:: javascript
 
@@ -76,7 +80,8 @@ mindshape_cookie_consent
 
     1.  Add cookie record
 
-        Edit cookie consent record on your root page, add/edit cookie-category and add new Cookie record.
+        Edit cookie consent record on your root page, add/edit cookie-category
+        and add new Cookie record.
 
         *   Set `identifier` to `google_maps`
         *   Set `Cookie name` to `mapProviderRequestsAllowedForMaps2`
@@ -124,7 +129,8 @@ mindshape_cookie_consent
 
         `initMap();`
 
-        If you choose another file path, please update it in Show.html at position 2 of the ViewHelper of step 3.
+        If you choose another file path, please update it in Show.html at
+        position 2 of the ViewHelper of step 3.
 
     5.  Set template path to SitePackage
 

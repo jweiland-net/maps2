@@ -17,6 +17,7 @@ use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Mapper\GoogleMapsMapper;
 use JWeiland\Maps2\Mapper\MapperFactory;
 use JWeiland\Maps2\Service\GeoCodeService;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
@@ -56,6 +57,8 @@ class GeoCodeServiceTest extends UnitTestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
+
         $this->clientFactoryMock = $this->createMock(Client\ClientFactory::class);
         $this->googleMapsClientMock = $this->createMock(Client\GoogleMapsClient::class);
         $this->requestFactoryMock = $this->createMock(Request\RequestFactory::class);
@@ -90,9 +93,7 @@ class GeoCodeServiceTest extends UnitTestCase
         parent::tearDown();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getPositionsByAddressWithEmptyAddressWillReturnEmptyObjectStorage(): void
     {
         $objectStorage = new ObjectStorage();
@@ -110,9 +111,7 @@ class GeoCodeServiceTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getPositionsByAddressWithAddressFilledWithSpacesWillReturnEmptyObjectStorage(): void
     {
         $objectStorage = new ObjectStorage();
@@ -130,11 +129,7 @@ class GeoCodeServiceTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     *
-     * @datProvider dataProviderForGeocodeRequests
-     */
+    #[Test]
     public function getPositionsByAddressWithEmptyResponseWillReturnEmptyObjectStorage(): void
     {
         $address = 'test street 123, 12345 city';
@@ -173,10 +168,7 @@ class GeoCodeServiceTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     * @throws \Exception
-     */
+    #[Test]
     public function getPositionsByAddressWillReturnFilledObjectStorage(): void
     {
         $positions = new ObjectStorage();
@@ -223,10 +215,7 @@ class GeoCodeServiceTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     * @throws \Exception
-     */
+    #[Test]
     public function getFirstFoundPositionByAddressWithEmptyAddressWillReturnNull(): void
     {
         $objectStorage = new ObjectStorage();
@@ -237,10 +226,7 @@ class GeoCodeServiceTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     * @throws \Exception
-     */
+    #[Test]
     public function getFirstFoundPositionByAddressWithAddressFilledWithSpacesWillReturnNull(): void
     {
         $objectStorage = new ObjectStorage();
@@ -251,10 +237,7 @@ class GeoCodeServiceTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     * @throws \Exception
-     */
+    #[Test]
     public function getFirstFoundPositionByAddressWithAddressWillReturnNull(): void
     {
         $objectStorage = new ObjectStorage();
@@ -285,10 +268,7 @@ class GeoCodeServiceTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     * @throws \Exception
-     */
+    #[Test]
     public function getFirstFoundPositionByAddressWillReturnRadiusResult(): void
     {
         $expectedPosition = new Position();

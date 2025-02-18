@@ -8,6 +8,23 @@ services:
     resource: '../Classes/*'
     exclude: '../Classes/Domain/Model/*'
 
+  cache.maps2CachedHtml:
+    class: TYPO3\CMS\Core\Cache\Frontend\FrontendInterface
+    factory: ['@TYPO3\CMS\Core\Cache\CacheManager', 'getCache']
+    arguments: ['maps2_cachedhtml']
+
+  querybuilder.tx_maps2_domain_model_poicollection:
+    class: 'TYPO3\CMS\Core\Database\Query\QueryBuilder'
+    factory:
+      - '@TYPO3\CMS\Core\Database\ConnectionPool'
+      - 'getQueryBuilderForTable'
+    arguments:
+      - 'tx_maps2_domain_model_poicollection'
+
+  # Called by makeInstance in TYPO3's PluginPreview
+  JWeiland\Maps2\Backend\Preview\Maps2PluginPreview:
+    public: true
+
   # Called by makeInstance in our RequestFactory
   JWeiland\Maps2\Client\Request\GoogleMaps\GeocodeRequest:
     public: true
@@ -24,8 +41,24 @@ services:
   JWeiland\Maps2\Client\OpenStreetMapClient:
     public: true
 
+  # Called by makeInstance in various TCA files
+  JWeiland\Maps2\Configuration\ExtConf:
+    public: true
+
   # Called by makeInstance in TYPO3's AbstractConditionMatcher
   JWeiland\Maps2\ExpressionLanguage\AllowMapProviderRequestFunctionsProvider:
+    public: true
+
+  # Called by makeInstance in TYPO3's NodeRegistry
+  JWeiland\Maps2\Form\Element\ReadOnlyInputTextElement:
+    public: true
+
+  # Called by makeInstance in TYPO3's NodeRegistry
+  JWeiland\Maps2\Form\FieldInformation\InfoWindowContent:
+    public: true
+
+  # Called by makeInstance in TYPO3's NodeRegistry
+  JWeiland\Maps2\Form\Resolver\MapProviderResolver:
     public: true
 
   # Called by makeInstance in our PoiCollection
@@ -43,6 +76,20 @@ services:
   # Called by makeInstance in PoiCollection model to add foreign records
   JWeiland\Maps2\Service\MapService:
     public: true
+
+  JWeiland\Maps2\Service\PoiCollectionService:
+    arguments:
+      $queryBuilder: '@querybuilder.tx_maps2_domain_model_poicollection'
+
+  JWeiland\Maps2\ViewHelpers\Cache\GetCacheViewHelper:
+    arguments:
+      $cache: '@cache.maps2CachedHtml'
+  JWeiland\Maps2\ViewHelpers\Cache\HasCacheViewHelper:
+    arguments:
+      $cache: '@cache.maps2CachedHtml'
+  JWeiland\Maps2\ViewHelpers\Cache\SetCacheViewHelper:
+    arguments:
+      $cache: '@cache.maps2CachedHtml'
 
   JWeiland\Maps2\Tca\Maps2Registry:
     tags:

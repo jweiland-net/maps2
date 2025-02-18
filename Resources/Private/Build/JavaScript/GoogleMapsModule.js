@@ -96,7 +96,7 @@ class GoogleMapsModule {
     }
 
     // if maps2 was inserted in (bootstrap) tabs, we have to re-render the map
-    document.querySelector("ul.t3js-tabs li:nth-of-type(2) a[data-bs-toggle='tab']").addEventListener("shown.bs.tab", () => {
+    document.querySelector("ul.t3js-tabs li:nth-of-type(2) button[data-bs-toggle='tab']").addEventListener("shown.bs.tab", () => {
       google.maps.event.trigger(this.map, "resize");
       if (poiCollection.latitude && poiCollection.longitude) {
         this.map.setCenter(new google.maps.LatLng(poiCollection.latitude, poiCollection.longitude));
@@ -171,12 +171,12 @@ class GoogleMapsModule {
     this.infoWindow.setContent(this.infoWindowContent);
 
     // open InfoWindow, if marker was clicked.
-    this.marker.addListener("click", function() {
+    this.marker.addListener("click", () => {
       this.infoWindow.open(this.map, this.marker);
     });
 
     // update fields and marker while dragging
-    google.maps.event.addListener(this.marker, 'dragend', function() {
+    google.maps.event.addListener(this.marker, 'dragend', () => {
       this.setLatLngFields(
         this.marker.getPosition().lat().toFixed(6),
         this.marker.getPosition().lng().toFixed(6),
@@ -185,7 +185,7 @@ class GoogleMapsModule {
     });
 
     // update fields and marker when clicking on the map
-    google.maps.event.addListener(this.map, 'click', function(event) {
+    google.maps.event.addListener(this.map, 'click', event => {
       this.marker.setPosition(event.latLng);
       this.setLatLngFields(
         event.latLng.lat().toFixed(6),
@@ -198,12 +198,12 @@ class GoogleMapsModule {
   createArea = function(record) {
     let coordinatesArray = [];
 
-    if (record.configuration_map) {
-      for (let i = 0; i < record.configuration_map.length; i++) {
+    if (record.configurationMap) {
+      for (let i = 0; i < record.configurationMap.length; i++) {
         coordinatesArray.push(
           new google.maps.LatLng(
-            record.configuration_map[i].latitude,
-            record.configuration_map[i].longitude
+            record.configurationMap[i].latitude,
+            record.configurationMap[i].longitude
           )
         );
       }
@@ -226,24 +226,24 @@ class GoogleMapsModule {
     area.setMap(this.map);
 
     // Listener which will be called, if a vertex was moved to a new location
-    google.maps.event.addListener(path, 'set_at', function() {
+    google.maps.event.addListener(path, 'set_at', () => {
       this.storeRouteAsJson(area);
     });
     // Listener to add new vertex in between a route
-    google.maps.event.addListener(path, 'insert_at', function() {
+    google.maps.event.addListener(path, 'insert_at', () => {
       this.storeRouteAsJson(area);
     });
     // Listener to remove a vertex
-    google.maps.event.addListener(area, 'rightclick', function(event) {
+    google.maps.event.addListener(area, 'rightclick', event => {
       area.getPath().removeAt(event.vertex);
       this.storeRouteAsJson(area);
     });
     // Listener to add a new vertex. Will not be called, while inserting a vertex in between
-    google.maps.event.addListener(this.map, 'click', function(event) {
+    google.maps.event.addListener(this.map, 'click', event => {
       area.getPath().push(event.latLng);
     });
     // update fields for saving map position
-    google.maps.event.addListener(this.map, 'dragend', function() {
+    google.maps.event.addListener(this.map, 'dragend', () => {
       this.setLatLngFields(
         this.map.getCenter().lat().toFixed(6),
         this.map.getCenter().lng().toFixed(6),
@@ -255,12 +255,12 @@ class GoogleMapsModule {
   createRoute = function(record) {
     let coordinatesArray = [];
 
-    if (record.configuration_map) {
-      for (let i = 0; i < record.configuration_map.length; i++) {
+    if (record.configurationMap) {
+      for (let i = 0; i < record.configurationMap.length; i++) {
         coordinatesArray.push(
           new google.maps.LatLng(
-            record.configuration_map[i].latitude,
-            record.configuration_map[i].longitude
+            record.configurationMap[i].latitude,
+            record.configurationMap[i].longitude
           )
         );
       }
@@ -284,24 +284,24 @@ class GoogleMapsModule {
     route.setMap(this.map);
 
     // Listener which will be called, if a vertex was moved to a new location
-    google.maps.event.addListener(path, 'set_at', function() {
+    google.maps.event.addListener(path, 'set_at', () => {
       this.storeRouteAsJson(route);
     });
     // Listener to add new vertex in between a route
-    google.maps.event.addListener(path, 'insert_at', function() {
+    google.maps.event.addListener(path, 'insert_at', () => {
       this.storeRouteAsJson(route);
     });
     // Listener to remove a vertex
-    google.maps.event.addListener(route, 'rightclick', function(event) {
+    google.maps.event.addListener(route, 'rightclick', event => {
       route.getPath().removeAt(event.vertex);
       this.storeRouteAsJson(route);
     });
     // Listener to add a new vertex. Will not be called, while inserting a vertex in between
-    google.maps.event.addListener(this.map, 'click', function(event) {
+    google.maps.event.addListener(this.map, 'click', event => {
       route.getPath().push(event.latLng);
     });
     // update fields for saving map position
-    google.maps.event.addListener(this.map, 'dragend', function() {
+    google.maps.event.addListener(this.map, 'dragend', () => {
       this.setLatLngFields(
         this.map.getCenter().lat().toFixed(6),
         this.map.getCenter().lng().toFixed(6),
@@ -316,7 +316,7 @@ class GoogleMapsModule {
     );
 
     // update fields and marker while dragging
-    google.maps.event.addListener(this.marker, 'center_changed', function() {
+    google.maps.event.addListener(this.marker, 'center_changed', () => {
       this.setLatLngFields(
         this.marker.getCenter().lat().toFixed(6),
         this.marker.getCenter().lng().toFixed(6),
@@ -325,7 +325,7 @@ class GoogleMapsModule {
     });
 
     // update fields and marker while resizing the radius
-    google.maps.event.addListener(this.marker, 'radius_changed', function() {
+    google.maps.event.addListener(this.marker, 'radius_changed', () => {
       this.setLatLngFields(
         this.marker.getCenter().lat().toFixed(6),
         this.marker.getCenter().lng().toFixed(6),
@@ -334,7 +334,7 @@ class GoogleMapsModule {
     });
 
     // update fields and marker when clicking on the map
-    google.maps.event.addListener(this.map, 'click', function(event) {
+    google.maps.event.addListener(this.map, 'click', event => {
       this.marker.setCenter(event.latLng);
       this.setLatLngFields(
         event.latLng.lat().toFixed(6),
@@ -414,8 +414,9 @@ class GoogleMapsModule {
     let $fieldElement = this.getFieldElement(field);
 
     if ($fieldElement && $fieldElement.length) {
-      $fieldElement.val(value);
-      $fieldElement.triggerHandler("change");
+      let humanReadableField = $fieldElement.get(0);
+      humanReadableField.value = value;
+      humanReadableField.dispatchEvent(new Event('change'));
     }
   };
 

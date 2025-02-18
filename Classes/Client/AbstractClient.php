@@ -22,15 +22,10 @@ use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
  */
 abstract class AbstractClient implements ClientInterface
 {
-    protected MessageHelper $messageHelper;
-
-    protected RequestFactory $requestFactory;
-
-    public function __construct(MessageHelper $messageHelper, RequestFactory $requestFactory)
-    {
-        $this->messageHelper = $messageHelper;
-        $this->requestFactory = $requestFactory;
-    }
+    public function __construct(
+        protected MessageHelper $messageHelper,
+        protected RequestFactory $requestFactory,
+    ) {}
 
     public function processRequest(RequestInterface $request): array
     {

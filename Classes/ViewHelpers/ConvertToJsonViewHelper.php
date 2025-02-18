@@ -16,9 +16,7 @@ use JWeiland\Maps2\Domain\Model\PoiCollection;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
-use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
-use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
 /**
  * As we need much information in frontend, this ViewHelper is really helpful to
@@ -26,8 +24,6 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
  */
 class ConvertToJsonViewHelper extends AbstractViewHelper
 {
-    use CompileWithRenderStatic;
-
     /**
      * @var bool
      */
@@ -41,21 +37,22 @@ class ConvertToJsonViewHelper extends AbstractViewHelper
     /**
      * Convert all array and object types into a json string. Useful for data-Attributes
      */
-    public static function renderStatic(
-        array $arguments,
-        \Closure $renderChildrenClosure,
-        RenderingContextInterface $renderingContext,
-    ): string {
-        $poiCollections = $renderChildrenClosure();
+    public function render(): string
+    {
+        $poiCollections = $this->renderChildren();
 
         if ($poiCollections instanceof PoiCollection) {
             $poiCollections = [$poiCollections];
         }
 
-        if (self::valueContainsPoiCollections($poiCollections)) {
-            $json = self::getPoiCollectionsAsJson($poiCollections);
-        } else {
-            $json = json_encode($poiCollections, JSON_THROW_ON_ERROR);
+        try {
+            if (self::valueContainsPoiCollections($poiCollections)) {
+                $json = self::getPoiCollectionsAsJson($poiCollections);
+            } else {
+                $json = json_encode($poiCollections, JSON_THROW_ON_ERROR);
+            }
+        } catch (\JsonException) {
+            $json = '{}';
         }
 
         return htmlspecialchars($json);
@@ -64,9 +61,9 @@ class ConvertToJsonViewHelper extends AbstractViewHelper
     /**
      * Convert poiCollections to array and pass them through json_encode
      *
-     * @param array|QueryResultInterface|ObjectStorage|PoiCollection[] $poiCollections
+     * @param PoiCollection[] $poiCollections
      */
-    protected static function getPoiCollectionsAsJson($poiCollections): string
+    protected function getPoiCollectionsAsJson(array|QueryResultInterface|ObjectStorage $poiCollections): string
     {
         $poiCollectionsAsArray = [];
         foreach ($poiCollections as $poiCollection) {
@@ -84,15 +81,17 @@ class ConvertToJsonViewHelper extends AbstractViewHelper
             $poiCollectionsAsArray[] = $poiCollectionAsArray;
         }
 
-        return json_encode($poiCollectionsAsArray, JSON_THROW_ON_ERROR);
+        try {
+            return json_encode($poiCollectionsAsArray, JSON_THROW_ON_ERROR);
+        } catch (\JsonException $e) {
+            return '{}';
+        }
     }
 
     /**
      * Check, if value contains entries of type PoiCollection
-     *
-     * @param mixed $value
      */
-    protected static function valueContainsPoiCollections($value): bool
+    protected function valueContainsPoiCollections(mixed $value): bool
     {
         // With PHP 8.1 reset() and current() should not be used with objects anymore.
         // Extract the values as simple array to be compatible in the future.

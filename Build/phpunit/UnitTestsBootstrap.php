@@ -47,6 +47,7 @@ use TYPO3\TestingFramework\Core\Testbase;
     if (!getenv('TYPO3_PATH_ROOT')) {
         putenv('TYPO3_PATH_ROOT=' . rtrim($testbase->getWebRoot(), '/'));
     }
+
     if (!getenv('TYPO3_PATH_WEB')) {
         putenv('TYPO3_PATH_WEB=' . rtrim($testbase->getWebRoot(), '/'));
     }

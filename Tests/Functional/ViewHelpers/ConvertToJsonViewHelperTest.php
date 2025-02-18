@@ -15,6 +15,7 @@ use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\Category;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Helper\MapHelper;
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
@@ -37,8 +38,6 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
         parent::setUp();
 
         $extConf = GeneralUtility::makeInstance(ExtConf::class);
-        GeneralUtility::setSingletonInstance(ExtConf::class, $extConf);
-
         $mapHelper = new MapHelper($extConf);
         GeneralUtility::addInstance(MapHelper::class, $mapHelper);
         $this->poiCollection = new PoiCollection();
@@ -55,9 +54,7 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
         parent::tearDown();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function renderWithStringWillJustCallJsonEncode(): void
     {
         $view = new StandaloneView();
@@ -79,9 +76,7 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function renderWithSimpleArrayWillJustCallJsonEncode(): void
     {
         $view = new StandaloneView();
@@ -103,9 +98,7 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function renderWithPoiCollectionWillSetItToArrayAndConvertItToJson(): void
     {
         $view = new StandaloneView();
@@ -128,9 +121,7 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function renderWithPoiCollectionsWillConvertItToJson(): void
     {
         $view = new StandaloneView();
@@ -156,9 +147,7 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
         self::stringStartsWith('[{');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function renderWithPoiCollectionsWillRemoveMaps2MarkerIconsFromCategories(): void
     {
         $poiCollection = $this->poiCollection;
@@ -187,9 +176,7 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function renderWithPoiCollectionsWillRemoveMarkerIconsFromPoiCollection(): void
     {
         $view = new StandaloneView();

@@ -11,7 +11,8 @@ User manual
 
     This chapter describes how to use the extension from a user point of view.
 
-    The section "*Maps2Record*" lists all the fields of the record and "*HowToStart*" describes all available plugins.
+    The section "*Maps2Record*" lists all the fields of the record and
+    "*HowToStart*" describes all available plugins.
 
 ..  toctree::
     :maxdepth: 2

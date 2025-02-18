@@ -29,7 +29,7 @@ Follow these steps to build fresh JS files:
   npm install
   ```
 
-- *Step 4: Build/Compile JS Files & Move them to the Appropriate Directory*
+- *Step 4: Build/Compile JS Files & Move them to the appropriate Directory*
 
   Use the 'gulp' command to build/compile and move the resulting JS files into
   the `Resources/Public/JavaScript` folder:

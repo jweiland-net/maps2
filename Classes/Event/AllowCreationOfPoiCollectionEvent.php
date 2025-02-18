@@ -16,29 +16,13 @@ namespace JWeiland\Maps2\Event;
  */
 class AllowCreationOfPoiCollectionEvent
 {
-    protected array $foreignLocationRecord = [];
-
-    protected string $foreignTableName = '';
-
-    protected string $foreignColumnName = '';
-
-    protected array $options = [];
-
-    protected bool $isValid = false;
-
     public function __construct(
-        array $foreignLocationRecord,
-        string $foreignTableName,
-        string $foreignColumnName,
-        array $options,
-        bool $isValid,
-    ) {
-        $this->foreignLocationRecord = $foreignLocationRecord;
-        $this->foreignTableName = $foreignTableName;
-        $this->foreignColumnName = $foreignColumnName;
-        $this->options = $options;
-        $this->isValid = $isValid;
-    }
+        protected array $foreignLocationRecord,
+        protected string $foreignTableName,
+        protected string $foreignColumnName,
+        protected array $options,
+        protected bool $isValid,
+    ) {}
 
     public function getForeignLocationRecord(): array
     {

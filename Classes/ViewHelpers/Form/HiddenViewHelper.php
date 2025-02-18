@@ -11,7 +11,9 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\ViewHelpers\Form;
 
-use TYPO3\CMS\Fluid\ViewHelpers\Form\AbstractFormFieldViewHelper;/**
+use TYPO3\CMS\Fluid\ViewHelpers\Form\AbstractFormFieldViewHelper;
+
+/**
  * Renders an :html:`<input type="hidden" ...>` tag.
  * This VH is a copy of the original f:hidden VH with ONE difference:
  * It adds a required __identity flag for property
@@ -28,7 +30,6 @@ class HiddenViewHelper extends AbstractFormFieldViewHelper
     public function initializeArguments(): void
     {
         parent::initializeArguments();
-        $this->registerUniversalTagAttributes();
     }
 
     /**

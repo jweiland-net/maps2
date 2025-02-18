@@ -14,6 +14,7 @@ namespace JWeiland\Maps2\Tests\Functional\Form\Element;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Form\Element\GoogleMapsElement;
 use JWeiland\Maps2\Helper\MapHelper;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Backend\Form\NodeFactory;
 use TYPO3\CMS\Core\Page\PageRenderer;
@@ -47,6 +48,8 @@ class GoogleMapsElementTest extends FunctionalTestCase
      */
     protected $viewMock;
 
+    protected NodeFactory $nodeFactoryMock;
+
     protected array $testExtensionsToLoad = [
         'jweiland/maps2',
     ];
@@ -73,7 +76,6 @@ class GoogleMapsElementTest extends FunctionalTestCase
         ];
 
         $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
-        GeneralUtility::setSingletonInstance(ExtConf::class, $this->extConf);
 
         $this->pageRendererMock = $this->createMock(PageRenderer::class);
         GeneralUtility::setSingletonInstance(PageRenderer::class, $this->pageRendererMock);
@@ -84,10 +86,11 @@ class GoogleMapsElementTest extends FunctionalTestCase
         $this->viewMock = $this->createMock(StandaloneView::class);
         GeneralUtility::addInstance(StandaloneView::class, $this->viewMock);
 
-        $this->subject = new GoogleMapsElement(
-            GeneralUtility::makeInstance(NodeFactory::class),
-            $this->data,
-        );
+        $this->nodeFactoryMock = $this->createMock(NodeFactory::class);
+        GeneralUtility::addInstance(NodeFactory::class, $this->nodeFactoryMock);
+
+        $this->subject = new GoogleMapsElement($this->nodeFactoryMock);
+        $this->subject->setData($this->data);
     }
 
     protected function tearDown(): void
@@ -103,9 +106,7 @@ class GoogleMapsElementTest extends FunctionalTestCase
         parent::tearDown();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function renderWillCleanUpCurrentRecord(): void
     {
         $record = $this->data['databaseRow'];

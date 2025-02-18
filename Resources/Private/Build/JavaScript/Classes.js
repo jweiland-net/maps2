@@ -39,7 +39,6 @@ export class ContentRecord {
   #hidden = '';
   #imageheight = '';
   #imagewidth = '';
-  #list_type = '';
   #pages = '';
   #pid = '';
   #starttime = '';
@@ -65,7 +64,6 @@ export class ContentRecord {
     this.#hidden = contentRecord.hidden;
     this.#imageheight = contentRecord.imageheight;
     this.#imagewidth = contentRecord.imagewidth;
-    this.#list_type = contentRecord.list_type;
     this.#pages = contentRecord.pages;
     this.#pid = contentRecord.pid;
     this.#starttime = contentRecord.starttime;
@@ -151,13 +149,6 @@ export class ContentRecord {
    */
   get imagewidth() {
     return this.#imagewidth;
-  }
-
-  /**
-   * @returns {string}
-   */
-  get list_type() {
-    return this.#list_type;
   }
 
   /**

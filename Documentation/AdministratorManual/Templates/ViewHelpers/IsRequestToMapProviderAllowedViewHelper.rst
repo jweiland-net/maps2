@@ -5,8 +5,8 @@
 IsRequestToMapProviderAllowedViewHelper
 =======================================
 
-Use this ViewHelper to check user consent, if requests to map providers like Google Maps or OpenStreetMap
-are allowed or not.
+Use this ViewHelper to check user consent, if requests to map providers like
+Google Maps or OpenStreetMap are allowed or not.
 
 
 Examples

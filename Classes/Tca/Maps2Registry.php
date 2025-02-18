@@ -65,7 +65,7 @@ class Maps2Registry implements SingletonInterface
                     $this->registry = $configuration['registry'];
                     $this->extensions = $configuration['extensions'];
                 }
-            } catch (\JsonException $jsonException) {
+            } catch (\JsonException) {
                 // File exists, but empty or other error
                 $this->registry = [];
                 $this->extensions = [];
@@ -154,7 +154,7 @@ class Maps2Registry implements SingletonInterface
                     512,
                     JSON_THROW_ON_ERROR,
                 );
-            } catch (\JsonException $jsonException) {
+            } catch (\JsonException) {
                 $configuration = [];
             }
 

@@ -32,7 +32,7 @@ plugin.tx_maps2 {
     scaleControl = 1
     streetViewControl = 1
     fullscreenMapControl = 1
-    mapTypeId => google.maps.MapTypeId.ROADMAP
+    mapTypeId = google.maps.MapTypeId.ROADMAP
     markerClusterer {
       enable = 0
       imagePath = EXT:maps2/Resources/Public/Icons/MarkerClusterer/m

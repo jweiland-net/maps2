@@ -1,0 +1,5 @@
+name: jweiland/maps2-openstreetmap
+label: Maps2 - OpenStreetMap
+
+dependencies:
+  - jweiland/maps2-default

@@ -42,11 +42,11 @@ return [
     ],
     'types' => [
         'Empty' => [
-            'showitem' => '--palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:palette.language_hidden;language_hidden, l10n_parent, l10n_diffsource,
+            'showitem' => '--palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:palette.language_hidden;language_hidden, l10n_diffsource,
             collection_type, title',
         ],
         'Point' => [
-            'showitem' => '--palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:palette.language_hidden;language_hidden, l10n_parent, l10n_diffsource,
+            'showitem' => '--palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:palette.language_hidden;language_hidden, l10n_diffsource,
                 collection_type, title,
                 --div--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.map, address, configuration_map,
                 --palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:palette.latitude_longitude;latitude_longitude,
@@ -58,7 +58,7 @@ return [
                 --div--;LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:sys_category.tabs.category, categories',
         ],
         'Area' => [
-            'showitem' => '--palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:palette.language_hidden;language_hidden, l10n_parent, l10n_diffsource,
+            'showitem' => '--palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:palette.language_hidden;language_hidden, l10n_diffsource,
                 collection_type, title,
                 --div--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.map, address, configuration_map,
                 --palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:palette.latitude_longitude;latitude_longitude,
@@ -70,7 +70,7 @@ return [
                 --div--;LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:sys_category.tabs.category, categories',
         ],
         'Route' => [
-            'showitem' => '--palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:palette.language_hidden;language_hidden, l10n_parent, l10n_diffsource,
+            'showitem' => '--palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:palette.language_hidden;language_hidden, l10n_diffsource,
                 collection_type, title,
                 --div--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.map, address, configuration_map,
                 --palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:palette.latitude_longitude;latitude_longitude,
@@ -81,7 +81,7 @@ return [
                 --div--;LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:sys_category.tabs.category, categories',
         ],
         'Radius' => [
-            'showitem' => '--palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:palette.language_hidden;language_hidden, l10n_parent, l10n_diffsource,
+            'showitem' => '--palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:palette.language_hidden;language_hidden, l10n_diffsource,
                 collection_type, title,
                 --div--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.map, address, configuration_map,
                 --palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:palette.latitude_longitude;latitude_longitude_radius,
@@ -96,7 +96,7 @@ return [
     'palettes' => [
         'latitude_longitude' => ['showitem' => 'latitude, longitude'],
         'latitude_longitude_radius' => ['showitem' => 'latitude, longitude, radius'],
-        'language_hidden' => ['showitem' => 'hidden, sys_language_uid'],
+        'language_hidden' => ['showitem' => 'hidden, sys_language_uid, l10n_parent'],
         'marker_icon_size' => ['showitem' => 'marker_icon_width, marker_icon_height'],
         'marker_icon_pos' => ['showitem' => 'marker_icon_anchor_pos_x, marker_icon_anchor_pos_y'],
         'stroke' => ['showitem' => 'stroke_color, stroke_opacity, stroke_weight'],
@@ -117,17 +117,18 @@ return [
             'displayCond' => 'FIELD:sys_language_uid:>:0',
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
             'config' => [
-                'type' => 'select',
-                'renderType' => 'selectSingle',
-                'items' => [
-                    [
-                        'label' => '',
-                        'value' => 0,
+                'type' => 'group',
+                'allowed' => 'tx_maps2_domain_model_poicollection',
+                'size' => 1,
+                'maxitems' => 1,
+                'minitems' => 0,
+                'default' => 0,
+                'suggestOptions' => [
+                    'default' => [
+                        'searchWholePhrase' => true,
+                        'addWhere' => 'AND tx_maps2_domain_model_poicollection.sys_language_uid IN (0,-1)',
                     ],
                 ],
-                'foreign_table' => 'tx_maps2_domain_model_poicollection',
-                'foreign_table_where' => 'AND tx_maps2_domain_model_poicollection.pid=###CURRENT_PID### AND tx_maps2_domain_model_poicollection.sys_language_uid IN (-1,0)',
-                'default' => 0,
             ],
         ],
         'l10n_diffsource' => [
@@ -224,6 +225,7 @@ return [
                 'type' => 'input',
                 'required' => true,
                 'size' => 30,
+                'max' => 255,
                 'eval' => 'trim',
             ],
         ],
@@ -235,6 +237,7 @@ return [
                 'type' => 'input',
                 'renderType' => 'maps2ReadOnlyInputText',
                 'size' => 48,
+                'max' => 255,
                 'placeholder' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.address.useSearchField',
             ],
         ],
@@ -291,17 +294,15 @@ return [
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.radius',
             'config' => [
                 'type' => 'number',
-                'size' => 12,
+                'format' => 'integer',
             ],
         ],
         'stroke_color' => [
             'exclude' => true,
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.stroke_color',
             'config' => [
-                'type' => 'input',
-                'size' => 7,
+                'type' => 'color',
                 'placeholder' => '#FF0000',
-                'eval' => 'trim',
             ],
         ],
         'stroke_opacity' => [
@@ -310,6 +311,7 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 5,
+                'max' => 5,
                 'placeholder' => '0.8',
                 'eval' => 'trim',
             ],
@@ -320,6 +322,7 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 5,
+                'max' => 5,
                 'placeholder' => '2',
                 'eval' => 'trim',
             ],
@@ -328,10 +331,8 @@ return [
             'exclude' => true,
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.fill_color',
             'config' => [
-                'type' => 'input',
-                'size' => 7,
+                'type' => 'color',
                 'placeholder' => '#FF0000',
-                'eval' => 'trim',
             ],
         ],
         'fill_opacity' => [
@@ -340,6 +341,7 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 5,
+                'max' => 5,
                 'placeholder' => '0.35',
                 'eval' => 'trim',
             ],
@@ -384,66 +386,41 @@ return [
             'exclude' => true,
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.marker_icon_width',
             'config' => [
-                'type' => 'input',
-                'size' => 5,
-                'default' => 0,
-                'eval' => 'trim',
+                'type' => 'number',
+                'format' => 'integer',
             ],
         ],
         'marker_icon_height' => [
             'exclude' => true,
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.marker_icon_height',
             'config' => [
-                'type' => 'input',
-                'size' => 5,
-                'default' => 0,
-                'eval' => 'trim',
+                'type' => 'number',
+                'format' => 'integer',
             ],
         ],
         'marker_icon_anchor_pos_x' => [
             'exclude' => true,
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.marker_icon_anchor_pos_x',
             'config' => [
-                'type' => 'input',
-                'size' => 5,
-                'default' => 0,
-                'eval' => 'trim',
+                'type' => 'number',
+                'format' => 'integer',
             ],
         ],
         'marker_icon_anchor_pos_y' => [
             'exclude' => true,
             'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.marker_icon_anchor_pos_y',
             'config' => [
-                'type' => 'input',
-                'size' => 5,
-                'default' => 0,
-                'eval' => 'trim',
+                'type' => 'number',
+                'format' => 'integer',
             ],
         ],
         'categories' => [
             'exclude' => true,
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:sys_category.categories',
             'config' => [
-                'type' => 'select',
-                'renderType' => 'selectTree',
-                'foreign_table' => 'sys_category',
-                'foreign_table_where' => ' AND sys_category.sys_language_uid IN (-1, 0) ORDER BY sys_category.sorting',
-                'MM' => 'sys_category_record_mm',
-                'MM_match_fields' => [
-                    'fieldname' => 'categories',
-                    'tablenames' => 'tx_maps2_domain_model_poicollection',
-                ],
-                'MM_opposite_field' => 'items',
-                'treeConfig' => [
-                    'parentField' => 'parent',
-                    'appearance' => [
-                        'showHeader' => true,
-                        'expandAll' => true,
-                        'maxLevels' => 99,
-                    ],
-                ],
+                'type' => 'category',
                 'size' => 20,
-                'maxitems' => 9999,
+                'default' => 0,
             ],
         ],
     ],

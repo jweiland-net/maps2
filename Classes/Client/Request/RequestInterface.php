@@ -24,10 +24,7 @@ interface RequestInterface
 
     public function setParameters(array $parameters);
 
-    /**
-     * @param mixed $value
-     */
-    public function addParameter(string $parameter, $value);
+    public function addParameter(string $parameter, mixed $value);
 
     /**
      * @return mixed

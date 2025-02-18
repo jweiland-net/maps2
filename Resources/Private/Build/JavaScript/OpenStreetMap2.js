@@ -1,7 +1,7 @@
 class OpenStreetMap2 {
   element = {};
   environment = {};
-  editable = false;;
+  editable = false;
   bounds = {};
 
   allMarkers = [];
@@ -469,6 +469,7 @@ class OpenStreetMap2 {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "ext-maps2": "infoWindowContent"
         },
         body: JSON.stringify({
           poiCollection: poiCollection.uid

@@ -9,7 +9,7 @@
     </f:then>
     <f:else>
         <f:variable name="content">
-            <f:render partial="InfoWindowContent" arguments="{poiCollection: poiCollection}"/>
+            <f:render partial="InfoWindowContent" arguments="{_all}"/>
         </f:variable>
         <m:cache.setCache data="{content -> f:format.raw()}" poiCollection="{poiCollection}"/>
         {content -> f:format.raw()}

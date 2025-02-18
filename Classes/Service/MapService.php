@@ -19,106 +19,29 @@ use JWeiland\Maps2\Event\PreAddForeignRecordEvent;
 use JWeiland\Maps2\Helper\MessageHelper;
 use JWeiland\Maps2\Tca\Maps2Registry;
 use JWeiland\Maps2\Utility\DatabaseUtility;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\FrontendRestrictionContainer;
-use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
-use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\View\ViewFactoryInterface;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
-use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
  * This class contains recurring methods for both map providers.
  */
 class MapService
 {
-    protected ConfigurationManagerInterface $configurationManager;
-
-    protected MessageHelper $messageHelper;
-
-    protected Maps2Registry $maps2Registry;
-
-    protected ExtConf $extConf;
-
-    protected EventDispatcher $eventDispatcher;
-
-    protected array $settings = [];
-
     public function __construct(
-        ConfigurationManagerInterface $configurationManager,
-        MessageHelper $messageHelper,
-        Maps2Registry $maps2Registry,
-        ExtConf $extConf,
-        EventDispatcher $eventDispatcher,
-    ) {
-        $this->configurationManager = $configurationManager;
-        $this->messageHelper = $messageHelper;
-        $this->maps2Registry = $maps2Registry;
-        $this->extConf = $extConf;
-        $this->eventDispatcher = $eventDispatcher;
-    }
-
-    /**
-     * Render InfoWindow for marker
-     */
-    public function renderInfoWindow(PoiCollection $poiCollection): string
-    {
-        $typoScriptConfiguration = $this->configurationManager->getConfiguration(
-            ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,
-            'Maps2',
-            'Maps2',
-        );
-
-        $view = GeneralUtility::makeInstance(StandaloneView::class);
-        $view->setLayoutRootPaths($typoScriptConfiguration['view']['layoutRootPaths'] ?? []);
-        $view->setPartialRootPaths($typoScriptConfiguration['view']['partialRootPaths'] ?? []);
-        $view->assign('settings', $this->getSettings());
-        $view->assign('poiCollection', $poiCollection);
-        $view->setTemplatePathAndFilename(
-            GeneralUtility::getFileAbsFileName(
-                $this->getInfoWindowContentTemplatePath(),
-            ),
-        );
-
-        return $view->render();
-    }
-
-    /**
-     * Get template path for info window content
-     */
-    protected function getInfoWindowContentTemplatePath(): string
-    {
-        $settings = $this->getSettings();
-
-        if (!array_key_exists('infoWindowContentTemplatePath', $settings)) {
-            return $this->extConf->getInfoWindowContentTemplatePath();
-        }
-
-        if (trim($settings['infoWindowContentTemplatePath']) === '') {
-            return $this->extConf->getInfoWindowContentTemplatePath();
-        }
-
-        return trim($settings['infoWindowContentTemplatePath']);
-    }
-
-    protected function getSettings(): array
-    {
-        $settings = [];
-        if (ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend()) {
-            // Keep ExtName and PluginName, else the extKey will not be added to return-value
-            // in further getConfiguration calls.
-            $settings = $this->configurationManager->getConfiguration(
-                ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
-                'Maps2',
-                'Maps2',
-            );
-        }
-
-        return $settings;
-    }
+        protected ConfigurationManagerInterface $configurationManager,
+        protected MessageHelper $messageHelper,
+        protected Maps2Registry $maps2Registry,
+        protected ExtConf $extConf,
+        protected EventDispatcherInterface $eventDispatcher,
+        protected ViewFactoryInterface $viewFactory,
+    ) {}
 
     protected function getColumnRegistry(): array
     {
@@ -175,7 +98,7 @@ class MapService
             $fieldValues,
         );
 
-        return (int)$connection->lastInsertId('tx_maps2_domain_model_poicollection');
+        return (int)$connection->lastInsertId();
     }
 
     /**
@@ -322,7 +245,7 @@ class MapService
 
                         $poiCollection->addForeignRecord($foreignRecord);
                     }
-                } catch (DBALException $exception) {
+                } catch (DBALException) {
                     continue;
                 }
             }

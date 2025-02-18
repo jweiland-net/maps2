@@ -26,17 +26,17 @@ General properties
 prefix
 ------
 
-If you want you can define a prefix for the generated CacheIdentifier. Leave this
-value empty to use "infoWindow" as default value
+If you want you can define a prefix for the generated CacheIdentifier. Leave
+this value empty to use "infoWindow" as default value
 
 ..  _poiCollection:
 
 poiCollection
 -------------
 
-You must assign the PoiCollection object to this ViewHelper. We extract some data from
-PoiCollection to build a more unique CacheIdentifier which can differ Caches in
-multilingual environment.
+You must assign the PoiCollection object to this ViewHelper. We extract some
+data from PoiCollection to build a more unique CacheIdentifier which can differ
+Caches in multilingual environment.
 
 Examples
 ========

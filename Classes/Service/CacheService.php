@@ -11,8 +11,8 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Service;
 
-use JWeiland\Maps2\Domain\Model\PoiCollection;
 use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Crypto\HashService;
 use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -20,8 +20,10 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * A global accessible class to build Cache Identifier and Tags for Cache Entries.
  * Used in Cache ViewHelpers and after storing PoiCollections in Backend: CreateMaps2RecordHook
  */
-class CacheService
+readonly class CacheService
 {
+    public function __construct(protected HashService $hashService) {}
+
     /**
      * In previous versions our CacheIdentifier was infoWindow{PoiCollectionUid}.
      * In multilingual environments, where UID is always the same, we have to build a more unique
@@ -32,7 +34,10 @@ class CacheService
     public function getCacheIdentifier(array $poiCollection, string $prefix = 'infoWindow'): string
     {
         if (!$this->isFrontendEnvironment()) {
-            throw new \RuntimeException('getCacheIdentifier can only be called from FE, as we have to add the true language ID to PoiCollection');
+            throw new \RuntimeException(
+                'getCacheIdentifier can only be called from FE, as we have to add the true language ID to PoiCollection',
+                1733471017,
+            );
         }
 
         // We do not add the original sys_language_uid of PoiCollection, as it can be the same for different languages.
@@ -41,8 +46,9 @@ class CacheService
         return sprintf(
             '%s%s',
             $prefix,
-            GeneralUtility::hmac(
+            $this->hashService->hmac(
                 \json_encode(array_diff_key($poiCollection, ['uid', 'pid', 'language', 'title', 'address'])),
+                $prefix,
             ),
         );
     }
@@ -64,21 +70,6 @@ class CacheService
     }
 
     /**
-     * In case of hooks where we have PoiCollection as array, we can assign PoiCollection directly
-     * to getCacheIdentifier. But in case of ViewHelpers we have a PoiCollection object. You can use
-     * this method to prepare/sanitize PoiCollection objects for use with getCacheIdentifier/getCacheTags.
-     */
-    public function preparePoiCollectionForCacheMethods(PoiCollection $poiCollection): array
-    {
-        return [
-            'uid' => $poiCollection->getUid(),
-            'pid' => $poiCollection->getUid(),
-            'title' => $poiCollection->getTitle(),
-            'address' => $poiCollection->getAddress(),
-        ];
-    }
-
-    /**
      * Returns the calculated (incl. fallback) sys_language_uid
      *
      * @throws \Exception
@@ -86,7 +77,10 @@ class CacheService
     protected function getLanguageUid(): int
     {
         if (!$this->isFrontendEnvironment()) {
-            throw new \RuntimeException('getLanguageId can only be called from FE, as we have to add the true language ID to PoiCollection');
+            throw new \RuntimeException(
+                'getLanguageId can only be called from FE, as we have to add the true language ID to PoiCollection',
+                1733470968,
+            );
         }
 
         return (int)GeneralUtility::makeInstance(Context::class)

@@ -1,0 +1,5 @@
+name: jweiland/maps2-googlemaps
+label: Maps2 - Google Maps
+
+dependencies:
+  - jweiland/maps2-default

@@ -23,15 +23,7 @@ class MapHelper
 {
     use GetTypo3RequestTrait;
 
-    /**
-     * @var ExtConf
-     */
-    protected ExtConf $extConf;
-
-    public function __construct(ExtConf $extConf)
-    {
-        $this->extConf = $extConf;
-    }
+    public function __construct(protected ExtConf $extConf) {}
 
     /**
      * Returns the map provider.
@@ -105,7 +97,7 @@ class MapHelper
                     GeneralUtility::trimExplode(',', $poi),
                 );
             }
-        } catch (\JsonException $jsonException) {
+        } catch (\JsonException) {
             // Return empty POIs
         }
 

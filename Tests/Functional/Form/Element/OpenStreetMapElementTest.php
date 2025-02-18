@@ -14,10 +14,13 @@ namespace JWeiland\Maps2\Tests\Functional\Form\Element;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Form\Element\OpenStreetMapElement;
 use JWeiland\Maps2\Helper\MapHelper;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Backend\Form\NodeFactory;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\View\ViewFactoryInterface;
+use TYPO3\CMS\Core\View\ViewInterface;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
@@ -47,6 +50,10 @@ class OpenStreetMapElementTest extends FunctionalTestCase
      */
     protected $viewMock;
 
+    protected ViewFactoryInterface $viewFactoryMock;
+
+    protected NodeFactory $nodeFactoryMock;
+
     protected array $testExtensionsToLoad = [
         'jweiland/maps2',
     ];
@@ -73,7 +80,6 @@ class OpenStreetMapElementTest extends FunctionalTestCase
         ];
 
         $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
-        GeneralUtility::setSingletonInstance(ExtConf::class, $this->extConf);
 
         $this->pageRendererMock = $this->createMock(PageRenderer::class);
         GeneralUtility::setSingletonInstance(PageRenderer::class, $this->pageRendererMock);
@@ -81,13 +87,23 @@ class OpenStreetMapElementTest extends FunctionalTestCase
         $this->mapHelperMock = $this->createMock(MapHelper::class);
         GeneralUtility::addInstance(MapHelper::class, $this->mapHelperMock);
 
-        $this->viewMock = $this->createMock(StandaloneView::class);
-        GeneralUtility::addInstance(StandaloneView::class, $this->viewMock);
+        $this->viewMock = $this->createMock(ViewInterface::class);
+        GeneralUtility::addInstance(ViewInterface::class, $this->viewMock);
+
+        $this->viewFactoryMock = $this->createMock(ViewFactoryInterface::class);
+        GeneralUtility::addInstance(ViewFactoryInterface::class, $this->viewFactoryMock);
+
+        $this->nodeFactoryMock = $this->createMock(NodeFactory::class);
+        GeneralUtility::addInstance(NodeFactory::class, $this->nodeFactoryMock);
 
         $this->subject = new OpenStreetMapElement(
-            GeneralUtility::makeInstance(NodeFactory::class),
-            $this->data,
+            $this->extConf,
+            $this->pageRendererMock,
+            $this->mapHelperMock,
+            $this->viewFactoryMock,
+            $this->nodeFactoryMock,
         );
+        $this->subject->setData($this->data);
     }
 
     protected function tearDown(): void
@@ -98,32 +114,20 @@ class OpenStreetMapElementTest extends FunctionalTestCase
             $this->pageRendererMock,
             $this->mapHelperMock,
             $this->viewMock,
+            $this->viewFactoryMock,
+            $this->nodeFactoryMock,
         );
 
         parent::tearDown();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function renderWillCleanUpCurrentRecord(): void
     {
-        $record = $this->data['databaseRow'];
-        $record['collection_type'] = 'Point';
+        $this->viewFactoryMock->expects(self::once())
+            ->method('create')
+            ->willReturn($this->viewMock);
 
-        $this->viewMock
-            ->expects(self::atLeastOnce())
-            ->method('setTemplatePathAndFilename')
-            ->with(
-                self::stringContains('Resources/Private/Templates/Tca/OpenStreetMap.html'),
-            );
-        $this->viewMock
-            ->expects(self::atLeastOnce())
-            ->method('assign')
-            ->willReturnMap([
-                ['record', json_encode($record), null],
-                ['extConf', self::any(), null],
-            ]);
         $this->viewMock
             ->expects(self::atLeastOnce())
             ->method('render')

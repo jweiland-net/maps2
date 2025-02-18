@@ -49,7 +49,7 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
      */
     public function initializeObject(): void
     {
-        $this->maps2MarkerIcons = $this->maps2MarkerIcons ?? new ObjectStorage();
+        $this->maps2MarkerIcons ??= new ObjectStorage();
     }
 
     public function getMaps2MarkerIcons(): ObjectStorage
@@ -60,6 +60,9 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
     public function getMaps2MarkerIcon(): string
     {
         $this->maps2MarkerIcons->rewind();
+        if ($this->maps2MarkerIcons->current() instanceof PoiCollection) {
+            return $this->maps2MarkerIcons->current()->getMarkerIcon();
+        }
 
         return $this->getWebPathOfFileReference($this->maps2MarkerIcons->current());
     }

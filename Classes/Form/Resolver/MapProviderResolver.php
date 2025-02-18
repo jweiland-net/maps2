@@ -14,23 +14,23 @@ namespace JWeiland\Maps2\Form\Resolver;
 use JWeiland\Maps2\Form\Element\GoogleMapsElement;
 use JWeiland\Maps2\Form\Element\OpenStreetMapElement;
 use JWeiland\Maps2\Helper\MapHelper;
-use TYPO3\CMS\Backend\Form\NodeFactory;
 use TYPO3\CMS\Backend\Form\NodeResolverInterface;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * This resolver decides with which map provider the map should be rendered. Either Google Maps or Open Street Map.
  */
 class MapProviderResolver implements NodeResolverInterface
 {
-    protected array $data = [];
+    protected array $data;
 
-    protected MapHelper $mapHelper;
+    public function __construct(protected MapHelper $mapHelper) {}
 
-    public function __construct(NodeFactory $nodeFactory, array $data)
+    /**
+     * Retrieve the current data array from NodeFactory.
+     */
+    public function setData(array $data): void
     {
         $this->data = $data;
-        $this->mapHelper = GeneralUtility::makeInstance(MapHelper::class);
     }
 
     /**

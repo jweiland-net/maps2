@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Tests\Unit\Domain\Model;
 
 use JWeiland\Maps2\Domain\Model\Position;
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 /**
@@ -23,6 +24,8 @@ class PositionTest extends UnitTestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
+
         $this->subject = new Position();
     }
 
@@ -35,9 +38,7 @@ class PositionTest extends UnitTestCase
         parent::tearDown();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getFormattedAddressInitiallyReturnsEmptyString(): void
     {
         self::assertSame(
@@ -46,9 +47,7 @@ class PositionTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setFormattedAddressSetsFormattedAddress(): void
     {
         $this->subject->setFormattedAddress('foo bar');
@@ -59,9 +58,7 @@ class PositionTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getLatitudeInitiallyReturnsZero(): void
     {
         self::assertSame(
@@ -70,9 +67,7 @@ class PositionTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setLatitudeSetsLatitude(): void
     {
         $this->subject->setLatitude(1234.56);
@@ -83,9 +78,7 @@ class PositionTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getLongitudeInitiallyReturnsZero(): void
     {
         self::assertSame(
@@ -94,9 +87,7 @@ class PositionTest extends UnitTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setLongitudeSetsLongitude(): void
     {
         $this->subject->setLongitude(1234.56);

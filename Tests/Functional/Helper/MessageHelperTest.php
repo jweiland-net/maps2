@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Tests\Functional\Helper;
 
 use JWeiland\Maps2\Helper\MessageHelper;
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
@@ -49,9 +50,7 @@ class MessageHelperTest extends FunctionalTestCase
         parent::tearDown();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function addFlashMessageWithMessageCallsEnqueue(): void
     {
         $expectedFlashMessage = new FlashMessage(
@@ -69,9 +68,7 @@ class MessageHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function addFlashMessageWithMessageAndSubjectCallsEnqueue(): void
     {
         $expectedFlashMessage = new FlashMessage(
@@ -89,9 +86,7 @@ class MessageHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function addFlashMessageWithAllArgumentsCallsEnqueue(): void
     {
         $expectedFlashMessage = new FlashMessage(
@@ -109,9 +104,7 @@ class MessageHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getAllFlashMessagesReturnsAllFlashMessages(): void
     {
         $this->subject->addFlashMessage('Hello', 'Hello');
@@ -129,9 +122,7 @@ class MessageHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getAllFlashMessagesReturnsAllFlashMessagesAndFlush(): void
     {
         $this->subject->addFlashMessage('Hello', 'Hello');
@@ -149,9 +140,7 @@ class MessageHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function hasMessagesChecksQueueIfThereAreAnyMessages(): void
     {
         $this->subject->addFlashMessage('Hello', 'Hello');
@@ -163,9 +152,7 @@ class MessageHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getFlashMessagesBySeverityAndFlushReturnsFlashMessages(): void
     {
         $this->subject->addFlashMessage('Hello', 'Hello', ContextualFeedbackSeverity::WARNING);
@@ -193,9 +180,7 @@ class MessageHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function hasErrorMessagesReturnsTrue(): void
     {
         $this->subject->addFlashMessage('Hello', 'Hello', ContextualFeedbackSeverity::WARNING);
@@ -207,9 +192,7 @@ class MessageHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function hasErrorMessagesReturnsFalse(): void
     {
         $this->subject->addFlashMessage('Hello', 'Hello', ContextualFeedbackSeverity::WARNING);
@@ -221,9 +204,7 @@ class MessageHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getErrorMessagesReturnsErrorMessages(): void
     {
         $this->subject->addFlashMessage('Hello', 'Hello', ContextualFeedbackSeverity::WARNING);
@@ -236,9 +217,7 @@ class MessageHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function hasWarningMessagesReturnsTrue(): void
     {
         $this->subject->addFlashMessage('Hello', 'Hello');
@@ -250,9 +229,7 @@ class MessageHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function hasWarningMessagesReturnsFalse(): void
     {
         $this->subject->addFlashMessage('Hello', 'Hello');
@@ -264,9 +241,7 @@ class MessageHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getWarningMessagesReturnsErrorMessages(): void
     {
         $this->subject->addFlashMessage('Hello', 'Hello');
@@ -279,9 +254,7 @@ class MessageHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function hasOkMessagesReturnsTrue(): void
     {
         $this->subject->addFlashMessage('Hello', 'Hello', ContextualFeedbackSeverity::WARNING);
@@ -293,9 +266,7 @@ class MessageHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function hasOkMessagesReturnsFalse(): void
     {
         $this->subject->addFlashMessage('Hello', 'Hello', ContextualFeedbackSeverity::ERROR);
@@ -307,9 +278,7 @@ class MessageHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getOkMessagesReturnsErrorMessages(): void
     {
         $this->subject->addFlashMessage('Hello', 'Hello', ContextualFeedbackSeverity::WARNING);
@@ -322,9 +291,7 @@ class MessageHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function hasInfoMessagesReturnsTrue(): void
     {
         $this->subject->addFlashMessage('Hello', 'Hello', ContextualFeedbackSeverity::WARNING);
@@ -336,9 +303,7 @@ class MessageHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function hasInfoMessagesReturnsFalse(): void
     {
         $this->subject->addFlashMessage('Hello', 'Hello', ContextualFeedbackSeverity::ERROR);
@@ -350,9 +315,7 @@ class MessageHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getInfoMessagesReturnsErrorMessages(): void
     {
         $this->subject->addFlashMessage('Hello', 'Hello', ContextualFeedbackSeverity::WARNING);
@@ -365,9 +328,7 @@ class MessageHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function hasNoticeMessagesReturnsTrue(): void
     {
         $this->subject->addFlashMessage('Hello', 'Hello', ContextualFeedbackSeverity::WARNING);
@@ -379,9 +340,7 @@ class MessageHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function hasNoticeMessagesReturnsFalse(): void
     {
         $this->subject->addFlashMessage('Hello', 'Hello', ContextualFeedbackSeverity::ERROR);
@@ -393,9 +352,7 @@ class MessageHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getNoticeMessagesReturnsErrorMessages(): void
     {
         $this->subject->addFlashMessage('Hello', 'Hello', ContextualFeedbackSeverity::WARNING);

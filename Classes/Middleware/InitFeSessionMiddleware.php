@@ -29,15 +29,10 @@ class InitFeSessionMiddleware implements MiddlewareInterface
 {
     use CookieHeaderTrait;
 
-    protected ExtConf $extConf;
-
-    protected MapHelper $mapHelper;
-
-    public function __construct(ExtConf $extConf, MapHelper $mapHelper)
-    {
-        $this->extConf = $extConf;
-        $this->mapHelper = $mapHelper;
-    }
+    public function __construct(
+        protected ExtConf $extConf,
+        protected MapHelper $mapHelper,
+    ) {}
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {

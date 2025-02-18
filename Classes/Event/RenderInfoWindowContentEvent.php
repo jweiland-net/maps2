@@ -11,35 +11,32 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Event;
 
-use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
- * Event to render the content of the info window on yourselves
+ * Event to render the content of the info window on your own.
  */
 class RenderInfoWindowContentEvent
 {
-    protected int $poiCollectionUid = 0;
+    private string $infoWindowContent = '';
 
-    protected string $infoWindowContent = '';
-
-    protected ?ContentObjectRenderer $contentObjectRenderer = null;
-
-    /**
-     * In some rare cases ContentObjectRenderer can be null. So please keep it nullable
-     */
     public function __construct(
-        int $poiCollectionUid,
-        string $infoWindowContent,
-        ?ContentObjectRenderer $contentObjectRenderer,
-    ) {
-        $this->poiCollectionUid = $poiCollectionUid;
-        $this->infoWindowContent = $infoWindowContent;
-        $this->contentObjectRenderer = $contentObjectRenderer;
+        private readonly array $poiCollectionRecord,
+        private readonly ServerRequestInterface $request,
+    ) {}
+
+    public function getPoiCollectionRecord(): array
+    {
+        return $this->poiCollectionRecord;
     }
 
-    public function getPoiCollectionUid(): int
+    /**
+     * Keep in mind: This event was called by a Middleware. The request object is not fully compiled!
+     * Attributes like ContentObjectRenderer are not defined until now.
+     */
+    public function getRequest(): ServerRequestInterface
     {
-        return $this->poiCollectionUid;
+        return $this->request;
     }
 
     public function getInfoWindowContent(): string
@@ -50,13 +47,5 @@ class RenderInfoWindowContentEvent
     public function setInfoWindowContent(string $infoWindowContent): void
     {
         $this->infoWindowContent = $infoWindowContent;
-    }
-
-    /**
-     * Please test return value against ContentObjectRenderer before using
-     */
-    public function getContentObjectRenderer(): ?ContentObjectRenderer
-    {
-        return $this->contentObjectRenderer;
     }
 }

@@ -7,9 +7,7 @@
  * LICENSE file that was distributed with this source code.
  */
 
-use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Helper\MapHelper;
-use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -18,16 +16,7 @@ if (!defined('TYPO3')) {
 }
 
 call_user_func(static function (): void {
-    // Use constructor arguments here to prevent DI. Else, some functions in InstallTool will not work.
-    $extConf = GeneralUtility::makeInstance(
-        ExtConf::class,
-        GeneralUtility::makeInstance(ExtensionConfiguration::class),
-    );
-
-    $mapHelper = GeneralUtility::makeInstance(
-        MapHelper::class,
-        $extConf,
-    );
+    $mapHelper = GeneralUtility::makeInstance(MapHelper::class);
 
     $ll = 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:';
     $mapProvider = $mapHelper->getMapProvider();
@@ -49,10 +38,8 @@ call_user_func(static function (): void {
             'label' => $ll . 'sys_category.maps2_marker_icon_width.' . $mapProvider,
             'description' => $ll . 'sys_category.maps2_marker_icon_width.' . $mapProvider . '.description',
             'config' => [
-                'type' => 'input',
-                'size' => 5,
-                'default' => 0,
-                'eval' => 'trim',
+                'type' => 'number',
+                'format' => 'integer',
             ],
         ],
         'maps2_marker_icon_height' => [
@@ -60,10 +47,8 @@ call_user_func(static function (): void {
             'label' => $ll . 'sys_category.maps2_marker_icon_height.' . $mapProvider,
             'description' => $ll . 'sys_category.maps2_marker_icon_height.' . $mapProvider . '.description',
             'config' => [
-                'type' => 'input',
-                'size' => 5,
-                'default' => 0,
-                'eval' => 'trim',
+                'type' => 'number',
+                'format' => 'integer',
             ],
         ],
         'maps2_marker_icon_anchor_pos_x' => [
@@ -71,10 +56,8 @@ call_user_func(static function (): void {
             'label' => $ll . 'sys_category.maps2_marker_icon_anchor_pos_x.' . $mapProvider,
             'description' => $ll . 'sys_category.maps2_marker_icon_anchor_pos_x.' . $mapProvider . '.description',
             'config' => [
-                'type' => 'input',
-                'size' => 5,
-                'default' => 0,
-                'eval' => 'trim',
+                'type' => 'number',
+                'format' => 'integer',
             ],
         ],
         'maps2_marker_icon_anchor_pos_y' => [
@@ -82,10 +65,8 @@ call_user_func(static function (): void {
             'label' => $ll . 'sys_category.maps2_marker_icon_anchor_pos_y.' . $mapProvider,
             'description' => $ll . 'sys_category.maps2_marker_icon_anchor_pos_y.' . $mapProvider . '.description',
             'config' => [
-                'type' => 'input',
-                'size' => 5,
-                'default' => 0,
-                'eval' => 'trim',
+                'type' => 'number',
+                'format' => 'integer',
             ],
         ],
     ];

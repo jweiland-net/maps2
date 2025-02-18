@@ -21,6 +21,7 @@ use JWeiland\Maps2\Helper\StoragePidHelper;
 use JWeiland\Maps2\Service\GeoCodeService;
 use JWeiland\Maps2\Service\MapService;
 use JWeiland\Maps2\Tca\Maps2Registry;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
@@ -28,7 +29,6 @@ use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
-use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
@@ -38,39 +38,17 @@ use TYPO3\CMS\Core\Utility\MathUtility;
  */
 class CreateMaps2RecordHook
 {
-    protected GeoCodeService $geoCodeService;
-
-    protected AddressHelper $addressHelper;
-
-    protected MessageHelper $messageHelper;
-
-    protected StoragePidHelper $storagePidHelper;
-
-    protected MapService $mapService;
-
-    protected Maps2Registry $maps2Registry;
-
-    protected EventDispatcher $eventDispatcher;
-
     protected array $columnRegistry = [];
 
     public function __construct(
-        GeoCodeService $geoCodeService,
-        AddressHelper $addressHelper,
-        MessageHelper $messageHelper,
-        StoragePidHelper $storagePidHelper,
-        MapService $mapService,
-        Maps2Registry $maps2Registry,
-        EventDispatcher $eventDispatcher,
-    ) {
-        $this->geoCodeService = $geoCodeService;
-        $this->addressHelper = $addressHelper;
-        $this->messageHelper = $messageHelper;
-        $this->storagePidHelper = $storagePidHelper;
-        $this->mapService = $mapService;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->maps2Registry = $maps2Registry;
-    }
+        protected GeoCodeService $geoCodeService,
+        protected AddressHelper $addressHelper,
+        protected MessageHelper $messageHelper,
+        protected StoragePidHelper $storagePidHelper,
+        protected MapService $mapService,
+        protected Maps2Registry $maps2Registry,
+        protected EventDispatcherInterface $eventDispatcher,
+    ) {}
 
     /**
      * Create a POI collection record while a foreign table was saved
@@ -295,7 +273,7 @@ class CreateMaps2RecordHook
             GeneralUtility::makeInstance(CacheManager::class)
                 ->getCache('maps2_cachedhtml')
                 ->flushByTag('infoWindowUid' . $poiCollectionUid);
-        } catch (NoSuchCacheException $noSuchCacheException) {
+        } catch (NoSuchCacheException) {
             // Do nothing
         }
     }
@@ -367,7 +345,7 @@ class CreateMaps2RecordHook
                 )
                 ->executeQuery()
                 ->fetchAssociative();
-        } catch (DBALException $exception) {
+        } catch (DBALException) {
             $poiCollection = false;
         }
 
@@ -447,7 +425,7 @@ class CreateMaps2RecordHook
                 )
                 ->executeQuery()
                 ->fetchAssociative();
-        } catch (DBALException $exception) {
+        } catch (DBALException) {
             $foreignLocationRecord = [];
         }
 
@@ -520,7 +498,7 @@ class CreateMaps2RecordHook
         if ($tableNeedsUpdate) {
             try {
                 $queryBuilder->executeStatement();
-            } catch (DBALException $exception) {
+            } catch (DBALException) {
             }
         }
 

@@ -1,0 +1,16 @@
+# Prevent including both static maps of map providers on one page
+page.includeJSFooterlibs.markerClustererForMaps2 >
+
+[isRequestToMapProviderAllowed()]
+[ELSE]
+  # Requests to OpenStreetMap are not allowed. Inform the user about cookies and request permissions for 3rd party.
+  tt_content.maps2_maps2.20.pluginName = Overlay
+[END]
+
+plugin.tx_maps2 {
+  settings {
+    mapProvider = osm
+    mapTile = {$maps2.mapTile}
+    mapTileAttribution = {$maps2.mapTileAttribution}
+  }
+}

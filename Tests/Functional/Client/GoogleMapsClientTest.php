@@ -15,6 +15,7 @@ use JWeiland\Maps2\Client\GoogleMapsClient;
 use JWeiland\Maps2\Client\Request\GoogleMaps\GeocodeRequest;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Helper\MessageHelper;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
@@ -70,9 +71,7 @@ class GoogleMapsClientTest extends FunctionalTestCase
         parent::tearDown();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function processRequestWithEmptyUriAddsFlashMessage(): void
     {
         $geocodeRequest = new GeocodeRequest($this->extConf);
@@ -93,9 +92,7 @@ class GoogleMapsClientTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function processRequestWithInvalidRequestAddsFlashMessage(): void
     {
         $geocodeRequest = new GeocodeRequest($this->extConf);

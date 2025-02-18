@@ -12,7 +12,9 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Tests\Functional\Configuration;
 
 use JWeiland\Maps2\Configuration\ExtConf;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\MockObject\MockObject;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 /**
@@ -20,7 +22,7 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
  */
 class ExtConfTest extends FunctionalTestCase
 {
-    protected ExtConf $subject;
+    public ExtensionConfiguration|MockObject $extensionConfigurationMock;
 
     protected array $testExtensionsToLoad = [
         'jweiland/maps2',
@@ -28,796 +30,921 @@ class ExtConfTest extends FunctionalTestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
-
-        $this->subject = GeneralUtility::makeInstance(ExtConf::class);
+        $this->extensionConfigurationMock = $this->createMock(ExtensionConfiguration::class);
     }
 
     protected function tearDown(): void
     {
         unset(
-            $this->subject,
+            $this->extensionConfigurationMock,
         );
-
-        parent::tearDown();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getMapProviderInitiallyReturnsBothAsString(): void
     {
+        $config = [];
+        $subject = new ExtConf(...$config);
+
         self::assertSame(
             'both',
-            $this->subject->getMapProvider(),
+            $subject->getMapProvider(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setMapProviderSetsMapProvider(): void
     {
-        $this->subject->setMapProvider('foo bar');
+        $config = [
+            'mapProvider' => 'foo bar',
+        ];
+        $subject = new ExtConf(...$config);
 
         self::assertSame(
             'foo bar',
-            $this->subject->getMapProvider(),
+            $subject->getMapProvider(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getDefaultMapProviderInitiallyReturnsGoogleMapsAsString(): void
     {
+        $config = [];
+        $subject = new ExtConf(...$config);
+
         self::assertSame(
             'gm',
-            $this->subject->getDefaultMapProvider(),
+            $subject->getDefaultMapProvider(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setDefaultMapProviderSetsDefaultMapProvider(): void
     {
-        $this->subject->setDefaultMapProvider('foo bar');
+        $config = [
+            'defaultMapProvider' => 'foo bar',
+        ];
+        $subject = new ExtConf(...$config);
 
         self::assertSame(
             'foo bar',
-            $this->subject->getDefaultMapProvider(),
+            $subject->getDefaultMapProvider(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getDefaultCountryInitiallyReturnsEmptyString(): void
     {
+        $config = [];
+        $subject = new ExtConf(...$config);
+
         self::assertSame(
             '',
-            $this->subject->getDefaultCountry(),
+            $subject->getDefaultCountry(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setDefaultCountrySetsDefaultCountry(): void
     {
-        $this->subject->setDefaultCountry('foo bar');
+        $config = [
+            'defaultCountry' => 'foo bar',
+        ];
+        $subject = new ExtConf(...$config);
 
         self::assertSame(
             'foo bar',
-            $this->subject->getDefaultCountry(),
+            $subject->getDefaultCountry(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getDefaultLatitudeInitiallyReturnsZero(): void
     {
+        $config = [];
+        $subject = new ExtConf(...$config);
+
         self::assertSame(
             0.0,
-            $this->subject->getDefaultLatitude(),
+            $subject->getDefaultLatitude(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setDefaultLatitudeSetsDefaultLatitude(): void
     {
-        $this->subject->setDefaultLatitude(1234.56);
+        $config = [
+            'defaultLatitude' => 1234.56,
+        ];
+        $subject = new ExtConf(...$config);
 
         self::assertSame(
             1234.56,
-            $this->subject->getDefaultLatitude(),
+            $subject->getDefaultLatitude(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getDefaultLongitudeInitiallyReturnsZero(): void
     {
+        $config = [];
+        $subject = new ExtConf(...$config);
+
         self::assertSame(
             0.0,
-            $this->subject->getDefaultLongitude(),
+            $subject->getDefaultLongitude(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setDefaultLongitudeSetsDefaultLongitude(): void
     {
-        $this->subject->setDefaultLongitude(1234.56);
+        $config = [
+            'defaultLongitude' => 1234.56,
+        ];
+        $subject = new ExtConf(...$config);
 
         self::assertSame(
             1234.56,
-            $this->subject->getDefaultLongitude(),
+            $subject->getDefaultLongitude(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getDefaultRadiusInitiallyReturns250(): void
     {
+        $config = [];
+        $subject = new ExtConf(...$config);
+
         self::assertSame(
             250,
-            $this->subject->getDefaultRadius(),
+            $subject->getDefaultRadius(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setDefaultRadiusSetsDefaultRadius(): void
     {
-        $this->subject->setDefaultRadius(123456);
+        $config = [
+            'defaultRadius' => 123456,
+        ];
+        $subject = new ExtConf(...$config);
 
         self::assertSame(
             123456,
-            $this->subject->getDefaultRadius(),
+            $subject->getDefaultRadius(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setDefaultRadiusWithStringResultsInInteger(): void
     {
-        $this->subject->setDefaultRadius('123Test');
+        $this->extensionConfigurationMock
+            ->expects(self::once())
+            ->method('get')
+            ->with('maps2')
+            ->willReturn([
+                'defaultRadius' => '123Test',
+            ]);
+
+        $subject = ExtConf::create($this->extensionConfigurationMock);
 
         self::assertSame(
             123,
-            $this->subject->getDefaultRadius(),
+            $subject->getDefaultRadius(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setDefaultRadiusWithBooleanResultsInInteger(): void
     {
-        $this->subject->setDefaultRadius(true);
+        $this->extensionConfigurationMock
+            ->expects(self::once())
+            ->method('get')
+            ->with('maps2')
+            ->willReturn([
+                'defaultRadius' => true,
+            ]);
+
+        $subject = ExtConf::create($this->extensionConfigurationMock);
 
         self::assertSame(
             1,
-            $this->subject->getDefaultRadius(),
+            $subject->getDefaultRadius(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getExplicitAllowMapProviderRequestsInitiallyReturnsFalse(): void
     {
+        $config = [];
+        $subject = new ExtConf(...$config);
+
         self::assertFalse(
-            $this->subject->getExplicitAllowMapProviderRequests(),
+            $subject->getExplicitAllowMapProviderRequests(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setExplicitAllowMapProviderRequestsSetsExplicitAllowGoogleMaps(): void
     {
-        $this->subject->setExplicitAllowMapProviderRequests(true);
+        $config = [
+            'explicitAllowMapProviderRequests' => true,
+        ];
+        $subject = new ExtConf(...$config);
+
         self::assertTrue(
-            $this->subject->getExplicitAllowMapProviderRequests(),
+            $subject->getExplicitAllowMapProviderRequests(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setExplicitAllowMapProviderRequestsWithStringReturnsTrue(): void
     {
-        $this->subject->setExplicitAllowMapProviderRequests('foo bar');
-        self::assertTrue($this->subject->getExplicitAllowMapProviderRequests());
+        $this->extensionConfigurationMock
+            ->expects(self::once())
+            ->method('get')
+            ->with('maps2')
+            ->willReturn([
+                'explicitAllowMapProviderRequests' => 'foo bar',
+            ]);
+
+        $subject = ExtConf::create($this->extensionConfigurationMock);
+
+        self::assertTrue(
+            $subject->getExplicitAllowMapProviderRequests(),
+        );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setExplicitAllowMapProviderRequestsWithZeroReturnsFalse(): void
     {
-        $this->subject->setExplicitAllowMapProviderRequests(0);
-        self::assertFalse($this->subject->getExplicitAllowMapProviderRequests());
+        $this->extensionConfigurationMock
+            ->expects(self::once())
+            ->method('get')
+            ->with('maps2')
+            ->willReturn([
+                'explicitAllowMapProviderRequests' => 0,
+            ]);
+
+        $subject = ExtConf::create($this->extensionConfigurationMock);
+
+        self::assertFalse(
+            $subject->getExplicitAllowMapProviderRequests(),
+        );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getExplicitAllowMapProviderRequestsBySessionOnlyInitiallyReturnsFalse(): void
     {
+        $config = [];
+        $subject = new ExtConf(...$config);
+
         self::assertFalse(
-            $this->subject->getExplicitAllowMapProviderRequestsBySessionOnly(),
+            $subject->getExplicitAllowMapProviderRequestsBySessionOnly(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setExplicitAllowMapProviderRequestsBySessionOnlySetsExplicitAllowGoogleMapsBySessionOnly(): void
     {
-        $this->subject->setExplicitAllowMapProviderRequestsBySessionOnly(true);
+        $config = [
+            'explicitAllowMapProviderRequestsBySessionOnly' => true,
+        ];
+        $subject = new ExtConf(...$config);
+
         self::assertTrue(
-            $this->subject->getExplicitAllowMapProviderRequestsBySessionOnly(),
+            $subject->getExplicitAllowMapProviderRequestsBySessionOnly(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setExplicitAllowMapProviderRequestsBySessionOnlyWithStringReturnsTrue(): void
     {
-        $this->subject->setExplicitAllowMapProviderRequestsBySessionOnly('foo bar');
+        $this->extensionConfigurationMock
+            ->expects(self::once())
+            ->method('get')
+            ->with('maps2')
+            ->willReturn([
+                'explicitAllowMapProviderRequestsBySessionOnly' => 'foo bar',
+            ]);
+
+        $subject = ExtConf::create($this->extensionConfigurationMock);
+
         self::assertTrue(
-            $this->subject->getExplicitAllowMapProviderRequestsBySessionOnly(),
+            $subject->getExplicitAllowMapProviderRequestsBySessionOnly(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setExplicitAllowMapProviderRequestsBySessionOnlyWithZeroReturnsFalse(): void
     {
-        $this->subject->setExplicitAllowMapProviderRequestsBySessionOnly(0);
+        $this->extensionConfigurationMock
+            ->expects(self::once())
+            ->method('get')
+            ->with('maps2')
+            ->willReturn([
+                'explicitAllowMapProviderRequestsBySessionOnly' => 0,
+            ]);
+
+        $subject = ExtConf::create($this->extensionConfigurationMock);
+
         self::assertFalse(
-            $this->subject->getExplicitAllowMapProviderRequestsBySessionOnly(),
+            $subject->getExplicitAllowMapProviderRequestsBySessionOnly(),
         );
     }
 
-    /**
-     * @test
-     */
-    public function getInfoWindowContentTemplatePathInitiallyReturnsDefaultPath(): void
-    {
-        self::assertSame(
-            'EXT:maps2/Resources/Private/Templates/InfoWindowContent.html',
-            $this->subject->getInfoWindowContentTemplatePath(),
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function setInfoWindowContentTemplatePathSetsInfoWindowContentTemplatePath(): void
-    {
-        $this->subject->setInfoWindowContentTemplatePath('foo bar');
-
-        self::assertSame(
-            'foo bar',
-            $this->subject->getInfoWindowContentTemplatePath(),
-        );
-    }
-
-    /**
-     * @test
-     */
+    #[Test]
     public function getGoogleMapsLibraryInitiallyReturnsEmptyString(): void
     {
-        $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');
+        $config = [
+            'googleMapsJavaScriptApiKey' => 'myApiKey',
+        ];
+        $subject = new ExtConf(...$config);
+
         self::assertSame(
             'https://maps.googleapis.com/maps/api/js?key=myApiKey&libraries=places',
-            $this->subject->getGoogleMapsLibrary(),
+            $subject->getGoogleMapsLibrary(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setGoogleMapsLibraryWithNoPipeWillNotSetGoogleMapsLibrary(): void
     {
-        $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');
-        $this->subject->setGoogleMapsLibrary('foo bar');
+        $config = [
+            'googleMapsJavaScriptApiKey' => 'myApiKey',
+            'googleMapsLibrary' => 'foo bar',
+        ];
+        $subject = new ExtConf(...$config);
 
         self::assertSame(
             '',
-            $this->subject->getGoogleMapsLibrary(),
+            $subject->getGoogleMapsLibrary(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setGoogleMapsLibraryWithNoHttpInFrontWillNotSetGoogleMapsLibrary(): void
     {
-        $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');
-        $this->subject->setGoogleMapsLibrary('www.domain.de/api=|&mobile=1');
+        $config = [
+            'googleMapsJavaScriptApiKey' => 'myApiKey',
+            'googleMapsLibrary' => 'www.domain.de/api=|&mobile=1',
+        ];
+        $subject = new ExtConf(...$config);
 
         self::assertSame(
             '',
-            $this->subject->getGoogleMapsLibrary(),
+            $subject->getGoogleMapsLibrary(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setGoogleMapsLibraryWithPipeAndHttpWillSetGoogleMapsLibrary(): void
     {
-        $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');
-        $this->subject->setGoogleMapsLibrary('http://www.domain.de/api=|&mobile=1');
+        $config = [
+            'googleMapsJavaScriptApiKey' => 'myApiKey',
+            'googleMapsLibrary' => 'http://www.domain.de/api=|&mobile=1',
+        ];
+        $subject = new ExtConf(...$config);
 
         self::assertSame(
             'https://www.domain.de/api=myApiKey&mobile=1',
-            $this->subject->getGoogleMapsLibrary(),
+            $subject->getGoogleMapsLibrary(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setGoogleMapsLibraryWithPipeAndHttpsWillSetGoogleMapsLibrary(): void
     {
-        $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');
-        $this->subject->setGoogleMapsLibrary('https://www.domain.de/api=|&mobile=1');
+        $config = [
+            'googleMapsJavaScriptApiKey' => 'myApiKey',
+            'googleMapsLibrary' => 'https://www.domain.de/api=|&mobile=1',
+        ];
+        $subject = new ExtConf(...$config);
 
         self::assertSame(
             'https://www.domain.de/api=myApiKey&mobile=1',
-            $this->subject->getGoogleMapsLibrary(),
+            $subject->getGoogleMapsLibrary(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setGoogleMapsLibraryWithHttpUriAndActivatedHttpsWillSetGoogleMapsLibrary(): void
     {
-        $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');
-        $this->subject->setGoogleMapsLibrary('http://www.domain.de/api=|&mobile=1');
+        $config = [
+            'googleMapsJavaScriptApiKey' => 'myApiKey',
+            'googleMapsLibrary' => 'http://www.domain.de/api=|&mobile=1',
+        ];
+        $subject = new ExtConf(...$config);
 
         self::assertSame(
             'https://www.domain.de/api=myApiKey&mobile=1',
-            $this->subject->getGoogleMapsLibrary(),
+            $subject->getGoogleMapsLibrary(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getGoogleMapsGeocodeUriInitiallyReturnsPreConfiguredUri(): void
     {
+        $config = [];
+        $subject = new ExtConf(...$config);
+
         self::assertSame(
             'https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=%s',
-            $this->subject->getGoogleMapsGeocodeUri(),
+            $subject->getGoogleMapsGeocodeUri(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setGoogleMapsGeocodeUriSetsGoogleMapsGeocodeUri(): void
     {
-        $this->subject->setGoogleMapsGeocodeUri('foo bar');
+        $config = [
+            'googleMapsGeocodeUri' => 'foo bar',
+        ];
+        $subject = new ExtConf(...$config);
 
         self::assertSame(
             'foo bar',
-            $this->subject->getGoogleMapsGeocodeUri(),
+            $subject->getGoogleMapsGeocodeUri(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setGoogleMapsJavaScriptApiKeySetsGoogleMapsJavaScriptApiKey(): void
     {
-        $this->subject->setGoogleMapsJavaScriptApiKey('foo bar');
+        $config = [
+            'googleMapsJavaScriptApiKey' => 'foo bar',
+        ];
+        $subject = new ExtConf(...$config);
 
         self::assertSame(
             'foo bar',
-            $this->subject->getGoogleMapsJavaScriptApiKey(),
+            $subject->getGoogleMapsJavaScriptApiKey(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setGoogleMapsGeocodeApiKeySetsGoogleMapsGeocodeApiKey(): void
     {
-        $this->subject->setGoogleMapsJavaScriptApiKey('myApiKey');
-        $this->subject->setGoogleMapsGeocodeApiKey('foo bar');
+        $config = [
+            'googleMapsJavaScriptApiKey' => 'myApiKey',
+            'googleMapsGeocodeApiKey' => 'foo bar',
+        ];
+        $subject = new ExtConf(...$config);
 
         self::assertSame(
             'foo bar',
-            $this->subject->getGoogleMapsGeocodeApiKey(),
+            $subject->getGoogleMapsGeocodeApiKey(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getOpenStreetMapGeocodeUriInitiallyReturnsPreConfiguredUri(): void
     {
+        $config = [];
+        $subject = new ExtConf(...$config);
+
         self::assertSame(
             'https://nominatim.openstreetmap.org/search?q=%s&format=json&addressdetails=1',
-            $this->subject->getOpenStreetMapGeocodeUri(),
+            $subject->getOpenStreetMapGeocodeUri(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setOpenStreetMapGeocodeUriSetsOpenStreetMapGeocodeUri(): void
     {
-        $this->subject->setOpenStreetMapGeocodeUri('foo bar');
+        $config = [
+            'openStreetMapGeocodeUri' => 'foo bar',
+        ];
+        $subject = new ExtConf(...$config);
 
         self::assertSame(
             'foo bar',
-            $this->subject->getOpenStreetMapGeocodeUri(),
+            $subject->getOpenStreetMapGeocodeUri(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getStrokeColorInitiallyReturnsRedColor(): void
     {
+        $config = [];
+        $subject = new ExtConf(...$config);
+
         self::assertSame(
             '#FF0000',
-            $this->subject->getStrokeColor(),
+            $subject->getStrokeColor(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setStrokeColorSetsStrokeColor(): void
     {
-        $this->subject->setStrokeColor('foo bar');
+        $config = [
+            'strokeColor' => 'foo bar',
+        ];
+        $subject = new ExtConf(...$config);
 
         self::assertSame(
             'foo bar',
-            $this->subject->getStrokeColor(),
+            $subject->getStrokeColor(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getStrokeOpacityInitiallyReturns0point8(): void
     {
+        $config = [];
+        $subject = new ExtConf(...$config);
+
         self::assertSame(
             0.8,
-            $this->subject->getStrokeOpacity(),
+            $subject->getStrokeOpacity(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setStrokeOpacitySetsStrokeOpacity(): void
     {
-        $this->subject->setStrokeOpacity(1234.56);
+        $config = [
+            'strokeOpacity' => 1234.56,
+        ];
+        $subject = new ExtConf(...$config);
 
         self::assertSame(
             1234.56,
-            $this->subject->getStrokeOpacity(),
+            $subject->getStrokeOpacity(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getStrokeWeightInitiallyReturnsTwo(): void
     {
+        $config = [];
+        $subject = new ExtConf(...$config);
+
         self::assertSame(
             2,
-            $this->subject->getStrokeWeight(),
+            $subject->getStrokeWeight(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setStrokeWeightSetsStrokeWeight(): void
     {
-        $this->subject->setStrokeWeight(123456);
+        $config = [
+            'strokeWeight' => 123456,
+        ];
+        $subject = new ExtConf(...$config);
 
         self::assertSame(
             123456,
-            $this->subject->getStrokeWeight(),
+            $subject->getStrokeWeight(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setStrokeWeightWithStringResultsInInteger(): void
     {
-        $this->subject->setStrokeWeight('123Test');
+        $this->extensionConfigurationMock
+            ->expects(self::once())
+            ->method('get')
+            ->with('maps2')
+            ->willReturn([
+                'strokeWeight' => '123Test',
+            ]);
+
+        $subject = ExtConf::create($this->extensionConfigurationMock);
 
         self::assertSame(
             123,
-            $this->subject->getStrokeWeight(),
+            $subject->getStrokeWeight(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setStrokeWeightWithBooleanResultsInInteger(): void
     {
-        $this->subject->setStrokeWeight(true);
+        $this->extensionConfigurationMock
+            ->expects(self::once())
+            ->method('get')
+            ->with('maps2')
+            ->willReturn([
+                'strokeWeight' => true,
+            ]);
+
+        $subject = ExtConf::create($this->extensionConfigurationMock);
 
         self::assertSame(
             1,
-            $this->subject->getStrokeWeight(),
+            $subject->getStrokeWeight(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getFillColorInitiallyReturnsRedColor(): void
     {
+        $config = [];
+        $subject = new ExtConf(...$config);
+
         self::assertSame(
             '#FF0000',
-            $this->subject->getFillColor(),
+            $subject->getFillColor(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setFillColorSetsFillColor(): void
     {
-        $this->subject->setFillColor('foo bar');
+        $config = [
+            'fillColor' => 'foo bar',
+        ];
+        $subject = new ExtConf(...$config);
 
         self::assertSame(
             'foo bar',
-            $this->subject->getFillColor(),
+            $subject->getFillColor(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getFillOpacityInitiallyReturns0point35(): void
     {
+        $config = [];
+        $subject = new ExtConf(...$config);
+
         self::assertSame(
             0.35,
-            $this->subject->getFillOpacity(),
+            $subject->getFillOpacity(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setFillOpacitySetsFillOpacity(): void
     {
-        $this->subject->setFillOpacity(1234.56);
+        $config = [
+            'fillOpacity' => 1234.56,
+        ];
+        $subject = new ExtConf(...$config);
 
         self::assertSame(
             1234.56,
-            $this->subject->getFillOpacity(),
+            $subject->getFillOpacity(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getMarkerIconWidthInitiallyReturns25(): void
     {
+        $config = [];
+        $subject = new ExtConf(...$config);
+
         self::assertSame(
             25,
-            $this->subject->getMarkerIconWidth(),
+            $subject->getMarkerIconWidth(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setMarkerIconWidthSetsMarkerIconWidth(): void
     {
-        $this->subject->setMarkerIconWidth(123456);
+        $config = [
+            'markerIconWidth' => 123456,
+        ];
+        $subject = new ExtConf(...$config);
 
         self::assertSame(
             123456,
-            $this->subject->getMarkerIconWidth(),
+            $subject->getMarkerIconWidth(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setMarkerIconWidthWithStringResultsInInteger(): void
     {
-        $this->subject->setMarkerIconWidth('123Test');
+        $this->extensionConfigurationMock
+            ->expects(self::once())
+            ->method('get')
+            ->with('maps2')
+            ->willReturn([
+                'markerIconWidth' => '123Test',
+            ]);
+
+        $subject = ExtConf::create($this->extensionConfigurationMock);
 
         self::assertSame(
             123,
-            $this->subject->getMarkerIconWidth(),
+            $subject->getMarkerIconWidth(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setMarkerIconWidthWithBooleanResultsInInteger(): void
     {
-        $this->subject->setMarkerIconWidth(true);
+        $this->extensionConfigurationMock
+            ->expects(self::once())
+            ->method('get')
+            ->with('maps2')
+            ->willReturn([
+                'markerIconWidth' => true,
+            ]);
+
+        $subject = ExtConf::create($this->extensionConfigurationMock);
 
         self::assertSame(
             1,
-            $this->subject->getMarkerIconWidth(),
+            $subject->getMarkerIconWidth(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getMarkerIconHeightInitiallyReturns40(): void
     {
+        $config = [];
+        $subject = new ExtConf(...$config);
+
         self::assertSame(
             40,
-            $this->subject->getMarkerIconHeight(),
+            $subject->getMarkerIconHeight(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setMarkerIconHeightSetsMarkerIconHeight(): void
     {
-        $this->subject->setMarkerIconHeight(123456);
+        $config = [
+            'markerIconHeight' => 123456,
+        ];
+        $subject = new ExtConf(...$config);
 
         self::assertSame(
             123456,
-            $this->subject->getMarkerIconHeight(),
+            $subject->getMarkerIconHeight(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setMarkerIconHeightWithStringResultsInInteger(): void
     {
-        $this->subject->setMarkerIconHeight('123Test');
+        $this->extensionConfigurationMock
+            ->expects(self::once())
+            ->method('get')
+            ->with('maps2')
+            ->willReturn([
+                'markerIconHeight' => '123Test',
+            ]);
+
+        $subject = ExtConf::create($this->extensionConfigurationMock);
 
         self::assertSame(
             123,
-            $this->subject->getMarkerIconHeight(),
+            $subject->getMarkerIconHeight(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setMarkerIconHeightWithBooleanResultsInInteger(): void
     {
-        $this->subject->setMarkerIconHeight(true);
+        $this->extensionConfigurationMock
+            ->expects(self::once())
+            ->method('get')
+            ->with('maps2')
+            ->willReturn([
+                'markerIconHeight' => true,
+            ]);
+
+        $subject = ExtConf::create($this->extensionConfigurationMock);
 
         self::assertSame(
             1,
-            $this->subject->getMarkerIconHeight(),
+            $subject->getMarkerIconHeight(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getMarkerIconAnchorPosXInitiallyReturns13(): void
     {
+        $config = [];
+        $subject = new ExtConf(...$config);
+
         self::assertSame(
             13,
-            $this->subject->getMarkerIconAnchorPosX(),
+            $subject->getMarkerIconAnchorPosX(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setMarkerIconAnchorPosXSetsMarkerIconAnchorPosX(): void
     {
-        $this->subject->setMarkerIconAnchorPosX(123456);
+        $config = [
+            'markerIconAnchorPosX' => 123456,
+        ];
+        $subject = new ExtConf(...$config);
 
         self::assertSame(
             123456,
-            $this->subject->getMarkerIconAnchorPosX(),
+            $subject->getMarkerIconAnchorPosX(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setMarkerIconAnchorPosXWithStringResultsInInteger(): void
     {
-        $this->subject->setMarkerIconAnchorPosX('123Test');
+        $this->extensionConfigurationMock
+            ->expects(self::once())
+            ->method('get')
+            ->with('maps2')
+            ->willReturn([
+                'markerIconAnchorPosX' => '123Test',
+            ]);
+
+        $subject = ExtConf::create($this->extensionConfigurationMock);
 
         self::assertSame(
             123,
-            $this->subject->getMarkerIconAnchorPosX(),
+            $subject->getMarkerIconAnchorPosX(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setMarkerIconAnchorPosXWithBooleanResultsInInteger(): void
     {
-        $this->subject->setMarkerIconAnchorPosX(true);
+        $this->extensionConfigurationMock
+            ->expects(self::once())
+            ->method('get')
+            ->with('maps2')
+            ->willReturn([
+                'markerIconAnchorPosX' => true,
+            ]);
+
+        $subject = ExtConf::create($this->extensionConfigurationMock);
 
         self::assertSame(
             1,
-            $this->subject->getMarkerIconAnchorPosX(),
+            $subject->getMarkerIconAnchorPosX(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getMarkerIconAnchorPosYInitiallyReturns40(): void
     {
+        $config = [];
+        $subject = new ExtConf(...$config);
+
         self::assertSame(
             40,
-            $this->subject->getMarkerIconAnchorPosY(),
+            $subject->getMarkerIconAnchorPosY(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setMarkerIconAnchorPosYSetsMarkerIconAnchorPosY(): void
     {
-        $this->subject->setMarkerIconAnchorPosY(123456);
+        $config = [
+            'markerIconAnchorPosY' => 123456,
+        ];
+        $subject = new ExtConf(...$config);
 
         self::assertSame(
             123456,
-            $this->subject->getMarkerIconAnchorPosY(),
+            $subject->getMarkerIconAnchorPosY(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setMarkerIconAnchorPosYWithStringResultsInInteger(): void
     {
-        $this->subject->setMarkerIconAnchorPosY('123Test');
+        $this->extensionConfigurationMock
+            ->expects(self::once())
+            ->method('get')
+            ->with('maps2')
+            ->willReturn([
+                'markerIconAnchorPosY' => '123Test',
+            ]);
+
+        $subject = ExtConf::create($this->extensionConfigurationMock);
 
         self::assertSame(
             123,
-            $this->subject->getMarkerIconAnchorPosY(),
+            $subject->getMarkerIconAnchorPosY(),
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function setMarkerIconAnchorPosYWithBooleanResultsInInteger(): void
     {
-        $this->subject->setMarkerIconAnchorPosY(true);
+        $this->extensionConfigurationMock
+            ->expects(self::once())
+            ->method('get')
+            ->with('maps2')
+            ->willReturn([
+                'markerIconAnchorPosY' => true,
+            ]);
+
+        $subject = ExtConf::create($this->extensionConfigurationMock);
 
         self::assertSame(
             1,
-            $this->subject->getMarkerIconAnchorPosY(),
+            $subject->getMarkerIconAnchorPosY(),
         );
     }
 }

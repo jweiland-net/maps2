@@ -31,7 +31,7 @@ class DatabaseUtility
         $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable($tableName);
         try {
             return $connection->createSchemaManager()->listTableColumns($tableName);
-        } catch (Exception $e) {
+        } catch (Exception) {
         }
 
         return [];

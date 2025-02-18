@@ -1,0 +1,18 @@
+categories:
+  Maps2.googlemaps:
+    label: 'Google Maps'
+    parent: Maps2
+
+settings:
+  maps2.enableMarkerClusterer:
+    label: 'Enable Marker Clusterer'
+    category: Maps2.googlemaps
+    description: 'If you have a lot of POIs, some POIs will be joined to a single POI with the amount of joined POIs as label'
+    type: bool
+    default: false
+  maps2.googleMapsJavaScriptApiKey:
+    label: 'JavaScript API Key'
+    category: Maps2.googlemaps
+    description: 'Enter the Google Maps JavaScript API key which you can get from google cloud console'
+    type: string
+    default: ''

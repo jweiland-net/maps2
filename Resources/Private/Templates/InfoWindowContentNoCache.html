@@ -10,7 +10,7 @@ yourself, to reduce the amount of VH calls (m:cache*) a lot.
 --></f:comment>
 
 <f:variable name="content">
-    <f:render partial="InfoWindowContent" arguments="{poiCollection: poiCollection}"/>
+    <f:render partial="InfoWindowContent" arguments="{_all}"/>
 </f:variable>
 
 {content -> f:format.raw()}

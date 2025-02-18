@@ -14,6 +14,7 @@ namespace JWeiland\Maps2\Form\Element;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Helper\MapHelper;
 use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
+use TYPO3\CMS\Backend\Form\NodeFactory;
 use TYPO3\CMS\Core\Page\JavaScriptModuleInstruction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
@@ -39,6 +40,8 @@ class GoogleMapsElement extends AbstractFormElement
         ],
     ];
 
+    public function __construct(protected NodeFactory $nodeFactory) {}
+
     /**
      * This will render Google Maps within PoiCollection records with a marker you can drag and drop
      *
@@ -63,7 +66,7 @@ class GoogleMapsElement extends AbstractFormElement
         );
 
         $fieldInformationResult = $this->renderFieldInformation();
-        $fieldInformationHtml = $fieldInformationResult['html'];
+        $fieldInformationHtml = isset($fieldInformationResult['html']) ?? $fieldInformationResult['html'];
 
         $attributes = [
             'value' => '',

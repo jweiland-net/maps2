@@ -21,12 +21,7 @@ use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
  */
 class AllowMapProviderRequestFunctionsProvider implements ExpressionFunctionProviderInterface
 {
-    protected MapHelper $mapHelper;
-
-    public function __construct(MapHelper $mapHelper)
-    {
-        $this->mapHelper = $mapHelper;
-    }
+    public function __construct(protected MapHelper $mapHelper) {}
 
     /**
      * @return ExpressionFunction[]
@@ -48,9 +43,7 @@ class AllowMapProviderRequestFunctionsProvider implements ExpressionFunctionProv
             static function (): void {
                 // Not implemented, we only use the evaluator
             },
-            static function ($existingVariables) use ($mapHelper) {
-                return $mapHelper->isRequestToMapProviderAllowed();
-            },
+            static fn($existingVariables) => $mapHelper->isRequestToMapProviderAllowed(),
         );
     }
 }

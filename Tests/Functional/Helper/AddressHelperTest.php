@@ -14,6 +14,8 @@ namespace JWeiland\Maps2\Tests\Functional\Helper;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Helper\AddressHelper;
 use JWeiland\Maps2\Helper\MessageHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
@@ -45,6 +47,9 @@ class AddressHelperTest extends FunctionalTestCase
 
     protected function setUp(): void
     {
+        // @todo : Remove this once events2 is fixed
+        self::markTestSkipped('Required test extensions are not available.');
+
         parent::setUp();
 
         $this->messageHelperMock = $this->createMock(MessageHelper::class);
@@ -67,9 +72,7 @@ class AddressHelperTest extends FunctionalTestCase
         parent::tearDown();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getAddressWithMissingAddressColumnsKeyAddsFlashMessage(): void
     {
         $this->messageHelperMock
@@ -93,9 +96,7 @@ class AddressHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getAddressWithEmptyAddressColumnsAddsFlashMessage(): void
     {
         $this->messageHelperMock
@@ -121,9 +122,7 @@ class AddressHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getAddressWithoutCountryAndNoFallbackGeneratesTwoFlashMessages(): void
     {
         $this->messageHelperMock
@@ -166,9 +165,7 @@ class AddressHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getAddressWithoutCountryButWithMaps2FallbackGeneratesOneFlashMessages(): void
     {
         $this->messageHelperMock
@@ -200,9 +197,7 @@ class AddressHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getAddressWithoutCountryButWithMaps2RegistryFallbackGeneratesNoFlashMessage(): void
     {
         $record = [
@@ -223,9 +218,7 @@ class AddressHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getAddressWithCountryUidWillGetCountryNameFromStaticCountries(): void
     {
         // Prevent including records multiple times on SQLite
@@ -275,9 +268,7 @@ class AddressHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getAddressWithCountryUidWillNotFindCountryNameFromStaticCountries(): void
     {
         /** @var PackageManager|MockObject $packageManagerMock */
@@ -317,9 +308,7 @@ class AddressHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getAddressWillUnifyMaps2RegistryOptions(): void
     {
         $record = [
@@ -341,9 +330,7 @@ class AddressHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getAddressWillRemoveCountryFromAddressColumnsIfAvailable(): void
     {
         $record = [
@@ -365,9 +352,7 @@ class AddressHelperTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getAddressWillConvertCommaSeparatedAddressColumnsIntoArray(): void
     {
         $record = [
@@ -393,7 +378,7 @@ class AddressHelperTest extends FunctionalTestCase
     /**
      * @return array<string, array<string>>
      */
-    public function addressDataProvider(): array
+    public static function addressDataProvider(): array
     {
         return [
             'address with commas and spaces' => ['Mainstreet 15, 51324 Cologne, Germany'],
@@ -404,10 +389,8 @@ class AddressHelperTest extends FunctionalTestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider addressDataProvider
-     */
+    #[Test]
+    #[DataProvider('addressDataProvider')]
     public function isSameAddressWithCommaAndSpacesWillReturnTrue(string $address): void
     {
         $foreignLocationRecord = [

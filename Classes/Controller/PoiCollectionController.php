@@ -12,16 +12,14 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Controller;
 
 use JWeiland\Maps2\Controller\Traits\InjectExtConfTrait;
+use JWeiland\Maps2\Controller\Traits\InjectGeoCodeServiceTrait;
 use JWeiland\Maps2\Controller\Traits\InjectLinkHelperTrait;
 use JWeiland\Maps2\Controller\Traits\InjectPoiCollectionRepositoryTrait;
 use JWeiland\Maps2\Controller\Traits\InjectSettingsHelperTrait;
 use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Domain\Model\Search;
 use JWeiland\Maps2\Event\PostProcessFluidVariablesEvent;
-use JWeiland\Maps2\Service\GeoCodeService;
 use Psr\Http\Message\ResponseInterface;
-use TYPO3\CMS\Core\Messaging\FlashMessage;
-use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
@@ -32,6 +30,7 @@ use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 class PoiCollectionController extends ActionController
 {
     use InjectExtConfTrait;
+    use InjectGeoCodeServiceTrait;
     use InjectLinkHelperTrait;
     use InjectSettingsHelperTrait;
     use InjectPoiCollectionRepositoryTrait;
@@ -53,42 +52,11 @@ class PoiCollectionController extends ActionController
 
         $view->assign('data', $contentRecord);
         $view->assign('environment', [
-            'settings' => $this->getPreparedSettings(),
+            'settings' => $this->settingsHelper->getPreparedSettings($this->settings),
             'extConf' => ObjectAccess::getGettableProperties($this->extConf),
-            'ajaxUrl' => $this->linkHelper->buildUriToCurrentPage(
-                [
-                    'type' => '1614075471',
-                    'tx_maps2_maps2' => [
-                        'controller' => 'Ajax',
-                        'action' => 'process',
-                        'method' => 'renderInfoWindowContent',
-                    ],
-                ],
-                $this->request,
-            ),
+            'ajaxUrl' => $this->linkHelper->buildUriToCurrentPage([], $this->request),
             'contentRecord' => $contentRecord,
         ]);
-    }
-
-    protected function getPreparedSettings(): array
-    {
-        if (array_key_exists('infoWindowContentTemplatePath', $this->settings)) {
-            $this->settings['infoWindowContentTemplatePath'] = trim($this->settings['infoWindowContentTemplatePath']);
-        } else {
-            $this->addFlashMessage('Dear Admin: Please add default static template of maps2 into your TS-Template.');
-        }
-
-        if (!array_key_exists('mapProvider', $this->settings)) {
-            $this->getFlashMessageQueue()
-                ->enqueue(GeneralUtility::makeInstance(
-                    FlashMessage::class,
-                    'You have forgotten to add maps2 static template for either Google Maps or OpenStreetMap',
-                    'Missing static template',
-                    ContextualFeedbackSeverity::ERROR,
-                ));
-        }
-
-        return $this->settingsHelper->getPreparedSettings($this->settings);
     }
 
     /**
@@ -128,10 +96,8 @@ class PoiCollectionController extends ActionController
 
     public function listRadiusAction(Search $search): ResponseInterface
     {
-        $geoCodeService = GeneralUtility::makeInstance(GeoCodeService::class);
-
         $poiCollections = new \SplObjectStorage();
-        $position = $geoCodeService->getFirstFoundPositionByAddress($search->getAddress());
+        $position = $this->geoCodeService->getFirstFoundPositionByAddress($search->getAddress());
         if ($position instanceof Position) {
             $poiCollections = $this->poiCollectionRepository->searchWithinRadius(
                 $position->getLatitude(),

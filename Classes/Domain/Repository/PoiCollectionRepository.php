@@ -12,16 +12,17 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Domain\Repository;
 
 use Doctrine\DBAL\Exception;
+use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Event\ModifyQueryOfFindPoiCollectionsEvent;
 use JWeiland\Maps2\Helper\OverlayHelper;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
-use TYPO3\CMS\Core\Database\Query\Restriction\FrontendRestrictionContainer;
-use TYPO3\CMS\Core\Domain\Repository\PageRepository;
-use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper;
 use TYPO3\CMS\Extbase\Persistence\Generic\Query;
+use TYPO3\CMS\Extbase\Persistence\Generic\Storage\Typo3DbQueryParser;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Persistence\Repository;
@@ -31,20 +32,45 @@ use TYPO3\CMS\Extbase\Persistence\Repository;
  */
 class PoiCollectionRepository extends Repository
 {
+    private const TABLE = 'tx_maps2_domain_model_poicollection';
+
+    private const EARTH_RADIUS = 6380;
+
     protected $defaultOrderings = [
         'title' => QueryInterface::ORDER_ASCENDING,
     ];
 
-    protected EventDispatcher $eventDispatcher;
-
     protected OverlayHelper $overlayHelper;
+
+    protected Typo3DbQueryParser $typo3DbQueryParser;
+
+    protected DataMapper $dataMapper;
+
+    protected ConnectionPool $connectionPool;
+
+    protected EventDispatcherInterface $eventDispatcher;
 
     public function injectOverlayHelper(OverlayHelper $overlayHelper): void
     {
         $this->overlayHelper = $overlayHelper;
     }
 
-    public function injectEventDispatcher(EventDispatcher $eventDispatcher): void
+    public function injectTypo3DbQueryParser(Typo3DbQueryParser $typo3DbQueryParser): void
+    {
+        $this->typo3DbQueryParser = $typo3DbQueryParser;
+    }
+
+    public function injectDataMapper(DataMapper $dataMapper): void
+    {
+        $this->dataMapper = $dataMapper;
+    }
+
+    public function injectConnectionPool(ConnectionPool $connectionPool): void
+    {
+        $this->connectionPool = $connectionPool;
+    }
+
+    public function injectEventDispatcher(EventDispatcherInterface $eventDispatcher): void
     {
         $this->eventDispatcher = $eventDispatcher;
     }
@@ -52,14 +78,14 @@ class PoiCollectionRepository extends Repository
     public function findPoiCollections(array $settings, int $poiCollectionUid = 0): QueryResultInterface
     {
         $extbaseQuery = $this->createQuery();
-        $queryBuilder = $this->getQueryBuilderForTable('tx_maps2_domain_model_poicollection', 'pc');
+        $queryBuilder = $this->typo3DbQueryParser->convertQueryToDoctrineQueryBuilder($extbaseQuery);
         $queryBuilder->select(...$this->getColumnsForPoiCollectionTable());
 
         $poiCollectionUid = $poiCollectionUid ?: (int)($settings['poiCollection'] ?? 0);
         if ($poiCollectionUid !== 0) {
             $queryBuilder->andWhere(
                 $queryBuilder->expr()->eq(
-                    'pc.uid',
+                    self::TABLE . '.uid',
                     $queryBuilder->createNamedParameter($poiCollectionUid, Connection::PARAM_INT),
                 ),
             );
@@ -81,40 +107,40 @@ class PoiCollectionRepository extends Repository
         return $extbaseQuery->statement($queryBuilder)->execute();
     }
 
-    public function searchWithinRadius(float $latitude, float $longitude, int $radius): QueryResultInterface
+    public function searchWithinRadius(float $latitude, float $longitude, int $radius): array
     {
-        $radiusOfEarth = 6380;
+        /** @var Query $extbaseQuery */
+        $extbaseQuery = $this->createQuery();
+        $queryBuilder = $this->typo3DbQueryParser->convertQueryToDoctrineQueryBuilder($extbaseQuery);
+        $queryBuilder
+            ->selectLiteral('*', 'ACOS(SIN(RADIANS(?)) * SIN(RADIANS(latitude)) + COS(RADIANS(?)) * COS(RADIANS(latitude)) * COS(RADIANS(?) - RADIANS(longitude))) * ? AS distance')
+            ->having('distance < ?')
+            ->orderBy('distance', 'ASC')
+            ->setParameters([$latitude, $latitude, $longitude, self::EARTH_RADIUS, $radius]);
 
-        /** @var Query $query */
-        $query = $this->createQuery();
+        // Query above works perfect, but if you make use of <f:if condition="{poiCollections}"> in
+        // fluid that will trigger a COUNT(*) statement. Extbase will remove everything from SELECT,
+        // so "distinct" in HAVING is not available anymore and query breaks. As maps2 is well known
+        // in TYPO3 community we can not remove this fluid snippet very easily, as that template may be
+        // overwritten in a lot of instances.
+        // For now, we just return the plain, versioned and translated records from extbase query and
+        // map them to objects by our own. That way the fluid snippet will do a
+        // count(poiCollections) instead of poiCollections->count() which solves the issue.
 
-        // Can't use QueryBuilder here, as Extbase deleted full select for COUNT(*) which results
-        // in an error because HAVING does not found "distance" then.
-        $sql = '
-            SELECT *, ACOS(SIN(RADIANS(?)) * SIN(RADIANS(latitude)) + COS(RADIANS(?)) * COS(RADIANS(latitude)) * COS(RADIANS(?) - RADIANS(longitude))) * ? AS distance
-            FROM tx_maps2_domain_model_poicollection
-            WHERE tx_maps2_domain_model_poicollection.pid IN (' . implode(',', $query->getQuerySettings()->getStoragePageIds()) . ')' .
-            $this->getPageRepository()->enableFields('tx_maps2_domain_model_poicollection') . '
-            HAVING distance < ?
-            ORDER BY distance;';
+        $poiCollections = $extbaseQuery->statement($queryBuilder)->execute(true);
 
-        return $query->statement(
-            $sql,
-            [$latitude, $latitude, $longitude, $radiusOfEarth, $radius],
-        )->execute();
+        return $this->dataMapper->map(PoiCollection::class, $poiCollections);
     }
 
-    protected function addConstraintForCategories(
-        QueryBuilder $queryBuilder,
-        array $categories,
-    ): void {
+    protected function addConstraintForCategories(QueryBuilder $queryBuilder, array $categories): void
+    {
         $queryBuilder->leftJoin(
-            'pc',
+            self::TABLE,
             'sys_category_record_mm',
             'category_mm',
             (string)$queryBuilder->expr()->and(
                 $queryBuilder->expr()->eq(
-                    'pc.uid',
+                    self::TABLE . '.uid',
                     $queryBuilder->quoteIdentifier('category_mm.uid_foreign'),
                 ),
                 $queryBuilder->expr()->eq(
@@ -145,29 +171,6 @@ class PoiCollectionRepository extends Repository
         $queryBuilder->addGroupBy(...$this->getColumnsForPoiCollectionTable());
     }
 
-    protected function getQueryBuilderForTable(string $table, string $alias, bool $useLangStrict = false): QueryBuilder
-    {
-        $extbaseQuery = $this->createQuery();
-
-        $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable($table);
-        $queryBuilder->setRestrictions(GeneralUtility::makeInstance(FrontendRestrictionContainer::class));
-        $queryBuilder
-            ->from($table, $alias)
-            ->andWhere(
-                $queryBuilder->expr()->in(
-                    'pid',
-                    $queryBuilder->createNamedParameter(
-                        $extbaseQuery->getQuerySettings()->getStoragePageIds(),
-                        Connection::PARAM_INT_ARRAY,
-                    ),
-                ),
-            );
-
-        $this->overlayHelper->addWhereForOverlay($queryBuilder, $table, $alias, $useLangStrict);
-
-        return $queryBuilder;
-    }
-
     /**
      * ->select() and ->groupBy() has to be the same in DB configuration
      * where only_full_group_by is activated.
@@ -175,29 +178,19 @@ class PoiCollectionRepository extends Repository
     protected function getColumnsForPoiCollectionTable(): array
     {
         $columns = [];
-        $connection = $this->getConnectionPool()->getConnectionForTable('tx_maps2_domain_model_poicollection');
+        $connection = $this->connectionPool->getConnectionForTable('tx_maps2_domain_model_poicollection');
 
         try {
             $schemaManager = $connection->createSchemaManager();
             $columns = array_map(
-                static fn($column): string => 'pc.' . $column,
+                static fn($column): string => self::TABLE . '.' . $column,
                 array_keys(
                     $schemaManager->listTableColumns('tx_maps2_domain_model_poicollection') ?? [],
                 ),
             );
-        } catch (Exception $e) {
+        } catch (Exception) {
         }
 
         return $columns;
-    }
-
-    protected function getPageRepository(): PageRepository
-    {
-        return GeneralUtility::makeInstance(PageRepository::class);
-    }
-
-    protected function getConnectionPool(): ConnectionPool
-    {
-        return GeneralUtility::makeInstance(ConnectionPool::class);
     }
 }

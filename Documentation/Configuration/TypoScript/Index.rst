@@ -9,6 +9,11 @@ TypoScript
 
 All following TypoScript configuration consists in `plugin.tx_maps2`
 
+..  hint::
+
+    We prefer using the Site Settings to configure maps2 since TYPO3 13.
+
+
 view
 ====
 
@@ -37,7 +42,8 @@ Default: `EXT:maps2/Resources/Private/Layouts/`
 
 Example: `plugin.tx_maps2.view.layoutsRootPaths.40 = EXT:site_package/Resources/Private/Layouts/`
 
-You can override our Layouts with your own SitePackage extension. We prefer to change this value in TS Constants.
+You can override our Layouts with your own SitePackage extension. We prefer to
+change this value in TS Constants.
 
 
 persistence
@@ -54,13 +60,14 @@ Set this value to a Storage Folder where you have stored the event records.
 
 ..  important::
 
-    If you have stored Organizers and Locations in another Storage Folder, you have to add theses
-    PIDs here, too.
+    If you have stored Organizers and Locations in another Storage Folder, you
+    have to add theses PIDs here, too.
 
 ..  tip::
 
-    If you use creation of events over frontend plugin, new records will be stored in first PID found
-    in storagePid. To store record in other storage PIDs you need following configuration
+    If you use creation of events over frontend plugin, new records will be
+    stored in first PID found in storagePid. To store record in other storage
+    PIDs you need following configuration
 
     ..  code-block:: typoscript
 
@@ -77,8 +84,8 @@ Default: 1
 
 Example: `plugin.tx_maps2.settings.overlay.link.addSection = 0`
 
-Append URI section to link of button in consent template. Useful to jump directly to
-the content element record with maps2 plugin.
+Append URI section to link of button in consent template. Useful to jump
+directly to the content element record with maps2 plugin.
 
 With option set to 1: [currentURI]/mapProviderRequestsAllowedForMaps2=1#c123
 
@@ -91,11 +98,13 @@ Example: `plugin.tx_maps2.settings.infoWindowContentTemplatePath = EXT:your_site
 
 Here you can define your own Fluid-Template for these little PopUps of Markers.
 
-Since maps2 9.2.0 you have access to all related foreign records of your PoiCollection in Template.
+Since maps2 9.2.0 you have access to all related foreign records of your
+PoiCollection in Template.
 Use: `<f:for each="{poiCollection.foreignRecords}" as="foreignRecord">...</f:for>`
 
-As such a PoiCollection can be assigned to multiple different tables like tt_address, news, what ever, you can differ
-between the foreign records with f.e.:
+As such a PoiCollection can be assigned to multiple different tables like
+tt_address, news, what ever, you can differ between the foreign records
+with f.e.:
 
 ..  code-block:: html
 
@@ -139,8 +148,9 @@ Example: `plugin.tx_maps2.settings.markerClusterer.enable = 1`
 
 This value is configurable through TypoScript Constants Editor
 
-If you work with a lot of poi collection records you can activate the marker clusterer. The marker
-clusterer will merge multiple poi collections to 1 icon with the contains amount of records.
+If you work with a lot of poi collection records you can activate the marker
+clusterer. The marker clusterer will merge multiple poi collections to 1 icon
+with the contains amount of records.
 
 markerClusterer.imagePath
 -------------------------
@@ -158,7 +168,8 @@ images.
 _LOCAL_LANG
 ===========
 
-As an integrator you can override each language key with TypoScript. For frontend maps2 uses this file:
+As an integrator you can override each language key with TypoScript. For
+frontend maps2 uses this file:
 
 `EXT:maps2/Resources/Private/Language/locallang.xlf`
 
