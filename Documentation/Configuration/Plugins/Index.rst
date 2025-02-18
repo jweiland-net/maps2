@@ -22,8 +22,9 @@ categories
 
 Default: [empty]
 
-If you have not set a fixed poiCollection above you can choose one or more categories here. If you have chosen more
-than one category some checkboxes will appear below the map in frontend where you can switch the markers of the
+If you have not set a fixed poiCollection above you can choose one or more
+categories here. If you have chosen more than one category some checkboxes will
+appear below the map in frontend where you can switch the markers of the
 chosen category on and off.
 
 mapWidth
@@ -52,10 +53,11 @@ forceZoom
 
 Default: false
 
-This setting is only interesting, if you will show multiple POIs on map. In that case maps2 will zoom out until
-all POIs can be displayed. This is realized with the BoundingBox feature of Google Maps or OpenStreetMap. If
-you don't want maps2 to zoom out, because you have POIs all around the world for example, you can activate
-this checkbox to prevent automatic zooming.
+This setting is only interesting, if you will show multiple POIs on map. In
+that case maps2 will zoom out until all POIs can be displayed. This is realized
+with the BoundingBox feature of Google Maps or OpenStreetMap. If you don't want
+maps2 to zoom out, because you have POIs all around the world for example, you
+can activate this checkbox to prevent automatic zooming.
 
 zoomControl
 ----------
@@ -137,7 +139,8 @@ mapTileAttribution
 Default: Road map
 Map Provider: Open Street Map only
 
-Each map needs to show the author attribution. Please check which Attribution has to be used for defined map tile above.
+Each map needs to show the author attribution. Please check which Attribution
+has to be used for defined map tile above.
 
 
 Maps2: Search Radius
@@ -169,10 +172,11 @@ forceZoom
 
 Default: false
 
-This setting is only interesting, if you will show multiple POIs on map. In that case maps2 will zoom out until
-all POIs can be displayed. This is realized with the BoundingBox feature of Google Maps or OpenStreetMap. If
-you don't want maps2 to zoom out, because you have POIs all around the world for example, you can activate
-this checkbox to prevent automatic zooming.
+This setting is only interesting, if you will show multiple POIs on map. In that
+case maps2 will zoom out until all POIs can be displayed. This is realized with
+the BoundingBox feature of Google Maps or OpenStreetMap. If you don't want maps2
+to zoom out, because you have POIs all around the world for example, you can
+activate this checkbox to prevent automatic zooming.
 
 zoomControl
 ----------
@@ -254,7 +258,8 @@ mapTileAttribution
 Default: Road map
 Map Provider: Open Street Map only
 
-Each map needs to show the author attribution. Please check which Attribution has to be used for defined map tile above.
+Each map needs to show the author attribution. Please check which Attribution
+has to be used for defined map tile above.
 
 
 Maps2: City Map
@@ -265,7 +270,8 @@ autoAppend
 
 Default: [empty]
 
-Append a fixed string to search value. Maybe a cityname. That way the user has only to insert a street.
+Append a fixed string to search value. Maybe a cityname. That way the user
+has only to insert a street.
 
 mapWidth
 --------
@@ -293,10 +299,11 @@ forceZoom
 
 Default: false
 
-This setting is only interesting, if you will show multiple POIs on map. In that case maps2 will zoom out until
-all POIs can be displayed. This is realized with the BoundingBox feature of Google Maps or OpenStreetMap. If
-you don't want maps2 to zoom out, because you have POIs all around the world for example, you can activate
-this checkbox to prevent automatic zooming.
+This setting is only interesting, if you will show multiple POIs on map. In
+that case maps2 will zoom out until all POIs can be displayed. This is realized
+with the BoundingBox feature of Google Maps or OpenStreetMap. If you don't want
+maps2 to zoom out, because you have POIs all around the world for example, you
+can activate this checkbox to prevent automatic zooming.
 
 zoomControl
 ----------
@@ -378,4 +385,5 @@ mapTileAttribution
 Default: Road map
 Map Provider: Open Street Map only
 
-Each map needs to show the author attribution. Please check which Attribution has to be used for defined map tile above.
+Each map needs to show the author attribution. Please check which Attribution
+has to be used for defined map tile above.

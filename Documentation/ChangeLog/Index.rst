@@ -12,6 +12,7 @@ Version 12.0.0
 
 *   Compatibility fixes for TYPO3 13 LTS
 *   Remove TYPO3 12 compatibility
+*   Add Site Sets for Google Maps and OpenStreetMap
 
 Version 11.0.3
 ==============
