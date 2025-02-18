@@ -68,8 +68,7 @@ and activate it:
 
 ..  seealso::
 
-    On pages ":doc:`Managing Extensions <t3start:Extensions/Management>`" and
-    ":doc:`Managing Extensions - Legacy Guide <t3start:Extensions/LegacyManagement>`"
+    On page `Installing extensions <https://docs.typo3.org/permalink/t3start:installing-extensions>`_
     both TYPO3 installation modes are explained in detail.
 
 **Next step**

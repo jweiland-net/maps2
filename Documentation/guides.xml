@@ -10,8 +10,4 @@
                edit-on-github-branch="main"
                edit-on-github="jweiland/maps2" typo3-core-preferred="stable"/>
     <project title="maps2 (Maps2)" release="11.0.3" version="11.0" copyright="since 2013 by jweiland.net"/>
-    <inventory id="t3coreapi" url="https://docs.typo3.org/m/typo3/reference-coreapi/master/en-us/"/>
-    <inventory id="t3extbasebook" url="https://docs.typo3.org/m/typo3/book-extbasefluid/master/en-us/"/>
-    <inventory id="t3tca" url="https://docs.typo3.org/m/typo3/reference-tca/master/en-us/"/>
-    <inventory id="t3tsref" url="https://docs.typo3.org/m/typo3/reference-typoscript/master/en-us/"/>
 </guides>

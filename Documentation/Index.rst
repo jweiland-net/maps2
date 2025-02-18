@@ -48,5 +48,4 @@ Maps2
     AdministratorManual/Index
     DeveloperManual/Index
     FAQ/Index
-    ToDoList/Index
     ChangeLog/Index

@@ -17,7 +17,7 @@ name of the column will be ``tx_maps2_uid``, but you can change that, if you
 want.
 
 Our Maps2 registry is adapted from
-:ref:`TYPO3s Category Registry <t3coreapi:system-categories-api>`
+`System categories API <https://docs.typo3.org/permalink/t3coreapi:categories-api>`_
 
 Create a new file in [yourExt]/Configuration/TCA/Overrides/[yourTableName].php
 and add the individually needed lines of code. Following is a slightly example

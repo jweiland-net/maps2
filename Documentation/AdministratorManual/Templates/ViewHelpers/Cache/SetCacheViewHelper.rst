@@ -7,64 +7,57 @@ Cache / SetCacheViewHelper
 
 This is a ViewHelper to set a new cache entry.
 
-**Type:** Basic
-
 General properties
 ==================
 
-..  container:: ts-properties
+..  confval-menu::
+    :name: confval-set-cache
+    :display: table
+    :required:
+    :type:
 
-    =============== ============== ============
-    Property        Data type      Default
-    =============== ============== ============
-    prefix_         String         infoWindow
-    poiCollection_  PoiCollection
-    data_           String
-    tags_           Array          Empty Array
-    lifetime_       Integer        NULL
-    =============== ============== ============
+..  confval:: prefix
+    :name: set-cache-prefix
+    :required: false
+    :type: string
 
-..  _prefix:
+    If you want you can define a prefix for the generated CacheIdentifier. Leave
+    this value empty to use "infoWindow" as default value
 
-prefix
-------
+..  confval:: poiCollection
+    :name: set-cache-poiCollection
+    :required: true
+    :type: PoiCollection
 
-If you want you can define a prefix for the generated CacheIdentifier. Leave
-this value empty to use "infoWindow" as default value
+    You must assign the PoiCollection object to this ViewHelper. We extract some
+    data from PoiCollection to build a more unique CacheIdentifier which can differ
+    Caches in multilingual environment.
 
-..  _poiCollection:
+..  confval:: data
+    :name: set-cache-data
+    :required: true
+    :type: string
 
-poiCollection
--------------
+    The data as string which has to be stored.
 
-You must assign the PoiCollection object to this ViewHelper. We extract some
-data from PoiCollection to build a more unique CacheIdentifier which can differ
-Caches in multilingual environment.
+..  confval:: tags
+    :name: set-cache-tags
+    :required: false
+    :type: array
 
-..  _data:
+    You can define some additional CacheEntryTags if you want. By default we add
+    two additional Cache Tags named `infoWindowUid{PoiCollectionUid}` and
+    `infoWindowPid{PoiCollectionPid}`
 
-data
-----
+..  confval:: lifetime
+    :name: set-cache-lifetime
+    :required: false
+    :type: int
 
-The data as string which has to be stored.
+    How long (in seconds) the CacheEntry should be available, before it will be
+    re-generated? Keep this value empty to use the Default Value of Storage-Backend.
+    0 for unlimited.
 
-..  _tags:
-
-tags
-----
-
-You can define some additional CacheEntryTags if you want. By default we add
-two additional Cache Tags named "infoWindowUid{PoiCollectionUid}" and
-"infoWindowPid{PoiCollectionPid}"
-
-..  _lifetime:
-
-lifetime
---------
-
-How long (in seconds) the CacheEntry should be available, before it will be
-re-generated? Keep this value empty to use the Default Value of Storage-Backend.
-0 for unlimited.
 
 Examples
 ========

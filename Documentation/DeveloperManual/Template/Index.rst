@@ -1,7 +1,7 @@
 ﻿..  include:: /Includes.rst.txt
 
 
-..  _developer-api:
+..  _developer-template:
 
 ========
 Template
