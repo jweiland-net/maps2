@@ -3,18 +3,6 @@
   <file source-language="en" datatype="plaintext" original="messages" date="2013-02-07T11:13:04Z" product-name="maps2" target-language="t3">
     <header/>
     <body>
-      <trans-unit id="plugin.maps.title">
-        <source>Maps2: Show map</source>
-        <target>crwdns308062:0crwdne308062:0</target>
-      </trans-unit>
-      <trans-unit id="plugin.radius.title">
-        <source>Maps2: Search Radius</source>
-        <target>crwdns308064:0crwdne308064:0</target>
-      </trans-unit>
-      <trans-unit id="plugin.cityMap.title">
-        <source>Maps2: City Map</source>
-        <target>crwdns308066:0crwdne308066:0</target>
-      </trans-unit>
       <trans-unit id="plugin.maps2.title">
         <source>Maps2: Show map</source>
         <target>crwdns308068:0crwdne308068:0</target>
@@ -22,6 +10,22 @@
       <trans-unit id="plugin.maps2.description">
         <source>Add a world map to your website</source>
         <target>crwdns308070:0crwdne308070:0</target>
+      </trans-unit>
+      <trans-unit id="plugin.searchwithinradius.title">
+        <source>Maps2: Search Radius</source>
+        <target>crwdns369960:0crwdne369960:0</target>
+      </trans-unit>
+      <trans-unit id="plugin.searchwithinradius.description">
+        <source>Displays a form where you can enter your address and find all the POIs within a certain radius.</source>
+        <target>crwdns369962:0crwdne369962:0</target>
+      </trans-unit>
+      <trans-unit id="plugin.citymap.title">
+        <source>Maps2: City Map</source>
+        <target>crwdns369964:0crwdne369964:0</target>
+      </trans-unit>
+      <trans-unit id="plugin.citymap.description">
+        <source>All search results in this plugin will only show POIs in a pre-defined city/town.</source>
+        <target>crwdns369966:0crwdne369966:0</target>
       </trans-unit>
       <trans-unit id="tx_maps2_domain_model_poi" xml:space="preserve">
 				<source>Map Position</source>
