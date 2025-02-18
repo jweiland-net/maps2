@@ -3,18 +3,6 @@
   <file source-language="en" datatype="plaintext" original="messages" date="2013-02-07T11:13:04Z" product-name="maps2" target-language="da">
     <header/>
     <body>
-      <trans-unit id="plugin.maps.title" approved="yes">
-        <source>Maps2: Show map</source>
-        <target state="final">Maps2: Vis kort</target>
-      </trans-unit>
-      <trans-unit id="plugin.radius.title" approved="yes">
-        <source>Maps2: Search Radius</source>
-        <target state="final">Maps2: Søg radius</target>
-      </trans-unit>
-      <trans-unit id="plugin.cityMap.title" approved="yes">
-        <source>Maps2: City Map</source>
-        <target state="final">Maps2: Bykort</target>
-      </trans-unit>
       <trans-unit id="plugin.maps2.title" approved="yes">
         <source>Maps2: Show map</source>
         <target state="final">Maps2: Vis kort</target>
