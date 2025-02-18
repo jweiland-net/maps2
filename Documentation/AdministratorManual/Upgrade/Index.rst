@@ -7,6 +7,22 @@ Upgrade
 
 If you upgrade EXT:maps2 to a newer version, please read this section carefully!
 
+Upgrade to Version 12.0.0
+=========================
+
+This version is not compatible with TYPO3 12!
+
+Updating TYPO3 extensions using class.ext_update.php has been deprecated since
+TYPO3 11.0 and was removed in TYPO3 12.0. If you are upgrading from an older
+maps2 version, first update to at least version 10 and execute the upgrade
+wizard in the Extension Manager before proceeding.
+
+** Added Site Configuration Support
+** No changes or investigations are needed for integrators.
+** Changes in EventListeners
+    - For normal users, **nothing has changed**.
+    - However, in **EventListeners**, `PoiCollection` has changed from a **QueryResult** to an **array**.
+
 Upgrade to Version 11.0.0
 =========================
 
