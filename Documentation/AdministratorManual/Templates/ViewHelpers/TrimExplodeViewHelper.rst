@@ -8,8 +8,6 @@ TrimExplodeViewHelper
 This is a ViewHelper to convert a comma separated value into an array.
 All values will be trimmed.
 
-**Type:** Basic
-
 General properties
 ==================
 
