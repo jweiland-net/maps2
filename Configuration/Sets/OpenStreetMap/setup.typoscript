@@ -7,8 +7,7 @@ plugin.tx_maps2.settings.markerClusterer >
 [isRequestToMapProviderAllowed()]
 [ELSE]
   # Requests to OpenStreetMap are not allowed. Inform the user about cookies and request permissions for 3rd party.
-  tt_content.list.20.maps2_maps2 = USER_INT
-  tt_content.list.20.maps2_maps2.pluginName = Overlay
+  tt_content.maps2_maps2.20.pluginName = Overlay
 [END]
 
 plugin.tx_maps2 {
