@@ -12,7 +12,30 @@ Version 12.0.0
 
 *   Compatibility fixes for TYPO3 13 LTS
 *   Remove TYPO3 12 compatibility
+*   Repair translation handling incl. Info Window Content
+*   Migrate maps2 plugins to content elements. Implement Upgrade Wizard.
+*   Migrate Standalone View to ViewFactory
+*   Use PoiCollectionService insteadof individual DB queries
+*   Use DI wherever possible
+*   Migrate TypoScript to three Site Sets
+*   Declare classes as readonly and/or stateless wherever possible
+*   Migrate GeneralUtility::makeInstance to DI, if possible
+*   Use PHP Attributes for Extbase Validators
+*   Migrate plain SQL Query to Doctrine QueryBuilder to find POI on earth
+*   Make use of more constants in classes, if possible
+*   Migrate Extbase Ajax call to Middleware
+*   Make use of new HashService
+*   Implement new InfoWindowContentService
+*   Implement new PoiCollectionService. DB queries without Extbase context.
+*   Load CSS/JS from VH assets instead from TypoScript
+*   Create table and columns via TCA. Schema API
+*   Move l10n_parent to palettes
+*   Remove ext_tables.php file
+*   Migrate static VHs to use original render method again
+*   Add configuration for CSP (Configuration/ContentSecurityPolicies.php)
 *   Add Site Sets for Google Maps and OpenStreetMap
+*   Migrated tests to "podman"
+*   Upgrade tests against MariaDB 10.4 to 10.5
 
 Version 11.0.3
 ==============
