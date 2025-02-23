@@ -11,6 +11,22 @@
         <source>Add a world map to your website</source>
         <target state="final">Tilføj et verdenskort til din webside</target>
       </trans-unit>
+      <trans-unit id="plugin.searchwithinradius.title" approved="yes">
+        <source>Maps2: Search Radius</source>
+        <target state="final">Maps2: Søgeradius</target>
+      </trans-unit>
+      <trans-unit id="plugin.searchwithinradius.description" approved="yes">
+        <source>Displays a form where you can enter your address and find all the POIs within a certain radius.</source>
+        <target state="final">Viser en formular, hvor du kan indtaste din adresse og finde alle POI'er i en bestemt radius.</target>
+      </trans-unit>
+      <trans-unit id="plugin.citymap.title" approved="yes">
+        <source>Maps2: City Map</source>
+        <target state="final">Maps2: Bykort</target>
+      </trans-unit>
+      <trans-unit id="plugin.citymap.description" approved="yes">
+        <source>All search results in this plugin will only show POIs in a pre-defined city/town.</source>
+        <target state="final">Alle søgeresultater i dette plugin vil kun vise POI'er i en foruddefineret by.</target>
+      </trans-unit>
       <trans-unit id="tx_maps2_domain_model_poi" xml:space="preserve" approved="yes">
 				<source>Map Position</source>
 			<target state="final">Kortposition</target></trans-unit>
