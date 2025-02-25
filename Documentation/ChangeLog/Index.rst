@@ -7,6 +7,11 @@
 ChangeLog
 =========
 
+Version 12.0.1
+==============
+
+*   Add cookie consent to searchwithinradius and citymap plugin
+
 Version 12.0.0
 ==============
 
