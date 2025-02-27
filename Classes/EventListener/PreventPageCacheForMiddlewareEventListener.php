@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\EventListener;
 
 use TYPO3\CMS\Core\Attribute\AsEventListener;
-use TYPO3\CMS\Frontend\Event\ShouldUseCachedPageDataIfAvailableEvent;/**
+use TYPO3\CMS\Frontend\Event\ShouldUseCachedPageDataIfAvailableEvent;
 
 /**
  * We load GetInfoWindowContentMiddleware at a very late position as we need the TypoScript configuration.
