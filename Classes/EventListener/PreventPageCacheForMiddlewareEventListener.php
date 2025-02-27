@@ -24,9 +24,11 @@ use TYPO3\CMS\Frontend\Event\ShouldUseCachedPageDataIfAvailableEvent;/**
 #[AsEventListener(identifier: 'maps2/deactivate-page-cache-usage')]
 class PreventPageCacheForMiddlewareEventListener
 {
-    public function __invoke(ShouldUseCachedPageDataIfAvailableEvent $event): bool
+    public function __invoke(ShouldUseCachedPageDataIfAvailableEvent $event): void
     {
         // Only if header matches we have to return "false" to set TYPO3s "$isUsingPageCacheAllowed" to false
-        return $event->getRequest()->getHeader('ext-maps2') !== ['infoWindowContent'];
+        $event->setShouldUseCachedPageData(
+            $event->getRequest()->getHeader('ext-maps2') !== ['infoWindowContent']
+        );
     }
 }
