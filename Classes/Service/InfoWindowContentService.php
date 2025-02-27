@@ -53,17 +53,17 @@ readonly class InfoWindowContentService
     {
         $maps2TypoScript = $this->getTypoScriptByPath('plugin./tx_maps2.', $request);
         if ($maps2TypoScript === []) {
-            return '';
+            return 'ERROR: Path at plugin.tx_maps2 not found. Missing TypoScript include? Cached request?';
         }
 
         $settings = $maps2TypoScript['settings.'] ?? [];
         if ($settings === []) {
-            return '';
+            return 'Error: Can not find any plugin settings';
         }
 
         $siteSettings = $this->getSiteSettings($request);
         if ($siteSettings === []) {
-            return '';
+            return 'Error: Missing site settings. Missing maps2 Site Set dependencies?';
         }
 
         $variables = [

@@ -7,6 +7,11 @@
 ChangeLog
 =========
 
+Version 12.0.2
+==============
+
+*   Disable page cache usage while rendering the info window content
+
 Version 12.0.1
 ==============
 
