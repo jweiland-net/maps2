@@ -28,7 +28,7 @@ class PreventPageCacheForMiddlewareEventListener
     {
         // Only if header matches we have to return "false" to set TYPO3s "$isUsingPageCacheAllowed" to false
         $event->setShouldUseCachedPageData(
-            $event->getRequest()->getHeader('ext-maps2') !== ['infoWindowContent']
+            $event->getRequest()->getHeader('ext-maps2') !== ['infoWindowContent'],
         );
     }
 }
