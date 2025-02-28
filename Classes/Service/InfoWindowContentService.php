@@ -90,7 +90,7 @@ readonly class InfoWindowContentService
     ): ViewInterface {
         return $this->viewFactory->create(new ViewFactoryData(
             partialRootPaths: $maps2TypoScript['view.']['partialRootPaths.'],
-            layoutRootPaths: $maps2TypoScript['view.']['layoutRootPath.'],
+            layoutRootPaths: $maps2TypoScript['view.']['layoutRootPaths.'],
             templatePathAndFilename: GeneralUtility::getFileAbsFileName(
                 $siteSettings['infoWindowContent']['templatePath'],
             ),
