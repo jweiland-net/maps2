@@ -36,6 +36,6 @@ for easy and recurring assignment.
 
 [TYPO3-13-url]: https://get.typo3.org/version/13
 
-[TYPO3-shield]: https://img.shields.io/badge/TYPO3-12.4-green.svg?style=for-the-badge&logo=typo3
+[TYPO3-shield]: https://img.shields.io/badge/TYPO3-13.4-green.svg?style=for-the-badge&logo=typo3
 
 [LICENSE_BADGE]: https://img.shields.io/github/license/jweiland-net/maps2?label=license&style=for-the-badge
