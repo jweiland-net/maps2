@@ -17,7 +17,7 @@ Follow these steps to build fresh JS files:
   folder:
 
   ```
-  cd [pathOfMaps2]/Resouces/Private/Build
+  cd [pathOfMaps2]/Resources/Private/Build
   ```
 
 - *Step 3: Install Necessary Tools*

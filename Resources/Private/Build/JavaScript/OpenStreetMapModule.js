@@ -336,6 +336,7 @@ class OpenStreetMapModule {
     // Prevent submitting the BE form on enter
     pacSearch.addEventListener("keydown", event => {
       if (event.keyCode === 13 && event.target.value) {
+        event.preventDefault();
         fetch("https://nominatim.openstreetmap.org/search?q=" + encodeURI(event.target.value) + "&format=json&addressdetails=1", {
           method: "GET",
           headers: {
