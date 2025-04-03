@@ -18,8 +18,9 @@ plugin.tx_maps2.settings.markerClusterer >
   }
 [ELSE]
   # Requests to OpenStreetMap are not allowed. Inform the user about cookies and request permissions for 3rd party.
-  tt_content.list.20.maps2_maps2 = USER_INT
   tt_content.list.20.maps2_maps2.pluginName = Overlay
+  tt_content.list.20.maps2_searchwithinradius.pluginName = Overlay
+  tt_content.list.20.maps2_citymap.pluginName = Overlay
 [END]
 
 plugin.tx_maps2 {
