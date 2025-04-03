@@ -7,6 +7,14 @@
 ChangeLog
 =========
 
+Version 11.0.4
+==============
+
+*   BUGFIX: Show overlay for all maps2 plugins if activated
+*   BUGFIX: Prevent core storing in BE form, when hitting ENTER on OSM search
+*   TASK: Test on MariaDB 10.11
+*   TASK: Rename LICENSE.md to LICENSE
+
 Version 11.0.3
 ==============
 
