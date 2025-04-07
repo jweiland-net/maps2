@@ -7,6 +7,11 @@
 ChangeLog
 =========
 
+Version 11.0.6
+==============
+
+*   Set addQueryString back to "true". "untrusted" comes in with TYPO3 12 first
+
 Version 11.0.5
 ==============
 
