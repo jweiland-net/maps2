@@ -7,6 +7,11 @@
 ChangeLog
 =========
 
+Version 11.0.7
+==============
+
+*   Set addQueryString to "untrusted" in RequestUriForOverlay VH
+
 Version 11.0.6
 ==============
 
