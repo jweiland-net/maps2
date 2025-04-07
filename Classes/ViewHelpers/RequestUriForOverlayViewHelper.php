@@ -47,7 +47,7 @@ class RequestUriForOverlayViewHelper extends AbstractViewHelper
     ): string {
         $uriBuilder = self::getUriBuilder()
             ->reset()
-            ->setAddQueryString('untrusted')
+            ->setAddQueryString(true)
             ->setArguments([
                 'tx_maps2_maps2' => [
                     'mapProviderRequestsAllowedForMaps2' => 1,
