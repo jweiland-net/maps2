@@ -26,10 +26,10 @@ return Map::fromEntries(
             new Mutation(
                 MutationMode::Extend,
                 Directive::ScriptSrcElem,
-                SourceKeyword::strictDynamic, // requires(!) Nonce everywhere
-                SourceScheme::https, // thx Google!
-                SourceKeyword::unsafeEval, // thx Google!
-                SourceScheme::blob, // thx Google!
+                SourceKeyword::strictDynamic,
+                SourceScheme::https,
+                SourceKeyword::unsafeEval,
+                SourceScheme::blob,
             ),
             new Mutation(
                 MutationMode::Extend,
@@ -52,8 +52,8 @@ return Map::fromEntries(
                 new UriValue('https://*.googleapis.com'),
                 new UriValue('https://*.gstatic.com'),
                 new UriValue('https://nominatim.openstreetmap.org'),
-                SourceScheme::blob, // thx Google!
-                SourceScheme::data, // thx Google!
+                SourceScheme::blob,
+                SourceScheme::data,
             ),
             new Mutation(
                 MutationMode::Extend,
@@ -80,10 +80,10 @@ return Map::fromEntries(
             new Mutation(
                 MutationMode::Extend,
                 Directive::ScriptSrcElem,
-                SourceKeyword::strictDynamic, // requires(!) Nonce everywhere
-                SourceScheme::https, // thx Google!
-                SourceKeyword::unsafeEval, // thx Google!
-                SourceScheme::blob, // thx Google!
+                SourceKeyword::strictDynamic,
+                SourceScheme::https,
+                SourceKeyword::unsafeEval,
+                SourceScheme::blob,
             ),
             new Mutation(
                 MutationMode::Extend,
@@ -106,8 +106,8 @@ return Map::fromEntries(
                 new UriValue('https://*.googleapis.com'),
                 new UriValue('https://*.gstatic.com'),
                 new UriValue('https://nominatim.openstreetmap.org'),
-                SourceScheme::blob, // thx Google!
-                SourceScheme::data, // thx Google!
+                SourceScheme::blob,
+                SourceScheme::data,
             ),
             new Mutation(
                 MutationMode::Extend,
