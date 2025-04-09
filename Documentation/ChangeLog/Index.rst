@@ -7,6 +7,11 @@
 ChangeLog
 =========
 
+Version 12.0.4
+==============
+
+*   Update CSP rules
+
 Version 12.0.3
 ==============
 

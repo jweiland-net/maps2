@@ -24,29 +24,21 @@ return Map::fromEntries(
         Scope::backend(),
         new MutationCollection(
             new Mutation(
-                MutationMode::Set,
-                Directive::DefaultSrc,
-                SourceKeyword::self,
-            ),
-            new Mutation(
                 MutationMode::Extend,
-                Directive::ScriptSrc,
-                SourceKeyword::nonceProxy,
-                SourceScheme::https,
+                Directive::ScriptSrcElem,
                 SourceKeyword::strictDynamic,
+                SourceScheme::https,
                 SourceKeyword::unsafeEval,
                 SourceScheme::blob,
             ),
             new Mutation(
                 MutationMode::Extend,
                 Directive::ImgSrc,
-                SourceKeyword::self,
                 new UriValue('https://*.googleapis.com'),
                 new UriValue('https://*.gstatic.com'),
                 new UriValue('*.google.com'),
                 new UriValue('*.googleusercontent.com'),
                 new UriValue('*.openstreetmap.org'),
-                SourceScheme::data,
             ),
             new Mutation(
                 MutationMode::Extend,
@@ -56,12 +48,12 @@ return Map::fromEntries(
             new Mutation(
                 MutationMode::Extend,
                 Directive::ConnectSrc,
-                new UriValue('https://*.googleapis.com'),
                 new UriValue('*.google.com'),
+                new UriValue('https://*.googleapis.com'),
                 new UriValue('https://*.gstatic.com'),
                 new UriValue('https://nominatim.openstreetmap.org'),
-                SourceScheme::data,
                 SourceScheme::blob,
+                SourceScheme::data,
             ),
             new Mutation(
                 MutationMode::Extend,
@@ -70,8 +62,9 @@ return Map::fromEntries(
             ),
             new Mutation(
                 MutationMode::Extend,
-                Directive::StyleSrc,
-                SourceKeyword::nonceProxy,
+                Directive::StyleSrcElem,
+                SourceKeyword::unsafeInline,
+                new UriValue('https://fonts.gstatic.com'),
                 new UriValue('https://fonts.googleapis.com'),
             ),
             new Mutation(
@@ -85,29 +78,21 @@ return Map::fromEntries(
         Scope::frontend(),
         new MutationCollection(
             new Mutation(
-                MutationMode::Set,
-                Directive::DefaultSrc,
-                SourceKeyword::self,
-            ),
-            new Mutation(
                 MutationMode::Extend,
-                Directive::ScriptSrc,
-                SourceKeyword::nonceProxy,
-                SourceScheme::https,
+                Directive::ScriptSrcElem,
                 SourceKeyword::strictDynamic,
+                SourceScheme::https,
                 SourceKeyword::unsafeEval,
                 SourceScheme::blob,
             ),
             new Mutation(
                 MutationMode::Extend,
                 Directive::ImgSrc,
-                SourceKeyword::self,
                 new UriValue('https://*.googleapis.com'),
                 new UriValue('https://*.gstatic.com'),
                 new UriValue('*.google.com'),
                 new UriValue('*.googleusercontent.com'),
                 new UriValue('*.openstreetmap.org'),
-                SourceScheme::data,
             ),
             new Mutation(
                 MutationMode::Extend,
@@ -117,12 +102,12 @@ return Map::fromEntries(
             new Mutation(
                 MutationMode::Extend,
                 Directive::ConnectSrc,
-                new UriValue('https://*.googleapis.com'),
                 new UriValue('*.google.com'),
+                new UriValue('https://*.googleapis.com'),
                 new UriValue('https://*.gstatic.com'),
                 new UriValue('https://nominatim.openstreetmap.org'),
-                SourceScheme::data,
                 SourceScheme::blob,
+                SourceScheme::data,
             ),
             new Mutation(
                 MutationMode::Extend,
@@ -131,8 +116,9 @@ return Map::fromEntries(
             ),
             new Mutation(
                 MutationMode::Extend,
-                Directive::StyleSrc,
-                SourceKeyword::nonceProxy,
+                Directive::StyleSrcElem,
+                SourceKeyword::unsafeInline,
+                new UriValue('https://fonts.gstatic.com'),
                 new UriValue('https://fonts.googleapis.com'),
             ),
             new Mutation(
