@@ -7,6 +7,11 @@
 ChangeLog
 =========
 
+Version 12.0.5
+==============
+
+*   Remove ScriptDynamic from CSP rules
+
 Version 12.0.4
 ==============
 
