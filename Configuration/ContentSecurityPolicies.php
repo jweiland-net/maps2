@@ -26,7 +26,6 @@ return Map::fromEntries(
             new Mutation(
                 MutationMode::Extend,
                 Directive::ScriptSrcElem,
-                SourceKeyword::strictDynamic,
                 SourceScheme::https,
                 SourceKeyword::unsafeEval,
                 SourceScheme::blob,
@@ -80,7 +79,6 @@ return Map::fromEntries(
             new Mutation(
                 MutationMode::Extend,
                 Directive::ScriptSrcElem,
-                SourceKeyword::strictDynamic,
                 SourceScheme::https,
                 SourceKeyword::unsafeEval,
                 SourceScheme::blob,
