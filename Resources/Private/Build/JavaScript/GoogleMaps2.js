@@ -705,7 +705,7 @@ function initMap () {
 
     maps2GoogleMaps.push(new GoogleMaps2(
       element,
-      extend(JSON.parse(environment), JSON.parse(override))
+      extend(true, JSON.parse(environment), JSON.parse(override))
     ));
   });
 
