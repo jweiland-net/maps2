@@ -7,6 +7,11 @@
 ChangeLog
 =========
 
+Version 12.0.7
+==============
+
+*   Add ajaxUrl to embed environment
+
 Version 12.0.6
 ==============
 
