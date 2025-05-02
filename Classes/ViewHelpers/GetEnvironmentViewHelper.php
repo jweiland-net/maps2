@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\ViewHelpers;
 
 use JWeiland\Maps2\Configuration\ExtConf;
+use JWeiland\Maps2\Helper\LinkHelper;
 use JWeiland\Maps2\Helper\SettingsHelper;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Extbase\Mvc\RequestInterface;
@@ -33,6 +34,7 @@ class GetEnvironmentViewHelper extends AbstractViewHelper
 
     public function __construct(
         private readonly SettingsHelper $settingsHelper,
+        private readonly LinkHelper $linkHelper,
         private readonly ExtConf $extConf,
     ) {}
 
@@ -52,7 +54,7 @@ class GetEnvironmentViewHelper extends AbstractViewHelper
             [
                 'settings' => $this->settingsHelper->getPreparedSettings(),
                 'extConf' => ObjectAccess::getGettableProperties($this->extConf),
-                'id' => (int)($extbaseRequest->getQueryParams()['id'] ?? 0),
+                'ajaxUrl' => $this->linkHelper->buildUriToCurrentPage([], $extbaseRequest),
                 'contentRecord' => $extbaseRequest->getAttribute('currentContentObject')->data,
             ],
         );
