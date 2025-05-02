@@ -8,6 +8,8 @@
 </f:comment>
 
 <f:section name="showMap">
+    <f:render partial="LoadAssets"/>
+
     <m:getEnvironment>
         <f:if condition="{m:isRequestToMapProviderAllowed()}">
             <f:then>

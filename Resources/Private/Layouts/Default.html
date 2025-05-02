@@ -1,37 +1,9 @@
+<html lang="en"
+      xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      data-namespace-typo3-fluid="true">
+
 <div class="tx-maps2" xmlns:f="http://www.w3.org/1999/html">
-    <f:if condition="{settings.mapProvider} == 'gm'">
-        <f:then>
-            <f:comment><!-- async has to be activated. Else "initMap" could not be found --></f:comment>
-            <f:comment><!-- What a dump solution to add the nonce attribute to all dynamically generated style tags by Google Maps API --></f:comment>
-            <f:asset.css identifier="maps2-google-maps" useNonce="1" priority="1">;</f:asset.css>
-            <f:asset.script identifier="maps2-google-maps-api"
-                            src="https://maps.googleapis.com/maps/api/js?key={environment.settings.googleMapsJavaScriptApiKey}&libraries=places&callback=initMap"
-                            async="1"
-                            inline="0"
-                            useNonce="1"/>
-            <f:asset.script identifier="maps2-google-maps"
-                            src="EXT:maps2/Resources/Public/JavaScript/GoogleMaps2.min.js"
-                            async="1"
-                            inline="0"
-                            useNonce="1"/>
-        </f:then>
-        <f:else>
-            <f:comment><!-- Do not activate async. Else "L" is not defined --></f:comment>
-            <f:asset.css identifier="maps2-osm"
-                         href="EXT:maps2/Resources/Public/Css/Leaflet/Leaflet.css"
-                         inline="0"
-                         useNonce="1"/>
-            <f:asset.script identifier="maps2-osm-leaflet"
-                            src="EXT:maps2/Resources/Public/JavaScript/leaflet.min.js"
-                            async="0"
-                            inline="0"
-                            useNonce="1"/>
-            <f:asset.script identifier="maps2-osm"
-                            src="EXT:maps2/Resources/Public/JavaScript/OpenStreetMap2.min.js"
-                            async="0"
-                            inline="0"
-                            useNonce="1"/>
-        </f:else>
-    </f:if>
+    <f:render partial="LoadAssets"/>
     <f:render section="main"/>
 </div>
+</html>
