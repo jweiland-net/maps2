@@ -7,6 +7,11 @@
 ChangeLog
 =========
 
+Version 12.0.6
+==============
+
+*   Load assets for embedded map in Maps2/PoiCollection partial
+
 Version 12.0.5
 ==============
 
