@@ -10,7 +10,7 @@
 $EM_CONF[$_EXTKEY] = [
     'title' => 'Maps2',
     'description' => 'Create maps with Marker, Area, Routes or Radius based on Google Maps or OpenStreetMap',
-    'version' => '12.0.6',
+    'version' => '12.0.7',
     'category' => 'plugin',
     'state' => 'stable',
     'author' => 'Stefan Froemken',

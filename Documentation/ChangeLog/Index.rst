@@ -11,6 +11,7 @@ Version 12.0.7
 ==============
 
 *   Add ajaxUrl to embed environment
+*   Activate deep merge for GM JS lib
 
 Version 12.0.6
 ==============
