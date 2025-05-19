@@ -7,6 +7,11 @@
 ChangeLog
 =========
 
+Version 12.0.8
+==============
+
+*   Add pages and recursive back to tt_content types
+
 Version 12.0.7
 ==============
 
