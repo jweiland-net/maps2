@@ -44,7 +44,7 @@ ExtensionUtility::registerPlugin(
 
 ExtensionManagementUtility::addToAllTCAtypes(
     'tt_content',
-    '--div--;Configuration,pi_flexform',
+    '--div--;Configuration,pi_flexform,pages;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:pages.ALT.list_formlabel,recursive',
     'maps2_maps2',
     'after:subheader',
 );
@@ -56,7 +56,7 @@ ExtensionManagementUtility::addPiFlexFormValue(
 
 ExtensionManagementUtility::addToAllTCAtypes(
     'tt_content',
-    '--div--;Configuration,pi_flexform',
+    '--div--;Configuration,pi_flexform,pages;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:pages.ALT.list_formlabel,recursive',
     'maps2_searchwithinradius',
     'after:subheader',
 );
@@ -68,7 +68,7 @@ ExtensionManagementUtility::addPiFlexFormValue(
 
 ExtensionManagementUtility::addToAllTCAtypes(
     'tt_content',
-    '--div--;Configuration,pi_flexform',
+    '--div--;Configuration,pi_flexform,pages;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:pages.ALT.list_formlabel,recursive',
     'maps2_citymap',
     'after:subheader',
 );
