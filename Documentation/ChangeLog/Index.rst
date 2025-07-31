@@ -7,6 +7,11 @@
 ChangeLog
 =========
 
+Version 12.0.9
+==============
+
+*   Update testing directory
+
 Version 12.0.8
 ==============
 
