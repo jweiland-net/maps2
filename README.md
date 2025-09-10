@@ -19,6 +19,12 @@ for easy and recurring assignment.
 | Read online: | https://docs.typo3.org/p/jweiland/maps2/main/en-us/ |
 | TER:         | https://extensions.typo3.org/extension/maps2        |
 
+## Support
+
+Free Support is available via [GitHub Issue Tracker](https://github.com/jweiland-net/maps2/issues).
+
+For commercial support, please contact us at [support@jweiland.net](support@jweiland.net).
+
 [extension-build-shield]: https://poser.pugx.org/jweiland/maps2/v/stable.svg?style=for-the-badge
 
 [extension-ci-shield]: https://github.com/jweiland-net/maps2/actions/workflows/ci.yml/badge.svg
