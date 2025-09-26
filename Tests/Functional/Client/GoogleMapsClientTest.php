@@ -30,18 +30,19 @@ class GoogleMapsClientTest extends FunctionalTestCase
 
     protected ExtConf $extConf;
 
-    /**
-     * @var MessageHelper|MockObject
-     */
-    protected $messageHelperMock;
+    protected MessageHelper|MockObject $messageHelperMock;
 
-    /**
-     * @var RequestFactory|MockObject
-     */
-    protected $requestFactoryMock;
+    protected RequestFactory|MockObject $requestFactoryMock;
+
+    protected array $coreExtensionsToLoad = [
+        'extensionmanager',
+        'reactions',
+    ];
 
     protected array $testExtensionsToLoad = [
+        'sjbr/static-info-tables',
         'jweiland/maps2',
+        'jweiland/events2',
     ];
 
     protected function setUp(): void
