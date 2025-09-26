@@ -161,7 +161,7 @@ class InfoWindowContentServiceTest extends FunctionalTestCase
             'maps2',
             1,
             [],
-            new SiteSettings(new Settings([]), [], [])
+            new SiteSettings(new Settings([]), [], []),
         );
 
         $request = new ServerRequest('https://www.example.com/', 'GET');
@@ -207,7 +207,7 @@ class InfoWindowContentServiceTest extends FunctionalTestCase
                 ]),
                 [],
                 [],
-            )
+            ),
         );
 
         $request = new ServerRequest('https://www.example.com/', 'GET');
@@ -242,13 +242,13 @@ class InfoWindowContentServiceTest extends FunctionalTestCase
                 'tx_maps2.' => [
                     'view.' => [
                         'layoutRootPaths.' => [
-                            '0' => 'EXT:maps2/Resources/Private/Layouts/'
+                            '0' => 'EXT:maps2/Resources/Private/Layouts/',
                         ],
                         'partialRootPaths.' => [
-                            '0' => 'EXT:maps2/Resources/Private/Partials/'
+                            '0' => 'EXT:maps2/Resources/Private/Partials/',
                         ],
                         'templateRootPaths.' => [
-                            '0' => 'EXT:maps2/Resources/Private/Templates/'
+                            '0' => 'EXT:maps2/Resources/Private/Templates/',
                         ],
                     ],
                     'settings.' => [
@@ -285,7 +285,7 @@ class InfoWindowContentServiceTest extends FunctionalTestCase
                 ]),
                 [],
                 [],
-            )
+            ),
         );
 
         $request = new ServerRequest('https://www.example.com/', 'GET');
