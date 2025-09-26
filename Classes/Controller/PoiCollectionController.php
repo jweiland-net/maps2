@@ -115,7 +115,7 @@ class PoiCollectionController extends ActionController
         return $this->htmlResponse();
     }
 
-    public function searchAction(Search $search = null): ResponseInterface
+    public function searchAction(?Search $search = null): ResponseInterface
     {
         $search ??= GeneralUtility::makeInstance(Search::class);
 
