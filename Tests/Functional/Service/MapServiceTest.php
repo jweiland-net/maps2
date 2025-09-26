@@ -37,46 +37,29 @@ class MapServiceTest extends FunctionalTestCase
 {
     protected MapService $subject;
 
-    /**
-     * @var ConfigurationManagerInterface|MockObject
-     */
-    protected $configurationManagerMock;
+    protected ConfigurationManagerInterface|MockObject $configurationManagerMock;
 
-    /**
-     * @var MessageHelper|MockObject
-     */
-    protected $messageHelperMock;
+    protected MessageHelper|MockObject $messageHelperMock;
 
-    /**
-     * @var Maps2Registry|MockObject
-     */
-    protected $maps2RegistryMock;
+    protected Maps2Registry|MockObject $maps2RegistryMock;
 
-    /**
-     * @var ExtConf|MockObject
-     */
-    protected $extConfMock;
+    protected ExtConf $extConf;
 
-    /**
-     * @var EventDispatcherInterface|MockObject
-     */
-    protected $eventDispatcherMock;
+    protected EventDispatcherInterface|MockObject $eventDispatcherMock;
 
-    /**
-     * @var ViewFactoryInterface|MockObject
-     */
-    protected $viewFactoryMock;
+    protected array $coreExtensionsToLoad = [
+        'extensionmanager',
+        'reactions',
+    ];
 
     protected array $testExtensionsToLoad = [
-        'jweiland/events2',
+        'sjbr/static-info-tables',
         'jweiland/maps2',
+        'jweiland/events2',
     ];
 
     protected function setUp(): void
     {
-        // @todo : Remove this once events2 is fixed
-        self::markTestSkipped('Required test extensions are not available.');
-
         parent::setUp();
 
         $this->importCSVDataSet(__DIR__ . '/../Fixtures/tx_events2_domain_model_location.csv');
@@ -87,21 +70,19 @@ class MapServiceTest extends FunctionalTestCase
         $this->messageHelperMock = $this->createMock(MessageHelper::class);
         $this->maps2RegistryMock = $this->createMock(Maps2Registry::class);
         $this->eventDispatcherMock = $this->createMock(EventDispatcher::class);
-        $this->viewFactoryMock = $this->createMock(ViewFactoryInterface::class);
 
         // Override partials path to prevent using f:format.html VH. It checks against applicationType which is not present in TYPO3 10.
         $this->configurationManagerMock = $this->createMock(ConfigurationManager::class);
 
         // Replace default template to prevent calling cache VHs. They check against FE
-        $this->extConfMock = $this->createMock(ExtConf::class);
+        $this->extConf = new ExtConf();
 
         $this->subject = new MapService(
             $this->configurationManagerMock,
             $this->messageHelperMock,
             $this->maps2RegistryMock,
-            $this->extConfMock,
+            $this->extConf,
             $this->eventDispatcherMock,
-            $this->viewFactoryMock,
         );
     }
 
@@ -112,197 +93,11 @@ class MapServiceTest extends FunctionalTestCase
             $this->configurationManagerMock,
             $this->messageHelperMock,
             $this->maps2RegistryMock,
-            $this->extConfMock,
+            $this->extConf,
             $this->eventDispatcherMock,
         );
 
         parent::tearDown();
-    }
-
-    #[Test]
-    public function renderInfoWindowWillLoadTemplatePathFromTypoScript(): void
-    {
-        $this->configurationManagerMock
-            ->expects(self::atLeastOnce())
-            ->method('getConfiguration')
-            ->willReturnMap([
-                [
-                    ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,
-                    'Maps2',
-                    'Maps2',
-                    [
-                        'view' => [
-                            'layoutRootPaths' => [],
-                            'partialRootPaths' => [
-                                'EXT:maps2/Tests/Functional/Fixtures/Partials',
-                            ],
-                        ],
-                    ],
-                ],
-                [
-                    ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
-                    'Maps2',
-                    'Maps2',
-                    [
-                        'infoWindowContentTemplatePath' => 'EXT:maps2/Resources/Private/Templates/InfoWindowContentNoCache.html',
-                    ],
-                ],
-            ]);
-
-        $this->extConfMock
-            ->expects(self::never())
-            ->method('getInfoWindowContentTemplatePath');
-
-        $poiCollection = new PoiCollection();
-        $poiCollection->setTitle('Test 123');
-
-        self::assertStringContainsString(
-            'Test 123',
-            $this->subject->renderInfoWindow($poiCollection),
-        );
-    }
-
-    #[Test]
-    public function renderInfoWindowWillRenderPoiCollectionTitle(): void
-    {
-        $this->configurationManagerMock
-            ->expects(self::atLeastOnce())
-            ->method('getConfiguration')
-            ->willReturnMap([
-                [
-                    ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,
-                    'Maps2',
-                    'Maps2',
-                    [
-                        'view' => [
-                            'layoutRootPaths' => [],
-                            'partialRootPaths' => [
-                                'EXT:maps2/Tests/Functional/Fixtures/Partials',
-                            ],
-                        ],
-                    ],
-                ],
-                [
-                    ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
-                    'Maps2',
-                    'Maps2',
-                    [],
-                ],
-            ]);
-
-        $this->extConfMock
-            ->expects(self::atLeastOnce())
-            ->method('getInfoWindowContentTemplatePath')
-            ->willReturn('EXT:maps2/Resources/Private/Templates/InfoWindowContentNoCache.html');
-
-        $poiCollection = new PoiCollection();
-        $poiCollection->setTitle('Test 123');
-
-        self::assertStringContainsString(
-            'Test 123',
-            $this->subject->renderInfoWindow($poiCollection),
-        );
-    }
-
-    #[Test]
-    public function renderInfoWindowWillRenderPoiCollectionAddress(): void
-    {
-        $this->configurationManagerMock
-            ->expects(self::atLeastOnce())
-            ->method('getConfiguration')
-            ->willReturnMap([
-                [
-                    ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,
-                    'Maps2',
-                    'Maps2',
-                    [
-                        'view' => [
-                            'layoutRootPaths' => [],
-                            'partialRootPaths' => [
-                                'EXT:maps2/Tests/Functional/Fixtures/Partials',
-                            ],
-                        ],
-                    ],
-                ],
-                [
-                    ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
-                    'Maps2',
-                    'Maps2',
-                    [],
-                ],
-            ]);
-
-        $this->extConfMock
-            ->expects(self::atLeastOnce())
-            ->method('getInfoWindowContentTemplatePath')
-            ->willReturn('EXT:maps2/Resources/Private/Templates/InfoWindowContentNoCache.html');
-
-        $poiCollection = new PoiCollection();
-        $poiCollection->setTitle('jweiland.net');
-        $poiCollection->setAddress('Echterdinger Straße 57, Gebäude 9, 70794 Filderstadt, Germany');
-
-        $renderedContent = $this->subject->renderInfoWindow($poiCollection);
-
-        self::assertStringContainsString(
-            'Echterdinger Straße 57',
-            $renderedContent,
-        );
-        self::assertStringContainsString(
-            'Gebäude 9',
-            $renderedContent,
-        );
-        self::assertStringContainsString(
-            '70794 Filderstadt',
-            $renderedContent,
-        );
-
-        self::assertStringNotContainsString(
-            'Germany',
-            $renderedContent,
-        );
-    }
-
-    #[Test]
-    public function renderInfoWindowWillRenderPoiCollectionInfoWindowContent(): void
-    {
-        $this->configurationManagerMock
-            ->expects(self::atLeastOnce())
-            ->method('getConfiguration')
-            ->willReturnMap([
-                [
-                    ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,
-                    'Maps2',
-                    'Maps2',
-                    [
-                        'view' => [
-                            'layoutRootPaths' => [],
-                            'partialRootPaths' => [
-                                'EXT:maps2/Tests/Functional/Fixtures/Partials',
-                            ],
-                        ],
-                    ],
-                ],
-                [
-                    ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
-                    'Maps2',
-                    'Maps2',
-                    [],
-                ],
-            ]);
-
-        $this->extConfMock
-            ->expects(self::atLeastOnce())
-            ->method('getInfoWindowContentTemplatePath')
-            ->willReturn('EXT:maps2/Resources/Private/Templates/InfoWindowContentNoCache.html');
-
-        $poiCollection = new PoiCollection();
-        $poiCollection->setTitle('Test 123');
-        $poiCollection->setInfoWindowContent('Hello all together');
-
-        self::assertStringContainsString(
-            'Hello all together',
-            $this->subject->renderInfoWindow($poiCollection),
-        );
     }
 
     #[Test]

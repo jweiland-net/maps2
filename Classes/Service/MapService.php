@@ -26,7 +26,6 @@ use TYPO3\CMS\Core\Database\Query\Restriction\FrontendRestrictionContainer;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\View\ViewFactoryInterface;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 
 /**
@@ -40,7 +39,6 @@ class MapService
         protected Maps2Registry $maps2Registry,
         protected ExtConf $extConf,
         protected EventDispatcherInterface $eventDispatcher,
-        protected ViewFactoryInterface $viewFactory,
     ) {}
 
     protected function getColumnRegistry(): array

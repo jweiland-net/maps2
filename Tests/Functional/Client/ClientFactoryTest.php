@@ -28,8 +28,15 @@ class ClientFactoryTest extends FunctionalTestCase
 
     protected ExtConf $extConf;
 
+    protected array $coreExtensionsToLoad = [
+        'extensionmanager',
+        'reactions',
+    ];
+
     protected array $testExtensionsToLoad = [
+        'sjbr/static-info-tables',
         'jweiland/maps2',
+        'jweiland/events2',
     ];
 
     protected function setUp(): void

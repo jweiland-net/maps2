@@ -31,6 +31,7 @@ use TYPO3\CMS\Core\Cache\Frontend\VariableFrontend;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\View\ViewFactoryInterface;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
@@ -41,27 +42,15 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
 {
     protected CreateMaps2RecordHook $subject;
 
-    /**
-     * @var GeoCodeService|MockObject
-     */
-    protected $geoCodeServiceMock;
+    protected GeoCodeService|MockObject $geoCodeServiceMock;
 
-    /**
-     * @var MessageHelper|MockObject
-     */
-    protected $messageHelperMock;
+    protected MessageHelper|MockObject $messageHelperMock;
 
-    /**
-     * @var Maps2Registry|MockObject
-     */
-    protected $maps2RegistryMock;
+    protected Maps2Registry|MockObject $maps2RegistryMock;
+
+    protected EventDispatcherInterface|MockObject $eventDispatcherMock;
 
     protected bool $creationAllowed = true;
-
-    /**
-     * @var EventDispatcherInterface|MockObject
-     */
-    protected $eventDispatcherMock;
 
     protected array $columnRegistry = [
         'tx_events2_domain_model_location' => [
@@ -86,16 +75,19 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
         ],
     ];
 
+    protected array $coreExtensionsToLoad = [
+        'extensionmanager',
+        'reactions',
+    ];
+
     protected array $testExtensionsToLoad = [
         'sjbr/static-info-tables',
-        'jweiland/events2',
         'jweiland/maps2',
+        'jweiland/events2',
     ];
 
     protected function setUp(): void
     {
-        parent::markTestIncomplete('Tests requires jweiland/events which is not TYPO3 13 compatible right now');
-
         parent::setUp();
 
         $this->importCSVDataSet(__DIR__ . '/../Fixtures/be_users.csv');
@@ -136,6 +128,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
                 $this->maps2RegistryMock,
                 GeneralUtility::makeInstance(ExtConf::class),
                 GeneralUtility::makeInstance(EventDispatcher::class),
+                GeneralUtility::makeInstance(ViewFactoryInterface::class),
             ),
             $this->maps2RegistryMock,
             $this->eventDispatcherMock,
@@ -186,7 +179,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
             ->method('dispatch');
 
         $this->subject->processDatamap_afterAllOperations(
-            new DataHandler(),
+            GeneralUtility::makeInstance(DataHandler::class),
         );
     }
 
@@ -213,7 +206,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
             ]);
         GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerMock);
 
-        $dataHandler = new DataHandler();
+        $dataHandler = GeneralUtility::makeInstance(DataHandler::class);
         $dataHandler->datamap = [
             'tx_maps2_domain_model_poicollection' => [
                 '123' => [
@@ -233,7 +226,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
     {
         $this->creationAllowed = false;
 
-        $dataHandler = new DataHandler();
+        $dataHandler = GeneralUtility::makeInstance(DataHandler::class);
         $dataHandler->datamap = [
             'tx_events2_domain_model_location' => [
                 '1' => [
@@ -263,7 +256,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
             ->method('getColumnRegistry')
             ->willReturn($columnRegistry);
 
-        $dataHandler = new DataHandler();
+        $dataHandler = GeneralUtility::makeInstance(DataHandler::class);
         $dataHandler->datamap = [
             'tx_events2_domain_model_location' => [
                 '1' => [
@@ -319,7 +312,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
             ->method('getColumnRegistry')
             ->willReturn($columnRegistry);
 
-        $dataHandler = new DataHandler();
+        $dataHandler = GeneralUtility::makeInstance(DataHandler::class);
         $dataHandler->datamap = [
             'tx_events2_domain_model_location' => [
                 '1' => [
@@ -339,7 +332,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
     #[Test]
     public function processDatamapCreatesNewPoiCollection(): void
     {
-        $dataHandler = new DataHandler();
+        $dataHandler = GeneralUtility::makeInstance(DataHandler::class);
         $dataHandler->datamap = [
             'tx_events2_domain_model_location' => [
                 '1' => [

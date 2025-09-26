@@ -33,25 +33,23 @@ class GoogleMapsElementTest extends FunctionalTestCase
 
     protected ExtConf $extConf;
 
-    /**
-     * @var PageRenderer|MockObject
-     */
-    protected $pageRendererMock;
+    protected PageRenderer|MockObject $pageRendererMock;
 
-    /**
-     * @var MapHelper|MockObject
-     */
-    protected $mapHelperMock;
+    protected MapHelper|MockObject $mapHelperMock;
 
-    /**
-     * @var StandaloneView|MockObject
-     */
-    protected $viewMock;
+    protected StandaloneView|MockObject $viewMock;
 
     protected NodeFactory $nodeFactoryMock;
 
+    protected array $coreExtensionsToLoad = [
+        'extensionmanager',
+        'reactions',
+    ];
+
     protected array $testExtensionsToLoad = [
+        'sjbr/static-info-tables',
         'jweiland/maps2',
+        'jweiland/events2',
     ];
 
     protected function setUp(): void
