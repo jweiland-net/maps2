@@ -28,7 +28,15 @@ class AddressHelperTest extends FunctionalTestCase
 {
     protected AddressHelper $subject;
 
-    protected MessageHelper|MockObject $messageHelperMock;
+    /**
+     * @var MessageHelper|MockObject
+     */
+    protected $messageHelperMock;
+
+    /**
+     * @var ExtConf
+     */
+    protected $extConf;
 
     protected array $coreExtensionsToLoad = [
         'extensionmanager',
@@ -46,10 +54,11 @@ class AddressHelperTest extends FunctionalTestCase
         parent::setUp();
 
         $this->messageHelperMock = $this->createMock(MessageHelper::class);
+        $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
 
         $this->subject = new AddressHelper(
             $this->messageHelperMock,
-            GeneralUtility::makeInstance(ExtConf::class),
+            $this->extConf,
         );
     }
 
@@ -58,6 +67,7 @@ class AddressHelperTest extends FunctionalTestCase
         unset(
             $this->subject,
             $this->messageHelperMock,
+            $this->extConf,
         );
 
         parent::tearDown();
@@ -176,6 +186,8 @@ class AddressHelperTest extends FunctionalTestCase
                 ContextualFeedbackSeverity::WARNING,
             );
 
+        $this->extConf->setDefaultCountry('Germany');
+
         $record = [
             'uid' => 100,
             'title' => 'Market',
@@ -188,18 +200,9 @@ class AddressHelperTest extends FunctionalTestCase
             'countryColumn' => 'country',
         ];
 
-        $config = [
-            'defaultCountry' => 'Germany',
-        ];
-
-        $subject = new AddressHelper(
-            $this->messageHelperMock,
-            new ExtConf(...$config),
-        );
-
         self::assertSame(
             'Mainstreet 17 23145 Munich Germany',
-            $subject->getAddress($record, $options),
+            $this->subject->getAddress($record, $options),
         );
     }
 
