@@ -19,13 +19,13 @@ use TYPO3\CMS\Core\Http\ServerRequestFactory;
  */
 trait GetTypo3RequestTrait
 {
+    /**
+     * This method returns the TYPO3_REQUEST from globals if available,
+     * otherwise falls back to creating a minimized ServerRequest from global variables
+     * containing only server variables like GET, POST, and COOKIE data.
+     */
     private function getTypo3Request(): ServerRequestInterface
     {
-        if ($GLOBALS['TYPO3_REQUEST'] instanceof ServerRequestInterface) {
-            return $GLOBALS['TYPO3_REQUEST'];
-        }
-
-        // Build up a minified version with just the server variables like GET, POST, COOKIE
-        return ServerRequestFactory::fromGlobals();
+        return $GLOBALS['TYPO3_REQUEST'] ?? ServerRequestFactory::fromGlobals();
     }
 }
