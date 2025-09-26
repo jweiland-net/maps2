@@ -7,6 +7,11 @@
 ChangeLog
 =========
 
+Version 11.0.8
+==============
+
+*   Check for TYPO3_REQUEST, before accessing it
+
 Version 11.0.7
 ==============
 
