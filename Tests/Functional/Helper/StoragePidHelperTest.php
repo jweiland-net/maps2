@@ -31,20 +31,21 @@ class StoragePidHelperTest extends FunctionalTestCase
 {
     protected StoragePidHelper $subject;
 
-    /**
-     * @var MessageHelper|MockObject
-     */
-    protected $messageHelperMock;
+    protected MessageHelper|MockObject $messageHelperMock;
+
+    protected array $coreExtensionsToLoad = [
+        'extensionmanager',
+        'reactions',
+    ];
 
     protected array $testExtensionsToLoad = [
+        'sjbr/static-info-tables',
         'jweiland/maps2',
         'jweiland/events2',
     ];
 
     protected function setUp(): void
     {
-        parent::markTestIncomplete('Tests requires jweiland/events which is not TYPO3 13 compatible right now');
-
         parent::setUp();
 
         $this->messageHelperMock = $this->createMock(MessageHelper::class);

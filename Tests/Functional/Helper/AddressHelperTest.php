@@ -30,34 +30,28 @@ class AddressHelperTest extends FunctionalTestCase
 {
     protected AddressHelper $subject;
 
-    /**
-     * @var MessageHelper|MockObject
-     */
-    protected $messageHelperMock;
+    protected MessageHelper|MockObject $messageHelperMock;
 
-    /**
-     * @var ExtConf
-     */
-    protected $extConf;
+    protected array $coreExtensionsToLoad = [
+        'extensionmanager',
+        'reactions',
+    ];
 
     protected array $testExtensionsToLoad = [
         'sjbr/static-info-tables',
         'jweiland/maps2',
+        'jweiland/events2',
     ];
 
     protected function setUp(): void
     {
-        // @todo : Remove this once events2 is fixed
-        self::markTestSkipped('Required test extensions are not available.');
-
         parent::setUp();
 
         $this->messageHelperMock = $this->createMock(MessageHelper::class);
-        $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
 
         $this->subject = new AddressHelper(
             $this->messageHelperMock,
-            $this->extConf,
+            GeneralUtility::makeInstance(ExtConf::class),
         );
     }
 
@@ -66,7 +60,6 @@ class AddressHelperTest extends FunctionalTestCase
         unset(
             $this->subject,
             $this->messageHelperMock,
-            $this->extConf,
         );
 
         parent::tearDown();
@@ -177,8 +170,6 @@ class AddressHelperTest extends FunctionalTestCase
                 ContextualFeedbackSeverity::WARNING,
             );
 
-        $this->extConf->setDefaultCountry('Germany');
-
         $record = [
             'uid' => 100,
             'title' => 'Market',
@@ -191,9 +182,18 @@ class AddressHelperTest extends FunctionalTestCase
             'countryColumn' => 'country',
         ];
 
+        $config = [
+            'defaultCountry' => 'Germany',
+        ];
+
+        $subject = new AddressHelper(
+            $this->messageHelperMock,
+            new ExtConf(...$config),
+        );
+
         self::assertSame(
             'Mainstreet 17 23145 Munich Germany',
-            $this->subject->getAddress($record, $options),
+            $subject->getAddress($record, $options),
         );
     }
 

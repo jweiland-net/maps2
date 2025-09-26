@@ -24,8 +24,15 @@ class ExtConfTest extends FunctionalTestCase
 {
     public ExtensionConfiguration|MockObject $extensionConfigurationMock;
 
+    protected array $coreExtensionsToLoad = [
+        'extensionmanager',
+        'reactions',
+    ];
+
     protected array $testExtensionsToLoad = [
+        'sjbr/static-info-tables',
         'jweiland/maps2',
+        'jweiland/events2',
     ];
 
     protected function setUp(): void

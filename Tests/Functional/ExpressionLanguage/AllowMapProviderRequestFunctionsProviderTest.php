@@ -23,15 +23,19 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
  */
 class AllowMapProviderRequestFunctionsProviderTest extends FunctionalTestCase
 {
-    /**
-     * @var MapHelper|MockObject
-     */
-    protected $mapHelperMock;
+    protected MapHelper|MockObject $mapHelperMock;
 
     protected AllowMapProviderRequestFunctionsProvider $subject;
 
+    protected array $coreExtensionsToLoad = [
+        'extensionmanager',
+        'reactions',
+    ];
+
     protected array $testExtensionsToLoad = [
+        'sjbr/static-info-tables',
         'jweiland/maps2',
+        'jweiland/events2',
     ];
 
     protected function setUp(): void

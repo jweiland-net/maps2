@@ -15,7 +15,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
- * Define a delimiter and your comma separated value will be exploded into trimmed parts
+ * Define a delimiter and your comma-separated value will be exploded into trimmed parts
  */
 class TrimExplodeViewHelper extends AbstractViewHelper
 {
@@ -31,12 +31,20 @@ class TrimExplodeViewHelper extends AbstractViewHelper
     }
 
     /**
-     * Implements a ViewHelper to trim explode comma separated strings
+     * Implements a ViewHelper to trim explode comma-separated strings
      *
      * @return string[]
      */
     public function render(): array
     {
-        return GeneralUtility::trimExplode($this->arguments['delimiter'], $this->renderChildren());
+        $content = $this->renderChildren();
+        if (!is_string($content)) {
+            return [];
+        }
+
+        return GeneralUtility::trimExplode(
+            $this->arguments['delimiter'],
+            $content,
+        );
     }
 }
