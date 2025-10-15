@@ -13,7 +13,6 @@ namespace JWeiland\Maps2\Traits;
 
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Http\ServerRequest;
-use TYPO3\CMS\Core\Http\ServerRequestFactory;
 
 /**
  * Trait to get current TYPO3 request where not available by API
