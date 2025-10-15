@@ -7,6 +7,11 @@
 ChangeLog
 =========
 
+Version 12.0.11
+===============
+
+*   Create fake TYPO3_REQUEST in CLI mode
+
 Version 12.0.10
 ===============
 

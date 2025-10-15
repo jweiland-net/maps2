@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Traits;
 
 use Psr\Http\Message\ServerRequestInterface;
-use TYPO3\CMS\Core\Http\ServerRequestFactory;
+use TYPO3\CMS\Core\Http\ServerRequest;
 
 /**
  * Trait to get current TYPO3 request where not available by API
@@ -26,6 +26,10 @@ trait GetTypo3RequestTrait
      */
     private function getTypo3Request(): ServerRequestInterface
     {
-        return $GLOBALS['TYPO3_REQUEST'] ?? ServerRequestFactory::fromGlobals();
+        if (isset($GLOBALS['TYPO3_REQUEST'])) {
+            return $GLOBALS['TYPO3_REQUEST'];
+        }
+
+        return new ServerRequest('https://jweiland.net', 'GET');
     }
 }
