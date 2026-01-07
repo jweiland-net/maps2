@@ -32,7 +32,7 @@ class MigratePluginToContentElementUpdate extends AbstractListTypeToCTypeUpdate
 
     public function getTitle(): string
     {
-        return 'Migrate plugins to Content Elements';
+        return '[maps2] Migrate plugins to Content Elements';
     }
 
     public function getDescription(): string

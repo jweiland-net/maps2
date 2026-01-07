@@ -7,6 +7,12 @@
 ChangeLog
 =========
 
+Version 12.0.12
+===============
+
+*   Updated wizard title with [extension] name format
+*   Updated wizard identifier prefix
+
 Version 12.0.11
 ===============
 
