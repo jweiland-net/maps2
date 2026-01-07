@@ -29,7 +29,7 @@ use TYPO3\CMS\Install\Updates\UpgradeWizardInterface;
  * With maps2 10.0.0 we have renamed sDEFAULT of CityMap and SearchWithinRadius to sDEF.
  * To prevent duplicates in DB, this update wizard removes old settings from FlexForm.
  */
-#[UpgradeWizard('maps2MoveFlexFormFields')]
+#[UpgradeWizard('maps2_moveFlexFormFields')]
 class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
 {
     public function getTitle(): string

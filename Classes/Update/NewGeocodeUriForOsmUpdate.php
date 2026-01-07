@@ -23,7 +23,7 @@ use TYPO3\CMS\Install\Updates\UpgradeWizardInterface;
  * Somewhere in october 2023 OSM has deprecated/removed the use of addresses as path segment in Geocode URI.
  * This UpgradeWizard migrates extension settings to new URI where address is a query parameter now.
  */
-#[UpgradeWizard('maps2NewOsmGeocodeUriExtConf')]
+#[UpgradeWizard('maps2_newOsmGeocodeUriExtConf')]
 class NewGeocodeUriForOsmUpdate implements UpgradeWizardInterface
 {
     private string $oldOsmGeocodeUri = 'https://nominatim.openstreetmap.org/search/%s?format=json&addressdetails=1';

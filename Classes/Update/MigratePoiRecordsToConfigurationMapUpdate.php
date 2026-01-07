@@ -26,7 +26,7 @@ use TYPO3\CMS\Install\Updates\UpgradeWizardInterface;
  * With maps2 10.0.0 we have removed the poi table.
  * Use this Upgrade Wizard to migrate all poi records as JSON into the configuration_map column of poicollection record
  */
-#[UpgradeWizard('maps2MigratePoiRecord')]
+#[UpgradeWizard('maps2_migratePoiRecord')]
 class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterface, ConfirmableInterface
 {
     public function getTitle(): string
