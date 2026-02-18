@@ -7,6 +7,11 @@
 ChangeLog
 =========
 
+Version 12.1.0
+===============
+
+*   Fixed issue with extracting OpenStreetMap house number
+
 Version 12.0.12
 ===============
 
