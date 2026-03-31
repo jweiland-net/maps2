@@ -392,27 +392,45 @@ class OpenStreetMapModule {
     let formattedAddress = "";
     let city = "";
 
-    if (address.hasOwnProperty("road")) {
-      formattedAddress += address.road;
+    // 1. extract the street/road name with fallbacks for different OSM types
+    const road = address.road ||
+      address.pedestrian ||
+      address.footway ||
+      address.path ||
+      address.cycleway ||
+      address.street;
+
+    if (road) {
+      formattedAddress += road;
     }
-    if (address.hasOwnProperty("houseNumber")) {
-      formattedAddress += " " + address.houseNumber;
+
+    // 2. extract house number (handles both camelCase and snake_case from the API)
+    const houseNumber = address.house_number || address.houseNumber;
+    if (houseNumber) {
+      formattedAddress += " " + houseNumber;
     }
+
+    // 3. handle postcode
     if (address.hasOwnProperty("postcode")) {
       formattedAddress += ", " + address.postcode;
     }
 
+    // 4. extract city/locality
     if (address.hasOwnProperty("village")) {
       city = address.village;
     }
+
     if (address.hasOwnProperty("town")) {
       city = address.town;
     }
+
     if (address.hasOwnProperty("city")) {
       city = address.city;
     }
+
     formattedAddress += " " + city;
 
+    // 5. handle country
     if (address.hasOwnProperty("country")) {
       formattedAddress += ", " + address.country;
     }
