@@ -19,6 +19,24 @@ wizard in the Extension Manager before proceeding.
 
 *   Added Site Configuration Support
 *   No changes or investigations are needed for integrators.
+
+*   **TCA Change: Restricted Record Creation to Storage Folders**
+
+    With the removal of ``ext_tables.php`` and the migration to TYPO3 13
+    standards, the explicit permission to create POI records on standard pages
+    (formerly ``allowTableOnStandardPages``) has been removed.
+
+    Following TYPO3 Core recommendations, these records are now restricted to
+    folders (SysFolders) by default to ensure a clean separation between
+    content and data records. If you need to restore the previous behavior
+    (allowing records on any page type), you can manually enable this in your
+    SitePackage's TCA override:
+
+    ..  code-block:: php
+
+        $GLOBALS['TCA']['tx_maps2_domain_model_poicollection']['ctrl']['security']['ignorePageTypeRestriction'] = true;
+        $GLOBALS['TCA']['tx_maps2_domain_model_poi']['ctrl']['security']['ignorePageTypeRestriction'] = true;
+
 *   Changes in EventListeners
 
     *   For normal users, **nothing has changed**.
