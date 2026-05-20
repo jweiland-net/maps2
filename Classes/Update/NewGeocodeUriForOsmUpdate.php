@@ -37,8 +37,8 @@ class NewGeocodeUriForOsmUpdate implements UpgradeWizardInterface
 
     public function getDescription(): string
     {
-        return 'OpenStreetMap has changed its Geocoding URI. The address has to be set as additional query parameter' .
-            'now. Adding the address as path segment seems to be removed somewhere in October 2023.';
+        return 'OpenStreetMap has changed its Geocoding URI. The address has to be set as additional query parameter'
+            . 'now. Adding the address as path segment seems to be removed somewhere in October 2023.';
     }
 
     public function updateNecessary(): bool

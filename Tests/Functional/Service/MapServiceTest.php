@@ -170,7 +170,7 @@ class MapServiceTest extends FunctionalTestCase
     public function assignPoiCollectionToForeignRecordWithEmptyPoiCollectionUidAddsFlashMessage(): void
     {
         $this->messageHelperMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('addFlashMessage')
             ->with(
                 self::stringContains('PoiCollection UID can not be empty'),
@@ -193,7 +193,7 @@ class MapServiceTest extends FunctionalTestCase
     public function assignPoiCollectionToForeignRecordWithEmptyForeignRecordAddsFlashMessages(): void
     {
         $this->messageHelperMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('addFlashMessage')
             ->willReturnMap([
                 [
@@ -221,7 +221,7 @@ class MapServiceTest extends FunctionalTestCase
     public function assignPoiCollectionToForeignRecordWithEmptyForeignTableNameAddsFlashMessage(): void
     {
         $this->messageHelperMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('addFlashMessage')
             ->with(
                 self::stringContains('Foreign table name is a must have value'),
@@ -244,7 +244,7 @@ class MapServiceTest extends FunctionalTestCase
     public function assignPoiCollectionToForeignRecordWithEmptyForeignFieldNameAddsFlashMessage(): void
     {
         $this->messageHelperMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('addFlashMessage')
             ->with(
                 self::stringContains('Foreign field name is a must have value'),
@@ -268,7 +268,7 @@ class MapServiceTest extends FunctionalTestCase
     public function assignPoiCollectionToForeignRecordWithInvalidTableNameAddsFlashMessage(): void
     {
         $this->messageHelperMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('addFlashMessage')
             ->with(
                 self::stringContains('Table "invalidTable" is not configured in TCA'),
@@ -291,7 +291,7 @@ class MapServiceTest extends FunctionalTestCase
     public function assignPoiCollectionToForeignRecordWithInvalidFieldNameAddsFlashMessage(): void
     {
         $this->messageHelperMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('addFlashMessage')
             ->with(
                 self::stringContains('Field "invalidField" is not configured in TCA'),
@@ -325,7 +325,7 @@ class MapServiceTest extends FunctionalTestCase
         );
 
         $this->messageHelperMock
-            ->expects(self::never())
+            ->expects($this->never())
             ->method('addFlashMessage');
 
         $foreignRecord = [
@@ -357,14 +357,14 @@ class MapServiceTest extends FunctionalTestCase
     public function addForeignRecordsToPoiCollectionWithEmptyRegistryWillNotAddForeignRecords(): void
     {
         $this->maps2RegistryMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('getColumnRegistry')
             ->willReturn([]);
 
         /** @var PoiCollection|MockObject $poiCollectionMock */
         $poiCollectionMock = $this->createMock(PoiCollection::class);
         $poiCollectionMock
-            ->expects(self::never())
+            ->expects($this->never())
             ->method('addForeignRecord');
 
         $this->subject->addForeignRecordsToPoiCollection($poiCollectionMock);
@@ -373,18 +373,18 @@ class MapServiceTest extends FunctionalTestCase
     public function addForeignRecordsToPoiCollectionWithEmptyPoiCollectionUidWillNotAddForeignRecords(): void
     {
         $this->maps2RegistryMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('getColumnRegistry')
             ->willReturn(['foo' => 'bar']);
 
         /** @var PoiCollection|MockObject $poiCollectionMock */
         $poiCollectionMock = $this->createMock(PoiCollection::class);
         $poiCollectionMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('getUid')
             ->willReturn(0);
         $poiCollectionMock
-            ->expects(self::never())
+            ->expects($this->never())
             ->method('addForeignRecord');
 
         $this->subject->addForeignRecordsToPoiCollection($poiCollectionMock);
@@ -393,7 +393,7 @@ class MapServiceTest extends FunctionalTestCase
     public function addForeignRecordsToPoiCollectionWillAddForeignRecord(): void
     {
         $this->maps2RegistryMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('getColumnRegistry')
             ->willReturn([
                 'tx_events2_domain_model_location' => [
@@ -404,7 +404,7 @@ class MapServiceTest extends FunctionalTestCase
         /** @var PoiCollection|MockObject $poiCollectionMock */
         $poiCollectionMock = $this->createMock(PoiCollection::class);
         $poiCollectionMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('addForeignRecord');
 
         $position = new Position();
@@ -430,7 +430,7 @@ class MapServiceTest extends FunctionalTestCase
         );
 
         $this->eventDispatcherMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('dispatch')
             ->willReturn($event);
 

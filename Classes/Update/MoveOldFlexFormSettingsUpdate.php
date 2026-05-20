@@ -39,8 +39,8 @@ class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
 
     public function getDescription(): string
     {
-        return 'It seems that some fields from FlexForm of one Map Provider was available for all Map Providers now. ' .
-            'In that case we have to move these fields to another Sheet.';
+        return 'It seems that some fields from FlexForm of one Map Provider was available for all Map Providers now. '
+            . 'In that case we have to move these fields to another Sheet.';
     }
 
     public function updateNecessary(): bool

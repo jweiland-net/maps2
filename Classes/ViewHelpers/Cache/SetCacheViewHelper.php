@@ -20,15 +20,14 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
  */
 class SetCacheViewHelper extends AbstractViewHelper
 {
-    public function __construct(
-        private readonly CacheService $cacheService,
-        private readonly FrontendInterface $cache,
-    ) {}
-
     /**
      * The result of this ViewHelper should not be escaped
      */
     protected $escapeOutput = false;
+    public function __construct(
+        private readonly CacheService $cacheService,
+        private readonly FrontendInterface $cache,
+    ) {}
 
     public function initializeArguments(): void
     {

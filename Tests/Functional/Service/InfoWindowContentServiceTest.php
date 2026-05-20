@@ -102,7 +102,7 @@ class InfoWindowContentServiceTest extends FunctionalTestCase
         $request = $request->withAttribute('frontend.typoscript', $frontendTypoScript);
 
         $this->eventDispatcherMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('dispatch')
             ->willReturn(new RenderInfoWindowContentEvent($poiCollectionRecord, $request));
 
@@ -130,7 +130,7 @@ class InfoWindowContentServiceTest extends FunctionalTestCase
         $request = $request->withAttribute('frontend.typoscript', $frontendTypoScript);
 
         $this->eventDispatcherMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('dispatch')
             ->willReturn(new RenderInfoWindowContentEvent($poiCollectionRecord, $request));
 
@@ -170,7 +170,7 @@ class InfoWindowContentServiceTest extends FunctionalTestCase
         $request = $request->withAttribute('site', $site);
 
         $this->eventDispatcherMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('dispatch')
             ->willReturn(new RenderInfoWindowContentEvent($poiCollectionRecord, $request));
 
@@ -216,7 +216,7 @@ class InfoWindowContentServiceTest extends FunctionalTestCase
         $request = $request->withAttribute('site', $site);
 
         $this->eventDispatcherMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('dispatch')
             ->willReturn(new RenderInfoWindowContentEvent($poiCollectionRecord, $request));
 
@@ -296,7 +296,7 @@ class InfoWindowContentServiceTest extends FunctionalTestCase
         $GLOBALS['TYPO3_REQUEST'] = $request;
 
         $this->eventDispatcherMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('dispatch')
             ->willReturn(new RenderInfoWindowContentEvent($poiCollectionRecord, $request));
 

@@ -124,18 +124,18 @@ class CategoryTest extends FunctionalTestCase
     {
         $fileMock = $this->createMock(File::class);
         $fileMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('getUid')
             ->willReturn(123);
 
         /** @var \TYPO3\CMS\Core\Resource\FileReference|MockObject $coreFileReferenceMock */
         $coreFileReferenceMock = $this->createMock(\TYPO3\CMS\Core\Resource\FileReference::class);
         $coreFileReferenceMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('getOriginalFile')
             ->willReturn($fileMock);
         $coreFileReferenceMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('getPublicUrl')
             ->willReturn('ImagePath');
 

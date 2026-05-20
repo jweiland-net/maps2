@@ -79,7 +79,7 @@ class OpenStreetMapClientTest extends FunctionalTestCase
         $geocodeRequest->setUri('');
 
         $this->messageHelperMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('addFlashMessage')
             ->with(
                 'URI is empty or contains invalid chars. URI: ',
@@ -100,7 +100,7 @@ class OpenStreetMapClientTest extends FunctionalTestCase
         $geocodeRequest->setUri('https://www.jweiländ.net');
 
         $this->messageHelperMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('addFlashMessage')
             ->with(
                 'URI is empty or contains invalid chars. URI: https://www.jweiländ.net',

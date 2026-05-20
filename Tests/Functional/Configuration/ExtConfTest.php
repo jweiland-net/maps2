@@ -207,7 +207,7 @@ class ExtConfTest extends FunctionalTestCase
     public function setDefaultRadiusWithStringResultsInInteger(): void
     {
         $this->extensionConfigurationMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('get')
             ->with('maps2')
             ->willReturn([
@@ -226,7 +226,7 @@ class ExtConfTest extends FunctionalTestCase
     public function setDefaultRadiusWithBooleanResultsInInteger(): void
     {
         $this->extensionConfigurationMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('get')
             ->with('maps2')
             ->willReturn([
@@ -269,7 +269,7 @@ class ExtConfTest extends FunctionalTestCase
     public function setExplicitAllowMapProviderRequestsWithStringReturnsTrue(): void
     {
         $this->extensionConfigurationMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('get')
             ->with('maps2')
             ->willReturn([
@@ -287,7 +287,7 @@ class ExtConfTest extends FunctionalTestCase
     public function setExplicitAllowMapProviderRequestsWithZeroReturnsFalse(): void
     {
         $this->extensionConfigurationMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('get')
             ->with('maps2')
             ->willReturn([
@@ -329,7 +329,7 @@ class ExtConfTest extends FunctionalTestCase
     public function setExplicitAllowMapProviderRequestsBySessionOnlyWithStringReturnsTrue(): void
     {
         $this->extensionConfigurationMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('get')
             ->with('maps2')
             ->willReturn([
@@ -347,7 +347,7 @@ class ExtConfTest extends FunctionalTestCase
     public function setExplicitAllowMapProviderRequestsBySessionOnlyWithZeroReturnsFalse(): void
     {
         $this->extensionConfigurationMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('get')
             ->with('maps2')
             ->willReturn([
@@ -613,7 +613,7 @@ class ExtConfTest extends FunctionalTestCase
     public function setStrokeWeightWithStringResultsInInteger(): void
     {
         $this->extensionConfigurationMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('get')
             ->with('maps2')
             ->willReturn([
@@ -632,7 +632,7 @@ class ExtConfTest extends FunctionalTestCase
     public function setStrokeWeightWithBooleanResultsInInteger(): void
     {
         $this->extensionConfigurationMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('get')
             ->with('maps2')
             ->willReturn([
@@ -729,7 +729,7 @@ class ExtConfTest extends FunctionalTestCase
     public function setMarkerIconWidthWithStringResultsInInteger(): void
     {
         $this->extensionConfigurationMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('get')
             ->with('maps2')
             ->willReturn([
@@ -748,7 +748,7 @@ class ExtConfTest extends FunctionalTestCase
     public function setMarkerIconWidthWithBooleanResultsInInteger(): void
     {
         $this->extensionConfigurationMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('get')
             ->with('maps2')
             ->willReturn([
@@ -793,7 +793,7 @@ class ExtConfTest extends FunctionalTestCase
     public function setMarkerIconHeightWithStringResultsInInteger(): void
     {
         $this->extensionConfigurationMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('get')
             ->with('maps2')
             ->willReturn([
@@ -812,7 +812,7 @@ class ExtConfTest extends FunctionalTestCase
     public function setMarkerIconHeightWithBooleanResultsInInteger(): void
     {
         $this->extensionConfigurationMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('get')
             ->with('maps2')
             ->willReturn([
@@ -857,7 +857,7 @@ class ExtConfTest extends FunctionalTestCase
     public function setMarkerIconAnchorPosXWithStringResultsInInteger(): void
     {
         $this->extensionConfigurationMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('get')
             ->with('maps2')
             ->willReturn([
@@ -876,7 +876,7 @@ class ExtConfTest extends FunctionalTestCase
     public function setMarkerIconAnchorPosXWithBooleanResultsInInteger(): void
     {
         $this->extensionConfigurationMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('get')
             ->with('maps2')
             ->willReturn([
@@ -921,7 +921,7 @@ class ExtConfTest extends FunctionalTestCase
     public function setMarkerIconAnchorPosYWithStringResultsInInteger(): void
     {
         $this->extensionConfigurationMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('get')
             ->with('maps2')
             ->willReturn([
@@ -940,7 +940,7 @@ class ExtConfTest extends FunctionalTestCase
     public function setMarkerIconAnchorPosYWithBooleanResultsInInteger(): void
     {
         $this->extensionConfigurationMock
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('get')
             ->with('maps2')
             ->willReturn([

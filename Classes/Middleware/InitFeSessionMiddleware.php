@@ -78,7 +78,7 @@ class InitFeSessionMiddleware implements MiddlewareInterface
         // If COOKIE is activated, set expire to FE sessionDataLifetime which is 1 day by default
         $maxSessionLifetime = $GLOBALS['TYPO3_CONF_VARS']['FE']['sessionDataLifetime'] ?? 60 * 60 * 24;
         $expire = GeneralUtility::makeInstance(Context::class)
-                ->getPropertyFromAspect('date', 'timestamp') + $maxSessionLifetime;
+            ->getPropertyFromAspect('date', 'timestamp') + $maxSessionLifetime;
 
         // If session only is activated, $expire = 0 will delete our created COOKIE after closing the browser
         if ($this->extConf->getExplicitAllowMapProviderRequestsBySessionOnly()) {

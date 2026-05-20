@@ -36,17 +36,17 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
 
     public function getDescription(): string
     {
-        return 'We have simplified the POI handling a lot and removed table tx_maps2_domain_model_poi. ' .
-            'All POIs will now be stored in configuration_map of table tx_maps2_domain_model_poicollection as JSON.';
+        return 'We have simplified the POI handling a lot and removed table tx_maps2_domain_model_poi. '
+            . 'All POIs will now be stored in configuration_map of table tx_maps2_domain_model_poicollection as JSON.';
     }
 
     public function getConfirmation(): Confirmation
     {
         return new Confirmation(
             'Have you changed column "configuration_map" to be of type TEXT?',
-            'This UpgradeWizards needs column "configuration_map" of table "tx_maps2_domain_model_poicollection" ' .
-            'to be of type TEXT in database. Else it may happen that POIs will be stored as incomplete JSON string ' .
-            'in configuration_map column. Further table "tx_maps2_domain_model_poi" should not be deleted.',
+            'This UpgradeWizards needs column "configuration_map" of table "tx_maps2_domain_model_poicollection" '
+            . 'to be of type TEXT in database. Else it may happen that POIs will be stored as incomplete JSON string '
+            . 'in configuration_map column. Further table "tx_maps2_domain_model_poi" should not be deleted.',
             false,
         );
     }

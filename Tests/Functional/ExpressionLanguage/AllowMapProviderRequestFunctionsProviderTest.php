@@ -71,7 +71,7 @@ class AllowMapProviderRequestFunctionsProviderTest extends FunctionalTestCase
     public function getFunctionsWillReturnSpecificExpressionFunction(): void
     {
         $this->mapHelperMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('isRequestToMapProviderAllowed')
             ->willReturn(true);
 

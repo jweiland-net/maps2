@@ -111,7 +111,7 @@ class SettingsHelperTest extends FunctionalTestCase
     public function getMergedSettingsWillNotChangeAnySettings(): void
     {
         $this->configurationManagerMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('getConfiguration')
             ->willReturnMap([
                 [
@@ -142,7 +142,7 @@ class SettingsHelperTest extends FunctionalTestCase
             = 'EXT:maps2/Resources/Private/Templates/InfoWindowContent.html';
 
         $this->configurationManagerMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('getConfiguration')
             ->willReturnMap([
                 [
@@ -172,7 +172,7 @@ class SettingsHelperTest extends FunctionalTestCase
         $mergedSettings['fullscreenMapControl'] = '0';
 
         $this->configurationManagerMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('getConfiguration')
             ->willReturnMap([
                 [
@@ -202,7 +202,7 @@ class SettingsHelperTest extends FunctionalTestCase
         $mergedSettings['streetViewControl'] = '1';
 
         $this->configurationManagerMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('getConfiguration')
             ->willReturnMap([
                 [
