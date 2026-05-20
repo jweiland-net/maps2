@@ -39,6 +39,7 @@ class MapService
         protected Maps2Registry $maps2Registry,
         protected ExtConf $extConf,
         protected EventDispatcherInterface $eventDispatcher,
+        private readonly ConnectionPool $connectionPool,
     ) {}
 
     protected function getColumnRegistry(): array
@@ -200,7 +201,7 @@ class MapService
     public function addForeignRecordsToPoiCollection(PoiCollection $poiCollection): void
     {
         $columnRegistry = $this->getColumnRegistry();
-        if (empty($columnRegistry)) {
+        if ($columnRegistry === []) {
             return;
         }
 
@@ -271,6 +272,6 @@ class MapService
 
     protected function getConnectionPool(): ConnectionPool
     {
-        return GeneralUtility::makeInstance(ConnectionPool::class);
+        return $this->connectionPool;
     }
 }

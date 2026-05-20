@@ -26,10 +26,6 @@ trait GetTypo3RequestTrait
      */
     private function getTypo3Request(): ServerRequestInterface
     {
-        if (isset($GLOBALS['TYPO3_REQUEST'])) {
-            return $GLOBALS['TYPO3_REQUEST'];
-        }
-
-        return new ServerRequest('https://jweiland.net', 'GET');
+        return $GLOBALS['TYPO3_REQUEST'] ?? new ServerRequest('https://jweiland.net', 'GET');
     }
 }

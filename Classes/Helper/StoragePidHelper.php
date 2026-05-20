@@ -32,7 +32,7 @@ class StoragePidHelper
         $this->updateStoragePidFromMaps2Registry($defaultStoragePid, $options, $foreignLocationRecord);
         $this->updateDefaultStoragePidFromPageTsConfig($defaultStoragePid, $foreignLocationRecord);
 
-        if (empty($defaultStoragePid)) {
+        if ($defaultStoragePid === 0) {
             $this->messageHelper->addFlashMessage(
                 'No PID found to store POI collection. Please check various places like pageTSconfig, Maps2 Registry and PID of this currently saved record.',
                 'Can not find a valid PID to store EXT:maps2 records',
@@ -71,11 +71,11 @@ class StoragePidHelper
     ): void {
         if (array_key_exists('defaultStoragePid', $options)) {
             $storagePid = $this->getHardCodedStoragePidFromMaps2Registry($options);
-            if (empty($storagePid)) {
+            if ($storagePid === 0) {
                 $storagePid = $this->getDynamicStoragePidFromMaps2Registry($options, $foreignLocationRecord);
             }
 
-            if (empty($storagePid)) {
+            if ($storagePid === 0) {
                 $this->messageHelper->addFlashMessage(
                     'You have configured a defaultStoragePid in maps2 registration, but returned value is still 0. Please check Maps2 Registry',
                     'Invalid defaultStoragePid configuration found',
@@ -128,7 +128,7 @@ class StoragePidHelper
             if ($hasSubConfiguration) {
                 $defaultStoragePid = 0;
                 foreach ($options['defaultStoragePid'] as $configuration) {
-                    if (empty($defaultStoragePid)) {
+                    if ($defaultStoragePid === 0) {
                         $defaultStoragePid = $this->getDynamicStoragePidBySingleArray(
                             $configuration,
                             $foreignLocationRecord,

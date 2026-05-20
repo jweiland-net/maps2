@@ -43,7 +43,7 @@ readonly class InfoWindowContentService
         $infoWindowContent = $this->getInfoWindowContentFromEventListener($poiCollectionRecord, $request);
 
         if ($infoWindowContent === '') {
-            $infoWindowContent = $this->renderInfoWindowContent($poiCollectionRecord, $request);
+            return $this->renderInfoWindowContent($poiCollectionRecord, $request);
         }
 
         return $infoWindowContent;

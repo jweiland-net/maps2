@@ -183,7 +183,7 @@ class PoiCollectionRepository extends Repository
         try {
             $schemaManager = $connection->createSchemaManager();
             $columns = array_map(
-                static fn($column): string => self::TABLE . '.' . $column,
+                static fn(string $column): string => self::TABLE . '.' . $column,
                 array_keys(
                     $schemaManager->listTableColumns('tx_maps2_domain_model_poicollection') ?? [],
                 ),

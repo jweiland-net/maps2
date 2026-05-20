@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the package jweiland/maps2.
  *
@@ -38,7 +40,6 @@ return [
             'starttime' => 'starttime',
             'endtime' => 'endtime',
         ],
-        'searchFields' => 'title, address',
     ],
     'types' => [
         'Empty' => [
@@ -53,7 +54,7 @@ return [
                 --div--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.style, info_window_content, info_window_images, marker_icons,
                 --palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:palette.marker_icon_size;marker_icon_size,
                 --palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:palette.marker_icon_pos;marker_icon_pos,
-                --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.access,
+                --div--;core.form.tabs:access,
                 --palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.access;access,
                 --div--;LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:sys_category.tabs.category, categories',
         ],
@@ -65,7 +66,7 @@ return [
                 --div--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.style, info_window_content, info_window_images,
                 --palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:palette.stroke;stroke,
                 --palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:palette.fill;fill,
-                --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.access,
+                --div--;core.form.tabs:access,
                 --palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.access;access,
                 --div--;LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:sys_category.tabs.category, categories',
         ],
@@ -76,7 +77,7 @@ return [
                 --palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:palette.latitude_longitude;latitude_longitude,
                 --div--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.style, info_window_content, info_window_images,
                 --palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:palette.stroke;stroke,
-                --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.access,
+                --div--;core.form.tabs:access,
                 --palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.access;access,
                 --div--;LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:sys_category.tabs.category, categories',
         ],
@@ -88,7 +89,7 @@ return [
                 --div--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.style, info_window_content, info_window_images,
                 --palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:palette.stroke;stroke,
                 --palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:palette.fill;fill,
-                --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.access,
+                --div--;core.form.tabs:access,
                 --palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.access;access,
                 --div--;LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:sys_category.tabs.category, categories',
         ],
@@ -102,7 +103,7 @@ return [
         'stroke' => ['showitem' => 'stroke_color, stroke_opacity, stroke_weight'],
         'fill' => ['showitem' => 'fill_color, fill_opacity'],
         'access' => [
-            'showitem' => 'starttime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:starttime_formlabel,endtime;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:endtime_formlabel',
+            'showitem' => 'starttime;core.db.general:starttime,endtime;core.db.general:endtime',
         ],
     ],
     'columns' => [
@@ -146,7 +147,6 @@ return [
                 'items' => [
                     [
                         'label' => '',
-                        'value' => '',
                         'invertStateDisplay' => true,
                     ],
                 ],
@@ -159,6 +159,7 @@ return [
                 'type' => 'datetime',
                 'format' => 'datetime',
                 'default' => 0,
+                'searchable' => false,
             ],
             'l10n_mode' => 'exclude',
             'l10n_display' => 'defaultAsReadonly',
@@ -173,6 +174,7 @@ return [
                 'range' => [
                     'upper' => mktime(0, 0, 0, 1, 1, 2038),
                 ],
+                'searchable' => false,
             ],
             'l10n_mode' => 'exclude',
             'l10n_display' => 'defaultAsReadonly',
@@ -278,6 +280,7 @@ return [
                 'type' => 'input',
                 'size' => 12,
                 'eval' => FloatType::class,
+                'searchable' => false,
             ],
         ],
         'longitude' => [
@@ -287,6 +290,7 @@ return [
                 'type' => 'input',
                 'size' => 12,
                 'eval' => FloatType::class,
+                'searchable' => false,
             ],
         ],
         'radius' => [
@@ -303,6 +307,7 @@ return [
             'config' => [
                 'type' => 'color',
                 'placeholder' => '#FF0000',
+                'searchable' => false,
             ],
         ],
         'stroke_opacity' => [
@@ -314,6 +319,7 @@ return [
                 'max' => 5,
                 'placeholder' => '0.8',
                 'eval' => 'trim',
+                'searchable' => false,
             ],
         ],
         'stroke_weight' => [
@@ -325,6 +331,7 @@ return [
                 'max' => 5,
                 'placeholder' => '2',
                 'eval' => 'trim',
+                'searchable' => false,
             ],
         ],
         'fill_color' => [
@@ -333,6 +340,7 @@ return [
             'config' => [
                 'type' => 'color',
                 'placeholder' => '#FF0000',
+                'searchable' => false,
             ],
         ],
         'fill_opacity' => [
@@ -344,6 +352,7 @@ return [
                 'max' => 5,
                 'placeholder' => '0.35',
                 'eval' => 'trim',
+                'searchable' => false,
             ],
         ],
         'info_window_content' => [
@@ -360,6 +369,7 @@ return [
                         'renderType' => 'maps2InfoWindowContent',
                     ],
                 ],
+                'searchable' => false,
             ],
         ],
         'info_window_images' => [

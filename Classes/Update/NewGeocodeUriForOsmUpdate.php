@@ -11,13 +11,12 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Update;
 
+use TYPO3\CMS\Core\Attribute\UpgradeWizard;
+use TYPO3\CMS\Core\Upgrades\UpgradeWizardInterface;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
-use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Install\Attribute\UpgradeWizard;
-use TYPO3\CMS\Install\Updates\UpgradeWizardInterface;
 
 /**
  * Somewhere in october 2023 OSM has deprecated/removed the use of addresses as path segment in Geocode URI.
@@ -82,11 +81,6 @@ class NewGeocodeUriForOsmUpdate implements UpgradeWizardInterface
     private function getExtensionConfiguration(): ExtensionConfiguration
     {
         return GeneralUtility::makeInstance(ExtensionConfiguration::class);
-    }
-
-    private function getTypo3Version(): Typo3Version
-    {
-        return GeneralUtility::makeInstance(Typo3Version::class);
     }
 
     public function getPrerequisites(): array

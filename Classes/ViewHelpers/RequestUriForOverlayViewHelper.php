@@ -55,7 +55,7 @@ class RequestUriForOverlayViewHelper extends AbstractViewHelper
 
         if (($this->settingsHelper->getPreparedSettings()['overlay']['link']['addSection'] ?? '') === '1') {
             $ttContentUid = (int)($arguments['ttContentUid'] ?? 0);
-            if ($ttContentUid) {
+            if ($ttContentUid !== 0) {
                 $uriBuilder->setSection('c' . $ttContentUid);
             }
         }

@@ -11,13 +11,15 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Form\Element;
 
+use TYPO3\CMS\Core\SystemResource\SystemResourceFactory;
+use TYPO3\CMS\Core\SystemResource\Publishing\SystemResourcePublisherInterface;
+use TYPO3\CMS\Core\SystemResource\Publishing\UriGenerationOptions;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Helper\MapHelper;
 use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
 use TYPO3\CMS\Backend\Form\NodeFactory;
 use TYPO3\CMS\Core\Page\JavaScriptModuleInstruction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Core\Utility\StringUtility;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 use TYPO3\CMS\Fluid\View\StandaloneView;
@@ -40,7 +42,7 @@ class GoogleMapsElement extends AbstractFormElement
         ],
     ];
 
-    public function __construct(protected NodeFactory $nodeFactory) {}
+    public function __construct(protected NodeFactory $nodeFactory, private readonly SystemResourceFactory $systemResourceFactory, private readonly SystemResourcePublisherInterface $resourcePublisher) {}
 
     /**
      * This will render Google Maps within PoiCollection records with a marker you can drag and drop
@@ -56,8 +58,8 @@ class GoogleMapsElement extends AbstractFormElement
         $itemValue = $parameterArray['itemFormElValue'];
         $config = $parameterArray['fieldConf']['config'];
         $evalList = GeneralUtility::trimExplode(',', $config['eval'] ?? '', true);
-
-        $publicResourcesPath = PathUtility::getPublicResourceWebPath('EXT:maps2/Resources/Public/');
+        $resource = $this->systemResourceFactory->createPublicResource('EXT:maps2/Resources/Public/');
+        $publicResourcesPath = (string) $this->resourcePublisher->generateUri($resource, $GLOBALS['TYPO3_REQUEST'], new UriGenerationOptions(absoluteUri: true));
 
         $resultArray['stylesheetFiles'][] = $publicResourcesPath . 'Css/GoogleMapsModule.css';
 
@@ -138,7 +140,7 @@ class GoogleMapsElement extends AbstractFormElement
             ));
 
             return $view->render();
-        } catch (\JsonException $jsonException) {
+        } catch (\JsonException) {
             return '';
         }
     }

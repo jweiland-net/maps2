@@ -48,6 +48,8 @@ class CreateMaps2RecordHook
         protected MapService $mapService,
         protected Maps2Registry $maps2Registry,
         protected EventDispatcherInterface $eventDispatcher,
+        private readonly CacheManager $cacheManager,
+        private readonly ConnectionPool $connectionPool,
     ) {}
 
     /**
@@ -75,7 +77,7 @@ class CreateMaps2RecordHook
                     $foreignTableName,
                     $this->getRealUid($uid, $dataHandler),
                 );
-                if (empty($foreignLocationRecord)) {
+                if ($foreignLocationRecord === []) {
                     continue;
                 }
 
@@ -270,7 +272,7 @@ class CreateMaps2RecordHook
     protected function clearHtmlCache(int $poiCollectionUid): void
     {
         try {
-            GeneralUtility::makeInstance(CacheManager::class)
+            $this->cacheManager
                 ->getCache('maps2_cachedhtml')
                 ->flushByTag('infoWindowUid' . $poiCollectionUid);
         } catch (NoSuchCacheException) {
@@ -320,7 +322,7 @@ class CreateMaps2RecordHook
         string $foreignColumnName,
     ): void {
         $poiCollection = $this->getPoiCollection((int)$foreignLocationRecord[$foreignColumnName], ['uid']);
-        if (empty($poiCollection)) {
+        if ($poiCollection === []) {
             // record does not exist anymore. Remove it from relation
             $foreignLocationRecord[$foreignColumnName] = 0;
         }
@@ -350,7 +352,7 @@ class CreateMaps2RecordHook
         }
 
         if ($poiCollection === false) {
-            $poiCollection = [];
+            return [];
         }
 
         return $poiCollection;
@@ -370,7 +372,7 @@ class CreateMaps2RecordHook
             $foreignLocationRecord,
             $options,
         );
-        if (empty($defaultStoragePid)) {
+        if ($defaultStoragePid === 0) {
             return false;
         }
 
@@ -430,7 +432,7 @@ class CreateMaps2RecordHook
         }
 
         if (empty($foreignLocationRecord)) {
-            $foreignLocationRecord = [];
+            return [];
         }
 
         return $foreignLocationRecord;
@@ -591,6 +593,6 @@ class CreateMaps2RecordHook
 
     protected function getConnectionPool(): ConnectionPool
     {
-        return GeneralUtility::makeInstance(ConnectionPool::class);
+        return $this->connectionPool;
     }
 }

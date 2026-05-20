@@ -57,7 +57,7 @@ class GeoCodeService implements SingletonInterface
 
         $response = $this->client->processRequest($geocodeRequest);
         if ($response !== []) {
-            $positions = $this->mapperFactory->create()->map($response);
+            return $this->mapperFactory->create()->map($response);
         }
 
         return $positions;

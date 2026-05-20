@@ -27,12 +27,8 @@ class CityMapController extends ActionController
 {
     use InjectExtConfTrait;
     use InjectSettingsHelperTrait;
-
-    protected GeoCodeService $geoCodeService;
-
-    public function injectGeoCodeService(GeoCodeService $geoCodeService): void
+    public function __construct(protected GeoCodeService $geoCodeService)
     {
-        $this->geoCodeService = $geoCodeService;
     }
 
     public function initializeObject(): void

@@ -107,18 +107,20 @@ class ReadOnlyInputTextElement extends AbstractFormElement
             // @todo: This is ugly: The code should find out on it's own whether an eval definition is a
             // @todo: keyword like "date", or a class reference. The global registration could be dropped then
             // Pair hook to the one in \TYPO3\CMS\Core\DataHandling\DataHandler::checkValue_input_Eval()
-            if (isset($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tce']['formevals'][$func])) {
-                if (class_exists($func)) {
-                    $evalObj = GeneralUtility::makeInstance($func);
-                    if (method_exists($evalObj, 'deevaluateFieldValue')) {
-                        $_params = [
-                            'value' => $itemValue,
-                        ];
-                        $itemValue = $evalObj->deevaluateFieldValue($_params);
-                    }
-                    $resultArray = $this->resolveJavaScriptEvaluation($resultArray, $func, $evalObj);
-                }
+            if (!isset($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tce']['formevals'][$func])) {
+                continue;
             }
+            if (!class_exists($func)) {
+                continue;
+            }
+            $evalObj = GeneralUtility::makeInstance($func);
+            if (method_exists($evalObj, 'deevaluateFieldValue')) {
+                $_params = [
+                    'value' => $itemValue,
+                ];
+                $itemValue = $evalObj->deevaluateFieldValue($_params);
+            }
+            $resultArray = $this->resolveJavaScriptEvaluation($resultArray, $func, $evalObj);
         }
 
         if ($config['nullable'] ?? false) {
@@ -136,7 +138,7 @@ class ReadOnlyInputTextElement extends AbstractFormElement
                 'hasDefaultValue',
             ]),
             'data-formengine-validation-rules' => $this->getValidationDataAsJsonString($config),
-            'data-formengine-input-params' => (string)json_encode([
+            'data-formengine-input-params' => json_encode([
                 'field' => $itemName,
                 'evalList' => implode(',', $evalList),
                 'is_in' => trim($config['is_in'] ?? ''),
@@ -176,7 +178,7 @@ class ReadOnlyInputTextElement extends AbstractFormElement
             $valuePickerHtml[] = '<select ' . GeneralUtility::implodeAttributes($valuePickerAttributes, true) . '>';
             $valuePickerHtml[] = '<option></option>';
             foreach ($config['valuePicker']['items'] as $item) {
-                $valuePickerHtml[] = '<option value="' . htmlspecialchars((string)$item[1]) . '">' . htmlspecialchars((string)$languageService->sL((string)$item[0])) . '</option>';
+                $valuePickerHtml[] = '<option value="' . htmlspecialchars((string)$item[1]) . '">' . htmlspecialchars($languageService->sL((string)$item[0])) . '</option>';
             }
             $valuePickerHtml[] = '</select>';
             $valuePickerHtml[] = '</typo3-formengine-valuepicker>';
@@ -199,7 +201,7 @@ class ReadOnlyInputTextElement extends AbstractFormElement
         $mainFieldHtml[] =          '<input type="text" ' . GeneralUtility::implodeAttributes($attributes, true) . ' />';
         $mainFieldHtml[] =          '<input type="hidden" name="' . $itemName . '" value="' . htmlspecialchars((string)$itemValue) . '" />';
         $mainFieldHtml[] =      '</div>';
-        if (!empty($valuePickerHtml) || !empty($fieldControlHtml)) {
+        if ($valuePickerHtml !== [] || !empty($fieldControlHtml)) {
             $mainFieldHtml[] =      '<div class="form-wizards-items-aside form-wizards-items-aside--field-control">';
             $mainFieldHtml[] =          '<div class="btn-group">';
             $mainFieldHtml[] =              implode(LF, $valuePickerHtml);
@@ -227,7 +229,7 @@ class ReadOnlyInputTextElement extends AbstractFormElement
             $fullElement[] =     '<input type="hidden" name="' . $nullControlNameEscaped . '" value="0" />';
             $fullElement[] =     '<input type="checkbox" class="form-check-input" name="' . $nullControlNameEscaped . '" id="' . $nullControlNameEscaped . '" value="1"' . $checked . ' />';
             $fullElement[] =     '<label class="form-check-label" for="' . $nullControlNameEscaped . '">';
-            $fullElement[] =         $languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.nullCheckbox');
+            $fullElement[] =         $languageService->sL('core.core:labels.nullCheckbox');
             $fullElement[] =     '</label>';
             $fullElement[] = '</div>';
             $fullElement[] = $mainFieldHtml;
@@ -239,18 +241,18 @@ class ReadOnlyInputTextElement extends AbstractFormElement
                 $shortenedPlaceholder = GeneralUtility::fixed_lgd_cs($placeholder, 20);
                 if ($placeholder !== $shortenedPlaceholder) {
                     $overrideLabel = sprintf(
-                        $languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.placeholder.override'),
+                        $languageService->sL('core.core:labels.placeholder.override'),
                         '<span title="' . htmlspecialchars($placeholder) . '">' . htmlspecialchars($shortenedPlaceholder) . '</span>',
                     );
                 } else {
                     $overrideLabel = sprintf(
-                        $languageService->sL('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.placeholder.override'),
+                        $languageService->sL('core.core:labels.placeholder.override'),
                         htmlspecialchars($placeholder),
                     );
                 }
             } else {
                 $overrideLabel = $languageService->sL(
-                    'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.placeholder.override_not_available',
+                    'core.core:labels.placeholder.override_not_available',
                 );
             }
             $fullElement = [];

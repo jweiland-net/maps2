@@ -83,7 +83,7 @@ class ConvertToJsonViewHelper extends AbstractViewHelper
 
         try {
             return json_encode($poiCollectionsAsArray, JSON_THROW_ON_ERROR);
-        } catch (\JsonException $e) {
+        } catch (\JsonException) {
             return '{}';
         }
     }

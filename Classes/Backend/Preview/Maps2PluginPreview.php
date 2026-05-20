@@ -91,12 +91,10 @@ class Maps2PluginPreview extends StandardContentPreviewRenderer
 
     protected function getPiFlexformData(array $ttContentRecord): array
     {
-        $data = [];
         if (!empty($ttContentRecord['pi_flexform'] ?? '')) {
-            $data = $this->flexFormService->convertFlexFormContentToArray($ttContentRecord['pi_flexform']);
+            return $this->flexFormService->convertFlexFormContentToArray($ttContentRecord['pi_flexform']);
         }
-
-        return $data;
+        return [];
     }
 
     protected function addPoiCollection(ViewInterface $view, array $piFlexformData): void
