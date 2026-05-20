@@ -28,14 +28,12 @@
 	},
 	"require": {
 		"ext-json": "*",
-		"typo3/cms-core": "^13.4.0"
+		"typo3/cms-core": "^14.3"
 	},
 	"require-dev": {
 		"ergebnis/composer-normalize": "^2.44",
-		"jweiland/events2": "^10.0",
-		"sjbr/static-info-tables": "^13.4",
 		"typo3/coding-standards": "^0.8",
-		"typo3/testing-framework": "^9.0.1"
+		"typo3/testing-framework": "^9.2.0"
 	},
 	"suggest": {
 		"sjbr/static-info-tables": "Install this package, if you want to choose from contained countries instead of typing them"
