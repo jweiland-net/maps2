@@ -39,9 +39,6 @@ node_modules
 
 # Ignore composer stuff
 /composer.lock
-/public
-/var
-/vendor
 
 # Ignore testing stuff
 /.Build
