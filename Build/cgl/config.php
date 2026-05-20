@@ -168,7 +168,7 @@ return (new \PhpCsFixer\Config())
     ->setParallelConfig(\PhpCsFixer\Runner\Parallel\ParallelConfigFactory::detect())
     ->setFinder(
         (new PhpCsFixer\Finder())
-            ->exclude(['var'])
+            ->exclude(['var', 'packages'])
             ->ignoreVCSIgnored(true)
             ->in(__DIR__ . '/../../'),
     )
