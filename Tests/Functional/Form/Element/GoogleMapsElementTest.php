@@ -111,20 +111,20 @@ class GoogleMapsElementTest extends FunctionalTestCase
         $record['collection_type'] = 'Point';
 
         $this->viewMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('setTemplatePathAndFilename')
             ->with(
                 self::stringContains('Resources/Private/Templates/Tca/GoogleMaps.html'),
             );
         $this->viewMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('assign')
             ->willReturnMap([
                 ['record', json_encode($record), null],
-                ['extConf', self::any(), null],
+                ['extConf', $this->any(), null],
             ]);
         $this->viewMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('render')
             ->willReturn('foo');
 

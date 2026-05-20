@@ -122,12 +122,12 @@ class OpenStreetMapElementTest extends FunctionalTestCase
     #[Test]
     public function renderWillCleanUpCurrentRecord(): void
     {
-        $this->viewFactoryMock->expects(self::once())
+        $this->viewFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->viewMock);
 
         $this->viewMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('render')
             ->willReturn('foo');
 

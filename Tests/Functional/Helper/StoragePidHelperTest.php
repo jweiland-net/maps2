@@ -67,7 +67,7 @@ class StoragePidHelperTest extends FunctionalTestCase
     public function getStoragePidWithoutPidAndNoRegistryConfigurationWillAddFlashMessage(): void
     {
         $this->messageHelperMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('addFlashMessage')
             ->with(
                 self::stringContains('Please check various places'),
@@ -95,7 +95,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         /** @var VariableFrontend|MockObject $variableFrontendMock */
         $variableFrontendMock = $this->createMock(VariableFrontend::class);
         $variableFrontendMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('get')
             ->willReturnMap([
                 ['pageTsConfig-pid-to-hash-200', 'Hash'],
@@ -105,7 +105,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         /** @var CacheManager|MockObject $cacheManagerMock */
         $cacheManagerMock = $this->createMock(CacheManager::class);
         $cacheManagerMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('getCache')
             ->with(self::stringContains('runtime'))
             ->willReturn($variableFrontendMock);
@@ -133,7 +133,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         /** @var VariableFrontend|MockObject $variableFrontendMock */
         $variableFrontendMock = $this->createMock(VariableFrontend::class);
         $variableFrontendMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('get')
             ->willReturnMap([
                 ['pageTsConfig-pid-to-hash-200', 'Hash'],
@@ -143,7 +143,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         /** @var CacheManager|MockObject $cacheManagerMock */
         $cacheManagerMock = $this->createMock(CacheManager::class);
         $cacheManagerMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('getCache')
             ->with(self::stringContains('runtime'))
             ->willReturn($variableFrontendMock);
@@ -173,7 +173,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         /** @var VariableFrontend|MockObject $variableFrontendMock */
         $variableFrontendMock = $this->createMock(VariableFrontend::class);
         $variableFrontendMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('get')
             ->willReturnMap([
                 ['pageTsConfig-pid-to-hash-200', 'Hash'],
@@ -183,7 +183,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         /** @var CacheManager|MockObject $cacheManagerMock */
         $cacheManagerMock = $this->createMock(CacheManager::class);
         $cacheManagerMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('getCache')
             ->with(self::stringContains('runtime'))
             ->willReturn($variableFrontendMock);
@@ -214,7 +214,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         /** @var PackageManager|MockObject $packageManagerMock */
         $packageManagerMock = $this->createMock(PackageManager::class);
         $packageManagerMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('isPackageActive')
             ->with('foreign_ext')
             ->willReturn(true);
@@ -246,7 +246,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         /** @var VariableFrontend|MockObject $variableFrontendMock */
         $variableFrontendMock = $this->createMock(VariableFrontend::class);
         $variableFrontendMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('get')
             ->willReturnMap([
                 ['pageTsConfig-pid-to-hash-200', 'Hash'],
@@ -256,7 +256,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         /** @var CacheManager|MockObject $cacheManagerMock */
         $cacheManagerMock = $this->createMock(CacheManager::class);
         $cacheManagerMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('getCache')
             ->with(self::stringContains('runtime'))
             ->willReturn($variableFrontendMock);
@@ -269,7 +269,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         /** @var PackageManager|MockObject $packageManagerMock */
         $packageManagerMock = $this->createMock(PackageManager::class);
         $packageManagerMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('isPackageActive')
             ->with('foreign_ext')
             ->willReturn(true);
@@ -302,7 +302,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         /** @var VariableFrontend|MockObject $variableFrontendMock */
         $variableFrontendMock = $this->createMock(VariableFrontend::class);
         $variableFrontendMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('get')
             ->willReturnMap([
                 ['pageTsConfig-pid-to-hash-200', 'Hash'],
@@ -312,7 +312,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         /** @var CacheManager|MockObject $cacheManagerMock */
         $cacheManagerMock = $this->createMock(CacheManager::class);
         $cacheManagerMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('getCache')
             ->with(self::stringContains('runtime'))
             ->willReturn($variableFrontendMock);
@@ -325,7 +325,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         /** @var PackageManager|MockObject $packageManagerMock */
         $packageManagerMock = $this->createMock(PackageManager::class);
         $packageManagerMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('isPackageActive')
             ->with('foreign_ext')
             ->willReturn(true);
@@ -365,7 +365,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         /** @var VariableFrontend|MockObject $variableFrontendMock */
         $variableFrontendMock = $this->createMock(VariableFrontend::class);
         $variableFrontendMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('get')
             ->willReturnMap([
                 ['pageTsConfig-pid-to-hash-5438', 'Hash'],
@@ -375,7 +375,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         /** @var CacheManager|MockObject $cacheManagerMock */
         $cacheManagerMock = $this->createMock(CacheManager::class);
         $cacheManagerMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('getCache')
             ->with(self::stringContains('runtime'))
             ->willReturn($variableFrontendMock);
@@ -409,7 +409,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         /** @var VariableFrontend|MockObject $variableFrontendMock */
         $variableFrontendMock = $this->createMock(VariableFrontend::class);
         $variableFrontendMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('get')
             ->willReturnMap([
                 ['pageTsConfig-pid-to-hash-5438', 'Hash'],
@@ -419,7 +419,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         /** @var CacheManager|MockObject $cacheManagerMock */
         $cacheManagerMock = $this->createMock(CacheManager::class);
         $cacheManagerMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('getCache')
             ->with(self::stringContains('runtime'))
             ->willReturn($variableFrontendMock);
@@ -459,7 +459,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         /** @var VariableFrontend|MockObject $variableFrontendMock */
         $variableFrontendMock = $this->createMock(VariableFrontend::class);
         $variableFrontendMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('get')
             ->willReturnMap([
                 ['pageTsConfig-pid-to-hash-5438', 'Hash'],
@@ -469,7 +469,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         /** @var CacheManager|MockObject $cacheManagerMock */
         $cacheManagerMock = $this->createMock(CacheManager::class);
         $cacheManagerMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('getCache')
             ->with(self::stringContains('runtime'))
             ->willReturn($variableFrontendMock);
@@ -509,7 +509,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         /** @var VariableFrontend|MockObject $variableFrontendMock */
         $variableFrontendMock = $this->createMock(VariableFrontend::class);
         $variableFrontendMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('get')
             ->willReturnMap([
                 ['pageTsConfig-pid-to-hash-5438', 'Hash'],
@@ -519,7 +519,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         /** @var CacheManager|MockObject $cacheManagerMock */
         $cacheManagerMock = $this->createMock(CacheManager::class);
         $cacheManagerMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('getCache')
             ->with(self::stringContains('runtime'))
             ->willReturn($variableFrontendMock);
@@ -555,7 +555,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         /** @var VariableFrontend|MockObject $variableFrontendMock */
         $variableFrontendMock = $this->createMock(VariableFrontend::class);
         $variableFrontendMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('get')
             ->willReturnMap([
                 ['pageTsConfig-pid-to-hash-5438', 'Hash'],
@@ -565,7 +565,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         /** @var CacheManager|MockObject $cacheManagerMock */
         $cacheManagerMock = $this->createMock(CacheManager::class);
         $cacheManagerMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('getCache')
             ->with(self::stringContains('runtime'))
             ->willReturn($variableFrontendMock);
@@ -574,12 +574,12 @@ class StoragePidHelperTest extends FunctionalTestCase
         /** @var PackageManager|MockObject $packageManagerMock */
         $packageManagerMock = $this->createMock(PackageManager::class);
         $packageManagerMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('isPackageActive')
             ->willReturnMap([
                 ['foreign_ext', true],
                 ['events2', true],
-                [self::any(), false],
+                [$this->any(), false],
             ]);
         ExtensionManagementUtility::setPackageManager($packageManagerMock);
 
@@ -640,7 +640,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         /** @var VariableFrontend|MockObject $variableFrontendMock */
         $variableFrontendMock = $this->createMock(VariableFrontend::class);
         $variableFrontendMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('get')
             ->willReturnMap([
                 ['pageTsConfig-pid-to-hash-5438', 'Hash'],
@@ -650,7 +650,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         /** @var CacheManager|MockObject $cacheManagerMock */
         $cacheManagerMock = $this->createMock(CacheManager::class);
         $cacheManagerMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('getCache')
             ->with(self::stringContains('runtime'))
             ->willReturn($variableFrontendMock);
@@ -666,12 +666,12 @@ class StoragePidHelperTest extends FunctionalTestCase
         /** @var PackageManager|MockObject $packageManagerMock */
         $packageManagerMock = $this->createMock(PackageManager::class);
         $packageManagerMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('isPackageActive')
             ->willReturnMap([
                 ['foreign_ext', true],
                 ['events2', true],
-                [self::any(), false],
+                [$this->any(), false],
             ]);
         ExtensionManagementUtility::setPackageManager($packageManagerMock);
 
@@ -725,7 +725,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         /** @var VariableFrontend|MockObject $variableFrontendMock */
         $variableFrontendMock = $this->createMock(VariableFrontend::class);
         $variableFrontendMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('get')
             ->willReturnMap([
                 ['pageTsConfig-pid-to-hash-5438', 'Hash'],
@@ -735,7 +735,7 @@ class StoragePidHelperTest extends FunctionalTestCase
         /** @var CacheManager|MockObject $cacheManagerMock */
         $cacheManagerMock = $this->createMock(CacheManager::class);
         $cacheManagerMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('getCache')
             ->with(self::stringContains('runtime'))
             ->willReturn($variableFrontendMock);
@@ -744,12 +744,12 @@ class StoragePidHelperTest extends FunctionalTestCase
         /** @var PackageManager|MockObject $packageManagerMock */
         $packageManagerMock = $this->createMock(PackageManager::class);
         $packageManagerMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('isPackageActive')
             ->willReturnMap([
                 ['foreign_ext', true],
                 ['events2', true],
-                [self::any(), false],
+                [$this->any(), false],
             ]);
         ExtensionManagementUtility::setPackageManager($packageManagerMock);
 

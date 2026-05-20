@@ -69,7 +69,7 @@ class AddressHelperTest extends FunctionalTestCase
     public function getAddressWithMissingAddressColumnsKeyAddsFlashMessage(): void
     {
         $this->messageHelperMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('addFlashMessage')
             ->with(
                 self::stringContains('addressColumns'),
@@ -93,7 +93,7 @@ class AddressHelperTest extends FunctionalTestCase
     public function getAddressWithEmptyAddressColumnsAddsFlashMessage(): void
     {
         $this->messageHelperMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('addFlashMessage')
             ->with(
                 self::stringContains('required field'),
@@ -119,7 +119,7 @@ class AddressHelperTest extends FunctionalTestCase
     public function getAddressWithoutCountryAndNoFallbackGeneratesTwoFlashMessages(): void
     {
         $this->messageHelperMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('addFlashMessage')
             ->willReturnMap([
                 [
@@ -135,7 +135,7 @@ class AddressHelperTest extends FunctionalTestCase
             ]);
 
         $this->messageHelperMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('addFlashMessage')
             ->with(
             );
@@ -162,7 +162,7 @@ class AddressHelperTest extends FunctionalTestCase
     public function getAddressWithoutCountryButWithMaps2FallbackGeneratesOneFlashMessages(): void
     {
         $this->messageHelperMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('addFlashMessage')
             ->with(
                 self::stringContains('We can not find any country information within your extension'),
@@ -232,7 +232,7 @@ class AddressHelperTest extends FunctionalTestCase
         }
 
         $this->messageHelperMock
-            ->expects(self::never())
+            ->expects($this->never())
             ->method('addFlashMessage')
             ->with(
                 self::stringContains('We can not find any country information within your extension'),
@@ -243,7 +243,7 @@ class AddressHelperTest extends FunctionalTestCase
         /** @var PackageManager|MockObject $packageManagerMock */
         $packageManagerMock = $this->createMock(PackageManager::class);
         $packageManagerMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('isPackageActive')
             ->with('static_info_tables')
             ->willReturn(true);
@@ -274,14 +274,14 @@ class AddressHelperTest extends FunctionalTestCase
         /** @var PackageManager|MockObject $packageManagerMock */
         $packageManagerMock = $this->createMock(PackageManager::class);
         $packageManagerMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('isPackageActive')
             ->with('static_info_tables')
             ->willReturn(true);
         ExtensionManagementUtility::setPackageManager($packageManagerMock);
 
         $this->messageHelperMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('addFlashMessage')
             ->with(
                 self::stringContains('static_countries table'),

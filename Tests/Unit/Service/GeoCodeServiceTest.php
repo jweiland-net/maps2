@@ -66,7 +66,7 @@ class GeoCodeServiceTest extends UnitTestCase
         $this->gmGeocodeRequestMock = $this->createMock(Request\GoogleMaps\GeocodeRequest::class);
 
         $this->clientFactoryMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('create')
             ->willReturn($this->googleMapsClientMock);
 
@@ -136,7 +136,7 @@ class GeoCodeServiceTest extends UnitTestCase
         $objectStorage = new ObjectStorage();
 
         $this->gmGeocodeRequestMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('addParameter')
             ->with(
                 'address',
@@ -144,13 +144,13 @@ class GeoCodeServiceTest extends UnitTestCase
             );
 
         $this->requestFactoryMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('create')
             ->with('GeocodeRequest')
             ->willReturn($this->gmGeocodeRequestMock);
 
         $this->googleMapsClientMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('processRequest')
             ->with($this->gmGeocodeRequestMock)
             ->willReturn([]);
@@ -183,7 +183,7 @@ class GeoCodeServiceTest extends UnitTestCase
         ];
 
         $this->gmGeocodeRequestMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('addParameter')
             ->with(
                 'address',
@@ -191,13 +191,13 @@ class GeoCodeServiceTest extends UnitTestCase
             );
 
         $this->requestFactoryMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('create')
             ->with('GeocodeRequest')
             ->willReturn($this->gmGeocodeRequestMock);
 
         $this->googleMapsClientMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('processRequest')
             ->with($this->gmGeocodeRequestMock)
             ->willReturn($response);
@@ -205,7 +205,7 @@ class GeoCodeServiceTest extends UnitTestCase
         $googleMapsMapper = new GoogleMapsMapper();
 
         $this->mapperFactoryMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('create')
             ->willReturn($googleMapsMapper);
 
@@ -244,7 +244,7 @@ class GeoCodeServiceTest extends UnitTestCase
         GeneralUtility::addInstance(ObjectStorage::class, $objectStorage);
 
         $this->gmGeocodeRequestMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('addParameter')
             ->with(
                 'address',
@@ -252,13 +252,13 @@ class GeoCodeServiceTest extends UnitTestCase
             );
 
         $this->requestFactoryMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('create')
             ->with('GeocodeRequest')
             ->willReturn($this->gmGeocodeRequestMock);
 
         $this->googleMapsClientMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('processRequest')
             ->with($this->gmGeocodeRequestMock)
             ->willReturn([]);
@@ -286,7 +286,7 @@ class GeoCodeServiceTest extends UnitTestCase
         ];
 
         $this->gmGeocodeRequestMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('addParameter')
             ->with(
                 'address',
@@ -294,13 +294,13 @@ class GeoCodeServiceTest extends UnitTestCase
             );
 
         $this->requestFactoryMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('create')
             ->with('GeocodeRequest')
             ->willReturn($this->gmGeocodeRequestMock);
 
         $this->googleMapsClientMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('processRequest')
             ->with($this->gmGeocodeRequestMock)
             ->willReturn($response);
@@ -308,7 +308,7 @@ class GeoCodeServiceTest extends UnitTestCase
         $googleMapsMapper = new GoogleMapsMapper();
 
         $this->mapperFactoryMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('create')
             ->willReturn($googleMapsMapper);
 

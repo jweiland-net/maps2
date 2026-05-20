@@ -110,7 +110,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
         $this->maps2RegistryMock = $this->createMock(Maps2Registry::class);
 
         $this->maps2RegistryMock
-            ->expects(self::any())
+            ->expects($this->any())
             ->method('getColumnRegistry')
             ->willReturn($this->columnRegistry);
 
@@ -154,18 +154,18 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
     {
         if ($this->creationAllowed) {
             $this->eventDispatcherMock
-                ->expects(self::any())
+                ->expects($this->any())
                 ->method('dispatch')
                 ->willReturnArgument(0);
         } else {
             $creationAllowedEventMock = $this->createMock(AllowCreationOfPoiCollectionEvent::class);
             $creationAllowedEventMock
-                ->expects(self::once())
+                ->expects($this->once())
                 ->method('isValid')
                 ->willReturn(false);
 
             $this->eventDispatcherMock
-                ->expects(self::once())
+                ->expects($this->once())
                 ->method('dispatch')
                 ->willReturn($creationAllowedEventMock);
         }
@@ -175,7 +175,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
     public function processDatamapWithInvalidTableNameWillNotStartRecordCreation(): void
     {
         $this->eventDispatcherMock
-            ->expects(self::never())
+            ->expects($this->never())
             ->method('dispatch');
 
         $this->subject->processDatamap_afterAllOperations(
@@ -189,7 +189,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
         /** @var FrontendInterface|MockObject $cacheMock */
         $cacheMock = $this->createMock(VariableFrontend::class);
         $cacheMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('flushByTag')
             ->with(self::logicalOr(
                 self::equalTo('infoWindowUid123'),
@@ -198,7 +198,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
 
         $cacheManagerMock = $this->createMock(CacheManager::class);
         $cacheManagerMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('getCache')
             ->willReturnMap([
                 ['maps2_cachedhtml', $cacheMock],
@@ -252,7 +252,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
         $columnRegistry['tx_events2_domain_model_location']['tx_maps2_uid']['columnMatch']['pid'] = 432;
 
         $this->maps2RegistryMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('getColumnRegistry')
             ->willReturn($columnRegistry);
 
@@ -308,7 +308,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
         $columnRegistry['tx_events2_domain_model_location']['tx_maps2_uid']['columnMatch'] = $columnMatch;
 
         $this->maps2RegistryMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('getColumnRegistry')
             ->willReturn($columnRegistry);
 
@@ -349,20 +349,20 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
         /** @var Position|MockObject $positionMock */
         $positionMock = $this->createMock(Position::class);
         $positionMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('getLatitude')
             ->willReturn(12.34);
         $positionMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('getLongitude')
             ->willReturn(56.78);
         $positionMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('getFormattedAddress')
             ->willReturn('Echterdinger Straße 57, 70794 Filderstadt, Germany');
 
         $this->geoCodeServiceMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('getFirstFoundPositionByAddress')
             ->with('Echterdinger Straße 57 70794 Filderstadt Germany')
             ->willReturn($positionMock);
