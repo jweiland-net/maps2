@@ -14,7 +14,8 @@ namespace JWeiland\Maps2\Backend\Preview;
 use JWeiland\Maps2\Service\PoiCollectionService;
 use TYPO3\CMS\Backend\Preview\StandardContentPreviewRenderer;
 use TYPO3\CMS\Backend\View\BackendLayout\Grid\GridColumnItem;
-use TYPO3\CMS\Core\Service\FlexFormService;
+use TYPO3\CMS\Core\Configuration\FlexForm\FlexFormTools;
+use TYPO3\CMS\Core\Domain\RecordInterface;
 use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Core\View\ViewFactoryData;
 use TYPO3\CMS\Core\View\ViewFactoryInterface;
@@ -35,10 +36,12 @@ class Maps2PluginPreview extends StandardContentPreviewRenderer
     ];
 
     public function __construct(
-        protected FlexFormService $flexFormService,
-        protected PoiCollectionService $poiCollectionService,
-        protected ViewFactoryInterface $viewFactory,
-    ) {}
+        private readonly FlexFormTools $flexFormTools,
+        private readonly PoiCollectionService $poiCollectionService,
+        private readonly ViewFactoryInterface $viewFactory,
+    ) {
+        parent::__construct();
+    }
 
     public function renderPageModulePreviewContent(GridColumnItem $item): string
     {
@@ -50,12 +53,12 @@ class Maps2PluginPreview extends StandardContentPreviewRenderer
         $view = $this->viewFactory->create(new ViewFactoryData(
             templatePathAndFilename: self::PREVIEW_TEMPLATE,
         ));
-        $view->assignMultiple($ttContentRecord);
+        $view->assignMultiple($ttContentRecord->toArray());
 
         $this->addPluginName($view, $ttContentRecord);
 
         // Add data from column pi_flexform
-        $piFlexformData = $this->getPiFlexformData($ttContentRecord);
+        $piFlexformData = $this->getPiFlexFormData($ttContentRecord);
         if ($piFlexformData !== []) {
             $view->assign('pi_flexform_transformed', $piFlexformData);
         }
@@ -67,20 +70,20 @@ class Maps2PluginPreview extends StandardContentPreviewRenderer
         return $view->render();
     }
 
-    protected function isValidPlugin(array $ttContentRecord): bool
+    protected function isValidPlugin(RecordInterface $ttContentRecord): bool
     {
-        if (!isset($ttContentRecord['CType'])) {
+        if (!$ttContentRecord->has('CType')) {
             return false;
         }
 
-        return in_array($ttContentRecord['CType'], self::ALLOWED_PLUGINS, true);
+        return in_array($ttContentRecord->get('CType'), self::ALLOWED_PLUGINS, true);
     }
 
-    protected function addPluginName(ViewInterface $view, array $ttContentRecord): void
+    protected function addPluginName(ViewInterface $view, RecordInterface $ttContentRecord): void
     {
         $langKey = sprintf(
             'plugin.%s.title',
-            str_replace('maps2_', '', $ttContentRecord['CType']),
+            str_replace('maps2_', '', $ttContentRecord->get('CType')),
         );
 
         $view->assign(
@@ -89,10 +92,12 @@ class Maps2PluginPreview extends StandardContentPreviewRenderer
         );
     }
 
-    protected function getPiFlexformData(array $ttContentRecord): array
+    protected function getPiFlexFormData(RecordInterface $ttContentRecord): array
     {
-        if (!empty($ttContentRecord['pi_flexform'] ?? '')) {
-            return $this->flexFormService->convertFlexFormContentToArray($ttContentRecord['pi_flexform']);
+        if ($ttContentRecord->has('pi_flexform') && $ttContentRecord->get('pi_flexform') !== '') {
+            return $this->flexFormTools->convertFlexFormContentToArray(
+                $ttContentRecord->get('pi_flexform'),
+            );
         }
         return [];
     }
