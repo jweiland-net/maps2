@@ -40,6 +40,7 @@ node_modules
 # Ignore composer stuff
 /composer.lock
 /var
+/vendor
 
 # Ignore testing stuff
 /.Build
