@@ -11,10 +11,10 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Service;
 
+use TYPO3\CMS\Core\Crypto\HashAlgo;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Crypto\HashService;
 use TYPO3\CMS\Core\Http\ApplicationType;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * A global accessible class to build Cache Identifier and Tags for Cache Entries.
@@ -22,7 +22,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 readonly class CacheService
 {
-    public function __construct(protected HashService $hashService) {}
+    public function __construct(protected HashService $hashService, private Context $context) {}
 
     /**
      * In previous versions our CacheIdentifier was infoWindow{PoiCollectionUid}.
@@ -49,6 +49,7 @@ readonly class CacheService
             $this->hashService->hmac(
                 \json_encode(array_diff_key($poiCollection, ['uid', 'pid', 'language', 'title', 'address'])),
                 $prefix,
+                HashAlgo::SHA3_256,
             ),
         );
     }
@@ -83,7 +84,7 @@ readonly class CacheService
             );
         }
 
-        return (int)GeneralUtility::makeInstance(Context::class)
+        return (int)$this->context
             ->getPropertyFromAspect('language', 'id');
     }
 

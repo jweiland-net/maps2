@@ -23,11 +23,8 @@ use TYPO3\CMS\Core\Utility\ArrayUtility;
  */
 class LinkHelper
 {
-    protected SiteFinder $siteFinder;
-
-    public function __construct(SiteFinder $siteFinder)
+    public function __construct(protected SiteFinder $siteFinder)
     {
-        $this->siteFinder = $siteFinder;
     }
 
     public function buildUriToCurrentPage(array $parameters, ServerRequestInterface $request): string
@@ -74,7 +71,7 @@ class LinkHelper
     {
         $pageUid = $this->getCurrentPageUidFromRequest($request);
         if ($pageUid === 0) {
-            $pageUid = $this->getCurrentPageUidFromQueryParameters($request);
+            return $this->getCurrentPageUidFromQueryParameters($request);
         }
 
         return $pageUid;

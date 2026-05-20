@@ -20,7 +20,6 @@ use Psr\Http\Server\RequestHandlerInterface;
 use Symfony\Component\HttpFoundation\Cookie;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Http\CookieHeaderTrait;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Save consent in cookie, if requests to map providers was allowed by website visitor
@@ -32,6 +31,7 @@ class InitFeSessionMiddleware implements MiddlewareInterface
     public function __construct(
         protected ExtConf $extConf,
         protected MapHelper $mapHelper,
+        private readonly Context $context,
     ) {}
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
@@ -77,7 +77,7 @@ class InitFeSessionMiddleware implements MiddlewareInterface
     {
         // If COOKIE is activated, set expire to FE sessionDataLifetime which is 1 day by default
         $maxSessionLifetime = $GLOBALS['TYPO3_CONF_VARS']['FE']['sessionDataLifetime'] ?? 60 * 60 * 24;
-        $expire = GeneralUtility::makeInstance(Context::class)
+        $expire = $this->context
             ->getPropertyFromAspect('date', 'timestamp') + $maxSessionLifetime;
 
         // If session only is activated, $expire = 0 will delete our created COOKIE after closing the browser

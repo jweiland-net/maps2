@@ -20,11 +20,8 @@ use TYPO3\CMS\Core\Database\Query\QueryBuilder;
  */
 class OverlayHelper
 {
-    protected Context $context;
-
-    public function __construct(Context $context)
+    public function __construct(protected Context $context)
     {
-        $this->context = $context;
     }
 
     public function addWhereForOverlay(

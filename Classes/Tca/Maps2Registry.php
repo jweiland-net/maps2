@@ -141,7 +141,6 @@ class Maps2Registry implements SingletonInterface
      * Reads, extract and returns Maps2 Column Configuration (Registry)
      *
      * @api
-     * @return array
      */
     public function getColumnRegistry(): array
     {
@@ -361,7 +360,7 @@ class Maps2Registry implements SingletonInterface
         ];
 
         // Merge changes to TCA configuration
-        if (!empty($fieldConfigurationOverride)) {
+        if ($fieldConfigurationOverride !== []) {
             ArrayUtility::mergeRecursiveWithOverrule(
                 $fieldConfiguration,
                 $fieldConfigurationOverride,

@@ -28,6 +28,7 @@ class AddressHelper
     public function __construct(
         protected MessageHelper $messageHelper,
         protected ExtConf $extConf,
+        private readonly ConnectionPool $connectionPool,
     ) {}
 
     /**
@@ -117,7 +118,7 @@ class AddressHelper
         );
 
         $defaultCountry = $this->extConf->getDefaultCountry();
-        if ($defaultCountry) {
+        if ($defaultCountry !== '' && $defaultCountry !== '0') {
             return trim($defaultCountry);
         }
 
@@ -191,7 +192,7 @@ class AddressHelper
         if (is_string($options['addressColumns'])) {
             $options['addressColumns'] = GeneralUtility::trimExplode(',', $options['addressColumns']);
         } else {
-            array_map('trim', $options['addressColumns']);
+            array_map(trim(...), $options['addressColumns']);
         }
 
         // unify countryColumn
@@ -200,7 +201,7 @@ class AddressHelper
             : '';
 
         // remove countryColumn from addressColumns
-        if (!empty($options['countryColumn'])) {
+        if (isset($options['countryColumn']) && ($options['countryColumn'] !== '' && $options['countryColumn'] !== '0')) {
             $key = array_search($options['countryColumn'], $options['addressColumns']);
             if ($key) {
                 unset($options['addressColumns'][$key]);
@@ -236,6 +237,6 @@ class AddressHelper
 
     protected function getConnectionPool(): ConnectionPool
     {
-        return GeneralUtility::makeInstance(ConnectionPool::class);
+        return $this->connectionPool;
     }
 }

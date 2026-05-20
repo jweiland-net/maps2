@@ -40,6 +40,8 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
  */
 class CreateMaps2RecordHookTest extends FunctionalTestCase
 {
+    public $mapService;
+    public $eventDispatcher;
     protected CreateMaps2RecordHook $subject;
 
     protected GeoCodeService|MockObject $geoCodeServiceMock;

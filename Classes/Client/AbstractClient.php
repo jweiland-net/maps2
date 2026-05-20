@@ -52,7 +52,7 @@ abstract class AbstractClient implements ClientInterface
         }
 
         if ($this->hasErrors()) {
-            $processedResponse = [];
+            return [];
         }
 
         return $processedResponse;

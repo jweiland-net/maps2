@@ -11,6 +11,10 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Tests\Unit\Service;
 
+use JWeiland\Maps2\Client\ClientFactory;
+use JWeiland\Maps2\Client\GoogleMapsClient;
+use JWeiland\Maps2\Client\Request\RequestFactory;
+use JWeiland\Maps2\Client\Request\GoogleMaps\GeocodeRequest;
 use JWeiland\Maps2\Client;
 use JWeiland\Maps2\Client\Request;
 use JWeiland\Maps2\Domain\Model\Position;
@@ -31,27 +35,27 @@ class GeoCodeServiceTest extends UnitTestCase
     /**
      * @var Client\ClientFactory|MockObject
      */
-    protected $clientFactoryMock;
+    protected MockObject $clientFactoryMock;
 
     /**
      * @var Client\GoogleMapsClient|MockObject
      */
-    protected $googleMapsClientMock;
+    protected MockObject $googleMapsClientMock;
 
     /**
      * @var Request\RequestFactory|MockObject
      */
-    protected $requestFactoryMock;
+    protected MockObject $requestFactoryMock;
 
     /**
      * @var MapperFactory|MockObject
      */
-    protected $mapperFactoryMock;
+    protected MockObject $mapperFactoryMock;
 
     /**
-     * @var Request\GoogleMaps\GeocodeRequest|MockObject
+     * @var GeocodeRequest|MockObject
      */
-    protected $gmGeocodeRequestMock;
+    protected MockObject $gmGeocodeRequestMock;
 
     protected GeoCodeService $subject;
 
@@ -59,11 +63,11 @@ class GeoCodeServiceTest extends UnitTestCase
     {
         parent::setUp();
 
-        $this->clientFactoryMock = $this->createMock(Client\ClientFactory::class);
-        $this->googleMapsClientMock = $this->createMock(Client\GoogleMapsClient::class);
-        $this->requestFactoryMock = $this->createMock(Request\RequestFactory::class);
+        $this->clientFactoryMock = $this->createMock(ClientFactory::class);
+        $this->googleMapsClientMock = $this->createMock(GoogleMapsClient::class);
+        $this->requestFactoryMock = $this->createMock(RequestFactory::class);
         $this->mapperFactoryMock = $this->createMock(MapperFactory::class);
-        $this->gmGeocodeRequestMock = $this->createMock(Request\GoogleMaps\GeocodeRequest::class);
+        $this->gmGeocodeRequestMock = $this->createMock(GeocodeRequest::class);
 
         $this->clientFactoryMock
             ->expects($this->atLeastOnce())
