@@ -54,7 +54,9 @@
 			"ergebnis/composer-normalize": true,
 			"typo3/class-alias-loader": true,
 			"typo3/cms-composer-installers": true
-		}
+		},
+		"bin-dir": ".Build/bin",
+		"vendor-dir": ".Build/vendor"
 	},
 	"extra": {
 		"typo3/cms": {
@@ -62,7 +64,8 @@
 				"providesPackages": {}
 			},
 			"extension-key": "maps2",
-			"version": "12.1.0"
+			"version": "12.1.0",
+			"web-dir": ".Build/public"
 		}
 	}
 }
