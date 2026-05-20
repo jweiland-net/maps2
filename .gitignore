@@ -39,6 +39,8 @@ node_modules
 
 # Ignore composer stuff
 /composer.lock
+/packages
+/var
 
 # Ignore testing stuff
 /.Build
