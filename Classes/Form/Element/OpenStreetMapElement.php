@@ -17,13 +17,13 @@ use TYPO3\CMS\Core\SystemResource\Publishing\UriGenerationOptions;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Helper\MapHelper;
 use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
-use TYPO3\CMS\Backend\Form\NodeFactory;
 use TYPO3\CMS\Core\Page\JavaScriptModuleInstruction;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\StringUtility;
 use TYPO3\CMS\Core\View\ViewFactoryData;
 use TYPO3\CMS\Core\View\ViewFactoryInterface;
+use TYPO3\CMS\Core\View\ViewInterface;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 
 /*
@@ -47,13 +47,12 @@ class OpenStreetMapElement extends AbstractFormElement
     ];
 
     public function __construct(
-        protected readonly ExtConf $extConf,
-        protected readonly PageRenderer $pageRenderer,
-        protected readonly MapHelper $mapHelper,
-        protected readonly ViewFactoryInterface $viewFactory,
-        protected NodeFactory $nodeFactory,
         private readonly SystemResourceFactory $systemResourceFactory,
         private readonly SystemResourcePublisherInterface $resourcePublisher,
+        private readonly PageRenderer $pageRenderer,
+        private readonly MapHelper $mapHelper,
+        private readonly ExtConf $extConf,
+        private readonly ViewFactoryInterface $viewFactory,
     ) {}
 
     /**
@@ -142,10 +141,7 @@ class OpenStreetMapElement extends AbstractFormElement
 
     protected function getMapHtml(array $poiCollectionRecord): string
     {
-        $view = $this->viewFactory->create(new ViewFactoryData(
-            templatePathAndFilename: self::ELEMENT_TEMPLATE,
-        ));
-
+        $view = $this->getView();
         $view->assign('poiCollection', json_encode($poiCollectionRecord, JSON_THROW_ON_ERROR));
         $view->assign('extConf', json_encode(
             ObjectAccess::getGettableProperties($this->extConf),
@@ -153,5 +149,12 @@ class OpenStreetMapElement extends AbstractFormElement
         ));
 
         return $view->render();
+    }
+
+    private function getView(): ViewInterface
+    {
+        return $this->viewFactory->create(new ViewFactoryData(
+            templatePathAndFilename: self::ELEMENT_TEMPLATE,
+        ));
     }
 }

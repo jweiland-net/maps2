@@ -17,12 +17,13 @@ use TYPO3\CMS\Core\SystemResource\Publishing\UriGenerationOptions;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Helper\MapHelper;
 use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
-use TYPO3\CMS\Backend\Form\NodeFactory;
 use TYPO3\CMS\Core\Page\JavaScriptModuleInstruction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\StringUtility;
+use TYPO3\CMS\Core\View\ViewFactoryData;
+use TYPO3\CMS\Core\View\ViewFactoryInterface;
+use TYPO3\CMS\Core\View\ViewInterface;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
-use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /*
  * Special backend FormEngine element to show Google Maps.
@@ -31,6 +32,8 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
  */
 class GoogleMapsElement extends AbstractFormElement
 {
+    private const ELEMENT_TEMPLATE = 'EXT:maps2/Resources/Private/Templates/Tca/GoogleMaps.html';
+
     /**
      * Default field information enabled for this element.
      *
@@ -42,7 +45,13 @@ class GoogleMapsElement extends AbstractFormElement
         ],
     ];
 
-    public function __construct(protected NodeFactory $nodeFactory, private readonly SystemResourceFactory $systemResourceFactory, private readonly SystemResourcePublisherInterface $resourcePublisher) {}
+    public function __construct(
+        private readonly SystemResourceFactory $systemResourceFactory,
+        private readonly SystemResourcePublisherInterface $resourcePublisher,
+        private readonly MapHelper $mapHelper,
+        private readonly ExtConf $extConf,
+        private readonly ViewFactoryInterface $viewFactory,
+    ) {}
 
     /**
      * This will render Google Maps within PoiCollection records with a marker you can drag and drop
@@ -59,7 +68,11 @@ class GoogleMapsElement extends AbstractFormElement
         $config = $parameterArray['fieldConf']['config'];
         $evalList = GeneralUtility::trimExplode(',', $config['eval'] ?? '', true);
         $resource = $this->systemResourceFactory->createPublicResource('EXT:maps2/Resources/Public/');
-        $publicResourcesPath = (string) $this->resourcePublisher->generateUri($resource, $GLOBALS['TYPO3_REQUEST'], new UriGenerationOptions(absoluteUri: true));
+        $publicResourcesPath = (string) $this->resourcePublisher->generateUri(
+            $resource,
+            $GLOBALS['TYPO3_REQUEST'],
+            new UriGenerationOptions(absoluteUri: true),
+        );
 
         $resultArray['stylesheetFiles'][] = $publicResourcesPath . 'Css/GoogleMapsModule.css';
 
@@ -87,7 +100,7 @@ class GoogleMapsElement extends AbstractFormElement
             'data-formengine-input-name' => (string)($parameterArray['itemFormElName'] ?? ''),
         ];
 
-        // SF: We can not set this field to type="hidden" as FormEngine.getFieldElement
+        // SF: We cannot set this field to type="hidden" as FormEngine.getFieldElement
         // will not find it. That's why I work with display: none;
         $attributes['style'] = 'display: none;';
 
@@ -119,7 +132,7 @@ class GoogleMapsElement extends AbstractFormElement
     {
         foreach ($poiCollection as $field => $value) {
             if ($field === 'configuration_map') {
-                $poiCollection[$field] = $this->getMapHelper()->convertPoisAsJsonToArray($value);
+                $poiCollection[$field] = $this->mapHelper->convertPoisAsJsonToArray($value);
             } else {
                 $poiCollection[$field] = is_array($value) && array_key_exists(0, $value) ? $value[0] : $value;
             }
@@ -131,11 +144,10 @@ class GoogleMapsElement extends AbstractFormElement
     protected function getMapHtml(array $poiCollectionRecord): string
     {
         try {
-            $view = GeneralUtility::makeInstance(StandaloneView::class);
-            $view->setTemplatePathAndFilename('EXT:maps2/Resources/Private/Templates/Tca/GoogleMaps.html');
+            $view = $this->getView();
             $view->assign('poiCollection', json_encode($poiCollectionRecord, JSON_THROW_ON_ERROR));
             $view->assign('extConf', json_encode(
-                ObjectAccess::getGettableProperties($this->getExtConf()),
+                ObjectAccess::getGettableProperties($this->extConf),
                 JSON_THROW_ON_ERROR,
             ));
 
@@ -145,13 +157,10 @@ class GoogleMapsElement extends AbstractFormElement
         }
     }
 
-    protected function getExtConf(): ExtConf
+    private function getView(): ViewInterface
     {
-        return GeneralUtility::makeInstance(ExtConf::class);
-    }
-
-    protected function getMapHelper(): MapHelper
-    {
-        return GeneralUtility::makeInstance(MapHelper::class);
+        return $this->viewFactory->create(new ViewFactoryData(
+            templatePathAndFilename: self::ELEMENT_TEMPLATE,
+        ));
     }
 }
