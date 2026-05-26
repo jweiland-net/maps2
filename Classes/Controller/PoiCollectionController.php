@@ -20,6 +20,8 @@ use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Domain\Model\Search;
 use JWeiland\Maps2\Event\PostProcessFluidVariablesEvent;
 use Psr\Http\Message\ResponseInterface;
+use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
@@ -64,9 +66,22 @@ class PoiCollectionController extends ActionController
      */
     public function showAction(int $poiCollectionUid = 0): ResponseInterface
     {
+        $poiCollections = $this->poiCollectionRepository->findPoiCollections(
+            $this->settings,
+            $poiCollectionUid,
+        );
+
         $this->postProcessAndAssignFluidVariables([
-            'poiCollections' => $this->poiCollectionRepository->findPoiCollections($this->settings, $poiCollectionUid),
+            'poiCollections' => $poiCollections,
         ]);
+
+        if ($poiCollections->count() === 0) {
+            $this->addFlashMessage(
+                'Please check maps2 Content Element and Site Settings',
+                'No POI collections found',
+                ContextualFeedbackSeverity::ERROR,
+            );
+        }
 
         return $this->htmlResponse();
     }
