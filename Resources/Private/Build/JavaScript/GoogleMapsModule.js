@@ -31,7 +31,7 @@ class GoogleMapsModule {
     return new Promise(resolve => {
       this.resolve = resolve;
       const script = document.createElement("script");
-      script.src = `${extConf.googleMapsLibrary}&callback=_GoogleMapsModule.initMaps&libraries=marker,places`;
+      script.src = `${extConf.googleMapsLibrary}&callback=_GoogleMapsModule.initMaps&libraries=marker,places&v=beta&loading=async`;
       script.async = true;
       script.defer = true;
       document.body.append(script);
@@ -79,9 +79,9 @@ class GoogleMapsModule {
     this.findAddress();
 
     if (poiCollection.latitude && poiCollection.longitude) {
-      this.map.setCenter({ lat: poiCollection.latitude, lng: poiCollection.longitude });
+      this.map.setCenter({ lat: parseFloat(poiCollection.latitude), lng: parseFloat(poiCollection.longitude) });
     } else {
-      this.map.setCenter({ lat: extConf.defaultLatitude, lng: extConf.defaultLongitude });
+      this.map.setCenter({ lat: parseFloat(extConf.defaultLatitude), lng: parseFloat(extConf.defaultLongitude) });
     }
 
     const tabButton = document.querySelector("ul.t3js-tabs li:nth-of-type(2) button[data-bs-toggle='tab']");
@@ -89,9 +89,9 @@ class GoogleMapsModule {
       tabButton.addEventListener("shown.bs.tab", () => {
         google.maps.event.trigger(this.map, "resize");
         if (poiCollection.latitude && poiCollection.longitude) {
-          this.map.setCenter({ lat: poiCollection.latitude, lng: poiCollection.longitude });
+          this.map.setCenter({ lat: parseFloat(poiCollection.latitude), lng: parseFloat(poiCollection.longitude) });
         } else {
-          this.map.setCenter({ lat: extConf.defaultLatitude, lng: extConf.defaultLongitude });
+          this.map.setCenter({ lat: parseFloat(extConf.defaultLatitude), lng: parseFloat(extConf.defaultLongitude) });
         }
       });
     }
@@ -100,13 +100,13 @@ class GoogleMapsModule {
   createMapOptions = () => ({
     zoom: 14,
     mapTypeId: google.maps.MapTypeId.ROADMAP,
-    mapId: this.extConf.mapId
+    mapId: this.extConf.googleMapsMapId
   });
 
   createCircleOptions = (map, record, extConf) => {
     return {
       map: map,
-      center: { lat: record.latitude, lng: record.longitude },
+      center: { lat: parseFloat(record.latitude), lng: parseFloat(record.longitude) },
       strokeColor: extConf.strokeColor,
       strokeOpacity: extConf.strokeOpacity,
       strokeWeight: extConf.strokeWeight,
@@ -140,7 +140,7 @@ class GoogleMapsModule {
   createMarker = async (record) => {
     const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
     this.marker = new AdvancedMarkerElement({
-      position: { lat: record.latitude, lng: record.longitude },
+      position: { lat: parseFloat(record.latitude), lng: parseFloat(record.longitude) },
       map: this.map,
       gmpDraggable: true
     });
@@ -166,11 +166,11 @@ class GoogleMapsModule {
     let coordinatesArray = [];
     if (record.configurationMap) {
       record.configurationMap.forEach(coord => {
-        coordinatesArray.push({ lat: coord.latitude, lng: coord.longitude });
+        coordinatesArray.push({ lat: parseFloat(coord.latitude), lng: parseFloat(coord.longitude) });
       });
     }
     if (coordinatesArray.length === 0) {
-      coordinatesArray.push({ lat: record.latitude, lng: record.longitude });
+      coordinatesArray.push({ lat: parseFloat(record.latitude), lng: parseFloat(record.longitude) });
     }
 
     const area = new google.maps.Polygon(this.createPolygonOptions(coordinatesArray, this.extConf));
@@ -199,11 +199,11 @@ class GoogleMapsModule {
     let coordinatesArray = [];
     if (record.configurationMap) {
       record.configurationMap.forEach(coord => {
-        coordinatesArray.push({ lat: coord.latitude, lng: coord.longitude });
+        coordinatesArray.push({ lat: parseFloat(coord.latitude), lng: parseFloat(coord.longitude) });
       });
     }
     if (coordinatesArray.length === 0) {
-      coordinatesArray.push({ lat: record.latitude, lng: record.longitude });
+      coordinatesArray.push({ lat: parseFloat(record.latitude), lng: parseFloat(record.longitude) });
     }
 
     const route = new google.maps.Polyline(this.createPolylineOptions(coordinatesArray, this.extConf));
@@ -246,7 +246,7 @@ class GoogleMapsModule {
       this.setLatLngFields(event.latLng.lat(), event.latLng.lng(), this.marker.getRadius());
     });
 
-    this.setLatLngFields(record.latitude, record.longitude, record.radius);
+    this.setLatLngFields(parseFloat(record.latitude), parseFloat(record.longitude), record.radius);
   };
 
   setLatLngFields = (lat, lng, rad, address) => {
@@ -286,19 +286,25 @@ class GoogleMapsModule {
   };
 
   findAddress = async () => {
-    const { PlaceAutocompleteElement } = await google.maps.importLibrary("places");
-    const pacInput = new PlaceAutocompleteElement({
-        fields: ["place_id", "name", "formatted_address", "geometry"]
-    });
-    const geoCoder = new google.maps.Geocoder();
+    const { Place, PlaceAutocompleteElement } = await google.maps.importLibrary("places");
+    const pacInput = new PlaceAutocompleteElement();
 
     this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(pacInput);
 
-    pacInput.addEventListener("gmp-placechange", () => {
+    pacInput.addEventListener("gmp-placechange", async () => {
       this.infoWindow.close();
-      const place = pacInput.place;
+      const placeResult = pacInput.place;
 
-      if (!place.id || !place.geometry || !place.geometry.location) {
+      if (!placeResult || !placeResult.id) {
+        return;
+      }
+
+      const { place } = await Place.fetchPlace({
+        placeId: placeResult.id,
+        fields: ["name", "formatted_address", "geometry", "place_id"]
+      });
+
+      if (!place || !place.geometry || !place.geometry.location) {
         return;
       }
 

@@ -25,9 +25,10 @@ return Map::fromEntries(
         new MutationCollection(
             new Mutation(
                 MutationMode::Extend,
-                Directive::ScriptSrcElem,
+                Directive::ScriptSrc,
                 SourceScheme::https,
                 SourceKeyword::unsafeEval,
+                SourceKeyword::wasmUnsafeEval,
                 SourceScheme::blob,
             ),
             new Mutation(
