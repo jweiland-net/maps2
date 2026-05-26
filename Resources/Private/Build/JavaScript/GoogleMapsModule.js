@@ -8,8 +8,6 @@ class GoogleMapsModule {
   extConf = [];
   marker = {};
   map = {};
-  infoWindow = {};
-  infoWindowContent = {};
 
   constructor() {
     const googleMaps = document.querySelector(this.selector);
@@ -31,7 +29,7 @@ class GoogleMapsModule {
     return new Promise(resolve => {
       this.resolve = resolve;
       const script = document.createElement("script");
-      script.src = `${extConf.googleMapsLibrary}&callback=_GoogleMapsModule.initMaps&libraries=marker,places&v=beta&loading=async`;
+      script.src = `${extConf.googleMapsLibrary}&callback=_GoogleMapsModule.initMaps&libraries=marker,places&loading=async`;
       script.async = true;
       script.defer = true;
       document.body.append(script);
@@ -47,8 +45,6 @@ class GoogleMapsModule {
   initialize = async (element, poiCollection, extConf) => {
     this.record = poiCollection;
     this.extConf = extConf;
-    this.infoWindow = new google.maps.InfoWindow();
-    this.infoWindowContent = document.getElementById("infowindow-content");
 
     const { Map } = await google.maps.importLibrary("maps");
     this.map = new Map(element, this.createMapOptions());
@@ -143,12 +139,6 @@ class GoogleMapsModule {
       position: { lat: parseFloat(record.latitude), lng: parseFloat(record.longitude) },
       map: this.map,
       gmpDraggable: true
-    });
-
-    this.infoWindow.setContent(this.infoWindowContent);
-
-    google.maps.event.addListener(this.marker, "gmp-click", () => {
-      this.infoWindow.open(this.map, this.marker);
     });
 
     google.maps.event.addListener(this.marker, 'dragend', () => {
@@ -295,27 +285,26 @@ class GoogleMapsModule {
 
     this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(pacInput);
 
-    pacInput.addEventListener("gmp-placechange", async () => {
-      this.infoWindow.close();
-      const placeResult = pacInput.place;
+    pacInput.addEventListener("gmp-select", async (event) => {
+      const placePrediction = event.placePrediction;
 
-      if (!placeResult || !placeResult.id) {
+      if (!placePrediction) {
         return;
       }
 
-      const { place } = await Place.fetchPlace({
-        placeId: placeResult.id,
-        fields: ["name", "formatted_address", "geometry", "place_id"]
+      const place = placePrediction.toPlace();
+      await place.fetchFields({
+        fields: ["displayName", "formattedAddress", "location"]
       });
 
-      if (!place || !place.geometry || !place.geometry.location) {
+      if (!place || !place.location) {
         return;
       }
 
-      const location = place.geometry.location;
-      const lat = location.lat();
-      const lng = location.lng();
-      const address = place.formatted_address;
+      const location = place.location;
+      const lat = typeof location.lat === 'function' ? location.lat() : location.lat;
+      const lng = typeof location.lng === 'function' ? location.lng() : location.lng;
+      const address = place.formattedAddress;
 
       switch (this.record.collectionType) {
         case 'Point':
@@ -333,10 +322,6 @@ class GoogleMapsModule {
       }
 
       this.map.setCenter(location);
-      this.infoWindowContent.querySelector("#place-name").textContent = place.name;
-      this.infoWindowContent.querySelector("#place-id").textContent = place.id;
-      this.infoWindowContent.querySelector("#place-address").textContent = address;
-      this.infoWindow.open(this.map, this.marker);
     });
   };
 }
