@@ -81,7 +81,7 @@ class GoogleMapsElement extends AbstractFormElement
         );
 
         $fieldInformationResult = $this->renderFieldInformation();
-        $fieldInformationHtml = isset($fieldInformationResult['html']) ?? $fieldInformationResult['html'];
+        $fieldInformationHtml = $fieldInformationResult['html'] ?? '';
 
         $attributes = [
             'value' => '',
