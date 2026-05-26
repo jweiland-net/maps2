@@ -1,6 +1,6 @@
 import { ExtConf, PoiCollection } from '@jweiland/maps2/Classes.js';
-import FormEngine from "@typo3/backend/form-engine.js";
-import Notification from"@typo3/backend/notification.js"
+import FormEngine from '@typo3/backend/form-engine.js';
+import Notification from '@typo3/backend/notification.js';
 
 class GoogleMapsModule {
   selector = '#maps2ConfigurationMap';
@@ -99,11 +99,12 @@ class GoogleMapsModule {
 
   createMapOptions = () => ({
     zoom: 14,
-    mapTypeId: google.maps.MapTypeId.ROADMAP
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    mapId: this.extConf.mapId
   });
 
   createCircleOptions = (map, record, extConf) => {
-    const circleOptions = {
+    return {
       map: map,
       center: { lat: record.latitude, lng: record.longitude },
       strokeColor: extConf.strokeColor,
@@ -114,7 +115,6 @@ class GoogleMapsModule {
       editable: true,
       radius: record.radius === 0 ? extConf.defaultRadius : record.radius
     };
-    return circleOptions;
   };
 
   createPolygonOptions = (paths, extConf) => ({
