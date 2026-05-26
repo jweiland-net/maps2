@@ -58,13 +58,13 @@ class Maps2PluginPreview extends StandardContentPreviewRenderer
         $this->addPluginName($view, $ttContentRecord);
 
         // Add data from column pi_flexform
-        $piFlexformData = $this->getPiFlexFormData($ttContentRecord);
-        if ($piFlexformData !== []) {
-            $view->assign('pi_flexform_transformed', $piFlexformData);
+        $piFlexFormData = $this->getPiFlexFormData($ttContentRecord->getRawRecord());
+        if ($piFlexFormData !== []) {
+            $view->assign('pi_flexform_transformed', $piFlexFormData);
         }
 
-        if ($ttContentRecord['CType'] === 'maps2_maps2') {
-            $this->addPoiCollection($view, $piFlexformData);
+        if ($ttContentRecord->getRecordType() === 'maps2_maps2') {
+            $this->addPoiCollection($view, $piFlexFormData);
         }
 
         return $view->render();
