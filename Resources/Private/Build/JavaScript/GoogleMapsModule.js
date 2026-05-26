@@ -147,16 +147,20 @@ class GoogleMapsModule {
 
     this.infoWindow.setContent(this.infoWindowContent);
 
-    this.marker.addListener("gmp-click", () => {
+    google.maps.event.addListener(this.marker, "gmp-click", () => {
       this.infoWindow.open(this.map, this.marker);
     });
 
-    this.marker.addListener('dragend', (event) => {
-      const position = event.target.position;
-      this.setLatLngFields(position.lat, position.lng, 0);
+    google.maps.event.addListener(this.marker, 'dragend', () => {
+      const position = this.marker.position;
+      if (position) {
+        const lat = typeof position.lat === 'function' ? position.lat() : position.lat;
+        const lng = typeof position.lng === 'function' ? position.lng() : position.lng;
+        this.setLatLngFields(lat, lng, 0);
+      }
     });
 
-    this.map.addListener('click', (event) => {
+    google.maps.event.addListener(this.map, 'click', (event) => {
       this.marker.position = event.latLng;
       this.setLatLngFields(event.latLng.lat(), event.latLng.lng(), 0);
     });
@@ -178,18 +182,18 @@ class GoogleMapsModule {
     const path = area.getPath();
 
     ['set_at', 'insert_at'].forEach(eventName => {
-      path.addListener(eventName, () => this.storeRouteAsJson(area));
+      google.maps.event.addListener(path, eventName, () => this.storeRouteAsJson(area));
     });
 
-    area.addListener('rightclick', (event) => {
+    google.maps.event.addListener(area, 'rightclick', (event) => {
       if (event.vertex !== undefined) {
         path.removeAt(event.vertex);
         this.storeRouteAsJson(area);
       }
     });
 
-    this.map.addListener('click', (event) => path.push(event.latLng));
-    this.map.addListener('dragend', () => {
+    google.maps.event.addListener(this.map, 'click', (event) => path.push(event.latLng));
+    google.maps.event.addListener(this.map, 'dragend', () => {
       const center = this.map.getCenter();
       this.setLatLngFields(center.lat(), center.lng(), 0);
     });
@@ -211,18 +215,18 @@ class GoogleMapsModule {
     const path = route.getPath();
 
     ['set_at', 'insert_at'].forEach(eventName => {
-      path.addListener(eventName, () => this.storeRouteAsJson(route));
+      google.maps.event.addListener(path, eventName, () => this.storeRouteAsJson(route));
     });
 
-    route.addListener('rightclick', (event) => {
+    google.maps.event.addListener(route, 'rightclick', (event) => {
       if (event.vertex !== undefined) {
         path.removeAt(event.vertex);
         this.storeRouteAsJson(route);
       }
     });
 
-    this.map.addListener('click', (event) => path.push(event.latLng));
-    this.map.addListener('dragend', () => {
+    google.maps.event.addListener(this.map, 'click', (event) => path.push(event.latLng));
+    google.maps.event.addListener(this.map, 'dragend', () => {
       const center = this.map.getCenter();
       this.setLatLngFields(center.lat(), center.lng(), 0);
     });
@@ -231,17 +235,17 @@ class GoogleMapsModule {
   createRadius = (record) => {
     this.marker = new google.maps.Circle(this.createCircleOptions(this.map, record, this.extConf));
 
-    this.marker.addListener('center_changed', () => {
+    google.maps.event.addListener(this.marker, 'center_changed', () => {
       const center = this.marker.getCenter();
       this.setLatLngFields(center.lat(), center.lng(), this.marker.getRadius());
     });
 
-    this.marker.addListener('radius_changed', () => {
+    google.maps.event.addListener(this.marker, 'radius_changed', () => {
       const center = this.marker.getCenter();
       this.setLatLngFields(center.lat(), center.lng(), this.marker.getRadius());
     });
 
-    this.map.addListener('click', (event) => {
+    google.maps.event.addListener(this.map, 'click', (event) => {
       this.marker.setCenter(event.latLng);
       this.setLatLngFields(event.latLng.lat(), event.latLng.lng(), this.marker.getRadius());
     });
