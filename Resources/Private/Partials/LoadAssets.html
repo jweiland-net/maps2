@@ -20,7 +20,7 @@
                             inline="0"
                             useNonce="1"/>
         </f:then>
-        <f:else>
+        <f:else if="{environment.settings.mapProvider} == 'osm'">
             <f:comment><!-- Do not activate async. Else "L" is not defined --></f:comment>
             <f:asset.css identifier="maps2-osm"
                          href="EXT:maps2/Resources/Public/Css/Leaflet/Leaflet.css"
@@ -36,6 +36,9 @@
                             async="0"
                             inline="0"
                             useNonce="1"/>
+        </f:else>
+        <f:else>
+            <p>No map provider configured. Please check Site Settings and Site Set Includes</p>
         </f:else>
     </f:if>
 </m:getEnvironment>
