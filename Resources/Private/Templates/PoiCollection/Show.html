@@ -9,7 +9,7 @@
     <f:flashMessages/>
     <f:flashMessages queueIdentifier="extbase.flashmessages.maps2"/>
 
-    <f:if condition="{poiCollections}">
+    <f:if condition="{poiCollections} && {settings.googleMapsJavaScriptApiKey}">
         <div id="maps2-{data.uid}"
              class="maps2"
              data-environment="{environment -> maps2:convertToJson()}"
