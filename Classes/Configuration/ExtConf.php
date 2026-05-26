@@ -41,6 +41,7 @@ final readonly class ExtConf
         'googleMapsGeocodeUri' => 'https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=%s',
         'googleMapsJavaScriptApiKey' => '',
         'googleMapsGeocodeApiKey' => '',
+        'googleMapsMapId' => '',
 
         // Open Street Map
         'openStreetMapGeocodeUri' => 'https://nominatim.openstreetmap.org/search?q=%s&format=json&addressdetails=1',
@@ -74,6 +75,7 @@ final readonly class ExtConf
         private string $googleMapsGeocodeUri = self::DEFAULT_SETTINGS['googleMapsGeocodeUri'],
         private string $googleMapsJavaScriptApiKey = self::DEFAULT_SETTINGS['googleMapsJavaScriptApiKey'],
         private string $googleMapsGeocodeApiKey = self::DEFAULT_SETTINGS['googleMapsGeocodeApiKey'],
+        private string $googleMapsMapId = self::DEFAULT_SETTINGS['googleMapsMapId'],
 
         // Open Street Map
         private string $openStreetMapGeocodeUri = self::DEFAULT_SETTINGS['openStreetMapGeocodeUri'],
@@ -120,6 +122,7 @@ final readonly class ExtConf
             googleMapsGeocodeUri: (string)$extensionSettings['googleMapsGeocodeUri'],
             googleMapsJavaScriptApiKey: (string)$extensionSettings['googleMapsJavaScriptApiKey'],
             googleMapsGeocodeApiKey: (string)$extensionSettings['googleMapsGeocodeApiKey'],
+            googleMapsMapId: (string)$extensionSettings['googleMapsMapId'],
 
             // Open Street Map
             openStreetMapGeocodeUri: (string)$extensionSettings['openStreetMapGeocodeUri'],
@@ -220,6 +223,11 @@ final readonly class ExtConf
     public function getOpenStreetMapGeocodeUri(): string
     {
         return trim($this->openStreetMapGeocodeUri);
+    }
+
+    public function getGoogleMapsMapId(): string
+    {
+        return trim($this->googleMapsMapId);
     }
 
     public function getStrokeColor(): string
