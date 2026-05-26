@@ -24,6 +24,7 @@ use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 
 /**
@@ -40,6 +41,18 @@ class PoiCollectionController extends ActionController
     public function initializeObject(): void
     {
         $this->settings = $this->settingsHelper->getMergedSettings();
+    }
+
+    protected function initializeAction(): void
+    {
+        if (($this->settings['googleMapsJavaScriptApiKey'] ?? '') === '') {
+            $this->addFlashMessage(
+                'Google Maps cannot be loaded because no API key is configured for this site. '
+                . 'Please check the site settings.',
+                'Google Maps cannot be loaded',
+                ContextualFeedbackSeverity::WARNING,
+            );
+        }
     }
 
     protected function initializeView($view): void
@@ -71,16 +84,29 @@ class PoiCollectionController extends ActionController
             $poiCollectionUid,
         );
 
-        $this->postProcessAndAssignFluidVariables([
+        $fluidVariables = $this->postProcessAndAssignFluidVariables([
             'poiCollections' => $poiCollections,
         ]);
 
-        if ($poiCollections->count() === 0) {
-            $this->addFlashMessage(
-                'Please check maps2 Content Element and Site Settings',
-                'No POI collections found',
-                ContextualFeedbackSeverity::ERROR,
-            );
+        if ($fluidVariables['poiCollections'] instanceof QueryResultInterface
+            && $fluidVariables['poiCollections']->count() === 0
+        ) {
+            $storagePageIds = $fluidVariables['poiCollections']->getQuery()->getQuerySettings()->getStoragePageIds();
+            if ($storagePageIds === [0]) {
+                $this->addFlashMessage(
+                    'No storage PID has been configured. '
+                    . 'Please check the maps2 content element and the site settings.',
+                    'Storage PID missing',
+                    ContextualFeedbackSeverity::ERROR,
+                );
+            } else {
+                $this->addFlashMessage(
+                    'No POI collections were found for the configured storage PID. '
+                    . 'Please check whether the correct storage PID is assigned.',
+                    'No POI collections found',
+                    ContextualFeedbackSeverity::ERROR,
+                );
+            }
         }
 
         return $this->htmlResponse();
@@ -129,7 +155,7 @@ class PoiCollectionController extends ActionController
         return $this->htmlResponse();
     }
 
-    protected function postProcessAndAssignFluidVariables(array $variables = []): void
+    protected function postProcessAndAssignFluidVariables(array $variables = []): array
     {
         /** @var PostProcessFluidVariablesEvent $event */
         $event = $this->eventDispatcher->dispatch(
@@ -141,5 +167,7 @@ class PoiCollectionController extends ActionController
         );
 
         $this->view->assignMultiple($event->getFluidVariables());
+
+        return $event->getFluidVariables();
     }
 }
