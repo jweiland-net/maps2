@@ -7,6 +7,7 @@ class GoogleMapsModule {
   record = [];
   extConf = [];
   marker = {};
+  shape = {};
   map = {};
 
   constructor() {
@@ -167,18 +168,18 @@ class GoogleMapsModule {
       coordinatesArray.push({ lat: parseFloat(record.latitude), lng: parseFloat(record.longitude) });
     }
 
-    const area = new google.maps.Polygon(this.createPolygonOptions(coordinatesArray, this.extConf));
-    area.setMap(this.map);
-    const path = area.getPath();
+    this.shape = new google.maps.Polygon(this.createPolygonOptions(coordinatesArray, this.extConf));
+    this.shape.setMap(this.map);
+    const path = this.shape.getPath();
 
     ['set_at', 'insert_at'].forEach(eventName => {
-      google.maps.event.addListener(path, eventName, () => this.storeRouteAsJson(area));
+      google.maps.event.addListener(path, eventName, () => this.storeRouteAsJson(this.shape));
     });
 
-    google.maps.event.addListener(area, 'rightclick', (event) => {
+    google.maps.event.addListener(this.shape, 'rightclick', (event) => {
       if (event.vertex !== undefined) {
         path.removeAt(event.vertex);
-        this.storeRouteAsJson(area);
+        this.storeRouteAsJson(this.shape);
       }
     });
 
@@ -200,18 +201,18 @@ class GoogleMapsModule {
       coordinatesArray.push({ lat: parseFloat(record.latitude), lng: parseFloat(record.longitude) });
     }
 
-    const route = new google.maps.Polyline(this.createPolylineOptions(coordinatesArray, this.extConf));
-    route.setMap(this.map);
-    const path = route.getPath();
+    this.shape = new google.maps.Polyline(this.createPolylineOptions(coordinatesArray, this.extConf));
+    this.shape.setMap(this.map);
+    const path = this.shape.getPath();
 
     ['set_at', 'insert_at'].forEach(eventName => {
-      google.maps.event.addListener(path, eventName, () => this.storeRouteAsJson(route));
+      google.maps.event.addListener(path, eventName, () => this.storeRouteAsJson(this.shape));
     });
 
-    google.maps.event.addListener(route, 'rightclick', (event) => {
+    google.maps.event.addListener(this.shape, 'rightclick', (event) => {
       if (event.vertex !== undefined) {
         path.removeAt(event.vertex);
-        this.storeRouteAsJson(route);
+        this.storeRouteAsJson(this.shape);
       }
     });
 
@@ -313,6 +314,12 @@ class GoogleMapsModule {
           break;
         case 'Area':
         case 'Route':
+          if (this.shape && typeof this.shape.getPath === 'function') {
+            const path = this.shape.getPath();
+            path.clear();
+            path.push(location);
+            this.storeRouteAsJson(this.shape);
+          }
           this.setLatLngFields(lat, lng, 0, address);
           break;
         case 'Radius':
