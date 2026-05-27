@@ -56,7 +56,7 @@ return [
                 --palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:palette.marker_icon_pos;marker_icon_pos,
                 --div--;core.form.tabs:access,
                 --palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.access;access,
-                --div--;LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:sys_category.tabs.category, categories',
+                --div--;core.form.tabs:categories, categories',
         ],
         'Area' => [
             'showitem' => '--palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:palette.language_hidden;language_hidden, l10n_diffsource,
@@ -68,7 +68,7 @@ return [
                 --palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:palette.fill;fill,
                 --div--;core.form.tabs:access,
                 --palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.access;access,
-                --div--;LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:sys_category.tabs.category, categories',
+                --div--;core.form.tabs:categories, categories',
         ],
         'Route' => [
             'showitem' => '--palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:palette.language_hidden;language_hidden, l10n_diffsource,
@@ -79,7 +79,7 @@ return [
                 --palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:palette.stroke;stroke,
                 --div--;core.form.tabs:access,
                 --palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.access;access,
-                --div--;LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:sys_category.tabs.category, categories',
+                --div--;core.form.tabs:categories, categories',
         ],
         'Radius' => [
             'showitem' => '--palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:palette.language_hidden;language_hidden, l10n_diffsource,
@@ -91,7 +91,7 @@ return [
                 --palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:palette.fill;fill,
                 --div--;core.form.tabs:access,
                 --palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.access;access,
-                --div--;LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:sys_category.tabs.category, categories',
+                --div--;core.form.tabs:categories, categories',
         ],
     ],
     'palettes' => [
