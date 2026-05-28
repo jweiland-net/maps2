@@ -24,22 +24,29 @@ class GoogleMaps2 {
 
     this.setMapDimensions(element, environment.settings);
 
+    this.initialize(element, environment);
+  }
+
+  /**
+   * Initialize Map and Markers asynchronously
+   *
+   * @param {HTMLElement} element
+   * @param {Environment} environment
+   */
+  initialize = async (element, environment) => {
     this.createMap(element, environment);
 
     if (typeof this.poiCollections === 'undefined' || this.poiCollections === null) {
-      // Plugin: CityMap
       let lat = Number(element.dataset.latitude);
       let lng = Number(element.dataset.longitude);
       if (lat && lng) {
-        this.createMarkerByLatLng(lat, lng);
+        await this.createMarkerByLatLng(lat, lng);
         this.map.setCenter(new google.maps.LatLng(lat, lng));
       } else {
-        // Fallback
         this.map.setCenter(new google.maps.LatLng(environment.extConf.defaultLatitude, environment.extConf.defaultLongitude));
       }
     } else {
-      // normal case
-      this.createPointByCollectionType(element, environment);
+      await this.createPointByCollectionType(element, environment);
       if (
         typeof environment.settings.markerClusterer !== 'undefined'
         && environment.settings.markerClusterer.enable === 1
@@ -170,10 +177,10 @@ class GoogleMaps2 {
    * @param {Environment} environment
    */
   createMap (element, environment) {
-    this.map = new google.maps.Map(
-      element,
-      this.getMapOptions(environment.settings)
-    );
+    let mapOptions = this.getMapOptions(environment.settings);
+    mapOptions.mapId = environment.settings.googleMapsMapId || '';
+
+    this.map = new google.maps.Map(element, mapOptions);
   }
 
   /**
@@ -325,7 +332,6 @@ class GoogleMaps2 {
     form.classList.add("txMaps2Form");
     form.setAttribute("id", "txMaps2Form-" + environment.contentRecord.uid);
 
-    // Add checkbox for category
     for (let categoryUid in categories) {
       if (categories.hasOwnProperty(categoryUid)) {
         form.appendChild(this.getCheckbox(categories[categoryUid]));
@@ -336,7 +342,6 @@ class GoogleMaps2 {
       }
     }
 
-    // Add listener for checkboxes
     form.querySelectorAll("input").forEach((checkbox) => {
       checkbox.addEventListener("click", () => {
         let isChecked = (checkbox).checked;
@@ -344,7 +349,13 @@ class GoogleMaps2 {
         let markers = this.getMarkersToChangeVisibilityFor(categoryUid, form, isChecked);
 
         markers.forEach((marker) => {
-          marker.setVisible(isChecked);
+          if (typeof marker.setVisible === 'function') {
+            marker.setVisible(isChecked);
+          } else if (typeof marker.setMap === 'function') {
+            marker.setMap(isChecked ? this.map : null);
+          } else {
+            marker.map = isChecked ? this.map : null;
+          }
         });
       });
     });
@@ -391,12 +402,12 @@ class GoogleMaps2 {
    * @param {HTMLElement} element
    * @param {Environment} environment
    */
-  createPointByCollectionType = (element, environment) => {
+  createPointByCollectionType = async (element, environment) => {
     let marker;
     let categoryUid = 0;
 
     if (this.poiCollections !== null && this.poiCollections.length) {
-      this.poiCollections.forEach(poiCollection => {
+      for (const poiCollection of this.poiCollections) {
         if (poiCollection.strokeColor === "") {
           poiCollection.strokeColor = environment.extConf.strokeColor;
         }
@@ -416,7 +427,7 @@ class GoogleMaps2 {
         marker = null;
         switch (poiCollection.collectionType) {
           case "Point":
-            marker = this.createMarker(poiCollection, element, environment);
+            marker = await this.createMarker(poiCollection, element, environment);
             break;
           case "Area":
             marker = this.createArea(poiCollection, environment);
@@ -447,7 +458,7 @@ class GoogleMaps2 {
             });
           }
         }
-      });
+      }
     }
   }
 
@@ -458,23 +469,23 @@ class GoogleMaps2 {
    * @param {HTMLElement} element
    * @param {Environment} environment
    */
-  createMarker = (poiCollection, element, environment) => {
-    let categoryUid = "0";
-    let marker = new google.maps.Marker({
+  createMarker = async (poiCollection, element, environment) => {
+    const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+    let markerOptions = {
       position: new google.maps.LatLng(poiCollection.latitude, poiCollection.longitude),
-      map: this.map
-    });
-    marker.setDraggable(this.editable);
+      map: this.map,
+      gmpDraggable: this.editable
+    };
 
-    // assign first found marker icon, if available
     if (poiCollection.hasOwnProperty("markerIcon") && poiCollection.markerIcon !== "") {
-      let icon = {
-        url: poiCollection.markerIcon,
-        scaledSize: new google.maps.Size(poiCollection.markerIconWidth, poiCollection.markerIconHeight),
-        anchor: new google.maps.Point(poiCollection.markerIconAnchorPosX, poiCollection.markerIconAnchorPosY)
-      };
-      marker.setIcon(icon);
+      const img = document.createElement('img');
+      img.src = poiCollection.markerIcon;
+      if (poiCollection.markerIconWidth) img.style.width = poiCollection.markerIconWidth + 'px';
+      if (poiCollection.markerIconHeight) img.style.height = poiCollection.markerIconHeight + 'px';
+      markerOptions.content = img;
     }
+
+    let marker = new AdvancedMarkerElement(markerOptions);
 
     this.pointMarkers.push(marker);
     this.bounds.extend(marker.position);
@@ -569,7 +580,6 @@ class GoogleMaps2 {
    * @param environment
    */
   addInfoWindow = (element, poiCollection, environment) => {
-    // we need these both vars to be set global. So that we can access them in Listener
     let infoWindow = this.infoWindow;
     let map = this.map;
     google.maps.event.addListener(element, "click", event => {
@@ -588,11 +598,12 @@ class GoogleMaps2 {
           infoWindow.close();
           infoWindow.setContent(data.content);
 
-          // Do not set pointer of InfoWindow to the same pointer of the POI icon.
-          // In case of Point the pointer of InfoWindow should be at mouse position.
           if (poiCollection.collectionType === "Point") {
             infoWindow.setPosition(null);
-            infoWindow.open(map, element);
+            infoWindow.open({
+              anchor: element,
+              map: map
+            });
           } else {
             infoWindow.setPosition(new google.maps.LatLng(poiCollection.latitude, poiCollection.longitude));
             infoWindow.open(map);
@@ -621,8 +632,9 @@ class GoogleMaps2 {
    * @param latitude
    * @param longitude
    */
-  createMarkerByLatLng = (latitude, longitude) => {
-    let marker = new google.maps.Marker({
+  createMarkerByLatLng = async (latitude, longitude) => {
+    const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+    let marker = new AdvancedMarkerElement({
       position: new google.maps.LatLng(latitude, longitude),
       map: this.map
     });
@@ -639,17 +651,16 @@ class GoogleMaps2 {
    * @param environment
    */
   addEditListeners = (mapContainer, marker, poiCollection, environment) => {
-    // update fields and marker while dragging
     google.maps.event.addListener(marker, 'dragend', () => {
-      let lat = marker.getPosition().lat().toFixed(6);
-      let lng = marker.getPosition().lng().toFixed(6);
+      let position = marker.position;
+      let lat = (typeof position.lat === 'function' ? position.lat() : position.lat).toFixed(6);
+      let lng = (typeof position.lng === 'function' ? position.lng() : position.lng).toFixed(6);
       mapContainer.prevAll("input.latitude-" + environment.contentRecord.uid).val(lat);
       mapContainer.prevAll("input.longitude-" + environment.contentRecord.uid).val(lng);
     });
 
-    // update fields and marker when clicking on the map
     google.maps.event.addListener(this.map, 'click', event => {
-      marker.setPosition(event.latLng);
+      marker.position = event.latLng;
       mapContainer.prevAll("input.latitude-" + environment.contentRecord.uid).val(event.latLng.lat().toFixed(6));
       mapContainer.prevAll("input.longitude-" + environment.contentRecord.uid).val(event.latLng.lng().toFixed(6));
     });
@@ -666,25 +677,20 @@ function initMap () {
     const environment = typeof element.dataset.environment !== 'undefined' ? element.dataset.environment : '{}';
     const override = typeof element.dataset.override !== 'undefined' ? element.dataset.override : '{}';
 
-    // Pass in the objects to merge as arguments.
-    // For a deep extend, set the first argument to `true`.
     const extend = (...args) => {
       let extended = {};
       let deep = false;
       let i = 0;
       let length = args.length;
 
-      // Check for deep merge
       if (Object.prototype.toString.call(args[0]) === '[object Boolean]') {
         deep = args[0];
         i++;
       }
 
-      // Merge the object into the extended object
       const merge = function (obj) {
         for ( var prop in obj ) {
           if ( Object.prototype.hasOwnProperty.call( obj, prop ) ) {
-            // If deep merge and property is an object, merge properties
             if ( deep && Object.prototype.toString.call(obj[prop]) === '[object Object]' ) {
               extended[prop] = extend( true, extended[prop], obj[prop] );
             } else {
@@ -694,7 +700,6 @@ function initMap () {
         }
       };
 
-      // Loop through each object and conduct a merge
       for ( ; i < length; i++ ) {
         var obj = args[i];
         merge(obj);
@@ -709,14 +714,11 @@ function initMap () {
     ));
   });
 
-  // Initialize radius search
   let address = document.querySelector('#maps2Address');
   let radius = document.querySelector('#maps2Radius');
   if (address !== null && radius !== null) {
     let autocomplete = new google.maps.places.Autocomplete(address, {
-      fields: [
-        "place_id"
-      ]
+      fields: ["id", "location", "formattedAddress", "displayName"]
     });
 
     address.addEventListener("keydown", event => {

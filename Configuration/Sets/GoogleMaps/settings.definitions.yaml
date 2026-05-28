@@ -16,3 +16,9 @@ settings:
     description: 'Enter the Google Maps JavaScript API key which you can get from google cloud console'
     type: string
     default: ''
+  maps2.googleMapsMapId:
+    label: 'Map ID'
+    category: Maps2.googlemaps
+    description: 'Visit https://console.developers.google.com Within your Google Maps project, please choose "Map Management" and create a new map ID.'
+    type: string
+    default: ''
