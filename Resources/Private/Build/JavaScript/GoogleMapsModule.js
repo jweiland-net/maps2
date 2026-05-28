@@ -30,7 +30,7 @@ class GoogleMapsModule {
     return new Promise(resolve => {
       this.resolve = resolve;
       const script = document.createElement("script");
-      script.src = `${extConf.googleMapsLibrary}&callback=_GoogleMapsModule.initMaps&libraries=marker,places&loading=async`;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${extConf.googleMapsJavaScriptApiKey}&libraries=marker,places&callback=_GoogleMapsModule.initMaps&loading=async`;
       script.async = true;
       script.defer = true;
       document.body.append(script);

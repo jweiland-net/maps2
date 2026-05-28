@@ -10,7 +10,7 @@
             <f:comment><!-- What a dump solution to add the nonce attribute to all dynamically generated style tags by Google Maps API --></f:comment>
             <f:asset.css identifier="maps2-google-maps" useNonce="1" priority="1">;</f:asset.css>
             <f:asset.script identifier="maps2-google-maps-api"
-                            src="https://maps.googleapis.com/maps/api/js?key={environment.settings.googleMapsJavaScriptApiKey}&libraries=places&callback=initMap"
+                            src="https://maps.googleapis.com/maps/api/js?key={environment.settings.googleMapsJavaScriptApiKey}&libraries=places&callback=initMap&loading=async"
                             async="1"
                             inline="0"
                             useNonce="1"/>

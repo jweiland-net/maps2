@@ -144,24 +144,6 @@ TypoScript:
 Tab: Gm
 =======
 
-googleMapsLibrary
------------------
-
-Default: `https://maps.googleapis.com/maps/api/js?key=|&libraries=places`
-
-This is the link to the current Google Maps JavaScript Api. It is configured as
-**wrap** so that you can decide where the ApiKey has to be inserted.
-
-..  important::
-
-    This configuration is only for Google Maps which are used in list module of
-    TYPO3 Backend.
-
-..  important::
-
-    Please keep **places** API information in link, as it is need for address
-    search while PoiCollection record creation.
-
 googleMapsGeocodeUri
 --------------------
 
