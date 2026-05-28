@@ -483,6 +483,13 @@ class GoogleMaps2 {
       if (poiCollection.markerIconWidth) img.style.width = poiCollection.markerIconWidth + 'px';
       if (poiCollection.markerIconHeight) img.style.height = poiCollection.markerIconHeight + 'px';
       markerOptions.content = img;
+
+      if (poiCollection.hasOwnProperty("markerIconAnchorPosX") && poiCollection.markerIconAnchorPosX !== "") {
+        markerOptions.anchorLeft = '-' + poiCollection.markerIconAnchorPosX + 'px';
+      }
+      if (poiCollection.hasOwnProperty("markerIconAnchorPosY") && poiCollection.markerIconAnchorPosY !== "") {
+        markerOptions.anchorTop = '-' + poiCollection.markerIconAnchorPosY + 'px';
+      }
     }
 
     let marker = new AdvancedMarkerElement(markerOptions);
