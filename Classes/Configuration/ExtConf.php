@@ -37,7 +37,6 @@ final readonly class ExtConf
         'explicitAllowMapProviderRequestsBySessionOnly' => false,
 
         // Google Maps
-        'googleMapsLibrary' => 'https://maps.googleapis.com/maps/api/js?key=|&libraries=places',
         'googleMapsGeocodeUri' => 'https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=%s',
         'googleMapsJavaScriptApiKey' => '',
         'googleMapsGeocodeApiKey' => '',
@@ -71,7 +70,6 @@ final readonly class ExtConf
         private bool $explicitAllowMapProviderRequestsBySessionOnly = self::DEFAULT_SETTINGS['explicitAllowMapProviderRequestsBySessionOnly'],
 
         // Google Maps
-        private string $googleMapsLibrary = self::DEFAULT_SETTINGS['googleMapsLibrary'],
         private string $googleMapsGeocodeUri = self::DEFAULT_SETTINGS['googleMapsGeocodeUri'],
         private string $googleMapsJavaScriptApiKey = self::DEFAULT_SETTINGS['googleMapsJavaScriptApiKey'],
         private string $googleMapsGeocodeApiKey = self::DEFAULT_SETTINGS['googleMapsGeocodeApiKey'],
@@ -118,7 +116,6 @@ final readonly class ExtConf
             explicitAllowMapProviderRequestsBySessionOnly: (bool)$extensionSettings['explicitAllowMapProviderRequestsBySessionOnly'],
 
             // Google Maps
-            googleMapsLibrary: (string)$extensionSettings['googleMapsLibrary'],
             googleMapsGeocodeUri: (string)$extensionSettings['googleMapsGeocodeUri'],
             googleMapsJavaScriptApiKey: (string)$extensionSettings['googleMapsJavaScriptApiKey'],
             googleMapsGeocodeApiKey: (string)$extensionSettings['googleMapsGeocodeApiKey'],
@@ -183,26 +180,6 @@ final readonly class ExtConf
     public function getExplicitAllowMapProviderRequestsBySessionOnly(): bool
     {
         return $this->explicitAllowMapProviderRequestsBySessionOnly;
-    }
-
-    public function getGoogleMapsLibrary(): string
-    {
-        $library = $this->googleMapsLibrary;
-
-        // This was a bug. After upgrading to TYPO3 ~8.7 this value just contains "|" or is empty.
-        // In that case fall back to default
-        if (in_array($library, ['|', ''])) {
-            $library = self::DEFAULT_SETTINGS['googleMapsLibrary'];
-        }
-
-        // insert ApiKey
-        $library = str_replace('|', $this->getGoogleMapsJavaScriptApiKey(), $library);
-        // $parts: 0 = full string; 1 = s or empty; 2 = needed url
-        if (preg_match('#^http(s)?://(.*)$#i', $library, $parts)) {
-            return 'https://' . $parts[2];
-        }
-
-        return '';
     }
 
     public function getGoogleMapsGeocodeUri(): string

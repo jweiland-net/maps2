@@ -34,9 +34,6 @@
 				<source>Store consent of website visitor in session: Unlike "explicitAllowMapProviderRequests", with this option we do not store the consent in a COOKIE, but in the current PHP SESSION. After a browser restart, the consent that the "Personal Data" will be sent to third parties must be obtained again. If the browser can save the current PHP SESSION even after exiting the browser (e.g. Firefox), then this setting has no effect. The option "explicitAllowMapProviderRequests" must also be active for this option to take effect.</source>
 			</trans-unit>
 
-			<trans-unit id="googleMapsLibrary" xml:space="preserve">
-				<source>Link to Google Maps API: This setting is for TYPO3 Backend only. Visit your TypoScript-Templates if you want to change the library for Frontend. You only need to fill this field if you want to use an older or beta version.</source>
-			</trans-unit>
 			<trans-unit id="googleMapsGeocodeUri" xml:space="preserve">
 				<source>Google Maps Geocode URI: If needed you can change the URI of Google Maps Geocode API here. It MUST have two %s placeholders.</source>
 			</trans-unit>

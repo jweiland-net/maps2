@@ -286,7 +286,6 @@ export class ExtConf {
   #googleMapsGeocodeApiKey = '';
   #googleMapsGeocodeUri = '';
   #googleMapsJavaScriptApiKey = '';
-  #googleMapsLibrary = '';
   #googleMapsMapId = '';
   #infoWindowContentTemplatePath = '';
   #mapProvider = '';
@@ -317,7 +316,6 @@ export class ExtConf {
     this.#googleMapsGeocodeApiKey = extConf.googleMapsGeocodeApiKey;
     this.#googleMapsGeocodeUri = extConf.googleMapsGeocodeUri;
     this.#googleMapsJavaScriptApiKey = extConf.googleMapsJavaScriptApiKey;
-    this.#googleMapsLibrary = extConf.googleMapsLibrary;
     this.#googleMapsMapId = extConf.googleMapsMapId;
     this.#infoWindowContentTemplatePath = extConf.infoWindowContentTemplatePath;
     this.#mapProvider = extConf.mapProvider;
@@ -420,13 +418,6 @@ export class ExtConf {
    */
   get googleMapsJavaScriptApiKey() {
     return this.#googleMapsJavaScriptApiKey;
-  }
-
-  /**
-   * @returns {string}
-   */
-  get googleMapsLibrary() {
-    return this.#googleMapsLibrary;
   }
 
   /**
