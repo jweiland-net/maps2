@@ -47,7 +47,7 @@
 				<source>Google Maps Geocode ApiKey: Visit https://console.developers.google.com Create a new project for Google Maps Geocode API and insert here the retrieved Server ApiKey.</source>
 			</trans-unit>
 			<trans-unit id="googleMapsMapId" xml:space="preserve">
-				<source>Google Maps Map ID: Visit https://console.developers.google.com Within your Google Maps project, please choose "Map Management" and create a new map ID.</source>
+				<source>Google Maps Map ID: This setting is for TYPO3 Backend only. Visit https://console.developers.google.com Within your Google Maps project, please choose "Map Management" and create a new map ID.</source>
 			</trans-unit>
 
 			<trans-unit id="openStreetMapGeocodeUri" xml:space="preserve">

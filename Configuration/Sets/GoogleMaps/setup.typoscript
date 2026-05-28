@@ -21,6 +21,7 @@ plugin.tx_maps2 {
     streetViewControl = 1
     fullscreenMapControl = 1
     googleMapsJavaScriptApiKey = {$maps2.googleMapsJavaScriptApiKey}
+    googleMapsMapId = {$maps2.googleMapsMapId}
     mapTypeId = google.maps.MapTypeId.ROADMAP
     markerClusterer {
       enable = {$maps2.enableMarkerClusterer}
