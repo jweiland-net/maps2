@@ -317,7 +317,7 @@ return [
                 'type' => 'file',
                 'minitems' => 0,
                 'maxitems' => 1,
-                'allowed' => 'common-image-types',
+                'allowed' => 'png, svg, webp, avif, jpg, jpeg, gif',
             ],
         ],
         'marker_icon_width' => [
