@@ -11,42 +11,37 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Controller;
 
-use JWeiland\Maps2\Configuration\ExtConf;
+use JWeiland\Maps2\Configuration\Environment;
+use JWeiland\Maps2\Configuration\EnvironmentFactory;
 use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Domain\Model\Search;
 use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
 use JWeiland\Maps2\Event\PostProcessFluidVariablesEvent;
-use JWeiland\Maps2\Helper\LinkHelper;
-use JWeiland\Maps2\Helper\SettingsHelper;
 use JWeiland\Maps2\Service\GeoCodeService;
 use Psr\Http\Message\ResponseInterface;
-use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
-use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 
 /**
  * The main controller to show various kinds of markers on Maps
  */
 class PoiCollectionController extends ActionController
 {
-    public function __construct(
-        protected ExtConf $extConf,
-        protected GeoCodeService $geoCodeService,
-        protected LinkHelper $linkHelper,
-        protected PoiCollectionRepository $poiCollectionRepository,
-        protected SettingsHelper $settingsHelper,
-    ) {}
+    protected Environment $environment;
 
-    public function initializeObject(): void
-    {
-        $this->settings = $this->settingsHelper->getMergedSettings();
-    }
+    public function __construct(
+        protected EnvironmentFactory $environmentFactory,
+        protected GeoCodeService $geoCodeService,
+        protected PoiCollectionRepository $poiCollectionRepository,
+    ) {}
 
     protected function initializeAction(): void
     {
+        $this->environment = $this->environmentFactory->buildEnvironment($this->request);
+        $this->settings = $this->environment->getSettings();
+
         if (($this->settings['googleMapsJavaScriptApiKey'] ?? '') === '') {
             $this->addFlashMessage(
                 'Google Maps cannot be loaded because no API key is configured for this site. '
@@ -59,21 +54,8 @@ class PoiCollectionController extends ActionController
 
     protected function initializeView($view): void
     {
-        $contentRecord = $this->request->getAttribute('currentContentObject')->data;
-
-        // Remove unneeded columns from tt_content array
-        unset(
-            $contentRecord['pi_flexform'],
-            $contentRecord['l18n_diffsource'],
-        );
-
-        $view->assign('data', $contentRecord);
-        $view->assign('environment', [
-            'settings' => $this->settingsHelper->getPreparedSettings($this->settings),
-            'extConf' => ObjectAccess::getGettableProperties($this->extConf),
-            'ajaxUrl' => $this->linkHelper->buildUriToCurrentPage([], $this->request),
-            'contentRecord' => $contentRecord,
-        ]);
+        $view->assign('data', $this->environment->getContentRecord());
+        $view->assign('environment', $this->environment);
     }
 
     /**

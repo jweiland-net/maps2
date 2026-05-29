@@ -11,48 +11,35 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Controller;
 
-use JWeiland\Maps2\Configuration\ExtConf;
+use JWeiland\Maps2\Configuration\Environment;
+use JWeiland\Maps2\Configuration\EnvironmentFactory;
 use JWeiland\Maps2\Domain\Model\Position;
-use JWeiland\Maps2\Helper\SettingsHelper;
 use JWeiland\Maps2\Service\GeoCodeService;
 use Psr\Http\Message\ResponseInterface;
-use TYPO3\CMS\Core\Routing\PageArguments;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 
 /**
  * A controller class to show Maps for a pre-configured city
  */
 class CityMapController extends ActionController
 {
+    protected Environment $environment;
+
     public function __construct(
-        protected ExtConf $extConf,
+        protected EnvironmentFactory $environmentFactory,
         protected GeoCodeService $geoCodeService,
-        protected SettingsHelper $settingsHelper,
     ) {}
 
-    public function initializeObject(): void
+    protected function initializeAction(): void
     {
-        $this->settings = $this->settingsHelper->getMergedSettings();
+        $this->environment = $this->environmentFactory->buildEnvironment($this->request);
+        $this->settings = $this->environment->getSettings();
     }
 
     protected function initializeView($view): void
     {
-        $contentRecord = $this->request->getAttribute('currentContentObject')->data;
-
-        // Remove unneeded columns from tt_content array
-        unset(
-            $contentRecord['pi_flexform'],
-            $contentRecord['l18n_diffsource'],
-        );
-
-        $view->assign('data', $contentRecord);
-        $view->assign('environment', [
-            'settings' => $this->settingsHelper->getPreparedSettings($this->settings),
-            'extConf' => ObjectAccess::getGettableProperties($this->extConf),
-            'id' => $this->getPageArguments()->getPageId(),
-            'contentRecord' => $contentRecord,
-        ]);
+        $view->assign('data', $this->environment->getContentRecord());
+        $view->assign('environment', $this->environment);
     }
 
     public function showAction(): ResponseInterface
@@ -73,10 +60,5 @@ class CityMapController extends ActionController
         }
 
         return $this->htmlResponse();
-    }
-
-    protected function getPageArguments(): PageArguments
-    {
-        return $this->request->getAttribute('routing');
     }
 }
