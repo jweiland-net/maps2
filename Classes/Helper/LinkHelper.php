@@ -23,9 +23,9 @@ use TYPO3\CMS\Core\Utility\ArrayUtility;
  */
 class LinkHelper
 {
-    public function __construct(protected SiteFinder $siteFinder)
-    {
-    }
+    public function __construct(
+        protected SiteFinder $siteFinder,
+    ) {}
 
     public function buildUriToCurrentPage(array $parameters, ServerRequestInterface $request): string
     {

@@ -11,13 +11,13 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Update;
 
-use TYPO3\CMS\Core\Attribute\UpgradeWizard;
-use TYPO3\CMS\Core\Upgrades\UpgradeWizardInterface;
-use TYPO3\CMS\Core\Upgrades\DatabaseUpdatedPrerequisite;
 use Doctrine\DBAL\Exception;
+use TYPO3\CMS\Core\Attribute\UpgradeWizard;
 use TYPO3\CMS\Core\Configuration\FlexForm\FlexFormTools;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Upgrades\DatabaseUpdatedPrerequisite;
+use TYPO3\CMS\Core\Upgrades\UpgradeWizardInterface;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\Exception\MissingArrayPathException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -32,9 +32,10 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 #[UpgradeWizard('maps2_moveFlexFormFields')]
 class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
 {
-    public function __construct(private readonly ConnectionPool $connectionPool)
-    {
-    }
+    public function __construct(
+        private readonly ConnectionPool $connectionPool,
+    ) {}
+
     public function getTitle(): string
     {
         return '[maps2] Move old FlexForm fields to new FlexForm sheet';
