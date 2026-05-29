@@ -11,14 +11,14 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Controller;
 
-use JWeiland\Maps2\Controller\Traits\InjectExtConfTrait;
-use JWeiland\Maps2\Controller\Traits\InjectGeoCodeServiceTrait;
-use JWeiland\Maps2\Controller\Traits\InjectLinkHelperTrait;
-use JWeiland\Maps2\Controller\Traits\InjectPoiCollectionRepositoryTrait;
-use JWeiland\Maps2\Controller\Traits\InjectSettingsHelperTrait;
+use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Domain\Model\Search;
+use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
 use JWeiland\Maps2\Event\PostProcessFluidVariablesEvent;
+use JWeiland\Maps2\Helper\LinkHelper;
+use JWeiland\Maps2\Helper\SettingsHelper;
+use JWeiland\Maps2\Service\GeoCodeService;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
@@ -32,11 +32,13 @@ use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
  */
 class PoiCollectionController extends ActionController
 {
-    use InjectExtConfTrait;
-    use InjectGeoCodeServiceTrait;
-    use InjectLinkHelperTrait;
-    use InjectSettingsHelperTrait;
-    use InjectPoiCollectionRepositoryTrait;
+    public function __construct(
+        protected ExtConf $extConf,
+        protected GeoCodeService $geoCodeService,
+        protected LinkHelper $linkHelper,
+        protected PoiCollectionRepository $poiCollectionRepository,
+        protected SettingsHelper $settingsHelper,
+    ) {}
 
     public function initializeObject(): void
     {

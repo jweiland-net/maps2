@@ -11,9 +11,9 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Controller;
 
-use JWeiland\Maps2\Controller\Traits\InjectExtConfTrait;
-use JWeiland\Maps2\Controller\Traits\InjectSettingsHelperTrait;
+use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\Position;
+use JWeiland\Maps2\Helper\SettingsHelper;
 use JWeiland\Maps2\Service\GeoCodeService;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Routing\PageArguments;
@@ -25,11 +25,11 @@ use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
  */
 class CityMapController extends ActionController
 {
-    use InjectExtConfTrait;
-    use InjectSettingsHelperTrait;
-    public function __construct(protected GeoCodeService $geoCodeService)
-    {
-    }
+    public function __construct(
+        protected ExtConf $extConf,
+        protected GeoCodeService $geoCodeService,
+        protected SettingsHelper $settingsHelper,
+    ) {}
 
     public function initializeObject(): void
     {
