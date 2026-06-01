@@ -40,39 +40,14 @@ class PoiCollectionRepository extends Repository
         'title' => QueryInterface::ORDER_ASCENDING,
     ];
 
-    protected OverlayHelper $overlayHelper;
-
-    protected Typo3DbQueryParser $typo3DbQueryParser;
-
-    protected DataMapper $dataMapper;
-
-    protected ConnectionPool $connectionPool;
-
-    protected EventDispatcherInterface $eventDispatcher;
-
-    public function injectOverlayHelper(OverlayHelper $overlayHelper): void
-    {
-        $this->overlayHelper = $overlayHelper;
-    }
-
-    public function injectTypo3DbQueryParser(Typo3DbQueryParser $typo3DbQueryParser): void
-    {
-        $this->typo3DbQueryParser = $typo3DbQueryParser;
-    }
-
-    public function injectDataMapper(DataMapper $dataMapper): void
-    {
-        $this->dataMapper = $dataMapper;
-    }
-
-    public function injectConnectionPool(ConnectionPool $connectionPool): void
-    {
-        $this->connectionPool = $connectionPool;
-    }
-
-    public function injectEventDispatcher(EventDispatcherInterface $eventDispatcher): void
-    {
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(
+        protected ConnectionPool $connectionPool,
+        protected DataMapper $dataMapper,
+        protected EventDispatcherInterface $eventDispatcher,
+        protected OverlayHelper $overlayHelper,
+        protected Typo3DbQueryParser $typo3DbQueryParser,
+    ) {
+        parent::__construct();
     }
 
     public function findPoiCollections(array $settings, int $poiCollectionUid = 0): QueryResultInterface

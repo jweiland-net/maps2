@@ -11,12 +11,12 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Tests\Unit\Service;
 
+use JWeiland\Maps2\Client;
 use JWeiland\Maps2\Client\ClientFactory;
 use JWeiland\Maps2\Client\GoogleMapsClient;
-use JWeiland\Maps2\Client\Request\RequestFactory;
-use JWeiland\Maps2\Client\Request\GoogleMaps\GeocodeRequest;
-use JWeiland\Maps2\Client;
 use JWeiland\Maps2\Client\Request;
+use JWeiland\Maps2\Client\Request\GoogleMaps\GeocodeRequest;
+use JWeiland\Maps2\Client\Request\RequestFactory;
 use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Mapper\GoogleMapsMapper;
 use JWeiland\Maps2\Mapper\MapperFactory;

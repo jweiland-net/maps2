@@ -11,14 +11,14 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Form\Element;
 
-use TYPO3\CMS\Core\SystemResource\SystemResourceFactory;
-use TYPO3\CMS\Core\SystemResource\Publishing\SystemResourcePublisherInterface;
-use TYPO3\CMS\Core\SystemResource\Publishing\UriGenerationOptions;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Helper\MapHelper;
 use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
 use TYPO3\CMS\Core\Page\JavaScriptModuleInstruction;
 use TYPO3\CMS\Core\Page\PageRenderer;
+use TYPO3\CMS\Core\SystemResource\Publishing\SystemResourcePublisherInterface;
+use TYPO3\CMS\Core\SystemResource\Publishing\UriGenerationOptions;
+use TYPO3\CMS\Core\SystemResource\SystemResourceFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\StringUtility;
 use TYPO3\CMS\Core\View\ViewFactoryData;
@@ -72,7 +72,7 @@ class OpenStreetMapElement extends AbstractFormElement
 
         $this->pageRenderer->loadJavaScriptModule('@jweiland/maps2/leaflet.min.js');
         $resource = $this->systemResourceFactory->createPublicResource('EXT:maps2/Resources/Public/Css/Leaflet/Leaflet.css');
-        $resultArray['stylesheetFiles'][] = (string) $this->resourcePublisher->generateUri($resource, $GLOBALS['TYPO3_REQUEST'], new UriGenerationOptions(absoluteUri: true));
+        $resultArray['stylesheetFiles'][] = (string)$this->resourcePublisher->generateUri($resource, $GLOBALS['TYPO3_REQUEST'], new UriGenerationOptions(absoluteUri: true));
 
         $resultArray['javaScriptModules'][] = JavaScriptModuleInstruction::create(
             '@jweiland/maps2/OpenStreetMapModule.min.js',

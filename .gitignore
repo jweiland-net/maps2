@@ -18,31 +18,36 @@
 .DS_Store
 
 # Ignore by common IDEs used directories/files
-.ddev
-nbproject
-*.idea
+.ddev/
+nbproject/
+*.idea/
 *.project
 .buildpath
-.settings
-.TemporaryItems
+.settings/
+.TemporaryItems/
 .webprj
-.fleet
+.fleet/
+.vscode/
 
 # Temporary files and folders
-/.cache
-node_modules
+/.cache/
+node_modules/
 .php_cs.cache
 .php-cs-fixer.cache
-.sass-cache
+.sass-cache/
 .session
 *.log
 
 # Ignore composer stuff
 /composer.lock
-/packages
-/var
+/packages/
+/var/
 
 # Ignore testing stuff
-/.Build
+/.Build/
 /composer.json.orig
 /composer.json.testing
+
+# Ignore AI agent local files
+.antigravitycli/
+.antigravity-cli/

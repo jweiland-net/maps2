@@ -25,9 +25,9 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class MessageHelper
 {
-    public function __construct(protected FlashMessageService $flashMessageService)
-    {
-    }
+    public function __construct(
+        protected FlashMessageService $flashMessageService,
+    ) {}
 
     public function addFlashMessage(string $message, string $title = '', ContextualFeedbackSeverity $severity = ContextualFeedbackSeverity::OK): void
     {
