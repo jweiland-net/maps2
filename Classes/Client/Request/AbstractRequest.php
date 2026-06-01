@@ -11,7 +11,6 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Client\Request;
 
-use JWeiland\Maps2\Configuration\ExtConf;
 use TYPO3\CMS\Core\Utility\MathUtility;
 
 /**
@@ -19,21 +18,7 @@ use TYPO3\CMS\Core\Utility\MathUtility;
  */
 abstract class AbstractRequest implements RequestInterface
 {
-    protected string $uri = '';
-
     protected array $parameters = [];
-
-    public function __construct(protected ExtConf $extConf) {}
-
-    public function getUri(): string
-    {
-        return $this->uri;
-    }
-
-    public function setUri(string $uri): void
-    {
-        $this->uri = trim($uri);
-    }
 
     public function getParameters(): array
     {
@@ -45,18 +30,12 @@ abstract class AbstractRequest implements RequestInterface
         $this->parameters = $parameters;
     }
 
-    /**
-     * @param mixed $value
-     */
-    public function addParameter(string $parameter, $value): void
+    public function addParameter(string $parameter, mixed $value): void
     {
         $this->parameters[$parameter] = $value;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getParameter(string $parameter)
+    public function getParameter(string $parameter): mixed
     {
         return $this->parameters[$parameter] ?? null;
     }
@@ -67,17 +46,17 @@ abstract class AbstractRequest implements RequestInterface
     }
 
     /**
-     * Prepare address for an uri
-     * Further it will add some additional information like country
+     * Prepare address for a URI.
+     * Further, it will add some additional information like country
      */
-    protected function updateAddressForUri(string $address): string
+    protected function updateAddressForUri(string $address, string $defaultCountry): string
     {
         // if address can be interpreted as zip, attach the default country to prevent a worldwide search
         if (
             MathUtility::canBeInterpretedAsInteger($address)
-            && $this->extConf->getDefaultCountry() !== ''
+            && $defaultCountry !== ''
         ) {
-            $address .= ' ' . $this->extConf->getDefaultCountry();
+            $address .= ' ' . $defaultCountry;
         }
 
         return rawurlencode($address);
@@ -85,10 +64,12 @@ abstract class AbstractRequest implements RequestInterface
 
     public function isValidRequest(): bool
     {
-        if ($this->getUri() === '') {
+        $uri = $this->getUri();
+
+        if ($uri === '') {
             return false;
         }
 
-        return (bool)filter_var($this->getUri(), FILTER_VALIDATE_URL);
+        return (bool)filter_var($uri, FILTER_VALIDATE_URL);
     }
 }
