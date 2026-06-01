@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Service;
 
 use JWeiland\Maps2\Client\ClientInterface;
-use JWeiland\Maps2\Client\Request\RequestFactory;
+use JWeiland\Maps2\Client\Request\RequestInterface;
 use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Mapper\MapperFactory;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
@@ -26,7 +26,7 @@ class GeoCodeService
 {
     public function __construct(
         protected ClientInterface $mapProviderClient,
-        protected RequestFactory $requestFactory,
+        protected RequestInterface $mapProviderGeoCodingRequest,
         protected MapperFactory $mapperFactory,
     ) {}
 
@@ -44,7 +44,7 @@ class GeoCodeService
         }
 
         $response = $this->mapProviderClient->processRequest(
-            $this->requestFactory->create('GeocodeRequest'),
+            $this->mapProviderGeoCodingRequest,
             $address,
         );
 
