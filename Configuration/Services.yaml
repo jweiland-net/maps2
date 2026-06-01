@@ -5,6 +5,7 @@ services:
     public: false
     bind:
       'JWeiland\Maps2\Client\ClientInterface': '@maps2.mapProviderClient'
+      'JWeiland\Maps2\Client\Request\RequestInterface': '@maps2.mapProviderRequest'
 
   JWeiland\Maps2\:
     resource: '../Classes/*'
@@ -18,6 +19,12 @@ services:
   maps2.mapProviderClient:
     class: 'JWeiland\Maps2\Client\GoogleMapsClient'
     factory: ['@JWeiland\Maps2\Client\ClientFactory', 'create']
+    arguments:
+      - '@=service("JWeiland\\Maps2\\Helper\\MapHelper").getMapProvider()'
+
+  maps2.mapProviderRequest:
+    class: 'JWeiland\Maps2\Client\Request\RequestInterface'
+    factory: ['@JWeiland\Maps2\Client\Request\RequestFactory', 'create']
     arguments:
       - '@=service("JWeiland\\Maps2\\Helper\\MapHelper").getMapProvider()'
 
@@ -36,6 +43,10 @@ services:
   JWeiland\Maps2\Client\ClientFactory:
     arguments:
       $mapProviderClients: !tagged_iterator { tag: 'maps2.client.geocoding' }
+
+  JWeiland\Maps2\Client\Request\RequestFactory:
+    arguments:
+      $mapProviderGeoCodingRequests: !tagged_iterator { tag: 'maps2.request.geocoding' }
 
   # Called by makeInstance in various TCA files
   JWeiland\Maps2\Configuration\ExtConf:

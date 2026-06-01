@@ -11,10 +11,14 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Client\Request;
 
+use JWeiland\Maps2\Configuration\MapProviderEnum;
+
 /**
  * Interface for Requests to Map Providers
  */
 interface RequestInterface
 {
+    public function canProcess(MapProviderEnum $mapProvider): bool;
+
     public function getUri(string $rawUrlEncodedAddress): string;
 }

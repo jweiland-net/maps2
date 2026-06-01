@@ -11,50 +11,26 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Client\Request;
 
-use JWeiland\Maps2\Helper\MapHelper;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
+use JWeiland\Maps2\Configuration\MapProviderEnum;
 
 /**
- * This factory builds new request objects for either Google Maps or Open Street Map.
- * This class only works as long as you keep filenames in GoogleMaps and OpenStreetMap folder in sync.
+ * This factory builds new request objects for either Google Maps or OpenStreetMap.
+ * This class only works as long as you keep filenames in Google Maps and OpenStreetMap folder in sync.
  */
-final class RequestFactory
+final readonly class RequestFactory
 {
-    protected array $mapping = [
-        'gm' => 'JWeiland\\Maps2\\Client\\Request\\GoogleMaps',
-        'osm' => 'JWeiland\\Maps2\\Client\\Request\\OpenStreetMap',
-    ];
+    public function __construct(
+        private iterable $mapProviderGeoCodingRequests,
+    ) {}
 
-    public function __construct(protected MapHelper $mapHelper) {}
-
-    /**
-     * Create a new Request by its filename
-     *
-     * @throws \Exception
-     */
-    public function create(string $filename): RequestInterface
+    public function create(MapProviderEnum $mapProvider): ?RequestInterface
     {
-        $className = sprintf(
-            '%s\\%s',
-            $this->mapping[$this->mapHelper->getMapProvider()],
-            $this->sanitizeFilename($filename),
-        );
-
-        if (!class_exists($className)) {
-            throw new \RuntimeException(
-                sprintf('Class "%s" to create a new Request could not be found', $className),
-                1733471535,
-            );
+        foreach ($this->mapProviderGeoCodingRequests as $mapProviderRequest) {
+            if ($mapProviderRequest->canProcess($mapProvider)) {
+                return $mapProviderRequest;
+            }
         }
 
-        /** @var RequestInterface $request */
-        $request = GeneralUtility::makeInstance($className);
-
-        return $request;
-    }
-
-    protected function sanitizeFilename(string $filename): string
-    {
-        return ucfirst(GeneralUtility::split_fileref($filename)['filebody']);
+        return null;
     }
 }
