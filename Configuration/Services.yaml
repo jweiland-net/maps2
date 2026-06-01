@@ -3,6 +3,8 @@ services:
     autowire: true
     autoconfigure: true
     public: false
+    bind:
+      'JWeiland\Maps2\Client\ClientInterface': '@maps2.mapProviderClient'
 
   JWeiland\Maps2\:
     resource: '../Classes/*'
@@ -12,6 +14,12 @@ services:
     class: TYPO3\CMS\Core\Cache\Frontend\FrontendInterface
     factory: ['@TYPO3\CMS\Core\Cache\CacheManager', 'getCache']
     arguments: ['maps2_cachedhtml']
+
+  maps2.mapProviderClient:
+    class: 'JWeiland\Maps2\Client\GoogleMapsClient'
+    factory: ['@JWeiland\Maps2\Client\ClientFactory', 'create']
+    arguments:
+      - '@=service("JWeiland\\Maps2\\Helper\\MapHelper").getMapProvider()'
 
   querybuilder.tx_maps2_domain_model_poicollection:
     class: 'TYPO3\CMS\Core\Database\Query\QueryBuilder'
@@ -25,21 +33,9 @@ services:
   JWeiland\Maps2\Backend\Preview\Maps2PluginPreview:
     public: true
 
-  # Called by makeInstance in our RequestFactory
-  JWeiland\Maps2\Client\Request\GoogleMaps\GeocodeRequest:
-    public: true
-
-  # Called by makeInstance in our RequestFactory
-  JWeiland\Maps2\Client\Request\OpenStreetMap\GeocodeRequest:
-    public: true
-
-  # Called by makeInstance in our ClientFactory
-  JWeiland\Maps2\Client\GoogleMapsClient:
-    public: true
-
-  # Called by makeInstance in our ClientFactory
-  JWeiland\Maps2\Client\OpenStreetMapClient:
-    public: true
+  JWeiland\Maps2\Client\ClientFactory:
+    arguments:
+      $mapProviderClients: !tagged_iterator { tag: 'maps2.client.geocoding' }
 
   # Called by makeInstance in various TCA files
   JWeiland\Maps2\Configuration\ExtConf:
