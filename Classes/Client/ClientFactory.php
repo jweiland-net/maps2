@@ -15,7 +15,7 @@ use JWeiland\Maps2\Helper\MapHelper;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
- * This factory creates a client for either Google Maps or Open Street Map
+ * This factory creates a client for either Google Maps or OpenStreetMap
  */
 class ClientFactory
 {
@@ -27,7 +27,9 @@ class ClientFactory
         'osm' => OpenStreetMapClient::class,
     ];
 
-    public function __construct(protected MapHelper $mapHelper) {}
+    public function __construct(
+        protected MapHelper $mapHelper,
+    ) {}
 
     public function create(): ClientInterface
     {

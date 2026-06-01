@@ -54,7 +54,7 @@ class MapHelper
     }
 
     /**
-     * Try to retrieve a default map provider from given database record
+     * Try to retrieve a default map provider from a given database record
      */
     protected function getMapProviderFromDatabase(array $databaseRow): string
     {
@@ -68,7 +68,7 @@ class MapHelper
                 // We have a record from TCEMAIN
                 $mapProvider = (string)current($databaseRow['map_provider']);
             } elseif (is_string($databaseRow['map_provider'])) {
-                // We have a normal array based record from database
+                // We have a normal array-based record from database
                 $mapProvider = $databaseRow['map_provider'];
             }
         }

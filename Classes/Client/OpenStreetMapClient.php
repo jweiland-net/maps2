@@ -15,11 +15,11 @@ use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
- * Open Street Map Client which will send Requests to Open Street Map Servers
+ * OpenStreetMap Client that will send Requests to OpenStreetMap Servers
  */
-class OpenStreetMapClient extends AbstractClient
+readonly class OpenStreetMapClient extends AbstractClient
 {
-    protected string $title = 'Open Street Map';
+    protected const TITLE = 'Open Street Map';
 
     protected function checkResponseForErrors(?array $processedResponse): void
     {
@@ -35,7 +35,7 @@ class OpenStreetMapClient extends AbstractClient
                     'error.noPositionsFound.body',
                     'maps2',
                     [
-                        0 => $this->title,
+                        0 => self::TITLE,
                     ],
                 ),
                 LocalizationUtility::translate(

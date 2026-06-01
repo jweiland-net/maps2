@@ -11,13 +11,13 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Client\Request\GoogleMaps;
 
-use JWeiland\Maps2\Client\Request\AbstractRequest;
+use JWeiland\Maps2\Client\Request\RequestInterface;
 use JWeiland\Maps2\Configuration\ExtConf;
 
 /**
  * A Request class for Google Maps Geocode API
  */
-class GeocodeRequest extends AbstractRequest
+final readonly class GeocodeRequest implements RequestInterface
 {
     public function __construct(
         protected ExtConf $extConf,
@@ -28,7 +28,7 @@ class GeocodeRequest extends AbstractRequest
      *
      * @throws \Exception
      */
-    public function getUri(): string
+    public function getUri(string $rawUrlEncodedAddress): string
     {
         $uri = $this->extConf->getGoogleMapsGeocodeUri();
 
@@ -36,17 +36,10 @@ class GeocodeRequest extends AbstractRequest
             return '';
         }
 
-        if (!$this->hasParameter('address')) {
+        if ($rawUrlEncodedAddress === '') {
             return $uri;
         }
 
-        return sprintf(
-            $uri,
-            $this->updateAddressForUri(
-                (string)$this->getParameter('address'),
-                $this->extConf->getDefaultCountry(),
-            ),
-            $this->extConf->getGoogleMapsGeocodeApiKey(),
-        );
+        return sprintf($uri, $rawUrlEncodedAddress);
     }
 }

@@ -18,7 +18,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * This factory builds new request objects for either Google Maps or Open Street Map.
  * This class only works as long as you keep filenames in GoogleMaps and OpenStreetMap folder in sync.
  */
-class RequestFactory
+final class RequestFactory
 {
     protected array $mapping = [
         'gm' => 'JWeiland\\Maps2\\Client\\Request\\GoogleMaps',
