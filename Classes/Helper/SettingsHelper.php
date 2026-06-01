@@ -24,7 +24,9 @@ use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 class SettingsHelper
 {
     public function __construct(
-        protected ConfigurationManagerInterface $configurationManager, private readonly SystemResourceFactory $systemResourceFactory, private readonly SystemResourcePublisherInterface $resourcePublisher,
+        protected ConfigurationManagerInterface $configurationManager,
+        private readonly SystemResourceFactory $systemResourceFactory,
+        private readonly SystemResourcePublisherInterface $resourcePublisher,
     ) {}
 
     /**
