@@ -42,7 +42,7 @@ class PoiCollectionController extends ActionController
         $this->environment = $this->environmentFactory->buildEnvironment($this->request);
         $this->settings = $this->environment->getSettings();
 
-        if (!$this->environment->isMapRenderable()) {
+        if (!$this->environment->getIsMapRenderable()) {
             $this->addFlashMessage(
                 'The map cannot be loaded because the map configuration is incomplete. '
                 . 'Please check that the required site set is loaded. '

@@ -76,17 +76,20 @@ final readonly class Environment implements \JsonSerializable
         return true;
     }
 
-    public function isMapRenderable(): bool
+    public function getIsMapRenderable(): bool
     {
         // TS template includes are missing
         if (!$this->hasMapProvider()) {
             return false;
         }
 
-        // Special case for Google Maps. An API key is manatory
+        // Special case for Google Maps. An API key and Map ID are manatory
         if (
             $this->getMapProvider() === MapProviderEnum::GOOGLE_MAPS
-            && ($this->settings['googleMapsApiKey'] ?? '') === ''
+            && (
+                ($this->settings['googleMapsJavaScriptApiKey'] ?? '') === ''
+                || ($this->settings['googleMapsMapId'] ?? '') === ''
+            )
         ) {
             return false;
         }
