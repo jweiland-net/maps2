@@ -23,7 +23,7 @@ use TYPO3\CMS\Core\View\ViewInterface;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
- * Add plugin preview for EXT:maps2
+ * Add content element preview for maps2
  */
 class Maps2PluginPreview extends StandardContentPreviewRenderer
 {
