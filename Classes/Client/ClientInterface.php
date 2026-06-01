@@ -19,7 +19,10 @@ use TYPO3\CMS\Core\Messaging\FlashMessage;
  */
 interface ClientInterface
 {
-    public function processRequest(RequestInterface $request): array;
+    public function processRequest(
+        RequestInterface $request,
+        string $address,
+    ): array;
 
     public function hasErrors(): bool;
 

@@ -12,36 +12,38 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Client;
 
 use JWeiland\Maps2\Client\Request\RequestInterface;
+use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Helper\MessageHelper;
 use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
+use TYPO3\CMS\Core\Utility\MathUtility;
 
 /**
  * Abstract client to send Requests to Map Providers
  */
-abstract class AbstractClient implements ClientInterface
+abstract readonly class AbstractClient implements ClientInterface
 {
     public function __construct(
         protected MessageHelper $messageHelper,
         protected RequestFactory $requestFactory,
+        protected ExtConf $extConf,
     ) {}
 
-    public function processRequest(RequestInterface $request): array
+    public function processRequest(RequestInterface $request, string $address): array
     {
-        if (!$request->isValidRequest()) {
-            $this->messageHelper->addFlashMessage(
-                'URI is empty or contains invalid chars. URI: ' . $request->getUri(),
-                'Invalid request URI',
-                ContextualFeedbackSeverity::ERROR,
-            );
-            return [];
-        }
-
         $processedResponse = [];
-        $response = $this->requestFactory->request($request->getUri());
+        $response = $this->requestFactory->request(
+            $request->getUri($this->getPreparedAddress($address)),
+        );
+
         if ($response->getStatusCode() === 200) {
-            $processedResponse = \json_decode((string)$response->getBody(), true, 512, JSON_THROW_ON_ERROR);
+            $processedResponse = \json_decode(
+                (string)$response->getBody(),
+                true,
+                512,
+                JSON_THROW_ON_ERROR,
+            );
             $this->checkResponseForErrors($processedResponse);
         } else {
             $this->messageHelper->addFlashMessage(
@@ -69,6 +71,22 @@ abstract class AbstractClient implements ClientInterface
     public function getErrors(): array
     {
         return $this->messageHelper->getErrorMessages();
+    }
+
+    /**
+     * It will also add some additional information like country to address
+     */
+    protected function getPreparedAddress(string $address): string
+    {
+        // If address can be interpreted as zip, attach the default country to prevent a worldwide search
+        if (
+            MathUtility::canBeInterpretedAsInteger($address)
+            && $this->extConf->getDefaultCountry() !== ''
+        ) {
+            $address .= ' ' . $this->extConf->getDefaultCountry();
+        }
+
+        return rawurlencode($address);
     }
 
     abstract protected function checkResponseForErrors(?array $processedResponse): void;

@@ -52,10 +52,11 @@ class GeoCodeService implements SingletonInterface
             return $positions;
         }
 
-        $geocodeRequest = $this->requestFactory->create('GeocodeRequest');
-        $geocodeRequest->addParameter('address', $address);
+        $response = $this->client->processRequest(
+            $this->requestFactory->create('GeocodeRequest'),
+            $address,
+        );
 
-        $response = $this->client->processRequest($geocodeRequest);
         if ($response !== []) {
             return $this->mapperFactory->create()->map($response);
         }
