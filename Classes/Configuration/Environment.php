@@ -54,6 +54,46 @@ final readonly class Environment implements \JsonSerializable
         return $this->id;
     }
 
+    /**
+     * @throws \ValueError
+     */
+    public function getMapProvider(): MapProviderEnum
+    {
+        return MapProviderEnum::from($this->settings['mapProvider']);
+    }
+
+    /**
+     * Can be used to test if TS template is defined
+     */
+    public function hasMapProvider(): bool
+    {
+        try {
+            $mapProvider = $this->getMapProvider();
+        } catch(\ValueError) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function isMapRenderable(): bool
+    {
+        // TS template includes are missing
+        if (!$this->hasMapProvider()) {
+            return false;
+        }
+
+        // Special case for Google Maps. An API key is manatory
+        if (
+            $this->getMapProvider() === MapProviderEnum::GOOGLE_MAPS
+            && ($this->settings['googleMapsApiKey'] ?? '') === ''
+        ) {
+            return false;
+        }
+
+        return true;
+    }
+
     public function jsonSerialize(): array
     {
         return [
