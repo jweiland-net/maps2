@@ -42,11 +42,12 @@ class PoiCollectionController extends ActionController
         $this->environment = $this->environmentFactory->buildEnvironment($this->request);
         $this->settings = $this->environment->getSettings();
 
-        if (($this->settings['googleMapsJavaScriptApiKey'] ?? '') === '') {
+        if (!$this->environment->isMapRenderable()) {
             $this->addFlashMessage(
-                'Google Maps cannot be loaded because no API key is configured for this site. '
-                . 'Please check the site settings.',
-                'Google Maps cannot be loaded',
+                'The map cannot be loaded because the map configuration is incomplete. '
+                . 'Please check that the required site set is loaded. '
+                . 'If Google Maps is used, also ensure that the API key and Map ID are configured.',
+                'Map cannot be renderer',
                 ContextualFeedbackSeverity::WARNING,
             );
         }
