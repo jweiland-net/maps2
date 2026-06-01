@@ -11,9 +11,9 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Helper;
 
-use TYPO3\CMS\Core\SystemResource\SystemResourceFactory;
 use TYPO3\CMS\Core\SystemResource\Publishing\SystemResourcePublisherInterface;
 use TYPO3\CMS\Core\SystemResource\Publishing\UriGenerationOptions;
+use TYPO3\CMS\Core\SystemResource\SystemResourceFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
@@ -23,9 +23,11 @@ use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
  */
 class SettingsHelper
 {
-    public function __construct(protected ConfigurationManagerInterface $configurationManager, private readonly SystemResourceFactory $systemResourceFactory, private readonly SystemResourcePublisherInterface $resourcePublisher)
-    {
-    }
+    public function __construct(
+        protected ConfigurationManagerInterface $configurationManager,
+        private readonly SystemResourceFactory $systemResourceFactory,
+        private readonly SystemResourcePublisherInterface $resourcePublisher,
+    ) {}
 
     /**
      * This method will merge TypoScript and FlexForm settings of EXT:maps2 and should be called
@@ -83,7 +85,7 @@ class SettingsHelper
             $settings['markerClusterer']['enable'] = 1;
             if (method_exists(PathUtility::class, 'getPublicResourceWebPath')) {
                 $resource = $this->systemResourceFactory->createPublicResource($settings['markerClusterer']['imagePath']);
-                $settings['markerClusterer']['imagePath'] = (string) $this->resourcePublisher->generateUri($resource, $GLOBALS['TYPO3_REQUEST'], new UriGenerationOptions(absoluteUri: true));
+                $settings['markerClusterer']['imagePath'] = (string)$this->resourcePublisher->generateUri($resource, $GLOBALS['TYPO3_REQUEST'], new UriGenerationOptions(absoluteUri: true));
             } else {
                 $settings['markerClusterer']['imagePath'] = PathUtility::getAbsoluteWebPath(
                     GeneralUtility::getFileAbsFileName(

@@ -12,8 +12,8 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Service;
 
 use Psr\Http\Message\ServerRequestInterface;
-use TYPO3\CMS\Core\Crypto\HashAlgo;
 use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Crypto\HashAlgo;
 use TYPO3\CMS\Core\Crypto\HashService;
 use TYPO3\CMS\Core\Http\ApplicationType;
 

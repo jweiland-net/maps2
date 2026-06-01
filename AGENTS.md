@@ -71,3 +71,8 @@ This document defines the technical standards and architectural constraints for 
 ## 7. Extbase Specifics
 
 - **Domain Models:** Properties of type `ObjectStorage` must be initialized in both the `__construct` and the `initializeObject` method to ensure consistency.
+
+## 8. Type Safety & IDE Support
+
+- **Type Checks & Autocomplete:** When retrieving variables or attributes from general containers (such as PSR-7 request attributes, dependency containers, or registry arrays) and accessing their properties or methods, avoid loose checks like `!== null`. Instead, always perform explicit class checks using `instanceof` (e.g., `$var instanceof SpecificClass`) to enable robust IDE autocomplete and static analysis support.
+

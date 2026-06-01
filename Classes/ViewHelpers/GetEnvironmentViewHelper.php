@@ -11,12 +11,9 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\ViewHelpers;
 
-use JWeiland\Maps2\Configuration\ExtConf;
-use JWeiland\Maps2\Helper\LinkHelper;
-use JWeiland\Maps2\Helper\SettingsHelper;
+use JWeiland\Maps2\Configuration\EnvironmentFactory;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Extbase\Mvc\RequestInterface;
-use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
@@ -33,9 +30,7 @@ class GetEnvironmentViewHelper extends AbstractViewHelper
     protected $escapeOutput = false;
 
     public function __construct(
-        private readonly SettingsHelper $settingsHelper,
-        private readonly LinkHelper $linkHelper,
-        private readonly ExtConf $extConf,
+        private readonly EnvironmentFactory $environmentFactory,
     ) {}
 
     /**
@@ -49,15 +44,9 @@ class GetEnvironmentViewHelper extends AbstractViewHelper
             return '';
         }
 
-        $templateVariableContainer->add(
-            'environment',
-            [
-                'settings' => $this->settingsHelper->getPreparedSettings(),
-                'extConf' => ObjectAccess::getGettableProperties($this->extConf),
-                'ajaxUrl' => $this->linkHelper->buildUriToCurrentPage([], $extbaseRequest),
-                'contentRecord' => $extbaseRequest->getAttribute('currentContentObject')->data,
-            ],
-        );
+        $environment = $this->environmentFactory->buildEnvironment($extbaseRequest);
+
+        $templateVariableContainer->add('environment', $environment);
 
         $content = $this->renderChildren();
 

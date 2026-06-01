@@ -11,13 +11,13 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Form\Element;
 
-use TYPO3\CMS\Core\SystemResource\SystemResourceFactory;
-use TYPO3\CMS\Core\SystemResource\Publishing\SystemResourcePublisherInterface;
-use TYPO3\CMS\Core\SystemResource\Publishing\UriGenerationOptions;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Helper\MapHelper;
 use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
 use TYPO3\CMS\Core\Page\JavaScriptModuleInstruction;
+use TYPO3\CMS\Core\SystemResource\Publishing\SystemResourcePublisherInterface;
+use TYPO3\CMS\Core\SystemResource\Publishing\UriGenerationOptions;
+use TYPO3\CMS\Core\SystemResource\SystemResourceFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\StringUtility;
 use TYPO3\CMS\Core\View\ViewFactoryData;
@@ -68,7 +68,7 @@ class GoogleMapsElement extends AbstractFormElement
         $config = $parameterArray['fieldConf']['config'];
         $evalList = GeneralUtility::trimExplode(',', $config['eval'] ?? '', true);
         $resource = $this->systemResourceFactory->createPublicResource('EXT:maps2/Resources/Public/');
-        $publicResourcesPath = (string) $this->resourcePublisher->generateUri(
+        $publicResourcesPath = (string)$this->resourcePublisher->generateUri(
             $resource,
             $GLOBALS['TYPO3_REQUEST'],
             new UriGenerationOptions(absoluteUri: true),
