@@ -11,33 +11,24 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Service;
 
-use JWeiland\Maps2\Client\ClientFactory;
 use JWeiland\Maps2\Client\ClientInterface;
 use JWeiland\Maps2\Client\Request\RequestFactory;
 use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Mapper\MapperFactory;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
-use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
  * With this class you can start requests to GeoCode API of Map Providers. Search for addresses, assign a POI
- * to a foreign record, save the foreign record and many more. It is designed as an API.
+ * to a foreign record, save the foreign record, and many more. It is designed as an API.
  */
-class GeoCodeService implements SingletonInterface
+class GeoCodeService
 {
-    /**
-     * Client depends on mapProvider which is either gm or osm
-     */
-    protected ClientInterface $client;
-
     public function __construct(
-        protected ClientFactory $clientFactory,
+        protected ClientInterface $mapProviderClient,
         protected RequestFactory $requestFactory,
         protected MapperFactory $mapperFactory,
-    ) {
-        $this->client = $clientFactory->create();
-    }
+    ) {}
 
     /**
      * @return ObjectStorage|Position[]
@@ -47,12 +38,12 @@ class GeoCodeService implements SingletonInterface
     {
         $positions = new ObjectStorage();
 
-        // Prevent calls to Map Providers GeoCode API, if address is empty
+        // Prevent calls to Map Providers GeoCode API if address is empty
         if (trim($address) === '') {
             return $positions;
         }
 
-        $response = $this->client->processRequest(
+        $response = $this->mapProviderClient->processRequest(
             $this->requestFactory->create('GeocodeRequest'),
             $address,
         );
@@ -79,7 +70,7 @@ class GeoCodeService implements SingletonInterface
 
     public function hasErrors(): bool
     {
-        return $this->client->hasErrors();
+        return $this->mapProviderClient->hasErrors();
     }
 
     /**
@@ -87,6 +78,6 @@ class GeoCodeService implements SingletonInterface
      */
     public function getErrors(): array
     {
-        return $this->client->getErrors();
+        return $this->mapProviderClient->getErrors();
     }
 }

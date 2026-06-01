@@ -14,5 +14,5 @@ namespace JWeiland\Maps2\Configuration;
 enum MapProviderEnum: string
 {
     case GOOGLE_MAPS = 'gm';
-    case OPEN_STREET_MAP = 'orm';
+    case OPEN_STREET_MAP = 'osm';
 }

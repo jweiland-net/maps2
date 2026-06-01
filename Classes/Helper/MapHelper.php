@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Helper;
 
 use JWeiland\Maps2\Configuration\ExtConf;
+use JWeiland\Maps2\Configuration\MapProviderEnum;
 use JWeiland\Maps2\Traits\GetTypo3RequestTrait;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -23,16 +24,14 @@ class MapHelper
 {
     use GetTypo3RequestTrait;
 
-    public function __construct(protected ExtConf $extConf) {}
+    public function __construct(
+        protected ExtConf $extConf,
+    ) {}
 
     /**
-     * Returns the map provider.
-     *
      * @param array $databaseRow If set, we first try to extract a default map provider from there
-     *
-     * @return string Only "gm" or "osm". If "both" is configured, it returns the value from default map provider
      */
-    public function getMapProvider(array $databaseRow = []): string
+    public function getMapProvider(array $databaseRow = []): MapProviderEnum
     {
         $mapProvider = '';
 
@@ -41,16 +40,16 @@ class MapHelper
             if ($databaseRow !== []) {
                 $mapProvider = $this->getMapProviderFromDatabase($databaseRow);
             }
-
-            if ($mapProvider === '') {
-                $mapProvider = $this->extConf->getDefaultMapProvider();
-            }
         } else {
             // We have a strict map provider.
             $mapProvider = $this->extConf->getMapProvider();
         }
 
-        return $mapProvider;
+        if ($mapProvider === '') {
+            $mapProvider = $this->extConf->getDefaultMapProvider();
+        }
+
+        return MapProviderEnum::from($mapProvider);
     }
 
     /**
@@ -105,9 +104,9 @@ class MapHelper
     }
 
     /**
-     * Check, if the current request is allowed to process/show the map in frontend.
+     * Check if the current request is allowed to process/show the map in the frontend.
      * It respects the settings from Extension Settings.
-     * If false, an overlay will be shown instead of the map and no JavaScript files
+     * If false, an overlay will be shown instead of the map, and no JavaScript files
      * will be loaded for maps2.
      */
     public function isRequestToMapProviderAllowed(): bool
