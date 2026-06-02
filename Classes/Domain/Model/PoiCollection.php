@@ -16,7 +16,7 @@ use JWeiland\Maps2\Domain\Traits\GetMapHelperTrait;
 use JWeiland\Maps2\Domain\Traits\GetWebPathOfFileReferenceTrait;
 use JWeiland\Maps2\Service\MapService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Annotation as Extbase;
+use TYPO3\CMS\Extbase\Attribute as Extbase;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
@@ -37,7 +37,9 @@ class PoiCollection extends AbstractEntity
 
     protected string $collectionType = '';
 
-    #[Extbase\Validate(['validator' => 'NotEmpty'])]
+    #[Extbase\Validate(
+        validator: 'NotEmpty',
+    )]
     protected string $title = '';
 
     /**
