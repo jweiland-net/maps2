@@ -29,16 +29,28 @@ final readonly class EnvironmentFactory
         private SettingsHelper $settingsHelper,
     ) {}
 
-    public function buildEnvironment(ServerRequestInterface $request): Environment
+    public function buildEnvironment(
+        array $mergedSettingsFromController,
+        ServerRequestInterface $request,
+    ): Environment {
+        return new Environment(
+            $this->getPreparedSettings($mergedSettingsFromController, $request),
+            ObjectAccess::getGettableProperties($this->extConf),
+            $this->getContentRecord($request),
+            $this->linkHelper->buildUriToCurrentPage([], $request),
+            $this->getCurrentPageUid($request),
+        );
+    }
+
+    private function getPreparedSettings(array $mergedSettingsFromController, ServerRequestInterface $request): array
     {
-        // 1. Get merged and prepared settings
-        $mergedSettings = $this->settingsHelper->getMergedSettings();
-        $preparedSettings = $this->settingsHelper->getPreparedSettings($mergedSettings);
+        return $this->settingsHelper->getPreparedSettings(
+            $this->settingsHelper->getMergedSettings($mergedSettingsFromController, $request),
+        );
+    }
 
-        // 2. Get gettable properties of ExtConf
-        $extConfProperties = ObjectAccess::getGettableProperties($this->extConf);
-
-        // 3. Get content record from the request
+    private function getContentRecord(ServerRequestInterface $request): array
+    {
         $contentObject = $request->getAttribute('currentContentObject');
         $contentRecord = $contentObject instanceof ContentObjectRenderer ? $contentObject->data : [];
         unset(
@@ -46,23 +58,18 @@ final readonly class EnvironmentFactory
             $contentRecord['l18n_diffsource'],
         );
 
-        // 4. Build ajax URL using LinkHelper
-        $ajaxUrl = $this->linkHelper->buildUriToCurrentPage([], $request);
+        return $contentRecord;
+    }
 
-        // 5. Get current page UID
+    private function getCurrentPageUid(ServerRequestInterface $request): int
+    {
         $routing = $request->getAttribute('routing');
-        $id = $routing instanceof PageArguments ? $routing->getPageId() : 0;
-        if ($id === 0) {
+        $pageUid = $routing instanceof PageArguments ? $routing->getPageId() : 0;
+        if ($pageUid === 0) {
             $queryParams = $request->getQueryParams();
-            $id = (int)($queryParams['id'] ?? 0);
+            $pageUid = (int)($queryParams['id'] ?? 0);
         }
 
-        return new Environment(
-            $preparedSettings,
-            $extConfProperties,
-            $contentRecord,
-            $ajaxUrl,
-            $id,
-        );
+        return $pageUid;
     }
 }
