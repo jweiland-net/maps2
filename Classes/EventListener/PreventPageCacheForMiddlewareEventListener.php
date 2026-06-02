@@ -16,8 +16,8 @@ use TYPO3\CMS\Frontend\Event\ShouldUseCachedPageDataIfAvailableEvent;
 
 /**
  * We load GetInfoWindowContentMiddleware at a very late position as we need the TypoScript configuration.
- * At that position the PrepareTypoScriptFrontendRendering middleware of TYPO3 checks, if there is cached
- * page content available. If yes, a very minimum of TypoScript will be provided. In that specific state
+ * At that position the PrepareTypoScriptFrontendRendering middleware of TYPO3 checks if there is cached
+ * page content available. If yes, a very minimum of TypoScript will be provided. In that specific state,
  * plugin.tx_maps2 is missing. With this EventListener we disallow TYPO3 to use cached content for our
  * GetInfoWindowContentMiddleware. We need the contained paths from TypoScript for Fluid rendering.
  */
@@ -27,7 +27,7 @@ class PreventPageCacheForMiddlewareEventListener
     public function __invoke(ShouldUseCachedPageDataIfAvailableEvent $event): void
     {
         // Only if header matches we have to return "false" to set TYPO3s "$isUsingPageCacheAllowed" to false
-        // Furthermore we take into account whether page shall be cached via "shouldUseCachedPageData()"
+        //  Furthermore, we take into account whether page shall be cached via "shouldUseCachedPageData()"
         $event->setShouldUseCachedPageData(
             $event->shouldUseCachedPageData() && $event->getRequest()->getHeader('ext-maps2') !== ['infoWindowContent'],
         );
