@@ -126,7 +126,7 @@ class EnvironmentFactoryTest extends FunctionalTestCase
         $GLOBALS['TYPO3_REQUEST'] = $request;
 
         $factory = new EnvironmentFactory($extConf, $linkHelper, $settingsHelper);
-        $environment = $factory->buildEnvironment($request);
+        $environment = $factory->buildEnvironment([], $request);
 
         self::assertSame(['prepared' => 'settings'], $environment->getSettings());
         // LinkHelper should natively generate the URL using the booted Site base and routing page ID

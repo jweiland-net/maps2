@@ -32,7 +32,7 @@ class CityMapController extends ActionController
 
     protected function initializeAction(): void
     {
-        $this->environment = $this->environmentFactory->buildEnvironment($this->request);
+        $this->environment = $this->environmentFactory->buildEnvironment($this->settings, $this->request);
         $this->settings = $this->environment->getSettings();
     }
 

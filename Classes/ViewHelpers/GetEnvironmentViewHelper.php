@@ -44,7 +44,7 @@ class GetEnvironmentViewHelper extends AbstractViewHelper
             return '';
         }
 
-        $environment = $this->environmentFactory->buildEnvironment($extbaseRequest);
+        $environment = $this->environmentFactory->buildEnvironment([], $extbaseRequest);
 
         $templateVariableContainer->add('environment', $environment);
 
