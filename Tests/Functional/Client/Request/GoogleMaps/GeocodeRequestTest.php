@@ -13,8 +13,8 @@ namespace JWeiland\Maps2\Tests\Functional\Client\Request\GoogleMaps;
 
 use JWeiland\Maps2\Client\Request\GoogleMaps\GeocodeRequest;
 use JWeiland\Maps2\Configuration\ExtConf;
+use JWeiland\Maps2\Configuration\MapProviderEnum;
 use PHPUnit\Framework\Attributes\Test;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 /**
@@ -24,204 +24,51 @@ class GeocodeRequestTest extends FunctionalTestCase
 {
     protected GeocodeRequest $subject;
 
-    protected ExtConf $extConf;
-
     protected array $testExtensionsToLoad = [
         'jweiland/maps2',
     ];
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-    }
-
     #[Test]
-    public function setUriSetsUri(): void
+    public function canProcessWillReturnTrue(): void
     {
-        $config = [];
-        $extConf = new ExtConf(...$config);
-        $subject = new GeocodeRequest(
-            $extConf,
-        );
+        $subject = new GeocodeRequest(new ExtConf());
 
-        $uri = 'https://www.jweiland.net';
-        $subject->setUri($uri);
-        self::assertSame(
-            $uri,
-            $subject->getUri(),
-        );
-    }
-
-    #[Test]
-    public function setParametersSetsParameters(): void
-    {
-        $config = [];
-        $extConf = new ExtConf(...$config);
-        $subject = new GeocodeRequest(
-            $extConf,
-        );
-
-        $parameters = [
-            'uri' => 'https://www.jweiland.net',
-            'address' => 'Echterdinger Straße 57',
-        ];
-        $subject->setParameters($parameters);
-        self::assertSame(
-            $parameters,
-            $subject->getParameters(),
-        );
-    }
-
-    #[Test]
-    public function addParameterSetsParameter(): void
-    {
-        $config = [];
-        $extConf = new ExtConf(...$config);
-        $subject = new GeocodeRequest(
-            $extConf,
-        );
-
-        $parameters = [
-            'uri' => 'https://www.jweiland.net',
-            'address' => 'Echterdinger Straße 57',
-        ];
-        $subject->setParameters($parameters);
-        $subject->addParameter('city', 'Filderstadt');
-        self::assertSame(
-            'Filderstadt',
-            $subject->getParameter('city'),
-        );
-        self::assertCount(
-            3,
-            $subject->getParameters(),
-        );
-    }
-
-    #[Test]
-    public function hasParameterReturnsTrue(): void
-    {
-        $config = [];
-        $extConf = new ExtConf(...$config);
-        $subject = new GeocodeRequest(
-            $extConf,
-        );
-
-        $parameters = [
-            'uri' => 'https://www.jweiland.net',
-            'address' => 'Echterdinger Straße 57',
-        ];
-        $subject->setParameters($parameters);
         self::assertTrue(
-            $subject->hasParameter('uri'),
+            $subject->canProcess(MapProviderEnum::GOOGLE_MAPS),
         );
     }
 
     #[Test]
-    public function hasParameterReturnsFalse(): void
+    public function canProcessWillReturnFalse(): void
     {
-        $config = [];
-        $extConf = new ExtConf(...$config);
-        $subject = new GeocodeRequest(
-            $extConf,
-        );
-
-        $parameters = [
-            'uri' => 'https://www.jweiland.net',
-            'address' => 'Echterdinger Straße 57',
-        ];
-        $subject->setParameters($parameters);
-        self::assertFalse(
-            $subject->hasParameter('city'),
-        );
-    }
-
-    #[Test]
-    public function isValidRequestWithEmptyUriReturnsFalse(): void
-    {
-        $config = [];
-        $extConf = new ExtConf(...$config);
-        $subject = new GeocodeRequest(
-            $extConf,
-        );
-
-        $subject->setUri('  ');
-        self::assertFalse(
-            $subject->isValidRequest(),
-        );
-    }
-
-    #[Test]
-    public function isValidRequestWithInvalidUriReturnsFalse(): void
-    {
-        $config = [];
-        $extConf = new ExtConf(...$config);
-        $subject = new GeocodeRequest(
-            $extConf,
-        );
-
-        $subject->setUri('nice try');
-        self::assertFalse(
-            $subject->isValidRequest(),
-        );
-    }
-
-    #[Test]
-    public function isValidRequestWithValidUriReturnsTrue(): void
-    {
-        $config = [];
-        $extConf = new ExtConf(...$config);
-        $subject = new GeocodeRequest(
-            $extConf,
-        );
-
-        $subject->setUri('https://www.jweiland.net/%s/what/ever/%s.html');
-        self::assertTrue(
-            $subject->isValidRequest(),
-        );
-    }
-
-    #[Test]
-    public function getUriWillAddAddressAndApiKeyToUri(): void
-    {
-        $config = [
-            'googleMapsGeocodeApiKey' => 'MyApiKey',
-        ];
-        $extConf = new ExtConf(...$config);
-        GeneralUtility::addInstance(ExtConf::class, $extConf);
-
-        $subject = new GeocodeRequest(
-            $extConf,
-        );
-        $subject->setUri('%s:%s');
-        $subject->addParameter('address', 'My Address');
-
-        self::assertEquals(
-            'My%20Address:MyApiKey',
-            $subject->getUri(),
-        );
-    }
-
-    #[Test]
-    public function getUriAddsAddressAndApiKeyToUriButUriIsInvalid(): void
-    {
-        $config = [
-            'googleMapsGeocodeApiKey' => 'MyApiKey',
-        ];
-        $extConf = new ExtConf(...$config);
-        $subject = new GeocodeRequest(
-            $extConf,
-        );
-
-        $subject->setUri('%s:%s');
-        $subject->addParameter('address', 'My Address');
+        $subject = new GeocodeRequest(new ExtConf());
 
         self::assertFalse(
-            $subject->isValidRequest(),
+            $subject->canProcess(MapProviderEnum::OPEN_STREET_MAP),
+        );
+    }
+
+    #[Test]
+    public function getUriWithEmptyAddressWillReturnEmptyString(): void
+    {
+        $subject = new GeocodeRequest(new ExtConf());
+
+        self::assertSame(
+            '',
+            $subject->getUri(''),
+        );
+    }
+
+    #[Test]
+    public function getUriWillReturnGeocodeUri(): void
+    {
+        $subject = new GeocodeRequest(new ExtConf(
+            googleMapsGeocodeApiKey: 'ApiKey',
+        ));
+
+        self::assertSame(
+            'https://maps.googleapis.com/maps/api/geocode/json?address=Filderstadt&key=ApiKey',
+            $subject->getUri('Filderstadt'),
         );
     }
 }

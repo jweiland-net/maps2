@@ -47,7 +47,7 @@ readonly class GeocodeRequest implements RequestInterface
         }
 
         if ($rawUrlEncodedAddress === '') {
-            return $uri;
+            return '';
         }
 
         return sprintf($uri, $rawUrlEncodedAddress, $this->extConf->getGoogleMapsGeocodeApiKey());
