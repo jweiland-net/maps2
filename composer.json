@@ -34,10 +34,7 @@
 		"ergebnis/composer-normalize": "^2.44",
 		"ssch/typo3-rector": "^3.6",
 		"typo3/coding-standards": "^0.8",
-		"typo3/testing-framework": "^9.2.0"
-	},
-	"suggest": {
-		"sjbr/static-info-tables": "Install this package, if you want to choose from contained countries instead of typing them"
+		"typo3/testing-framework": "^9.5.0"
 	},
 	"autoload": {
 		"psr-4": {
