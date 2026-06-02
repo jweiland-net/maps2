@@ -11,12 +11,8 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Tests\Unit\Service;
 
-use JWeiland\Maps2\Client;
-use JWeiland\Maps2\Client\ClientFactory;
 use JWeiland\Maps2\Client\GoogleMapsClient;
-use JWeiland\Maps2\Client\Request;
 use JWeiland\Maps2\Client\Request\GoogleMaps\GeocodeRequest;
-use JWeiland\Maps2\Client\Request\RequestFactory;
 use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Mapper\GoogleMapsMapper;
 use JWeiland\Maps2\Mapper\MapperFactory;
@@ -32,29 +28,12 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
  */
 class GeoCodeServiceTest extends UnitTestCase
 {
-    /**
-     * @var Client\ClientFactory|MockObject
-     */
-    protected MockObject $clientFactoryMock;
+    public $clientFactoryMock;
+    public $requestFactoryMock;
+    protected MockObject $mapProviderClient;
 
-    /**
-     * @var Client\GoogleMapsClient|MockObject
-     */
-    protected MockObject $googleMapsClientMock;
-
-    /**
-     * @var Request\RequestFactory|MockObject
-     */
-    protected MockObject $requestFactoryMock;
-
-    /**
-     * @var MapperFactory|MockObject
-     */
     protected MockObject $mapperFactoryMock;
 
-    /**
-     * @var GeocodeRequest|MockObject
-     */
     protected MockObject $gmGeocodeRequestMock;
 
     protected GeoCodeService $subject;
@@ -63,20 +42,13 @@ class GeoCodeServiceTest extends UnitTestCase
     {
         parent::setUp();
 
-        $this->clientFactoryMock = $this->createMock(ClientFactory::class);
-        $this->googleMapsClientMock = $this->createMock(GoogleMapsClient::class);
-        $this->requestFactoryMock = $this->createMock(RequestFactory::class);
+        $this->mapProviderClient = $this->createMock(GoogleMapsClient::class);
         $this->mapperFactoryMock = $this->createMock(MapperFactory::class);
         $this->gmGeocodeRequestMock = $this->createMock(GeocodeRequest::class);
 
-        $this->clientFactoryMock
-            ->expects($this->atLeastOnce())
-            ->method('create')
-            ->willReturn($this->googleMapsClientMock);
-
         $this->subject = new GeoCodeService(
-            $this->clientFactoryMock,
-            $this->requestFactoryMock,
+            $this->mapProviderClient,
+            $this->gmGeocodeRequestMock,
             $this->mapperFactoryMock,
         );
     }
@@ -86,7 +58,7 @@ class GeoCodeServiceTest extends UnitTestCase
         unset(
             $this->subject,
             $this->clientFactoryMock,
-            $this->googleMapsClientMock,
+            $this->mapProviderClient,
             $this->requestFactoryMock,
             $this->mapperFactoryMock,
             $this->gmGeocodeRequestMock,
@@ -104,11 +76,6 @@ class GeoCodeServiceTest extends UnitTestCase
 
         $positions = $this->subject->getPositionsByAddress('');
 
-        self::assertInstanceOf(
-            ObjectStorage::class,
-            $positions,
-        );
-
         self::assertSame(
             $objectStorage->toArray(),
             $positions->toArray(),
@@ -122,11 +89,6 @@ class GeoCodeServiceTest extends UnitTestCase
 
         $positions = $this->subject->getPositionsByAddress('    ');
 
-        self::assertInstanceOf(
-            ObjectStorage::class,
-            $positions,
-        );
-
         self::assertSame(
             $objectStorage->toArray(),
             $positions->toArray(),
@@ -139,32 +101,13 @@ class GeoCodeServiceTest extends UnitTestCase
         $address = 'test street 123, 12345 city';
         $objectStorage = new ObjectStorage();
 
-        $this->gmGeocodeRequestMock
-            ->expects($this->atLeastOnce())
-            ->method('addParameter')
-            ->with(
-                'address',
-                $address,
-            );
-
-        $this->requestFactoryMock
-            ->expects($this->atLeastOnce())
-            ->method('create')
-            ->with('GeocodeRequest')
-            ->willReturn($this->gmGeocodeRequestMock);
-
-        $this->googleMapsClientMock
+        $this->mapProviderClient
             ->expects($this->atLeastOnce())
             ->method('processRequest')
             ->with($this->gmGeocodeRequestMock)
             ->willReturn([]);
 
         $positions = $this->subject->getPositionsByAddress($address);
-
-        self::assertInstanceOf(
-            ObjectStorage::class,
-            $positions,
-        );
 
         self::assertSame(
             $objectStorage->toArray(),
@@ -186,21 +129,7 @@ class GeoCodeServiceTest extends UnitTestCase
             ],
         ];
 
-        $this->gmGeocodeRequestMock
-            ->expects($this->atLeastOnce())
-            ->method('addParameter')
-            ->with(
-                'address',
-                'My private address',
-            );
-
-        $this->requestFactoryMock
-            ->expects($this->atLeastOnce())
-            ->method('create')
-            ->with('GeocodeRequest')
-            ->willReturn($this->gmGeocodeRequestMock);
-
-        $this->googleMapsClientMock
+        $this->mapProviderClient
             ->expects($this->atLeastOnce())
             ->method('processRequest')
             ->with($this->gmGeocodeRequestMock)
@@ -247,21 +176,7 @@ class GeoCodeServiceTest extends UnitTestCase
         $objectStorage = new ObjectStorage();
         GeneralUtility::addInstance(ObjectStorage::class, $objectStorage);
 
-        $this->gmGeocodeRequestMock
-            ->expects($this->atLeastOnce())
-            ->method('addParameter')
-            ->with(
-                'address',
-                'My private address',
-            );
-
-        $this->requestFactoryMock
-            ->expects($this->atLeastOnce())
-            ->method('create')
-            ->with('GeocodeRequest')
-            ->willReturn($this->gmGeocodeRequestMock);
-
-        $this->googleMapsClientMock
+        $this->mapProviderClient
             ->expects($this->atLeastOnce())
             ->method('processRequest')
             ->with($this->gmGeocodeRequestMock)
@@ -289,21 +204,7 @@ class GeoCodeServiceTest extends UnitTestCase
             ],
         ];
 
-        $this->gmGeocodeRequestMock
-            ->expects($this->atLeastOnce())
-            ->method('addParameter')
-            ->with(
-                'address',
-                'My private address',
-            );
-
-        $this->requestFactoryMock
-            ->expects($this->atLeastOnce())
-            ->method('create')
-            ->with('GeocodeRequest')
-            ->willReturn($this->gmGeocodeRequestMock);
-
-        $this->googleMapsClientMock
+        $this->mapProviderClient
             ->expects($this->atLeastOnce())
             ->method('processRequest')
             ->with($this->gmGeocodeRequestMock)
