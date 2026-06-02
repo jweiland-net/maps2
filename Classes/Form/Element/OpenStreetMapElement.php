@@ -15,10 +15,6 @@ use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Helper\MapHelper;
 use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
 use TYPO3\CMS\Core\Page\JavaScriptModuleInstruction;
-use TYPO3\CMS\Core\Page\PageRenderer;
-use TYPO3\CMS\Core\SystemResource\Publishing\SystemResourcePublisherInterface;
-use TYPO3\CMS\Core\SystemResource\Publishing\UriGenerationOptions;
-use TYPO3\CMS\Core\SystemResource\SystemResourceFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\StringUtility;
 use TYPO3\CMS\Core\View\ViewFactoryData;
@@ -27,9 +23,9 @@ use TYPO3\CMS\Core\View\ViewInterface;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 
 /*
- * Special backend FormEngine element to show Open Street Map.
- * This is a very reduced InputTextElement. The textfield itself will not be displayed,
- * but it contains the JSON for all the POIs.
+ * Special backend FormEngine element to show OpenStreetMap.
+ * This is a very reduced InputTextElement. The textfield itself will not be
+ * displayed, but it contains the JSON for all the POIs.
  */
 class OpenStreetMapElement extends AbstractFormElement
 {
@@ -47,9 +43,6 @@ class OpenStreetMapElement extends AbstractFormElement
     ];
 
     public function __construct(
-        private readonly SystemResourceFactory $systemResourceFactory,
-        private readonly SystemResourcePublisherInterface $resourcePublisher,
-        private readonly PageRenderer $pageRenderer,
         private readonly MapHelper $mapHelper,
         private readonly ExtConf $extConf,
         private readonly ViewFactoryInterface $viewFactory,
@@ -70,10 +63,11 @@ class OpenStreetMapElement extends AbstractFormElement
         $config = $parameterArray['fieldConf']['config'];
         $evalList = GeneralUtility::trimExplode(',', $config['eval'] ?? '', true);
 
-        $this->pageRenderer->loadJavaScriptModule('@jweiland/maps2/leaflet.min.js');
-        $resource = $this->systemResourceFactory->createPublicResource('EXT:maps2/Resources/Public/Css/Leaflet/Leaflet.css');
-        $resultArray['stylesheetFiles'][] = (string)$this->resourcePublisher->generateUri($resource, $GLOBALS['TYPO3_REQUEST'], new UriGenerationOptions(absoluteUri: true));
+        $resultArray['stylesheetFiles'][] = 'EXT:maps2/Resources/Public/Css/Leaflet/Leaflet.css';
 
+        $resultArray['javaScriptModules'][] = JavaScriptModuleInstruction::create(
+            '@jweiland/maps2/leaflet.min.js',
+        );
         $resultArray['javaScriptModules'][] = JavaScriptModuleInstruction::create(
             '@jweiland/maps2/OpenStreetMapModule.min.js',
         );

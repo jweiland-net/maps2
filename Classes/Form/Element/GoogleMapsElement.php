@@ -15,9 +15,6 @@ use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Helper\MapHelper;
 use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
 use TYPO3\CMS\Core\Page\JavaScriptModuleInstruction;
-use TYPO3\CMS\Core\SystemResource\Publishing\SystemResourcePublisherInterface;
-use TYPO3\CMS\Core\SystemResource\Publishing\UriGenerationOptions;
-use TYPO3\CMS\Core\SystemResource\SystemResourceFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\StringUtility;
 use TYPO3\CMS\Core\View\ViewFactoryData;
@@ -27,18 +24,13 @@ use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 
 /*
  * Special backend FormEngine element to show Google Maps.
- * This is a very reduced InputTextElement. The textfield itself will not be displayed,
- * but it contains the JSON for all the POIs.
+ * This is a very reduced InputTextElement. The textfield itself will not be
+ * displayed, but it contains the JSON for all the POIs.
  */
 class GoogleMapsElement extends AbstractFormElement
 {
     private const ELEMENT_TEMPLATE = 'EXT:maps2/Resources/Private/Templates/Tca/GoogleMaps.html';
 
-    /**
-     * Default field information enabled for this element.
-     *
-     * @var array
-     */
     protected $defaultFieldInformation = [
         'tcaDescription' => [
             'renderType' => 'tcaDescription',
@@ -46,8 +38,6 @@ class GoogleMapsElement extends AbstractFormElement
     ];
 
     public function __construct(
-        private readonly SystemResourceFactory $systemResourceFactory,
-        private readonly SystemResourcePublisherInterface $resourcePublisher,
         private readonly MapHelper $mapHelper,
         private readonly ExtConf $extConf,
         private readonly ViewFactoryInterface $viewFactory,
@@ -67,14 +57,8 @@ class GoogleMapsElement extends AbstractFormElement
         $itemValue = $parameterArray['itemFormElValue'];
         $config = $parameterArray['fieldConf']['config'];
         $evalList = GeneralUtility::trimExplode(',', $config['eval'] ?? '', true);
-        $resource = $this->systemResourceFactory->createPublicResource('EXT:maps2/Resources/Public/');
-        $publicResourcesPath = (string)$this->resourcePublisher->generateUri(
-            $resource,
-            $GLOBALS['TYPO3_REQUEST'],
-            new UriGenerationOptions(absoluteUri: true),
-        );
 
-        $resultArray['stylesheetFiles'][] = $publicResourcesPath . 'Css/GoogleMapsModule.css';
+        $resultArray['stylesheetFiles'][] = 'EXT:maps2/Resources/Public/Css/GoogleMapsModule.css';
 
         $resultArray['javaScriptModules'][] = JavaScriptModuleInstruction::create(
             '@jweiland/maps2/GoogleMapsModule.min.js',

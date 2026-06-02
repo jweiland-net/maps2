@@ -18,10 +18,9 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Backend\Form\NodeFactory;
 use TYPO3\CMS\Core\Page\PageRenderer;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\View\ViewFactoryData;
 use TYPO3\CMS\Core\View\ViewFactoryInterface;
-use TYPO3\CMS\Core\View\ViewInterface;
-use TYPO3\CMS\Fluid\View\StandaloneView;
+use TYPO3\CMS\Fluid\View\FluidViewAdapter;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 /**
@@ -33,15 +32,11 @@ class OpenStreetMapElementTest extends FunctionalTestCase
 
     protected array $data = [];
 
-    protected ExtConf $extConf;
-
     protected PageRenderer|MockObject $pageRendererMock;
 
     protected MapHelper|MockObject $mapHelperMock;
 
-    protected StandaloneView|MockObject $viewMock;
-
-    protected ViewFactoryInterface $viewFactoryMock;
+    protected ViewFactoryInterface|MockObject $viewFactoryMock;
 
     protected NodeFactory $nodeFactoryMock;
 
@@ -70,30 +65,16 @@ class OpenStreetMapElementTest extends FunctionalTestCase
             ],
         ];
 
-        $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
-
-        $this->pageRendererMock = $this->createMock(PageRenderer::class);
-        GeneralUtility::setSingletonInstance(PageRenderer::class, $this->pageRendererMock);
-
         $this->mapHelperMock = $this->createMock(MapHelper::class);
-        GeneralUtility::addInstance(MapHelper::class, $this->mapHelperMock);
-
-        $this->viewMock = $this->createMock(ViewInterface::class);
-        GeneralUtility::addInstance(ViewInterface::class, $this->viewMock);
-
         $this->viewFactoryMock = $this->createMock(ViewFactoryInterface::class);
-        GeneralUtility::addInstance(ViewFactoryInterface::class, $this->viewFactoryMock);
-
         $this->nodeFactoryMock = $this->createMock(NodeFactory::class);
-        GeneralUtility::addInstance(NodeFactory::class, $this->nodeFactoryMock);
 
         $this->subject = new OpenStreetMapElement(
-            $this->extConf,
-            $this->pageRendererMock,
             $this->mapHelperMock,
+            new ExtConf(),
             $this->viewFactoryMock,
-            $this->nodeFactoryMock,
         );
+        $this->subject->injectNodeFactory($this->nodeFactoryMock);
         $this->subject->setData($this->data);
     }
 
@@ -101,10 +82,7 @@ class OpenStreetMapElementTest extends FunctionalTestCase
     {
         unset(
             $this->subject,
-            $this->extConf,
-            $this->pageRendererMock,
             $this->mapHelperMock,
-            $this->viewMock,
             $this->viewFactoryMock,
             $this->nodeFactoryMock,
         );
@@ -113,16 +91,38 @@ class OpenStreetMapElementTest extends FunctionalTestCase
     }
 
     #[Test]
-    public function renderWillCleanUpCurrentRecord(): void
+    public function renderWillCreateViewAndAssignVariables(): void
     {
-        $this->viewFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($this->viewMock);
+        $record = $this->data['databaseRow'];
+        $record['collection_type'] = 'Point';
 
-        $this->viewMock
+        $viewMock = $this->createMock(FluidViewAdapter::class);
+
+        $viewMock
+            ->expects($this->exactly(2))
+            ->method('assign')
+            ->willReturnCallback(function (string $key, $value) use ($record, $viewMock) {
+                match ($key) {
+                    'poiCollection' => $this->assertSame(json_encode($record), $value),
+                    'extConf' => true, // Simulates the old $this->anything() behavior
+                    default => $this->fail('Unexpected argument passed to assign()'),
+                };
+
+                return $viewMock;
+            });
+
+        $viewMock
             ->expects($this->atLeastOnce())
             ->method('render')
             ->willReturn('foo');
+
+        $this->viewFactoryMock
+            ->expects($this->atLeastOnce())
+            ->method('create')
+            ->with(new ViewFactoryData(
+                templatePathAndFilename: 'EXT:maps2/Resources/Private/Templates/Tca/OpenStreetMap.html',
+            ))
+            ->willReturn($viewMock);
 
         $this->subject->render();
     }
