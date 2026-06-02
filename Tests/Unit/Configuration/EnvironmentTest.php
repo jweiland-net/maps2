@@ -28,6 +28,7 @@ class EnvironmentTest extends UnitTestCase
         $contentRecord = ['uid' => 42];
         $ajaxUrl = '/ajax-url';
         $id = 123;
+        $siteUrl = 'https://example.com/';
 
         $subject = new Environment(
             $settings,
@@ -35,6 +36,7 @@ class EnvironmentTest extends UnitTestCase
             $contentRecord,
             $ajaxUrl,
             $id,
+            $siteUrl,
         );
 
         self::assertSame($settings, $subject->getSettings());
@@ -42,6 +44,7 @@ class EnvironmentTest extends UnitTestCase
         self::assertSame($contentRecord, $subject->getContentRecord());
         self::assertSame($ajaxUrl, $subject->getAjaxUrl());
         self::assertSame($id, $subject->getId());
+        self::assertSame($siteUrl, $subject->getSiteUrl());
 
         $expectedJson = json_encode([
             'settings' => $settings,
@@ -49,8 +52,12 @@ class EnvironmentTest extends UnitTestCase
             'contentRecord' => $contentRecord,
             'ajaxUrl' => $ajaxUrl,
             'id' => $id,
+            'siteUrl' => $siteUrl,
         ], JSON_THROW_ON_ERROR);
 
-        self::assertSame($expectedJson, json_encode($subject, JSON_THROW_ON_ERROR));
+        self::assertSame(
+            $expectedJson,
+            json_encode($subject, JSON_THROW_ON_ERROR),
+        );
     }
 }
