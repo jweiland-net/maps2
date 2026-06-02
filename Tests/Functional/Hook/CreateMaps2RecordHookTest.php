@@ -90,7 +90,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
 
         $this->importCSVDataSet(__DIR__ . '/../Fixtures/tx_events2_domain_model_location.csv');
 
-        // Seems that records of ext_tables_static+adt.sql will be included just once for all tests in this class.
+        // It seems that records of ext_tables_static+adt.sql will be included just once for all tests in this class.
         // So, for all tests (except the first one), we have to add the records ourselves.
         $country = $this->getConnectionPool()
             ->getConnectionForTable('static_countries')
