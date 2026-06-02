@@ -12,8 +12,6 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Helper;
 
 use Psr\Http\Message\ServerRequestInterface;
-use TYPO3\CMS\Core\SystemResource\Publishing\SystemResourcePublisherInterface;
-use TYPO3\CMS\Core\SystemResource\SystemResourceFactory;
 use TYPO3\CMS\Core\TypoScript\FrontendTypoScript;
 use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -26,8 +24,6 @@ readonly class SettingsHelper
 {
     public function __construct(
         protected TypoScriptService $typoScriptService,
-        protected SystemResourceFactory $systemResourceFactory,
-        protected SystemResourcePublisherInterface $resourcePublisher,
     ) {}
 
     /**

@@ -13,8 +13,10 @@ namespace JWeiland\Maps2\Tests\Functional\Helper;
 
 use JWeiland\Maps2\Helper\SettingsHelper;
 use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\MockObject\MockObject;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Core\Http\ServerRequest;
+use TYPO3\CMS\Core\TypoScript\AST\Node\RootNode;
+use TYPO3\CMS\Core\TypoScript\FrontendTypoScript;
+use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 /**
@@ -24,27 +26,29 @@ class SettingsHelperTest extends FunctionalTestCase
 {
     protected SettingsHelper $subject;
 
-    protected ConfigurationManagerInterface|MockObject $configurationManagerMock;
-
     protected array $typoScriptSettings = [
-        'settings' => [
-            'mapProvider' => 'gm',
-            'mapTypeControl' => '1',
-            'scaleControl' => '1',
-            'streetViewControl' => '0',
-            'fullscreenMapControl' => '1',
-            'zoom' => '10',
-            'zoomControl' => '1',
-            'overlay' => [
-                'link' => [
-                    'addSection' => '1',
-                ],
-            ],
-            'infoWindowContentTemplatePath' => '',
-            'infoWindow' => [
-                'image' => [
-                    'width' => '150c',
-                    'height' => '150c',
+        'plugin.' => [
+            'tx_maps2.' => [
+                'settings.' => [
+                    'mapProvider' => 'gm',
+                    'mapTypeControl' => '1',
+                    'scaleControl' => '1',
+                    'streetViewControl' => '0',
+                    'fullscreenMapControl' => '1',
+                    'zoom' => '10',
+                    'zoomControl' => '1',
+                    'overlay.' => [
+                        'link.' => [
+                            'addSection' => '1',
+                        ],
+                    ],
+                    'infoWindowContentTemplatePath' => '',
+                    'infoWindow.' => [
+                        'image.' => [
+                            'width' => '150c',
+                            'height' => '150c',
+                        ],
+                    ],
                 ],
             ],
         ],
@@ -85,16 +89,15 @@ class SettingsHelperTest extends FunctionalTestCase
     {
         parent::setUp();
 
-        $this->configurationManagerMock = $this->createMock(ConfigurationManagerInterface::class);
-
-        $this->subject = new SettingsHelper($this->configurationManagerMock);
+        $this->subject = new SettingsHelper(
+            $this->get(TypoScriptService::class),
+        );
     }
 
     protected function tearDown(): void
     {
         unset(
             $this->subject,
-            $this->configurationManagerMock,
         );
 
         parent::tearDown();
@@ -103,27 +106,16 @@ class SettingsHelperTest extends FunctionalTestCase
     #[Test]
     public function getMergedSettingsWillNotChangeAnySettings(): void
     {
-        $this->configurationManagerMock
-            ->expects($this->atLeastOnce())
-            ->method('getConfiguration')
-            ->willReturnMap([
-                [
-                    ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,
-                    'maps2',
-                    'invalid',
-                    $this->typoScriptSettings,
-                ],
-                [
-                    ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
-                    null,
-                    null,
-                    $this->mergedScriptSettings,
-                ],
-            ]);
+        $typoScript = new FrontendTypoScript(new RootNode(), [], [], []);
+        $typoScript->setSetupArray($this->typoScriptSettings);
+        $request = (new ServerRequest())->withAttribute('frontend.typoscript', $typoScript);
 
         self::assertSame(
             $this->mergedScriptSettings,
-            $this->subject->restoreTypoScriptDefaultsForEmptyFlexFormSettings(),
+            $this->subject->restoreTypoScriptDefaultsForEmptyFlexFormSettings(
+                $this->mergedScriptSettings,
+                $request,
+            ),
         );
     }
 
@@ -131,90 +123,57 @@ class SettingsHelperTest extends FunctionalTestCase
     public function getMergedSettingsWillOverrideEmptyInfoWindowContentTemplateWithTypoScriptValue(): void
     {
         $typoScriptSettings = $this->typoScriptSettings;
-        $typoScriptSettings['settings']['infoWindowContentTemplatePath']
+        $typoScriptSettings['plugin.']['tx_maps2.']['settings.']['infoWindowContentTemplatePath']
             = 'EXT:maps2/Resources/Private/Templates/InfoWindowContent.html';
 
-        $this->configurationManagerMock
-            ->expects($this->atLeastOnce())
-            ->method('getConfiguration')
-            ->willReturnMap([
-                [
-                    ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,
-                    'maps2',
-                    'invalid',
-                    $typoScriptSettings,
-                ],
-                [
-                    ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
-                    null,
-                    null,
-                    $this->mergedScriptSettings,
-                ],
-            ]);
+        $typoScript = new FrontendTypoScript(new RootNode(), [], [], []);
+        $typoScript->setSetupArray($typoScriptSettings);
+        $request = (new ServerRequest())->withAttribute('frontend.typoscript', $typoScript);
 
         self::assertSame(
             'EXT:maps2/Resources/Private/Templates/InfoWindowContent.html',
-            $this->subject->restoreTypoScriptDefaultsForEmptyFlexFormSettings()['infoWindowContentTemplatePath'],
+            $this->subject->restoreTypoScriptDefaultsForEmptyFlexFormSettings(
+                $this->mergedScriptSettings,
+                $request,
+            )['infoWindowContentTemplatePath'],
         );
     }
 
     #[Test]
     public function getMergedSettingsWithDeactivatedFullscreenMapControlWillKeepFlexFormSetting(): void
     {
+        $typoScript = new FrontendTypoScript(new RootNode(), [], [], []);
+        $typoScript->setSetupArray($this->typoScriptSettings);
+        $request = (new ServerRequest())->withAttribute('frontend.typoscript', $typoScript);
+
         $mergedSettings = $this->mergedScriptSettings;
         $mergedSettings['fullscreenMapControl'] = '0';
 
-        $this->configurationManagerMock
-            ->expects($this->atLeastOnce())
-            ->method('getConfiguration')
-            ->willReturnMap([
-                [
-                    ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,
-                    'maps2',
-                    'invalid',
-                    $this->typoScriptSettings,
-                ],
-                [
-                    ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
-                    null,
-                    null,
-                    $mergedSettings,
-                ],
-            ]);
-
         self::assertSame(
             '0',
-            $this->subject->restoreTypoScriptDefaultsForEmptyFlexFormSettings()['fullscreenMapControl'],
+            $this->subject->restoreTypoScriptDefaultsForEmptyFlexFormSettings(
+                $mergedSettings,
+                $request,
+            )['fullscreenMapControl'],
         );
     }
 
     #[Test]
     public function getMergedSettingsWithActivatedStreetViewControlWillKeepFlexFormSetting(): void
     {
+        $typoScript = new FrontendTypoScript(new RootNode(), [], [], []);
+        $typoScript->setSetupArray($this->typoScriptSettings);
+        $request = (new ServerRequest())->withAttribute('frontend.typoscript', $typoScript);
+
         $mergedSettings = $this->mergedScriptSettings;
         $mergedSettings['streetViewControl'] = '1';
 
-        $this->configurationManagerMock
-            ->expects($this->atLeastOnce())
-            ->method('getConfiguration')
-            ->willReturnMap([
-                [
-                    ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,
-                    'maps2',
-                    'invalid',
-                    $this->typoScriptSettings,
-                ],
-                [
-                    ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
-                    null,
-                    null,
-                    $mergedSettings,
-                ],
-            ]);
-
         self::assertSame(
             '1',
-            $this->subject->restoreTypoScriptDefaultsForEmptyFlexFormSettings()['streetViewControl'],
+            $this->subject->restoreTypoScriptDefaultsForEmptyFlexFormSettings(
+                $mergedSettings,
+                $request,
+            )['streetViewControl'],
         );
     }
 }
