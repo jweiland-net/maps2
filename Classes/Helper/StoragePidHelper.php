@@ -21,13 +21,17 @@ use TYPO3\CMS\Core\Utility\MathUtility;
 /**
  * This class searches various places to find a storage PID where new POI Collections should be saved
  */
-class StoragePidHelper
+readonly class StoragePidHelper
 {
-    public function __construct(protected MessageHelper $messageHelper) {}
+    public function __construct(
+        protected MessageHelper $messageHelper,
+        protected ExtensionConfiguration $extensionConfiguration,
+    ) {}
 
     public function getDefaultStoragePidForNewPoiCollection(array $foreignLocationRecord, array $options): int
     {
         $defaultStoragePid = 0;
+
         $this->updateStoragePidFromForeignLocationRecord($defaultStoragePid, $foreignLocationRecord);
         $this->updateStoragePidFromMaps2Registry($defaultStoragePid, $options, $foreignLocationRecord);
         $this->updateDefaultStoragePidFromPageTsConfig($defaultStoragePid, $foreignLocationRecord);
@@ -44,7 +48,7 @@ class StoragePidHelper
 
     /**
      * Lowest priority:
-     * Get default location record from foreign location record
+     * Get a default location record from a foreign location record
      */
     protected function updateStoragePidFromForeignLocationRecord(
         int &$defaultStoragePid,
@@ -62,7 +66,7 @@ class StoragePidHelper
     }
 
     /**
-     * Update default storage PID with value/configuration of Maps2 Registry
+     * Update the default storage PID with the value / configuration of Maps2 Registry
      */
     protected function updateStoragePidFromMaps2Registry(
         int &$defaultStoragePid,
@@ -89,7 +93,7 @@ class StoragePidHelper
 
     /**
      * Get hard-coded storage PID from Maps2 Registry.
-     * Very bad idea, because default storage PID was hard-coded in foreign extension. You should always try to avoid
+     * Very bad idea, because default storage PID was hard-coded in a foreign extension. You should always try to avoid
      * this way and use the dynamic variant instead.
      */
     protected function getHardCodedStoragePidFromMaps2Registry(array $options): int
@@ -176,8 +180,7 @@ class StoragePidHelper
                     }
 
                     try {
-                        $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class);
-                        $extConf = (array)$extensionConfiguration->get($extKey);
+                        $extConf = (array)$this->extensionConfiguration->get($extKey);
                     } catch (\Exception) {
                         return $defaultStoragePid;
                     }

@@ -17,6 +17,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\VariableFrontend;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\CMS\Core\Site\Entity\NullSite;
 use TYPO3\CMS\Core\TypoScript\PageTsConfigFactory;
@@ -43,7 +44,10 @@ class StoragePidHelperTest extends FunctionalTestCase
 
         $this->messageHelperMock = $this->createMock(MessageHelper::class);
 
-        $this->subject = new StoragePidHelper($this->messageHelperMock);
+        $this->subject = new StoragePidHelper(
+            $this->messageHelperMock,
+            $this->get(ExtensionConfiguration::class)
+        );
     }
 
     protected function tearDown(): void
