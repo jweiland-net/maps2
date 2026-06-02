@@ -16,9 +16,9 @@ use TYPO3\CMS\Core\SystemResource\Publishing\SystemResourcePublisherInterface;
 use TYPO3\CMS\Core\SystemResource\Publishing\UriGenerationOptions;
 use TYPO3\CMS\Core\SystemResource\SystemResourceFactory;
 use TYPO3\CMS\Core\TypoScript\FrontendTypoScript;
+use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 
 /**
  * Helper to prepare settings
@@ -26,8 +26,9 @@ use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 readonly class SettingsHelper
 {
     public function __construct(
-        private SystemResourceFactory $systemResourceFactory,
-        private SystemResourcePublisherInterface $resourcePublisher,
+        protected TypoScriptService $typoScriptService,
+        protected SystemResourceFactory $systemResourceFactory,
+        protected SystemResourcePublisherInterface $resourcePublisher,
     ) {}
 
     /**
@@ -43,45 +44,28 @@ readonly class SettingsHelper
      * that FlexForm settings of your plugin will be merged with TypoScript settings of maps2. This can
      * lead to unforeseen miss-configuration.
      */
-    public function getMergedSettings(array $mergedSettingsFromController, ServerRequestInterface $request): array
-    {
-        $fullTypoScript = $this->getTypoScriptSetup($request);
+    public function restoreTypoScriptDefaultsForEmptyFlexFormSettings(
+        array $mergedSettingsFromController,
+        ServerRequestInterface $request,
+    ): array {
+        $pluginConfiguration = $this->getPluginConfiguration($request);
+        $pluginSettings = $pluginConfiguration['settings'] ?? [];
 
-
-        $typoScriptSettings = $this->configurationManager->getConfiguration(
-            ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,
-            'maps2',
-            'invalid', // invalid plugin name to get fresh unmerged settings
-        );
-
-        // In context of a maps2 plugin this will return the merged (TS and FlexForm) settings
-        $mergedSettings = $this->configurationManager->getConfiguration(
-            ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
-        );
-
-        foreach ($mergedSettings as $setting => $value) {
-            if ($value === '' && isset($typoScriptSettings['settings'][$setting])) {
-                $mergedSettings[$setting] = $typoScriptSettings['settings'][$setting];
+        foreach ($mergedSettingsFromController as $mergedSetting => $value) {
+            if ($value === '' && isset($pluginSettings[$mergedSetting])) {
+                $mergedSettingsFromController[$mergedSetting] = $pluginSettings[$mergedSetting];
             }
         }
 
-        return $mergedSettings;
+        return $mergedSettingsFromController ?: $pluginSettings;
     }
 
-
-    /**
-     * If possible, you should always set $settings. In the context of controllers $settings contain a
-     * merged version of TS settings and FlexForm settings. If you don't have any settings by hand, leave
-     * empty, and we will try to get settings from TypoScript (no FlexForm settings!!!)
-     */
-    public function getPreparedSettings(array $settings = []): array
+    public function getPreparedSettings(array $settings, ServerRequestInterface $request): array
     {
-        $settings = $settings ?: $this->getTypoScriptSettings();
-
         $settings['forceZoom'] = (bool)($settings['forceZoom'] ?? false);
 
         $this->prepareMapTileForOpenStreetMap($settings);
-        $this->prepareImagePathForMarkerClusterer($settings);
+        $this->prepareImagePathForMarkerClusterer($settings, $request);
 
         return $settings;
     }
@@ -98,24 +82,36 @@ readonly class SettingsHelper
         }
     }
 
-    protected function prepareImagePathForMarkerClusterer(array &$settings): void
+    protected function prepareImagePathForMarkerClusterer(array &$settings, ServerRequestInterface $request): void
     {
         if (
-            !empty($settings['markerClusterer']['enable'])
-            && !empty($settings['markerClusterer']['imagePath'])
+            isset($settings['markerClusterer']['enable'], $settings['markerClusterer']['imagePath'])
+            && (string)$settings['markerClusterer']['enable'] === '1'
         ) {
             $settings['markerClusterer']['enable'] = 1;
-            if (method_exists(PathUtility::class, 'getPublicResourceWebPath')) {
-                $resource = $this->systemResourceFactory->createPublicResource($settings['markerClusterer']['imagePath']);
-                $settings['markerClusterer']['imagePath'] = (string)$this->resourcePublisher->generateUri($resource, $GLOBALS['TYPO3_REQUEST'], new UriGenerationOptions(absoluteUri: true));
-            } else {
-                $settings['markerClusterer']['imagePath'] = PathUtility::getAbsoluteWebPath(
-                    GeneralUtility::getFileAbsFileName(
-                        $settings['markerClusterer']['imagePath'],
-                    ),
-                );
-            }
+
+            $imageWebPath = PathUtility::getAbsoluteWebPath(
+                GeneralUtility::getFileAbsFileName($settings['markerClusterer']['imagePath']),
+            );
+
+            $settings['markerClusterer']['imagePath'] = GeneralUtility::locationHeaderUrl($imageWebPath, $request);
         }
+    }
+
+    /**
+     * Returns the TypoScript configuration found in plugin.tx_maps2.
+     */
+    private function getPluginConfiguration(ServerRequestInterface $request): array
+    {
+        $setup = $this->getTypoScriptSetup($request);
+
+        $pluginConfiguration = [];
+
+        if (isset($setup['plugin.']['tx_maps2.']) && is_array($setup['plugin.']['tx_maps2.'])) {
+            $pluginConfiguration = $this->typoScriptService->convertTypoScriptArrayToPlainArray($setup['plugin.']['tx_maps2.']);
+        }
+
+        return $pluginConfiguration;
     }
 
     protected function getTypoScriptSetup(ServerRequestInterface $request): array

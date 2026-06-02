@@ -27,6 +27,7 @@ final readonly class Environment implements \JsonSerializable
         private array $contentRecord,
         private string $ajaxUrl,
         private int $id,
+        private string $siteUrl,
     ) {}
 
     public function getSettings(): array
@@ -52,6 +53,11 @@ final readonly class Environment implements \JsonSerializable
     public function getId(): int
     {
         return $this->id;
+    }
+
+    public function getSiteUrl(): string
+    {
+        return $this->siteUrl;
     }
 
     /**
@@ -94,6 +100,7 @@ final readonly class Environment implements \JsonSerializable
             'contentRecord' => $this->contentRecord,
             'ajaxUrl' => $this->ajaxUrl,
             'id' => $this->id,
+            'siteUrl' => $this->siteUrl,
         ];
     }
 }

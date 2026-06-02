@@ -12,11 +12,12 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Domain\Traits;
 
 use TYPO3\CMS\Core\Resource\FileReference as CoreFileReference;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference as ExtbaseFileReference;
 
 /**
- * Trait to provide full web-path of given FileReference
+ * Trait to provide public url of a given FileReference.
+ *
+ * It will just return /fileadmin/user_upload/whatever.png
  */
 trait GetWebPathOfFileReferenceTrait
 {
@@ -28,7 +29,7 @@ trait GetWebPathOfFileReferenceTrait
         }
 
         if ($coreFileReference instanceof CoreFileReference && $coreFileReference->getPublicUrl() !== null) {
-            return GeneralUtility::locationHeaderUrl($coreFileReference->getPublicUrl());
+            return $coreFileReference->getPublicUrl();
         }
 
         return '';

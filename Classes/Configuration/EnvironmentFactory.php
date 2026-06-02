@@ -14,6 +14,7 @@ namespace JWeiland\Maps2\Configuration;
 use JWeiland\Maps2\Helper\LinkHelper;
 use JWeiland\Maps2\Helper\SettingsHelper;
 use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Core\Http\NormalizedParams;
 use TYPO3\CMS\Core\Routing\PageArguments;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
@@ -39,13 +40,18 @@ final readonly class EnvironmentFactory
             $this->getContentRecord($request),
             $this->linkHelper->buildUriToCurrentPage([], $request),
             $this->getCurrentPageUid($request),
+            $this->getSiteUrl($request),
         );
     }
 
     private function getPreparedSettings(array $mergedSettingsFromController, ServerRequestInterface $request): array
     {
         return $this->settingsHelper->getPreparedSettings(
-            $this->settingsHelper->getMergedSettings($mergedSettingsFromController, $request),
+            $this->settingsHelper->restoreTypoScriptDefaultsForEmptyFlexFormSettings(
+                $mergedSettingsFromController,
+                $request,
+            ),
+            $request,
         );
     }
 
@@ -71,5 +77,13 @@ final readonly class EnvironmentFactory
         }
 
         return $pageUid;
+    }
+
+    private function getSiteUrl(ServerRequestInterface $request): string
+    {
+        /** @var NormalizedParams $normalizedParams */
+        $normalizedParams = $request->getAttribute('normalizedParams');
+
+        return $normalizedParams->getSiteUrl();
     }
 }

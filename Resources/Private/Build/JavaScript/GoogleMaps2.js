@@ -479,7 +479,15 @@ class GoogleMaps2 {
 
     if (poiCollection.hasOwnProperty("markerIcon") && poiCollection.markerIcon !== "") {
       const img = document.createElement('img');
-      img.src = poiCollection.markerIcon;
+      let markerIconPath = poiCollection.markerIcon;
+
+      // Remove leading slash if present, to avoid double slashes with siteUrl
+      if (markerIconPath.startsWith('/')) {
+        markerIconPath = markerIconPath.substring(1);
+      }
+
+      img.src = environment.siteUrl + markerIconPath;
+
       if (poiCollection.markerIconWidth) img.style.width = poiCollection.markerIconWidth + 'px';
       if (poiCollection.markerIconHeight) img.style.height = poiCollection.markerIconHeight + 'px';
       markerOptions.content = img;

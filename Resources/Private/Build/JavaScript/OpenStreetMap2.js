@@ -368,7 +368,16 @@ class OpenStreetMap2 {
 
     if (poiCollection.hasOwnProperty("markerIcon") && poiCollection.markerIcon !== "") {
       let icon = L.icon({
-        iconUrl: poiCollection.markerIcon,
+        iconUrl: (() => {
+          let markerIconPath = poiCollection.markerIcon;
+
+          // Remove leading slash if present, to avoid double slashes with siteUrl
+          if (markerIconPath.startsWith('/')) {
+            markerIconPath = markerIconPath.substring(1);
+          }
+
+          return this.environment.siteUrl + markerIconPath;
+        })(),
         iconSize: [poiCollection.markerIconWidth, poiCollection.markerIconHeight],
         iconAnchor: [poiCollection.markerIconAnchorPosX, poiCollection.markerIconAnchorPosY]
       });
