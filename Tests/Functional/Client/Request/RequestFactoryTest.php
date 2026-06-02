@@ -11,10 +11,11 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Tests\Functional\Client\Request;
 
-use JWeiland\Maps2\Client\Request\GoogleMaps\GeocodeRequest;
+use JWeiland\Maps2\Client\Request\GoogleMaps\GeocodeRequest as GoogleMapsGeocodeRequest;
+use JWeiland\Maps2\Client\Request\OpenStreetMap\GeocodeRequest as OpenStreetMapGeocodeRequest;
 use JWeiland\Maps2\Client\Request\RequestFactory;
 use JWeiland\Maps2\Configuration\ExtConf;
-use JWeiland\Maps2\Helper\MapHelper;
+use JWeiland\Maps2\Configuration\MapProviderEnum;
 use PHPUnit\Framework\Attributes\Test;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
@@ -31,117 +32,25 @@ class RequestFactoryTest extends FunctionalTestCase
         'jweiland/maps2',
     ];
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-    }
-
     #[Test]
-    public function createCreatesGoogleMapsGeocodeRequest(): void
+    public function createWithGoogleMapsMapProviderWillReturnGoogleMapsGeocodeRequest(): void
     {
-        $config = [
-            'mapProvider' => 'both',
-            'defaultMapProvider' => 'gm',
-        ];
-        $extConf = new ExtConf(...$config);
-
-        $subject = new RequestFactory(
-            new MapHelper(
-                $extConf,
-            ),
-        );
+        $subject = $this->get(RequestFactory::class);
 
         self::assertInstanceOf(
-            GeocodeRequest::class,
-            $subject->create('GeocodeRequest'),
+            GoogleMapsGeocodeRequest::class,
+            $subject->create(MapProviderEnum::GOOGLE_MAPS),
         );
     }
 
     #[Test]
-    public function createCreatesOpenStreetMapGeocodeRequest(): void
+    public function createWithOpenStreetMapMapProviderWillReturnOpenStreetMapGeocodeRequest(): void
     {
-        $config = [
-            'mapProvider' => 'both',
-            'defaultMapProvider' => 'osm',
-        ];
-        $extConf = new ExtConf(...$config);
-
-        $subject = new RequestFactory(
-            new MapHelper(
-                $extConf,
-            ),
-        );
+        $subject = $this->get(RequestFactory::class);
 
         self::assertInstanceOf(
-            \JWeiland\Maps2\Client\Request\OpenStreetMap\GeocodeRequest::class,
-            $subject->create('GeocodeRequest'),
+            OpenStreetMapGeocodeRequest::class,
+            $subject->create(MapProviderEnum::OPEN_STREET_MAP),
         );
-    }
-
-    #[Test]
-    public function createSanitizesFilenameWithExtension(): void
-    {
-        $config = [
-            'mapProvider' => 'both',
-            'defaultMapProvider' => 'gm',
-        ];
-        $extConf = new ExtConf(...$config);
-
-        $subject = new RequestFactory(
-            new MapHelper(
-                $extConf,
-            ),
-        );
-
-        self::assertInstanceOf(
-            GeocodeRequest::class,
-            $subject->create('GeocodeRequest.php'),
-        );
-    }
-
-    #[Test]
-    public function createSanitizesFilenameWithLowerCamelCase(): void
-    {
-        $config = [
-            'mapProvider' => 'both',
-            'defaultMapProvider' => 'gm',
-        ];
-        $extConf = new ExtConf(...$config);
-
-        $subject = new RequestFactory(
-            new MapHelper(
-                $extConf,
-            ),
-        );
-
-        self::assertInstanceOf(
-            GeocodeRequest::class,
-            $subject->create('geocodeRequest'),
-        );
-    }
-
-    #[Test]
-    public function createWithNonExistingClassThrowsException(): void
-    {
-        $this->expectExceptionMessage('Class "JWeiland\\Maps2\\Client\\Request\\GoogleMaps\\NonExistingClass" to create a new Request could not be found');
-
-        $config = [
-            'mapProvider' => 'both',
-            'defaultMapProvider' => 'gm',
-        ];
-        $extConf = new ExtConf(...$config);
-
-        $subject = new RequestFactory(
-            new MapHelper(
-                $extConf,
-            ),
-        );
-
-        $subject->create('NonExistingClass');
     }
 }
