@@ -123,7 +123,7 @@ class SettingsHelperTest extends FunctionalTestCase
 
         self::assertSame(
             $this->mergedScriptSettings,
-            $this->subject->getMergedSettings(),
+            $this->subject->restoreTypoScriptDefaultsForEmptyFlexFormSettings(),
         );
     }
 
@@ -154,7 +154,7 @@ class SettingsHelperTest extends FunctionalTestCase
 
         self::assertSame(
             'EXT:maps2/Resources/Private/Templates/InfoWindowContent.html',
-            $this->subject->getMergedSettings()['infoWindowContentTemplatePath'],
+            $this->subject->restoreTypoScriptDefaultsForEmptyFlexFormSettings()['infoWindowContentTemplatePath'],
         );
     }
 
@@ -184,7 +184,7 @@ class SettingsHelperTest extends FunctionalTestCase
 
         self::assertSame(
             '0',
-            $this->subject->getMergedSettings()['fullscreenMapControl'],
+            $this->subject->restoreTypoScriptDefaultsForEmptyFlexFormSettings()['fullscreenMapControl'],
         );
     }
 
@@ -214,7 +214,7 @@ class SettingsHelperTest extends FunctionalTestCase
 
         self::assertSame(
             '1',
-            $this->subject->getMergedSettings()['streetViewControl'],
+            $this->subject->restoreTypoScriptDefaultsForEmptyFlexFormSettings()['streetViewControl'],
         );
     }
 }
