@@ -16,7 +16,7 @@ use JWeiland\Maps2\Configuration\MapProviderEnum;
 /**
  * This factory creates a client for either Google Maps or OpenStreetMap
  */
-final readonly class ClientFactory
+readonly class ClientFactory
 {
     public function __construct(
         private iterable $mapProviderClients,

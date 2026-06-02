@@ -50,6 +50,6 @@ readonly class GeocodeRequest implements RequestInterface
             return $uri;
         }
 
-        return sprintf($uri, $rawUrlEncodedAddress);
+        return sprintf($uri, $rawUrlEncodedAddress, $this->extConf->getGoogleMapsGeocodeApiKey());
     }
 }

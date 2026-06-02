@@ -17,7 +17,7 @@ use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExis
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 
 /**
- * This class will streamline the values from extension manager configuration
+ * This class will streamline the values from the extension manager configuration
  */
 #[Autoconfigure(constructor: 'create')]
 final readonly class ExtConf
@@ -42,7 +42,7 @@ final readonly class ExtConf
         'googleMapsGeocodeApiKey' => '',
         'googleMapsMapId' => '',
 
-        // Open Street Map
+        // OpenStreetMap
         'openStreetMapGeocodeUri' => 'https://nominatim.openstreetmap.org/search?q=%s&format=json&addressdetails=1',
 
         // Design/Color
@@ -75,7 +75,7 @@ final readonly class ExtConf
         private string $googleMapsGeocodeApiKey = self::DEFAULT_SETTINGS['googleMapsGeocodeApiKey'],
         private string $googleMapsMapId = self::DEFAULT_SETTINGS['googleMapsMapId'],
 
-        // Open Street Map
+        // OpenStreetMap
         private string $openStreetMapGeocodeUri = self::DEFAULT_SETTINGS['openStreetMapGeocodeUri'],
 
         // Design/Color

@@ -17,7 +17,7 @@ use JWeiland\Maps2\Configuration\MapProviderEnum;
  * This factory builds new request objects for either Google Maps or OpenStreetMap.
  * This class only works as long as you keep filenames in Google Maps and OpenStreetMap folder in sync.
  */
-final readonly class RequestFactory
+readonly class RequestFactory
 {
     public function __construct(
         private iterable $mapProviderGeoCodingRequests,

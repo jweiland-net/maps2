@@ -14,8 +14,7 @@ namespace JWeiland\Maps2\Tests\Functional\Client;
 use JWeiland\Maps2\Client\ClientFactory;
 use JWeiland\Maps2\Client\GoogleMapsClient;
 use JWeiland\Maps2\Client\OpenStreetMapClient;
-use JWeiland\Maps2\Configuration\ExtConf;
-use JWeiland\Maps2\Helper\MapHelper;
+use JWeiland\Maps2\Configuration\MapProviderEnum;
 use PHPUnit\Framework\Attributes\Test;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
@@ -24,70 +23,29 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
  */
 class ClientFactoryTest extends FunctionalTestCase
 {
-    protected ClientFactory $subject;
-
-    protected ExtConf $extConf;
-
     protected array $testExtensionsToLoad = [
         'jweiland/maps2',
     ];
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-    }
-
-    protected function tearDown(): void
-    {
-        unset(
-            $this->subject,
-            $this->extConf,
-        );
-
-        parent::tearDown();
-    }
-
     #[Test]
     public function createCreatesGoogleMapsClient(): void
     {
-        $config = [
-            'mapProvider' => 'both',
-            'defaultMapProvider' => 'gm',
-        ];
-
-        $this->extConf = new ExtConf(...$config);
-
-        $this->subject = new ClientFactory(
-            new MapHelper(
-                $this->extConf,
-            ),
-        );
+        $subject = $this->get(ClientFactory::class);
 
         self::assertInstanceOf(
             GoogleMapsClient::class,
-            $this->subject->create(),
+            $subject->create(MapProviderEnum::GOOGLE_MAPS),
         );
     }
 
     #[Test]
     public function createCreatesOpenStreetMapClient(): void
     {
-        $config = [
-            'mapProvider' => 'both',
-            'defaultMapProvider' => 'osm',
-        ];
-
-        $this->extConf = new ExtConf(...$config);
-
-        $this->subject = new ClientFactory(
-            new MapHelper(
-                $this->extConf,
-            ),
-        );
+        $subject = $this->get(ClientFactory::class);
 
         self::assertInstanceOf(
             OpenStreetMapClient::class,
-            $this->subject->create(),
+            $subject->create(MapProviderEnum::OPEN_STREET_MAP),
         );
     }
 }

@@ -22,7 +22,7 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 /**
  * Factory class to build the Environment configuration state
  */
-final readonly class EnvironmentFactory
+readonly class EnvironmentFactory
 {
     public function __construct(
         private ExtConf $extConf,
