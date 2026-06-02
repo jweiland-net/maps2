@@ -16,7 +16,7 @@ use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
- * Trait to start-up a simple sites configuration
+ * Trait to start up a simple sites configuration
  */
 trait SetUpFrontendSiteTrait
 {

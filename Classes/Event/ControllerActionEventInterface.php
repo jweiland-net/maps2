@@ -11,20 +11,20 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Event;
 
-use TYPO3\CMS\Extbase\Mvc\Request;
+use Psr\Http\Message\ServerRequestInterface;
 
 interface ControllerActionEventInterface
 {
-    public function getRequest(): Request;
+    public function getRequest(): ServerRequestInterface;
 
     /**
-     * Get controller name.
+     * Get the controller name.
      * It's just "PoiCollection". It's not the full class name.
      */
     public function getControllerName(): string;
 
     /**
-     * Get action name without appended "Action".
+     * Get the action name without appended "Action".
      * It's just "overlay" or "show"
      */
     public function getActionName(): string;

@@ -11,33 +11,42 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Event;
 
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Extbase\Mvc\Request;
 
 /**
- * Post process controller actions which assign fluid variables to view.
- * Often used by controller actions like "overlay" or "show". No redirects possible here.
+ * Post process controller actions that assign fluid variables to view.
+ * Often used by controller actions like "overlay" or "show". No redirects are possible here.
  */
 class PostProcessFluidVariablesEvent implements ControllerActionEventInterface
 {
     public function __construct(
-        protected Request $request,
+        protected ServerRequestInterface $request,
         protected array $settings,
         protected array $fluidVariables,
     ) {}
 
-    public function getRequest(): Request
+    public function getRequest(): ServerRequestInterface
     {
         return $this->request;
     }
 
     public function getControllerName(): string
     {
-        return $this->request->getControllerName();
+        if ($this->request instanceof Request) {
+            return $this->request->getControllerName();
+        }
+
+        return '';
     }
 
     public function getActionName(): string
     {
-        return $this->request->getControllerActionName();
+        if ($this->request instanceof Request) {
+            return $this->request->getControllerActionName();
+        }
+
+        return '';
     }
 
     public function getSettings(): array

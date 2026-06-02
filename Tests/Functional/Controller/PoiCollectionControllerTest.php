@@ -77,7 +77,7 @@ class PoiCollectionControllerTest extends FunctionalTestCase
     }
 
     #[Test]
-    public function showActionWithCategoriesButWithoutPoiCollectionsAddsEmptyPois(): void
+    public function showActionWithCategoriesButWithoutPoiCollectionsAddsErrorMessage(): void
     {
         $this->importCSVDataSet(__DIR__ . '/../Fixtures/tt_content-with-category-uid-2.csv');
 
@@ -90,7 +90,7 @@ class PoiCollectionControllerTest extends FunctionalTestCase
         $content = (string)$response->getBody();
 
         self::assertStringContainsString(
-            'data-pois="{}"',
+            '[ERROR] No POI collections found',
             $content,
         );
     }
