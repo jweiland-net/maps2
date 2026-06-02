@@ -17,10 +17,10 @@ use JWeiland\Maps2\Helper\MessageHelper;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
+use TYPO3\CMS\Core\Country\CountryProvider;
 use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 /**
@@ -44,7 +44,8 @@ class AddressHelperTest extends FunctionalTestCase
 
         $this->subject = new AddressHelper(
             $this->messageHelperMock,
-            GeneralUtility::makeInstance(ExtConf::class),
+            $this->get(CountryProvider::class),
+            new ExtConf(),
         );
     }
 
@@ -109,88 +110,6 @@ class AddressHelperTest extends FunctionalTestCase
     }
 
     #[Test]
-    public function getAddressWithoutCountryAndNoFallbackGeneratesTwoFlashMessages(): void
-    {
-        $this->messageHelperMock
-            ->expects($this->atLeastOnce())
-            ->method('addFlashMessage')
-            ->willReturnMap([
-                [
-                    self::stringContains('We can not find any country information within your extension'),
-                    'No country information found',
-                    ContextualFeedbackSeverity::WARNING,
-                ],
-                [
-                    self::stringContains('extension manager configuration'),
-                    'Default country of maps2 is not configured',
-                    ContextualFeedbackSeverity::WARNING,
-                ],
-            ]);
-
-        $this->messageHelperMock
-            ->expects($this->atLeastOnce())
-            ->method('addFlashMessage')
-            ->with(
-            );
-
-        $record = [
-            'uid' => 100,
-            'title' => 'Market',
-            'street' => 'Mainstreet 17',
-            'zip' => '23145',
-            'city' => 'Munich',
-        ];
-        $options = [
-            'addressColumns' => ['street', 'zip', 'city'],
-            'countryColumn' => 'country',
-        ];
-
-        self::assertSame(
-            'Mainstreet 17 23145 Munich',
-            $this->subject->getAddress($record, $options),
-        );
-    }
-
-    #[Test]
-    public function getAddressWithoutCountryButWithMaps2FallbackGeneratesOneFlashMessages(): void
-    {
-        $this->messageHelperMock
-            ->expects($this->atLeastOnce())
-            ->method('addFlashMessage')
-            ->with(
-                self::stringContains('We can not find any country information within your extension'),
-                'No country information found',
-                ContextualFeedbackSeverity::WARNING,
-            );
-
-        $record = [
-            'uid' => 100,
-            'title' => 'Market',
-            'street' => 'Mainstreet 17',
-            'zip' => '23145',
-            'city' => 'Munich',
-        ];
-        $options = [
-            'addressColumns' => ['street', 'zip', 'city'],
-            'countryColumn' => 'country',
-        ];
-
-        $config = [
-            'defaultCountry' => 'Germany',
-        ];
-
-        $subject = new AddressHelper(
-            $this->messageHelperMock,
-            new ExtConf(...$config),
-        );
-
-        self::assertSame(
-            'Mainstreet 17 23145 Munich Germany',
-            $subject->getAddress($record, $options),
-        );
-    }
-
-    #[Test]
     public function getAddressWithoutCountryButWithMaps2RegistryFallbackGeneratesNoFlashMessage(): void
     {
         $record = [
@@ -212,43 +131,15 @@ class AddressHelperTest extends FunctionalTestCase
     }
 
     #[Test]
-    public function getAddressWithCountryUidWillGetCountryNameFromStaticCountries(): void
+    public function getAddressWith2IsoCodeWillGetCountryName(): void
     {
-        // Prevent including records multiple times on SQLite
-        $amountOfCountries = $this
-            ->getConnectionPool()
-            ->getConnectionForTable('static_countries')
-            ->count('*', 'static_countries', []);
-
-        if ($amountOfCountries === 0) {
-            $this->importCSVDataSet(__DIR__ . '/../Fixtures/static_countries.csv');
-        }
-
-        $this->messageHelperMock
-            ->expects($this->never())
-            ->method('addFlashMessage')
-            ->with(
-                self::stringContains('We can not find any country information within your extension'),
-                'No country information found',
-                ContextualFeedbackSeverity::WARNING,
-            );
-
-        /** @var PackageManager|MockObject $packageManagerMock */
-        $packageManagerMock = $this->createMock(PackageManager::class);
-        $packageManagerMock
-            ->expects($this->atLeastOnce())
-            ->method('isPackageActive')
-            ->with('static_info_tables')
-            ->willReturn(true);
-        ExtensionManagementUtility::setPackageManager($packageManagerMock);
-
         $record = [
             'uid' => 100,
             'title' => 'Market',
             'street' => 'Mainstreet 17',
             'zip' => '23145',
             'city' => 'Filderstadt',
-            'country' => '54',
+            'country' => 'de',
         ];
         $options = [
             'addressColumns' => ['street', 'zip', 'city'],
@@ -262,33 +153,15 @@ class AddressHelperTest extends FunctionalTestCase
     }
 
     #[Test]
-    public function getAddressWithCountryUidWillNotFindCountryNameFromStaticCountries(): void
+    public function getAddressWith3IsoCodeWillGetCountryName(): void
     {
-        /** @var PackageManager|MockObject $packageManagerMock */
-        $packageManagerMock = $this->createMock(PackageManager::class);
-        $packageManagerMock
-            ->expects($this->atLeastOnce())
-            ->method('isPackageActive')
-            ->with('static_info_tables')
-            ->willReturn(true);
-        ExtensionManagementUtility::setPackageManager($packageManagerMock);
-
-        $this->messageHelperMock
-            ->expects($this->atLeastOnce())
-            ->method('addFlashMessage')
-            ->with(
-                self::stringContains('static_countries table'),
-                'Country not found in DB',
-                ContextualFeedbackSeverity::WARNING,
-            );
-
         $record = [
             'uid' => 100,
             'title' => 'Market',
             'street' => 'Mainstreet 17',
             'zip' => '23145',
-            'city' => 'Warschau',
-            'country' => '328',
+            'city' => 'Filderstadt',
+            'country' => 'deu',
         ];
         $options = [
             'addressColumns' => ['street', 'zip', 'city'],
@@ -296,7 +169,29 @@ class AddressHelperTest extends FunctionalTestCase
         ];
 
         self::assertSame(
-            'Mainstreet 17 23145 Warschau',
+            'Mainstreet 17 23145 Filderstadt Germany',
+            $this->subject->getAddress($record, $options),
+        );
+    }
+
+    #[Test]
+    public function getAddressWithEnglishNameWillGetCountryName(): void
+    {
+        $record = [
+            'uid' => 100,
+            'title' => 'Market',
+            'street' => 'Mainstreet 17',
+            'zip' => '23145',
+            'city' => 'Filderstadt',
+            'country' => 'Germany',
+        ];
+        $options = [
+            'addressColumns' => ['street', 'zip', 'city'],
+            'countryColumn' => 'country',
+        ];
+
+        self::assertSame(
+            'Mainstreet 17 23145 Filderstadt Germany',
             $this->subject->getAddress($record, $options),
         );
     }

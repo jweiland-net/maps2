@@ -11,24 +11,21 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Helper;
 
-use Doctrine\DBAL\Exception;
 use JWeiland\Maps2\Configuration\ExtConf;
-use TYPO3\CMS\Core\Database\Connection;
-use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Country\Country;
+use TYPO3\CMS\Core\Country\CountryProvider;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\MathUtility;
 
 /**
- * Extract address parts from foreign record array and build an address for Google Maps GoeCode requests
+ * Extract address parts from a foreign record array and build an address for Geocode requests
  */
 class AddressHelper
 {
     public function __construct(
         protected MessageHelper $messageHelper,
+        protected CountryProvider $countryProvider,
         protected ExtConf $extConf,
-        private readonly ConnectionPool $connectionPool,
     ) {}
 
     /**
@@ -59,7 +56,7 @@ class AddressHelper
     }
 
     /**
-     * Check, if a formatted address is still equal with the address parts of foreign location record.
+     * Check if a formatted address is still equal with the address parts of a foreign location record.
      */
     public function isSameAddress(string $address, array $foreignLocationRecord, array $options): bool
     {
@@ -84,24 +81,38 @@ class AddressHelper
     }
 
     /**
-     * Try to get a country name from foreign extension record.
+     * Try to get a country name from a foreign extension record.
      * If we do not find a country name, we will try some fallbacks.
      */
     protected function getCountryName(array $record, array $options): string
     {
-        if ($this->canCountryBeLoadedFromStaticCountry($record, $options['countryColumn'])) {
-            $countryName = $this->getCountryNameFromStaticCountries((int)$record[$options['countryColumn']]);
-        } elseif (array_key_exists($options['countryColumn'], $record)) {
-            $countryName = $record[$options['countryColumn']];
-        } else {
-            $countryName = $this->getFallbackCountryName($options);
+        $defaultCountry = $this->getFallbackCountryName($options);
+
+        $countryColumn = $options['countryColumn'] ?? '';
+        if ($countryColumn === '') {
+            return $defaultCountry;
         }
 
-        return $countryName;
+        $countryValue = $record[$countryColumn] ?? '';
+        if ($countryValue === '' || $countryValue === '0') {
+            return $defaultCountry;
+        }
+
+        $country = $this->countryProvider->getByIsoCode($countryValue);
+        if ($country instanceof Country) {
+            return $country->getName();
+        }
+
+        $country = $this->countryProvider->getByEnglishName($countryValue);
+        if ($country instanceof Country) {
+            return $country->getName();
+        }
+
+        return $defaultCountry;
     }
 
     /**
-     * If we can not get any country information of foreign extension,
+     * If we cannot get any country information of foreign extension,
      * we now try some fallbacks to get a country name.
      */
     protected function getFallbackCountryName(array $options): string
@@ -111,76 +122,12 @@ class AddressHelper
             return trim((string)$options['defaultCountry']);
         }
 
-        $this->messageHelper->addFlashMessage(
-            'We can not find any country information within your extension. Either in Maps2 Registry nor in this record. Please check your configuration or update your extension.',
-            'No country information found',
-            ContextualFeedbackSeverity::WARNING,
-        );
-
         $defaultCountry = $this->extConf->getDefaultCountry();
         if ($defaultCountry !== '' && $defaultCountry !== '0') {
             return trim($defaultCountry);
         }
 
-        $this->messageHelper->addFlashMessage(
-            'Default country in maps2 of extension manager configuration is empty. Request to Google Maps GeoCode will start without any country information, which may lead to curious results.',
-            'Default country of maps2 is not configured',
-            ContextualFeedbackSeverity::WARNING,
-        );
-
         return '';
-    }
-
-    protected function getCountryNameFromStaticCountries(int $uid): string
-    {
-        $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable('static_countries');
-        try {
-            $countryRecord = $queryBuilder
-                ->select('cn_short_en')
-                ->from('static_countries')
-                ->where(
-                    $queryBuilder->expr()->eq(
-                        'uid',
-                        $queryBuilder->createNamedParameter($uid, Connection::PARAM_INT),
-                    ),
-                )
-                ->executeQuery()
-                ->fetchAssociative();
-        } catch (Exception) {
-            $countryRecord = [];
-        }
-
-        if (empty($countryRecord)) {
-            $this->messageHelper->addFlashMessage(
-                'Country with UID "' . $uid . '" could not be found in static_countries table. Please check your record for correct country field.',
-                'Country not found in DB',
-                ContextualFeedbackSeverity::WARNING,
-            );
-
-            return '';
-        }
-
-        return $countryRecord['cn_short_en'];
-    }
-
-    /**
-     * Check, if we can load country name from static_countries
-     */
-    protected function canCountryBeLoadedFromStaticCountry(array $record, string $countryColumn): bool
-    {
-        if ($countryColumn === '') {
-            return false;
-        }
-
-        if (!array_key_exists($countryColumn, $record)) {
-            return false;
-        }
-
-        if (!MathUtility::canBeInterpretedAsInteger($record[$countryColumn])) {
-            return false;
-        }
-
-        return ExtensionManagementUtility::isLoaded('static_info_tables');
     }
 
     /**
@@ -201,7 +148,7 @@ class AddressHelper
             : '';
 
         // remove countryColumn from addressColumns
-        if (isset($options['countryColumn']) && ($options['countryColumn'] !== '' && $options['countryColumn'] !== '0')) {
+        if (($options['countryColumn'] !== '' && $options['countryColumn'] !== '0')) {
             $key = array_search($options['countryColumn'], $options['addressColumns']);
             if ($key) {
                 unset($options['addressColumns'][$key]);
@@ -210,13 +157,13 @@ class AddressHelper
     }
 
     /**
-     * Check, if configured options are valid
+     * Check if configured options are valid
      */
     protected function isValidOptionConfiguration(array $options): bool
     {
         if (!array_key_exists('addressColumns', $options)) {
             $this->messageHelper->addFlashMessage(
-                'Array key "addressColumns" does not exist in your maps2 registration. This field must be filled to prevent creating empty GeoCode requests to google.',
+                'Array key "addressColumns" does not exist in your maps2 registration. This field must be filled to prevent creating empty Geocode requests.',
                 'Key addressColumns is missing',
                 ContextualFeedbackSeverity::ERROR,
             );
@@ -225,7 +172,7 @@ class AddressHelper
 
         if (empty($options['addressColumns'])) {
             $this->messageHelper->addFlashMessage(
-                'Array key "addressColumns" is a required field in maps2 registraton. Please fill it with column names of your table.',
+                'Array key "addressColumns" is a required field in maps2 registration. Please fill it with column names of your table.',
                 'Key addressColumns is empty',
                 ContextualFeedbackSeverity::ERROR,
             );
@@ -233,10 +180,5 @@ class AddressHelper
         }
 
         return true;
-    }
-
-    protected function getConnectionPool(): ConnectionPool
-    {
-        return $this->connectionPool;
     }
 }
