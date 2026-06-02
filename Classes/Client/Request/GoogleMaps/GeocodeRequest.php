@@ -22,7 +22,7 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 #[AutoconfigureTag(
     name: 'maps2.request.geocoding',
 )]
-final readonly class GeocodeRequest implements RequestInterface
+readonly class GeocodeRequest implements RequestInterface
 {
     public function __construct(
         protected ExtConf $extConf,

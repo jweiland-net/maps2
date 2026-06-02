@@ -69,7 +69,7 @@ final readonly class Environment implements \JsonSerializable
     {
         try {
             $mapProvider = $this->getMapProvider();
-        } catch(\ValueError) {
+        } catch (\ValueError) {
             return false;
         }
 
@@ -82,19 +82,8 @@ final readonly class Environment implements \JsonSerializable
         if (!$this->hasMapProvider()) {
             return false;
         }
-
         // Special case for Google Maps. An API key and Map ID are manatory
-        if (
-            $this->getMapProvider() === MapProviderEnum::GOOGLE_MAPS
-            && (
-                ($this->settings['googleMapsJavaScriptApiKey'] ?? '') === ''
-                || ($this->settings['googleMapsMapId'] ?? '') === ''
-            )
-        ) {
-            return false;
-        }
-
-        return true;
+        return !($this->getMapProvider() === MapProviderEnum::GOOGLE_MAPS && (($this->settings['googleMapsJavaScriptApiKey'] ?? '') === '' || ($this->settings['googleMapsMapId'] ?? '') === ''));
     }
 
     public function jsonSerialize(): array

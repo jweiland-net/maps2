@@ -16,35 +16,33 @@ if (!defined('TYPO3')) {
     die('Access denied.');
 }
 
-call_user_func(static function (): void {
-    $extConf = GeneralUtility::makeInstance(ExtConf::class);
-    $mapHelper = GeneralUtility::makeInstance(MapHelper::class);
+$extConf = GeneralUtility::makeInstance(ExtConf::class);
+$mapHelper = GeneralUtility::makeInstance(MapHelper::class);
 
-    // Set a default for column map_provider on save
-    $GLOBALS['TCA']['tx_maps2_domain_model_poicollection']['columns']['map_provider']['config']['default']
-        = $mapHelper->getMapProvider();
+// Set a default for column map_provider on save
+$GLOBALS['TCA']['tx_maps2_domain_model_poicollection']['columns']['map_provider']['config']['default']
+    = $mapHelper->getMapProvider()->value;
 
-    // Set default for poi collection type
-    $GLOBALS['TCA']['tx_maps2_domain_model_poicollection']['columns']['collection_type']['config']['default']
-        = $extConf->getDefaultMapType();
+// Set default for poi collection type
+$GLOBALS['TCA']['tx_maps2_domain_model_poicollection']['columns']['collection_type']['config']['default']
+    = $extConf->getDefaultMapType();
 
-    // Set latitude/longitude to float representation of extension configuration
-    $GLOBALS['TCA']['tx_maps2_domain_model_poicollection']['columns']['latitude']['config']['default'] = number_format(
-        $extConf->getDefaultLatitude(),
-        6,
+// Set latitude/longitude to float representation of extension configuration
+$GLOBALS['TCA']['tx_maps2_domain_model_poicollection']['columns']['latitude']['config']['default'] = number_format(
+    $extConf->getDefaultLatitude(),
+    6,
+);
+$GLOBALS['TCA']['tx_maps2_domain_model_poicollection']['columns']['longitude']['config']['default'] = number_format(
+    $extConf->getDefaultLongitude(),
+    6,
+);
+
+// If both map providers are allowed in ExtensionManager we have to add a selectbox for map provider to TCA
+if ($extConf->getMapProvider() === 'both') {
+    ExtensionManagementUtility::addToAllTCAtypes(
+        'tx_maps2_domain_model_poicollection',
+        'map_provider',
+        '',
+        'before:configuration_map',
     );
-    $GLOBALS['TCA']['tx_maps2_domain_model_poicollection']['columns']['longitude']['config']['default'] = number_format(
-        $extConf->getDefaultLongitude(),
-        6,
-    );
-
-    // If both map providers are allowed in ExtensionManager we have to add a selectbox for map provider to TCA
-    if ($extConf->getMapProvider() === 'both') {
-        ExtensionManagementUtility::addToAllTCAtypes(
-            'tx_maps2_domain_model_poicollection',
-            'map_provider',
-            '',
-            'before:configuration_map',
-        );
-    }
-});
+}

@@ -70,11 +70,9 @@ class HasCacheViewHelper extends AbstractViewHelper
 
     private function getRequest(): ?ServerRequestInterface
     {
-        $request = null;
         if ($this->renderingContext->hasAttribute(ServerRequestInterface::class)) {
-            $request = $this->renderingContext->getAttribute(ServerRequestInterface::class);
+            return $this->renderingContext->getAttribute(ServerRequestInterface::class);
         }
-
-        return $request;
+        return null;
     }
 }

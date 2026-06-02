@@ -14,7 +14,7 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 if (!defined('TYPO3')) {
-die('Access denied.');
+    die('Access denied.');
 }
 
 $mapHelper = GeneralUtility::makeInstance(MapHelper::class);

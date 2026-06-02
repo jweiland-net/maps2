@@ -18,10 +18,11 @@ use JWeiland\Maps2\Helper\SettingsHelper;
 use JWeiland\Maps2\Tests\Functional\Traits\SetUpFrontendSiteTrait;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
+use Symfony\Component\Yaml\Yaml;
+use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Routing\PageArguments;
-use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
@@ -33,7 +34,6 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 class EnvironmentFactoryTest extends FunctionalTestCase
 {
     use SetUpFrontendSiteTrait;
-    protected array $coreExtensionsToLoad = [];
 
     protected array $testExtensionsToLoad = [
         'jweiland/maps2',
@@ -62,12 +62,12 @@ class EnvironmentFactoryTest extends FunctionalTestCase
         ];
 
         GeneralUtility::mkdir_deep($this->instancePath . '/typo3conf/sites/testing/');
-        $yamlFileContents = \Symfony\Component\Yaml\Yaml::dump($configuration, 99, 2);
+        $yamlFileContents = Yaml::dump($configuration, 99, 2);
         $fileName = $this->instancePath . '/typo3conf/sites/testing/config.yaml';
         GeneralUtility::writeFile($fileName, $yamlFileContents);
 
-        /** @var \TYPO3\CMS\Core\Cache\CacheManager $cacheManager */
-        $cacheManager = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Cache\CacheManager::class);
+        /** @var CacheManager $cacheManager */
+        $cacheManager = GeneralUtility::makeInstance(CacheManager::class);
         $cacheManager->flushCaches();
     }
 
