@@ -21,6 +21,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Yaml\Yaml;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
+use TYPO3\CMS\Core\Http\NormalizedParams;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Routing\PageArguments;
 use TYPO3\CMS\Core\Site\SiteFinder;
@@ -95,7 +96,7 @@ class EnvironmentFactoryTest extends FunctionalTestCase
         /** @var SettingsHelper|MockObject $settingsHelper */
         $settingsHelper = $this->createMock(SettingsHelper::class);
         $settingsHelper->expects($this->once())
-            ->method('getMergedSettings')
+            ->method('restoreTypoScriptDefaultsForEmptyFlexFormSettings')
             ->willReturn(['some' => 'settings']);
         $settingsHelper->expects($this->once())
             ->method('getPreparedSettings')
@@ -122,6 +123,8 @@ class EnvironmentFactoryTest extends FunctionalTestCase
             ->withAttribute('currentContentObject', $contentObject)
             ->withAttribute('site', $site)
             ->withAttribute('routing', $routing);
+
+        $request = $request->withAttribute('normalizedParams', NormalizedParams::createFromRequest($request));
 
         $GLOBALS['TYPO3_REQUEST'] = $request;
 

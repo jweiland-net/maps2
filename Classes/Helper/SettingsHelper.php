@@ -13,7 +13,6 @@ namespace JWeiland\Maps2\Helper;
 
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\SystemResource\Publishing\SystemResourcePublisherInterface;
-use TYPO3\CMS\Core\SystemResource\Publishing\UriGenerationOptions;
 use TYPO3\CMS\Core\SystemResource\SystemResourceFactory;
 use TYPO3\CMS\Core\TypoScript\FrontendTypoScript;
 use TYPO3\CMS\Core\TypoScript\TypoScriptService;
