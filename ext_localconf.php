@@ -7,13 +7,13 @@
  * LICENSE file that was distributed with this source code.
  */
 
+use JWeiland\Maps2\Backend\Form\Element\Maps2RelationElement;
 use JWeiland\Maps2\Controller\CityMapController;
 use JWeiland\Maps2\Controller\PoiCollectionController;
 use JWeiland\Maps2\Form\Element\ReadOnlyInputTextElement;
 use JWeiland\Maps2\Form\FieldInformation\InfoWindowContent;
 use JWeiland\Maps2\Form\Resolver\MapProviderResolver;
 use JWeiland\Maps2\Hook\CreateMaps2RecordHook;
-use TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend;
 use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
 if (!defined('TYPO3')) {
@@ -66,13 +66,10 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['maps2_cach
     'groups' => ['pages', 'all'],
 ];
 
-// Cache for Maps2 Registry
-$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['maps2_registry'] = [
-    'backend' => SimpleFileBackend::class,
-    'groups' => ['system'],
-    'options' => [
-        'defaultLifetime' => 0,
-    ],
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1780489740] = [
+    'nodeName' => 'maps2Relation',
+    'priority' => '70',
+    'class' => Maps2RelationElement::class,
 ];
 
 // This is a solution to build GET forms.

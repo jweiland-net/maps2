@@ -12,10 +12,13 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Service;
 
 use Doctrine\DBAL\Driver\Exception as DBALException;
+use Doctrine\DBAL\Exception;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Event\PreAddForeignRecordEvent;
 use JWeiland\Maps2\Helper\MessageHelper;
+use JWeiland\Maps2\Tca\ColumnRegistration;
+use JWeiland\Maps2\Tca\ColumnRegistrationStorage;
 use JWeiland\Maps2\Tca\Maps2Registry;
 use JWeiland\Maps2\Utility\DatabaseUtility;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -33,15 +36,10 @@ readonly class MapService
 {
     public function __construct(
         protected MessageHelper $messageHelper,
-        protected Maps2Registry $maps2Registry,
+        protected ColumnRegistrationStorage $columnRegistry,
         protected EventDispatcherInterface $eventDispatcher,
         protected ConnectionPool $connectionPool,
     ) {}
-
-    protected function getColumnRegistry(): array
-    {
-        return $this->maps2Registry->getColumnRegistry() ?? [];
-    }
 
     /**
      * Creates a new poiCollection
@@ -81,7 +79,7 @@ readonly class MapService
         // you don't like the current fieldValues? Override them with $overrideFieldValues
         ArrayUtility::mergeRecursiveWithOverrule($fieldValues, $overrideFieldValues);
 
-        // remove all fields which are not set in DB
+        // remove all fields that are not set in DB
         $fieldValues = array_intersect_key(
             $fieldValues,
             DatabaseUtility::getColumnsFromTable('tx_maps2_domain_model_poicollection'),
@@ -196,53 +194,46 @@ readonly class MapService
      */
     public function addForeignRecordsToPoiCollection(PoiCollection $poiCollection): void
     {
-        $columnRegistry = $this->getColumnRegistry();
-        if ($columnRegistry === []) {
-            return;
-        }
-
         if ($poiCollection->getUid() === 0) {
             return;
         }
 
         // Loop through all configured tables and columns and add the foreignRecord to PoiCollection
-        foreach ($columnRegistry as $tableName => $columns) {
-            foreach ($columns as $columnName => $configuration) {
-                $queryBuilder = $this->connectionPool->getQueryBuilderForTable($tableName);
-                $queryBuilder->setRestrictions(
-                    GeneralUtility::makeInstance(FrontendRestrictionContainer::class),
-                );
+        /** @var ColumnRegistration $columnRegistration */
+        foreach ($this->columnRegistry as $columnRegistration) {
+            $queryBuilder = $this->connectionPool->getQueryBuilderForTable($columnRegistration->getTableName());
+            $queryBuilder
+                ->setRestrictions(GeneralUtility::makeInstance(FrontendRestrictionContainer::class));
 
-                try {
-                    $statement = $queryBuilder
-                        ->select('*')
-                        ->from($tableName)
-                        ->where(
-                            $queryBuilder->expr()->eq(
-                                $columnName,
-                                $queryBuilder->createNamedParameter($poiCollection->getUid(), Connection::PARAM_INT),
-                            ),
-                        )
-                        ->executeQuery();
+            try {
+                $statement = $queryBuilder
+                    ->select('*')
+                    ->from($columnRegistration->getTableName())
+                    ->where(
+                        $queryBuilder->expr()->eq(
+                            $columnRegistration->getColumnName(),
+                            $queryBuilder->createNamedParameter($poiCollection->getUid(), Connection::PARAM_INT),
+                        ),
+                    )
+                    ->executeQuery();
 
-                    while ($foreignRecord = $statement->fetchAssociative()) {
-                        // Hopefully, these keys are unique enough
-                        // Very useful to f:groupedFor in Fluid Templates
-                        $foreignRecord['jwMaps2TableName'] = $tableName;
-                        $foreignRecord['jwMaps2ColumnName'] = $columnName;
+                while ($foreignRecord = $statement->fetchAssociative()) {
+                    // Hopefully, these keys are unique enough
+                    // Very useful to f:groupedFor in Fluid Templates
+                    $foreignRecord['jwMaps2TableName'] = $columnRegistration->getTableName();
+                    $foreignRecord['jwMaps2ColumnName'] = $columnRegistration->getColumnName();
 
-                        // Add or remove your own values
-                        $foreignRecord = $this->emitPreAddForeignRecordToPoiCollectionEvent(
-                            $foreignRecord,
-                            $tableName,
-                            $columnName,
-                        );
+                    // Add or remove your own values
+                    $foreignRecord = $this->emitPreAddForeignRecordToPoiCollectionEvent(
+                        $foreignRecord,
+                        $columnRegistration->getTableName(),
+                        $columnRegistration->getColumnName(),
+                    );
 
-                        $poiCollection->addForeignRecord($foreignRecord);
-                    }
-                } catch (DBALException) {
-                    continue;
+                    $poiCollection->addForeignRecord($foreignRecord);
                 }
+            } catch (Exception $e) {
+                continue;
             }
         }
     }

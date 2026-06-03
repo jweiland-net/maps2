@@ -11,6 +11,9 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Helper;
 
+use JWeiland\Maps2\Tca\ColumnRegistration;
+use JWeiland\Maps2\Tca\StoragePidLocation;
+use JWeiland\Maps2\Tca\StoragePidLocationTypeEnum;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
@@ -29,13 +32,21 @@ readonly class StoragePidHelper
 
     public function getDefaultStoragePidForNewPoiCollection(
         array $foreignLocationRecord,
-        array $maps2RegistryColumnConfiguration,
+        ColumnRegistration $columnRegistration,
     ): int {
         $defaultStoragePid = 0;
 
         $this->updateStoragePidFromForeignLocationRecord($defaultStoragePid, $foreignLocationRecord);
-        $this->updateStoragePidFromMaps2Registry($defaultStoragePid, $maps2RegistryColumnConfiguration, $foreignLocationRecord);
-        $this->updateDefaultStoragePidFromPageTsConfig($defaultStoragePid, $foreignLocationRecord);
+        $this->updateStoragePidFromMaps2Registry($defaultStoragePid, $columnRegistration, $foreignLocationRecord);
+        $this->updateDefaultStoragePidFromPageTsConfig(
+            $defaultStoragePid,
+            $foreignLocationRecord,
+            new StoragePidLocation(
+                'maps2',
+                StoragePidLocationTypeEnum::PAGE_TS_CONFIG,
+                'defaultStoragePid',
+            )
+        );
 
         if ($defaultStoragePid === 0) {
             $this->messageHelper->addFlashMessage(
@@ -72,25 +83,27 @@ readonly class StoragePidHelper
      */
     protected function updateStoragePidFromMaps2Registry(
         int &$defaultStoragePid,
-        array $maps2RegistryColumnConfiguration,
+        ColumnRegistration $columnRegistration,
         array $foreignLocationRecord,
     ): void {
-        if (array_key_exists('defaultStoragePid', $maps2RegistryColumnConfiguration)) {
-            $storagePid = $this->getHardCodedStoragePidFromMaps2Registry($maps2RegistryColumnConfiguration);
-            if ($storagePid === 0) {
-                $storagePid = $this->getDynamicStoragePidFromMaps2Registry($maps2RegistryColumnConfiguration, $foreignLocationRecord);
-            }
+        if (!$columnRegistration->hasDefaultStoragePid()) {
+            return;
+        }
 
-            if ($storagePid === 0) {
-                $this->messageHelper->addFlashMessage(
-                    'You have configured a defaultStoragePid in maps2 registration, but returned value '
-                    . 'is still 0. Please check Maps2 Registry',
-                    'Invalid defaultStoragePid configuration found',
-                    ContextualFeedbackSeverity::WARNING,
-                );
-            } else {
-                $defaultStoragePid = $storagePid;
-            }
+        $storagePid = $this->getHardCodedStoragePidFromMaps2Registry($columnRegistration);
+        if ($storagePid === 0) {
+            $storagePid = $this->getDynamicStoragePidFromMaps2Registry($columnRegistration, $foreignLocationRecord);
+        }
+
+        if ($storagePid === 0) {
+            $this->messageHelper->addFlashMessage(
+                'You have configured a defaultStoragePid in maps2 registration, but returned value '
+                . 'is still 0. Please check Maps2 Registry',
+                'Invalid defaultStoragePid configuration found',
+                ContextualFeedbackSeverity::WARNING,
+            );
+        } else {
+            $defaultStoragePid = $storagePid;
         }
     }
 
@@ -99,21 +112,13 @@ readonly class StoragePidHelper
      * Very bad idea, because default storage PID was hard-coded in a foreign extension. You should always try to avoid
      * this way and use the dynamic variant instead.
      */
-    protected function getHardCodedStoragePidFromMaps2Registry(array $maps2RegistryColumnConfiguration): int
+    protected function getHardCodedStoragePidFromMaps2Registry(ColumnRegistration $columnRegistration): int
     {
-        if (is_array($maps2RegistryColumnConfiguration['defaultStoragePid'])) {
+        if (is_array($columnRegistration->getDefaultStoragePid())) {
             return 0;
         }
 
-        if (!MathUtility::canBeInterpretedAsInteger($maps2RegistryColumnConfiguration['defaultStoragePid'])) {
-            return 0;
-        }
-
-        if ((int)$maps2RegistryColumnConfiguration['defaultStoragePid'] <= 0) {
-            return 0;
-        }
-
-        return (int)$maps2RegistryColumnConfiguration['defaultStoragePid'];
+        return $columnRegistration->getDefaultStoragePid();
     }
 
     /**
@@ -121,88 +126,42 @@ readonly class StoragePidHelper
      * A way better idea as getHardCodedStoragePidFromMaps2Registry, as that way we read storage PID dynamically from
      * foreign extension configuration ext_conf_template.txt.
      */
-    protected function getDynamicStoragePidFromMaps2Registry(array $maps2RegistryColumnConfiguration, array $foreignLocationRecord): int
-    {
-        if (is_array($maps2RegistryColumnConfiguration['defaultStoragePid'])) {
-            $hasSubConfiguration = true;
-            foreach ($maps2RegistryColumnConfiguration['defaultStoragePid'] as $configuration) {
-                if (!is_array($configuration)) {
-                    $hasSubConfiguration = false;
-                    break;
-                }
-            }
-
-            if ($hasSubConfiguration) {
-                $defaultStoragePid = 0;
-                foreach ($maps2RegistryColumnConfiguration['defaultStoragePid'] as $configuration) {
-                    if ($defaultStoragePid === 0) {
-                        $defaultStoragePid = $this->getDynamicStoragePidBySingleArray(
-                            $configuration,
-                            $foreignLocationRecord,
-                        );
-                    }
-                }
-
-                return $defaultStoragePid;
-            }
-
-            return $this->getDynamicStoragePidBySingleArray($maps2RegistryColumnConfiguration['defaultStoragePid'], $foreignLocationRecord);
+    protected function getDynamicStoragePidFromMaps2Registry(
+        ColumnRegistration $columnRegistry,
+        array $foreignLocationRecord,
+    ): int {
+        if (!is_array($columnRegistry->getDefaultStoragePid())) {
+            return 0;
         }
 
-        return 0;
-    }
-
-    /**
-     * Get dynamic storage PID from a single Maps2 Registry configuration.
-     */
-    protected function getDynamicStoragePidBySingleArray(array $configuration, array $foreignLocationRecord): int
-    {
         $defaultStoragePid = 0;
-        if (
-            array_key_exists('extKey', $configuration)
-            && !empty($configuration['extKey'])
-            && array_key_exists('property', $configuration)
-            && !empty($configuration['property'])
-        ) {
-            $type = 'extensionmanager';
-            if (
-                array_key_exists('type', $configuration)
-                && !empty($configuration['type'])
-                && in_array(strtolower((string)$configuration['type']), ['extensionmanager', 'pagetsconfig'])
-            ) {
-                $type = strtolower((string)$configuration['type']);
-            }
-
-            $extKey = $configuration['extKey'];
-            $property = $configuration['property'];
-
-            switch ($type) {
-                case 'extensionmanager':
-                    if (!ExtensionManagementUtility::isLoaded($configuration['extKey'])) {
+        foreach ($columnRegistry->getDefaultStoragePid() as $configuration) {
+            switch ($configuration->getType()) {
+                case StoragePidLocationTypeEnum::EXTENSION_MANAGER:
+                    if (!ExtensionManagementUtility::isLoaded($configuration->getExtKey())) {
                         return $defaultStoragePid;
                     }
 
                     try {
-                        $extConf = (array)$this->extensionConfiguration->get($extKey);
+                        $extConf = (array)$this->extensionConfiguration->get($configuration->getExtKey());
                     } catch (\Exception) {
                         return $defaultStoragePid;
                     }
 
                     if (
-                        array_key_exists($property, $extConf)
-                        && MathUtility::canBeInterpretedAsInteger($extConf[$property])
-                        && (int)$extConf[$property] > 0
+                        array_key_exists($configuration->getProperty(), $extConf)
+                        && MathUtility::canBeInterpretedAsInteger($extConf[$configuration->getProperty()])
+                        && (int)$extConf[$configuration->getProperty()] > 0
                     ) {
-                        return (int)$extConf[$property];
+                        return (int)$extConf[$configuration->getProperty()];
                     }
                     break;
                 default:
-                case 'pagetsconfig':
+                case StoragePidLocationTypeEnum::PAGE_TS_CONFIG:
                     $this->updateDefaultStoragePidFromPageTsConfig(
                         $defaultStoragePid,
                         $foreignLocationRecord,
-                        $extKey,
-                        $property,
+                        $configuration,
                     );
             }
         }
@@ -216,23 +175,22 @@ readonly class StoragePidHelper
     protected function updateDefaultStoragePidFromPageTsConfig(
         int &$defaultStoragePid,
         array $foreignLocationRecord,
-        string $extKey = 'maps2',
-        string $property = 'defaultStoragePid',
+        StoragePidLocation $configuration,
     ): void {
-        $tsConfig = $this->getTsConfig($foreignLocationRecord, $extKey);
-        if (!array_key_exists($property, $tsConfig)) {
+        $tsConfig = $this->getTsConfig($foreignLocationRecord, $configuration->getExtKey());
+        if (!array_key_exists($configuration->getProperty(), $tsConfig)) {
             return;
         }
 
-        if (!MathUtility::canBeInterpretedAsInteger($tsConfig[$property])) {
+        if (!MathUtility::canBeInterpretedAsInteger($tsConfig[$configuration->getProperty()])) {
             return;
         }
 
-        if ((int)$tsConfig[$property] <= 0) {
+        if ((int)$tsConfig[$configuration->getProperty()] <= 0) {
             return;
         }
 
-        $defaultStoragePid = (int)$tsConfig[$property];
+        $defaultStoragePid = (int)$tsConfig[$configuration->getProperty()];
     }
 
     /**

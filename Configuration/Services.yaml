@@ -16,16 +16,15 @@ services:
     factory: ['@TYPO3\CMS\Core\Cache\CacheManager', 'getCache']
     arguments: ['maps2_cachedhtml']
 
-  cache.maps2Registry:
-    class: TYPO3\CMS\Core\Cache\Frontend\FrontendInterface
-    factory: ['@TYPO3\CMS\Core\Cache\CacheManager', 'getCache']
-    arguments: ['maps2_registry']
-
   maps2.mapProviderClient:
     class: 'JWeiland\Maps2\Client\GoogleMapsClient'
     factory: ['@JWeiland\Maps2\Client\ClientFactory', 'create']
     arguments:
       - '@=service("JWeiland\\Maps2\\Helper\\MapHelper").getMapProvider()'
+
+  maps2.columnRegistry:
+    class: 'JWeiland\Maps2\Tca\ColumnRegistrationStorage'
+    factory: ['@JWeiland\Maps2\Tca\Maps2Registry', 'getColumnRegistry']
 
   maps2.mapProviderRequest:
     class: 'JWeiland\Maps2\Client\Request\RequestInterface'
@@ -84,10 +83,14 @@ services:
   # Called by makeInstance in TYPO3's DataHandler
   JWeiland\Maps2\Hook\CreateMaps2RecordHook:
     public: true
+    arguments:
+      $columnRegistry: '@maps2.columnRegistry'
 
   # Called by makeInstance in PoiCollection model to add foreign records
   JWeiland\Maps2\Service\MapService:
     public: true
+    arguments:
+      $columnRegistry: '@maps2.columnRegistry'
 
   JWeiland\Maps2\Service\PoiCollectionService:
     arguments:
@@ -106,5 +109,3 @@ services:
   # Will be called by various TCA files
   JWeiland\Maps2\Tca\Maps2Registry:
     public: true
-    arguments:
-      $cache: '@cache.maps2Registry'

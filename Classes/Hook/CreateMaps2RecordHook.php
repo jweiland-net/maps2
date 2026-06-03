@@ -20,15 +20,17 @@ use JWeiland\Maps2\Helper\MessageHelper;
 use JWeiland\Maps2\Helper\StoragePidHelper;
 use JWeiland\Maps2\Service\GeoCodeService;
 use JWeiland\Maps2\Service\MapService;
-use JWeiland\Maps2\Tca\Maps2Registry;
+use JWeiland\Maps2\Tca\ColumnRegistration;
+use JWeiland\Maps2\Tca\ColumnRegistrationStorage;
 use Psr\EventDispatcher\EventDispatcherInterface;
-use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
+use TYPO3\CMS\Core\Schema\Capability\TcaSchemaCapability;
+use TYPO3\CMS\Core\Schema\TcaSchemaFactory;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
@@ -36,20 +38,19 @@ use TYPO3\CMS\Core\Utility\MathUtility;
 /**
  * Create a POI collection record while a foreign table was saved
  */
-class CreateMaps2RecordHook
+final readonly class CreateMaps2RecordHook
 {
-    protected array $columnRegistry = [];
-
     public function __construct(
-        protected GeoCodeService $geoCodeService,
-        protected AddressHelper $addressHelper,
-        protected MessageHelper $messageHelper,
-        protected StoragePidHelper $storagePidHelper,
-        protected MapService $mapService,
-        protected Maps2Registry $maps2Registry,
-        protected EventDispatcherInterface $eventDispatcher,
-        private readonly CacheManager $cacheManager,
-        private readonly ConnectionPool $connectionPool,
+        private GeoCodeService $geoCodeService,
+        private AddressHelper $addressHelper,
+        private MessageHelper $messageHelper,
+        private StoragePidHelper $storagePidHelper,
+        private MapService $mapService,
+        private ColumnRegistrationStorage $columnRegistry,
+        private EventDispatcherInterface $eventDispatcher,
+        private TcaSchemaFactory $tcaSchemaFactory,
+        private CacheManager $cacheManager,
+        private ConnectionPool $connectionPool,
     ) {}
 
     /**
@@ -64,7 +65,7 @@ class CreateMaps2RecordHook
             }
 
             // process this hook only on registered tables
-            if (!array_key_exists($foreignTableName, $this->getColumnRegistry())) {
+            if (!$this->columnRegistry->isTableRegistered($foreignTableName)) {
                 continue;
             }
 
@@ -81,35 +82,30 @@ class CreateMaps2RecordHook
                     continue;
                 }
 
-                foreach ($this->getColumnRegistry()[$foreignTableName] as $foreignColumnName => $maps2RegistryColumnConfiguration) {
+                foreach ($this->columnRegistry->getColumnRegistrations($foreignTableName) as $foreignColumnName => $columnRegistration) {
                     if (!array_key_exists($foreignColumnName, $foreignLocationRecord)) {
                         continue;
                     }
 
-                    // Do not update foreign record automatically
-                    // There are still extensions out there, where you want to define POI collection record on your own.
-                    if (empty($maps2RegistryColumnConfiguration)) {
-                        continue;
-                    }
-
-                    if (!$this->isForeignLocationRecordAllowedToCreateNewPoiCollectionRecords($foreignLocationRecord, $foreignTableName, $foreignColumnName, $maps2RegistryColumnConfiguration)) {
-                        // We need $option of second foreach for this call. So, if this is false, we have to continue parent foreach.
+                    if (!$this->isForeignLocationRecordAllowedToCreateNewPoiCollectionRecords($foreignLocationRecord, $foreignTableName, $foreignColumnName, $columnRegistration)) {
+                        // We need the option of the second foreach for this call.
+                        // So, if this is false, we have to continue parent foreach.
                         continue 2;
                     }
 
                     $this->updateForeignLocationRecordIfPoiCollectionDoesNotExist($foreignLocationRecord, $foreignColumnName);
 
                     if (!$foreignLocationRecord[$foreignColumnName]) {
-                        if ($this->createNewMapsRecord($foreignLocationRecord, $foreignTableName, $foreignColumnName, $maps2RegistryColumnConfiguration)) {
-                            $this->synchronizeColumnsFromForeignRecordWithPoiCollection($foreignLocationRecord, $foreignTableName, $foreignColumnName, $maps2RegistryColumnConfiguration);
+                        if ($this->createNewMapsRecord($foreignLocationRecord, $foreignTableName, $foreignColumnName, $columnRegistration)) {
+                            $this->synchronizeColumnsFromForeignRecordWithPoiCollection($foreignLocationRecord, $foreignTableName, $foreignColumnName, $columnRegistration);
                             $this->messageHelper->addFlashMessage(
                                 'While creating this record, we have automatically inserted a new maps2 record, too',
                                 'Maps2 record creation successful',
                             );
                         }
                     } else {
-                        $this->updateAddressInPoiCollectionIfNecessary($foreignLocationRecord, $foreignColumnName, $maps2RegistryColumnConfiguration);
-                        $this->synchronizeColumnsFromForeignRecordWithPoiCollection($foreignLocationRecord, $foreignTableName, $foreignColumnName, $maps2RegistryColumnConfiguration);
+                        $this->updateAddressInPoiCollectionIfNecessary($foreignLocationRecord, $foreignColumnName, $columnRegistration);
+                        $this->synchronizeColumnsFromForeignRecordWithPoiCollection($foreignLocationRecord, $foreignTableName, $foreignColumnName, $columnRegistration);
                         $this->messageHelper->addFlashMessage(
                             'While updating this record, we have automatically updated the related maps2 record, too',
                             'Maps2 record update successful',
@@ -121,7 +117,7 @@ class CreateMaps2RecordHook
                         (int)$foreignLocationRecord[$foreignColumnName],
                         $foreignTableName,
                         $foreignLocationRecord,
-                        $maps2RegistryColumnConfiguration,
+                        $columnRegistration,
                     );
 
                     $this->clearHtmlCache((int)$foreignLocationRecord[$foreignColumnName]);
@@ -142,14 +138,22 @@ class CreateMaps2RecordHook
      */
     protected function isValidRecord(array $recordFromRequest, string $tableName): bool
     {
-        $isTableLocalizable = BackendUtility::isTableLocalizable($tableName);
+        if (!$this->tcaSchemaFactory->has($tableName)) {
+            return false;
+        }
+
+        $isTableLocalizable = $this->tcaSchemaFactory
+            ->get($tableName)
+            ->hasCapability(TcaSchemaCapability::Language);
+
+        $languageField = $this->tcaSchemaFactory
+            ->get($tableName)
+            ->getCapability(TcaSchemaCapability::Language)
+            ->getFieldName();
 
         return
             !$isTableLocalizable
-            || (
-                ($languageField = $GLOBALS['TCA'][$tableName]['ctrl']['languageField'])
-                && array_key_exists($languageField, $recordFromRequest)
-            );
+            || array_key_exists($languageField, $recordFromRequest);
     }
 
     /**
@@ -160,70 +164,49 @@ class CreateMaps2RecordHook
         array $foreignLocationRecord,
         string $foreignTableName,
         string $foreignColumnName,
-        array $maps2RegistryColumnConfiguration,
+        ColumnRegistration $columnRegistration,
     ): bool {
         $isValid = true;
 
-        // Process simple matching
-        if (
-            isset($maps2RegistryColumnConfiguration['columnMatch'])
-            && is_array($maps2RegistryColumnConfiguration['columnMatch'])
-        ) {
-            foreach ($maps2RegistryColumnConfiguration['columnMatch'] as $columnName => $configuration) {
-                $foreignValue = (string)$foreignLocationRecord[$columnName];
-                if (empty($configuration)) {
-                    continue;
-                }
+        foreach ($columnRegistration->getColumnMatch() as $columnName => $columnMatch) {
+            $foreignValue = (string)($foreignLocationRecord[$columnName] ?? '');
 
-                if (
-                    is_array($configuration)
-                    && array_key_exists('expr', $configuration)
-                    && array_key_exists('value', $configuration)
-                ) {
-                    switch ($configuration['expr']) {
-                        case 'eq':
-                            if ($foreignValue !== (string)$configuration['value']) {
-                                $isValid = false;
-                            }
-                            break;
-                        case 'lt':
-                            if ((int)$foreignValue >= (int)$configuration['value']) {
-                                $isValid = false;
-                            }
-                            break;
-                        case 'lte':
-                            if ((int)$foreignValue > (int)$configuration['value']) {
-                                $isValid = false;
-                            }
-                            break;
-                        case 'gt':
-                            if ((int)$foreignValue <= (int)$configuration['value']) {
-                                $isValid = false;
-                            }
-                            break;
-                        case 'gte':
-                            if ((int)$foreignValue < (int)$configuration['value']) {
-                                $isValid = false;
-                            }
-                            break;
-                        case 'in':
-                        default:
-                            if (!in_array(
-                                $foreignValue,
-                                GeneralUtility::trimExplode(',', $configuration['value'], true),
-                                true,
-                            )) {
-                                $isValid = false;
-                            }
-                            break;
-                    }
-                } elseif (!is_array($configuration) && array_key_exists($columnName, $foreignLocationRecord)) {
-                    // $configuration is the value to check against. equals.
-                    if ($foreignValue !== (string)$configuration) {
+            switch ($columnMatch->getExpr()) {
+                case 'eq':
+                    if ($foreignValue !== $columnMatch->getValue()) {
                         $isValid = false;
-                        break;
                     }
-                }
+                    break;
+                case 'lt':
+                    if ((int)$foreignValue >= (int)$columnMatch->getValue()) {
+                        $isValid = false;
+                    }
+                    break;
+                case 'lte':
+                    if ((int)$foreignValue > (int)$columnMatch->getValue()) {
+                        $isValid = false;
+                    }
+                    break;
+                case 'gt':
+                    if ((int)$foreignValue <= (int)$columnMatch->getValue()) {
+                        $isValid = false;
+                    }
+                    break;
+                case 'gte':
+                    if ((int)$foreignValue < (int)$columnMatch->getValue()) {
+                        $isValid = false;
+                    }
+                    break;
+                case 'in':
+                default:
+                    if (!in_array(
+                        $foreignValue,
+                        GeneralUtility::trimExplode(',', $columnMatch->getValue(), true),
+                        true,
+                    )) {
+                        $isValid = false;
+                    }
+                    break;
             }
         }
 
@@ -232,7 +215,7 @@ class CreateMaps2RecordHook
             $foreignLocationRecord,
             $foreignTableName,
             $foreignColumnName,
-            $maps2RegistryColumnConfiguration,
+            $columnRegistration,
             $isValid,
         );
 
@@ -256,11 +239,6 @@ class CreateMaps2RecordHook
                 $this->clearHtmlCache((int)$poiCollection[$originalTranslationColumn]);
             }
         }
-    }
-
-    protected function getColumnRegistry(): array
-    {
-        return $this->maps2Registry->getColumnRegistry() ?? [];
     }
 
     /**
@@ -288,11 +266,11 @@ class CreateMaps2RecordHook
     protected function updateAddressInPoiCollectionIfNecessary(
         array $foreignLocationRecord,
         string $foreignColumnName,
-        array $maps2RegistryColumnConfiguration,
+        array $columnRegistration,
     ): void {
         $poiCollection = $this->getPoiCollection((int)$foreignLocationRecord[$foreignColumnName]);
-        if (!$this->addressHelper->isSameAddress($poiCollection['address'], $foreignLocationRecord, $maps2RegistryColumnConfiguration)) {
-            $address = $this->addressHelper->getAddress($foreignLocationRecord, $maps2RegistryColumnConfiguration);
+        if (!$this->addressHelper->isSameAddress($poiCollection['address'], $foreignLocationRecord, $columnRegistration)) {
+            $address = $this->addressHelper->getAddress($foreignLocationRecord, $columnRegistration);
 
             $position = $this->geoCodeService->getFirstFoundPositionByAddress($address);
             if ($position instanceof Position) {
@@ -366,17 +344,17 @@ class CreateMaps2RecordHook
         array &$foreignLocationRecord,
         string $foreignTableName,
         string $foreignColumnName,
-        array $maps2RegistryColumnConfiguration,
+        ColumnRegistration $columnRegistration,
     ): bool {
         $defaultStoragePid = $this->storagePidHelper->getDefaultStoragePidForNewPoiCollection(
             $foreignLocationRecord,
-            $maps2RegistryColumnConfiguration,
+            $columnRegistration,
         );
         if ($defaultStoragePid === 0) {
             return false;
         }
 
-        $address = $this->addressHelper->getAddress($foreignLocationRecord, $maps2RegistryColumnConfiguration);
+        $address = $this->addressHelper->getAddress($foreignLocationRecord, $columnRegistration);
 
         $position = $this->geoCodeService->getFirstFoundPositionByAddress($address);
         if ($position instanceof Position) {
@@ -458,9 +436,9 @@ class CreateMaps2RecordHook
         array $foreignLocationRecord,
         string $foreignTableName,
         string $maps2ColumnName,
-        array $maps2RegistryColumnConfiguration = [],
+        array $columnRegistration = [],
     ): bool {
-        if (!array_key_exists('synchronizeColumns', $maps2RegistryColumnConfiguration)) {
+        if (!array_key_exists('synchronizeColumns', $columnRegistration)) {
             $this->messageHelper->addFlashMessage(
                 'There are no synchronizationColumns configured in your maps2 registration, so we are using the address as maps2 title',
                 'Using address as record title',
@@ -471,7 +449,7 @@ class CreateMaps2RecordHook
         }
 
         // Initialize QueryBuilder
-        $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable('tx_maps2_domain_model_poicollection');
+        $queryBuilder = $this->connectionPool->getQueryBuilderForTable('tx_maps2_domain_model_poicollection');
         $queryBuilder = $queryBuilder
             ->update('tx_maps2_domain_model_poicollection')
             ->where(
@@ -482,7 +460,7 @@ class CreateMaps2RecordHook
             );
 
         $tableNeedsUpdate = false;
-        foreach ($maps2RegistryColumnConfiguration['synchronizeColumns'] as $synchronizeColumns) {
+        foreach ($columnRegistration['synchronizeColumns'] as $synchronizeColumns) {
             if (!$this->isValidSynchronizeConfiguration($synchronizeColumns, $foreignTableName)) {
                 return false;
             }
@@ -554,7 +532,7 @@ class CreateMaps2RecordHook
         int $poiCollectionUid,
         string $foreignTableName,
         array $foreignLocationRecord,
-        array $maps2RegistryColumnConfiguration,
+        array $columnRegistration,
     ): void {
         $this->eventDispatcher->dispatch(
             new PostProcessPoiCollectionRecordEvent(
@@ -562,7 +540,7 @@ class CreateMaps2RecordHook
                 $poiCollectionUid,
                 $foreignTableName,
                 $foreignLocationRecord,
-                $maps2RegistryColumnConfiguration,
+                $columnRegistration,
             ),
         );
     }
@@ -574,16 +552,17 @@ class CreateMaps2RecordHook
         array $foreignLocationRecord,
         string $foreignTableName,
         string $foreignColumnName,
-        array $maps2RegistryColumnConfiguration,
+        ColumnRegistration $columnRegistration,
         bool &$isValid,
     ): void {
         $event = new AllowCreationOfPoiCollectionEvent(
             $foreignLocationRecord,
             $foreignTableName,
             $foreignColumnName,
-            $maps2RegistryColumnConfiguration,
+            $columnRegistration,
             $isValid,
         );
+
         /** @var AllowCreationOfPoiCollectionEvent $event */
         $event = $this->eventDispatcher->dispatch($event);
         $isValid = $event->isValid();
