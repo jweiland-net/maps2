@@ -15,7 +15,6 @@ use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
 
 /**
@@ -28,8 +27,10 @@ readonly class StoragePidHelper
         protected ExtensionConfiguration $extensionConfiguration,
     ) {}
 
-    public function getDefaultStoragePidForNewPoiCollection(array $foreignLocationRecord, array $options): int
-    {
+    public function getDefaultStoragePidForNewPoiCollection(
+        array $foreignLocationRecord,
+        array $options,
+    ): int {
         $defaultStoragePid = 0;
 
         $this->updateStoragePidFromForeignLocationRecord($defaultStoragePid, $foreignLocationRecord);
@@ -38,7 +39,8 @@ readonly class StoragePidHelper
 
         if ($defaultStoragePid === 0) {
             $this->messageHelper->addFlashMessage(
-                'No PID found to store POI collection. Please check various places like pageTSconfig, Maps2 Registry and PID of this currently saved record.',
+                'No PID found to store POI collection. Please check various places like pageTSconfig, '
+                . 'Maps2 Registry and PID of this currently saved record.',
                 'Can not find a valid PID to store EXT:maps2 records',
             );
         }
@@ -81,7 +83,8 @@ readonly class StoragePidHelper
 
             if ($storagePid === 0) {
                 $this->messageHelper->addFlashMessage(
-                    'You have configured a defaultStoragePid in maps2 registration, but returned value is still 0. Please check Maps2 Registry',
+                    'You have configured a defaultStoragePid in maps2 registration, but returned value '
+                    . 'is still 0. Please check Maps2 Registry',
                     'Invalid defaultStoragePid configuration found',
                     ContextualFeedbackSeverity::WARNING,
                 );
