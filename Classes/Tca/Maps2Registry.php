@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Tca;
 
+use TYPO3\CMS\Core\Attribute\AsEventListener;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Database\Event\AlterTableDefinitionStatementsEvent;
 use TYPO3\CMS\Core\Localization\LanguageService;
@@ -66,6 +67,20 @@ class Maps2Registry
             GeneralUtility::mkdir_deep(dirname($configurationFile));
             GeneralUtility::writeFile($configurationFile, '{}');
         }
+    }
+
+    /**
+     * An event-listener method to inject the required maps2 database columns of
+     * various extensions to the table definition string
+     */
+    #[AsEventListener(
+        identifier: 'maps2/deactivate-page-cache-usage',
+    )]
+    public function addMaps2DatabaseSchemasToTablesDefinition(
+        AlterTableDefinitionStatementsEvent $alterTableDefinitionStatementsEvent,
+    ): void {
+        $this->initialize();
+        $alterTableDefinitionStatementsEvent->addSqlData($this->getDatabaseTableDefinitions());
     }
 
     /**
@@ -375,17 +390,6 @@ class Maps2Registry
     {
         $sqlString[] = $this->getDatabaseTableDefinition($extensionKey);
         return ['sqlString' => $sqlString, 'extensionKey' => $extensionKey];
-    }
-
-    /**
-     * A slot method to inject the required maps2 database fields of
-     * various extensions to the table definition string
-     */
-    public function addMaps2DatabaseSchemasToTablesDefinition(
-        AlterTableDefinitionStatementsEvent $alterTableDefinitionStatementsEvent,
-    ): void {
-        $this->initialize();
-        $alterTableDefinitionStatementsEvent->addSqlData($this->getDatabaseTableDefinitions());
     }
 
     protected function getLanguageService(): LanguageService
