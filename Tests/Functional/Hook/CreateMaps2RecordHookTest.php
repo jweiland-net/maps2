@@ -40,8 +40,6 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
  */
 class CreateMaps2RecordHookTest extends FunctionalTestCase
 {
-    public $mapService;
-    public $eventDispatcher;
     protected CreateMaps2RecordHook $subject;
 
     protected GeoCodeService|MockObject $geoCodeServiceMock;
@@ -78,6 +76,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
     ];
 
     protected array $testExtensionsToLoad = [
+        __DIR__ . '/../Fixtures/Extensions/address',
         'jweiland/maps2',
     ];
 
@@ -88,17 +87,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
         $this->importCSVDataSet(__DIR__ . '/../Fixtures/be_users.csv');
         $this->setUpBackendUser(1);
 
-        $this->importCSVDataSet(__DIR__ . '/../Fixtures/tx_events2_domain_model_location.csv');
-
-        // It seems that records of ext_tables_static+adt.sql will be included just once for all tests in this class.
-        // So, for all tests (except the first one), we have to add the records ourselves.
-        $country = $this->getConnectionPool()
-            ->getConnectionForTable('static_countries')
-            ->select(['*'], 'static_countries', ['uid' => 54])
-            ->fetchAssociative();
-        if ($country === false) {
-            $this->importCSVDataSet(__DIR__ . '/../Fixtures/static_countries.csv');
-        }
+        $this->importCSVDataSet(__DIR__ . '/../Fixtures/tx_address_domain_model_address.csv');
 
         $this->geoCodeServiceMock = $this->createMock(GeoCodeService::class);
         $this->messageHelperMock = $this->createMock(MessageHelper::class);
