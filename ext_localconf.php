@@ -13,6 +13,7 @@ use JWeiland\Maps2\Form\Element\ReadOnlyInputTextElement;
 use JWeiland\Maps2\Form\FieldInformation\InfoWindowContent;
 use JWeiland\Maps2\Form\Resolver\MapProviderResolver;
 use JWeiland\Maps2\Hook\CreateMaps2RecordHook;
+use TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend;
 use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
 if (!defined('TYPO3')) {
@@ -25,8 +26,6 @@ ExtensionUtility::configurePlugin(
     [
         PoiCollectionController::class => 'show',
     ],
-    [],
-    ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT,
 );
 
 ExtensionUtility::configurePlugin(
@@ -38,7 +37,6 @@ ExtensionUtility::configurePlugin(
     [
         PoiCollectionController::class => 'overlay',
     ],
-    ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT,
 );
 
 ExtensionUtility::configurePlugin(
@@ -50,7 +48,6 @@ ExtensionUtility::configurePlugin(
     [
         PoiCollectionController::class => 'listRadius',
     ],
-    ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT,
 );
 
 ExtensionUtility::configurePlugin(
@@ -62,15 +59,21 @@ ExtensionUtility::configurePlugin(
     [
         CityMapController::class => 'search',
     ],
-    ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT,
 );
 
-// Activate caching for info window content
-if (!isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['maps2_cachedhtml'])) {
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['maps2_cachedhtml'] = [
-        'groups' => ['pages', 'all'],
-    ];
-}
+// Cache for info window content
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['maps2_cachedhtml'] = [
+    'groups' => ['pages', 'all'],
+];
+
+// Cache for Maps2 Registry
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['maps2_registry'] = [
+    'backend' => SimpleFileBackend::class,
+    'groups' => ['system'],
+    'options' => [
+        'defaultLifetime' => 0,
+    ],
+];
 
 // This is a solution to build GET forms.
 $GLOBALS['TYPO3_CONF_VARS']['FE']['cacheHash']['excludedParameters']['maps2'] = 'tx_maps2_citymap[street]';

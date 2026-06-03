@@ -12,9 +12,11 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Tca;
 
 use TYPO3\CMS\Core\Attribute\AsEventListener;
+use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Database\Event\AlterTableDefinitionStatementsEvent;
 use TYPO3\CMS\Core\Localization\LanguageService;
+use TYPO3\CMS\Core\Schema\TcaSchemaFactory;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -32,41 +34,14 @@ class Maps2Registry
 
     protected array $addedMaps2Tabs = [];
 
+    public function __construct(
+        protected TcaSchemaFactory $tcaSchemaFactory,
+        protected FrontendInterface $cache,
+    ) {}
+
     public static function getInstance(): self
     {
         return GeneralUtility::makeInstance(self::class);
-    }
-
-    protected function initialize(): void
-    {
-        $configurationFile = $this->getConfigurationFile();
-
-        if (@is_file($configurationFile)) {
-            try {
-                $configuration = json_decode(
-                    file_get_contents($configurationFile),
-                    true,
-                    512,
-                    JSON_THROW_ON_ERROR,
-                );
-
-                if (
-                    is_array($configuration)
-                    && array_key_exists('registry', $configuration)
-                    && array_key_exists('extensions', $configuration)
-                ) {
-                    $this->registry = $configuration['registry'];
-                    $this->extensions = $configuration['extensions'];
-                }
-            } catch (\JsonException) {
-                // File exists, but empty or other error
-                $this->registry = [];
-                $this->extensions = [];
-            }
-        } else {
-            GeneralUtility::mkdir_deep(dirname($configurationFile));
-            GeneralUtility::writeFile($configurationFile, '{}');
-        }
     }
 
     /**
@@ -79,8 +54,9 @@ class Maps2Registry
     public function addMaps2DatabaseSchemasToTablesDefinition(
         AlterTableDefinitionStatementsEvent $alterTableDefinitionStatementsEvent,
     ): void {
-        $this->initialize();
-        $alterTableDefinitionStatementsEvent->addSqlData($this->getDatabaseTableDefinitions());
+        $alterTableDefinitionStatementsEvent->addSqlData(
+            $this->getDatabaseTableDefinitions(),
+        );
     }
 
     /**
@@ -112,8 +88,6 @@ class Maps2Registry
         string $fieldName = 'tx_maps2_uid',
         bool $override = false,
     ): bool {
-        $this->initialize();
-        $didRegister = false;
         if ($tableName === '') {
             throw new \InvalidArgumentException('No or invalid table name "' . $tableName . '" given.', 1369122038);
         }
@@ -138,10 +112,10 @@ class Maps2Registry
                     'extensions' => $this->extensions,
                 ], JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT),
             );
-            $didRegister = true;
+            return true;
         }
 
-        return $didRegister;
+        return false;
     }
 
     /**

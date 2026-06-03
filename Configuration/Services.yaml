@@ -16,6 +16,11 @@ services:
     factory: ['@TYPO3\CMS\Core\Cache\CacheManager', 'getCache']
     arguments: ['maps2_cachedhtml']
 
+  cache.maps2Registry:
+    class: TYPO3\CMS\Core\Cache\Frontend\FrontendInterface
+    factory: ['@TYPO3\CMS\Core\Cache\CacheManager', 'getCache']
+    arguments: ['maps2_registry']
+
   maps2.mapProviderClient:
     class: 'JWeiland\Maps2\Client\GoogleMapsClient'
     factory: ['@JWeiland\Maps2\Client\ClientFactory', 'create']
@@ -101,3 +106,5 @@ services:
   # Will be called by various TCA files
   JWeiland\Maps2\Tca\Maps2Registry:
     public: true
+    arguments:
+      $cache: '@cache.maps2Registry'
