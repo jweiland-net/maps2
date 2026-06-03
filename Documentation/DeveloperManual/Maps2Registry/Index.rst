@@ -183,21 +183,19 @@ Example for tt_address
         die('Access denied.');
     }
 
-    call_user_func(function() {
-        if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('maps2')) {
-            \JWeiland\Maps2\Tca\Maps2Registry::getInstance()->add(
-                'tt_address',
-                'tt_address',
-                [
-                    'addressColumns' => ['address', 'zip', 'city'],
-                    'countryColumn' => 'country',
-                    'synchronizeColumns' => [
-                        [
-                            'foreignColumnName' => 'name',
-                            'poiCollectionColumnName' => 'title'
-                        ]
+    if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('maps2')) {
+        \JWeiland\Maps2\Tca\Maps2Registry::getInstance()->add(
+            'tt_address',
+            'tt_address',
+            [
+                'addressColumns' => ['address', 'zip', 'city'],
+                'countryColumn' => 'country',
+                'synchronizeColumns' => [
+                    [
+                        'foreignColumnName' => 'name',
+                        'poiCollectionColumnName' => 'title'
                     ]
                 ]
-            );
-        }
-    });
+            ]
+        );
+    }
