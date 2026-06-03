@@ -9,17 +9,11 @@ declare(strict_types=1);
  * LICENSE file that was distributed with this source code.
  */
 
-namespace JWeiland\Maps2\Mapper;
+namespace JWeiland\Maps2\Form\Element;
 
 use JWeiland\Maps2\Configuration\MapProviderEnum;
-use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
-/**
- * Each Mapper must have a map Method.
- */
-interface MapperInterface
+interface FormElementInterface
 {
     public function canProcess(MapProviderEnum $mapProvider): bool;
-
-    public function map(array $response): ObjectStorage;
 }

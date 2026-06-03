@@ -11,7 +11,6 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Service;
 
-use Doctrine\DBAL\Driver\Exception as DBALException;
 use Doctrine\DBAL\Exception;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Domain\Model\Position;
@@ -19,7 +18,6 @@ use JWeiland\Maps2\Event\PreAddForeignRecordEvent;
 use JWeiland\Maps2\Helper\MessageHelper;
 use JWeiland\Maps2\Tca\ColumnRegistration;
 use JWeiland\Maps2\Tca\ColumnRegistrationStorage;
-use JWeiland\Maps2\Tca\Maps2Registry;
 use JWeiland\Maps2\Utility\DatabaseUtility;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Database\Connection;
@@ -232,7 +230,7 @@ readonly class MapService
 
                     $poiCollection->addForeignRecord($foreignRecord);
                 }
-            } catch (Exception $e) {
+            } catch (Exception) {
                 continue;
             }
         }

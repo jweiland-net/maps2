@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Helper;
 
 use JWeiland\Maps2\Configuration\ExtConf;
+use JWeiland\Maps2\Tca\ColumnRegistration;
 use TYPO3\CMS\Core\Country\Country;
 use TYPO3\CMS\Core\Country\CountryProvider;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
@@ -31,26 +32,21 @@ class AddressHelper
     /**
      * Get address for Map Providers GeoCode requests
      */
-    public function getAddress(array $locationRecordToSave, array $options): string
+    public function getAddress(array $locationRecordToSave, ColumnRegistration $columnRegistration): string
     {
-        if (!$this->isValidOptionConfiguration($options)) {
-            return '';
-        }
-
-        $this->unifyOptionConfiguration($options);
         $locationRecordToSave = array_map(
             static fn($value) => is_string($value) ? trim($value) : $value,
             $locationRecordToSave,
         );
 
         $addressParts = [];
-        foreach ($options['addressColumns'] as $addressColumn) {
+        foreach ($columnRegistration->getAddressColumns() as $addressColumn) {
             if (!empty($locationRecordToSave[$addressColumn])) {
                 $addressParts[] = $locationRecordToSave[$addressColumn];
             }
         }
 
-        $addressParts[] = $this->getCountryName($locationRecordToSave, $options);
+        $addressParts[] = $this->getCountryName($locationRecordToSave, $columnRegistration);
 
         return trim(implode(' ', $addressParts));
     }
@@ -58,14 +54,17 @@ class AddressHelper
     /**
      * Check if a formatted address is still equal with the address parts of a foreign location record.
      */
-    public function isSameAddress(string $address, array $foreignLocationRecord, array $options): bool
-    {
+    public function isSameAddress(
+        string $address,
+        array $foreignLocationRecord,
+        ColumnRegistration $columnRegistration,
+    ): bool {
         // Convert formatted address like "Mainstreet 15, 51324 Cologne, Germany" into array
         $poiCollectionAddressParts = GeneralUtility::trimExplode(
             ' ',
             str_replace(',', '', strtolower($address)),
         );
-        foreach ($options['addressColumns'] as $addressColumn) {
+        foreach ($columnRegistration->getAddressColumns() as $addressColumn) {
             if (in_array(
                 strtolower((string)$foreignLocationRecord[$addressColumn]),
                 $poiCollectionAddressParts,
@@ -84,11 +83,11 @@ class AddressHelper
      * Try to get a country name from a foreign extension record.
      * If we do not find a country name, we will try some fallbacks.
      */
-    protected function getCountryName(array $record, array $options): string
+    protected function getCountryName(array $record, ColumnRegistration $columnRegistration): string
     {
-        $defaultCountry = $this->getFallbackCountryName($options);
+        $defaultCountry = $this->getFallbackCountryName($columnRegistration);
 
-        $countryColumn = $options['countryColumn'] ?? '';
+        $countryColumn = $columnRegistration->getCountryColumn();
         if ($countryColumn === '') {
             return $defaultCountry;
         }
@@ -115,11 +114,11 @@ class AddressHelper
      * If we cannot get any country information of foreign extension,
      * we now try some fallbacks to get a country name.
      */
-    protected function getFallbackCountryName(array $options): string
+    protected function getFallbackCountryName(ColumnRegistration $columnRegistration): string
     {
         // try to get defaultCountry from maps2 registry
-        if (array_key_exists('defaultCountry', $options) && !empty($options['defaultCountry'])) {
-            return trim((string)$options['defaultCountry']);
+        if ($columnRegistration->getDefaultCountry() !== '' && $columnRegistration->getDefaultCountry() !== '0') {
+            return trim($columnRegistration->getDefaultCountry());
         }
 
         $defaultCountry = $this->extConf->getDefaultCountry();
@@ -128,32 +127,6 @@ class AddressHelper
         }
 
         return '';
-    }
-
-    /**
-     * Unify option configuration
-     */
-    protected function unifyOptionConfiguration(array &$options): void
-    {
-        // unify addressColumns
-        if (is_string($options['addressColumns'])) {
-            $options['addressColumns'] = GeneralUtility::trimExplode(',', $options['addressColumns']);
-        } else {
-            array_map(trim(...), $options['addressColumns']);
-        }
-
-        // unify countryColumn
-        $options['countryColumn'] = array_key_exists('countryColumn', $options)
-            ? trim((string)$options['countryColumn'])
-            : '';
-
-        // remove countryColumn from addressColumns
-        if (($options['countryColumn'] !== '' && $options['countryColumn'] !== '0')) {
-            $key = array_search($options['countryColumn'], $options['addressColumns']);
-            if ($key) {
-                unset($options['addressColumns'][$key]);
-            }
-        }
     }
 
     /**

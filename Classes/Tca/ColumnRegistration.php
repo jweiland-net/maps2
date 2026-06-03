@@ -112,7 +112,17 @@ final readonly class ColumnRegistration
 
     public function getAddressColumns(): array
     {
-        return $this->addressColumns;
+        $addressColumns = $this->addressColumns;
+
+        // remove countryColumn from addressColumns
+        if (($this->getCountryColumn() !== '' && $this->getCountryColumn() !== '0')) {
+            $key = array_search($this->getCountryColumn(), $addressColumns);
+            if ($key) {
+                unset($addressColumns[$key]);
+            }
+        }
+
+        return $addressColumns;
     }
 
     public function getCountryColumn(): string

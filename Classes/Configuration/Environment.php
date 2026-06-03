@@ -74,7 +74,7 @@ final readonly class Environment implements \JsonSerializable
     public function hasMapProvider(): bool
     {
         try {
-            $mapProvider = $this->getMapProvider();
+            $this->getMapProvider();
         } catch (\ValueError) {
             return false;
         }

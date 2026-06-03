@@ -29,8 +29,9 @@ class DatabaseUtility
     public static function getColumnsFromTable(string $tableName): array
     {
         $connection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable($tableName);
+
         try {
-            return $connection->createSchemaManager()->listTableColumns($tableName);
+            return $connection->createSchemaManager()->introspectTableColumnsByUnquotedName($tableName);
         } catch (Exception) {
         }
 

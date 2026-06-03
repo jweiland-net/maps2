@@ -30,10 +30,10 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * To prevent duplicates in DB, this update wizard removes old settings from FlexForm.
  */
 #[UpgradeWizard('maps2_moveFlexFormFields')]
-class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
+readonly class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
 {
     public function __construct(
-        private readonly ConnectionPool $connectionPool,
+        private ConnectionPool $connectionPool,
     ) {}
 
     public function getTitle(): string

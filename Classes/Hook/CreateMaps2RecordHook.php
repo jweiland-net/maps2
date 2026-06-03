@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Hook;
 
-use Doctrine\DBAL\Driver\Exception as DBALException;
+use Doctrine\DBAL\Exception;
 use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Event\AllowCreationOfPoiCollectionEvent;
 use JWeiland\Maps2\Event\PostProcessPoiCollectionRecordEvent;
@@ -22,6 +22,7 @@ use JWeiland\Maps2\Service\GeoCodeService;
 use JWeiland\Maps2\Service\MapService;
 use JWeiland\Maps2\Tca\ColumnRegistration;
 use JWeiland\Maps2\Tca\ColumnRegistrationStorage;
+use JWeiland\Maps2\Tca\SynchronizeColumn;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
@@ -266,7 +267,7 @@ final readonly class CreateMaps2RecordHook
     protected function updateAddressInPoiCollectionIfNecessary(
         array $foreignLocationRecord,
         string $foreignColumnName,
-        array $columnRegistration,
+        ColumnRegistration $columnRegistration,
     ): void {
         $poiCollection = $this->getPoiCollection((int)$foreignLocationRecord[$foreignColumnName]);
         if (!$this->addressHelper->isSameAddress($poiCollection['address'], $foreignLocationRecord, $columnRegistration)) {
@@ -325,7 +326,7 @@ final readonly class CreateMaps2RecordHook
                 )
                 ->executeQuery()
                 ->fetchAssociative();
-        } catch (DBALException) {
+        } catch (Exception $e) {
             $poiCollection = false;
         }
 
@@ -405,7 +406,7 @@ final readonly class CreateMaps2RecordHook
                 )
                 ->executeQuery()
                 ->fetchAssociative();
-        } catch (DBALException) {
+        } catch (Exception $e) {
             $foreignLocationRecord = [];
         }
 
@@ -436,9 +437,9 @@ final readonly class CreateMaps2RecordHook
         array $foreignLocationRecord,
         string $foreignTableName,
         string $maps2ColumnName,
-        array $columnRegistration = [],
+        ColumnRegistration $columnRegistration,
     ): bool {
-        if (!array_key_exists('synchronizeColumns', $columnRegistration)) {
+        if ($columnRegistration->getSynchronizeColumns() === []) {
             $this->messageHelper->addFlashMessage(
                 'There are no synchronizationColumns configured in your maps2 registration, so we are using the address as maps2 title',
                 'Using address as record title',
@@ -460,7 +461,7 @@ final readonly class CreateMaps2RecordHook
             );
 
         $tableNeedsUpdate = false;
-        foreach ($columnRegistration['synchronizeColumns'] as $synchronizeColumns) {
+        foreach ($columnRegistration->getSynchronizeColumns() as $synchronizeColumns) {
             if (!$this->isValidSynchronizeConfiguration($synchronizeColumns, $foreignTableName)) {
                 return false;
             }
@@ -474,10 +475,7 @@ final readonly class CreateMaps2RecordHook
 
         // Only execute query, if there are columns to update
         if ($tableNeedsUpdate) {
-            try {
-                $queryBuilder->executeStatement();
-            } catch (DBALException) {
-            }
+            $queryBuilder->executeStatement();
         }
 
         return true;
@@ -486,33 +484,19 @@ final readonly class CreateMaps2RecordHook
     /**
      * This method checks the synchronization options itself and if columns are configured in TCA
      */
-    protected function isValidSynchronizeConfiguration(array $synchronizeColumns, string $foreignTableName): bool
+    protected function isValidSynchronizeConfiguration(SynchronizeColumn $synchronizeColumns, string $foreignTableName): bool
     {
-        // Check options itself
-        if (
-            !array_key_exists('foreignColumnName', $synchronizeColumns)
-            || !array_key_exists('poiCollectionColumnName', $synchronizeColumns)
-            || !is_string($synchronizeColumns['foreignColumnName'])
-            || !is_string($synchronizeColumns['poiCollectionColumnName'])
-        ) {
-            $this->messageHelper->addFlashMessage(
-                'Please check your Maps registration. The keys foreignColumnName and poiCollectionColumnName have to be set.',
-                'Missing registration keys',
-                ContextualFeedbackSeverity::ERROR,
-            );
-
-            return false;
-        }
-
         // Check, if configured foreign columnName is valid in TCA
-        $foreignColumnName = $synchronizeColumns['foreignColumnName'];
+        $foreignColumnName = $synchronizeColumns->getForeignColumnName();
         if (
             !array_key_exists($foreignTableName, $GLOBALS['TCA'])
             || !array_key_exists($foreignColumnName, $GLOBALS['TCA'][$foreignTableName]['columns'])
             || !is_array($GLOBALS['TCA'][$foreignTableName]['columns'][$foreignColumnName]['config'])
         ) {
             $this->messageHelper->addFlashMessage(
-                'Error while trying to synchronize columns of your record with maps2 record. It seems that "' . $foreignTableName . '" is not registered as table or "' . $foreignColumnName . '" is not a valid column in ' . $foreignTableName,
+                'Error while trying to synchronize columns of your record with maps2 record. It seems that "'
+                . $foreignTableName . '" is not registered as table or "'
+                . $foreignColumnName . '" is not a valid column in ' . $foreignTableName,
                 'Missing table/column in TCA',
                 ContextualFeedbackSeverity::ERROR,
             );
@@ -524,7 +508,7 @@ final readonly class CreateMaps2RecordHook
     }
 
     /**
-     * Use this event, if you want to implement further modification to our POI collection record, while saving
+     * Use this event if you want to implement further modification to our POI collection record, while saving
      * a foreign location record.
      */
     protected function emitPostUpdatePoiCollectionEvent(
@@ -532,7 +516,7 @@ final readonly class CreateMaps2RecordHook
         int $poiCollectionUid,
         string $foreignTableName,
         array $foreignLocationRecord,
-        array $columnRegistration,
+        ColumnRegistration $columnRegistration,
     ): void {
         $this->eventDispatcher->dispatch(
             new PostProcessPoiCollectionRecordEvent(

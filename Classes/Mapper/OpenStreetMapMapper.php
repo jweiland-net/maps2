@@ -11,15 +11,25 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Mapper;
 
+use JWeiland\Maps2\Configuration\MapProviderEnum;
 use JWeiland\Maps2\Domain\Model\Position;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
- * Map Open Street Map Request into Position object
+ * Map OpenStreetMap Request into a Position object
  */
+#[AutoconfigureTag(
+    name: 'maps2.mapper',
+)]
 class OpenStreetMapMapper implements MapperInterface
 {
+    public function canProcess(MapProviderEnum $mapProvider): bool
+    {
+        return $mapProvider === MapProviderEnum::OPEN_STREET_MAP;
+    }
+
     public function map(array $response): ObjectStorage
     {
         $objectStorage = GeneralUtility::makeInstance(ObjectStorage::class);

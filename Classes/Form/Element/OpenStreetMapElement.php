@@ -12,7 +12,9 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Form\Element;
 
 use JWeiland\Maps2\Configuration\ExtConf;
+use JWeiland\Maps2\Configuration\MapProviderEnum;
 use JWeiland\Maps2\Helper\MapHelper;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
 use TYPO3\CMS\Core\Page\JavaScriptModuleInstruction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -27,7 +29,10 @@ use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
  * This is a very reduced InputTextElement. The textfield itself will not be
  * displayed, but it contains the JSON for all the POIs.
  */
-class OpenStreetMapElement extends AbstractFormElement
+#[AutoconfigureTag(
+    name: 'maps2.form.element',
+)]
+class OpenStreetMapElement extends AbstractFormElement implements FormElementInterface
 {
     private const ELEMENT_TEMPLATE = 'EXT:maps2/Resources/Private/Templates/Tca/OpenStreetMap.html';
 
@@ -47,6 +52,11 @@ class OpenStreetMapElement extends AbstractFormElement
         private readonly ExtConf $extConf,
         private readonly ViewFactoryInterface $viewFactory,
     ) {}
+
+    public function canProcess(MapProviderEnum $mapProvider): bool
+    {
+        return $mapProvider === MapProviderEnum::OPEN_STREET_MAP;
+    }
 
     /**
      * This will render Google Maps within PoiCollection records with a marker you can drag and drop

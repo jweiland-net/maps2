@@ -27,11 +27,6 @@ class HiddenViewHelper extends AbstractFormFieldViewHelper
      */
     protected $tagName = 'input';
 
-    public function initializeArguments(): void
-    {
-        parent::initializeArguments();
-    }
-
     /**
      * Renders the hidden field.
      */

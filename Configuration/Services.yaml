@@ -26,6 +26,12 @@ services:
     class: 'JWeiland\Maps2\Tca\ColumnRegistrationStorage'
     factory: ['@JWeiland\Maps2\Tca\Maps2Registry', 'getColumnRegistry']
 
+  maps2.mapper:
+    class: 'JWeiland\Maps2\Mapper\MapperInterface'
+    factory: ['@JWeiland\Maps2\Mapper\MapperFactory', 'create']
+    arguments:
+      - '@=service("JWeiland\\Maps2\\Helper\\MapHelper").getMapProvider()'
+
   maps2.mapProviderRequest:
     class: 'JWeiland\Maps2\Client\Request\RequestInterface'
     factory: ['@JWeiland\Maps2\Client\Request\RequestFactory', 'create']
@@ -71,6 +77,9 @@ services:
   # Called by makeInstance in TYPO3's NodeRegistry
   JWeiland\Maps2\Form\Resolver\MapProviderResolver:
     public: true
+    arguments:
+      $mapProviderFormElements: !tagged_iterator { tag: 'maps2.form.element' }
+      $mapProvider: '@=service("JWeiland\\Maps2\\Helper\\MapHelper").getMapProvider()'
 
   # Called by makeInstance in our PoiCollection
   JWeiland\Maps2\Helper\MapHelper:
@@ -85,6 +94,10 @@ services:
     public: true
     arguments:
       $columnRegistry: '@maps2.columnRegistry'
+
+  JWeiland\Maps2\Service\GeoCodeService:
+    arguments:
+      $mapper: '@maps2.mapper'
 
   # Called by makeInstance in PoiCollection model to add foreign records
   JWeiland\Maps2\Service\MapService:

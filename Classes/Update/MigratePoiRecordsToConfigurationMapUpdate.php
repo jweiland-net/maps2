@@ -17,20 +17,20 @@ use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\Upgrades\ConfirmableInterface;
+use TYPO3\CMS\Core\Upgrades\Confirmation;
 use TYPO3\CMS\Core\Upgrades\DatabaseUpdatedPrerequisite;
 use TYPO3\CMS\Core\Upgrades\UpgradeWizardInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Install\Updates\Confirmation;
 
 /**
  * With maps2 10.0.0 we have removed the poi table.
  * Use this Upgrade Wizard to migrate all poi records as JSON into the configuration_map column of poicollection record
  */
 #[UpgradeWizard('maps2_migratePoiRecord')]
-class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterface, ConfirmableInterface
+readonly class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterface, ConfirmableInterface
 {
     public function __construct(
-        private readonly ConnectionPool $connectionPool,
+        private ConnectionPool $connectionPool,
     ) {}
 
     public function getTitle(): string

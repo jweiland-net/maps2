@@ -160,7 +160,7 @@ class PoiCollectionRepository extends Repository
             $columns = array_map(
                 static fn(string $column): string => self::TABLE . '.' . $column,
                 array_keys(
-                    $schemaManager->listTableColumns('tx_maps2_domain_model_poicollection') ?? [],
+                    $schemaManager->introspectTableColumnsByUnquotedName('tx_maps2_domain_model_poicollection') ?? [],
                 ),
             );
         } catch (Exception) {

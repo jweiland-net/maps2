@@ -20,7 +20,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * Little helper with a very reduced set of dependencies like Extbase. Useful, if you need f.e. the configured
  * MapProvider at a very early state of TYPO3 like Middlewares.
  */
-class MapHelper
+readonly class MapHelper
 {
     use GetTypo3RequestTrait;
 

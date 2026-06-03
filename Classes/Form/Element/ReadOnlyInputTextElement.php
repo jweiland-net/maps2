@@ -155,7 +155,7 @@ class ReadOnlyInputTextElement extends AbstractFormElement
             $attributes['minlength'] = (string)$minLength;
         }
         if (!empty($config['placeholder'])) {
-            $attributes['placeholder'] = trim($config['placeholder'] ?? '');
+            $attributes['placeholder'] = trim($config['placeholder']);
         }
         if (isset($config['autocomplete'])) {
             $attributes['autocomplete'] = empty($config['autocomplete']) ? 'new-' . $fieldName : 'on';

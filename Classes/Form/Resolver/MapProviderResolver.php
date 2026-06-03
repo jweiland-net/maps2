@@ -11,19 +11,20 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Form\Resolver;
 
-use JWeiland\Maps2\Form\Element\GoogleMapsElement;
-use JWeiland\Maps2\Form\Element\OpenStreetMapElement;
-use JWeiland\Maps2\Helper\MapHelper;
+use JWeiland\Maps2\Configuration\MapProviderEnum;
 use TYPO3\CMS\Backend\Form\NodeResolverInterface;
 
 /**
  * This resolver decides with which map provider the map should be rendered. Either Google Maps or Open Street Map.
  */
-class MapProviderResolver implements NodeResolverInterface
+final class MapProviderResolver implements NodeResolverInterface
 {
     protected array $data;
 
-    public function __construct(protected MapHelper $mapHelper) {}
+    public function __construct(
+        private readonly iterable $mapProviderFormElements,
+        private readonly MapProviderEnum $mapProvider,
+    ) {}
 
     /**
      * Retrieve the current data array from NodeFactory.
@@ -34,16 +35,18 @@ class MapProviderResolver implements NodeResolverInterface
     }
 
     /**
-     * Returns either a map based on Google Maps or Open Street Map
+     * Returns either a map based on Google Maps or OpenStreetMap
      *
      * @return string New class name
      */
     public function resolve(): string
     {
-        if ($this->mapHelper->getMapProvider($this->data['databaseRow']) === 'osm') {
-            return OpenStreetMapElement::class;
+        foreach ($this->mapProviderFormElements as $mapProviderFormElement) {
+            if ($mapProviderFormElement->canProcess($this->mapProvider)) {
+                return $mapProviderFormElement::class;
+            }
         }
 
-        return GoogleMapsElement::class;
+        return '';
     }
 }
