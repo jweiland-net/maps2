@@ -11,7 +11,6 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Tests\Functional\Service;
 
-use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Event\PreAddForeignRecordEvent;
@@ -25,8 +24,6 @@ use TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
 use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 /**
@@ -36,17 +33,14 @@ class MapServiceTest extends FunctionalTestCase
 {
     protected MapService $subject;
 
-    protected ConfigurationManagerInterface|MockObject $configurationManagerMock;
-
     protected MessageHelper|MockObject $messageHelperMock;
 
     protected Maps2Registry|MockObject $maps2RegistryMock;
 
-    protected ExtConf $extConf;
-
     protected EventDispatcherInterface|MockObject $eventDispatcherMock;
 
     protected array $testExtensionsToLoad = [
+        __DIR__ . '/../Fixtures/Extensions/address',
         'jweiland/maps2',
     ];
 
@@ -54,7 +48,7 @@ class MapServiceTest extends FunctionalTestCase
     {
         parent::setUp();
 
-        $this->importCSVDataSet(__DIR__ . '/../Fixtures/tx_events2_domain_model_location.csv');
+        $this->importCSVDataSet(__DIR__ . '/../Fixtures/tx_address_domain_model_address.csv');
 
         $GLOBALS['TYPO3_REQUEST'] = (new ServerRequest('https://www.example.com/'))
             ->withAttribute('applicationType', SystemEnvironmentBuilder::REQUESTTYPE_FE);
@@ -63,18 +57,11 @@ class MapServiceTest extends FunctionalTestCase
         $this->maps2RegistryMock = $this->createMock(Maps2Registry::class);
         $this->eventDispatcherMock = $this->createMock(EventDispatcher::class);
 
-        // Override partials path to prevent using f:format.html VH. It checks against applicationType which is not present in TYPO3 10.
-        $this->configurationManagerMock = $this->createMock(ConfigurationManager::class);
-
-        // Replace default template to prevent calling cache VHs. They check against FE
-        $this->extConf = new ExtConf();
-
         $this->subject = new MapService(
-            $this->configurationManagerMock,
             $this->messageHelperMock,
             $this->maps2RegistryMock,
-            $this->extConf,
             $this->eventDispatcherMock,
+            $this->getConnectionPool(),
         );
     }
 
@@ -82,10 +69,8 @@ class MapServiceTest extends FunctionalTestCase
     {
         unset(
             $this->subject,
-            $this->configurationManagerMock,
             $this->messageHelperMock,
             $this->maps2RegistryMock,
-            $this->extConf,
             $this->eventDispatcherMock,
         );
 
@@ -178,7 +163,7 @@ class MapServiceTest extends FunctionalTestCase
         $this->subject->assignPoiCollectionToForeignRecord(
             0,
             $foreignRecord,
-            'tx_events2_domain_model_location',
+            'tx_address_domain_model_address',
         );
     }
 
@@ -206,7 +191,7 @@ class MapServiceTest extends FunctionalTestCase
         $this->subject->assignPoiCollectionToForeignRecord(
             1,
             $foreignRecord,
-            'tx_events2_domain_model_location',
+            'tx_address_domain_model_address',
         );
     }
 
@@ -252,7 +237,7 @@ class MapServiceTest extends FunctionalTestCase
         $this->subject->assignPoiCollectionToForeignRecord(
             1,
             $foreignRecord,
-            'tx_events2_domain_model_location',
+            'tx_address_domain_model_address',
             '  ',
         );
     }
@@ -299,7 +284,7 @@ class MapServiceTest extends FunctionalTestCase
         $this->subject->assignPoiCollectionToForeignRecord(
             1,
             $foreignRecord,
-            'tx_events2_domain_model_location',
+            'tx_address_domain_model_address',
             'invalidField',
         );
     }
@@ -328,7 +313,7 @@ class MapServiceTest extends FunctionalTestCase
         $this->subject->assignPoiCollectionToForeignRecord(
             1,
             $foreignRecord,
-            'tx_events2_domain_model_location',
+            'tx_address_domain_model_address',
         );
 
         self::assertSame(
@@ -336,13 +321,13 @@ class MapServiceTest extends FunctionalTestCase
             $newUid,
         );
 
-        $locationRecord = $this->getConnectionPool()
-            ->getConnectionForTable('tx_events2_domain_model_location')
-            ->select(['*'], 'tx_events2_domain_model_location', ['uid' => 1])
+        $addressRecord = $this->getConnectionPool()
+            ->getConnectionForTable('tx_address_domain_model_address')
+            ->select(['*'], 'tx_address_domain_model_address', ['uid' => 1])
             ->fetchAssociative();
 
         self::assertSame(
-            $locationRecord['tx_maps2_uid'],
+            $addressRecord['tx_maps2_uid'],
             $newUid,
         );
     }
@@ -389,7 +374,7 @@ class MapServiceTest extends FunctionalTestCase
             ->expects($this->atLeastOnce())
             ->method('getColumnRegistry')
             ->willReturn([
-                'tx_events2_domain_model_location' => [
+                'tx_address_domain_model_address' => [
                     'tx_maps2_uid' => [],
                 ],
             ]);
@@ -413,12 +398,12 @@ class MapServiceTest extends FunctionalTestCase
         $this->subject->assignPoiCollectionToForeignRecord(
             $newUid,
             $foreignRecord,
-            'tx_events2_domain_model_location',
+            'tx_address_domain_model_address',
         );
 
         $event = new PreAddForeignRecordEvent(
             $foreignRecord,
-            'tx_events2_domain_model_location',
+            'tx_address_domain_model_address',
             'tx_maps2_uid',
         );
 

@@ -12,7 +12,6 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Service;
 
 use Doctrine\DBAL\Driver\Exception as DBALException;
-use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Event\PreAddForeignRecordEvent;
@@ -26,20 +25,17 @@ use TYPO3\CMS\Core\Database\Query\Restriction\FrontendRestrictionContainer;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 
 /**
  * This class contains recurring methods for both map providers.
  */
-class MapService
+readonly class MapService
 {
     public function __construct(
-        protected ConfigurationManagerInterface $configurationManager,
         protected MessageHelper $messageHelper,
         protected Maps2Registry $maps2Registry,
-        protected ExtConf $extConf,
         protected EventDispatcherInterface $eventDispatcher,
-        private readonly ConnectionPool $connectionPool,
+        protected ConnectionPool $connectionPool,
     ) {}
 
     protected function getColumnRegistry(): array
@@ -85,13 +81,13 @@ class MapService
         // you don't like the current fieldValues? Override them with $overrideFieldValues
         ArrayUtility::mergeRecursiveWithOverrule($fieldValues, $overrideFieldValues);
 
-        // remove all fields, which are not set in DB
+        // remove all fields which are not set in DB
         $fieldValues = array_intersect_key(
             $fieldValues,
             DatabaseUtility::getColumnsFromTable('tx_maps2_domain_model_poicollection'),
         );
 
-        $connection = $this->getConnectionPool()->getConnectionForTable('tx_maps2_domain_model_poicollection');
+        $connection = $this->connectionPool->getConnectionForTable('tx_maps2_domain_model_poicollection');
         $connection->insert(
             'tx_maps2_domain_model_poicollection',
             $fieldValues,
@@ -101,7 +97,7 @@ class MapService
     }
 
     /**
-     * Assign PoiCollection UID to foreign record
+     * Assign PoiCollection UID to a foreign record
      *
      * @param int $poiCollectionUid This must be the UID of the newly created POI collection record
      * @param array $foreignRecord This is the record of the foreign extensions. It must be an already saved record, and it MUST HAVE an UID assigned
@@ -185,7 +181,7 @@ class MapService
             return;
         }
 
-        $connection = $this->getConnectionPool()->getConnectionForTable($foreignTableName);
+        $connection = $this->connectionPool->getConnectionForTable($foreignTableName);
         $connection->update(
             $foreignTableName,
             [$foreignFieldName => $poiCollectionUid],
@@ -212,7 +208,7 @@ class MapService
         // Loop through all configured tables and columns and add the foreignRecord to PoiCollection
         foreach ($columnRegistry as $tableName => $columns) {
             foreach ($columns as $columnName => $configuration) {
-                $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable($tableName);
+                $queryBuilder = $this->connectionPool->getQueryBuilderForTable($tableName);
                 $queryBuilder->setRestrictions(
                     GeneralUtility::makeInstance(FrontendRestrictionContainer::class),
                 );
@@ -230,7 +226,7 @@ class MapService
                         ->executeQuery();
 
                     while ($foreignRecord = $statement->fetchAssociative()) {
-                        // Hopefully these keys are unique enough
+                        // Hopefully, these keys are unique enough
                         // Very useful to f:groupedFor in Fluid Templates
                         $foreignRecord['jwMaps2TableName'] = $tableName;
                         $foreignRecord['jwMaps2ColumnName'] = $columnName;
@@ -252,8 +248,8 @@ class MapService
     }
 
     /**
-     * Use this EventListener, if you want to modify the foreign record, before adding it to PoiCollection record.
-     * If you set $foreignRecord to empty array it will NOT be added to PoiCollection.
+     * Use this EventListener if you want to modify the foreign record, before adding it to PoiCollection record.
+     * If you set $foreignRecord to an empty array, it will NOT be added to PoiCollection.
      */
     protected function emitPreAddForeignRecordToPoiCollectionEvent(
         array $foreignRecord,
@@ -268,10 +264,5 @@ class MapService
         ));
 
         return $event->getForeignRecord();
-    }
-
-    protected function getConnectionPool(): ConnectionPool
-    {
-        return $this->connectionPool;
     }
 }
