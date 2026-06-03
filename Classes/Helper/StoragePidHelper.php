@@ -29,12 +29,12 @@ readonly class StoragePidHelper
 
     public function getDefaultStoragePidForNewPoiCollection(
         array $foreignLocationRecord,
-        array $options,
+        array $maps2RegistryColumnConfiguration,
     ): int {
         $defaultStoragePid = 0;
 
         $this->updateStoragePidFromForeignLocationRecord($defaultStoragePid, $foreignLocationRecord);
-        $this->updateStoragePidFromMaps2Registry($defaultStoragePid, $options, $foreignLocationRecord);
+        $this->updateStoragePidFromMaps2Registry($defaultStoragePid, $maps2RegistryColumnConfiguration, $foreignLocationRecord);
         $this->updateDefaultStoragePidFromPageTsConfig($defaultStoragePid, $foreignLocationRecord);
 
         if ($defaultStoragePid === 0) {
@@ -72,13 +72,13 @@ readonly class StoragePidHelper
      */
     protected function updateStoragePidFromMaps2Registry(
         int &$defaultStoragePid,
-        array $options,
+        array $maps2RegistryColumnConfiguration,
         array $foreignLocationRecord,
     ): void {
-        if (array_key_exists('defaultStoragePid', $options)) {
-            $storagePid = $this->getHardCodedStoragePidFromMaps2Registry($options);
+        if (array_key_exists('defaultStoragePid', $maps2RegistryColumnConfiguration)) {
+            $storagePid = $this->getHardCodedStoragePidFromMaps2Registry($maps2RegistryColumnConfiguration);
             if ($storagePid === 0) {
-                $storagePid = $this->getDynamicStoragePidFromMaps2Registry($options, $foreignLocationRecord);
+                $storagePid = $this->getDynamicStoragePidFromMaps2Registry($maps2RegistryColumnConfiguration, $foreignLocationRecord);
             }
 
             if ($storagePid === 0) {
@@ -99,21 +99,21 @@ readonly class StoragePidHelper
      * Very bad idea, because default storage PID was hard-coded in a foreign extension. You should always try to avoid
      * this way and use the dynamic variant instead.
      */
-    protected function getHardCodedStoragePidFromMaps2Registry(array $options): int
+    protected function getHardCodedStoragePidFromMaps2Registry(array $maps2RegistryColumnConfiguration): int
     {
-        if (is_array($options['defaultStoragePid'])) {
+        if (is_array($maps2RegistryColumnConfiguration['defaultStoragePid'])) {
             return 0;
         }
 
-        if (!MathUtility::canBeInterpretedAsInteger($options['defaultStoragePid'])) {
+        if (!MathUtility::canBeInterpretedAsInteger($maps2RegistryColumnConfiguration['defaultStoragePid'])) {
             return 0;
         }
 
-        if ((int)$options['defaultStoragePid'] <= 0) {
+        if ((int)$maps2RegistryColumnConfiguration['defaultStoragePid'] <= 0) {
             return 0;
         }
 
-        return (int)$options['defaultStoragePid'];
+        return (int)$maps2RegistryColumnConfiguration['defaultStoragePid'];
     }
 
     /**
@@ -121,11 +121,11 @@ readonly class StoragePidHelper
      * A way better idea as getHardCodedStoragePidFromMaps2Registry, as that way we read storage PID dynamically from
      * foreign extension configuration ext_conf_template.txt.
      */
-    protected function getDynamicStoragePidFromMaps2Registry(array $options, array $foreignLocationRecord): int
+    protected function getDynamicStoragePidFromMaps2Registry(array $maps2RegistryColumnConfiguration, array $foreignLocationRecord): int
     {
-        if (is_array($options['defaultStoragePid'])) {
+        if (is_array($maps2RegistryColumnConfiguration['defaultStoragePid'])) {
             $hasSubConfiguration = true;
-            foreach ($options['defaultStoragePid'] as $configuration) {
+            foreach ($maps2RegistryColumnConfiguration['defaultStoragePid'] as $configuration) {
                 if (!is_array($configuration)) {
                     $hasSubConfiguration = false;
                     break;
@@ -134,7 +134,7 @@ readonly class StoragePidHelper
 
             if ($hasSubConfiguration) {
                 $defaultStoragePid = 0;
-                foreach ($options['defaultStoragePid'] as $configuration) {
+                foreach ($maps2RegistryColumnConfiguration['defaultStoragePid'] as $configuration) {
                     if ($defaultStoragePid === 0) {
                         $defaultStoragePid = $this->getDynamicStoragePidBySingleArray(
                             $configuration,
@@ -146,7 +146,7 @@ readonly class StoragePidHelper
                 return $defaultStoragePid;
             }
 
-            return $this->getDynamicStoragePidBySingleArray($options['defaultStoragePid'], $foreignLocationRecord);
+            return $this->getDynamicStoragePidBySingleArray($maps2RegistryColumnConfiguration['defaultStoragePid'], $foreignLocationRecord);
         }
 
         return 0;
@@ -236,11 +236,11 @@ readonly class StoragePidHelper
     }
 
     /**
-     * Get pageTSconfig for given extension key (ext.ext_key.*)
+     * Get pageTSconfig for the given extension key (ext.ext_key.*)
      *
      * @throws \Exception
      */
-    public function getTsConfig(array $locationRecord, string $extKey = 'maps2'): array
+    protected function getTsConfig(array $locationRecord, string $extKey = 'maps2'): array
     {
         if (
             array_key_exists('pid', $locationRecord)
