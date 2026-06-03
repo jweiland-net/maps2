@@ -14,7 +14,6 @@ namespace JWeiland\Maps2\Tca;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Database\Event\AlterTableDefinitionStatementsEvent;
 use TYPO3\CMS\Core\Localization\LanguageService;
-use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -22,36 +21,29 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 /**
  * Class to register maps2 columns to TCA.
  */
-class Maps2Registry implements SingletonInterface
+class Maps2Registry
 {
+    protected const CONFIGURATION_FILE = '/Maps2/Registry.json';
+
     protected array $registry = [];
 
     protected array $extensions = [];
 
     protected array $addedMaps2Tabs = [];
 
-    protected string $configurationFile = '';
-
-    protected string $template = '';
-
     public static function getInstance(): self
     {
         return GeneralUtility::makeInstance(self::class);
     }
 
-    public function __construct()
-    {
-        $this->configurationFile = Environment::getConfigPath() . '/Maps2/Registry.json';
-        $this->template = str_repeat(PHP_EOL, 3) . 'CREATE TABLE %s (' . PHP_EOL
-            . '  %s int(11) unsigned DEFAULT \'0\' NOT NULL' . PHP_EOL . ');' . str_repeat(PHP_EOL, 3);
-    }
-
     protected function initialize(): void
     {
-        if (@is_file($this->configurationFile)) {
+        $configurationFile = $this->getConfigurationFile();
+
+        if (@is_file($configurationFile)) {
             try {
                 $configuration = json_decode(
-                    file_get_contents($this->configurationFile),
+                    file_get_contents($configurationFile),
                     true,
                     512,
                     JSON_THROW_ON_ERROR,
@@ -71,8 +63,8 @@ class Maps2Registry implements SingletonInterface
                 $this->extensions = [];
             }
         } else {
-            GeneralUtility::mkdir_deep(dirname($this->configurationFile));
-            GeneralUtility::writeFile($this->configurationFile, '{}');
+            GeneralUtility::mkdir_deep(dirname($configurationFile));
+            GeneralUtility::writeFile($configurationFile, '{}');
         }
     }
 
@@ -125,7 +117,7 @@ class Maps2Registry implements SingletonInterface
         if (isset($GLOBALS['TCA'][$tableName]['columns'])) {
             $this->applyTcaForTableAndField($tableName, $fieldName);
             file_put_contents(
-                $this->configurationFile,
+                $this->getConfigurationFile(),
                 json_encode([
                     'registry' => $this->registry,
                     'extensions' => $this->extensions,
@@ -138,17 +130,19 @@ class Maps2Registry implements SingletonInterface
     }
 
     /**
-     * Reads, extract and returns Maps2 Column Configuration (Registry)
+     * Reads, extract, and returns Maps2 Column Configuration (Registry)
      *
      * @api
      */
     public function getColumnRegistry(): array
     {
+        $configurationFile = $this->getConfigurationFile();
+
         $columnRegistry = [];
-        if (@is_file($this->configurationFile)) {
+        if (@is_file($configurationFile)) {
             try {
                 $configuration = json_decode(
-                    file_get_contents($this->configurationFile),
+                    file_get_contents($configurationFile),
                     true,
                     512,
                     JSON_THROW_ON_ERROR,
@@ -210,11 +204,12 @@ class Maps2Registry implements SingletonInterface
             return '';
         }
 
+        $sqlTemplate = $this->getSqlTemplate();
         $sql = '';
 
         foreach ($this->extensions[$extensionKey] as $tableName => $fields) {
             foreach ($fields as $fieldName) {
-                $sql .= sprintf($this->template, $tableName, $fieldName);
+                $sql .= sprintf($sqlTemplate, $tableName, $fieldName);
             }
         }
 
@@ -431,5 +426,17 @@ class Maps2Registry implements SingletonInterface
         }
 
         unset($this->addedMaps2Tabs[$tableName]);
+    }
+
+    protected function getConfigurationFile(): string
+    {
+        return Environment::getConfigPath() . self::CONFIGURATION_FILE;
+    }
+
+    protected function getSqlTemplate(): string
+    {
+        return str_repeat(PHP_EOL, 3)
+            . 'CREATE TABLE %s (' . PHP_EOL . '  %s int(11) unsigned DEFAULT \'0\' NOT NULL' . PHP_EOL . ');'
+            . str_repeat(PHP_EOL, 3);
     }
 }
