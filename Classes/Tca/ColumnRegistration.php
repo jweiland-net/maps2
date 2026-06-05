@@ -24,15 +24,6 @@ final readonly class ColumnRegistration
     private string $columnName;
 
     /**
-     * Choose the address columns from the table declared above.
-     * All columns have to be registered in TCA of TYPO3.
-     * We prefer to order the columns like used in the address form
-     * for the best matches with geocoding APIs.
-     * F.e. Street, house number, zip, city, country
-     */
-    private array $addressColumns;
-
-    /**
      * Choose the country column from the address columns above that should be used
      * as the country column
      */
@@ -46,58 +37,52 @@ final readonly class ColumnRegistration
      */
     private string $defaultCountry;
 
-    /**
-     * Column Match
-     */
-    private array $columnMatch;
-
-    /**
-     * The default storage PID
-     *
-     * This PID will be used to store the map records if no PID is provided
-     * by the foreign location record.
-     *
-     * If integer, the value will be used as it is
-     * Use array of StoragePidConfiguration objects to add more complex configurations
-     *
-     * @var int|StoragePidLocation[]
-     */
-    private int|array $defaultStoragePid;
-
-    /**
-     * Columns to synchronize from foreign table to poi collection table
-     * of maps2.
-     *
-     * @var SynchronizeColumn[]
-     */
-    private array $synchronizeColumns;
-
-    /**
-     * If another extension already adds a column configuration, you have the possibility
-     * to override their column configuration with your own one.
-     */
-    private bool $override;
-
     public function __construct(
         string $tableName,
         string $columnName,
-        array $addressColumns,
+        /**
+         * Choose the address columns from the table declared above.
+         * All columns have to be registered in TCA of TYPO3.
+         * We prefer to order the columns like used in the address form
+         * for the best matches with geocoding APIs.
+         * F.e. Street, house number, zip, city, country
+         */
+        private array $addressColumns,
         string $countryColumn = '',
         string $defaultCountry = '',
-        array $columnMatch = [],
-        int|array $defaultStoragePid = 0,
-        array $synchronizeColumns = [],
-        bool $override = false,
+        /**
+         * Column Match
+         */
+        private array $columnMatch = [],
+        /**
+         * The default storage PID
+         *
+         * This PID will be used to store the map records if no PID is provided
+         * by the foreign location record.
+         *
+         * If integer, the value will be used as it is
+         * Use array of StoragePidConfiguration objects to add more complex configurations
+         *
+         * @var int|StoragePidLocation[]
+         */
+        private int|array $defaultStoragePid = 0,
+        /**
+         * Columns to synchronize from foreign table to poi collection table
+         * of maps2.
+         *
+         * @var SynchronizeColumn[]
+         */
+        private array $synchronizeColumns = [],
+        /**
+         * If another extension already adds a column configuration, you have the possibility
+         * to override their column configuration with your own one.
+         */
+        private bool $override = false,
     ) {
         $this->tableName = strtolower(trim($tableName));
         $this->columnName = strtolower(trim($columnName));
-        $this->addressColumns = $addressColumns;
         $this->countryColumn = trim($countryColumn);
         $this->defaultCountry = trim($defaultCountry);
-        $this->columnMatch = $columnMatch;
-        $this->defaultStoragePid = $defaultStoragePid;
-        $this->synchronizeColumns = $synchronizeColumns;
-        $this->override = $override;
     }
 
     public function getTableName(): string
@@ -115,8 +100,8 @@ final readonly class ColumnRegistration
         $addressColumns = $this->addressColumns;
 
         // remove countryColumn from addressColumns
-        if (($this->getCountryColumn() !== '' && $this->getCountryColumn() !== '0')) {
-            $key = array_search($this->getCountryColumn(), $addressColumns);
+        if (($this->countryColumn !== '' && $this->countryColumn !== '0')) {
+            $key = array_search($this->countryColumn, $addressColumns);
             if ($key) {
                 unset($addressColumns[$key]);
             }

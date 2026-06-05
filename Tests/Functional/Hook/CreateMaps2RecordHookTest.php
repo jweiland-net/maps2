@@ -48,7 +48,6 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
         $this->setUpBackendUser(1);
 
         $this->importCSVDataSet(__DIR__ . '/../Fixtures/tx_address_domain_model_address.csv');
-
     }
 
     #[Test]
@@ -68,7 +67,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
 
         $cacheMock = $this->createMock(FrontendInterface::class);
         $cacheMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('flushByTag')
             ->willReturnMap([
                 ['infoWindowUid123'],
@@ -77,7 +76,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
 
         $cacheManagerMock = $this->createMock(CacheManager::class);
         $cacheManagerMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('getCache')
             ->willReturn($cacheMock);
 
@@ -148,7 +147,7 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
                     columnName: 'tx_maps2_uid',
                     addressColumns: ['street', 'zip', 'city'],
                     countryColumn: 'country',
-                )
+                ),
             ]),
             $this->get(EventDispatcherInterface::class),
             $this->get(TcaSchemaFactory::class),

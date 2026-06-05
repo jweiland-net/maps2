@@ -93,7 +93,7 @@ class GoogleMapsClientTest extends FunctionalTestCase
             ->expects($this->atLeastOnce())
             ->method('request')
             ->with(
-                'https://maps.googleapis.com/maps/api/geocode/json?address=Filderstadt&key=ApiKey'
+                'https://maps.googleapis.com/maps/api/geocode/json?address=Filderstadt&key=ApiKey',
             )
             ->willReturn(new HtmlResponse('Client Error', 500));
 
@@ -123,7 +123,7 @@ class GoogleMapsClientTest extends FunctionalTestCase
             ->expects($this->atLeastOnce())
             ->method('request')
             ->with(
-                'https://maps.googleapis.com/maps/api/geocode/json?address=Filderstadt&key=ApiKey'
+                'https://maps.googleapis.com/maps/api/geocode/json?address=Filderstadt&key=ApiKey',
             )
             ->willReturn(new JsonResponse(
                 [
@@ -160,7 +160,7 @@ class GoogleMapsClientTest extends FunctionalTestCase
             ->expects($this->atLeastOnce())
             ->method('request')
             ->with(
-                'https://maps.googleapis.com/maps/api/geocode/json?address=Filderstadt&key=ApiKey'
+                'https://maps.googleapis.com/maps/api/geocode/json?address=Filderstadt&key=ApiKey',
             )
             ->willReturn(new JsonResponse(
                 [
@@ -199,7 +199,7 @@ class GoogleMapsClientTest extends FunctionalTestCase
             ->expects($this->atLeastOnce())
             ->method('request')
             ->with(
-                'https://maps.googleapis.com/maps/api/geocode/json?address=K%C3%B6ln%20Bonn&key=ApiKey'
+                'https://maps.googleapis.com/maps/api/geocode/json?address=K%C3%B6ln%20Bonn&key=ApiKey',
             )
             ->willReturn(new JsonResponse(
                 [
@@ -227,7 +227,7 @@ class GoogleMapsClientTest extends FunctionalTestCase
             ->expects($this->atLeastOnce())
             ->method('request')
             ->with(
-                'https://maps.googleapis.com/maps/api/geocode/json?address=12345%20Germany&key=ApiKey'
+                'https://maps.googleapis.com/maps/api/geocode/json?address=12345%20Germany&key=ApiKey',
             )
             ->willReturn(new JsonResponse(
                 [

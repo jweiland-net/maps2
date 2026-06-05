@@ -45,7 +45,7 @@ readonly class StoragePidHelper
                 'maps2',
                 'defaultStoragePid',
                 StoragePidLocationTypeEnum::PAGE_TS_CONFIG,
-            )
+            ),
         );
 
         if ($defaultStoragePid === 0) {

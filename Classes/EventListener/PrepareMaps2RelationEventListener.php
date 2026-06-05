@@ -25,10 +25,12 @@ final readonly class PrepareMaps2RelationEventListener
         $tca = $event->getTca();
 
         foreach ($tca as &$tableDefinition) {
-            if (!isset($tableDefinition['columns']) || !is_array($tableDefinition['columns'])) {
+            if (!isset($tableDefinition['columns'])) {
                 continue;
             }
-
+            if (!is_array($tableDefinition['columns'])) {
+                continue;
+            }
             foreach ($tableDefinition['columns'] as &$fieldConfig) {
                 if (($fieldConfig['config']['type'] ?? '') !== 'group') {
                     continue;

@@ -11,8 +11,6 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Domain\Repository;
 
-use Doctrine\DBAL\Exception;
-use Doctrine\DBAL\Schema\Column;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Event\ModifyQueryOfFindPoiCollectionsEvent;
 use JWeiland\Maps2\Helper\OverlayHelper;

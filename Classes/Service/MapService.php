@@ -12,7 +12,6 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Service;
 
 use Doctrine\DBAL\Exception;
-use Doctrine\DBAL\Schema\Column;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Event\PreAddForeignRecordEvent;

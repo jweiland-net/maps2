@@ -17,22 +17,17 @@ use TYPO3\CMS\Backend\Form\NodeResolverInterface;
 /**
  * This resolver decides with which map provider the map should be rendered. Either Google Maps or Open Street Map.
  */
-final class MapProviderResolver implements NodeResolverInterface
+final readonly class MapProviderResolver implements NodeResolverInterface
 {
-    protected array $data;
-
     public function __construct(
-        private readonly iterable $mapProviderFormElements,
-        private readonly MapProviderEnum $mapProvider,
+        private iterable $mapProviderFormElements,
+        private MapProviderEnum $mapProvider,
     ) {}
 
     /**
      * Retrieve the current data array from NodeFactory.
      */
-    public function setData(array $data): void
-    {
-        $this->data = $data;
-    }
+    public function setData(array $data): void {}
 
     /**
      * Returns either a map based on Google Maps or OpenStreetMap

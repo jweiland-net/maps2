@@ -101,7 +101,7 @@ class OpenStreetMapElementTest extends FunctionalTestCase
         $viewMock
             ->expects($this->exactly(2))
             ->method('assign')
-            ->willReturnCallback(function (string $key, $value) use ($record, $viewMock) {
+            ->willReturnCallback(function (string $key, $value) use ($record, $viewMock): MockObject {
                 match ($key) {
                     'poiCollection' => $this->assertSame(json_encode($record), $value),
                     'extConf' => true, // Simulates the old $this->anything() behavior

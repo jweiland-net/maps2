@@ -121,7 +121,7 @@ class OpenStreetMapClientTest extends FunctionalTestCase
             ->expects($this->atLeastOnce())
             ->method('request')
             ->with(
-                'https://nominatim.openstreetmap.org/search?q=Filderstadt&format=json&addressdetails=1'
+                'https://nominatim.openstreetmap.org/search?q=Filderstadt&format=json&addressdetails=1',
             )
             ->willReturn(new JsonResponse(
                 [],
@@ -152,7 +152,7 @@ class OpenStreetMapClientTest extends FunctionalTestCase
             ->expects($this->atLeastOnce())
             ->method('request')
             ->with(
-                'https://nominatim.openstreetmap.org/search?q=K%C3%B6ln%20Bonn&format=json&addressdetails=1'
+                'https://nominatim.openstreetmap.org/search?q=K%C3%B6ln%20Bonn&format=json&addressdetails=1',
             )
             ->willReturn(new JsonResponse(
                 [
@@ -180,7 +180,7 @@ class OpenStreetMapClientTest extends FunctionalTestCase
             ->expects($this->atLeastOnce())
             ->method('request')
             ->with(
-                'https://nominatim.openstreetmap.org/search?q=12345%20Germany&format=json&addressdetails=1'
+                'https://nominatim.openstreetmap.org/search?q=12345%20Germany&format=json&addressdetails=1',
             )
             ->willReturn(new JsonResponse(
                 [

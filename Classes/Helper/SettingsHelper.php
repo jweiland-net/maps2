@@ -99,14 +99,11 @@ readonly class SettingsHelper
     private function getPluginConfiguration(ServerRequestInterface $request): array
     {
         $setup = $this->getTypoScriptSetup($request);
-
-        $pluginConfiguration = [];
-
         if (isset($setup['plugin.']['tx_maps2.']) && is_array($setup['plugin.']['tx_maps2.'])) {
-            $pluginConfiguration = $this->typoScriptService->convertTypoScriptArrayToPlainArray($setup['plugin.']['tx_maps2.']);
+            return $this->typoScriptService->convertTypoScriptArrayToPlainArray($setup['plugin.']['tx_maps2.']);
         }
 
-        return $pluginConfiguration;
+        return [];
     }
 
     protected function getTypoScriptSetup(ServerRequestInterface $request): array

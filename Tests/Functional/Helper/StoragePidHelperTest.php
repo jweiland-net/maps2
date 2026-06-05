@@ -49,7 +49,7 @@ class StoragePidHelperTest extends FunctionalTestCase
 
         $this->subject = new StoragePidHelper(
             $this->messageHelperMock,
-            $this->get(ExtensionConfiguration::class)
+            $this->get(ExtensionConfiguration::class),
         );
     }
 
@@ -179,7 +179,7 @@ class StoragePidHelperTest extends FunctionalTestCase
                 new StoragePidLocation(
                     extKey: 'foreign_ext',
                     property: 'maps2Storage',
-                )
+                ),
             ],
         );
 
@@ -241,7 +241,7 @@ class StoragePidHelperTest extends FunctionalTestCase
                 new StoragePidLocation(
                     extKey: 'foreign_ext',
                     property: 'maps2Storage',
-                )
+                ),
             ],
         );
 
@@ -304,7 +304,7 @@ class StoragePidHelperTest extends FunctionalTestCase
                     extKey: 'foreign_ext',
                     property: 'maps2Storage',
                     type: StoragePidLocationTypeEnum::EXTENSION_MANAGER,
-                )
+                ),
             ],
         );
 
@@ -360,7 +360,7 @@ class StoragePidHelperTest extends FunctionalTestCase
                     extKey: 'foreign_ext',
                     property: 'maps2Storage',
                     type: StoragePidLocationTypeEnum::PAGE_TS_CONFIG,
-                )
+                ),
             ],
         );
 
@@ -416,7 +416,7 @@ class StoragePidHelperTest extends FunctionalTestCase
                     extKey: 'foreign_ext',
                     property: 'maps2Storage',
                     type: StoragePidLocationTypeEnum::PAGE_TS_CONFIG,
-                )
+                ),
             ],
         );
 

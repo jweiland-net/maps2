@@ -15,7 +15,6 @@ use JWeiland\Maps2\Client\GoogleMapsClient;
 use JWeiland\Maps2\Client\Request\GoogleMaps\GeocodeRequest;
 use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Mapper\GoogleMapsMapper;
-use JWeiland\Maps2\Mapper\MapperFactory;
 use JWeiland\Maps2\Service\GeoCodeService;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
