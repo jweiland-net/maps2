@@ -14,13 +14,12 @@ namespace JWeiland\Maps2\Tests\Functional\Helper;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Helper\AddressHelper;
 use JWeiland\Maps2\Helper\MessageHelper;
+use JWeiland\Maps2\Tca\ColumnRegistration;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Core\Country\CountryProvider;
-use TYPO3\CMS\Core\Package\PackageManager;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 /**
@@ -60,56 +59,6 @@ class AddressHelperTest extends FunctionalTestCase
     }
 
     #[Test]
-    public function getAddressWithMissingAddressColumnsKeyAddsFlashMessage(): void
-    {
-        $this->messageHelperMock
-            ->expects($this->atLeastOnce())
-            ->method('addFlashMessage')
-            ->with(
-                self::stringContains('addressColumns'),
-                'Key addressColumns is missing',
-                ContextualFeedbackSeverity::ERROR,
-            );
-
-        $record = [
-            'uid' => 100,
-            'title' => 'Market',
-        ];
-        $options = [];
-
-        self::assertSame(
-            '',
-            $this->subject->getAddress($record, $options),
-        );
-    }
-
-    #[Test]
-    public function getAddressWithEmptyAddressColumnsAddsFlashMessage(): void
-    {
-        $this->messageHelperMock
-            ->expects($this->atLeastOnce())
-            ->method('addFlashMessage')
-            ->with(
-                self::stringContains('required field'),
-                'Key addressColumns is empty',
-                ContextualFeedbackSeverity::ERROR,
-            );
-
-        $record = [
-            'uid' => 100,
-            'title' => 'Market',
-        ];
-        $options = [
-            'addressColumns' => [],
-        ];
-
-        self::assertSame(
-            '',
-            $this->subject->getAddress($record, $options),
-        );
-    }
-
-    #[Test]
     public function getAddressWithoutCountryButWithMaps2RegistryFallbackGeneratesNoFlashMessage(): void
     {
         $record = [
@@ -119,14 +68,16 @@ class AddressHelperTest extends FunctionalTestCase
             'zip' => '23145',
             'city' => 'Paris',
         ];
-        $options = [
-            'addressColumns' => ['street', 'zip', 'city'],
-            'defaultCountry' => 'France',
-        ];
+        $columnRegistration = new ColumnRegistration(
+            tableName: 'tt_address',
+            columnName: 'tx_maps2_uid',
+            addressColumns: ['street', 'zip', 'city'],
+            defaultCountry: 'France',
+        );
 
         self::assertSame(
             'Mainstreet 17 23145 Paris France',
-            $this->subject->getAddress($record, $options),
+            $this->subject->getAddress($record, $columnRegistration),
         );
     }
 
@@ -141,14 +92,16 @@ class AddressHelperTest extends FunctionalTestCase
             'city' => 'Filderstadt',
             'country' => 'de',
         ];
-        $options = [
-            'addressColumns' => ['street', 'zip', 'city'],
-            'countryColumn' => 'country',
-        ];
+        $columnRegistration = new ColumnRegistration(
+            tableName: 'tt_address',
+            columnName: 'tx_maps2_uid',
+            addressColumns: ['street', 'zip', 'city'],
+            countryColumn: 'country',
+        );
 
         self::assertSame(
             'Mainstreet 17 23145 Filderstadt Germany',
-            $this->subject->getAddress($record, $options),
+            $this->subject->getAddress($record, $columnRegistration),
         );
     }
 
@@ -163,14 +116,16 @@ class AddressHelperTest extends FunctionalTestCase
             'city' => 'Filderstadt',
             'country' => 'deu',
         ];
-        $options = [
-            'addressColumns' => ['street', 'zip', 'city'],
-            'countryColumn' => 'country',
-        ];
+        $columnRegistration = new ColumnRegistration(
+            tableName: 'tt_address',
+            columnName: 'tx_maps2_uid',
+            addressColumns: ['street', 'zip', 'city'],
+            countryColumn: 'country',
+        );
 
         self::assertSame(
             'Mainstreet 17 23145 Filderstadt Germany',
-            $this->subject->getAddress($record, $options),
+            $this->subject->getAddress($record, $columnRegistration),
         );
     }
 
@@ -185,14 +140,16 @@ class AddressHelperTest extends FunctionalTestCase
             'city' => 'Filderstadt',
             'country' => 'Germany',
         ];
-        $options = [
-            'addressColumns' => ['street', 'zip', 'city'],
-            'countryColumn' => 'country',
-        ];
+        $columnRegistration = new ColumnRegistration(
+            tableName: 'tt_address',
+            columnName: 'tx_maps2_uid',
+            addressColumns: ['street', 'zip', 'city'],
+            countryColumn: 'country',
+        );
 
         self::assertSame(
             'Mainstreet 17 23145 Filderstadt Germany',
-            $this->subject->getAddress($record, $options),
+            $this->subject->getAddress($record, $columnRegistration),
         );
     }
 
@@ -207,14 +164,16 @@ class AddressHelperTest extends FunctionalTestCase
             'city' => '     Madrid  ',
             'country' => '  Spain   ',
         ];
-        $options = [
-            'addressColumns' => ['street', 'zip', 'city'],
-            'countryColumn' => '    country   ',
-        ];
+        $columnRegistration = new ColumnRegistration(
+            tableName: 'tt_address',
+            columnName: 'tx_maps2_uid',
+            addressColumns: ['street', 'zip', 'city'],
+            countryColumn: '    country   ',
+        );
 
         self::assertSame(
             'Mainstreet 17 23145 Madrid Spain',
-            $this->subject->getAddress($record, $options),
+            $this->subject->getAddress($record, $columnRegistration),
         );
     }
 
@@ -229,37 +188,16 @@ class AddressHelperTest extends FunctionalTestCase
             'city' => '     Madrid  ',
             'country' => '  Spain   ',
         ];
-        $options = [
-            'addressColumns' => ['street', 'zip', 'city', 'country'],
-            'countryColumn' => '    country   ',
-        ];
+        $columnRegistration = new ColumnRegistration(
+            tableName: 'tt_address',
+            columnName: 'tx_maps2_uid',
+            addressColumns: ['street', 'zip', 'city', 'country'],
+            countryColumn: '    country   ',
+        );
 
         self::assertSame(
             'Mainstreet 17 23145 Madrid Spain',
-            $this->subject->getAddress($record, $options),
-        );
-    }
-
-    #[Test]
-    public function getAddressWillConvertCommaSeparatedAddressColumnsIntoArray(): void
-    {
-        $record = [
-            'uid' => 100,
-            'title' => 'Market',
-            'street' => 'Mainstreet',
-            'house_number' => '23',
-            'zip' => '00367',
-            'city' => 'Madrid',
-            'country' => '  Spain   ',
-        ];
-        $options = [
-            'addressColumns' => 'street, house_number, zip, city',
-            'countryColumn' => 'country',
-        ];
-
-        self::assertSame(
-            'Mainstreet 23 00367 Madrid Spain',
-            $this->subject->getAddress($record, $options),
+            $this->subject->getAddress($record, $columnRegistration),
         );
     }
 
@@ -289,17 +227,15 @@ class AddressHelperTest extends FunctionalTestCase
             'house_number' => '15',
             'city' => 'Cologne',
         ];
-        $options = [
-            'addressColumns' => [
-                'street',
-                'house_number',
-                'zip',
-                'city',
-            ],
-        ];
+        $columnRegistration = new ColumnRegistration(
+            tableName: 'tt_address',
+            columnName: 'tx_maps2_uid',
+            addressColumns: ['street', 'house_number', 'zip', 'city'],
+            countryColumn: '    country   ',
+        );
 
         self::assertTrue(
-            $this->subject->isSameAddress($address, $foreignLocationRecord, $options),
+            $this->subject->isSameAddress($address, $foreignLocationRecord, $columnRegistration),
         );
     }
 }
