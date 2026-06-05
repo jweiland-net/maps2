@@ -28,28 +28,25 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
  */
 class GeoCodeServiceTest extends UnitTestCase
 {
-    public $clientFactoryMock;
-    public $requestFactoryMock;
+    protected GeoCodeService $subject;
+
     protected MockObject $mapProviderClient;
 
     protected MockObject $mapperFactoryMock;
 
     protected MockObject $gmGeocodeRequestMock;
 
-    protected GeoCodeService $subject;
-
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->mapProviderClient = $this->createMock(GoogleMapsClient::class);
-        $this->mapperFactoryMock = $this->createMock(MapperFactory::class);
         $this->gmGeocodeRequestMock = $this->createMock(GeocodeRequest::class);
 
         $this->subject = new GeoCodeService(
             $this->mapProviderClient,
             $this->gmGeocodeRequestMock,
-            $this->mapperFactoryMock,
+            new GoogleMapsMapper(),
         );
     }
 
@@ -57,10 +54,7 @@ class GeoCodeServiceTest extends UnitTestCase
     {
         unset(
             $this->subject,
-            $this->clientFactoryMock,
             $this->mapProviderClient,
-            $this->requestFactoryMock,
-            $this->mapperFactoryMock,
             $this->gmGeocodeRequestMock,
         );
 
@@ -135,13 +129,6 @@ class GeoCodeServiceTest extends UnitTestCase
             ->with($this->gmGeocodeRequestMock)
             ->willReturn($response);
 
-        $googleMapsMapper = new GoogleMapsMapper();
-
-        $this->mapperFactoryMock
-            ->expects($this->atLeastOnce())
-            ->method('create')
-            ->willReturn($googleMapsMapper);
-
         self::assertCount(
             1,
             $this->subject->getPositionsByAddress('My private address'),
@@ -209,13 +196,6 @@ class GeoCodeServiceTest extends UnitTestCase
             ->method('processRequest')
             ->with($this->gmGeocodeRequestMock)
             ->willReturn($response);
-
-        $googleMapsMapper = new GoogleMapsMapper();
-
-        $this->mapperFactoryMock
-            ->expects($this->atLeastOnce())
-            ->method('create')
-            ->willReturn($googleMapsMapper);
 
         self::assertEquals(
             $expectedPosition,
