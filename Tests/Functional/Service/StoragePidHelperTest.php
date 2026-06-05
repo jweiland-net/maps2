@@ -11,9 +11,9 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Tests\Functional\Service;
 
-use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Helper\MessageHelper;
 use JWeiland\Maps2\Helper\StoragePidHelper;
+use JWeiland\Maps2\Tca\ColumnRegistration;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
@@ -65,7 +65,11 @@ class StoragePidHelperTest extends FunctionalTestCase
             0,
             $this->subject->getDefaultStoragePidForNewPoiCollection(
                 [],
-                [],
+                new ColumnRegistration(
+                    tableName: 'tt_address',
+                    columnName: 'tx_maps2_uid',
+                    addressColumns: [],
+                ),
             ),
         );
     }
@@ -79,7 +83,11 @@ class StoragePidHelperTest extends FunctionalTestCase
                 [
                     'pid' => 'ten',
                 ],
-                [],
+                new ColumnRegistration(
+                    tableName: 'tt_address',
+                    columnName: 'tx_maps2_uid',
+                    addressColumns: [],
+                ),
             ),
         );
     }
@@ -93,7 +101,11 @@ class StoragePidHelperTest extends FunctionalTestCase
                 [
                     'pid' => 12,
                 ],
-                [],
+                new ColumnRegistration(
+                    tableName: 'tt_address',
+                    columnName: 'tx_maps2_uid',
+                    addressColumns: [],
+                ),
             ),
         );
     }
@@ -107,9 +119,12 @@ class StoragePidHelperTest extends FunctionalTestCase
                 [
                     'pid' => 12,
                 ],
-                [
-                    'defaultStoragePid' => 24,
-                ],
+                new ColumnRegistration(
+                    tableName: 'tt_address',
+                    columnName: 'tx_maps2_uid',
+                    addressColumns: [],
+                    defaultStoragePid: 24,
+                ),
             ),
         );
     }
