@@ -15,8 +15,8 @@ final readonly class StoragePidLocation
 {
     public function __construct(
         private string $extKey,
-        private StoragePidLocationTypeEnum $type,
         private string $property,
+        private StoragePidLocationTypeEnum $type = StoragePidLocationTypeEnum::EXTENSION_MANAGER,
     ) {}
 
     public function getExtKey(): string
@@ -24,13 +24,13 @@ final readonly class StoragePidLocation
         return $this->extKey;
     }
 
-    public function getType(): StoragePidLocationTypeEnum
-    {
-        return $this->type;
-    }
-
     public function getProperty(): string
     {
         return $this->property;
+    }
+
+    public function getType(): StoragePidLocationTypeEnum
+    {
+        return $this->type;
     }
 }

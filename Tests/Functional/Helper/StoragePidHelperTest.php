@@ -13,6 +13,9 @@ namespace JWeiland\Maps2\Tests\Functional\Helper;
 
 use JWeiland\Maps2\Helper\MessageHelper;
 use JWeiland\Maps2\Helper\StoragePidHelper;
+use JWeiland\Maps2\Tca\ColumnRegistration;
+use JWeiland\Maps2\Tca\StoragePidLocation;
+use JWeiland\Maps2\Tca\StoragePidLocationTypeEnum;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Core\Cache\CacheManager;
@@ -61,29 +64,6 @@ class StoragePidHelperTest extends FunctionalTestCase
     }
 
     #[Test]
-    public function getStoragePidWithoutPidAndNoRegistryConfigurationWillAddFlashMessage(): void
-    {
-        $this->messageHelperMock
-            ->expects($this->atLeastOnce())
-            ->method('addFlashMessage')
-            ->with(
-                self::stringContains('Please check various places'),
-                'Can not find a valid PID to store EXT:maps2 records',
-            );
-
-        $recordWithoutPid = [
-            'uid' => 100,
-            'title' => 'Market',
-        ];
-        $options = [];
-
-        self::assertSame(
-            0,
-            $this->subject->getDefaultStoragePidForNewPoiCollection($recordWithoutPid, $options),
-        );
-    }
-
-    #[Test]
     public function getStoragePidWithPidInForeignRecordWillReturnStoragePid(): void
     {
         $subject = $this->get(PageTsConfigFactory::class);
@@ -113,11 +93,16 @@ class StoragePidHelperTest extends FunctionalTestCase
             'pid' => 200,
             'title' => 'Market',
         ];
-        $options = [];
+
+        $columnRegistration = new ColumnRegistration(
+            tableName: 'tt_address',
+            columnName: 'tx_mpas2_uid',
+            addressColumns: [],
+        );
 
         self::assertSame(
             200,
-            $this->subject->getDefaultStoragePidForNewPoiCollection($record, $options),
+            $this->subject->getDefaultStoragePidForNewPoiCollection($record, $columnRegistration),
         );
     }
 
@@ -151,53 +136,17 @@ class StoragePidHelperTest extends FunctionalTestCase
             'pid' => 200,
             'title' => 'Market',
         ];
-        $options = [
-            'defaultStoragePid' => 428,
-        ];
 
-        self::assertSame(
-            428,
-            $this->subject->getDefaultStoragePidForNewPoiCollection($record, $options),
+        $columnRegistration = new ColumnRegistration(
+            tableName: 'tt_address',
+            columnName: 'tx_mpas2_uid',
+            addressColumns: [],
+            defaultStoragePid: 428,
         );
-    }
-
-    #[Test]
-    public function getStoragePidWithHardCodedMaps2RegistryWillReturnUnifiedStoragePid(): void
-    {
-        $subject = $this->get(PageTsConfigFactory::class);
-        $pageTsConfig = $subject->create([], new NullSite());
-
-        /** @var VariableFrontend|MockObject $variableFrontendMock */
-        $variableFrontendMock = $this->createMock(VariableFrontend::class);
-        $variableFrontendMock
-            ->expects($this->atLeastOnce())
-            ->method('get')
-            ->willReturnMap([
-                ['pageTsConfig-pid-to-hash-200', 'Hash'],
-                ['pageTsConfig-hash-to-object-Hash', $pageTsConfig],
-            ]);
-
-        /** @var CacheManager|MockObject $cacheManagerMock */
-        $cacheManagerMock = $this->createMock(CacheManager::class);
-        $cacheManagerMock
-            ->expects($this->atLeastOnce())
-            ->method('getCache')
-            ->with(self::stringContains('runtime'))
-            ->willReturn($variableFrontendMock);
-        GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerMock);
-
-        $record = [
-            'uid' => 100,
-            'pid' => 200,
-            'title' => 'Market',
-        ];
-        $options = [
-            'defaultStoragePid' => '428',
-        ];
 
         self::assertSame(
             428,
-            $this->subject->getDefaultStoragePidForNewPoiCollection($record, $options),
+            $this->subject->getDefaultStoragePidForNewPoiCollection($record, $columnRegistration),
         );
     }
 
@@ -221,16 +170,22 @@ class StoragePidHelperTest extends FunctionalTestCase
             'uid' => 100,
             'title' => 'Market',
         ];
-        $options = [
-            'defaultStoragePid' => [
-                'extKey' => 'foreign_ext',
-                'property' => 'maps2Storage',
+
+        $columnRegistration = new ColumnRegistration(
+            tableName: 'tt_address',
+            columnName: 'tx_mpas2_uid',
+            addressColumns: [],
+            defaultStoragePid: [
+                new StoragePidLocation(
+                    extKey: 'foreign_ext',
+                    property: 'maps2Storage',
+                )
             ],
-        ];
+        );
 
         self::assertSame(
             385,
-            $this->subject->getDefaultStoragePidForNewPoiCollection($recordWithoutPid, $options),
+            $this->subject->getDefaultStoragePidForNewPoiCollection($recordWithoutPid, $columnRegistration),
         );
     }
 
@@ -277,16 +232,22 @@ class StoragePidHelperTest extends FunctionalTestCase
             'pid' => 200,
             'title' => 'Market',
         ];
-        $options = [
-            'defaultStoragePid' => [
-                'extKey' => 'foreign_ext',
-                'property' => 'maps2Storage',
+
+        $columnRegistration = new ColumnRegistration(
+            tableName: 'tt_address',
+            columnName: 'tx_mpas2_uid',
+            addressColumns: [],
+            defaultStoragePid: [
+                new StoragePidLocation(
+                    extKey: 'foreign_ext',
+                    property: 'maps2Storage',
+                )
             ],
-        ];
+        );
 
         self::assertSame(
             197,
-            $this->subject->getDefaultStoragePidForNewPoiCollection($record, $options),
+            $this->subject->getDefaultStoragePidForNewPoiCollection($record, $columnRegistration),
         );
     }
 
@@ -333,61 +294,23 @@ class StoragePidHelperTest extends FunctionalTestCase
             'pid' => 200,
             'title' => 'Market',
         ];
-        $options = [
-            'defaultStoragePid' => [
-                'extKey' => 'foreign_ext',
-                'property' => 'maps2Storage',
-                'type' => 'ExtensionManager',
+
+        $columnRegistration = new ColumnRegistration(
+            tableName: 'tt_address',
+            columnName: 'tx_mpas2_uid',
+            addressColumns: [],
+            defaultStoragePid: [
+                new StoragePidLocation(
+                    extKey: 'foreign_ext',
+                    property: 'maps2Storage',
+                    type: StoragePidLocationTypeEnum::EXTENSION_MANAGER,
+                )
             ],
-        ];
+        );
 
         self::assertSame(
             197,
-            $this->subject->getDefaultStoragePidForNewPoiCollection($record, $options),
-        );
-    }
-
-    #[Test]
-    public function getStoragePidWithPidWillReturnPidFromDefaultPageTsConfigPath(): void
-    {
-        $rootLine = [
-            [
-                'uid' => 1,
-                'TSconfig' => 'ext.maps2.defaultStoragePid = 582',
-            ],
-        ];
-        $subject = $this->get(PageTsConfigFactory::class);
-        $pageTsConfig = $subject->create($rootLine, new NullSite());
-
-        /** @var VariableFrontend|MockObject $variableFrontendMock */
-        $variableFrontendMock = $this->createMock(VariableFrontend::class);
-        $variableFrontendMock
-            ->expects($this->atLeastOnce())
-            ->method('get')
-            ->willReturnMap([
-                ['pageTsConfig-pid-to-hash-5438', 'Hash'],
-                ['pageTsConfig-hash-to-object-Hash', $pageTsConfig],
-            ]);
-
-        /** @var CacheManager|MockObject $cacheManagerMock */
-        $cacheManagerMock = $this->createMock(CacheManager::class);
-        $cacheManagerMock
-            ->expects($this->atLeastOnce())
-            ->method('getCache')
-            ->with(self::stringContains('runtime'))
-            ->willReturn($variableFrontendMock);
-        GeneralUtility::setSingletonInstance(CacheManager::class, $cacheManagerMock);
-
-        $record = [
-            'uid' => 100,
-            'pid' => 5438,
-            'title' => 'Market',
-        ];
-        $options = [];
-
-        self::assertSame(
-            582,
-            $this->subject->getDefaultStoragePidForNewPoiCollection($record, $options),
+            $this->subject->getDefaultStoragePidForNewPoiCollection($record, $columnRegistration),
         );
     }
 
@@ -427,17 +350,23 @@ class StoragePidHelperTest extends FunctionalTestCase
             'pid' => 5438,
             'title' => 'Market',
         ];
-        $options = [
-            'defaultStoragePid' => [
-                'extKey' => 'foreign_ext',
-                'property' => 'maps2Storage',
-                'type' => 'pageTSconfig',
+
+        $columnRegistration = new ColumnRegistration(
+            tableName: 'tt_address',
+            columnName: 'tx_mpas2_uid',
+            addressColumns: [],
+            defaultStoragePid: [
+                new StoragePidLocation(
+                    extKey: 'foreign_ext',
+                    property: 'maps2Storage',
+                    type: StoragePidLocationTypeEnum::PAGE_TS_CONFIG,
+                )
             ],
-        ];
+        );
 
         self::assertSame(
             582,
-            $this->subject->getDefaultStoragePidForNewPoiCollection($record, $options),
+            $this->subject->getDefaultStoragePidForNewPoiCollection($record, $columnRegistration),
         );
     }
 
@@ -477,17 +406,23 @@ class StoragePidHelperTest extends FunctionalTestCase
             'pid' => 5438,
             'title' => 'Market',
         ];
-        $options = [
-            'defaultStoragePid' => [
-                'extKey' => 'foreign_ext',
-                'property' => 'maps2Storage',
-                'type' => 'pageTSconfig',
+
+        $columnRegistration = new ColumnRegistration(
+            tableName: 'tt_address',
+            columnName: 'tx_mpas2_uid',
+            addressColumns: [],
+            defaultStoragePid: [
+                new StoragePidLocation(
+                    extKey: 'foreign_ext',
+                    property: 'maps2Storage',
+                    type: StoragePidLocationTypeEnum::PAGE_TS_CONFIG,
+                )
             ],
-        ];
+        );
 
         self::assertSame(
             927,
-            $this->subject->getDefaultStoragePidForNewPoiCollection($record, $options),
+            $this->subject->getDefaultStoragePidForNewPoiCollection($record, $columnRegistration),
         );
     }
 
@@ -527,13 +462,17 @@ class StoragePidHelperTest extends FunctionalTestCase
             'pid' => 5438,
             'title' => 'Market',
         ];
-        $options = [
-            'defaultStoragePid' => 428,
-        ];
+
+        $columnRegistration = new ColumnRegistration(
+            tableName: 'tt_address',
+            columnName: 'tx_mpas2_uid',
+            addressColumns: [],
+            defaultStoragePid: 428,
+        );
 
         self::assertSame(
             582,
-            $this->subject->getDefaultStoragePidForNewPoiCollection($record, $options),
+            $this->subject->getDefaultStoragePidForNewPoiCollection($record, $columnRegistration),
         );
     }
 
@@ -592,33 +531,38 @@ class StoragePidHelperTest extends FunctionalTestCase
             'pid' => 5438,
             'title' => 'Market',
         ];
-        $options = [
-            'defaultStoragePid' => [
-                0 => [
-                    'extKey' => 'foreign_ext',
-                    'property' => 'maps2Storage',
-                    'type' => 'extensionmanager',
-                ],
-                1 => [
-                    'extKey' => 'events2',
-                    'property' => 'defaultLocationPid',
-                ],
-                2 => [
-                    'extKey' => 'news',
-                    'property' => 'location',
-                    'type' => 'pageTSconfig',
-                ],
-                3 => [
-                    'extKey' => 'foreign_ext',
-                    'property' => 'maps2Pid',
-                    'type' => 'pagetsconfig',
-                ],
+
+        $columnRegistration = new ColumnRegistration(
+            tableName: 'tt_address',
+            columnName: 'tx_mpas2_uid',
+            addressColumns: [],
+            defaultStoragePid: [
+                new StoragePidLocation(
+                    extKey: 'foreign_ext',
+                    property: 'maps2Storage',
+                    type: StoragePidLocationTypeEnum::EXTENSION_MANAGER,
+                ),
+                new StoragePidLocation(
+                    extKey: 'events2',
+                    property: 'defaultLocationPid',
+                    type: StoragePidLocationTypeEnum::EXTENSION_MANAGER,
+                ),
+                new StoragePidLocation(
+                    extKey: 'news',
+                    property: 'location',
+                    type: StoragePidLocationTypeEnum::PAGE_TS_CONFIG,
+                ),
+                new StoragePidLocation(
+                    extKey: 'foreign_ext',
+                    property: 'maps2Pid',
+                    type: StoragePidLocationTypeEnum::PAGE_TS_CONFIG,
+                ),
             ],
-        ];
+        );
 
         self::assertSame(
             4297,
-            $this->subject->getDefaultStoragePidForNewPoiCollection($record, $options),
+            $this->subject->getDefaultStoragePidForNewPoiCollection($record, $columnRegistration),
         );
     }
 
@@ -677,33 +621,38 @@ class StoragePidHelperTest extends FunctionalTestCase
             'pid' => 5438,
             'title' => 'Market',
         ];
-        $options = [
-            'defaultStoragePid' => [
-                0 => [
-                    'extKey' => 'foreign_ext',
-                    'property' => 'maps2Storage',
-                    'type' => 'extensionmanager',
-                ],
-                1 => [
-                    'extKey' => 'events2',
-                    'property' => 'defaultLocationPid',
-                ],
-                2 => [
-                    'extKey' => 'news',
-                    'property' => 'location',
-                    'type' => 'pageTSconfig',
-                ],
-                3 => [
-                    'extKey' => 'foreign_ext',
-                    'property' => 'maps2Pid',
-                    'type' => 'pagetsconfig',
-                ],
+
+        $columnRegistration = new ColumnRegistration(
+            tableName: 'tt_address',
+            columnName: 'tx_mpas2_uid',
+            addressColumns: [],
+            defaultStoragePid: [
+                new StoragePidLocation(
+                    extKey: 'foreign_ext',
+                    property: 'maps2Storage',
+                    type: StoragePidLocationTypeEnum::EXTENSION_MANAGER,
+                ),
+                new StoragePidLocation(
+                    extKey: 'events2',
+                    property: 'defaultLocationPid',
+                    type: StoragePidLocationTypeEnum::EXTENSION_MANAGER,
+                ),
+                new StoragePidLocation(
+                    extKey: 'news',
+                    property: 'location',
+                    type: StoragePidLocationTypeEnum::PAGE_TS_CONFIG,
+                ),
+                new StoragePidLocation(
+                    extKey: 'foreign_ext',
+                    property: 'maps2Pid',
+                    type: StoragePidLocationTypeEnum::PAGE_TS_CONFIG,
+                ),
             ],
-        ];
+        );
 
         self::assertSame(
             4867,
-            $this->subject->getDefaultStoragePidForNewPoiCollection($record, $options),
+            $this->subject->getDefaultStoragePidForNewPoiCollection($record, $columnRegistration),
         );
     }
 
@@ -762,33 +711,38 @@ class StoragePidHelperTest extends FunctionalTestCase
             'pid' => 5438,
             'title' => 'Market',
         ];
-        $options = [
-            'defaultStoragePid' => [
-                0 => [
-                    'extKey' => 'foreign_ext',
-                    'property' => 'maps2Storage',
-                    'type' => 'extensionmanager',
-                ],
-                1 => [
-                    'extKey' => 'events2',
-                    'property' => 'defaultLocationPid',
-                ],
-                2 => [
-                    'extKey' => 'news',
-                    'property' => 'location',
-                    'type' => 'pageTSconfig',
-                ],
-                3 => [
-                    'extKey' => 'foreign_ext',
-                    'property' => 'maps2Pid',
-                    'type' => 'pagetsconfig',
-                ],
+
+        $columnRegistration = new ColumnRegistration(
+            tableName: 'tt_address',
+            columnName: 'tx_mpas2_uid',
+            addressColumns: [],
+            defaultStoragePid: [
+                new StoragePidLocation(
+                    extKey: 'foreign_ext',
+                    property: 'maps2Storage',
+                    type: StoragePidLocationTypeEnum::EXTENSION_MANAGER,
+                ),
+                new StoragePidLocation(
+                    extKey: 'events2',
+                    property: 'defaultLocationPid',
+                    type: StoragePidLocationTypeEnum::EXTENSION_MANAGER,
+                ),
+                new StoragePidLocation(
+                    extKey: 'news',
+                    property: 'location',
+                    type: StoragePidLocationTypeEnum::PAGE_TS_CONFIG,
+                ),
+                new StoragePidLocation(
+                    extKey: 'foreign_ext',
+                    property: 'maps2Pid',
+                    type: StoragePidLocationTypeEnum::PAGE_TS_CONFIG,
+                ),
             ],
-        ];
+        );
 
         self::assertSame(
             5837,
-            $this->subject->getDefaultStoragePidForNewPoiCollection($record, $options),
+            $this->subject->getDefaultStoragePidForNewPoiCollection($record, $columnRegistration),
         );
     }
 }

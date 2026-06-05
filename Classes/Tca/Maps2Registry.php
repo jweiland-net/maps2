@@ -160,8 +160,8 @@ class Maps2Registry
         ) {
             return new StoragePidLocation(
                 extKey: (string)$storagePidConfiguration['extKey'] ?? '',
-                type: StoragePidLocationTypeEnum::from((string)$storagePidConfiguration['type'] ?? ''),
                 property: (string)$storagePidConfiguration['property'] ?? '',
+                type: StoragePidLocationTypeEnum::from((string)$storagePidConfiguration['type'] ?? ''),
             );
         }
 

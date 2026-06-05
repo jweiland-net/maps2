@@ -43,8 +43,8 @@ readonly class StoragePidHelper
             $foreignLocationRecord,
             new StoragePidLocation(
                 'maps2',
-                StoragePidLocationTypeEnum::PAGE_TS_CONFIG,
                 'defaultStoragePid',
+                StoragePidLocationTypeEnum::PAGE_TS_CONFIG,
             )
         );
 
