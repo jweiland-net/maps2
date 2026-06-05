@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\ViewHelpers;
 
-use JWeiland\Maps2\Helper\SettingsHelper;
+use JWeiland\Maps2\Configuration\EnvironmentFactory;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
@@ -23,7 +23,7 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 class RequestUriForOverlayViewHelper extends AbstractViewHelper
 {
     public function __construct(
-        private readonly SettingsHelper $settingsHelper,
+        private readonly EnvironmentFactory $environmentFactory,
         private readonly UriBuilder $uriBuilder,
     ) {}
 
@@ -53,14 +53,17 @@ class RequestUriForOverlayViewHelper extends AbstractViewHelper
             ])
             ->setArgumentsToBeExcludedFromQueryString(['cHash']);
 
-        if (($this->settingsHelper->getPreparedSettings()['overlay']['link']['addSection'] ?? '') === '1') {
+        $request = $this->renderingContext->getAttribute(ServerRequestInterface::class);
+
+        $environment = $this->environmentFactory->buildEnvironment([], $request);
+
+        if (($environment->getSettings()['overlay']['link']['addSection'] ?? '') === '1') {
             $ttContentUid = (int)($arguments['ttContentUid'] ?? 0);
             if ($ttContentUid !== 0) {
                 $uriBuilder->setSection('c' . $ttContentUid);
             }
         }
 
-        $request = $this->renderingContext->getAttribute(ServerRequestInterface::class);
         $this->uriBuilder->setRequest($request);
 
         return $uriBuilder->build();
