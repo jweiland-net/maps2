@@ -17,8 +17,9 @@ use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Helper\MapHelper;
 use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Fluid\View\StandaloneView;
+use TYPO3\CMS\Fluid\Core\Rendering\RenderingContextFactory;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
+use TYPO3Fluid\Fluid\View\TemplateView;
 
 /**
  * Class ConvertToJsonViewHelper
@@ -37,8 +38,7 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
     {
         parent::setUp();
 
-        $extConf = GeneralUtility::makeInstance(ExtConf::class);
-        $mapHelper = new MapHelper($extConf);
+        $mapHelper = new MapHelper(new ExtConf());
         GeneralUtility::addInstance(MapHelper::class, $mapHelper);
         $this->poiCollection = new PoiCollection();
 
@@ -57,90 +57,80 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
     #[Test]
     public function renderWithStringWillJustCallJsonEncode(): void
     {
-        $view = new StandaloneView();
-        $view->assign('content', 'simpleString');
-        $view->setTemplateSource('
+        $context = $this->get(RenderingContextFactory::class)->create();
+        $context->getTemplatePaths()->setTemplateSource('
             <html lang="en"
                 xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
                 xmlns:m="http://typo3.org/ns/JWeiland/Maps2/ViewHelpers"
                 data-namespace-typo3-fluid="true">
 
                 {content -> m:convertToJson()}
-            </html>');
-
-        $contentWithJson = $view->render();
-
+            </html>
+        ');
         self::assertStringContainsString(
             '&quot;simpleString&quot;',
-            $contentWithJson,
+            (new TemplateView($context))->assign('content', 'simpleString')->render(),
         );
     }
 
     #[Test]
     public function renderWithSimpleArrayWillJustCallJsonEncode(): void
     {
-        $view = new StandaloneView();
-        $view->assign('content', ['foo' => 'bar']);
-        $view->setTemplateSource('
+        $context = $this->get(RenderingContextFactory::class)->create();
+        $context->getTemplatePaths()->setTemplateSource('
             <html lang="en"
                 xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
                 xmlns:m="http://typo3.org/ns/JWeiland/Maps2/ViewHelpers"
                 data-namespace-typo3-fluid="true">
 
                 {content -> m:convertToJson()}
-            </html>');
-
-        $contentWithJson = $view->render();
-
+            </html>
+        ');
         self::assertStringContainsString(
             '{&quot;foo&quot;:&quot;bar&quot;}',
-            $contentWithJson,
+            (new TemplateView($context))->assign('content', ['foo' => 'bar'])->render(),
         );
     }
 
     #[Test]
     public function renderWithPoiCollectionWillSetItToArrayAndConvertItToJson(): void
     {
-        $view = new StandaloneView();
-        $view->assign('poiCollection', $this->poiCollection);
-        $view->setTemplateSource('
+        $context = $this->get(RenderingContextFactory::class)->create();
+        $context->getTemplatePaths()->setTemplateSource('
             <html lang="en"
                 xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
                 xmlns:m="http://typo3.org/ns/JWeiland/Maps2/ViewHelpers"
                 data-namespace-typo3-fluid="true">
 
                 {poiCollection -> m:convertToJson()}
-            </html>');
-
-        $contentWithJson = $view->render();
+            </html>
+        ');
 
         // a property of PoiCollection should be found in string
         self::assertStringContainsString(
             'address',
-            $contentWithJson,
+            (new TemplateView($context))->assign('poiCollection', $this->poiCollection)->render(),
         );
     }
 
     #[Test]
     public function renderWithPoiCollectionsWillConvertItToJson(): void
     {
-        $view = new StandaloneView();
-        $view->assign('poiCollections', [$this->poiCollection]);
-        $view->setTemplateSource('
+        $context = $this->get(RenderingContextFactory::class)->create();
+        $context->getTemplatePaths()->setTemplateSource('
             <html lang="en"
                 xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
                 xmlns:m="http://typo3.org/ns/JWeiland/Maps2/ViewHelpers"
                 data-namespace-typo3-fluid="true">
 
                 {poiCollections -> m:convertToJson()}
-            </html>');
-
-        $contentWithJson = $view->render();
+            </html>
+        ');
 
         // a property of PoiCollection should be found in string
         self::assertStringContainsString(
             'address',
-            $contentWithJson,
+            (new TemplateView($context))->assign('poiCollections', [$this->poiCollection])->render(),
         );
 
         // we have set PoiCollection into an array, so JSON should start with [{
@@ -153,48 +143,45 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
         $poiCollection = $this->poiCollection;
         $poiCollection->addCategory($this->category);
 
-        $view = new StandaloneView();
-        $view->assign('poiCollections', [$poiCollection]);
-        $view->setTemplateSource('
+        $context = $this->get(RenderingContextFactory::class)->create();
+        $context->getTemplatePaths()->setTemplateSource('
             <html lang="en"
                 xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
                 xmlns:m="http://typo3.org/ns/JWeiland/Maps2/ViewHelpers"
                 data-namespace-typo3-fluid="true">
 
                 {poiCollections -> m:convertToJson()}
-            </html>');
-
-        $contentWithJson = $view->render();
+            </html>
+        ');
 
         self::assertStringNotContainsString(
             'maps2MarkerIcons',
-            $contentWithJson,
+            (new TemplateView($context))->assign('poiCollections', [$poiCollection])->render(),
         );
+
         self::assertStringNotContainsString(
             'parent',
-            $contentWithJson,
+            (new TemplateView($context))->assign('poiCollections', [$poiCollection])->render(),
         );
     }
 
     #[Test]
     public function renderWithPoiCollectionsWillRemoveMarkerIconsFromPoiCollection(): void
     {
-        $view = new StandaloneView();
-        $view->assign('poiCollections', [$this->poiCollection]);
-        $view->setTemplateSource('
+        $context = $this->get(RenderingContextFactory::class)->create();
+        $context->getTemplatePaths()->setTemplateSource('
             <html lang="en"
                 xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
                 xmlns:m="http://typo3.org/ns/JWeiland/Maps2/ViewHelpers"
                 data-namespace-typo3-fluid="true">
 
                 {poiCollections -> m:convertToJson()}
-            </html>');
-
-        $contentWithJson = $view->render();
+            </html>
+        ');
 
         self::assertStringNotContainsString(
             'markerIcons',
-            $contentWithJson,
+            (new TemplateView($context))->assign('poiCollections', [$this->poiCollection])->render(),
         );
     }
 }
