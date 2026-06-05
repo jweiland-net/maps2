@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Domain\Repository;
 
 use Doctrine\DBAL\Exception;
+use Doctrine\DBAL\Schema\Column;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Event\ModifyQueryOfFindPoiCollectionsEvent;
 use JWeiland\Maps2\Helper\OverlayHelper;
@@ -82,6 +83,21 @@ class PoiCollectionRepository extends Repository
         return $extbaseQuery->statement($queryBuilder)->execute();
     }
 
+    /**
+     * Searches POI collections within the given radius.
+     *
+     * The query uses a calculated "distance" column in HAVING. This works for
+     * the regular query, but Fluid checks like <f:if condition="{poiCollections}">
+     * trigger a COUNT(*) query. Extbase removes the SELECT clause for that query,
+     * so the calculated "distance" column is no longer available, and the query
+     * fails.
+     *
+     * Returning plain, versioned, and translated records makes Fluid call
+     * count(poiCollections) instead of poiCollections->count(). The records are
+     * then mapped to objects manually.
+     *
+     * @return array<PoiCollection>
+     */
     public function searchWithinRadius(float $latitude, float $longitude, int $radius): array
     {
         /** @var Query $extbaseQuery */
@@ -92,15 +108,6 @@ class PoiCollectionRepository extends Repository
             ->having('distance < ?')
             ->orderBy('distance', 'ASC')
             ->setParameters([$latitude, $latitude, $longitude, self::EARTH_RADIUS, $radius]);
-
-        // Query above works perfect, but if you make use of <f:if condition="{poiCollections}"> in
-        // fluid that will trigger a COUNT(*) statement. Extbase will remove everything from SELECT,
-        // so "distinct" in HAVING is not available anymore and query breaks. As maps2 is well known
-        // in TYPO3 community we can not remove this fluid snippet very easily, as that template may be
-        // overwritten in a lot of instances.
-        // For now, we just return the plain, versioned and translated records from extbase query and
-        // map them to objects by our own. That way the fluid snippet will do a
-        // count(poiCollections) instead of poiCollections->count() which solves the issue.
 
         $poiCollections = $extbaseQuery->statement($queryBuilder)->execute(true);
 
@@ -147,25 +154,24 @@ class PoiCollectionRepository extends Repository
     }
 
     /**
-     * ->select() and ->groupBy() has to be the same in DB configuration
-     * where only_full_group_by is activated.
+     * Returns all fully qualified column names of the POI collection table.
+     *
+     * The generated column list is used for both SELECT and GROUP BY clauses.
+     * This is required for database systems with ONLY_FULL_GROUP_BY enabled,
+     * where every selected non-aggregated column must also be part of the
+     * GROUP BY clause.
+     *
+     * @return list<string>
      */
     protected function getColumnsForPoiCollectionTable(): array
     {
-        $columns = [];
-        $connection = $this->connectionPool->getConnectionForTable('tx_maps2_domain_model_poicollection');
+        $connection = $this->connectionPool->getConnectionForTable(self::TABLE);
 
-        try {
-            $schemaManager = $connection->createSchemaManager();
-            $columns = array_map(
-                static fn(string $column): string => self::TABLE . '.' . $column,
-                array_keys(
-                    $schemaManager->introspectTableColumnsByUnquotedName('tx_maps2_domain_model_poicollection') ?? [],
-                ),
-            );
-        } catch (Exception) {
-        }
+        $columnNames = $connection->getSchemaInformation()->listTableColumnNames(self::TABLE);
 
-        return $columns;
+        return array_map(
+            static fn(string $columnName): string => self::TABLE . '.' . $columnName,
+            $columnNames,
+        );
     }
 }

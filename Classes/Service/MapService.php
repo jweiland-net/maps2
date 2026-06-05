@@ -12,13 +12,13 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Service;
 
 use Doctrine\DBAL\Exception;
+use Doctrine\DBAL\Schema\Column;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
 use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Event\PreAddForeignRecordEvent;
 use JWeiland\Maps2\Helper\MessageHelper;
 use JWeiland\Maps2\Tca\ColumnRegistration;
 use JWeiland\Maps2\Tca\ColumnRegistrationStorage;
-use JWeiland\Maps2\Utility\DatabaseUtility;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
@@ -80,7 +80,7 @@ readonly class MapService
         // remove all fields that are not set in DB
         $fieldValues = array_intersect_key(
             $fieldValues,
-            DatabaseUtility::getColumnsFromTable('tx_maps2_domain_model_poicollection'),
+            $this->getColumnsFromTable('tx_maps2_domain_model_poicollection'),
         );
 
         $connection = $this->connectionPool->getConnectionForTable('tx_maps2_domain_model_poicollection');
@@ -253,5 +253,12 @@ readonly class MapService
         ));
 
         return $event->getForeignRecord();
+    }
+
+    protected function getColumnsFromTable(string $tableName): array
+    {
+        $connection = $this->connectionPool->getConnectionForTable($tableName);
+
+        return $connection->getSchemaInformation()->listTableColumnNames($tableName);
     }
 }
