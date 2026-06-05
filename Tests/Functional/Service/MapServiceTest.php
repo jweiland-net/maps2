@@ -16,6 +16,8 @@ use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Event\PreAddForeignRecordEvent;
 use JWeiland\Maps2\Helper\MessageHelper;
 use JWeiland\Maps2\Service\MapService;
+use JWeiland\Maps2\Tca\ColumnRegistration;
+use JWeiland\Maps2\Tca\ColumnRegistrationStorage;
 use JWeiland\Maps2\Tca\Maps2Registry;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -31,11 +33,7 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
  */
 class MapServiceTest extends FunctionalTestCase
 {
-    protected MapService $subject;
-
     protected MessageHelper|MockObject $messageHelperMock;
-
-    protected Maps2Registry|MockObject $maps2RegistryMock;
 
     protected EventDispatcherInterface|MockObject $eventDispatcherMock;
 
@@ -54,23 +52,13 @@ class MapServiceTest extends FunctionalTestCase
             ->withAttribute('applicationType', SystemEnvironmentBuilder::REQUESTTYPE_FE);
 
         $this->messageHelperMock = $this->createMock(MessageHelper::class);
-        $this->maps2RegistryMock = $this->createMock(Maps2Registry::class);
         $this->eventDispatcherMock = $this->createMock(EventDispatcher::class);
-
-        $this->subject = new MapService(
-            $this->messageHelperMock,
-            $this->maps2RegistryMock,
-            $this->eventDispatcherMock,
-            $this->getConnectionPool(),
-        );
     }
 
     protected function tearDown(): void
     {
         unset(
-            $this->subject,
             $this->messageHelperMock,
-            $this->maps2RegistryMock,
             $this->eventDispatcherMock,
         );
 
@@ -80,9 +68,16 @@ class MapServiceTest extends FunctionalTestCase
     #[Test]
     public function createNewPoiCollectionWithEmptyLatitudeReturnsZero(): void
     {
+        $subject = new MapService(
+            $this->messageHelperMock,
+            new ColumnRegistrationStorage(),
+            $this->eventDispatcherMock,
+            $this->getConnectionPool(),
+        );
+
         self::assertSame(
             0,
-            $this->subject->createNewPoiCollection(
+            $subject->createNewPoiCollection(
                 1,
                 new Position(),
             ),
@@ -92,6 +87,13 @@ class MapServiceTest extends FunctionalTestCase
     #[Test]
     public function createNewPoiCollectionWillCreateNewPoiCollectionRecord(): void
     {
+        $subject = new MapService(
+            $this->messageHelperMock,
+            new ColumnRegistrationStorage(),
+            $this->eventDispatcherMock,
+            $this->getConnectionPool(),
+        );
+
         $position = new Position();
         $position->setLatitude(51.4);
         $position->setLongitude(7.4);
@@ -99,7 +101,7 @@ class MapServiceTest extends FunctionalTestCase
 
         self::assertSame(
             1,
-            $this->subject->createNewPoiCollection(
+            $subject->createNewPoiCollection(
                 1,
                 $position,
             ),
@@ -109,12 +111,19 @@ class MapServiceTest extends FunctionalTestCase
     #[Test]
     public function createNewPoiCollectionWithOverrideWillCreateNewPoiCollectionRecord(): void
     {
+        $subject = new MapService(
+            $this->messageHelperMock,
+            new ColumnRegistrationStorage(),
+            $this->eventDispatcherMock,
+            $this->getConnectionPool(),
+        );
+
         $position = new Position();
         $position->setLatitude(51.4);
         $position->setLongitude(7.4);
         $position->setFormattedAddress('Echterdinger Straße 57, 70794 Filderstadt, Germany');
 
-        $poiCollectionUid = $this->subject->createNewPoiCollection(
+        $poiCollectionUid = $subject->createNewPoiCollection(
             1,
             $position,
             [
@@ -160,7 +169,14 @@ class MapServiceTest extends FunctionalTestCase
             'uid' => 1,
         ];
 
-        $this->subject->assignPoiCollectionToForeignRecord(
+        $subject = new MapService(
+            $this->messageHelperMock,
+            new ColumnRegistrationStorage(),
+            $this->eventDispatcherMock,
+            $this->getConnectionPool(),
+        );
+
+        $subject->assignPoiCollectionToForeignRecord(
             0,
             $foreignRecord,
             'tx_address_domain_model_address',
@@ -188,7 +204,14 @@ class MapServiceTest extends FunctionalTestCase
 
         $foreignRecord = [];
 
-        $this->subject->assignPoiCollectionToForeignRecord(
+        $subject = new MapService(
+            $this->messageHelperMock,
+            new ColumnRegistrationStorage(),
+            $this->eventDispatcherMock,
+            $this->getConnectionPool(),
+        );
+
+        $subject->assignPoiCollectionToForeignRecord(
             1,
             $foreignRecord,
             'tx_address_domain_model_address',
@@ -211,7 +234,14 @@ class MapServiceTest extends FunctionalTestCase
             'uid' => 1,
         ];
 
-        $this->subject->assignPoiCollectionToForeignRecord(
+        $subject = new MapService(
+            $this->messageHelperMock,
+            new ColumnRegistrationStorage(),
+            $this->eventDispatcherMock,
+            $this->getConnectionPool(),
+        );
+
+        $subject->assignPoiCollectionToForeignRecord(
             1,
             $foreignRecord,
             '',
@@ -234,7 +264,14 @@ class MapServiceTest extends FunctionalTestCase
             'uid' => 1,
         ];
 
-        $this->subject->assignPoiCollectionToForeignRecord(
+        $subject = new MapService(
+            $this->messageHelperMock,
+            new ColumnRegistrationStorage(),
+            $this->eventDispatcherMock,
+            $this->getConnectionPool(),
+        );
+
+        $subject->assignPoiCollectionToForeignRecord(
             1,
             $foreignRecord,
             'tx_address_domain_model_address',
@@ -258,7 +295,14 @@ class MapServiceTest extends FunctionalTestCase
             'uid' => 1,
         ];
 
-        $this->subject->assignPoiCollectionToForeignRecord(
+        $subject = new MapService(
+            $this->messageHelperMock,
+            new ColumnRegistrationStorage(),
+            $this->eventDispatcherMock,
+            $this->getConnectionPool(),
+        );
+
+        $subject->assignPoiCollectionToForeignRecord(
             1,
             $foreignRecord,
             'invalidTable',
@@ -281,7 +325,14 @@ class MapServiceTest extends FunctionalTestCase
             'uid' => 1,
         ];
 
-        $this->subject->assignPoiCollectionToForeignRecord(
+        $subject = new MapService(
+            $this->messageHelperMock,
+            new ColumnRegistrationStorage(),
+            $this->eventDispatcherMock,
+            $this->getConnectionPool(),
+        );
+
+        $subject->assignPoiCollectionToForeignRecord(
             1,
             $foreignRecord,
             'tx_address_domain_model_address',
@@ -297,7 +348,14 @@ class MapServiceTest extends FunctionalTestCase
         $position->setLongitude(7.3);
         $position->setFormattedAddress('Echterdinger Straße 57, 70794 Filderstadt');
 
-        $newUid = $this->subject->createNewPoiCollection(
+        $subject = new MapService(
+            $this->messageHelperMock,
+            new ColumnRegistrationStorage(),
+            $this->eventDispatcherMock,
+            $this->getConnectionPool(),
+        );
+
+        $newUid = $subject->createNewPoiCollection(
             12,
             $position,
         );
@@ -310,13 +368,21 @@ class MapServiceTest extends FunctionalTestCase
             'uid' => 1,
         ];
 
-        $this->subject->assignPoiCollectionToForeignRecord(
+        $subject = new MapService(
+            $this->messageHelperMock,
+            new ColumnRegistrationStorage(),
+            $this->eventDispatcherMock,
+            $this->getConnectionPool(),
+        );
+
+        $subject->assignPoiCollectionToForeignRecord(
             1,
             $foreignRecord,
             'tx_address_domain_model_address',
         );
 
-        self::assertSame(
+        // Do not use assertSame as column is TCA:group now, so it's longtext
+        self::assertEquals(
             $foreignRecord['tx_maps2_uid'],
             $newUid,
         );
@@ -326,7 +392,8 @@ class MapServiceTest extends FunctionalTestCase
             ->select(['*'], 'tx_address_domain_model_address', ['uid' => 1])
             ->fetchAssociative();
 
-        self::assertSame(
+        // Do not use assertSame as column is TCA:group now, so it's longtext
+        self::assertEquals(
             $addressRecord['tx_maps2_uid'],
             $newUid,
         );
@@ -334,27 +401,24 @@ class MapServiceTest extends FunctionalTestCase
 
     public function addForeignRecordsToPoiCollectionWithEmptyRegistryWillNotAddForeignRecords(): void
     {
-        $this->maps2RegistryMock
-            ->expects($this->atLeastOnce())
-            ->method('getColumnRegistry')
-            ->willReturn([]);
-
         /** @var PoiCollection|MockObject $poiCollectionMock */
         $poiCollectionMock = $this->createMock(PoiCollection::class);
         $poiCollectionMock
             ->expects($this->never())
             ->method('addForeignRecord');
 
-        $this->subject->addForeignRecordsToPoiCollection($poiCollectionMock);
+        $subject = new MapService(
+            $this->messageHelperMock,
+            new ColumnRegistrationStorage(),
+            $this->eventDispatcherMock,
+            $this->getConnectionPool(),
+        );
+
+        $subject->addForeignRecordsToPoiCollection($poiCollectionMock);
     }
 
     public function addForeignRecordsToPoiCollectionWithEmptyPoiCollectionUidWillNotAddForeignRecords(): void
     {
-        $this->maps2RegistryMock
-            ->expects($this->atLeastOnce())
-            ->method('getColumnRegistry')
-            ->willReturn(['foo' => 'bar']);
-
         /** @var PoiCollection|MockObject $poiCollectionMock */
         $poiCollectionMock = $this->createMock(PoiCollection::class);
         $poiCollectionMock
@@ -365,20 +429,18 @@ class MapServiceTest extends FunctionalTestCase
             ->expects($this->never())
             ->method('addForeignRecord');
 
-        $this->subject->addForeignRecordsToPoiCollection($poiCollectionMock);
+        $subject = new MapService(
+            $this->messageHelperMock,
+            new ColumnRegistrationStorage(),
+            $this->eventDispatcherMock,
+            $this->getConnectionPool(),
+        );
+
+        $subject->addForeignRecordsToPoiCollection($poiCollectionMock);
     }
 
     public function addForeignRecordsToPoiCollectionWillAddForeignRecord(): void
     {
-        $this->maps2RegistryMock
-            ->expects($this->atLeastOnce())
-            ->method('getColumnRegistry')
-            ->willReturn([
-                'tx_address_domain_model_address' => [
-                    'tx_maps2_uid' => [],
-                ],
-            ]);
-
         /** @var PoiCollection|MockObject $poiCollectionMock */
         $poiCollectionMock = $this->createMock(PoiCollection::class);
         $poiCollectionMock
@@ -390,12 +452,28 @@ class MapServiceTest extends FunctionalTestCase
         $position->setLongitude(7.3);
         $position->setFormattedAddress('Echterdinger Straße 57, 70794 Filderstadt');
 
-        $newUid = $this->subject->createNewPoiCollection(
+        $subject = new MapService(
+            $this->messageHelperMock,
+            new ColumnRegistrationStorage(),
+            $this->eventDispatcherMock,
+            $this->getConnectionPool(),
+        );
+
+        $newUid = $subject->createNewPoiCollection(
             12,
             $position,
         );
+
         $foreignRecord = ['uid' => 1];
-        $this->subject->assignPoiCollectionToForeignRecord(
+
+        $subject = new MapService(
+            $this->messageHelperMock,
+            new ColumnRegistrationStorage(),
+            $this->eventDispatcherMock,
+            $this->getConnectionPool(),
+        );
+
+        $subject->assignPoiCollectionToForeignRecord(
             $newUid,
             $foreignRecord,
             'tx_address_domain_model_address',
@@ -412,6 +490,13 @@ class MapServiceTest extends FunctionalTestCase
             ->method('dispatch')
             ->willReturn($event);
 
-        $this->subject->addForeignRecordsToPoiCollection($poiCollectionMock);
+        $subject = new MapService(
+            $this->messageHelperMock,
+            new ColumnRegistrationStorage(),
+            $this->eventDispatcherMock,
+            $this->getConnectionPool(),
+        );
+
+        $subject->addForeignRecordsToPoiCollection($poiCollectionMock);
     }
 }

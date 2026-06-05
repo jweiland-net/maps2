@@ -78,10 +78,12 @@ readonly class MapService
         ArrayUtility::mergeRecursiveWithOverrule($fieldValues, $overrideFieldValues);
 
         // remove all fields that are not set in DB
-        $fieldValues = array_intersect_key(
-            $fieldValues,
+        $allowedColumns = array_fill_keys(
             $this->getColumnsFromTable('tx_maps2_domain_model_poicollection'),
+            true,
         );
+
+        $fieldValues = array_intersect_key($fieldValues, $allowedColumns);
 
         $connection = $this->connectionPool->getConnectionForTable('tx_maps2_domain_model_poicollection');
         $connection->insert(
