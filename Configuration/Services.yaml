@@ -95,6 +95,10 @@ services:
     arguments:
       $columnRegistry: '@maps2.columnRegistry'
 
+  JWeiland\Maps2\Mapper\MapperFactory:
+    arguments:
+      $mapper: !tagged_iterator { tag: 'maps2.mapper' }
+
   JWeiland\Maps2\Service\GeoCodeService:
     arguments:
       $mapper: '@maps2.mapper'
