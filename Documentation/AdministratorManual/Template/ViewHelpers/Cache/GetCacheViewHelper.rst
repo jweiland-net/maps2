@@ -1,11 +1,15 @@
 ..  include:: /Includes.rst.txt
 
 
+..  _viewhelper-get-cache:
+
 ==========================
 Cache / GetCacheViewHelper
 ==========================
 
 This is a ViewHelper to retrieve a cache entry.
+
+..  _viewhelper-get-cache-properties:
 
 General properties
 ==================
@@ -33,8 +37,12 @@ General properties
     data from PoiCollection to build a more unique CacheIdentifier which can differ
     Caches in multilingual environment.
 
+..  _viewhelper-get-cache-examples:
+
 Examples
 ========
+
+..  _viewhelper-get-basic-example:
 
 Basic example
 -------------

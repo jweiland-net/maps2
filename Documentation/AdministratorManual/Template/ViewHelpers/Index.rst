@@ -1,6 +1,8 @@
 ..  include:: /Includes.rst.txt
 
 
+..  _viewhelpers:
+
 ========================
 ViewHelpers of EXT:maps2
 ========================
@@ -55,6 +57,8 @@ and call the ViewHelper like
 ..  code-block:: html
 
     <e:nameOfTheViewHelper />
+
+..  _viewhelper-list-all:
 
 All ViewHelpers
 ===============

@@ -1,6 +1,8 @@
 ..  include:: /Includes.rst.txt
 
 
+..  _viewhelper-request-uri-for-overlay:
+
 ==============================
 RequestUriForOverlayViewHelper
 ==============================
@@ -9,8 +11,12 @@ This ViewHelper creates an URI with a special parameter which allows the map to
 be visible for the user.
 
 
+..  _viewhelper-request-uri-for-overlay-examples:
+
 Examples
 ========
+
+..  _viewhelper-request-uri-for-overlay-basic-example:
 
 Basic example
 -------------
@@ -20,6 +26,8 @@ Basic example
     <a href="{m:requestUriForOverlay()}">
       Link to current page. Map will be shown somewhere on that page.
     </a>
+
+..  _viewhelper-request-uri-for-overlay-scroll-to-content:
 
 Scroll to content element
 -------------------------

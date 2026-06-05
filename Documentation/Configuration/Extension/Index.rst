@@ -11,6 +11,8 @@ Some general settings for maps2 can be configured in `Admin Tools` -> `Settings`
 
 The settings are divided into several tabs and described here in detail:
 
+..  _extensionSettings-tab-basic:
+
 Tab: Basic
 ==========
 
@@ -141,6 +143,8 @@ TypoScript:
     settings.infoWindowContentTemplatePath = EXT:my_ext/Resources/Private/Extensions/Maps2/InfoWindowContent.html
 
 
+..  _extensionSettings-tab-gm:
+
 Tab: Gm
 =======
 
@@ -183,6 +187,8 @@ TYPO3 backend and frontend (Plugin CityMap).
 
 You can register API keys here: `Google Console<http://console.developers.google.com>`_
 
+..  _extensionSettings-tab-osm:
+
 Tab: Osm
 ========
 
@@ -200,6 +206,8 @@ change that URI here.
     There is one %s placeholder in URI for address. We replace it with
     sprintf(), so, if you change that URI the new URI must have this
     placeholder, too.
+
+..  _extensionSettings-tab-design:
 
 Tab: Design
 ===========

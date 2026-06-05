@@ -1,11 +1,15 @@
 ..  include:: /Includes.rst.txt
 
 
+..  _viewhelper-set-cache:
+
 ==========================
 Cache / SetCacheViewHelper
 ==========================
 
 This is a ViewHelper to set a new cache entry.
+
+..  _viewhelper-set-properties:
 
 General properties
 ==================
@@ -59,8 +63,12 @@ General properties
     0 for unlimited.
 
 
+..  _viewhelper-set-cache-examples:
+
 Examples
 ========
+
+..  _viewhelper-set-cache-basic-example:
 
 Basic example
 -------------

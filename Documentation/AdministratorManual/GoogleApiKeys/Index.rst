@@ -1,6 +1,8 @@
 .. include:: /Includes.rst.txt
 
 
+..  _google-api-keys:
+
 ===============
 Google Api Keys
 ===============
@@ -8,6 +10,8 @@ Google Api Keys
 Since version 2.0.0 maps2 will only work with assigned Google Api Keys.
 This documentation will show you step by step how to get the API Keys
 from Google Clout Platform.
+
+..  _google-api-keys-gcp:
 
 Google Cloud Platform
 =====================
@@ -78,6 +82,8 @@ Google Cloud Platform
 #.  Copy your API Key and paste it into the both API fields in Extension
 Configuration of maps2.
 
+..  _google-api-keys-more-safe:
+
 Do you want it more safe?
 =========================
 
@@ -95,6 +101,8 @@ Configuration of maps2.
 
 Copy API Key with IP-Address security to field `Geocoding API Key` in Extension
 Configuration of maps2.
+
+..  _google-api-keys-super-safe:
 
 Do you want it super safe?
 ==========================

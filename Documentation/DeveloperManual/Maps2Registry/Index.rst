@@ -1,201 +1,544 @@
 ..  include:: /Includes.rst.txt
 
 
-..  _developer-maps2registry:
+..  _developer-maps2-registry:
 
 ==============
 Maps2 Registry
 ==============
 
-Available since version 3.0.0
-
 This is a pretty cool feature to extend your own extension with a new field
 which will hold the reference UID to a PoiCollection record of maps2. So, if
 you have a location record or something similar, then you can use our Maps2
-registry to create a new field into a table of your extension. The default
-name of the column will be ``tx_maps2_uid``, but you can change that, if you
-want.
-
-Our Maps2 registry is adapted from
-`System categories API <https://docs.typo3.org/permalink/t3coreapi:categories-api>`_
+registry to create a new field into a table of your extension.
 
 Create a new file in [yourExt]/Configuration/TCA/Overrides/[yourTableName].php
-and add the individually needed lines of code. Following is a slightly example
-for events2 with all possible properties:
-
-..  code-block:: php
-
-    \JWeiland\Maps2\Tca\Maps2Registry::getInstance()->add(
-        'events2', // Extension key of your extension
-        'tx_events2_domain_model_location', // tablename of your location table
-        [
-            // add all columns to build a valid address as array
-            // Add country only, if it is a string like "Germany". Else, see next options
-            'addressColumns' => ['street', 'house_number', 'zip', 'city', 'country'],
-
-            // You can define a hard-coded country for all addresses.
-            'defaultCountry' => 'France',
-
-            // Best option for country. If it is an INT and static_info_tables is loaded, it will
-            // get country name from static_country.
-            // If country could not be fetched, it will fallback to defaultCountry from above.
-            'countryColumn' => 'country',
-
-            // Optional: If you want to assign a PoiCollection only to a reduced set of records, you should use
-            // ``columnMatch`` property. Internally this is a very simple array value comparison. No DB! If
-            // you need more than simple comparison you can use SignalSlot in ``CreateMaps2RecordHook``.
-            'columnMatch' => [
-                // Simple match
-                'pid' => '12',
-                'title' => 'jweiland.net',
-
-                // More complex examples:
-
-                // Same as above: equals
-                'pid' => [
-                    'expr' => 'eq',
-                    'value' => '12',
-                ]
-
-                // pid is in list of comma separated values
-                'pid' => [
-                    'expr' => 'in',
-                    'value' => '11,12,13',
-                ]
-
-                // pid is greater than 8
-                'pid' => [
-                    'expr' => 'gt',
-                    'value' => '8',
-                ]
-
-                // pid is greater than or equals 12
-                'pid' => [
-                    'expr' => 'gte',
-                    'value' => '12',
-                ]
-
-                // pid is less than 15
-                'pid' => [
-                    'expr' => 'lt',
-                    'value' => '15',
-                ]
-
-                // pid is less than or equals 12
-                'pid' => [
-                    'expr' => 'lte',
-                    'value' => '12',
-                ]
-            ],
-
-            // With defaultStoragePid you can define where our maps2 record should be saved.
-            // defaultStoragePid has following priority from low to high:
-            // PID of your location record, Configuration of Maps2Registry, pageTSconfig (ext.maps2.defaultStoragePid)
-            // This order is hardcoded and can not be changed.
-            // So, if a PID with help of Maps2Registry was found, it will be overwritten with value of pageTSconfig.
-
-            // Within the Maps2Registry we have following ordering from low to high:
-            // A fixed value, an extension configuration value, a pageTSconfig value.
-
-            // Define a fixed storage PID where to save our maps2 PoiCollection record.
-            // Useful for small websites. Single domain instances.
-            // Keep in mind that this value will be overwritten with pageTSconfig (ext.maps2.pid)
-            'defaultStoragePid' => 414,
-
-            // Do not configure "defaultStoragePid" if you want to save maps2 PoiCollection records
-            // in same storage as your location record. But, be careful: As a fallback we are using
-            // pageTSconfig path "ext.maps2.defaultStoragePid" which has a higher priority than PID of your location record.
-            // So, keep that in mind, remove "ext.maps2.defaultStoragePid" from pageTSconfig to save maps2 record in same storage
-            // of your records.
-
-            // Read an extension manager configuration from ext_conf_template.txt of a given extension
-            'defaultStoragePid' => [
-                'extKey' => 'events2', // extension to read $EXTCONF from
-                'property' => 'poiCollectionPid', // Property with storage UID
-                'type' => 'extensionmanager' // If type is not given, we will use "extensionmanager" as default.
-            ],
-
-            // Read storage PID from pageTSconfig
-            // You can configure that path to your needs. In example below we try to get storage PID
-            // from pageTSconfig: ext.events2.poiCollectionPid = 4324
-            // Do not forget: If pageTSconfig (ext.maps2.defaultStoragePid) is set, it will overwrite this configuration.
-            'defaultStoragePid' => [
-                'extKey' => 'events2', // Extension key to read storage PID from
-                'property' => 'poiCollectionPid', // Property key to read storage PID from
-                'type' => 'pagetsconfig'
-            ],
-
-            // Priority ordered version
-            // We will read all these entries from array key 0 until array key 3. If a PID was found in f.e.
-            // array key 2 (after entry 0 and 1 have not returned a valid PID) we will use it and will not
-            // process further entries (entry 3)
-            'defaultStoragePid' => [
-                0 => [
-                    'extKey' => 'news',
-                    'property' => 'pid_of_maps2',
-                    'type' => 'pagetsconfig'
-                ],
-                1 => [
-                    'extKey' => 'my_ext',
-                    'property' => 'specialConfiguredPidForMaps2',
-                    'type' => 'pagetsconfig'
-                ],
-                2 => [
-                    'extKey' => 'my_ext',
-                    'property' => 'mapsPid',
-                    'type' => 'extensionmanager'
-                ],
-                3 => [
-                    'extKey' => 'events2',
-                    'property' => 'poiCollectionPid',
-                    'type' => 'extensionmanager'
-                ],
-            ],
-
-            // You can synchronize additional fields of your record with maps2 PoiCollection
-            // Please only use fields of type String or int.
-            // 1:N, N:1 and N:M relations are not supported. Please use SignalSlot postUpdatePoiCollection
-            // and synchronize them on your own.
-            'synchronizeColumns' => [
-                [
-                    'foreignColumnName' => 'location', // column name of your extension
-                    'poiCollectionColumnName' => 'title' // column name of maps2 PoiCollection record
-                ]
-            ]
-        ]
-    );
-
-..  important::
-
-    After adding these lines of code you have to de- and reactivate your
-    extension in ExtensionManager to execute the SQL queries in behind.
-    Alternatively you can go into InstallTool and execute Database Compare to
-    insert the new configured field.
-
-
-Example for tt_address
-======================
+and add the needed lines of code. Keep an eye on the new `renderType`
+`maps2Relation` which is available since maps2 13.0.0:
 
 ..  code-block:: php
 
     <?php
-    if (!defined('TYPO3')) {
-        die('Access denied.');
-    }
 
-    if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('maps2')) {
-        \JWeiland\Maps2\Tca\Maps2Registry::getInstance()->add(
-            'tt_address',
-            'tt_address',
-            [
-                'addressColumns' => ['address', 'zip', 'city'],
-                'countryColumn' => 'country',
-                'synchronizeColumns' => [
-                    [
-                        'foreignColumnName' => 'name',
-                        'poiCollectionColumnName' => 'title'
+    use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+
+    ExtensionManagementUtility::addTCAcolumns(
+        '[TABLE_NAME]',
+        [
+            '[COLUMN_NAME]' => [
+                'config' => [
+                    'type' => 'group',
+                    'renderType' => 'maps2Relation',
+                    'addressColumns' => [],
+                ],
+            ],
+        ],
+    );
+
+The maps2 registry will automatically be filled with every column identified
+by this new renderType.
+
+..  _developer-maps2-registry-basic-example:
+
+Basic Example
+=============
+
+To help geocoding service you have to provide some address related columns
+of your table. Would be good to enter the address columns in an official
+order of the address form:
+
+..  code-block:: php
+
+    <?php
+
+    use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+
+    ExtensionManagementUtility::addTCAcolumns(
+        'tt_address',
+        [
+            'tx_maps2_uid' => [
+                'config' => [
+                    'type' => 'group',
+                    'renderType' => 'maps2Relation',
+                    'addressColumns' => [
+                        'address',
+                        'zip',
+                        'city',
+                    ],
+                ],
+            ],
+        ],
+    );
+
+    // Label with "Google Maps"
+    ExtensionManagementUtility::addToAllTCAtypes(
+        'tt_address',
+        '--div--;maps2.db:tab.maps2.gm,tx_maps2_uid',
+    );
+
+
+..  _developer-maps2-registry-default-country:
+
+Default Country
+===============
+
+To prevent geocoding service to search for your addresses all over the world
+you should provide a default country:
+
+..  code-block:: php
+
+    <?php
+
+    use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+
+    ExtensionManagementUtility::addTCAcolumns(
+        'tt_address',
+        [
+            'tx_maps2_uid' => [
+                'config' => [
+                    'type' => 'group',
+                    'renderType' => 'maps2Relation',
+                    'addressColumns' => [
+                        'address',
+                        'zip',
+                        'city',
+                    ],
+                    'defaultCountry' => 'Germany',
+                ],
+            ],
+        ],
+    );
+
+    // Label with "Google Maps"
+    ExtensionManagementUtility::addToAllTCAtypes(
+        'tt_address',
+        '--div--;maps2.db:tab.maps2.gm,tx_maps2_uid',
+    );
+
+
+..  _developer-maps2-registry-country-column:
+
+Dynamic country
+===============
+
+To prevent geocoding service to search for your addresses all over the world
+you should provide a country. If you have a country column in your table
+please provide it that way:
+
+..  code-block:: php
+
+    <?php
+
+    use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+
+    ExtensionManagementUtility::addTCAcolumns(
+        'tt_address',
+        [
+            'tx_maps2_uid' => [
+                'config' => [
+                    'type' => 'group',
+                    'renderType' => 'maps2Relation',
+                    'addressColumns' => [
+                        'address',
+                        'zip',
+                        'city',
+                    ],
+                    'countryColumn' => 'country',
+                ],
+            ],
+        ],
+    );
+
+    // Label with "Google Maps"
+    ExtensionManagementUtility::addToAllTCAtypes(
+        'tt_address',
+        '--div--;maps2.db:tab.maps2.gm,tx_maps2_uid',
+    );
+
+If you also add the country column to `addressColumns` it will automatically
+removed internally.
+
+Of cause you still can make use of `defaultCountry` as a fallback.
+
+
+..  _developer-maps2-registry-matching columns:
+
+Matching Columns
+================
+
+By default maps2 will try to assign a poi collection record to every
+of your registered tables. But if you have a lot of records or you want to
+reduce possible cost you may want to reduce the amount of records to a specific
+storage record or another value of your records:
+
+..  code-block:: php
+
+    <?php
+
+    use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+
+    ExtensionManagementUtility::addTCAcolumns(
+        'tt_address',
+        [
+            'tx_maps2_uid' => [
+                'config' => [
+                    'type' => 'group',
+                    'renderType' => 'maps2Relation',
+                    'addressColumns' => [
+                        'address',
+                        'zip',
+                        'city',
+                    ],
+                    'columnMatch' => [
+                        // Simple match
+                        'pid' => '12',
+                        'title' => 'jweiland.net',
+
+                        // More complex examples:
+
+                        // Same as above: equals
+                        'pid' => [
+                            'expr' => 'eq',
+                            'value' => '12',
+                        ]
+
+                        // pid is in list of comma separated values
+                        'pid' => [
+                            'expr' => 'in',
+                            'value' => '11,12,13',
+                        ]
+
+                        // pid is greater than 8
+                        'pid' => [
+                            'expr' => 'gt',
+                            'value' => '8',
+                        ]
+
+                        // pid is greater than or equals 12
+                        'pid' => [
+                            'expr' => 'gte',
+                            'value' => '12',
+                        ]
+
+                        // pid is less than 15
+                        'pid' => [
+                            'expr' => 'lt',
+                            'value' => '15',
+                        ]
+
+                        // pid is less than or equals 12
+                        'pid' => [
+                            'expr' => 'lte',
+                            'value' => '12',
+                        ]
+                    ],
+                ],
+            ],
+        ],
+    );
+
+    // Label with "Google Maps"
+    ExtensionManagementUtility::addToAllTCAtypes(
+        'tt_address',
+        '--div--;maps2.db:tab.maps2.gm,tx_maps2_uid',
+    );
+
+
+..  _developer-maps2-registry-simple-default-storage:
+
+Simple Default Storage
+======================
+
+By default maps2 will store the related POI collection record on the same
+storage folder as of your stored record. If you want maps2 to store
+poi collection record in a different storage folder you can set a hard-coded
+default storage PID:
+
+..  code-block:: php
+
+    <?php
+
+    use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+
+    ExtensionManagementUtility::addTCAcolumns(
+        'tt_address',
+        [
+            'tx_maps2_uid' => [
+                'config' => [
+                    'type' => 'group',
+                    'renderType' => 'maps2Relation',
+                    'addressColumns' => [
+                        'address',
+                        'zip',
+                        'city',
+                    ],
+                    'defaultStoragePid' => 4711,
+                ],
+            ],
+        ],
+    );
+
+    // Label with "Google Maps"
+    ExtensionManagementUtility::addToAllTCAtypes(
+        'tt_address',
+        '--div--;maps2.db:tab.maps2.gm,tx_maps2_uid',
+    );
+
+..  _developer-maps2-registry-default-storage-ext-conf:
+
+Default Storage from Extension Configuration
+============================================
+
+By default maps2 will store the related POI collection record on the same
+storage folder as of your stored record. If you want maps2 to store
+poi collection record in a declared storage PID defined in on of the installed
+extensions you can configure it that way:
+
+..  code-block:: php
+
+    <?php
+
+    use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+
+    ExtensionManagementUtility::addTCAcolumns(
+        'tt_address',
+        [
+            'tx_maps2_uid' => [
+                'config' => [
+                    'type' => 'group',
+                    'renderType' => 'maps2Relation',
+                    'addressColumns' => [
+                        'address',
+                        'zip',
+                        'city',
+                    ],
+                    'defaultStoragePid' => [
+                        'type' => 'extensionmanager'
+                        'extKey' => 'my_ext',
+                        'property' => 'mapsPid',
+                    ],
+                ],
+            ],
+        ],
+    );
+
+    // Label with "Google Maps"
+    ExtensionManagementUtility::addToAllTCAtypes(
+        'tt_address',
+        '--div--;maps2.db:tab.maps2.gm,tx_maps2_uid',
+    );
+
+
+..  _developer-maps2-registry-default-storage-pagetsconfig:
+
+Default Storage from PageTS config
+==================================
+
+By default maps2 will store the related POI collection record on the same
+storage folder as of your stored record. If you want maps2 to store
+poi collection record in a declared storage PID defined by a value of
+PageTS config `ext.my_ext.specialConfiguredPidForMaps2 = 4324`
+
+..  code-block:: php
+
+    <?php
+
+    use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+
+    ExtensionManagementUtility::addTCAcolumns(
+        'tt_address',
+        [
+            'tx_maps2_uid' => [
+                'config' => [
+                    'type' => 'group',
+                    'renderType' => 'maps2Relation',
+                    'addressColumns' => [
+                        'address',
+                        'zip',
+                        'city',
+                    ],
+                    'defaultStoragePid' => [
+                        'type' => 'pagetsconfig'
+                        'extKey' => 'my_ext',
+                        'property' => 'specialConfiguredPidForMaps2',
+                    ],
+                ],
+            ],
+        ],
+    );
+
+    // Label with "Google Maps"
+    ExtensionManagementUtility::addToAllTCAtypes(
+        'tt_address',
+        '--div--;maps2.db:tab.maps2.gm,tx_maps2_uid',
+    );
+
+..  _developer-maps2-registry-stacked-default-storage:
+
+Stacked Default Storage
+=======================
+
+By default maps2 will store the related POI collection record on the same
+storage folder as of your stored record. If you want maps2 to store
+POI collection record in a different storage folder you can set various
+ordered storage PID locations:
+
+..  code-block:: php
+
+    <?php
+
+    use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+
+    ExtensionManagementUtility::addTCAcolumns(
+        'tt_address',
+        [
+            'tx_maps2_uid' => [
+                'config' => [
+                    'type' => 'group',
+                    'renderType' => 'maps2Relation',
+                    'addressColumns' => [
+                        'address',
+                        'zip',
+                        'city',
+                    ],
+                    'defaultStoragePid' => [
+                        0 => [
+                            'type' => 'pagetsconfig'
+                            'extKey' => 'news',
+                            'property' => 'pid_of_maps2',
+                        ],
+                        1 => [
+                            'type' => 'pagetsconfig'
+                            'extKey' => 'my_ext',
+                            'property' => 'specialConfiguredPidForMaps2',
+                        ],
+                        2 => [
+                            'type' => 'extensionmanager'
+                            'extKey' => 'my_ext',
+                            'property' => 'mapsPid',
+                        ],
+                        3 => [
+                            'type' => 'extensionmanager'
+                            'extKey' => 'events2',
+                            'property' => 'poiCollectionPid',
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    );
+
+    // Label with "Google Maps"
+    ExtensionManagementUtility::addToAllTCAtypes(
+        'tt_address',
+        '--div--;maps2.db:tab.maps2.gm,tx_maps2_uid',
+    );
+
+
+..  _developer-maps2-registry-synchronize-columns:
+
+Synchronize Columns
+===================
+
+By default maps2 will only add the related UID of POI collection to your record
+but it is possible to synchronize further columns like a title od a hidden flag.
+Following example shows how to synchronize location column of your table into
+the title column of maps2 POI collection record:
+
+..  code-block:: php
+
+    <?php
+
+    use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+
+    ExtensionManagementUtility::addTCAcolumns(
+        'tt_address',
+        [
+            'tx_maps2_uid' => [
+                'config' => [
+                    'type' => 'group',
+                    'renderType' => 'maps2Relation',
+                    'addressColumns' => [
+                        'address',
+                        'zip',
+                        'city',
+                    ],
+                    'synchronizeColumns' => [
+                        [
+                            'foreignColumnName' => 'location',
+                            'poiCollectionColumnName' => 'title'
+                        ]
                     ]
-                ]
-            ]
-        );
-    }
+                ],
+            ],
+        ],
+    );
+
+    // Label with "Google Maps"
+    ExtensionManagementUtility::addToAllTCAtypes(
+        'tt_address',
+        '--div--;maps2.db:tab.maps2.gm,tx_maps2_uid',
+    );
+
+You can add multiple configuration to `synchronizeColumns`. BUT: Currently,
+only 1:1 relations are allowed.
+
+
+..  _developer-maps2-registry-override:
+
+Override Configuration
+======================
+
+The Maps2Registry is an API, so other extension may make use of it and have
+already created a relation for their tables. But you as a developer need a tool
+to always override the maps2 registry to your needs.
+
+That's why we have implemented an override feature:
+
+..  code-block:: php
+
+    <?php
+
+    use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+
+    ExtensionManagementUtility::addTCAcolumns(
+        'tt_address',
+        [
+            'tx_maps2_uid' => [
+                'config' => [
+                    'type' => 'group',
+                    'renderType' => 'maps2Relation',
+                    'addressColumns' => [
+                        'address',
+                        'zip',
+                        'city',
+                    ],
+                    'override' => true,
+                ],
+            ],
+        ],
+    );
+
+    // Label with "Google Maps"
+    ExtensionManagementUtility::addToAllTCAtypes(
+        'tt_address',
+        '--div--;maps2.db:tab.maps2.gm,tx_maps2_uid',
+    );
+
+This will remove the registration of the other extensions/developers and just
+yours will win.
+
+..  _developer-maps2-registry-tab-openstreetmap:
+
+Change maps2 tab to "OpenStreetMap"
+===================================
+
+In the examples above you only see how to create a new tab for
+Google Maps to TCEforms in backend, but it is also possible to change that to
+OpenStreetMap:
+
+    // Label with "OpenStreetMap"
+    ExtensionManagementUtility::addToAllTCAtypes(
+        'tt_address',
+        '--div--;maps2.db:tab.maps2.osm,tx_maps2_uid',
+    );

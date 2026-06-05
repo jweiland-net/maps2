@@ -22,6 +22,8 @@ For this case you can use following configuration.
     If you really want to use a title please create a slug column on your own
     and reference that column in aspect yourself.
 
+..  _routing-example-configuration:
+
 Example Configuration
 =====================
 

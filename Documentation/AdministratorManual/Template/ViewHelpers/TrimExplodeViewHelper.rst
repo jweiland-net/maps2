@@ -1,12 +1,16 @@
 ..  include:: /Includes.rst.txt
 
 
+..  _viewhelper-trim-explode:
+
 =====================
 TrimExplodeViewHelper
 =====================
 
 This is a ViewHelper to convert a comma separated value into an array.
 All values will be trimmed.
+
+..  _viewhelper-trim-explode-properties:
 
 General properties
 ==================
@@ -28,8 +32,12 @@ General properties
     :Default value:
         ,
 
+..  _viewhelper-trim-explode-examples:
+
 Examples
 ========
+
+..  _viewhelper-trim-explode-basic-example:
 
 Basic example
 -------------

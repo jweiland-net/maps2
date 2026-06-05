@@ -1,6 +1,8 @@
 ..  include:: /Includes.rst.txt
 
 
+..  _viewhelper-is-request-to-map-provider-allowed:
+
 =======================================
 IsRequestToMapProviderAllowedViewHelper
 =======================================
@@ -9,8 +11,12 @@ Use this ViewHelper to check user consent, if requests to map providers like
 Google Maps or OpenStreetMap are allowed or not.
 
 
+..  _viewhelper-is-request-to-map-provider-allowed-example:
+
 Examples
 ========
+
+..  _viewhelper-is-request-to-map-provider-allowed-basic-example:
 
 Basic example
 -------------

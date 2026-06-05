@@ -18,4 +18,4 @@ Administrator manual
     GoogleApiKeys/Index
     Routing/Index
     Upgrade/Index
-    Templates/Index
+    Template/Index

@@ -1,9 +1,11 @@
 ..  include:: /Includes.rst.txt
 
 
-=========
-Templates
-=========
+..  _template:
+
+========
+Template
+========
 
 ..  only:: html
 

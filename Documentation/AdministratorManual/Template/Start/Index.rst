@@ -1,6 +1,8 @@
 ..  include:: /Includes.rst.txt
 
 
+..  _editing-templates:
+
 ============================
 Changing & editing templates
 ============================
@@ -8,6 +10,8 @@ Changing & editing templates
 EXT:maps2 is using fluid as template engine. If you are know how to manage fluid
 templates, you can skip this section.
 
+
+..  _editing-templates-changing-paths:
 
 Changing paths of the template
 ==============================
@@ -42,6 +46,8 @@ customize the templates.
         }
       }
     }
+
+..  _editing-templates-using-of-typoscript-constants:
 
 Change the templates using TypoScript constants
 -----------------------------------------------

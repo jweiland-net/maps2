@@ -1,11 +1,15 @@
 ..  include:: /Includes.rst.txt
 
 
+..  _viewhelper-has-cache:
+
 ==========================
 Cache / HasCacheViewHelper
 ==========================
 
 This is a ViewHelper to check, if a cache entry exists.
+
+..  _viewhelper-has-cache-properties:
 
 General properties
 ==================
@@ -33,8 +37,12 @@ General properties
     data from PoiCollection to build a more unique CacheIdentifier which can differ
     Caches in multilingual environment.
 
+..  _viewhelper-has-cache-example:
+
 Examples
 ========
+
+..  _viewhelper-has-cache-basic-example:
 
 Basic example
 -------------
