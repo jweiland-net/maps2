@@ -25,8 +25,14 @@ ExtensionManagementUtility::addTCAcolumns(
                 ],
                 'countryColumn' => 'country',
                 'synchronizeColumns' => [
-                    'foreignColumnName' => 'title',
-                    'poiCollectionColumnName' => 'title',
+                    0 => [
+                        'foreignColumnName' => 'title',
+                        'poiCollectionColumnName' => 'title',
+                    ],
+                    1 => [
+                        'foreignColumnName' => 'hidden',
+                        'poiCollectionColumnName' => 'hidden',
+                    ],
                 ],
             ],
         ],

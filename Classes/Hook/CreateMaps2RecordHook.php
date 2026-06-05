@@ -150,7 +150,8 @@ final readonly class CreateMaps2RecordHook
         $languageField = $this->tcaSchemaFactory
             ->get($tableName)
             ->getCapability(TcaSchemaCapability::Language)
-            ->getFieldName();
+            ->getLanguageField()
+            ->getName();
 
         return
             !$isTableLocalizable

@@ -14,6 +14,9 @@ return [
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
         'delete' => 'deleted',
+        'languageField' => 'sys_language_uid',
+        'transOrigPointerField' => 'l10n_parent',
+        'transOrigDiffSourceField' => 'l10n_diffsource',
         'enablecolumns' => [
             'disabled' => 'hidden',
             'starttime' => 'starttime',
@@ -22,7 +25,7 @@ return [
     ],
     'types' => [
         '1' => [
-            'showitem' => 'streetHouseNumber'
+            'showitem' => 'title, street, house_number, zip, city, country'
         ],
     ],
     'palettes' => [],
