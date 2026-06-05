@@ -49,23 +49,23 @@ ExtensionUtility::registerPlugin(
 
 ExtensionManagementUtility::addToAllTCAtypes(
     'tt_content',
-    '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:plugin,pi_flexform,pages;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:pages.ALT.list_formlabel,recursive',
+    'pages;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:pages.ALT.list_formlabel,recursive',
     'maps2_maps2',
-    'after:subheader',
+    'after:pi_flexform',
 );
 
 ExtensionManagementUtility::addToAllTCAtypes(
     'tt_content',
-    '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:plugin,pi_flexform,pages;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:pages.ALT.list_formlabel,recursive',
+    'pages;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:pages.ALT.list_formlabel,recursive',
     'maps2_searchwithinradius',
-    'after:subheader',
+    'after:pi_flexform',
 );
 
 ExtensionManagementUtility::addToAllTCAtypes(
     'tt_content',
-    '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:plugin,pi_flexform,pages;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:pages.ALT.list_formlabel,recursive',
+    'pages;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:pages.ALT.list_formlabel,recursive',
     'maps2_citymap',
-    'after:subheader',
+    'after:pi_flexform',
 );
 
 $GLOBALS['TCA']['tt_content']['types']['maps2_maps2']['previewRenderer'] = Maps2PluginPreview::class;
