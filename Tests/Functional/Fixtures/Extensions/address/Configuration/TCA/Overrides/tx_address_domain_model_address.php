@@ -7,22 +7,33 @@
  * LICENSE file that was distributed with this source code.
  */
 
-use JWeiland\Maps2\Tca\Maps2Registry;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
-if (ExtensionManagementUtility::isLoaded('maps2')) {
-    Maps2Registry::getInstance()->add(
-        'address',
-        'tx_address_domain_model_address',
-        [
-            'addressColumns' => ['address', 'house_number', 'zip', 'city'],
-            'countryColumn' => 'country',
-            'synchronizeColumns' => [
-                [
+ExtensionManagementUtility::addTCAcolumns(
+    'tx_address_domain_model_address',
+    [
+        'tx_maps2_uid' => [
+            'config' => [
+                'type' => 'group',
+                'renderType' => 'maps2Relation',
+                'addressColumns' => [
+                    'address',
+                    'house_number',
+                    'zip',
+                    'city',
+                    'country',
+                ],
+                'countryColumn' => 'country',
+                'synchronizeColumns' => [
                     'foreignColumnName' => 'title',
-                    'poiCollectionColumnName' => 'title'
-                ]
-            ]
-        ]
-    );
-}
+                    'poiCollectionColumnName' => 'title',
+                ],
+            ],
+        ],
+    ],
+);
+
+ExtensionManagementUtility::addToAllTCAtypes(
+    'tx_address_domain_model_address',
+    '--div--;maps2.db:tab.maps2.gm,tx_maps2_uid',
+);

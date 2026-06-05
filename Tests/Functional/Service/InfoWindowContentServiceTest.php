@@ -46,6 +46,7 @@ class InfoWindowContentServiceTest extends FunctionalTestCase
     protected EventDispatcherInterface|MockObject $eventDispatcherMock;
 
     protected array $testExtensionsToLoad = [
+        __DIR__ . '/../Fixtures/Extensions/address',
         'jweiland/maps2',
     ];
 
@@ -53,7 +54,7 @@ class InfoWindowContentServiceTest extends FunctionalTestCase
     {
         parent::setUp();
 
-        $this->importCSVDataSet(__DIR__ . '/../Fixtures/tx_events2_domain_model_location.csv');
+        $this->importCSVDataSet(__DIR__ . '/../Fixtures/tx_address_domain_model_address.csv');
 
         $this->viewFactory = GeneralUtility::makeInstance(ViewFactoryInterface::class);
         $this->contentDataProcessor = GeneralUtility::makeInstance(ContentDataProcessor::class);
