@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Backend\Preview;
 
 use JWeiland\Maps2\Service\PoiCollectionService;
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Preview\StandardContentPreviewRenderer;
 use TYPO3\CMS\Backend\View\BackendLayout\Grid\GridColumnItem;
 use TYPO3\CMS\Core\Configuration\FlexForm\FlexFormTools;
@@ -64,7 +65,11 @@ class Maps2PluginPreview extends StandardContentPreviewRenderer
         }
 
         if ($ttContentRecord->getRecordType() === 'maps2_maps2') {
-            $this->addPoiCollection($view, $piFlexFormData);
+            $this->addPoiCollection(
+                $view,
+                $piFlexFormData,
+                $item->getContext()->getCurrentRequest(),
+            );
         }
 
         return $view->render();
@@ -102,7 +107,11 @@ class Maps2PluginPreview extends StandardContentPreviewRenderer
         return [];
     }
 
-    protected function addPoiCollection(ViewInterface $view, array $piFlexformData): void
+    protected function addPoiCollection(
+        ViewInterface $view,
+        array $piFlexformData,
+        ServerRequestInterface $request,
+    ): void
     {
         if (
             isset($piFlexformData['settings']['poiCollection'])
@@ -111,7 +120,7 @@ class Maps2PluginPreview extends StandardContentPreviewRenderer
         ) {
             $poiCollectionRecord = $this->poiCollectionService->findByUid(
                 (int)$piFlexformData['settings']['poiCollection'],
-                $GLOBALS['TYPO3_REQUEST'] ?? null,
+                $request,
             );
             if ($poiCollectionRecord !== null) {
                 $view->assign('poiCollectionRecord', $poiCollectionRecord);

@@ -97,7 +97,6 @@ services:
 
   # Called by makeInstance in PoiCollection model to add foreign records
   JWeiland\Maps2\Service\MapService:
-    public: true
     arguments:
       $columnRegistry: '@maps2.columnRegistry'
 
