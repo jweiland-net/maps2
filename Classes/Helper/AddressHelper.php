@@ -21,7 +21,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 /**
  * Extract address parts from a foreign record array and build an address for Geocode requests
  */
-class AddressHelper
+readonly class AddressHelper
 {
     public function __construct(
         protected MessageHelper $messageHelper,

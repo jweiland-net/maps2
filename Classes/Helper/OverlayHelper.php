@@ -18,7 +18,7 @@ use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 /**
  * Helper to add where clause for translations and workspaces to QueryBuilder
  */
-class OverlayHelper
+readonly class OverlayHelper
 {
     public function __construct(
         protected Context $context,

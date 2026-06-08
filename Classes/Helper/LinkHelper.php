@@ -21,7 +21,7 @@ use TYPO3\CMS\Core\Utility\ArrayUtility;
 /**
  * Extract address parts from foreign record array and build an address for Google Maps GoeCode requests
  */
-class LinkHelper
+readonly class LinkHelper
 {
     public function __construct(
         protected SiteFinder $siteFinder,

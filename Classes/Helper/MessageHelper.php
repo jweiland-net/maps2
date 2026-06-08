@@ -21,9 +21,9 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Contains methods to create FlashMessages.
- * Further we will implement a central position for Logging
+ * Further, we will implement a central position for Logging
  */
-class MessageHelper
+readonly class MessageHelper
 {
     public function __construct(
         protected FlashMessageService $flashMessageService,
