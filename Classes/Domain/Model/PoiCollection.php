@@ -11,10 +11,9 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Domain\Model;
 
-use JWeiland\Maps2\Domain\Traits\GetExtConfTrait;
-use JWeiland\Maps2\Domain\Traits\GetMapHelperTrait;
-use JWeiland\Maps2\Domain\Traits\GetWebPathOfFileReferenceTrait;
+use JWeiland\Maps2\Traits\GetWebPathOfFileReferenceTrait;
 use JWeiland\Maps2\Service\MapService;
+use JWeiland\Maps2\Traits\ConvertJsonPoisAsArrayTrait;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Attribute as Extbase;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
@@ -27,8 +26,7 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  */
 class PoiCollection extends AbstractEntity
 {
-    use GetExtConfTrait;
-    use GetMapHelperTrait;
+    use ConvertJsonPoisAsArrayTrait;
     use GetWebPathOfFileReferenceTrait;
 
     protected int $sysLanguageUid = 0;
@@ -463,7 +461,7 @@ class PoiCollection extends AbstractEntity
             $configurationMap = '[]';
         }
 
-        return $this->getMapHelper()->convertPoisAsJsonToArray($configurationMap);
+        return $this->convertJsonPoisToArray($configurationMap);
     }
 
     public function getDistance(): float

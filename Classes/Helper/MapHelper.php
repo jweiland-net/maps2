@@ -14,7 +14,6 @@ namespace JWeiland\Maps2\Helper;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Configuration\MapProviderEnum;
 use JWeiland\Maps2\Traits\GetTypo3RequestTrait;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Little helper with a very reduced set of dependencies like Extbase. Useful, if you need f.e. the configured
@@ -73,34 +72,6 @@ readonly class MapHelper
         }
 
         return $mapProvider;
-    }
-
-    /**
-     * POIs are stored as JSON in tx_maps_domain_model_poicollection.
-     * Use this method to convert the JSON back into an array.
-     *
-     * @param string $poisAsJson That's normally the content of column "configuration_map"
-     * @return array<string, string>[]|bool[]
-     */
-    public function convertPoisAsJsonToArray(string $poisAsJson): array
-    {
-        $pois = [];
-
-        try {
-            foreach (json_decode($poisAsJson, true, 512, JSON_THROW_ON_ERROR) ?? [] as $poi) {
-                $pois[] = array_combine(
-                    [
-                        'latitude',
-                        'longitude',
-                    ],
-                    GeneralUtility::trimExplode(',', $poi),
-                );
-            }
-        } catch (\JsonException) {
-            // Return empty POIs
-        }
-
-        return $pois;
     }
 
     /**

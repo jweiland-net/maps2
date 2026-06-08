@@ -11,8 +11,7 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Domain\Model;
 
-use JWeiland\Maps2\Domain\Traits\GetExtConfTrait;
-use JWeiland\Maps2\Domain\Traits\GetWebPathOfFileReferenceTrait;
+use JWeiland\Maps2\Traits\GetWebPathOfFileReferenceTrait;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
@@ -21,7 +20,6 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  */
 class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
 {
-    use GetExtConfTrait;
     use GetWebPathOfFileReferenceTrait;
 
     /**

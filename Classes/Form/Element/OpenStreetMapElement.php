@@ -13,7 +13,7 @@ namespace JWeiland\Maps2\Form\Element;
 
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Configuration\MapProviderEnum;
-use JWeiland\Maps2\Helper\MapHelper;
+use JWeiland\Maps2\Traits\ConvertJsonPoisAsArrayTrait;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
 use TYPO3\CMS\Core\Page\JavaScriptModuleInstruction;
@@ -34,6 +34,8 @@ use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 )]
 class OpenStreetMapElement extends AbstractFormElement implements FormElementInterface
 {
+    use ConvertJsonPoisAsArrayTrait;
+
     private const ELEMENT_TEMPLATE = 'EXT:maps2/Resources/Private/Templates/Tca/OpenStreetMap.fluid.html';
 
     /**
@@ -48,7 +50,6 @@ class OpenStreetMapElement extends AbstractFormElement implements FormElementInt
     ];
 
     public function __construct(
-        private readonly MapHelper $mapHelper,
         private readonly ExtConf $extConf,
         private readonly ViewFactoryInterface $viewFactory,
     ) {}
@@ -134,7 +135,7 @@ class OpenStreetMapElement extends AbstractFormElement implements FormElementInt
     {
         foreach ($poiCollectionRecord as $field => $value) {
             if ($field === 'configuration_map') {
-                $poiCollectionRecord[$field] = $this->mapHelper->convertPoisAsJsonToArray($value);
+                $poiCollectionRecord[$field] = $this->convertJsonPoisToArray($value);
             } else {
                 $poiCollectionRecord[$field] = is_array($value) && array_key_exists(0, $value) ? $value[0] : $value;
             }
