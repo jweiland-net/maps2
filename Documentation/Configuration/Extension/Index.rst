@@ -55,7 +55,7 @@ a default map provider to be preselected for new poi collection records.
 defaultMapType
 --------------
 
-Default: `Empty`
+Default: `Point`
 
 By default an editor has to choose which type of poi collection record he wants
 to create. As an administrator or integrator you have the possibility to reduce

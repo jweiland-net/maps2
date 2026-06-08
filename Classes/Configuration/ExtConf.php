@@ -28,7 +28,7 @@ final readonly class ExtConf
         // general
         'mapProvider' => 'both',
         'defaultMapProvider' => 'gm',
-        'defaultMapType' => 'Empty',
+        'defaultMapType' => 'Point',
         'defaultCountry' => '',
         'defaultLatitude' => 0.0,
         'defaultLongitude' => 0.0,

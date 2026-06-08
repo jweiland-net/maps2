@@ -15,8 +15,7 @@
         </source>
       </trans-unit>
       <trans-unit id="defaultMapType">
-        <source>Default map type: If desired, you can specify a default map type for new POI records. With the default
-          "Empty", the editor must first select a type when creating a new POI.
+        <source>Default map type: If desired, you can specify a default map type for new POI records.
         </source>
       </trans-unit>
       <trans-unit id="defaultCountry">

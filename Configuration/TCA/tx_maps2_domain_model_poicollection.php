@@ -29,7 +29,6 @@ return [
         'typeicon_column' => 'collection_type',
         'typeicon_classes' => [
             'default' => 'ext-maps2-record-type-point',
-            'Empty' => 'ext-maps2-record-type-point',
             'Point' => 'ext-maps2-record-type-point',
             'Area' => 'ext-maps2-record-type-area',
             'Route' => 'ext-maps2-record-type-route',
@@ -42,10 +41,6 @@ return [
         ],
     ],
     'types' => [
-        'Empty' => [
-            'showitem' => '--palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:palette.language_hidden;language_hidden, l10n_diffsource,
-            collection_type, title',
-        ],
         'Point' => [
             'showitem' => '--palette--;LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:palette.language_hidden;language_hidden, l10n_diffsource,
                 collection_type, title,
@@ -114,12 +109,8 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'required' => true,
-                'default' => 'Empty',
+                'default' => 'Point',
                 'items' => [
-                    [
-                        'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.collectionType.empty',
-                        'value' => 'Empty',
-                    ],
                     [
                         'label' => 'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:tx_maps2_domain_model_poicollection.collectionType.point',
                         'value' => 'Point',
