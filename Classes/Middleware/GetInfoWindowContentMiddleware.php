@@ -68,7 +68,7 @@ final readonly class GetInfoWindowContentMiddleware implements MiddlewareInterfa
         ]);
     }
 
-    protected function getPostData(ServerRequestInterface $request): array
+    private function getPostData(ServerRequestInterface $request): array
     {
         try {
             $payload = json_decode((string)$request->getBody(), true, 512, JSON_THROW_ON_ERROR);

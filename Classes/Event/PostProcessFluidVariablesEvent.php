@@ -21,9 +21,9 @@ use TYPO3\CMS\Extbase\Mvc\Request;
 final class PostProcessFluidVariablesEvent implements ControllerActionEventInterface
 {
     public function __construct(
-        protected ServerRequestInterface $request,
-        protected array $settings,
-        protected array $fluidVariables,
+        private readonly ServerRequestInterface $request,
+        private readonly array $settings,
+        private array $fluidVariables,
     ) {}
 
     public function getRequest(): ServerRequestInterface

@@ -11,9 +11,9 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Domain\Model;
 
-use JWeiland\Maps2\Traits\GetWebPathOfFileReferenceTrait;
 use JWeiland\Maps2\Service\MapService;
 use JWeiland\Maps2\Traits\ConvertJsonPoisAsArrayTrait;
+use JWeiland\Maps2\Traits\GetWebPathOfFileReferenceTrait;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Attribute as Extbase;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;

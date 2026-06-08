@@ -29,9 +29,9 @@ final readonly class InitFeSessionMiddleware implements MiddlewareInterface
     use CookieHeaderTrait;
 
     public function __construct(
-        protected ExtConf $extConf,
-        protected MapHelper $mapHelper,
-        private readonly Context $context,
+        private ExtConf $extConf,
+        private MapHelper $mapHelper,
+        private Context $context,
     ) {}
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
@@ -48,7 +48,7 @@ final readonly class InitFeSessionMiddleware implements MiddlewareInterface
         return $response;
     }
 
-    protected function createCookie(ServerRequestInterface $request): Cookie
+    private function createCookie(ServerRequestInterface $request): Cookie
     {
         $normalizedParams = $request->getAttribute('normalizedParams');
 
@@ -73,7 +73,7 @@ final readonly class InitFeSessionMiddleware implements MiddlewareInterface
         );
     }
 
-    protected function getCookieExpire(): int
+    private function getCookieExpire(): int
     {
         // If COOKIE is activated, set expire to FE sessionDataLifetime which is 1 day by default
         $maxSessionLifetime = $GLOBALS['TYPO3_CONF_VARS']['FE']['sessionDataLifetime'] ?? 60 * 60 * 24;

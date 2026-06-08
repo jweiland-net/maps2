@@ -63,7 +63,7 @@ final class ConvertToJsonViewHelper extends AbstractViewHelper
      *
      * @param PoiCollection[] $poiCollections
      */
-    protected function getPoiCollectionsAsJson(array|QueryResultInterface|ObjectStorage $poiCollections): string
+    private function getPoiCollectionsAsJson(array|QueryResultInterface|ObjectStorage $poiCollections): string
     {
         $poiCollectionsAsArray = [];
         foreach ($poiCollections as $poiCollection) {
@@ -91,7 +91,7 @@ final class ConvertToJsonViewHelper extends AbstractViewHelper
     /**
      * Check, if value contains entries of type PoiCollection
      */
-    protected function valueContainsPoiCollections(mixed $value): bool
+    private function valueContainsPoiCollections(mixed $value): bool
     {
         // With PHP 8.1 reset() and current() should not be used with objects anymore.
         // Extract the values as simple array to be compatible in the future.

@@ -17,9 +17,9 @@ namespace JWeiland\Maps2\Event;
 final class PreAddForeignRecordEvent
 {
     public function __construct(
-        protected array $foreignRecord,
-        protected string $tableName,
-        protected string $columnName,
+        private array $foreignRecord,
+        private readonly string $tableName,
+        private readonly string $columnName,
     ) {}
 
     public function getForeignRecord(): array
