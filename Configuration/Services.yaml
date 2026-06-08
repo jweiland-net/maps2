@@ -38,7 +38,7 @@ services:
     arguments:
       - '@=service("JWeiland\\Maps2\\Helper\\MapHelper").getMapProvider()'
 
-  # Called by makeInstance in TYPO3's PluginPreview
+  # Called by makeInstance in TYPO3's StandardPreviewRendererResolver
   JWeiland\Maps2\Backend\Preview\Maps2PluginPreview:
     public: true
 
@@ -50,13 +50,13 @@ services:
     arguments:
       $mapProviderGeoCodingRequests: !tagged_iterator { tag: 'maps2.request.geocoding' }
 
-  # Called by makeInstance in various TCA files
-  JWeiland\Maps2\Configuration\ExtConf:
-    public: true
-
   # Called by makeInstance in TYPO3's AbstractConditionMatcher
   JWeiland\Maps2\ExpressionLanguage\AllowMapProviderRequestFunctionsProvider:
     public: true
+
+  JWeiland\Maps2\EventListener\PrepareTcaEventListener:
+    arguments:
+      $mapProvider: '@=service("JWeiland\\Maps2\\Helper\\MapHelper").getMapProvider()'
 
   # Called by makeInstance in TYPO3's NodeRegistry
   JWeiland\Maps2\Form\Element\ReadOnlyInputTextElement:
