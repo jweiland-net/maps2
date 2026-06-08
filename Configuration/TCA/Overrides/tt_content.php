@@ -20,30 +20,30 @@ if (!defined('TYPO3')) {
 ExtensionUtility::registerPlugin(
     'maps2',
     'Maps2',
-    'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.maps2.title',
+    'maps2.db:plugin.maps2.title',
     'ext-maps2-wizard-icon',
     'plugins',
-    'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.maps2.description',
+    'maps2.db:plugin.maps2.description',
     'FILE:EXT:maps2/Configuration/FlexForms/Maps2.xml',
 );
 
 ExtensionUtility::registerPlugin(
     'maps2',
     'SearchWithinRadius',
-    'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.searchwithinradius.title',
+    'maps2.db:plugin.searchwithinradius.title',
     'ext-maps2-wizard-icon',
     'plugins',
-    'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.searchwithinradius.description',
+    'maps2.db:plugin.searchwithinradius.description',
     'FILE:EXT:maps2/Configuration/FlexForms/Radius.xml',
 );
 
 ExtensionUtility::registerPlugin(
     'maps2',
     'CityMap',
-    'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.citymap.title',
+    'maps2.db:plugin.citymap.title',
     'ext-maps2-wizard-icon',
     'plugins',
-    'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.citymap.description',
+    'maps2.db:plugin.citymap.description',
     'FILE:EXT:maps2/Configuration/FlexForms/CityMap.xml',
 );
 
