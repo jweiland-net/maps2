@@ -74,14 +74,11 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
 
     public function getMaps2MarkerIconWidth(): int
     {
-        $markerIconWidth = $this->getExtConf()->getMarkerIconWidth();
-
-        // Only use icon width of this model, if model has marker icons
         if ($this->maps2MarkerIconWidth > 0 && $this->getMaps2MarkerIcons()->count() !== 0) {
-            $markerIconWidth = $this->maps2MarkerIconWidth;
+            return $this->maps2MarkerIconWidth;
         }
 
-        return $markerIconWidth;
+        return 0;
     }
 
     public function setMaps2MarkerIconWidth(int $maps2MarkerIconWidth): void
@@ -91,14 +88,11 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
 
     public function getMaps2MarkerIconHeight(): int
     {
-        $markerIconHeight = $this->getExtConf()->getMarkerIconHeight();
-
-        // Only use icon height of this model, if model has marker icons
         if ($this->maps2MarkerIconHeight > 0 && $this->getMaps2MarkerIcons()->count() !== 0) {
-            $markerIconHeight = $this->maps2MarkerIconHeight;
+            return $this->maps2MarkerIconHeight;
         }
 
-        return $markerIconHeight;
+        return 0;
     }
 
     public function setMaps2MarkerIconHeight(int $maps2MarkerIconHeight): void
@@ -108,14 +102,11 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
 
     public function getMaps2MarkerIconAnchorPosX(): int
     {
-        $markerIconAnchorPosX = $this->getExtConf()->getMarkerIconAnchorPosX();
-
-        // Only use icon anchor pos X of this model, if model has marker icons
         if ($this->maps2MarkerIconAnchorPosX > 0 && $this->getMaps2MarkerIcons()->count() !== 0) {
-            $markerIconAnchorPosX = $this->maps2MarkerIconAnchorPosX;
+            return $this->maps2MarkerIconAnchorPosX;
         }
 
-        return $markerIconAnchorPosX;
+        return 0;
     }
 
     public function setMaps2MarkerIconAnchorPosX(int $maps2MarkerIconAnchorPosX): void
@@ -125,14 +116,11 @@ class Category extends \TYPO3\CMS\Extbase\Domain\Model\Category
 
     public function getMaps2MarkerIconAnchorPosY(): int
     {
-        $markerIconAnchorPosY = $this->getExtConf()->getMarkerIconAnchorPosY();
-
-        // Only use icon anchor pos Y of this model, if model has marker icons
         if ($this->maps2MarkerIconAnchorPosY > 0 && $this->getMaps2MarkerIcons()->count() !== 0) {
-            $markerIconAnchorPosY = $this->maps2MarkerIconAnchorPosY;
+            return $this->maps2MarkerIconAnchorPosY;
         }
 
-        return $markerIconAnchorPosY;
+        return 0;
     }
 
     public function setMaps2MarkerIconAnchorPosY(int $maps2MarkerIconAnchorPosY): void

@@ -488,15 +488,20 @@ class GoogleMaps2 {
 
       img.src = environment.siteUrl + markerIconPath;
 
-      if (poiCollection.markerIconWidth) img.style.width = poiCollection.markerIconWidth + 'px';
-      if (poiCollection.markerIconHeight) img.style.height = poiCollection.markerIconHeight + 'px';
+      const markerIconWidth = poiCollection.markerIconWidth || environment.extConf.markerIconWidth;
+      const markerIconHeight = poiCollection.markerIconHeight || environment.extConf.markerIconHeight;
+      const markerIconAnchorPosX = poiCollection.markerIconAnchorPosX || environment.extConf.markerIconAnchorPosX;
+      const markerIconAnchorPosY = poiCollection.markerIconAnchorPosY || environment.extConf.markerIconAnchorPosY;
+
+      if (markerIconWidth) img.style.width = markerIconWidth + 'px';
+      if (markerIconHeight) img.style.height = markerIconHeight + 'px';
       markerOptions.content = img;
 
-      if (poiCollection.hasOwnProperty("markerIconAnchorPosX") && poiCollection.markerIconAnchorPosX !== "") {
-        markerOptions.anchorLeft = '-' + poiCollection.markerIconAnchorPosX + 'px';
+      if (markerIconAnchorPosX) {
+        markerOptions.anchorLeft = '-' + markerIconAnchorPosX + 'px';
       }
-      if (poiCollection.hasOwnProperty("markerIconAnchorPosY") && poiCollection.markerIconAnchorPosY !== "") {
-        markerOptions.anchorTop = '-' + poiCollection.markerIconAnchorPosY + 'px';
+      if (markerIconAnchorPosY) {
+        markerOptions.anchorTop = '-' + markerIconAnchorPosY + 'px';
       }
     }
 

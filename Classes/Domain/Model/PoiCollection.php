@@ -374,22 +374,18 @@ class PoiCollection extends AbstractEntity
 
     public function getMarkerIconWidth(): int
     {
-        $markerIconWidth = $this->getExtConf()->getMarkerIconWidth();
+        if ($this->markerIconWidth > 0 && $this->getMarkerIcons()->count() !== 0) {
+            return $this->markerIconWidth;
+        }
 
-        // Overwrite width with value from category
         if (
             ($categoryWithIcon = $this->getFirstFoundCategoryWithIcon())
             && $categoryWithIcon instanceof Category
         ) {
-            $markerIconWidth = $categoryWithIcon->getMaps2MarkerIconWidth();
+            return $categoryWithIcon->getMaps2MarkerIconWidth();
         }
 
-        // Only use icon width of this model, if model has marker icons
-        if ($this->markerIconWidth > 0 && $this->getMarkerIcons()->count() !== 0) {
-            $markerIconWidth = $this->markerIconWidth;
-        }
-
-        return $markerIconWidth;
+        return 0;
     }
 
     public function setMarkerIconWidth(int $markerIconWidth): void
@@ -399,22 +395,18 @@ class PoiCollection extends AbstractEntity
 
     public function getMarkerIconHeight(): int
     {
-        $markerIconHeight = $this->getExtConf()->getMarkerIconHeight();
+        if ($this->markerIconHeight > 0 && $this->getMarkerIcons()->count() !== 0) {
+            return $this->markerIconHeight;
+        }
 
-        // Overwrite height with value from category
         if (
             ($categoryWithIcon = $this->getFirstFoundCategoryWithIcon())
             && $categoryWithIcon instanceof Category
         ) {
-            $markerIconHeight = $categoryWithIcon->getMaps2MarkerIconHeight();
+            return $categoryWithIcon->getMaps2MarkerIconHeight();
         }
 
-        // Only use icon height of this model, if model has marker icons
-        if ($this->markerIconHeight > 0 && $this->getMarkerIcons()->count() !== 0) {
-            $markerIconHeight = $this->markerIconHeight;
-        }
-
-        return $markerIconHeight;
+        return 0;
     }
 
     public function setMarkerIconHeight(int $markerIconHeight): void
@@ -424,22 +416,18 @@ class PoiCollection extends AbstractEntity
 
     public function getMarkerIconAnchorPosX(): int
     {
-        $markerIconAnchorPosX = $this->getExtConf()->getMarkerIconAnchorPosX();
+        if ($this->markerIconAnchorPosX > 0 && $this->getMarkerIcons()->count() !== 0) {
+            return $this->markerIconAnchorPosX;
+        }
 
-        // Overwrite anchor pos X with value from category
         if (
             ($categoryWithIcon = $this->getFirstFoundCategoryWithIcon())
             && $categoryWithIcon instanceof Category
         ) {
-            $markerIconAnchorPosX = $categoryWithIcon->getMaps2MarkerIconAnchorPosX();
+            return $categoryWithIcon->getMaps2MarkerIconAnchorPosX();
         }
 
-        // Only use icon anchor pos X of this model, if model has marker icons
-        if ($this->markerIconAnchorPosX > 0 && $this->getMarkerIcons()->count() !== 0) {
-            $markerIconAnchorPosX = $this->markerIconAnchorPosX;
-        }
-
-        return $markerIconAnchorPosX;
+        return 0;
     }
 
     public function setMarkerIconAnchorPosX(int $markerIconAnchorPosX): void
@@ -449,22 +437,18 @@ class PoiCollection extends AbstractEntity
 
     public function getMarkerIconAnchorPosY(): int
     {
-        $markerIconAnchorPosY = $this->getExtConf()->getMarkerIconAnchorPosY();
+        if ($this->markerIconAnchorPosY > 0 && $this->getMarkerIcons()->count() !== 0) {
+            return $this->markerIconAnchorPosY;
+        }
 
-        // Overwrite anchor pos Y with value from category
         if (
             ($categoryWithIcon = $this->getFirstFoundCategoryWithIcon())
             && $categoryWithIcon instanceof Category
         ) {
-            $markerIconAnchorPosY = $categoryWithIcon->getMaps2MarkerIconAnchorPosY();
+            return $categoryWithIcon->getMaps2MarkerIconAnchorPosY();
         }
 
-        // Only use icon anchor pos Y of this model, if model has marker icons
-        if ($this->markerIconAnchorPosY > 0 && $this->getMarkerIcons()->count() !== 0) {
-            $markerIconAnchorPosY = $this->markerIconAnchorPosY;
-        }
-
-        return $markerIconAnchorPosY;
+        return 0;
     }
 
     public function setMarkerIconAnchorPosY(int $markerIconAnchorPosY): void

@@ -367,6 +367,11 @@ class OpenStreetMap2 {
     ).addTo(this.map);
 
     if (poiCollection.hasOwnProperty("markerIcon") && poiCollection.markerIcon !== "") {
+      const markerIconWidth = poiCollection.markerIconWidth || this.getExtConf().markerIconWidth;
+      const markerIconHeight = poiCollection.markerIconHeight || this.getExtConf().markerIconHeight;
+      const markerIconAnchorPosX = poiCollection.markerIconAnchorPosX || this.getExtConf().markerIconAnchorPosX;
+      const markerIconAnchorPosY = poiCollection.markerIconAnchorPosY || this.getExtConf().markerIconAnchorPosY;
+
       let icon = L.icon({
         iconUrl: (() => {
           let markerIconPath = poiCollection.markerIcon;
@@ -378,8 +383,8 @@ class OpenStreetMap2 {
 
           return this.environment.siteUrl + markerIconPath;
         })(),
-        iconSize: [poiCollection.markerIconWidth, poiCollection.markerIconHeight],
-        iconAnchor: [poiCollection.markerIconAnchorPosX, poiCollection.markerIconAnchorPosY]
+        iconSize: [markerIconWidth, markerIconHeight],
+        iconAnchor: [markerIconAnchorPosX, markerIconAnchorPosY]
       });
       marker.setIcon(icon);
     }
