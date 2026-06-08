@@ -16,7 +16,7 @@ use JWeiland\Maps2\Tca\ColumnRegistration;
 /**
  * Event to modify a POI collection record after saving a foreign location record
  */
-class PostProcessPoiCollectionRecordEvent
+final class PostProcessPoiCollectionRecordEvent
 {
     public function __construct(
         protected string $poiCollectionTableName,

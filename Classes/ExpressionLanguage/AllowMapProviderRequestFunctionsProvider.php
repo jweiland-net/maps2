@@ -16,12 +16,14 @@ use Symfony\Component\ExpressionLanguage\ExpressionFunction;
 use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
 
 /**
- * Check, if extension configuration is set
- * and user has not explicit allowed map provider requests
+ * Check if extension configuration is set
+ * and the user has not explicitly allowed map provider requests
  */
-class AllowMapProviderRequestFunctionsProvider implements ExpressionFunctionProviderInterface
+readonly class AllowMapProviderRequestFunctionsProvider implements ExpressionFunctionProviderInterface
 {
-    public function __construct(protected MapHelper $mapHelper) {}
+    public function __construct(
+        protected MapHelper $mapHelper,
+    ) {}
 
     /**
      * @return ExpressionFunction[]

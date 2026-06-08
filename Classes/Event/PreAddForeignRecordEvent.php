@@ -14,7 +14,7 @@ namespace JWeiland\Maps2\Event;
 /**
  * Event to modify a foreign record just before it was added to PoiCollection object
  */
-class PreAddForeignRecordEvent
+final class PreAddForeignRecordEvent
 {
     public function __construct(
         protected array $foreignRecord,

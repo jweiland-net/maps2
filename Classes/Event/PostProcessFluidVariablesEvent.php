@@ -15,10 +15,10 @@ use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Extbase\Mvc\Request;
 
 /**
- * Post process controller actions that assign fluid variables to view.
+ * Post-process controller actions that assign fluid variables to view.
  * Often used by controller actions like "overlay" or "show". No redirects are possible here.
  */
-class PostProcessFluidVariablesEvent implements ControllerActionEventInterface
+final class PostProcessFluidVariablesEvent implements ControllerActionEventInterface
 {
     public function __construct(
         protected ServerRequestInterface $request,
