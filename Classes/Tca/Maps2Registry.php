@@ -19,7 +19,7 @@ use TYPO3\CMS\Core\Schema\TcaSchemaFactory;
 /**
  * Class to register maps2 columns to TCA.
  */
-class Maps2Registry
+readonly class Maps2Registry
 {
     public function __construct(
         protected TcaSchemaFactory $tcaSchemaFactory,

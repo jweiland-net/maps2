@@ -22,9 +22,9 @@ use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Http\CookieHeaderTrait;
 
 /**
- * Save consent in cookie, if requests to map providers was allowed by website visitor
+ * Save consent in cookie if requests to map providers was allowed by website visitor
  */
-class InitFeSessionMiddleware implements MiddlewareInterface
+final readonly class InitFeSessionMiddleware implements MiddlewareInterface
 {
     use CookieHeaderTrait;
 

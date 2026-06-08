@@ -23,7 +23,7 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 #[AutoconfigureTag(
     name: 'maps2.mapper',
 )]
-class OpenStreetMapMapper implements MapperInterface
+readonly class OpenStreetMapMapper implements MapperInterface
 {
     public function canProcess(MapProviderEnum $mapProvider): bool
     {

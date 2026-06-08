@@ -16,7 +16,7 @@ use JWeiland\Maps2\Configuration\MapProviderEnum;
 /**
  * This factory returns either a Mapper for Google Maps or OpenStreetMap
  */
-class MapperFactory
+readonly class MapperFactory
 {
     public function __construct(
         protected iterable $mapper,

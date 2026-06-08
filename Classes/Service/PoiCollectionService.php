@@ -25,13 +25,13 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * Sometimes there is no need to get PoiCollection via Extbase. Use this service to get records
  * via plain TYPO3 API.
  */
-class PoiCollectionService
+readonly class PoiCollectionService
 {
     private const TABLE = 'tx_maps2_domain_model_poicollection';
 
     public function __construct(
-        protected readonly QueryBuilder $queryBuilder,
-        protected readonly PageRepository $pageRepository,
+        protected QueryBuilder $queryBuilder,
+        protected PageRepository $pageRepository,
     ) {}
 
     public function findByUid(int $poiCollectionUid, ServerRequestInterface $request): ?array

@@ -22,7 +22,7 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  * With this class you can start requests to GeoCode API of Map Providers. Search for addresses, assign a POI
  * to a foreign record, save the foreign record, and many more. It is designed as an API.
  */
-class GeoCodeService
+readonly class GeoCodeService
 {
     public function __construct(
         protected ClientInterface $mapProviderClient,

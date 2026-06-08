@@ -24,7 +24,7 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 #[AutoconfigureTag(
     name: 'maps2.mapper',
 )]
-class GoogleMapsMapper implements MapperInterface
+readonly class GoogleMapsMapper implements MapperInterface
 {
     public function canProcess(MapProviderEnum $mapProvider): bool
     {
