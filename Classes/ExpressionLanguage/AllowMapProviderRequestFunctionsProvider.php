@@ -43,7 +43,7 @@ readonly class AllowMapProviderRequestFunctionsProvider implements ExpressionFun
         return new ExpressionFunction(
             'isRequestToMapProviderAllowed',
             static fn() => null, // Not implemented, we only use the evaluator
-            static fn($arguments, $str): bool => $mapHelper->isRequestToMapProviderAllowed($arguments['request']),
+            static fn($arguments): bool => $mapHelper->isRequestToMapProviderAllowed($arguments['request']),
         );
     }
 }

@@ -14,6 +14,7 @@ namespace JWeiland\Maps2\Helper;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Configuration\MapProviderEnum;
 use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Core\ExpressionLanguage\RequestWrapper;
 
 /**
  * Little helper with a very reduced set of dependencies like Extbase. Useful if you need f.e. the configured
@@ -78,7 +79,7 @@ readonly class MapHelper
      * If false, an overlay will be shown instead of the map, and no JavaScript files
      * will be loaded for maps2.
      */
-    public function isRequestToMapProviderAllowed(ServerRequestInterface $request): bool
+    public function isRequestToMapProviderAllowed(ServerRequestInterface|RequestWrapper $request): bool
     {
         if ($this->extConf->getExplicitAllowMapProviderRequests()) {
             // Check, if cookie with last consent was available
