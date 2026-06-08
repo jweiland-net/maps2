@@ -17,19 +17,12 @@ class OpenStreetMapModule {
   constructor() {
     this.element = document.querySelector("#maps2ConfigurationMap");
 
-    /**
-     * @type {ExtConf}
-     */
+    if (!this.element) {
+      return;
+    }
+
     let extConf = new ExtConf(JSON.parse(this.element.dataset.extConf));
-
-    /**
-     * @type {PoiCollection}
-     */
     let poiCollection = new PoiCollection(JSON.parse(this.element.dataset.poiCollection));
-
-    /**
-     * @type {L.Marker}
-     */
     let marker = {};
 
     this.createMap();
@@ -50,25 +43,28 @@ class OpenStreetMapModule {
     }
 
     this.findAddress(poiCollection, marker);
+    this.panToCenter(poiCollection, extConf);
 
+    // Re-render map dynamically when it becomes visible (e.g. switching FormEngine tabs)
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          this.map.invalidateSize();
+          this.panToCenter(poiCollection, extConf);
+        }
+      });
+    }, { root: null, threshold: 0.1 });
+
+    observer.observe(this.element);
+  }
+
+  panToCenter = (poiCollection, extConf) => {
     if (poiCollection.latitude && poiCollection.longitude) {
       this.map.panTo([poiCollection.latitude, poiCollection.longitude]);
     } else {
-      // Fallback
       this.map.panTo([extConf.defaultLatitude, extConf.defaultLongitude]);
     }
-
-    // If maps2 was inserted in (bootstrap) tabs, we have to re-render the map
-    document.querySelector("ul.t3js-tabs li:nth-of-type(2) button[data-bs-toggle='tab']").addEventListener("shown.bs.tab", () => {
-      this.map.invalidateSize();
-      if (poiCollection.latitude && poiCollection.longitude) {
-        this.map.panTo([poiCollection.latitude, poiCollection.longitude]);
-      } else {
-        // Fallback
-        this.map.panTo([extConf.defaultLatitude, extConf.defaultLongitude]);
-      }
-    });
-  }
+  };
 
   createMap = () => {
     this.map = L.map(
