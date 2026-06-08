@@ -20,9 +20,9 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * If you make use of our Partial/PoiCollection or Partial/EditPoiCollection we need some additional information
- * about current record and Extension Settings of maps2. Use this VH to add these additional variables to template.
+ * about the current record and Extension Settings of maps2. Use this VH to add these additional variables to template.
  */
-class GetEnvironmentViewHelper extends AbstractViewHelper
+final class GetEnvironmentViewHelper extends AbstractViewHelper
 {
     /**
      * @var bool

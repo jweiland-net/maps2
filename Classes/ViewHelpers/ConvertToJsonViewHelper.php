@@ -19,10 +19,10 @@ use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
- * As we need much information in frontend, this ViewHelper is really helpful to
+ * As we need much information in the frontend, this ViewHelper is really helpful to
  * convert all array and object types into a json string which we/you can use for various data attributes.
  */
-class ConvertToJsonViewHelper extends AbstractViewHelper
+final class ConvertToJsonViewHelper extends AbstractViewHelper
 {
     /**
      * @var bool

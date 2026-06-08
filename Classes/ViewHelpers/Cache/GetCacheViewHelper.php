@@ -19,7 +19,7 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 /**
  * A ViewHelper to get a value from maps2 cache
  */
-class GetCacheViewHelper extends AbstractViewHelper
+final class GetCacheViewHelper extends AbstractViewHelper
 {
     /**
      * The result of this ViewHelper should not be escaped

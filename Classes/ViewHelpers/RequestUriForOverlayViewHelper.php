@@ -17,10 +17,10 @@ use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
- * In overlay template we need a link to allow requests for map providers.
+ * In the overlay template we need a link to allow requests for map providers.
  * Use this ViewHelper to build that URI.
  */
-class RequestUriForOverlayViewHelper extends AbstractViewHelper
+final class RequestUriForOverlayViewHelper extends AbstractViewHelper
 {
     public function __construct(
         private readonly EnvironmentFactory $environmentFactory,

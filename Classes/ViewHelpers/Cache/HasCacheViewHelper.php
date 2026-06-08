@@ -17,9 +17,9 @@ use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
- * A ViewHelper to check, if a cache entry exists in maps2 cache
+ * A ViewHelper to check if a cache entry exists in maps2 cache
  */
-class HasCacheViewHelper extends AbstractViewHelper
+final class HasCacheViewHelper extends AbstractViewHelper
 {
     public function __construct(
         private readonly CacheService $cacheService,

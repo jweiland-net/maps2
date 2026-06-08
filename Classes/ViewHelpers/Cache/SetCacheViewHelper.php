@@ -19,7 +19,7 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 /**
  * A ViewHelper to set a value to maps2 cache
  */
-class SetCacheViewHelper extends AbstractViewHelper
+final class SetCacheViewHelper extends AbstractViewHelper
 {
     /**
      * The result of this ViewHelper should not be escaped

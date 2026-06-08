@@ -17,7 +17,7 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractConditionViewHelper;
 /**
  * Check, if selected map provider is allowed to be requested.
  */
-class IsRequestToMapProviderAllowedViewHelper extends AbstractConditionViewHelper
+final class IsRequestToMapProviderAllowedViewHelper extends AbstractConditionViewHelper
 {
     public function __construct(private readonly MapHelper $mapHelper) {}
 
