@@ -14,6 +14,7 @@ use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Configuration\MapProviderEnum;
 use TYPO3\CMS\Core\Attribute\AsEventListener;
 use TYPO3\CMS\Core\Configuration\Event\AfterTcaCompilationEvent;
+use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 #[AsEventListener(
@@ -39,7 +40,9 @@ final readonly class PrepareTcaEventListener
         $this->setDefaultMapType($tca);
         $this->updateFloatingValuesForPosition($tca);
         $this->activateMapProviderColumn();
-        $this->addMaps2ColumnsToSysCategory();
+        $this->addMaps2ColumnsToSysCategory($tca);
+
+        ArrayUtility::mergeRecursiveWithOverrule($tca, $GLOBALS['TCA']);
 
         $event->setTca($tca);
     }
@@ -114,62 +117,45 @@ final readonly class PrepareTcaEventListener
         }
     }
 
-    private function addMaps2ColumnsToSysCategory(): void
+    private function addMaps2ColumnsToSysCategory(array &$tca): void
     {
-        $newSysCategoryColumn = [
-            'maps2_marker_icons' => [
-                'exclude' => 1,
-                'label' => 'maps2.db:sys_category.maps2_marker_icons.' . $this->mapProvider->value,
-                'description' => 'maps2.db:sys_category.maps2_marker_icons.' . $this->mapProvider->value . '.description',
-                'config' => [
-                    'type' => 'file',
-                    'minitems' => 0,
-                    'maxitems' => 1,
-                    'allowed' => 'common-image-types',
-                ],
-            ],
-            'maps2_marker_icon_width' => [
-                'exclude' => true,
-                'label' => 'maps2.db:sys_category.maps2_marker_icon_width.' . $this->mapProvider->value,
-                'description' => 'maps2.db:sys_category.maps2_marker_icon_width.' . $this->mapProvider->value . '.description',
-                'config' => [
-                    'type' => 'number',
-                    'format' => 'integer',
-                ],
-            ],
-            'maps2_marker_icon_height' => [
-                'exclude' => true,
-                'label' => 'maps2.db:sys_category.maps2_marker_icon_height.' . $this->mapProvider->value,
-                'description' => 'maps2.db:sys_category.maps2_marker_icon_height.' . $this->mapProvider->value . '.description',
-                'config' => [
-                    'type' => 'number',
-                    'format' => 'integer',
-                ],
-            ],
-            'maps2_marker_icon_anchor_pos_x' => [
-                'exclude' => true,
-                'label' => 'maps2.db:sys_category.maps2_marker_icon_anchor_pos_x.' . $this->mapProvider->value,
-                'description' => 'maps2.db:sys_category.maps2_marker_icon_anchor_pos_x.' . $this->mapProvider->value . '.description',
-                'config' => [
-                    'type' => 'number',
-                    'format' => 'integer',
-                ],
-            ],
-            'maps2_marker_icon_anchor_pos_y' => [
-                'exclude' => true,
-                'label' => 'maps2.db:sys_category.maps2_marker_icon_anchor_pos_y.' . $this->mapProvider->value,
-                'description' => 'maps2.db:sys_category.maps2_marker_icon_anchor_pos_y.' . $this->mapProvider->value . '.description',
-                'config' => [
-                    'type' => 'number',
-                    'format' => 'integer',
-                ],
-            ],
+        $columnNames = [
+            'maps2_marker_icons',
+            'maps2_marker_icon_width',
+            'maps2_marker_icon_height',
+            'maps2_marker_icon_anchor_pos_x',
+            'maps2_marker_icon_anchor_pos_y',
         ];
 
-        ExtensionManagementUtility::addTCAcolumns(self::TABLE_CATEGORY, $newSysCategoryColumn);
+        foreach ($columnNames as $columnName) {
+            if (!isset($tca[self::TABLE_CATEGORY]['columns'][$columnName]['exclude'])) {
+                $tca[self::TABLE_CATEGORY]['columns'][$columnName]['exclude'] = true;
+            }
+
+            $label = sprintf(
+                'maps2.db:sys_category.%s.%s',
+                $columnName,
+                $this->mapProvider->value,
+            );
+
+            if (!isset($tca[self::TABLE_CATEGORY]['columns'][$columnName]['label'])) {
+                $tca[self::TABLE_CATEGORY]['columns'][$columnName]['label'] = $label;
+            }
+
+            $description = sprintf(
+                'maps2.db:sys_category.%s.%s.description',
+                $columnName,
+                $this->mapProvider->value,
+            );
+
+            if (!isset($tca[self::TABLE_CATEGORY]['columns'][$columnName]['description'])) {
+                $tca[self::TABLE_CATEGORY]['columns'][$columnName]['description'] = $description;
+            }
+        }
+
         ExtensionManagementUtility::addToAllTCAtypes(
             self::TABLE_CATEGORY,
-            '--div--;maps2.db:tab.maps2.' . $this->mapProvider->value . ', maps2_marker_icons, maps2_marker_icon_width, maps2_marker_icon_height, maps2_marker_icon_anchor_pos_x, maps2_marker_icon_anchor_pos_y',
+            '--div--;maps2.db:tab.maps2.' . $this->mapProvider->value . ',' . implode(', ', $columnNames),
         );
     }
 }
