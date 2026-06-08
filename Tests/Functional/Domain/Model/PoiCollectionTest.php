@@ -735,10 +735,9 @@ class PoiCollectionTest extends FunctionalTestCase
     }
 
     #[Test]
-    public function getForeignRecordsInitiallyReturnsArray(): void
+    public function getForeignRecordsInitiallyReturnsNull(): void
     {
-        self::assertSame(
-            [],
+        self::assertNull(
             $this->subject->getForeignRecords(),
         );
     }
