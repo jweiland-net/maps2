@@ -34,7 +34,7 @@ use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 )]
 class GoogleMapsElement extends AbstractFormElement implements FormElementInterface
 {
-    private const ELEMENT_TEMPLATE = 'EXT:maps2/Resources/Private/Templates/Tca/GoogleMaps.html';
+    private const ELEMENT_TEMPLATE = 'EXT:maps2/Resources/Private/Templates/Tca/GoogleMaps.fluid.html';
 
     protected $defaultFieldInformation = [
         'tcaDescription' => [

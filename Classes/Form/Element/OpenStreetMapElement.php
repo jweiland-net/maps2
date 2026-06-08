@@ -34,7 +34,7 @@ use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 )]
 class OpenStreetMapElement extends AbstractFormElement implements FormElementInterface
 {
-    private const ELEMENT_TEMPLATE = 'EXT:maps2/Resources/Private/Templates/Tca/OpenStreetMap.html';
+    private const ELEMENT_TEMPLATE = 'EXT:maps2/Resources/Private/Templates/Tca/OpenStreetMap.fluid.html';
 
     /**
      * Default field information enabled for this element.
