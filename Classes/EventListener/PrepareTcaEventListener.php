@@ -21,7 +21,9 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 )]
 final readonly class PrepareTcaEventListener
 {
-    private const TABLE = 'tx_maps2_domain_model_poicollection';
+    private const TABLE_POI = 'tx_maps2_domain_model_poicollection';
+
+    private const TABLE_CATEGORY = 'sys_category';
 
     public function __construct(
         private ExtConf $extConf,
@@ -37,6 +39,7 @@ final readonly class PrepareTcaEventListener
         $this->setDefaultMapType($tca);
         $this->updateFloatingValuesForPosition($tca);
         $this->activateMapProviderColumn();
+        $this->addMaps2ColumnsToSysCategory();
 
         $event->setTca($tca);
     }
@@ -67,9 +70,9 @@ final readonly class PrepareTcaEventListener
                     $fieldConfig['label'] = 'maps2.db:tx_maps2_uid';
                 }
 
-                $fieldConfig['config']['allowed'] = self::TABLE;
+                $fieldConfig['config']['allowed'] = self::TABLE_POI;
                 $fieldConfig['config']['default'] = 0;
-                $fieldConfig['config']['foreign_table'] = self::TABLE;
+                $fieldConfig['config']['foreign_table'] = self::TABLE_POI;
                 $fieldConfig['config']['maxitems'] = 1;
                 $fieldConfig['config']['minitems'] = 0;
                 $fieldConfig['config']['prepend_tname'] = false;
@@ -85,18 +88,18 @@ final readonly class PrepareTcaEventListener
 
     private function setDefaultMapProvider(array &$tca): void
     {
-        $tca[self::TABLE]['columns']['map_provider']['config']['default'] = $this->mapProvider->value;
+        $tca[self::TABLE_POI]['columns']['map_provider']['config']['default'] = $this->mapProvider->value;
     }
 
     private function setDefaultMapType(array &$tca): void
     {
-        $tca[self::TABLE]['columns']['collection_type']['config']['default'] = $this->extConf->getDefaultMapType();
+        $tca[self::TABLE_POI]['columns']['collection_type']['config']['default'] = $this->extConf->getDefaultMapType();
     }
 
     private function updateFloatingValuesForPosition(array &$tca): void
     {
-        $tca[self::TABLE]['columns']['latitude']['config']['default'] = number_format($this->extConf->getDefaultLatitude(), 6);
-        $tca[self::TABLE]['columns']['longitude']['config']['default'] = number_format($this->extConf->getDefaultLongitude(), 6);
+        $tca[self::TABLE_POI]['columns']['latitude']['config']['default'] = number_format($this->extConf->getDefaultLatitude(), 6);
+        $tca[self::TABLE_POI]['columns']['longitude']['config']['default'] = number_format($this->extConf->getDefaultLongitude(), 6);
     }
 
     private function activateMapProviderColumn(): void
@@ -109,5 +112,64 @@ final readonly class PrepareTcaEventListener
                 'before:configuration_map',
             );
         }
+    }
+
+    private function addMaps2ColumnsToSysCategory(): void
+    {
+        $newSysCategoryColumn = [
+            'maps2_marker_icons' => [
+                'exclude' => 1,
+                'label' => 'maps2.db:sys_category.maps2_marker_icons.' . $this->mapProvider->value,
+                'description' => 'maps2.db:sys_category.maps2_marker_icons.' . $this->mapProvider->value . '.description',
+                'config' => [
+                    'type' => 'file',
+                    'minitems' => 0,
+                    'maxitems' => 1,
+                    'allowed' => 'common-image-types',
+                ],
+            ],
+            'maps2_marker_icon_width' => [
+                'exclude' => true,
+                'label' => 'maps2.db:sys_category.maps2_marker_icon_width.' . $this->mapProvider->value,
+                'description' => 'maps2.db:sys_category.maps2_marker_icon_width.' . $this->mapProvider->value . '.description',
+                'config' => [
+                    'type' => 'number',
+                    'format' => 'integer',
+                ],
+            ],
+            'maps2_marker_icon_height' => [
+                'exclude' => true,
+                'label' => 'maps2.db:sys_category.maps2_marker_icon_height.' . $this->mapProvider->value,
+                'description' => 'maps2.db:sys_category.maps2_marker_icon_height.' . $this->mapProvider->value . '.description',
+                'config' => [
+                    'type' => 'number',
+                    'format' => 'integer',
+                ],
+            ],
+            'maps2_marker_icon_anchor_pos_x' => [
+                'exclude' => true,
+                'label' => 'maps2.db:sys_category.maps2_marker_icon_anchor_pos_x.' . $this->mapProvider->value,
+                'description' => 'maps2.db:sys_category.maps2_marker_icon_anchor_pos_x.' . $this->mapProvider->value . '.description',
+                'config' => [
+                    'type' => 'number',
+                    'format' => 'integer',
+                ],
+            ],
+            'maps2_marker_icon_anchor_pos_y' => [
+                'exclude' => true,
+                'label' => 'maps2.db:sys_category.maps2_marker_icon_anchor_pos_y.' . $this->mapProvider->value,
+                'description' => 'maps2.db:sys_category.maps2_marker_icon_anchor_pos_y.' . $this->mapProvider->value . '.description',
+                'config' => [
+                    'type' => 'number',
+                    'format' => 'integer',
+                ],
+            ],
+        ];
+
+        ExtensionManagementUtility::addTCAcolumns(self::TABLE_CATEGORY, $newSysCategoryColumn);
+        ExtensionManagementUtility::addToAllTCAtypes(
+            self::TABLE_CATEGORY,
+            '--div--;maps2.db:tab.maps2.' . $this->mapProvider->value . ', maps2_marker_icons, maps2_marker_icon_width, maps2_marker_icon_height, maps2_marker_icon_anchor_pos_x, maps2_marker_icon_anchor_pos_y',
+        );
     }
 }

@@ -11,12 +11,9 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Tests\Functional\ViewHelpers;
 
-use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\Category;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
-use JWeiland\Maps2\Helper\MapHelper;
 use PHPUnit\Framework\Attributes\Test;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContextFactory;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 use TYPO3Fluid\Fluid\View\TemplateView;
@@ -38,8 +35,6 @@ class ConvertToJsonViewHelperTest extends FunctionalTestCase
     {
         parent::setUp();
 
-        $mapHelper = new MapHelper(new ExtConf());
-        GeneralUtility::addInstance(MapHelper::class, $mapHelper);
         $this->poiCollection = new PoiCollection();
 
         $this->category = new Category();

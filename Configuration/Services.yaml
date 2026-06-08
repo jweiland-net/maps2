@@ -50,7 +50,7 @@ services:
     arguments:
       $mapProviderGeoCodingRequests: !tagged_iterator { tag: 'maps2.request.geocoding' }
 
-  # Called by makeInstance in TYPO3's AbstractConditionMatcher
+  # Called by makeInstance in TYPO3's Classes/ExpressionLanguage/Resolver.php
   JWeiland\Maps2\ExpressionLanguage\AllowMapProviderRequestFunctionsProvider:
     public: true
 
@@ -58,28 +58,20 @@ services:
     arguments:
       $mapProvider: '@=service("JWeiland\\Maps2\\Helper\\MapHelper").getMapProvider()'
 
-  # Called by makeInstance in TYPO3's NodeRegistry
+  # Called by makeInstance in TYPO3's Classes/Form/NodeFactory.php
   JWeiland\Maps2\Form\Element\ReadOnlyInputTextElement:
     public: true
 
-  # Called by makeInstance in TYPO3's NodeRegistry
+  # Called by makeInstance in TYPO3's Classes/Form/NodeFactory.php
   JWeiland\Maps2\Form\FieldInformation\InfoWindowContent:
     public: true
 
-  # Called by makeInstance in TYPO3's NodeRegistry
+  # Called by makeInstance in TYPO3's Classes/Form/NodeFactory.php
   JWeiland\Maps2\Form\Resolver\MapProviderResolver:
     public: true
     arguments:
       $mapProviderFormElements: !tagged_iterator { tag: 'maps2.form.element' }
       $mapProvider: '@=service("JWeiland\\Maps2\\Helper\\MapHelper").getMapProvider()'
-
-  # Called by makeInstance in our PoiCollection
-  JWeiland\Maps2\Helper\MapHelper:
-    public: true
-
-  # Called by makeInstance in our GetEnvironmentViewHelper
-  JWeiland\Maps2\Helper\SettingsHelper:
-    public: true
 
   # Called by makeInstance in TYPO3's DataHandler
   JWeiland\Maps2\Hook\CreateMaps2RecordHook:
@@ -109,7 +101,3 @@ services:
   JWeiland\Maps2\ViewHelpers\Cache\SetCacheViewHelper:
     arguments:
       $cache: '@cache.maps2CachedHtml'
-
-  # Will be called by various TCA files
-  JWeiland\Maps2\Tca\Maps2Registry:
-    public: true
