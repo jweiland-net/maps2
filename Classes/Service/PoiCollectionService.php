@@ -14,6 +14,7 @@ namespace JWeiland\Maps2\Service;
 use Doctrine\DBAL\Exception;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Database\Connection;
+use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\Database\Query\Restriction\FrontendRestrictionContainer;
@@ -30,7 +31,7 @@ readonly class PoiCollectionService
     private const TABLE = 'tx_maps2_domain_model_poicollection';
 
     public function __construct(
-        protected QueryBuilder $queryBuilder,
+        protected ConnectionPool $connectionPool,
         protected PageRepository $pageRepository,
     ) {}
 
@@ -69,7 +70,7 @@ readonly class PoiCollectionService
 
     private function getQueryBuilder(ServerRequestInterface $request): QueryBuilder
     {
-        $queryBuilder = $this->queryBuilder;
+        $queryBuilder = $this->connectionPool->getQueryBuilderForTable(self::TABLE);
 
         if (ApplicationType::fromRequest($request)->isFrontend()) {
             $queryBuilder->setRestrictions(GeneralUtility::makeInstance(FrontendRestrictionContainer::class));

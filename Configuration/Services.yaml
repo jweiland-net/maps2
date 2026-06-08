@@ -38,14 +38,6 @@ services:
     arguments:
       - '@=service("JWeiland\\Maps2\\Helper\\MapHelper").getMapProvider()'
 
-  querybuilder.tx_maps2_domain_model_poicollection:
-    class: 'TYPO3\CMS\Core\Database\Query\QueryBuilder'
-    factory:
-      - '@TYPO3\CMS\Core\Database\ConnectionPool'
-      - 'getQueryBuilderForTable'
-    arguments:
-      - 'tx_maps2_domain_model_poicollection'
-
   # Called by makeInstance in TYPO3's PluginPreview
   JWeiland\Maps2\Backend\Preview\Maps2PluginPreview:
     public: true
@@ -108,10 +100,6 @@ services:
     public: true
     arguments:
       $columnRegistry: '@maps2.columnRegistry'
-
-  JWeiland\Maps2\Service\PoiCollectionService:
-    arguments:
-      $queryBuilder: '@querybuilder.tx_maps2_domain_model_poicollection'
 
   JWeiland\Maps2\ViewHelpers\Cache\GetCacheViewHelper:
     arguments:
