@@ -13,16 +13,14 @@ namespace JWeiland\Maps2\Helper;
 
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Configuration\MapProviderEnum;
-use JWeiland\Maps2\Traits\GetTypo3RequestTrait;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
- * Little helper with a very reduced set of dependencies like Extbase. Useful, if you need f.e. the configured
+ * Little helper with a very reduced set of dependencies like Extbase. Useful if you need f.e. the configured
  * MapProvider at a very early state of TYPO3 like Middlewares.
  */
 readonly class MapHelper
 {
-    use GetTypo3RequestTrait;
-
     public function __construct(
         protected ExtConf $extConf,
     ) {}
@@ -80,7 +78,7 @@ readonly class MapHelper
      * If false, an overlay will be shown instead of the map, and no JavaScript files
      * will be loaded for maps2.
      */
-    public function isRequestToMapProviderAllowed(): bool
+    public function isRequestToMapProviderAllowed(ServerRequestInterface $request): bool
     {
         if ($this->extConf->getExplicitAllowMapProviderRequests()) {
             // Check, if cookie with last consent was available
@@ -89,7 +87,7 @@ readonly class MapHelper
             }
 
             // Else, check GET parameter for consent
-            $parameters = $this->getTypo3Request()->getQueryParams()['tx_maps2_maps2'] ?? [];
+            $parameters = $request->getQueryParams()['tx_maps2_maps2'] ?? [];
 
             return isset($parameters['mapProviderRequestsAllowedForMaps2'])
                 && (int)$parameters['mapProviderRequestsAllowedForMaps2'] === 1;

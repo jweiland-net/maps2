@@ -39,7 +39,7 @@ final readonly class InitFeSessionMiddleware implements MiddlewareInterface
         $response = $handler->handle($request);
         if (
             $this->extConf->getExplicitAllowMapProviderRequests()
-            && $this->mapHelper->isRequestToMapProviderAllowed()
+            && $this->mapHelper->isRequestToMapProviderAllowed($request)
         ) {
             $cookie = $this->createCookie($request);
             $response = $response->withAddedHeader('Set-Cookie', $cookie->__toString());
