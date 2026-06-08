@@ -3,85 +3,85 @@
 	<file source-language="en" datatype="plaintext" original="messages" date="2013-02-18T15:03:04Z" product-name="maps2">
 		<header/>
 		<body>
-			<trans-unit id="sheetGeneral" xml:space="preserve">
+			<trans-unit id="sheetGeneral">
 				<source>General</source>
 			</trans-unit>
-			<trans-unit id="mapProvider" xml:space="preserve">
+			<trans-unit id="mapProvider">
 				<source>Map Provider</source>
 			</trans-unit>
-			<trans-unit id="poiCollection" xml:space="preserve">
+			<trans-unit id="poiCollection">
 				<source>Which marking should be shown? If there is a marking defined in website uri, that one has priority.</source>
 			</trans-unit>
-			<trans-unit id="categories" xml:space="preserve">
+			<trans-unit id="categories">
 				<source>Show all markings of given categories. This will only work, if there is no marking in website uri nor if a marking is selected above.</source>
 			</trans-unit>
-			<trans-unit id="autoAppend" xml:space="preserve">
+			<trans-unit id="autoAppend">
 				<source>Append a fixed string to search value. Maybe a cityname. That way the user has only to insert a streetname.</source>
 			</trans-unit>
-			<trans-unit id="mapWidth" xml:space="preserve">
+			<trans-unit id="mapWidth">
 				<source>Map width</source>
 			</trans-unit>
-			<trans-unit id="mapHeight" xml:space="preserve">
+			<trans-unit id="mapHeight">
 				<source>Map height</source>
 			</trans-unit>
 
-			<trans-unit id="sheetMapOptions" xml:space="preserve">
+			<trans-unit id="sheetMapOptions">
 				<source>Map Options</source>
 			</trans-unit>
-			<trans-unit id="zoom" xml:space="preserve">
+			<trans-unit id="zoom">
 				<source>Default zoom</source>
 			</trans-unit>
-			<trans-unit id="forceZoom" xml:space="preserve">
+			<trans-unit id="forceZoom">
 				<source>Set a fix Zoomlevel if more than one POI will be displayed. Default: automatic zoomlevel to display all POIs.</source>
 			</trans-unit>
-			<trans-unit id="zoomControl" xml:space="preserve">
+			<trans-unit id="zoomControl">
 				<source>Show Zoom Control</source>
 			</trans-unit>
-			<trans-unit id="fullScreenControl" xml:space="preserve">
+			<trans-unit id="fullScreenControl">
 				<source>Show full screen Control</source>
 			</trans-unit>
 
-			<trans-unit id="sheetGoogleMapsOptions" xml:space="preserve">
+			<trans-unit id="sheetGoogleMapsOptions">
 				<source>Google Maps</source>
 			</trans-unit>
-			<trans-unit id="mapTypeId" xml:space="preserve">
+			<trans-unit id="mapTypeId">
 				<source>Default map view</source>
 			</trans-unit>
-			<trans-unit id="mapTypeId.Hybrid" xml:space="preserve">
+			<trans-unit id="mapTypeId.Hybrid">
 				<source>Hybrid</source>
 			</trans-unit>
-			<trans-unit id="mapTypeId.RoadMap" xml:space="preserve">
+			<trans-unit id="mapTypeId.RoadMap">
 				<source>Road Map</source>
 			</trans-unit>
-			<trans-unit id="mapTypeId.Satellite" xml:space="preserve">
+			<trans-unit id="mapTypeId.Satellite">
 				<source>Satellite</source>
 			</trans-unit>
-			<trans-unit id="mapTypeId.Terrain" xml:space="preserve">
+			<trans-unit id="mapTypeId.Terrain">
 				<source>Terrain</source>
 			</trans-unit>
-			<trans-unit id="mapTypeControl" xml:space="preserve">
+			<trans-unit id="mapTypeControl">
 				<source>Show Map Type Control</source>
 			</trans-unit>
-			<trans-unit id="scaleControl" xml:space="preserve">
+			<trans-unit id="scaleControl">
 				<source>Show Scale Control</source>
 			</trans-unit>
-			<trans-unit id="streetViewControl" xml:space="preserve">
+			<trans-unit id="streetViewControl">
 				<source>Show StreetView Control</source>
 			</trans-unit>
-			<trans-unit id="activateScrollWheel" xml:space="preserve">
+			<trans-unit id="activateScrollWheel">
 				<source>Activate zoom with mouse scroll wheel</source>
 			</trans-unit>
-			<trans-unit id="styles" xml:space="preserve">
+			<trans-unit id="styles">
 				<source>Map Style. Have a look at https://snazzymaps.com to copy some cool styles for you map</source>
 			</trans-unit>
 
-			<trans-unit id="sheetOpenStreetMapOptions" xml:space="preserve">
+			<trans-unit id="sheetOpenStreetMapOptions">
 				<source>Open Street Map</source>
 			</trans-unit>
-			<trans-unit id="mapTile" xml:space="preserve">
+			<trans-unit id="mapTile">
 				<source>Map Tile URI: Define another external provider to show map with another layout</source>
 			</trans-unit>
-			<trans-unit id="mapTileAttribution" xml:space="preserve">
+			<trans-unit id="mapTileAttribution">
 				<source>Map Tile Attribution: Each map needs to show the author attribution. Please check which Attribution has to be used for defined map tile above</source>
 			</trans-unit>
 		</body>
