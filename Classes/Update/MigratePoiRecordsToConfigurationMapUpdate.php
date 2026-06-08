@@ -60,7 +60,7 @@ readonly class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizar
         // Something with DB was gone totally wrong. Skip Upgrade. Repair your DB first.
         try {
             $connection = $this
-                ->getConnectionPool()
+                ->connectionPool
                 ->getConnectionByName(ConnectionPool::DEFAULT_CONNECTION_NAME);
         } catch (Exception) {
             return false;
@@ -76,7 +76,7 @@ readonly class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizar
             return false;
         }
 
-        $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable('tx_maps2_domain_model_poicollection');
+        $queryBuilder = $this->connectionPool->getQueryBuilderForTable('tx_maps2_domain_model_poicollection');
         $queryBuilder
             ->getRestrictions()->removeAll()
             ->add(GeneralUtility::makeInstance(DeletedRestriction::class));
@@ -120,7 +120,7 @@ readonly class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizar
 
     public function executeUpdate(): bool
     {
-        $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable('tx_maps2_domain_model_poicollection');
+        $queryBuilder = $this->connectionPool->getQueryBuilderForTable('tx_maps2_domain_model_poicollection');
         $queryBuilder
             ->getRestrictions()
             ->removeAll()
@@ -133,7 +133,7 @@ readonly class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizar
                 ->executeQuery();
 
             while ($poiCollectionRecord = $statement->fetchAssociative()) {
-                $connection = $this->getConnectionPool()->getConnectionForTable('tx_maps2_domain_model_poi');
+                $connection = $this->connectionPool->getConnectionForTable('tx_maps2_domain_model_poi');
                 $connection->update(
                     'tx_maps2_domain_model_poicollection',
                     [
@@ -168,7 +168,7 @@ readonly class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizar
 
     protected function getPoiRecords(int $poiCollectionUid): array
     {
-        $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable('tx_maps2_domain_model_poi');
+        $queryBuilder = $this->connectionPool->getQueryBuilderForTable('tx_maps2_domain_model_poi');
         $queryBuilder
             ->getRestrictions()
             ->removeAll()
@@ -202,10 +202,5 @@ readonly class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizar
         return [
             DatabaseUpdatedPrerequisite::class,
         ];
-    }
-
-    protected function getConnectionPool(): ConnectionPool
-    {
-        return $this->connectionPool;
     }
 }

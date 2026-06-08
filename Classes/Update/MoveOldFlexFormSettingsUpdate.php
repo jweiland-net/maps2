@@ -33,6 +33,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 readonly class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
 {
     public function __construct(
+        private FlexFormTools $flexFormTools,
         private ConnectionPool $connectionPool,
     ) {}
 
@@ -133,7 +134,7 @@ readonly class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
             $this->moveFieldFromOldToNewSheet($valueFromDatabase, 'settings.styles', 'sMapOptions', 'sGoogleMapsOptions');
             unset($valueFromDatabase['data']['sGoogleMapsOptions']['lDEF']['settings.fullScreenControl']);
 
-            $connection = $this->getConnectionPool()->getConnectionForTable('tt_content');
+            $connection = $this->connectionPool->getConnectionForTable('tt_content');
             $connection->update(
                 'tt_content',
                 [
@@ -166,7 +167,7 @@ readonly class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
      */
     protected function getTtContentRecordsWithMaps2Plugin(): array
     {
-        $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable('tt_content');
+        $queryBuilder = $this->connectionPool->getQueryBuilderForTable('tt_content');
         $queryBuilder->getRestrictions()->removeAll();
 
         try {
@@ -218,7 +219,7 @@ readonly class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
     }
 
     /**
-     * Move field from one sheet to another and remove field from old location
+     * Move the field from one sheet to another and remove the field from the old location
      */
     protected function moveFieldFromOldToNewSheet(
         array &$valueFromDatabase,
@@ -260,12 +261,6 @@ readonly class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
      */
     public function checkValue_flexArray2Xml(array $array): string
     {
-        $flexObj = GeneralUtility::makeInstance(FlexFormTools::class);
-        return $flexObj->flexArray2Xml($array);
-    }
-
-    protected function getConnectionPool(): ConnectionPool
-    {
-        return $this->connectionPool;
+        return $this->flexFormTools->flexArray2Xml($array);
     }
 }
