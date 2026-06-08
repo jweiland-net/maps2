@@ -11,10 +11,8 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Domain\Model;
 
-use JWeiland\Maps2\Service\MapService;
 use JWeiland\Maps2\Traits\ConvertJsonPoisAsArrayTrait;
 use JWeiland\Maps2\Traits\GetWebPathOfFileReferenceTrait;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Attribute as Extbase;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
@@ -474,13 +472,15 @@ class PoiCollection extends AbstractEntity
         $this->distance = $distance;
     }
 
-    public function getForeignRecords(): array
+    /**
+     * If the foreign result is empty, you have to apply
+     * \JWeiland\Maps2\Service\MapService::addForeignRecordsToPoiCollection
+     * on this PoiCollection
+     *
+     * @return array|null
+     */
+    public function getForeignRecords(): ?array
     {
-        if ($this->foreignRecords === null) {
-            $this->foreignRecords = [];
-            $mapService = GeneralUtility::makeInstance(MapService::class);
-            $mapService->addForeignRecordsToPoiCollection($this);
-        }
         return $this->foreignRecords;
     }
 
