@@ -273,7 +273,7 @@ class InfoWindowContentServiceTest extends FunctionalTestCase
                 new Settings([
                     'maps2' => [
                         'infoWindowContent' => [
-                            'templatePath' => 'EXT:maps2/Resources/Private/Templates/InfoWindowContent.html',
+                            'templatePath' => 'EXT:maps2/Resources/Private/Templates/InfoWindowContent.fluid.html',
                         ],
                     ],
                 ]),

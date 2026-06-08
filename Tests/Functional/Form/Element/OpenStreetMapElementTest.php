@@ -34,8 +34,6 @@ class OpenStreetMapElementTest extends FunctionalTestCase
 
     protected PageRenderer|MockObject $pageRendererMock;
 
-    protected MapHelper|MockObject $mapHelperMock;
-
     protected ViewFactoryInterface|MockObject $viewFactoryMock;
 
     protected NodeFactory $nodeFactoryMock;
@@ -65,12 +63,10 @@ class OpenStreetMapElementTest extends FunctionalTestCase
             ],
         ];
 
-        $this->mapHelperMock = $this->createMock(MapHelper::class);
         $this->viewFactoryMock = $this->createMock(ViewFactoryInterface::class);
         $this->nodeFactoryMock = $this->createMock(NodeFactory::class);
 
         $this->subject = new OpenStreetMapElement(
-            $this->mapHelperMock,
             new ExtConf(),
             $this->viewFactoryMock,
         );
@@ -82,7 +78,6 @@ class OpenStreetMapElementTest extends FunctionalTestCase
     {
         unset(
             $this->subject,
-            $this->mapHelperMock,
             $this->viewFactoryMock,
             $this->nodeFactoryMock,
         );
@@ -120,7 +115,7 @@ class OpenStreetMapElementTest extends FunctionalTestCase
             ->expects($this->atLeastOnce())
             ->method('create')
             ->with(new ViewFactoryData(
-                templatePathAndFilename: 'EXT:maps2/Resources/Private/Templates/Tca/OpenStreetMap.html',
+                templatePathAndFilename: 'EXT:maps2/Resources/Private/Templates/Tca/OpenStreetMap.fluid.html',
             ))
             ->willReturn($viewMock);
 
