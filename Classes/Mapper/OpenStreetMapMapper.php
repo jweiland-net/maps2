@@ -14,7 +14,6 @@ namespace JWeiland\Maps2\Mapper;
 use JWeiland\Maps2\Configuration\MapProviderEnum;
 use JWeiland\Maps2\Domain\Model\Position;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
@@ -32,7 +31,7 @@ readonly class OpenStreetMapMapper implements MapperInterface
 
     public function map(array $response): ObjectStorage
     {
-        $objectStorage = GeneralUtility::makeInstance(ObjectStorage::class);
+        $objectStorage = new ObjectStorage();
         foreach ($response as $data) {
             $objectStorage->attach($this->getPosition($data));
         }
@@ -42,7 +41,7 @@ readonly class OpenStreetMapMapper implements MapperInterface
 
     protected function getPosition(array $data): Position
     {
-        $position = GeneralUtility::makeInstance(Position::class);
+        $position = new Position();
         $position->setFormattedAddress($this->getFormattedAddress($data));
         $position->setLatitude((float)($data['lat'] ?? 0.0));
         $position->setLongitude((float)($data['lon'] ?? 0.0));
