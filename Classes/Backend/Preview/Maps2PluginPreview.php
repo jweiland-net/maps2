@@ -111,8 +111,7 @@ class Maps2PluginPreview extends StandardContentPreviewRenderer
         ViewInterface $view,
         array $piFlexformData,
         ServerRequestInterface $request,
-    ): void
-    {
+    ): void {
         if (
             isset($piFlexformData['settings']['poiCollection'])
             && $piFlexformData['settings']['poiCollection'] !== '0'
