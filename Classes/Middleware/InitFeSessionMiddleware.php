@@ -20,18 +20,18 @@ use Psr\Http\Server\RequestHandlerInterface;
 use Symfony\Component\HttpFoundation\Cookie;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Http\CookieHeaderTrait;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
- * Save consent in cookie, if requests to map providers was allowed by website visitor
+ * Save consent in cookie if requests to map providers was allowed by website visitor
  */
-class InitFeSessionMiddleware implements MiddlewareInterface
+final readonly class InitFeSessionMiddleware implements MiddlewareInterface
 {
     use CookieHeaderTrait;
 
     public function __construct(
-        protected ExtConf $extConf,
-        protected MapHelper $mapHelper,
+        private ExtConf $extConf,
+        private MapHelper $mapHelper,
+        private Context $context,
     ) {}
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
@@ -39,7 +39,7 @@ class InitFeSessionMiddleware implements MiddlewareInterface
         $response = $handler->handle($request);
         if (
             $this->extConf->getExplicitAllowMapProviderRequests()
-            && $this->mapHelper->isRequestToMapProviderAllowed()
+            && $this->mapHelper->isRequestToMapProviderAllowed($request)
         ) {
             $cookie = $this->createCookie($request);
             $response = $response->withAddedHeader('Set-Cookie', $cookie->__toString());
@@ -48,7 +48,7 @@ class InitFeSessionMiddleware implements MiddlewareInterface
         return $response;
     }
 
-    protected function createCookie(ServerRequestInterface $request): Cookie
+    private function createCookie(ServerRequestInterface $request): Cookie
     {
         $normalizedParams = $request->getAttribute('normalizedParams');
 
@@ -73,12 +73,12 @@ class InitFeSessionMiddleware implements MiddlewareInterface
         );
     }
 
-    protected function getCookieExpire(): int
+    private function getCookieExpire(): int
     {
         // If COOKIE is activated, set expire to FE sessionDataLifetime which is 1 day by default
         $maxSessionLifetime = $GLOBALS['TYPO3_CONF_VARS']['FE']['sessionDataLifetime'] ?? 60 * 60 * 24;
-        $expire = GeneralUtility::makeInstance(Context::class)
-                ->getPropertyFromAspect('date', 'timestamp') + $maxSessionLifetime;
+        $expire = $this->context
+            ->getPropertyFromAspect('date', 'timestamp') + $maxSessionLifetime;
 
         // If session only is activated, $expire = 0 will delete our created COOKIE after closing the browser
         if ($this->extConf->getExplicitAllowMapProviderRequestsBySessionOnly()) {

@@ -7,6 +7,8 @@
 Plugins
 ========
 
+..  _plugins-show-map:
+
 Maps2: Show map
 ===============
 
@@ -143,6 +145,8 @@ Each map needs to show the author attribution. Please check which Attribution
 has to be used for defined map tile above.
 
 
+..  _plugins-search-radius:
+
 Maps2: Search Radius
 ====================
 
@@ -261,6 +265,8 @@ Map Provider: Open Street Map only
 Each map needs to show the author attribution. Please check which Attribution
 has to be used for defined map tile above.
 
+
+..  _plugins-city-map:
 
 Maps2: City Map
 ===============

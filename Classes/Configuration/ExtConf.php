@@ -17,7 +17,7 @@ use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExis
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 
 /**
- * This class will streamline the values from extension manager configuration
+ * This class will streamline the values from the extension manager configuration
  */
 #[Autoconfigure(constructor: 'create')]
 final readonly class ExtConf
@@ -28,7 +28,7 @@ final readonly class ExtConf
         // general
         'mapProvider' => 'both',
         'defaultMapProvider' => 'gm',
-        'defaultMapType' => 'Empty',
+        'defaultMapType' => 'Point',
         'defaultCountry' => '',
         'defaultLatitude' => 0.0,
         'defaultLongitude' => 0.0,
@@ -37,12 +37,12 @@ final readonly class ExtConf
         'explicitAllowMapProviderRequestsBySessionOnly' => false,
 
         // Google Maps
-        'googleMapsLibrary' => 'https://maps.googleapis.com/maps/api/js?key=|&libraries=places',
         'googleMapsGeocodeUri' => 'https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=%s',
         'googleMapsJavaScriptApiKey' => '',
         'googleMapsGeocodeApiKey' => '',
+        'googleMapsMapId' => '',
 
-        // Open Street Map
+        // OpenStreetMap
         'openStreetMapGeocodeUri' => 'https://nominatim.openstreetmap.org/search?q=%s&format=json&addressdetails=1',
 
         // Design/Color
@@ -70,12 +70,12 @@ final readonly class ExtConf
         private bool $explicitAllowMapProviderRequestsBySessionOnly = self::DEFAULT_SETTINGS['explicitAllowMapProviderRequestsBySessionOnly'],
 
         // Google Maps
-        private string $googleMapsLibrary = self::DEFAULT_SETTINGS['googleMapsLibrary'],
         private string $googleMapsGeocodeUri = self::DEFAULT_SETTINGS['googleMapsGeocodeUri'],
         private string $googleMapsJavaScriptApiKey = self::DEFAULT_SETTINGS['googleMapsJavaScriptApiKey'],
         private string $googleMapsGeocodeApiKey = self::DEFAULT_SETTINGS['googleMapsGeocodeApiKey'],
+        private string $googleMapsMapId = self::DEFAULT_SETTINGS['googleMapsMapId'],
 
-        // Open Street Map
+        // OpenStreetMap
         private string $openStreetMapGeocodeUri = self::DEFAULT_SETTINGS['openStreetMapGeocodeUri'],
 
         // Design/Color
@@ -116,10 +116,10 @@ final readonly class ExtConf
             explicitAllowMapProviderRequestsBySessionOnly: (bool)$extensionSettings['explicitAllowMapProviderRequestsBySessionOnly'],
 
             // Google Maps
-            googleMapsLibrary: (string)$extensionSettings['googleMapsLibrary'],
             googleMapsGeocodeUri: (string)$extensionSettings['googleMapsGeocodeUri'],
             googleMapsJavaScriptApiKey: (string)$extensionSettings['googleMapsJavaScriptApiKey'],
             googleMapsGeocodeApiKey: (string)$extensionSettings['googleMapsGeocodeApiKey'],
+            googleMapsMapId: (string)$extensionSettings['googleMapsMapId'],
 
             // Open Street Map
             openStreetMapGeocodeUri: (string)$extensionSettings['openStreetMapGeocodeUri'],
@@ -182,26 +182,6 @@ final readonly class ExtConf
         return $this->explicitAllowMapProviderRequestsBySessionOnly;
     }
 
-    public function getGoogleMapsLibrary(): string
-    {
-        $library = $this->googleMapsLibrary;
-
-        // This was a bug. After upgrading to TYPO3 ~8.7 this value just contains "|" or is empty.
-        // In that case fall back to default
-        if (in_array($library, ['|', ''])) {
-            $library = self::DEFAULT_SETTINGS['googleMapsLibrary'];
-        }
-
-        // insert ApiKey
-        $library = str_replace('|', $this->getGoogleMapsJavaScriptApiKey(), $library);
-        // $parts: 0 = full string; 1 = s or empty; 2 = needed url
-        if (preg_match('#^http(s)?://(.*)$#i', $library, $parts)) {
-            return 'https://' . $parts[2];
-        }
-
-        return '';
-    }
-
     public function getGoogleMapsGeocodeUri(): string
     {
         return trim($this->googleMapsGeocodeUri);
@@ -220,6 +200,11 @@ final readonly class ExtConf
     public function getOpenStreetMapGeocodeUri(): string
     {
         return trim($this->openStreetMapGeocodeUri);
+    }
+
+    public function getGoogleMapsMapId(): string
+    {
+        return trim($this->googleMapsMapId);
     }
 
     public function getStrokeColor(): string

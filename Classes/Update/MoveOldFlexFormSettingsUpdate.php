@@ -12,15 +12,15 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Update;
 
 use Doctrine\DBAL\Exception;
+use TYPO3\CMS\Core\Attribute\UpgradeWizard;
 use TYPO3\CMS\Core\Configuration\FlexForm\FlexFormTools;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Upgrades\DatabaseUpdatedPrerequisite;
+use TYPO3\CMS\Core\Upgrades\UpgradeWizardInterface;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\Exception\MissingArrayPathException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Install\Attribute\UpgradeWizard;
-use TYPO3\CMS\Install\Updates\DatabaseUpdatedPrerequisite;
-use TYPO3\CMS\Install\Updates\UpgradeWizardInterface;
 
 /**
  * With maps2 5.0.0 we have moved some FlexForm Settings to another sheet.
@@ -30,8 +30,13 @@ use TYPO3\CMS\Install\Updates\UpgradeWizardInterface;
  * To prevent duplicates in DB, this update wizard removes old settings from FlexForm.
  */
 #[UpgradeWizard('maps2_moveFlexFormFields')]
-class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
+readonly class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
 {
+    public function __construct(
+        private FlexFormTools $flexFormTools,
+        private ConnectionPool $connectionPool,
+    ) {}
+
     public function getTitle(): string
     {
         return '[maps2] Move old FlexForm fields to new FlexForm sheet';
@@ -39,8 +44,8 @@ class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
 
     public function getDescription(): string
     {
-        return 'It seems that some fields from FlexForm of one Map Provider was available for all Map Providers now. ' .
-            'In that case we have to move these fields to another Sheet.';
+        return 'It seems that some fields from FlexForm of one Map Provider was available for all Map Providers now. '
+            . 'In that case we have to move these fields to another Sheet.';
     }
 
     public function updateNecessary(): bool
@@ -52,7 +57,7 @@ class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
                 continue;
             }
 
-            if (empty($valueFromDatabase)) {
+            if ($valueFromDatabase === []) {
                 continue;
             }
 
@@ -116,7 +121,7 @@ class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
                 continue;
             }
 
-            if (empty($valueFromDatabase)) {
+            if ($valueFromDatabase === []) {
                 continue;
             }
 
@@ -129,7 +134,7 @@ class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
             $this->moveFieldFromOldToNewSheet($valueFromDatabase, 'settings.styles', 'sMapOptions', 'sGoogleMapsOptions');
             unset($valueFromDatabase['data']['sGoogleMapsOptions']['lDEF']['settings.fullScreenControl']);
 
-            $connection = $this->getConnectionPool()->getConnectionForTable('tt_content');
+            $connection = $this->connectionPool->getConnectionForTable('tt_content');
             $connection->update(
                 'tt_content',
                 [
@@ -162,7 +167,7 @@ class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
      */
     protected function getTtContentRecordsWithMaps2Plugin(): array
     {
-        $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable('tt_content');
+        $queryBuilder = $this->connectionPool->getQueryBuilderForTable('tt_content');
         $queryBuilder->getRestrictions()->removeAll();
 
         try {
@@ -214,7 +219,7 @@ class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
     }
 
     /**
-     * Move field from one sheet to another and remove field from old location
+     * Move the field from one sheet to another and remove the field from the old location
      */
     protected function moveFieldFromOldToNewSheet(
         array &$valueFromDatabase,
@@ -256,12 +261,6 @@ class MoveOldFlexFormSettingsUpdate implements UpgradeWizardInterface
      */
     public function checkValue_flexArray2Xml(array $array): string
     {
-        $flexObj = GeneralUtility::makeInstance(FlexFormTools::class);
-        return $flexObj->flexArray2Xml($array, true);
-    }
-
-    protected function getConnectionPool(): ConnectionPool
-    {
-        return GeneralUtility::makeInstance(ConnectionPool::class);
+        return $this->flexFormTools->flexArray2Xml($array);
     }
 }

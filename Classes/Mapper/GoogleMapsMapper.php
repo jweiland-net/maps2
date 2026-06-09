@@ -11,19 +11,28 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Mapper;
 
+use JWeiland\Maps2\Configuration\MapProviderEnum;
 use JWeiland\Maps2\Domain\Model\Position;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
  * Map Google Maps Request into Position object
  */
-class GoogleMapsMapper implements MapperInterface
+#[AutoconfigureTag(
+    name: 'maps2.mapper',
+)]
+readonly class GoogleMapsMapper implements MapperInterface
 {
+    public function canProcess(MapProviderEnum $mapProvider): bool
+    {
+        return $mapProvider === MapProviderEnum::GOOGLE_MAPS;
+    }
+
     public function map(array $response): ObjectStorage
     {
-        $objectStorage = GeneralUtility::makeInstance(ObjectStorage::class);
+        $objectStorage = new ObjectStorage();
         foreach ($response['results'] as $data) {
             $objectStorage->attach($this->getPosition($data));
         }
@@ -33,7 +42,7 @@ class GoogleMapsMapper implements MapperInterface
 
     protected function getPosition(array $data): Position
     {
-        $position = GeneralUtility::makeInstance(Position::class);
+        $position = new Position();
         $position->setFormattedAddress($data['formatted_address']);
 
         try {

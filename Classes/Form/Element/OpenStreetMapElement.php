@@ -12,26 +12,31 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Form\Element;
 
 use JWeiland\Maps2\Configuration\ExtConf;
-use JWeiland\Maps2\Helper\MapHelper;
+use JWeiland\Maps2\Configuration\MapProviderEnum;
+use JWeiland\Maps2\Traits\ConvertJsonPoisAsArrayTrait;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
-use TYPO3\CMS\Backend\Form\NodeFactory;
 use TYPO3\CMS\Core\Page\JavaScriptModuleInstruction;
-use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Core\Utility\StringUtility;
 use TYPO3\CMS\Core\View\ViewFactoryData;
 use TYPO3\CMS\Core\View\ViewFactoryInterface;
+use TYPO3\CMS\Core\View\ViewInterface;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 
 /*
- * Special backend FormEngine element to show Open Street Map.
- * This is a very reduced InputTextElement. The textfield itself will not be displayed,
- * but it contains the JSON for all the POIs.
+ * Special backend FormEngine element to show OpenStreetMap.
+ * This is a very reduced InputTextElement. The textfield itself will not be
+ * displayed, but it contains the JSON for all the POIs.
  */
-class OpenStreetMapElement extends AbstractFormElement
+#[AutoconfigureTag(
+    name: 'maps2.form.element',
+)]
+class OpenStreetMapElement extends AbstractFormElement implements FormElementInterface
 {
-    private const ELEMENT_TEMPLATE = 'EXT:maps2/Resources/Private/Templates/Tca/OpenStreetMap.html';
+    use ConvertJsonPoisAsArrayTrait;
+
+    private const ELEMENT_TEMPLATE = 'EXT:maps2/Resources/Private/Templates/Tca/OpenStreetMap.fluid.html';
 
     /**
      * Default field information enabled for this element.
@@ -45,12 +50,14 @@ class OpenStreetMapElement extends AbstractFormElement
     ];
 
     public function __construct(
-        protected readonly ExtConf $extConf,
-        protected readonly PageRenderer $pageRenderer,
-        protected readonly MapHelper $mapHelper,
-        protected readonly ViewFactoryInterface $viewFactory,
-        protected NodeFactory $nodeFactory,
+        private readonly ExtConf $extConf,
+        private readonly ViewFactoryInterface $viewFactory,
     ) {}
+
+    public function canProcess(MapProviderEnum $mapProvider): bool
+    {
+        return $mapProvider === MapProviderEnum::OPEN_STREET_MAP;
+    }
 
     /**
      * This will render Google Maps within PoiCollection records with a marker you can drag and drop
@@ -67,12 +74,11 @@ class OpenStreetMapElement extends AbstractFormElement
         $config = $parameterArray['fieldConf']['config'];
         $evalList = GeneralUtility::trimExplode(',', $config['eval'] ?? '', true);
 
-        $this->pageRenderer->loadJavaScriptModule('@jweiland/maps2/leaflet.min.js');
+        $resultArray['stylesheetFiles'][] = 'EXT:maps2/Resources/Public/Css/Leaflet/Leaflet.css';
 
-        $resultArray['stylesheetFiles'][] = PathUtility::getPublicResourceWebPath(
-            'EXT:maps2/Resources/Public/Css/Leaflet/Leaflet.css',
+        $resultArray['javaScriptModules'][] = JavaScriptModuleInstruction::create(
+            '@jweiland/maps2/leaflet.min.js',
         );
-
         $resultArray['javaScriptModules'][] = JavaScriptModuleInstruction::create(
             '@jweiland/maps2/OpenStreetMapModule.min.js',
         );
@@ -129,7 +135,7 @@ class OpenStreetMapElement extends AbstractFormElement
     {
         foreach ($poiCollectionRecord as $field => $value) {
             if ($field === 'configuration_map') {
-                $poiCollectionRecord[$field] = $this->mapHelper->convertPoisAsJsonToArray($value);
+                $poiCollectionRecord[$field] = $this->convertJsonPoisToArray($value);
             } else {
                 $poiCollectionRecord[$field] = is_array($value) && array_key_exists(0, $value) ? $value[0] : $value;
             }
@@ -140,10 +146,7 @@ class OpenStreetMapElement extends AbstractFormElement
 
     protected function getMapHtml(array $poiCollectionRecord): string
     {
-        $view = $this->viewFactory->create(new ViewFactoryData(
-            templatePathAndFilename: self::ELEMENT_TEMPLATE,
-        ));
-
+        $view = $this->getView();
         $view->assign('poiCollection', json_encode($poiCollectionRecord, JSON_THROW_ON_ERROR));
         $view->assign('extConf', json_encode(
             ObjectAccess::getGettableProperties($this->extConf),
@@ -151,5 +154,12 @@ class OpenStreetMapElement extends AbstractFormElement
         ));
 
         return $view->render();
+    }
+
+    private function getView(): ViewInterface
+    {
+        return $this->viewFactory->create(new ViewFactoryData(
+            templatePathAndFilename: self::ELEMENT_TEMPLATE,
+        ));
     }
 }

@@ -9,12 +9,9 @@
 
 namespace JWeiland\Maps2\Tests\Functional\Domain\Model;
 
-use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Domain\Model\Category;
 use JWeiland\Maps2\Domain\Model\PoiCollection;
-use JWeiland\Maps2\Helper\MapHelper;
 use PHPUnit\Framework\Attributes\Test;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
@@ -26,29 +23,13 @@ class PoiCollectionTest extends FunctionalTestCase
 {
     protected PoiCollection $subject;
 
-    protected ExtConf $extConf;
-
-    protected MapHelper $mapHelper;
-
-    protected array $coreExtensionsToLoad = [
-        'extensionmanager',
-        'reactions',
-    ];
-
     protected array $testExtensionsToLoad = [
-        'sjbr/static-info-tables',
         'jweiland/maps2',
-        'jweiland/events2',
     ];
 
     protected function setUp(): void
     {
         parent::setUp();
-
-        $this->extConf = GeneralUtility::makeInstance(ExtConf::class);
-
-        $this->mapHelper = new MapHelper($this->extConf);
-        GeneralUtility::addInstance(MapHelper::class, $this->mapHelper);
 
         $this->subject = new PoiCollection();
     }
@@ -57,7 +38,6 @@ class PoiCollectionTest extends FunctionalTestCase
     {
         unset(
             $this->subject,
-            $this->extConf,
         );
 
         parent::tearDown();
@@ -435,7 +415,7 @@ class PoiCollectionTest extends FunctionalTestCase
     public function getMarkerIconWidthInitiallyReturnsZero(): void
     {
         self::assertSame(
-            25,
+            0,
             $this->subject->getMarkerIconWidth(),
         );
     }
@@ -492,42 +472,10 @@ class PoiCollectionTest extends FunctionalTestCase
     }
 
     #[Test]
-    public function setMarkerIconWidthWillGetValueFromExtConfIfEmpty(): void
-    {
-        $config = [
-            'markerIconWidth' => 123456,
-        ];
-        $this->extConf = new ExtConf(...$config);
-        GeneralUtility::addInstance(ExtConf::class, $this->extConf);
-
-        self::assertSame(
-            123456,
-            $this->subject->getMarkerIconWidth(),
-        );
-    }
-
-    #[Test]
-    public function setMarkerIconWidthWillGetValueFromExtConfIfImageIsEmpty(): void
-    {
-        $this->subject->setMarkerIconWidth(123456);
-
-        $config = [
-            'markerIconWidth' => 654321,
-        ];
-        $this->extConf = new ExtConf(...$config);
-        GeneralUtility::addInstance(ExtConf::class, $this->extConf);
-
-        self::assertSame(
-            654321,
-            $this->subject->getMarkerIconWidth(),
-        );
-    }
-
-    #[Test]
     public function getMarkerIconHeightInitiallyReturnsZero(): void
     {
         self::assertSame(
-            40,
+            0,
             $this->subject->getMarkerIconHeight(),
         );
     }
@@ -584,25 +532,10 @@ class PoiCollectionTest extends FunctionalTestCase
     }
 
     #[Test]
-    public function setMarkerIconHeightWillGetValueFromExtConfIfEmpty(): void
-    {
-        $config = [
-            'markerIconHeight' => 123456,
-        ];
-        $this->extConf = new ExtConf(...$config);
-        GeneralUtility::addInstance(ExtConf::class, $this->extConf);
-
-        self::assertSame(
-            123456,
-            $this->subject->getMarkerIconHeight(),
-        );
-    }
-
-    #[Test]
     public function getMarkerIconAnchorPosXInitiallyReturnsZero(): void
     {
         self::assertSame(
-            13,
+            0,
             $this->subject->getMarkerIconAnchorPosX(),
         );
     }
@@ -660,59 +593,10 @@ class PoiCollectionTest extends FunctionalTestCase
     }
 
     #[Test]
-    public function setMarkerIconAnchorPosXWillGetValueFromExtConfIfEmpty(): void
-    {
-        $config = [
-            'markerIconAnchorPosX' => 123456,
-        ];
-        $this->extConf = new ExtConf(...$config);
-        GeneralUtility::addInstance(ExtConf::class, $this->extConf);
-
-        self::assertSame(
-            123456,
-            $this->subject->getMarkerIconAnchorPosX(),
-        );
-    }
-
-    #[Test]
-    public function setMarkerIconAnchorPosXWillGetValueFromExtConfIfImageIsEmpty(): void
-    {
-        $this->subject->setMarkerIconAnchorPosX(123456);
-
-        $config = [
-            'markerIconAnchorPosX' => 654321,
-        ];
-        $this->extConf = new ExtConf(...$config);
-        GeneralUtility::addInstance(ExtConf::class, $this->extConf);
-
-        self::assertSame(
-            654321,
-            $this->subject->getMarkerIconAnchorPosX(),
-        );
-    }
-
-    #[Test]
-    public function setMarkerIconHeightWillGetValueFromExtConfIfImageIsEmpty(): void
-    {
-        $this->subject->setMarkerIconHeight(123456);
-
-        $config = [
-            'markerIconHeight' => 654321,
-        ];
-        $this->extConf = new ExtConf(...$config);
-        GeneralUtility::addInstance(ExtConf::class, $this->extConf);
-
-        self::assertSame(
-            654321,
-            $this->subject->getMarkerIconHeight(),
-        );
-    }
-
-    #[Test]
     public function getMarkerIconAnchorPosYInitiallyReturnsZero(): void
     {
         self::assertSame(
-            40,
+            0,
             $this->subject->getMarkerIconAnchorPosY(),
         );
     }
@@ -766,39 +650,6 @@ class PoiCollectionTest extends FunctionalTestCase
         self::assertSame(
             654321,
             $this->subject->getMarkerIconAnchorPosY(),
-        );
-    }
-
-    #[Test]
-    public function setMarkerIconAnchorPosYWillGetValueFromExtConfIfEmpty(): void
-    {
-        $config = [
-            'markerIconAnchorPosY' => 123456,
-        ];
-        $this->extConf = new ExtConf(...$config);
-        GeneralUtility::addInstance(ExtConf::class, $this->extConf);
-
-        self::assertSame(
-            123456,
-            $this->subject->getMarkerIconAnchorPosY(),
-        );
-    }
-
-    #[Test]
-    public function setMarkerIconAnchorPosYWillGetValueFromExtConfIfImageIsEmpty(): void
-    {
-        $this->subject->setMarkerIconAnchorPosY(123456);
-
-        $config = [
-            'markerIconAnchorPosY' => 654321,
-        ];
-        $this->extConf = new ExtConf(...$config);
-        GeneralUtility::addInstance(ExtConf::class, $this->extConf);
-
-        $subject = new PoiCollection();
-        self::assertSame(
-            654321,
-            $subject->getMarkerIconAnchorPosY(),
         );
     }
 
@@ -884,10 +735,9 @@ class PoiCollectionTest extends FunctionalTestCase
     }
 
     #[Test]
-    public function getForeignRecordsInitiallyReturnsArray(): void
+    public function getForeignRecordsInitiallyReturnsNull(): void
     {
-        self::assertSame(
-            [],
+        self::assertNull(
             $this->subject->getForeignRecords(),
         );
     }

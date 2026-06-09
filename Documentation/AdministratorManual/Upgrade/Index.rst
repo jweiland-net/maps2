@@ -1,11 +1,65 @@
 ..  include:: /Includes.rst.txt
 
 
+..  _upgrade:
+
 =======
 Upgrade
 =======
 
 If you upgrade EXT:maps2 to a newer version, please read this section carefully!
+
+..  _upgrade-13:
+
+Upgrade to Version 13.0.0
+=========================
+
+This version is not compatible with TYPO3 13!
+
+Removed static_info_tables dependency
+-------------------------------------
+
+All dependencies on static_info_tables have been removed. If you interact with
+the maps2 API and provide country information, the related column in the
+provided dataset must now contain an ISO 3166 alpha 2 code,
+an ISO 3166 alpha 3 code, or the English country name. Integer based references
+such as a static_info_tables UID are no longer supported. For further
+information about country handling in TYPO3, see the
+`Country API <https://docs.typo3.org/permalink/t3coreapi:country-api>`_
+
+Introduction of the TCA renderType maps2Relation
+------------------------------------------------
+
+With the introduction of the TCA renderType `maps2Relation`, integrators can
+now create a TCA field as a relation to the maps2 table much more easily. Please
+also refer to the revised API documentation: [link follows].
+
+The previous implementation always created a cache file whose content changed
+again after each cache clear. This caused problems during deployment. In
+addition, working with objects in TCA configuration is difficult because the
+TCA is not fully built at that point. TYPO3 is still in its loading state, where
+various objects cannot be loaded reliably.
+
+For these reasons, this system has been rewritten from the ground up.
+
+Mandatory Map ID for Google Maps
+--------------------------------
+
+Google Maps markers used for POIs have been deprecated for more than a year. To
+avoid map rendering issues caused by a future removal of the old marker
+implementation, maps2 now uses Google Maps AdvancedMarker. This requires an
+additional Map ID in the extension configuration. If you use Google Maps, you
+must configure a valid Map ID there.
+
+Updated JavaScript Files
+------------------------
+
+If you have overridden the JavaScript provided by maps2, you need to review
+and reapply your custom adjustments. maps2 now uses the new Google Maps
+AdvancedMarker implementation, which may require changes in customized
+JavaScript files.
+
+..  _upgrade-12:
 
 Upgrade to Version 12.0.0
 =========================
@@ -43,6 +97,8 @@ wizard in the Extension Manager before proceeding.
     *   However, in **EventListeners**, `PoiCollection` has changed from a
         **QueryResult** to an **array**.
 
+..  _upgrade-11:
+
 Upgrade to Version 11.0.0
 =========================
 
@@ -63,6 +119,8 @@ the UpgradeWizard to activate the new parameter based OSM Geocoding URI. This
 UpgradeWizard will only update that value, if it is the original old URI. Any
 modified URIs will be kept untouched.
 
+
+..  _upgrade-10:
 
 Upgrade to Version 10.0.0
 =========================
@@ -129,6 +187,8 @@ inject-methods in AjaxController. So please clear all cache after update.
 Please use "Flush Cache" in Installtool for TYPO3 10.* to update DI cache.
 
 
+..  _upgrade-9:
+
 Upgrade to Version 9.0.0
 ========================
 
@@ -147,6 +207,8 @@ configuration file was created. Further it would be good to check, if the
 tx_maps2_uid columns still exists in DB.
 
 
+..  _upgrade-8:
+
 Upgrade to Version 8.0.0
 ========================
 
@@ -161,6 +223,8 @@ There is no Debug Output of Map Provider response in Backend anymore, if request
 fails. We have added more detailed error messages instead. As a Dev, you can
 access all Messages of Client and GeoCodeService directly.
 
+
+..  _upgrade-7:
 
 Upgrade to Version 7.0.0
 ========================
@@ -197,6 +261,8 @@ execute the Update Wizard to move this Option in FlexForm from Google Maps sheet
 to MapOptions sheet.
 
 
+..  _upgrade-6:
+
 Upgrade to Version 6.0.0
 ========================
 
@@ -227,6 +293,8 @@ If you don't make use of our Widget ViewHelpers there should be no problem with
 this update.
 
 
+..  _upgrade-5:
+
 Upgrade to Version 5.0.0
 ========================
 
@@ -252,6 +320,8 @@ instead of RadiusResult objects now. `getFirstFoundPositionByAddress` return an
 object of type Position now.
 
 
+..  _upgrade-4:
+
 Upgrade to Version 4.0.0
 ========================
 
@@ -273,6 +343,8 @@ All methods of MapService have been migrated into GoogleMapsService.
 GeocodeUtility have been deleted. Please use getPositionsByAddress or
 getFirstFoundPositionByAddress of GoogleMapsService.
 
+
+..  _upgrade-3:
 
 Upgrade to Version 3.0.0
 ========================
@@ -300,6 +372,8 @@ maps2 in extension manager and activate it again.
 
     It does not help to rename these tables only.
 
+
+..  _upgrade-2:
 
 Upgrade to Version 2.0.0
 ========================

@@ -20,9 +20,9 @@ use Psr\Http\Server\RequestHandlerInterface;
 use TYPO3\CMS\Core\Http\JsonResponse;
 
 /**
- * Instead of page type we use Middleware to get the info window content of POIs
+ * Instead of a page type we use Middleware to get the info window content of POIs
  */
-readonly class GetInfoWindowContentMiddleware implements MiddlewareInterface
+final readonly class GetInfoWindowContentMiddleware implements MiddlewareInterface
 {
     public function __construct(
         private PoiCollectionService $poiCollectionService,
@@ -68,7 +68,7 @@ readonly class GetInfoWindowContentMiddleware implements MiddlewareInterface
         ]);
     }
 
-    protected function getPostData(ServerRequestInterface $request): array
+    private function getPostData(ServerRequestInterface $request): array
     {
         try {
             $payload = json_decode((string)$request->getBody(), true, 512, JSON_THROW_ON_ERROR);

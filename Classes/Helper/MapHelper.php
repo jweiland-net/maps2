@@ -12,27 +12,24 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Helper;
 
 use JWeiland\Maps2\Configuration\ExtConf;
-use JWeiland\Maps2\Traits\GetTypo3RequestTrait;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
+use JWeiland\Maps2\Configuration\MapProviderEnum;
+use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Core\ExpressionLanguage\RequestWrapper;
 
 /**
- * Little helper with a very reduced set of dependencies like Extbase. Useful, if you need f.e. the configured
+ * Little helper with a very reduced set of dependencies like Extbase. Useful if you need f.e. the configured
  * MapProvider at a very early state of TYPO3 like Middlewares.
  */
-class MapHelper
+readonly class MapHelper
 {
-    use GetTypo3RequestTrait;
-
-    public function __construct(protected ExtConf $extConf) {}
+    public function __construct(
+        protected ExtConf $extConf,
+    ) {}
 
     /**
-     * Returns the map provider.
-     *
      * @param array $databaseRow If set, we first try to extract a default map provider from there
-     *
-     * @return string Only "gm" or "osm". If "both" is configured, it returns the value from default map provider
      */
-    public function getMapProvider(array $databaseRow = []): string
+    public function getMapProvider(array $databaseRow = []): MapProviderEnum
     {
         $mapProvider = '';
 
@@ -41,20 +38,20 @@ class MapHelper
             if ($databaseRow !== []) {
                 $mapProvider = $this->getMapProviderFromDatabase($databaseRow);
             }
-
-            if ($mapProvider === '') {
-                $mapProvider = $this->extConf->getDefaultMapProvider();
-            }
         } else {
             // We have a strict map provider.
             $mapProvider = $this->extConf->getMapProvider();
         }
 
-        return $mapProvider;
+        if ($mapProvider === '') {
+            $mapProvider = $this->extConf->getDefaultMapProvider();
+        }
+
+        return MapProviderEnum::from($mapProvider);
     }
 
     /**
-     * Try to retrieve a default map provider from given database record
+     * Try to retrieve a default map provider from a given database record
      */
     protected function getMapProviderFromDatabase(array $databaseRow): string
     {
@@ -68,7 +65,7 @@ class MapHelper
                 // We have a record from TCEMAIN
                 $mapProvider = (string)current($databaseRow['map_provider']);
             } elseif (is_string($databaseRow['map_provider'])) {
-                // We have a normal array based record from database
+                // We have a normal array-based record from database
                 $mapProvider = $databaseRow['map_provider'];
             }
         }
@@ -77,40 +74,12 @@ class MapHelper
     }
 
     /**
-     * POIs are stored as JSON in tx_maps_domain_model_poicollection.
-     * Use this method to convert the JSON back into an array.
-     *
-     * @param string $poisAsJson That's normally the content of column "configuration_map"
-     * @return array<string, string>[]|bool[]
-     */
-    public function convertPoisAsJsonToArray(string $poisAsJson): array
-    {
-        $pois = [];
-
-        try {
-            foreach (json_decode($poisAsJson, true, 512, JSON_THROW_ON_ERROR) ?? [] as $poi) {
-                $pois[] = array_combine(
-                    [
-                        'latitude',
-                        'longitude',
-                    ],
-                    GeneralUtility::trimExplode(',', $poi),
-                );
-            }
-        } catch (\JsonException) {
-            // Return empty POIs
-        }
-
-        return $pois;
-    }
-
-    /**
-     * Check, if the current request is allowed to process/show the map in frontend.
+     * Check if the current request is allowed to process/show the map in the frontend.
      * It respects the settings from Extension Settings.
-     * If false, an overlay will be shown instead of the map and no JavaScript files
+     * If false, an overlay will be shown instead of the map, and no JavaScript files
      * will be loaded for maps2.
      */
-    public function isRequestToMapProviderAllowed(): bool
+    public function isRequestToMapProviderAllowed(ServerRequestInterface|RequestWrapper $request): bool
     {
         if ($this->extConf->getExplicitAllowMapProviderRequests()) {
             // Check, if cookie with last consent was available
@@ -119,7 +88,7 @@ class MapHelper
             }
 
             // Else, check GET parameter for consent
-            $parameters = $this->getTypo3Request()->getQueryParams()['tx_maps2_maps2'] ?? [];
+            $parameters = $request->getQueryParams()['tx_maps2_maps2'] ?? [];
 
             return isset($parameters['mapProviderRequestsAllowedForMaps2'])
                 && (int)$parameters['mapProviderRequestsAllowedForMaps2'] === 1;

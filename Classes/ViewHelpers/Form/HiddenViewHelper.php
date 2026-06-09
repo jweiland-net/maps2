@@ -20,17 +20,12 @@ use TYPO3\CMS\Fluid\ViewHelpers\Form\AbstractFormFieldViewHelper;
  * Many other f:form.* VHs do so, but f:hidden not. Don't know why.
  * Remove this VH, if this is resolved: https://forge.typo3.org/issues/90331
  */
-class HiddenViewHelper extends AbstractFormFieldViewHelper
+final class HiddenViewHelper extends AbstractFormFieldViewHelper
 {
     /**
      * @var string
      */
     protected $tagName = 'input';
-
-    public function initializeArguments(): void
-    {
-        parent::initializeArguments();
-    }
 
     /**
      * Renders the hidden field.

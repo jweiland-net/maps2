@@ -16,6 +16,8 @@ use JWeiland\Maps2\Helper\MapHelper;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\ExpressionLanguage\ExpressionFunction;
+use TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
+use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 /**
@@ -27,15 +29,8 @@ class AllowMapProviderRequestFunctionsProviderTest extends FunctionalTestCase
 
     protected AllowMapProviderRequestFunctionsProvider $subject;
 
-    protected array $coreExtensionsToLoad = [
-        'extensionmanager',
-        'reactions',
-    ];
-
     protected array $testExtensionsToLoad = [
-        'sjbr/static-info-tables',
         'jweiland/maps2',
-        'jweiland/events2',
     ];
 
     protected function setUp(): void
@@ -71,11 +66,14 @@ class AllowMapProviderRequestFunctionsProviderTest extends FunctionalTestCase
     public function getFunctionsWillReturnSpecificExpressionFunction(): void
     {
         $this->mapHelperMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('isRequestToMapProviderAllowed')
             ->willReturn(true);
 
         $expressionFunction = $this->subject->getFunctions()[0];
+
+        $request = (new ServerRequest('https://www.example.com/', 'GET'))
+            ->withAttribute('applicationType', SystemEnvironmentBuilder::REQUESTTYPE_FE);
 
         self::assertSame(
             'isRequestToMapProviderAllowed',
@@ -87,7 +85,10 @@ class AllowMapProviderRequestFunctionsProviderTest extends FunctionalTestCase
         );
 
         self::assertTrue(
-            call_user_func($expressionFunction->getEvaluator(), ['foo' => 'bar']),
+            call_user_func($expressionFunction->getEvaluator(), [
+                'foo' => 'bar',
+                'request' => $request,
+            ]),
         );
     }
 }

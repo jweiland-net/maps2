@@ -11,6 +11,8 @@ Some general settings for maps2 can be configured in `Admin Tools` -> `Settings`
 
 The settings are divided into several tabs and described here in detail:
 
+..  _extensionSettings-tab-basic:
+
 Tab: Basic
 ==========
 
@@ -53,7 +55,7 @@ a default map provider to be preselected for new poi collection records.
 defaultMapType
 --------------
 
-Default: `Empty`
+Default: `Point`
 
 By default an editor has to choose which type of poi collection record he wants
 to create. As an administrator or integrator you have the possibility to reduce
@@ -141,26 +143,10 @@ TypoScript:
     settings.infoWindowContentTemplatePath = EXT:my_ext/Resources/Private/Extensions/Maps2/InfoWindowContent.html
 
 
+..  _extensionSettings-tab-gm:
+
 Tab: Gm
 =======
-
-googleMapsLibrary
------------------
-
-Default: `https://maps.googleapis.com/maps/api/js?key=|&libraries=places`
-
-This is the link to the current Google Maps JavaScript Api. It is configured as
-**wrap** so that you can decide where the ApiKey has to be inserted.
-
-..  important::
-
-    This configuration is only for Google Maps which are used in list module of
-    TYPO3 Backend.
-
-..  important::
-
-    Please keep **places** API information in link, as it is need for address
-    search while PoiCollection record creation.
 
 googleMapsGeocodeUri
 --------------------
@@ -201,6 +187,8 @@ TYPO3 backend and frontend (Plugin CityMap).
 
 You can register API keys here: `Google Console<http://console.developers.google.com>`_
 
+..  _extensionSettings-tab-osm:
+
 Tab: Osm
 ========
 
@@ -218,6 +206,8 @@ change that URI here.
     There is one %s placeholder in URI for address. We replace it with
     sprintf(), so, if you change that URI the new URI must have this
     placeholder, too.
+
+..  _extensionSettings-tab-design:
 
 Tab: Design
 ===========

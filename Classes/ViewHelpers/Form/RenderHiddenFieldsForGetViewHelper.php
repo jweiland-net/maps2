@@ -23,9 +23,9 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * This ViewHelper is useful to render special hidden fields
- * to save and modify markers in frontend of foreign extensions
+ * to save and modify markers in the frontend of foreign extensions
  */
-class RenderHiddenFieldsForGetViewHelper extends AbstractViewHelper
+final class RenderHiddenFieldsForGetViewHelper extends AbstractViewHelper
 {
     /**
      * @var bool

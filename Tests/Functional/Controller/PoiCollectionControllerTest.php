@@ -26,15 +26,8 @@ class PoiCollectionControllerTest extends FunctionalTestCase
 
     protected PoiCollectionController $subject;
 
-    protected array $coreExtensionsToLoad = [
-        'extensionmanager',
-        'reactions',
-    ];
-
     protected array $testExtensionsToLoad = [
-        'sjbr/static-info-tables',
         'jweiland/maps2',
-        'jweiland/events2',
     ];
 
     protected function setUp(): void
@@ -84,7 +77,7 @@ class PoiCollectionControllerTest extends FunctionalTestCase
     }
 
     #[Test]
-    public function showActionWithCategoriesButWithoutPoiCollectionsAddsEmptyPois(): void
+    public function showActionWithCategoriesButWithoutPoiCollectionsAddsErrorMessage(): void
     {
         $this->importCSVDataSet(__DIR__ . '/../Fixtures/tt_content-with-category-uid-2.csv');
 
@@ -97,7 +90,7 @@ class PoiCollectionControllerTest extends FunctionalTestCase
         $content = (string)$response->getBody();
 
         self::assertStringContainsString(
-            'data-pois="{}"',
+            '[ERROR] No POI collections found',
             $content,
         );
     }

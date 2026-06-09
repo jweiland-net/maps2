@@ -19,10 +19,10 @@ use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
- * As we need much information in frontend, this ViewHelper is really helpful to
+ * As we need much information in the frontend, this ViewHelper is really helpful to
  * convert all array and object types into a json string which we/you can use for various data attributes.
  */
-class ConvertToJsonViewHelper extends AbstractViewHelper
+final class ConvertToJsonViewHelper extends AbstractViewHelper
 {
     /**
      * @var bool
@@ -63,7 +63,7 @@ class ConvertToJsonViewHelper extends AbstractViewHelper
      *
      * @param PoiCollection[] $poiCollections
      */
-    protected function getPoiCollectionsAsJson(array|QueryResultInterface|ObjectStorage $poiCollections): string
+    private function getPoiCollectionsAsJson(array|QueryResultInterface|ObjectStorage $poiCollections): string
     {
         $poiCollectionsAsArray = [];
         foreach ($poiCollections as $poiCollection) {
@@ -83,7 +83,7 @@ class ConvertToJsonViewHelper extends AbstractViewHelper
 
         try {
             return json_encode($poiCollectionsAsArray, JSON_THROW_ON_ERROR);
-        } catch (\JsonException $e) {
+        } catch (\JsonException) {
             return '{}';
         }
     }
@@ -91,7 +91,7 @@ class ConvertToJsonViewHelper extends AbstractViewHelper
     /**
      * Check, if value contains entries of type PoiCollection
      */
-    protected function valueContainsPoiCollections(mixed $value): bool
+    private function valueContainsPoiCollections(mixed $value): bool
     {
         // With PHP 8.1 reset() and current() should not be used with objects anymore.
         // Extract the values as simple array to be compatible in the future.

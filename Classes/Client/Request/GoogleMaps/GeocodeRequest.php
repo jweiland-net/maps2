@@ -11,21 +11,26 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Client\Request\GoogleMaps;
 
-use JWeiland\Maps2\Client\Request\AbstractRequest;
+use JWeiland\Maps2\Client\Request\RequestInterface;
 use JWeiland\Maps2\Configuration\ExtConf;
+use JWeiland\Maps2\Configuration\MapProviderEnum;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 /**
  * A Request class for Google Maps Geocode API
  */
-class GeocodeRequest extends AbstractRequest
+#[AutoconfigureTag(
+    name: 'maps2.request.geocoding',
+)]
+readonly class GeocodeRequest implements RequestInterface
 {
-    protected string $uri = '';
+    public function __construct(
+        protected ExtConf $extConf,
+    ) {}
 
-    public function __construct(ExtConf $extConf)
+    public function canProcess(MapProviderEnum $mapProvider): bool
     {
-        parent::__construct($extConf);
-
-        $this->uri = $this->extConf->getGoogleMapsGeocodeUri();
+        return $mapProvider === MapProviderEnum::GOOGLE_MAPS;
     }
 
     /**
@@ -33,22 +38,18 @@ class GeocodeRequest extends AbstractRequest
      *
      * @throws \Exception
      */
-    public function getUri(): string
+    public function getUri(string $rawUrlEncodedAddress): string
     {
-        if ($this->uri === '') {
+        $uri = $this->extConf->getGoogleMapsGeocodeUri();
+
+        if ($uri === '') {
             return '';
         }
 
-        if (!$this->hasParameter('address')) {
-            return $this->uri;
+        if ($rawUrlEncodedAddress === '') {
+            return '';
         }
 
-        return sprintf(
-            $this->uri,
-            $this->updateAddressForUri(
-                (string)$this->getParameter('address'),
-            ),
-            $this->extConf->getGoogleMapsGeocodeApiKey(),
-        );
+        return sprintf($uri, $rawUrlEncodedAddress, $this->extConf->getGoogleMapsGeocodeApiKey());
     }
 }

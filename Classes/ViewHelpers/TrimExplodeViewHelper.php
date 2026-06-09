@@ -17,7 +17,7 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 /**
  * Define a delimiter and your comma-separated value will be exploded into trimmed parts
  */
-class TrimExplodeViewHelper extends AbstractViewHelper
+final class TrimExplodeViewHelper extends AbstractViewHelper
 {
     public function initializeArguments(): void
     {

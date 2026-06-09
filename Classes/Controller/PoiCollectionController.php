@@ -11,52 +11,52 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Controller;
 
-use JWeiland\Maps2\Controller\Traits\InjectExtConfTrait;
-use JWeiland\Maps2\Controller\Traits\InjectGeoCodeServiceTrait;
-use JWeiland\Maps2\Controller\Traits\InjectLinkHelperTrait;
-use JWeiland\Maps2\Controller\Traits\InjectPoiCollectionRepositoryTrait;
-use JWeiland\Maps2\Controller\Traits\InjectSettingsHelperTrait;
+use JWeiland\Maps2\Configuration\Environment;
+use JWeiland\Maps2\Configuration\EnvironmentFactory;
 use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Domain\Model\Search;
+use JWeiland\Maps2\Domain\Repository\PoiCollectionRepository;
 use JWeiland\Maps2\Event\PostProcessFluidVariablesEvent;
+use JWeiland\Maps2\Service\GeoCodeService;
 use Psr\Http\Message\ResponseInterface;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 /**
  * The main controller to show various kinds of markers on Maps
  */
 class PoiCollectionController extends ActionController
 {
-    use InjectExtConfTrait;
-    use InjectGeoCodeServiceTrait;
-    use InjectLinkHelperTrait;
-    use InjectSettingsHelperTrait;
-    use InjectPoiCollectionRepositoryTrait;
+    protected Environment $environment;
 
-    public function initializeObject(): void
+    public function __construct(
+        protected EnvironmentFactory $environmentFactory,
+        protected GeoCodeService $geoCodeService,
+        protected PoiCollectionRepository $poiCollectionRepository,
+    ) {}
+
+    protected function initializeAction(): void
     {
-        $this->settings = $this->settingsHelper->getMergedSettings();
+        $this->environment = $this->environmentFactory->buildEnvironment($this->settings, $this->request);
+        $this->settings = $this->environment->getSettings();
+
+        if (!$this->environment->getIsMapRenderable()) {
+            $this->addFlashMessage(
+                'The map cannot be rendered because the map configuration is incomplete. '
+                . 'Please check that the required site set is loaded. '
+                . 'If Google Maps is used, also ensure that the API key and Map ID are configured.',
+                'Map cannot be renderer',
+                ContextualFeedbackSeverity::WARNING,
+            );
+        }
     }
 
     protected function initializeView($view): void
     {
-        $contentRecord = $this->request->getAttribute('currentContentObject')->data;
-
-        // Remove unneeded columns from tt_content array
-        unset(
-            $contentRecord['pi_flexform'],
-            $contentRecord['l18n_diffsource'],
-        );
-
-        $view->assign('data', $contentRecord);
-        $view->assign('environment', [
-            'settings' => $this->settingsHelper->getPreparedSettings($this->settings),
-            'extConf' => ObjectAccess::getGettableProperties($this->extConf),
-            'ajaxUrl' => $this->linkHelper->buildUriToCurrentPage([], $this->request),
-            'contentRecord' => $contentRecord,
-        ]);
+        $view->assign('data', $this->environment->getContentRecord());
+        $view->assign('environment', $this->environment);
     }
 
     /**
@@ -64,9 +64,35 @@ class PoiCollectionController extends ActionController
      */
     public function showAction(int $poiCollectionUid = 0): ResponseInterface
     {
-        $this->postProcessAndAssignFluidVariables([
-            'poiCollections' => $this->poiCollectionRepository->findPoiCollections($this->settings, $poiCollectionUid),
+        $poiCollections = $this->poiCollectionRepository->findPoiCollections(
+            $this->settings,
+            $poiCollectionUid,
+        );
+
+        $fluidVariables = $this->postProcessAndAssignFluidVariables([
+            'poiCollections' => $poiCollections,
         ]);
+
+        if ($fluidVariables['poiCollections'] instanceof QueryResultInterface
+            && $fluidVariables['poiCollections']->count() === 0
+        ) {
+            $storagePageIds = $fluidVariables['poiCollections']->getQuery()->getQuerySettings()->getStoragePageIds();
+            if ($storagePageIds === [0]) {
+                $this->addFlashMessage(
+                    'No storage PID has been configured. '
+                    . 'Please check the maps2 content element and the site settings.',
+                    'Storage PID missing',
+                    ContextualFeedbackSeverity::ERROR,
+                );
+            } else {
+                $this->addFlashMessage(
+                    'No POI collections were found for the configured storage PID. '
+                    . 'Please check whether the correct storage PID is assigned.',
+                    'No POI collections found',
+                    ContextualFeedbackSeverity::ERROR,
+                );
+            }
+        }
 
         return $this->htmlResponse();
     }
@@ -114,7 +140,7 @@ class PoiCollectionController extends ActionController
         return $this->htmlResponse();
     }
 
-    protected function postProcessAndAssignFluidVariables(array $variables = []): void
+    protected function postProcessAndAssignFluidVariables(array $variables = []): array
     {
         /** @var PostProcessFluidVariablesEvent $event */
         $event = $this->eventDispatcher->dispatch(
@@ -126,5 +152,7 @@ class PoiCollectionController extends ActionController
         );
 
         $this->view->assignMultiple($event->getFluidVariables());
+
+        return $event->getFluidVariables();
     }
 }

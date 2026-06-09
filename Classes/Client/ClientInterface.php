@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Client;
 
 use JWeiland\Maps2\Client\Request\RequestInterface;
+use JWeiland\Maps2\Configuration\MapProviderEnum;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 
 /**
@@ -19,7 +20,12 @@ use TYPO3\CMS\Core\Messaging\FlashMessage;
  */
 interface ClientInterface
 {
-    public function processRequest(RequestInterface $request): array;
+    public function canProcess(MapProviderEnum $mapProvider): bool;
+
+    public function processRequest(
+        RequestInterface $request,
+        string $address,
+    ): array;
 
     public function hasErrors(): bool;
 

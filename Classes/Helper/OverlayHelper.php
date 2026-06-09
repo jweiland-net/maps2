@@ -18,14 +18,11 @@ use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 /**
  * Helper to add where clause for translations and workspaces to QueryBuilder
  */
-class OverlayHelper
+readonly class OverlayHelper
 {
-    protected Context $context;
-
-    public function __construct(Context $context)
-    {
-        $this->context = $context;
-    }
+    public function __construct(
+        protected Context $context,
+    ) {}
 
     public function addWhereForOverlay(
         QueryBuilder $queryBuilder,

@@ -11,17 +11,19 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Event;
 
+use JWeiland\Maps2\Tca\ColumnRegistration;
+
 /**
  * Event to modify a POI collection record after saving a foreign location record
  */
-class PostProcessPoiCollectionRecordEvent
+final readonly class PostProcessPoiCollectionRecordEvent
 {
     public function __construct(
-        protected string $poiCollectionTableName,
-        protected int $poiCollectionUid,
-        protected string $foreignTableName,
-        protected array $foreignLocationRecord,
-        protected array $options,
+        private string $poiCollectionTableName,
+        private int $poiCollectionUid,
+        private string $foreignTableName,
+        private array $foreignLocationRecord,
+        private ColumnRegistration $columnRegistration,
     ) {}
 
     public function getPoiCollectionTableName(): string
@@ -44,8 +46,8 @@ class PostProcessPoiCollectionRecordEvent
         return $this->foreignLocationRecord;
     }
 
-    public function getOptions(): array
+    public function getColumnRegistration(): ColumnRegistration
     {
-        return $this->options;
+        return $this->columnRegistration;
     }
 }

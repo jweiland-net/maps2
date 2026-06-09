@@ -14,15 +14,15 @@ namespace JWeiland\Maps2\Event;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 
 /*
- * Use this event, if you want to modify the query
+ * Use this event if you want to modify the query
  * of PoiCollectionRepository::findPoiCollections
  */
-class ModifyQueryOfFindPoiCollectionsEvent
+final readonly class ModifyQueryOfFindPoiCollectionsEvent
 {
     public function __construct(
-        protected QueryBuilder $queryBuilder,
-        protected array $settings,
-        protected int $poiCollectionUid,
+        private QueryBuilder $queryBuilder,
+        private array $settings,
+        private int $poiCollectionUid,
     ) {}
 
     public function getQueryBuilder(): QueryBuilder

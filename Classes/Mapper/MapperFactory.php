@@ -11,28 +11,25 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Mapper;
 
-use JWeiland\Maps2\Helper\MapHelper;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
+use JWeiland\Maps2\Configuration\MapProviderEnum;
 
 /**
- * This factory returns either a Mapper for Google Maps or Open Street Map
+ * This factory returns either a Mapper for Google Maps or OpenStreetMap
  */
-class MapperFactory
+readonly class MapperFactory
 {
-    protected array $mapping = [
-        'gm' => GoogleMapsMapper::class,
-        'osm' => OpenStreetMapMapper::class,
-    ];
+    public function __construct(
+        protected iterable $mapper,
+    ) {}
 
-    public function __construct(protected MapHelper $mapHelper) {}
-
-    public function create(): MapperInterface
+    public function create(MapProviderEnum $mapProvider): ?MapperInterface
     {
-        /** @var MapperInterface $client */
-        $client = GeneralUtility::makeInstance(
-            $this->mapping[$this->mapHelper->getMapProvider()],
-        );
+        foreach ($this->mapper as $mapper) {
+            if ($mapper->canProcess($mapProvider)) {
+                return $mapper;
+            }
+        }
 
-        return $client;
+        return null;
     }
 }

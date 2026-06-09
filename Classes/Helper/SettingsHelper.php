@@ -11,63 +11,63 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Helper;
 
+use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Core\TypoScript\FrontendTypoScript;
+use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 
 /**
  * Helper to prepare settings
  */
-class SettingsHelper
+readonly class SettingsHelper
 {
-    protected ConfigurationManagerInterface $configurationManager;
-
-    public function __construct(ConfigurationManagerInterface $configurationManager)
-    {
-        $this->configurationManager = $configurationManager;
-    }
+    public function __construct(
+        protected TypoScriptService $typoScriptService,
+    ) {}
 
     /**
      * This method will merge TypoScript and FlexForm settings of EXT:maps2 and should be called
      * by maps2 only.
+     *
+     * Extbase merges TypoScript and FlexForm settings in a way where empty FlexForm values overwrite
+     * TypoScript defaults. To preserve TypoScript defaults, this method retrieves the original,
+     * untouched TypoScript settings separately and restores those values when the merged setting
+     * contains an empty string.
+     *
      * Be careful using this method from within foreign extensions. The context may differ. It may happen
      * that FlexForm settings of your plugin will be merged with TypoScript settings of maps2. This can
      * lead to unforeseen miss-configuration.
      */
-    public function getMergedSettings(): array
-    {
-        $typoScriptSettings = $this->configurationManager->getConfiguration(
-            ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,
-            'maps2',
-            'invalid', // invalid plugin name, to get fresh unmerged settings
-        );
+    public function restoreTypoScriptDefaultsForEmptyFlexFormSettings(
+        array $mergedSettingsFromController,
+        ServerRequestInterface $request,
+    ): array {
+        $pluginConfiguration = $this->getPluginConfiguration($request);
+        $pluginSettings = $pluginConfiguration['settings'] ?? [];
 
-        // In context of a maps2 plugin this will return the merged (TS and FlexForm) settings
-        $mergedSettings = $this->configurationManager->getConfiguration(
-            ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
-        );
-
-        foreach ($mergedSettings as $setting => $value) {
-            if ($value === '' && isset($typoScriptSettings['settings'][$setting])) {
-                $mergedSettings[$setting] = $typoScriptSettings['settings'][$setting];
+        foreach ($mergedSettingsFromController as $mergedSetting => $value) {
+            if ($value === '' && isset($pluginSettings[$mergedSetting])) {
+                $mergedSettingsFromController[$mergedSetting] = $pluginSettings[$mergedSetting];
             }
         }
 
-        return $mergedSettings;
+        return $mergedSettingsFromController ?: $pluginSettings;
     }
 
-    /**
-     * If possible you should always set $settings. In context of controllers $settings contains a merged version
-     * of TS settings and FlexForm settings. If you don't have any settings by hand, leave empty, and we will
-     * try to get settings from TypoScript (no FlexForm settings!!!)
-     */
-    public function getPreparedSettings(array $settings = []): array
+    public function getPreparedSettings(array $settings, ServerRequestInterface $request): array
     {
-        $settings = $settings ?: $this->getTypoScriptSettings();
-
         $settings['forceZoom'] = (bool)($settings['forceZoom'] ?? false);
 
-        // https://wiki.openstreetmap.org/wiki/Tile_servers tolds to use ${x} placeholders, but they don't work.
+        $this->prepareMapTileForOpenStreetMap($settings);
+        $this->prepareImagePathForMarkerClusterer($settings, $request);
+
+        return $settings;
+    }
+
+    protected function prepareMapTileForOpenStreetMap(array &$settings): void
+    {
+        // https://wiki.openstreetmap.org/wiki/Tile_servers told you to use ${x} placeholders, but they don't work.
         if (!empty($settings['mapTile'])) {
             $settings['mapTile'] = str_replace(
                 ['${s}', '${x}', '${y}', '${z}'],
@@ -75,32 +75,47 @@ class SettingsHelper
                 $settings['mapTile'],
             );
         }
-
-        if (
-            !empty($settings['markerClusterer']['enable'])
-            && !empty($settings['markerClusterer']['imagePath'])
-        ) {
-            $settings['markerClusterer']['enable'] = 1;
-            if (method_exists(PathUtility::class, 'getPublicResourceWebPath')) {
-                $settings['markerClusterer']['imagePath'] = PathUtility::getPublicResourceWebPath($settings['markerClusterer']['imagePath']);
-            } else {
-                $settings['markerClusterer']['imagePath'] = PathUtility::getAbsoluteWebPath(
-                    GeneralUtility::getFileAbsFileName(
-                        $settings['markerClusterer']['imagePath'],
-                    ),
-                );
-            }
-        }
-
-        return $settings;
     }
 
-    protected function getTypoScriptSettings(): array
+    protected function prepareImagePathForMarkerClusterer(array &$settings, ServerRequestInterface $request): void
     {
-        return $this->configurationManager->getConfiguration(
-            ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
-            'Maps2',
-            'Maps2',
-        ) ?? [];
+        if (
+            isset($settings['markerClusterer']['enable'], $settings['markerClusterer']['imagePath'])
+            && (string)$settings['markerClusterer']['enable'] === '1'
+        ) {
+            $settings['markerClusterer']['enable'] = 1;
+
+            $imageWebPath = PathUtility::getAbsoluteWebPath(
+                GeneralUtility::getFileAbsFileName($settings['markerClusterer']['imagePath']),
+            );
+
+            $settings['markerClusterer']['imagePath'] = GeneralUtility::locationHeaderUrl($imageWebPath, $request);
+        }
+    }
+
+    /**
+     * Returns the TypoScript configuration found in plugin.tx_maps2.
+     */
+    private function getPluginConfiguration(ServerRequestInterface $request): array
+    {
+        $setup = $this->getTypoScriptSetup($request);
+        if (isset($setup['plugin.']['tx_maps2.']) && is_array($setup['plugin.']['tx_maps2.'])) {
+            return $this->typoScriptService->convertTypoScriptArrayToPlainArray($setup['plugin.']['tx_maps2.']);
+        }
+
+        return [];
+    }
+
+    protected function getTypoScriptSetup(ServerRequestInterface $request): array
+    {
+        $frontendTypoScript = $request->getAttribute('frontend.typoscript');
+        if (!($frontendTypoScript instanceof FrontendTypoScript)) {
+            throw new \RuntimeException(
+                'Setup array has not been initialized. This happens in cached Frontend scope where full TypoScript'
+                . ' is not needed by the system.',
+                1780395099,
+            );
+        }
+        return $frontendTypoScript->getSetupArray();
     }
 }

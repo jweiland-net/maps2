@@ -11,24 +11,26 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Update;
 
+use TYPO3\CMS\Core\Attribute\UpgradeWizard;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
-use TYPO3\CMS\Core\Information\Typo3Version;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Install\Attribute\UpgradeWizard;
-use TYPO3\CMS\Install\Updates\UpgradeWizardInterface;
+use TYPO3\CMS\Core\Upgrades\UpgradeWizardInterface;
 
 /**
- * Somewhere in october 2023 OSM has deprecated/removed the use of addresses as path segment in Geocode URI.
- * This UpgradeWizard migrates extension settings to new URI where address is a query parameter now.
+ * Somewhere in october 2023 OSM has deprecated/removed the use of addresses as a path segment in Geocode URI.
+ * This UpgradeWizard migrates extension settings to a new URI where address is a query parameter now.
  */
 #[UpgradeWizard('maps2_newOsmGeocodeUriExtConf')]
-class NewGeocodeUriForOsmUpdate implements UpgradeWizardInterface
+readonly class NewGeocodeUriForOsmUpdate implements UpgradeWizardInterface
 {
-    private string $oldOsmGeocodeUri = 'https://nominatim.openstreetmap.org/search/%s?format=json&addressdetails=1';
+    private const OLD_OSM_GEOCODE_URI = 'https://nominatim.openstreetmap.org/search/%s?format=json&addressdetails=1';
 
-    private string $newOsmGeocodeUri = 'https://nominatim.openstreetmap.org/search?q=%s&format=json&addressdetails=1';
+    private const NEW_OS_GEOCODE_URI = 'https://nominatim.openstreetmap.org/search?q=%s&format=json&addressdetails=1';
+
+    public function __construct(
+        private ExtensionConfiguration $extensionConfiguration,
+    ) {}
 
     public function getTitle(): string
     {
@@ -37,26 +39,26 @@ class NewGeocodeUriForOsmUpdate implements UpgradeWizardInterface
 
     public function getDescription(): string
     {
-        return 'OpenStreetMap has changed its Geocoding URI. The address has to be set as additional query parameter' .
-            'now. Adding the address as path segment seems to be removed somewhere in October 2023.';
+        return 'OpenStreetMap has changed its Geocoding URI. The address has to be set as additional query parameter'
+            . 'now. Adding the address as path segment seems to be removed somewhere in October 2023.';
     }
 
     public function updateNecessary(): bool
     {
-        return $this->getOsmGeocodeUri() === $this->oldOsmGeocodeUri;
+        return $this->getOsmGeocodeUri() === self::OLD_OSM_GEOCODE_URI;
     }
 
     public function executeUpdate(): bool
     {
-        if ($this->getOsmGeocodeUri() === $this->oldOsmGeocodeUri) {
+        if ($this->getOsmGeocodeUri() === self::OLD_OSM_GEOCODE_URI) {
             try {
-                $maps2ExtensionConfiguration = $this->getExtensionConfiguration()->get('maps2');
+                $maps2ExtensionConfiguration = $this->extensionConfiguration->get('maps2');
                 if (
                     is_array($maps2ExtensionConfiguration)
                     && array_key_exists('openStreetMapGeocodeUri', $maps2ExtensionConfiguration)
                 ) {
-                    $maps2ExtensionConfiguration['openStreetMapGeocodeUri'] = $this->newOsmGeocodeUri;
-                    $this->getExtensionConfiguration()->set(
+                    $maps2ExtensionConfiguration['openStreetMapGeocodeUri'] = self::NEW_OS_GEOCODE_URI;
+                    $this->extensionConfiguration->set(
                         'maps2',
                         $maps2ExtensionConfiguration,
                     );
@@ -73,20 +75,10 @@ class NewGeocodeUriForOsmUpdate implements UpgradeWizardInterface
     private function getOsmGeocodeUri(): string
     {
         try {
-            return $this->getExtensionConfiguration()->get('maps2', 'openStreetMapGeocodeUri');
+            return $this->extensionConfiguration->get('maps2', 'openStreetMapGeocodeUri');
         } catch (ExtensionConfigurationExtensionNotConfiguredException | ExtensionConfigurationPathDoesNotExistException) {
             return '';
         }
-    }
-
-    private function getExtensionConfiguration(): ExtensionConfiguration
-    {
-        return GeneralUtility::makeInstance(ExtensionConfiguration::class);
-    }
-
-    private function getTypo3Version(): Typo3Version
-    {
-        return GeneralUtility::makeInstance(Typo3Version::class);
     }
 
     public function getPrerequisites(): array

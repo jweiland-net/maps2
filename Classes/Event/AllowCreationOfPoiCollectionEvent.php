@@ -11,17 +11,19 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Event;
 
+use JWeiland\Maps2\Tca\ColumnRegistration;
+
 /**
- * Event to control, if a PoiCollection is allowed to be created while saving a foreign record in TYPO3 backend.
+ * Event to control if a PoiCollection is allowed to be created while saving a foreign record in TYPO3 backend.
  */
-class AllowCreationOfPoiCollectionEvent
+final class AllowCreationOfPoiCollectionEvent
 {
     public function __construct(
-        protected array $foreignLocationRecord,
-        protected string $foreignTableName,
-        protected string $foreignColumnName,
-        protected array $options,
-        protected bool $isValid,
+        private readonly array $foreignLocationRecord,
+        private readonly string $foreignTableName,
+        private readonly string $foreignColumnName,
+        private readonly ColumnRegistration $columnRegistration,
+        private bool $isValid,
     ) {}
 
     public function getForeignLocationRecord(): array
@@ -39,9 +41,9 @@ class AllowCreationOfPoiCollectionEvent
         return $this->foreignColumnName;
     }
 
-    public function getOptions(): array
+    public function getColumnRegistration(): ColumnRegistration
     {
-        return $this->options;
+        return $this->columnRegistration;
     }
 
     public function isValid(): bool

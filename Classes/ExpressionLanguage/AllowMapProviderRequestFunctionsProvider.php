@@ -16,12 +16,14 @@ use Symfony\Component\ExpressionLanguage\ExpressionFunction;
 use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
 
 /**
- * Check, if extension configuration is set
- * and user has not explicit allowed map provider requests
+ * Check if extension configuration is set
+ * and the user has not explicitly allowed map provider requests
  */
-class AllowMapProviderRequestFunctionsProvider implements ExpressionFunctionProviderInterface
+final readonly class AllowMapProviderRequestFunctionsProvider implements ExpressionFunctionProviderInterface
 {
-    public function __construct(protected MapHelper $mapHelper) {}
+    public function __construct(
+        private MapHelper $mapHelper,
+    ) {}
 
     /**
      * @return ExpressionFunction[]
@@ -33,17 +35,15 @@ class AllowMapProviderRequestFunctionsProvider implements ExpressionFunctionProv
         ];
     }
 
-    protected function getIsRequestToMapProviderAllowed(): ExpressionFunction
+    private function getIsRequestToMapProviderAllowed(): ExpressionFunction
     {
         // Need local variable for static callable
         $mapHelper = $this->mapHelper;
 
         return new ExpressionFunction(
             'isRequestToMapProviderAllowed',
-            static function (): void {
-                // Not implemented, we only use the evaluator
-            },
-            static fn($existingVariables) => $mapHelper->isRequestToMapProviderAllowed(),
+            static fn(): null => null, // Not implemented, we only use the evaluator
+            static fn($arguments): bool => $mapHelper->isRequestToMapProviderAllowed($arguments['request']),
         );
     }
 }

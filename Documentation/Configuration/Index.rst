@@ -7,6 +7,8 @@
 Configuration
 =============
 
+..  _configuration-minimal-example:
+
 Minimal Example
 ===============
 

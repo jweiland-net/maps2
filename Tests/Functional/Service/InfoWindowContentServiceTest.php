@@ -45,22 +45,16 @@ class InfoWindowContentServiceTest extends FunctionalTestCase
 
     protected EventDispatcherInterface|MockObject $eventDispatcherMock;
 
-    protected array $coreExtensionsToLoad = [
-        'extensionmanager',
-        'reactions',
-    ];
-
     protected array $testExtensionsToLoad = [
-        'sjbr/static-info-tables',
+        __DIR__ . '/../Fixtures/Extensions/address',
         'jweiland/maps2',
-        'jweiland/events2',
     ];
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->importCSVDataSet(__DIR__ . '/../Fixtures/tx_events2_domain_model_location.csv');
+        $this->importCSVDataSet(__DIR__ . '/../Fixtures/tx_address_domain_model_address.csv');
 
         $this->viewFactory = GeneralUtility::makeInstance(ViewFactoryInterface::class);
         $this->contentDataProcessor = GeneralUtility::makeInstance(ContentDataProcessor::class);
@@ -102,7 +96,7 @@ class InfoWindowContentServiceTest extends FunctionalTestCase
         $request = $request->withAttribute('frontend.typoscript', $frontendTypoScript);
 
         $this->eventDispatcherMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('dispatch')
             ->willReturn(new RenderInfoWindowContentEvent($poiCollectionRecord, $request));
 
@@ -130,7 +124,7 @@ class InfoWindowContentServiceTest extends FunctionalTestCase
         $request = $request->withAttribute('frontend.typoscript', $frontendTypoScript);
 
         $this->eventDispatcherMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('dispatch')
             ->willReturn(new RenderInfoWindowContentEvent($poiCollectionRecord, $request));
 
@@ -170,7 +164,7 @@ class InfoWindowContentServiceTest extends FunctionalTestCase
         $request = $request->withAttribute('site', $site);
 
         $this->eventDispatcherMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('dispatch')
             ->willReturn(new RenderInfoWindowContentEvent($poiCollectionRecord, $request));
 
@@ -216,7 +210,7 @@ class InfoWindowContentServiceTest extends FunctionalTestCase
         $request = $request->withAttribute('site', $site);
 
         $this->eventDispatcherMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('dispatch')
             ->willReturn(new RenderInfoWindowContentEvent($poiCollectionRecord, $request));
 
@@ -279,7 +273,7 @@ class InfoWindowContentServiceTest extends FunctionalTestCase
                 new Settings([
                     'maps2' => [
                         'infoWindowContent' => [
-                            'templatePath' => 'EXT:maps2/Resources/Private/Templates/InfoWindowContent.html',
+                            'templatePath' => 'EXT:maps2/Resources/Private/Templates/InfoWindowContent.fluid.html',
                         ],
                     ],
                 ]),
@@ -296,7 +290,7 @@ class InfoWindowContentServiceTest extends FunctionalTestCase
         $GLOBALS['TYPO3_REQUEST'] = $request;
 
         $this->eventDispatcherMock
-            ->expects(self::atLeastOnce())
+            ->expects($this->atLeastOnce())
             ->method('dispatch')
             ->willReturn(new RenderInfoWindowContentEvent($poiCollectionRecord, $request));
 

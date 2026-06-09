@@ -1,20 +1,22 @@
 import { ExtConf, PoiCollection } from '@jweiland/maps2/Classes.js';
-import FormEngine from "@typo3/backend/form-engine.js";
-import Notification from"@typo3/backend/notification.js"
+import FormEngine from '@typo3/backend/form-engine.js';
+import Notification from '@typo3/backend/notification.js';
 
 class GoogleMapsModule {
   selector = '#maps2ConfigurationMap';
   record = [];
   extConf = [];
   marker = {};
+  shape = {};
   map = {};
-  infoWindow = {};
-  infoWindowContent = {};
 
   constructor() {
-    let googleMaps = document.querySelector(this.selector);
-    let poiCollection = new PoiCollection(JSON.parse(googleMaps.dataset.poiCollection));
-    let extConf = new ExtConf(JSON.parse(googleMaps.dataset.extConf));
+    const googleMaps = document.querySelector(this.selector);
+    if (!googleMaps) {
+      return;
+    }
+    const poiCollection = new PoiCollection(JSON.parse(googleMaps.dataset.poiCollection));
+    const extConf = new ExtConf(JSON.parse(googleMaps.dataset.extConf));
 
     this.load(extConf).then(() => {
       this.initialize(googleMaps, poiCollection, extConf);
@@ -23,18 +25,16 @@ class GoogleMapsModule {
 
   load = (extConf) => {
     window._GoogleMapsModule = this;
-    window._GoogleMapsModule.initMaps = this.initMaps.bind(this);
+    window._GoogleMapsModule.initMaps = this.initMaps;
 
-    let promise = new Promise(resolve => {
+    return new Promise(resolve => {
       this.resolve = resolve;
-
       const script = document.createElement("script");
-      script.src = extConf.googleMapsLibrary + "&callback=_GoogleMapsModule.initMaps";
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${extConf.googleMapsJavaScriptApiKey}&libraries=marker,places&callback=_GoogleMapsModule.initMaps&loading=async`;
       script.async = true;
+      script.defer = true;
       document.body.append(script);
     });
-
-    return promise;
   }
 
   initMaps = () => {
@@ -43,32 +43,19 @@ class GoogleMapsModule {
     }
   };
 
-  /**
-   * @param {HTMLElement} element
-   * @param {PoiCollection} poiCollection
-   * @param {ExtConf} extConf
-   */
-  initialize = (element, poiCollection, extConf) => {
+  initialize = async (element, poiCollection, extConf) => {
     this.record = poiCollection;
     this.extConf = extConf;
-    this.infoWindow = new google.maps.InfoWindow();
-    this.infoWindowContent = document.getElementById("infowindow-content");
-    this.map = this.createMap(element);
+
+    const { Map } = await google.maps.importLibrary("maps");
+    this.map = new Map(element, this.createMapOptions());
 
     if (extConf.googleMapsJavaScriptApiKey === "") {
-      Notification.warning(
-        'Missing JS API Key',
-        'You have forgotten to set Google Maps JavaScript ApiKey in Extension Settings.',
-        15
-      );
+      Notification.warning('Missing JS API Key', 'You have forgotten to set Google Maps JavaScript ApiKey in Extension Settings.', 15);
     }
 
     if (extConf.googleMapsGeocodeApiKey === "") {
-      Notification.warning(
-        'Missing GeoCode API Key',
-        'You have forgotten to set Google Maps Geocode ApiKey in Extension Settings.',
-        15
-      );
+      Notification.warning('Missing GeoCode API Key', 'You have forgotten to set Google Maps Geocode ApiKey in Extension Settings.', 15);
     }
 
     switch (poiCollection.collectionType) {
@@ -89,407 +76,259 @@ class GoogleMapsModule {
     this.findAddress();
 
     if (poiCollection.latitude && poiCollection.longitude) {
-      this.map.setCenter(new google.maps.LatLng(poiCollection.latitude, poiCollection.longitude));
+      this.map.setCenter({ lat: parseFloat(poiCollection.latitude), lng: parseFloat(poiCollection.longitude) });
     } else {
-      // Fallback
-      this.map.setCenter(new google.maps.LatLng(extConf.defaultLatitude, extConf.defaultLongitude));
+      this.map.setCenter({ lat: parseFloat(extConf.defaultLatitude), lng: parseFloat(extConf.defaultLongitude) });
     }
 
-    // if maps2 was inserted in (bootstrap) tabs, we have to re-render the map
-    document.querySelector("ul.t3js-tabs li:nth-of-type(2) button[data-bs-toggle='tab']").addEventListener("shown.bs.tab", () => {
-      google.maps.event.trigger(this.map, "resize");
-      if (poiCollection.latitude && poiCollection.longitude) {
-        this.map.setCenter(new google.maps.LatLng(poiCollection.latitude, poiCollection.longitude));
-      } else {
-        this.map.setCenter(new google.maps.LatLng(extConf.defaultLatitude, extConf.defaultLongitude));
-      }
-    });
+    const tabButton = document.querySelector("ul.t3js-tabs li:nth-of-type(2) button[data-bs-toggle='tab']");
+    if (tabButton) {
+      tabButton.addEventListener("shown.bs.tab", () => {
+        google.maps.event.trigger(this.map, "resize");
+        if (poiCollection.latitude && poiCollection.longitude) {
+          this.map.setCenter({ lat: parseFloat(poiCollection.latitude), lng: parseFloat(poiCollection.longitude) });
+        } else {
+          this.map.setCenter({ lat: parseFloat(extConf.defaultLatitude), lng: parseFloat(extConf.defaultLongitude) });
+        }
+      });
+    }
   };
 
-  createMapOptions = function() {
+  createMapOptions = () => ({
+    zoom: 14,
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    mapId: this.extConf.googleMapsMapId
+  });
+
+  createCircleOptions = (map, record, extConf) => {
     return {
-      zoom: 14,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
-  };
-
-  createCircleOptions = function(map, record, extConf) {
-    let circleOptions = {
       map: map,
-      center: new google.maps.LatLng(record.latitude, record.longitude),
+      center: { lat: parseFloat(record.latitude), lng: parseFloat(record.longitude) },
       strokeColor: extConf.strokeColor,
       strokeOpacity: extConf.strokeOpacity,
       strokeWeight: extConf.strokeWeight,
       fillColor: extConf.fillColor,
       fillOpacity: extConf.fillOpacity,
-      editable: true
-    };
-    if (record.radius === 0) {
-      circleOptions.radius = extConf.defaultRadius;
-    } else {
-      circleOptions.radius = record.radius;
-    }
-    return circleOptions;
-  };
-
-  createPolygonOptions = function(paths, extConf) {
-    return {
-      paths: paths,
-      strokeColor: extConf.strokeColor,
-      strokeOpacity: extConf.strokeOpacity,
-      strokeWeight: extConf.strokeWeight,
-      fillColor: extConf.fillColor,
-      fillOpacity: extConf.fillOpacity,
-      editable: true
+      editable: true,
+      radius: record.radius === 0 ? extConf.defaultRadius : record.radius
     };
   };
 
-  createPolylineOptions = function(paths, extConf) {
-    return {
-      path: paths,
-      strokeColor: extConf.strokeColor,
-      strokeOpacity: extConf.strokeOpacity,
-      strokeWeight: extConf.strokeWeight,
-      editable: true
-    };
-  };
+  createPolygonOptions = (paths, extConf) => ({
+    paths: paths,
+    strokeColor: extConf.strokeColor,
+    strokeOpacity: extConf.strokeOpacity,
+    strokeWeight: extConf.strokeWeight,
+    fillColor: extConf.fillColor,
+    fillOpacity: extConf.fillOpacity,
+    editable: true
+  });
 
-  createMap = function(element) {
-    return new google.maps.Map(
-      element,
-      this.createMapOptions()
-    );
-  };
+  createPolylineOptions = (paths, extConf) => ({
+    path: paths,
+    strokeColor: extConf.strokeColor,
+    strokeOpacity: extConf.strokeOpacity,
+    strokeWeight: extConf.strokeWeight,
+    editable: true
+  });
 
-  createMarker = function(record) {
-    this.marker = new google.maps.Marker({
-      position: new google.maps.LatLng(record.latitude, record.longitude),
+  createMap = (element) => new google.maps.Map(element, this.createMapOptions());
+
+  createMarker = async (record) => {
+    const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+    this.marker = new AdvancedMarkerElement({
+      position: { lat: parseFloat(record.latitude), lng: parseFloat(record.longitude) },
       map: this.map,
-      draggable: true
+      gmpDraggable: true
     });
 
-    this.infoWindow.setContent(this.infoWindowContent);
-
-    // open InfoWindow, if marker was clicked.
-    this.marker.addListener("click", () => {
-      this.infoWindow.open(this.map, this.marker);
-    });
-
-    // update fields and marker while dragging
     google.maps.event.addListener(this.marker, 'dragend', () => {
-      this.setLatLngFields(
-        this.marker.getPosition().lat().toFixed(6),
-        this.marker.getPosition().lng().toFixed(6),
-        0
-      );
-    });
-
-    // update fields and marker when clicking on the map
-    google.maps.event.addListener(this.map, 'click', event => {
-      this.marker.setPosition(event.latLng);
-      this.setLatLngFields(
-        event.latLng.lat().toFixed(6),
-        event.latLng.lng().toFixed(6),
-        0
-      );
-    });
-  };
-
-  createArea = function(record) {
-    let coordinatesArray = [];
-
-    if (record.configurationMap) {
-      for (let i = 0; i < record.configurationMap.length; i++) {
-        coordinatesArray.push(
-          new google.maps.LatLng(
-            record.configurationMap[i].latitude,
-            record.configurationMap[i].longitude
-          )
-        );
+      const position = this.marker.position;
+      if (position) {
+        const lat = typeof position.lat === 'function' ? position.lat() : position.lat;
+        const lng = typeof position.lng === 'function' ? position.lng() : position.lng;
+        this.setLatLngFields(lat, lng, 0);
       }
-    }
-
-    if (coordinatesArray.length === 0) {
-      coordinatesArray.push(
-        new google.maps.LatLng(
-          record.latitude,
-          record.longitude
-        )
-      );
-    }
-
-    let area = new google.maps.Polygon(
-      this.createPolygonOptions(coordinatesArray, this.extConf)
-    );
-    let path = area.getPath();
-
-    area.setMap(this.map);
-
-    // Listener which will be called, if a vertex was moved to a new location
-    google.maps.event.addListener(path, 'set_at', () => {
-      this.storeRouteAsJson(area);
     });
-    // Listener to add new vertex in between a route
-    google.maps.event.addListener(path, 'insert_at', () => {
-      this.storeRouteAsJson(area);
-    });
-    // Listener to remove a vertex
-    google.maps.event.addListener(area, 'rightclick', event => {
-      area.getPath().removeAt(event.vertex);
-      this.storeRouteAsJson(area);
-    });
-    // Listener to add a new vertex. Will not be called, while inserting a vertex in between
-    google.maps.event.addListener(this.map, 'click', event => {
-      area.getPath().push(event.latLng);
-    });
-    // update fields for saving map position
-    google.maps.event.addListener(this.map, 'dragend', () => {
-      this.setLatLngFields(
-        this.map.getCenter().lat().toFixed(6),
-        this.map.getCenter().lng().toFixed(6),
-        0
-      );
+
+    google.maps.event.addListener(this.map, 'click', (event) => {
+      this.marker.position = event.latLng;
+      this.setLatLngFields(event.latLng.lat(), event.latLng.lng(), 0);
     });
   };
 
-  createRoute = function(record) {
+  createArea = (record) => {
     let coordinatesArray = [];
-
     if (record.configurationMap) {
-      for (let i = 0; i < record.configurationMap.length; i++) {
-        coordinatesArray.push(
-          new google.maps.LatLng(
-            record.configurationMap[i].latitude,
-            record.configurationMap[i].longitude
-          )
-        );
-      }
+      record.configurationMap.forEach(coord => {
+        coordinatesArray.push({ lat: parseFloat(coord.latitude), lng: parseFloat(coord.longitude) });
+      });
     }
-
     if (coordinatesArray.length === 0) {
-      coordinatesArray.push(
-        new google.maps.LatLng(
-          record.latitude,
-          record.longitude
-        )
-      );
+      coordinatesArray.push({ lat: parseFloat(record.latitude), lng: parseFloat(record.longitude) });
     }
 
-    /* create route overlay */
-    let route = new google.maps.Polyline(
-      this.createPolylineOptions(coordinatesArray, this.extConf)
-    );
-    let path = route.getPath();
+    this.shape = new google.maps.Polygon(this.createPolygonOptions(coordinatesArray, this.extConf));
+    this.shape.setMap(this.map);
+    const path = this.shape.getPath();
 
-    route.setMap(this.map);
+    ['set_at', 'insert_at'].forEach(eventName => {
+      google.maps.event.addListener(path, eventName, () => this.storeRouteAsJson(this.shape));
+    });
 
-    // Listener which will be called, if a vertex was moved to a new location
-    google.maps.event.addListener(path, 'set_at', () => {
-      this.storeRouteAsJson(route);
+    google.maps.event.addListener(this.shape, 'rightclick', (event) => {
+      if (event.vertex !== undefined) {
+        path.removeAt(event.vertex);
+        this.storeRouteAsJson(this.shape);
+      }
     });
-    // Listener to add new vertex in between a route
-    google.maps.event.addListener(path, 'insert_at', () => {
-      this.storeRouteAsJson(route);
-    });
-    // Listener to remove a vertex
-    google.maps.event.addListener(route, 'rightclick', event => {
-      route.getPath().removeAt(event.vertex);
-      this.storeRouteAsJson(route);
-    });
-    // Listener to add a new vertex. Will not be called, while inserting a vertex in between
-    google.maps.event.addListener(this.map, 'click', event => {
-      route.getPath().push(event.latLng);
-    });
-    // update fields for saving map position
+
+    google.maps.event.addListener(this.map, 'click', (event) => path.push(event.latLng));
     google.maps.event.addListener(this.map, 'dragend', () => {
-      this.setLatLngFields(
-        this.map.getCenter().lat().toFixed(6),
-        this.map.getCenter().lng().toFixed(6),
-        0
-      );
+      const center = this.map.getCenter();
+      this.setLatLngFields(center.lat(), center.lng(), 0);
     });
   };
 
-  createRadius = function(record) {
-    this.marker = new google.maps.Circle(
-      this.createCircleOptions(this.map, record, this.extConf)
-    );
+  createRoute = (record) => {
+    let coordinatesArray = [];
+    if (record.configurationMap) {
+      record.configurationMap.forEach(coord => {
+        coordinatesArray.push({ lat: parseFloat(coord.latitude), lng: parseFloat(coord.longitude) });
+      });
+    }
+    if (coordinatesArray.length === 0) {
+      coordinatesArray.push({ lat: parseFloat(record.latitude), lng: parseFloat(record.longitude) });
+    }
 
-    // update fields and marker while dragging
+    this.shape = new google.maps.Polyline(this.createPolylineOptions(coordinatesArray, this.extConf));
+    this.shape.setMap(this.map);
+    const path = this.shape.getPath();
+
+    ['set_at', 'insert_at'].forEach(eventName => {
+      google.maps.event.addListener(path, eventName, () => this.storeRouteAsJson(this.shape));
+    });
+
+    google.maps.event.addListener(this.shape, 'rightclick', (event) => {
+      if (event.vertex !== undefined) {
+        path.removeAt(event.vertex);
+        this.storeRouteAsJson(this.shape);
+      }
+    });
+
+    google.maps.event.addListener(this.map, 'click', (event) => path.push(event.latLng));
+    google.maps.event.addListener(this.map, 'dragend', () => {
+      const center = this.map.getCenter();
+      this.setLatLngFields(center.lat(), center.lng(), 0);
+    });
+  };
+
+  createRadius = (record) => {
+    this.marker = new google.maps.Circle(this.createCircleOptions(this.map, record, this.extConf));
+
     google.maps.event.addListener(this.marker, 'center_changed', () => {
-      this.setLatLngFields(
-        this.marker.getCenter().lat().toFixed(6),
-        this.marker.getCenter().lng().toFixed(6),
-        this.marker.getRadius()
-      );
+      const center = this.marker.getCenter();
+      this.setLatLngFields(center.lat(), center.lng(), this.marker.getRadius());
     });
 
-    // update fields and marker while resizing the radius
     google.maps.event.addListener(this.marker, 'radius_changed', () => {
-      this.setLatLngFields(
-        this.marker.getCenter().lat().toFixed(6),
-        this.marker.getCenter().lng().toFixed(6),
-        this.marker.getRadius()
-      );
+      const center = this.marker.getCenter();
+      this.setLatLngFields(center.lat(), center.lng(), this.marker.getRadius());
     });
 
-    // update fields and marker when clicking on the map
-    google.maps.event.addListener(this.map, 'click', event => {
+    google.maps.event.addListener(this.map, 'click', (event) => {
       this.marker.setCenter(event.latLng);
-      this.setLatLngFields(
-        event.latLng.lat().toFixed(6),
-        event.latLng.lng().toFixed(6),
-        this.marker.getRadius()
-      );
+      this.setLatLngFields(event.latLng.lat(), event.latLng.lng(), this.marker.getRadius());
     });
 
-    this.setLatLngFields(record.latitude, record.longitude, record.radius);
+    this.setLatLngFields(parseFloat(record.latitude), parseFloat(record.longitude), record.radius);
   };
 
-  /**
-   * Fill TCA fields for Lat and Lng with value of marker position
-   *
-   * @param {number} lat
-   * @param {number} lng
-   * @param {number} rad
-   * @param {string} address
-   */
   setLatLngFields = (lat, lng, rad, address) => {
-    this.setFieldValue("latitude", lat);
-    this.setFieldValue("longitude", lng);
-
-    if (typeof rad !== "undefined" && rad > 0) {
-      this.setFieldValue("radius", parseInt(rad));
+    this.setFieldValue("latitude", Number(lat).toFixed(6));
+    this.setFieldValue("longitude", Number(lng).toFixed(6));
+    if (rad > 0) {
+      this.setFieldValue("radius", Math.round(rad));
     }
-
-    if (typeof address !== "undefined") {
+    if (address) {
       this.setFieldValue("address", address);
     }
   };
 
-  /**
-   * Generate an uri to save all coordinates
-   *
-   * @param {object} route
-   */
-  getUriForRoute = route => {
-    let routeObject = {};
-
-    route.getPath().forEach((latLng, index) => {
+  getUriForRoute = (route) => {
+    const routeObject = {};
+    route.getPath().getArray().forEach((latLng, index) => {
       routeObject[index] = latLng.toUrlValue();
     });
-
     return routeObject;
   };
 
-  /**
-   * Return FieldElement from TCEFORM by fieldName
-   *
-   * @param {string} field
-   * @returns {*|HTMLElement} jQuery object. FormEngine works with $ selectors
-   */
-  getFieldElement = field => {
-    // Return the FieldElement which is visible to the editor
-    return TYPO3.FormEngine.getFieldElement(this.buildFieldName(field), '_list');
-  };
+  getFieldElement = (field) => FormEngine.getFieldElement(this.buildFieldName(field), '_list');
 
-  /**
-   * Build fieldName like 'data[tx_maps2_domain_model_poicollection][1][latitude]'
-   *
-   * @param {string} field
-   * @returns {string}
-   */
-  buildFieldName = field => {
-    return 'data[tx_maps2_domain_model_poicollection][' + this.record.uid + '][' + field + ']';
-  };
+  buildFieldName = (field) => `data[tx_maps2_domain_model_poicollection][${this.record.uid}][${field}]`;
 
-  /**
-   * Set field value
-   *
-   * @param {string} field
-   * @param {string | int} value
-   */
   setFieldValue = (field, value) => {
-    /* getFieldName returns a jquery object via FormEngine */
-    let $fieldElement = this.getFieldElement(field);
-
+    const $fieldElement = this.getFieldElement(field);
     if ($fieldElement && $fieldElement.length) {
-      let humanReadableField = $fieldElement.get(0);
+      const humanReadableField = $fieldElement.get(0);
       humanReadableField.value = value;
       humanReadableField.dispatchEvent(new Event('change'));
     }
   };
 
-  /**
-   * Store route/area path into configuration_map as JSON
-   *
-   * @param route
-   */
-  storeRouteAsJson = route => {
-    this.setFieldValue(
-      "configuration_map",
-      JSON.stringify(this.getUriForRoute(route))
-    );
+  storeRouteAsJson = (route) => {
+    this.setFieldValue("configuration_map", JSON.stringify(this.getUriForRoute(route)));
   };
 
-  /**
-   * Read address, send it to Google and move map/marker to new location
-   */
-  findAddress = () => {
-    let pacInput = document.querySelector("#pac-input");
-    let autocomplete = new google.maps.places.Autocomplete(pacInput, {fields: ["place_id"]});
-    let geoCoder = new google.maps.Geocoder;
+  findAddress = async () => {
+    const { Place, PlaceAutocompleteElement } = await google.maps.importLibrary("places");
+    const pacInput = new PlaceAutocompleteElement();
 
-    autocomplete.bindTo("bounds", this.map);
     this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(pacInput);
 
-    // Prevent submitting the BE form on enter, while selecting entry from AutoSuggest
-    pacInput.addEventListener("keydown", event => {
-      let pacContainer = document.querySelector(".pac-container");
-      if (event.keyCode === 13 && pacContainer !== null) return false;
-    });
+    pacInput.addEventListener("gmp-select", async (event) => {
+      const placePrediction = event.placePrediction;
 
-    autocomplete.addListener("place_changed", () => {
-      this.infoWindow.close();
-      let place = autocomplete.getPlace();
-
-      if (!place.place_id) {
+      if (!placePrediction) {
         return;
       }
 
-      geoCoder.geocode({"placeId": place.place_id}, (results, status) => {
-        if (status !== "OK") {
-          window.alert("Geocoder failed due to: " + status);
-          return;
-        }
-
-        let lat = results[0].geometry.location.lat().toFixed(6);
-        let lng = results[0].geometry.location.lng().toFixed(6);
-
-        switch (this.record.collectionType) {
-          case 'Point':
-            this.marker.setPosition(results[0].geometry.location);
-            this.marker.setVisible(true);
-            this.setLatLngFields(lat, lng, 0, results[0].formatted_address);
-            break;
-          case 'Area':
-            this.setLatLngFields(lat, lng, 0, results[0].formatted_address);
-            break;
-          case 'Route':
-            this.setLatLngFields(lat, lng, 0, results[0].formatted_address);
-            break;
-          case 'Radius':
-            this.marker.setCenter(results[0].geometry.location);
-            this.setLatLngFields(lat, lng, this.marker.getRadius(), results[0].formatted_address);
-            break;
-        }
-
-        this.map.setCenter(results[0].geometry.location);
-        this.infoWindowContent.children["place-name"].textContent = place.name;
-        this.infoWindowContent.children["place-id"].textContent = place.place_id;
-        this.infoWindowContent.children["place-address"].textContent = results[0].formatted_address;
-        this.infoWindow.open(this.map, this.marker);
+      const place = placePrediction.toPlace();
+      await place.fetchFields({
+        fields: ["displayName", "formattedAddress", "location"]
       });
+
+      if (!place || !place.location) {
+        return;
+      }
+
+      const location = place.location;
+      const lat = typeof location.lat === 'function' ? location.lat() : location.lat;
+      const lng = typeof location.lng === 'function' ? location.lng() : location.lng;
+      const address = place.formattedAddress;
+
+      switch (this.record.collectionType) {
+        case 'Point':
+          this.marker.position = location;
+          this.setLatLngFields(lat, lng, 0, address);
+          break;
+        case 'Area':
+        case 'Route':
+          if (this.shape && typeof this.shape.getPath === 'function') {
+            const path = this.shape.getPath();
+            path.clear();
+            path.push(location);
+            this.storeRouteAsJson(this.shape);
+          }
+          this.setLatLngFields(lat, lng, 0, address);
+          break;
+        case 'Radius':
+          this.marker.setCenter(location);
+          this.setLatLngFields(lat, lng, this.marker.getRadius(), address);
+          break;
+      }
+
+      this.map.setCenter(location);
     });
   };
 }

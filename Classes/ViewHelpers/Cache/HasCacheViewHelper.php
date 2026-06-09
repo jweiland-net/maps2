@@ -12,13 +12,14 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\ViewHelpers\Cache;
 
 use JWeiland\Maps2\Service\CacheService;
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
- * A ViewHelper to check, if a cache entry exists in maps2 cache
+ * A ViewHelper to check if a cache entry exists in maps2 cache
  */
-class HasCacheViewHelper extends AbstractViewHelper
+final class HasCacheViewHelper extends AbstractViewHelper
 {
     public function __construct(
         private readonly CacheService $cacheService,
@@ -49,16 +50,29 @@ class HasCacheViewHelper extends AbstractViewHelper
     {
         $poiCollectionRecord = $this->arguments['poiCollection'];
 
+        if (!$this->getRequest() instanceof ServerRequestInterface) {
+            return false;
+        }
+
         try {
             return $this->cache->has(
                 $this->cacheService->getCacheIdentifier(
                     $poiCollectionRecord,
                     $this->arguments['prefix'],
+                    $this->getRequest(),
                 ),
             );
         } catch (\Exception) {
         }
 
         return false;
+    }
+
+    private function getRequest(): ?ServerRequestInterface
+    {
+        if ($this->renderingContext->hasAttribute(ServerRequestInterface::class)) {
+            return $this->renderingContext->getAttribute(ServerRequestInterface::class);
+        }
+        return null;
     }
 }

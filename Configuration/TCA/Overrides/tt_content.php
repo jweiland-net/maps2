@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the package jweiland/maps2.
  *
@@ -18,64 +20,52 @@ if (!defined('TYPO3')) {
 ExtensionUtility::registerPlugin(
     'maps2',
     'Maps2',
-    'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.maps2.title',
+    'maps2.db:plugin.maps2.title',
     'ext-maps2-wizard-icon',
     'plugins',
-    'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.maps2.description',
+    'maps2.db:plugin.maps2.description',
+    'FILE:EXT:maps2/Configuration/FlexForms/Maps2.xml',
 );
 
 ExtensionUtility::registerPlugin(
     'maps2',
     'SearchWithinRadius',
-    'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.searchwithinradius.title',
+    'maps2.db:plugin.searchwithinradius.title',
     'ext-maps2-wizard-icon',
     'plugins',
-    'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.searchwithinradius.description',
+    'maps2.db:plugin.searchwithinradius.description',
+    'FILE:EXT:maps2/Configuration/FlexForms/Radius.xml',
 );
 
 ExtensionUtility::registerPlugin(
     'maps2',
     'CityMap',
-    'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.citymap.title',
+    'maps2.db:plugin.citymap.title',
     'ext-maps2-wizard-icon',
     'plugins',
-    'LLL:EXT:maps2/Resources/Private/Language/locallang_db.xlf:plugin.citymap.description',
-);
-
-ExtensionManagementUtility::addToAllTCAtypes(
-    'tt_content',
-    '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:plugin,pi_flexform,pages;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:pages.ALT.list_formlabel,recursive',
-    'maps2_maps2',
-    'after:subheader',
-);
-ExtensionManagementUtility::addPiFlexFormValue(
-    '*',
-    'FILE:EXT:maps2/Configuration/FlexForms/Maps2.xml',
-    'maps2_maps2',
-);
-
-ExtensionManagementUtility::addToAllTCAtypes(
-    'tt_content',
-    '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:plugin,pi_flexform,pages;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:pages.ALT.list_formlabel,recursive',
-    'maps2_searchwithinradius',
-    'after:subheader',
-);
-ExtensionManagementUtility::addPiFlexFormValue(
-    '*',
-    'FILE:EXT:maps2/Configuration/FlexForms/Radius.xml',
-    'maps2_searchwithinradius',
-);
-
-ExtensionManagementUtility::addToAllTCAtypes(
-    'tt_content',
-    '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:plugin,pi_flexform,pages;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:pages.ALT.list_formlabel,recursive',
-    'maps2_citymap',
-    'after:subheader',
-);
-ExtensionManagementUtility::addPiFlexFormValue(
-    '*',
+    'maps2.db:plugin.citymap.description',
     'FILE:EXT:maps2/Configuration/FlexForms/CityMap.xml',
+);
+
+ExtensionManagementUtility::addToAllTCAtypes(
+    'tt_content',
+    'pages;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:pages.ALT.list_formlabel,recursive',
+    'maps2_maps2',
+    'after:pi_flexform',
+);
+
+ExtensionManagementUtility::addToAllTCAtypes(
+    'tt_content',
+    'pages;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:pages.ALT.list_formlabel,recursive',
+    'maps2_searchwithinradius',
+    'after:pi_flexform',
+);
+
+ExtensionManagementUtility::addToAllTCAtypes(
+    'tt_content',
+    'pages;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:pages.ALT.list_formlabel,recursive',
     'maps2_citymap',
+    'after:pi_flexform',
 );
 
 $GLOBALS['TCA']['tt_content']['types']['maps2_maps2']['previewRenderer'] = Maps2PluginPreview::class;

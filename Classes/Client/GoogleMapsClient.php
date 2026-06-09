@@ -11,15 +11,25 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Client;
 
+use JWeiland\Maps2\Configuration\MapProviderEnum;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
- * Google Maps Client which will send Requests to Google Maps Servers
+ * Google Maps Client that will send Requests to Google Maps Servers
  */
-class GoogleMapsClient extends AbstractClient
+#[AutoconfigureTag(
+    name: 'maps2.client.geocoding',
+)]
+readonly class GoogleMapsClient extends AbstractClient
 {
-    protected string $title = 'Google Maps';
+    protected const TITLE = 'Google Maps';
+
+    public function canProcess(MapProviderEnum $mapProvider): bool
+    {
+        return $mapProvider === MapProviderEnum::GOOGLE_MAPS;
+    }
 
     protected function checkResponseForErrors(?array $processedResponse): void
     {
@@ -36,7 +46,7 @@ class GoogleMapsClient extends AbstractClient
                         'error.noPositionsFound.body',
                         'maps2',
                         [
-                            0 => $this->title,
+                            0 => self::TITLE,
                         ],
                     ),
                     LocalizationUtility::translate(

@@ -12,23 +12,27 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Update;
 
 use Doctrine\DBAL\Exception;
+use TYPO3\CMS\Core\Attribute\UpgradeWizard;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
+use TYPO3\CMS\Core\Upgrades\ConfirmableInterface;
+use TYPO3\CMS\Core\Upgrades\Confirmation;
+use TYPO3\CMS\Core\Upgrades\DatabaseUpdatedPrerequisite;
+use TYPO3\CMS\Core\Upgrades\UpgradeWizardInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Install\Attribute\UpgradeWizard;
-use TYPO3\CMS\Install\Updates\ConfirmableInterface;
-use TYPO3\CMS\Install\Updates\Confirmation;
-use TYPO3\CMS\Install\Updates\DatabaseUpdatedPrerequisite;
-use TYPO3\CMS\Install\Updates\UpgradeWizardInterface;
 
 /**
  * With maps2 10.0.0 we have removed the poi table.
  * Use this Upgrade Wizard to migrate all poi records as JSON into the configuration_map column of poicollection record
  */
 #[UpgradeWizard('maps2_migratePoiRecord')]
-class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterface, ConfirmableInterface
+readonly class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterface, ConfirmableInterface
 {
+    public function __construct(
+        private ConnectionPool $connectionPool,
+    ) {}
+
     public function getTitle(): string
     {
         return '[maps2] Migrate all POI records as JSON into poicollection record';
@@ -36,17 +40,17 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
 
     public function getDescription(): string
     {
-        return 'We have simplified the POI handling a lot and removed table tx_maps2_domain_model_poi. ' .
-            'All POIs will now be stored in configuration_map of table tx_maps2_domain_model_poicollection as JSON.';
+        return 'We have simplified the POI handling a lot and removed table tx_maps2_domain_model_poi. '
+            . 'All POIs will now be stored in configuration_map of table tx_maps2_domain_model_poicollection as JSON.';
     }
 
     public function getConfirmation(): Confirmation
     {
         return new Confirmation(
             'Have you changed column "configuration_map" to be of type TEXT?',
-            'This UpgradeWizards needs column "configuration_map" of table "tx_maps2_domain_model_poicollection" ' .
-            'to be of type TEXT in database. Else it may happen that POIs will be stored as incomplete JSON string ' .
-            'in configuration_map column. Further table "tx_maps2_domain_model_poi" should not be deleted.',
+            'This UpgradeWizards needs column "configuration_map" of table "tx_maps2_domain_model_poicollection" '
+            . 'to be of type TEXT in database. Else it may happen that POIs will be stored as incomplete JSON string '
+            . 'in configuration_map column. Further table "tx_maps2_domain_model_poi" should not be deleted.',
             false,
         );
     }
@@ -56,7 +60,7 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
         // Something with DB was gone totally wrong. Skip Upgrade. Repair your DB first.
         try {
             $connection = $this
-                ->getConnectionPool()
+                ->connectionPool
                 ->getConnectionByName(ConnectionPool::DEFAULT_CONNECTION_NAME);
         } catch (Exception) {
             return false;
@@ -72,7 +76,7 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
             return false;
         }
 
-        $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable('tx_maps2_domain_model_poicollection');
+        $queryBuilder = $this->connectionPool->getQueryBuilderForTable('tx_maps2_domain_model_poicollection');
         $queryBuilder
             ->getRestrictions()->removeAll()
             ->add(GeneralUtility::makeInstance(DeletedRestriction::class));
@@ -116,7 +120,7 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
 
     public function executeUpdate(): bool
     {
-        $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable('tx_maps2_domain_model_poicollection');
+        $queryBuilder = $this->connectionPool->getQueryBuilderForTable('tx_maps2_domain_model_poicollection');
         $queryBuilder
             ->getRestrictions()
             ->removeAll()
@@ -129,7 +133,7 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
                 ->executeQuery();
 
             while ($poiCollectionRecord = $statement->fetchAssociative()) {
-                $connection = $this->getConnectionPool()->getConnectionForTable('tx_maps2_domain_model_poi');
+                $connection = $this->connectionPool->getConnectionForTable('tx_maps2_domain_model_poi');
                 $connection->update(
                     'tx_maps2_domain_model_poicollection',
                     [
@@ -164,7 +168,7 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
 
     protected function getPoiRecords(int $poiCollectionUid): array
     {
-        $queryBuilder = $this->getConnectionPool()->getQueryBuilderForTable('tx_maps2_domain_model_poi');
+        $queryBuilder = $this->connectionPool->getQueryBuilderForTable('tx_maps2_domain_model_poi');
         $queryBuilder
             ->getRestrictions()
             ->removeAll()
@@ -198,10 +202,5 @@ class MigratePoiRecordsToConfigurationMapUpdate implements UpgradeWizardInterfac
         return [
             DatabaseUpdatedPrerequisite::class,
         ];
-    }
-
-    protected function getConnectionPool(): ConnectionPool
-    {
-        return GeneralUtility::makeInstance(ConnectionPool::class);
     }
 }

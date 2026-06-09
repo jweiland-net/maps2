@@ -14,6 +14,8 @@ All following TypoScript configuration consists in `plugin.tx_maps2`
     We prefer using the Site Settings to configure maps2 since TYPO3 13.
 
 
+..  _typoScript-view:
+
 view
 ====
 
@@ -46,6 +48,8 @@ You can override our Layouts with your own SitePackage extension. We prefer to
 change this value in TS Constants.
 
 
+..  _typoScript-persistence:
+
 persistence
 ===========
 
@@ -73,6 +77,8 @@ Set this value to a Storage Folder where you have stored the event records.
 
         plugin.tx_maps2.persistence.classes.JWeiland\maps2\Domain\Model\Event.newRecordStoragePid = 34
         plugin.tx_maps2.persistence.classes.JWeiland\maps2\Domain\Model\Location.newRecordStoragePid = 543
+
+..  _typoScript-settings:
 
 settings
 ========
@@ -164,6 +170,8 @@ Example: `plugin.tx_maps2.settings.markerClusterer.imagePath = EXT:my_sitepackag
 If you don't like the icons of Marker Clusterer you can choose a different path for your own
 images.
 
+
+..  _typoScript-local-lang:
 
 _LOCAL_LANG
 ===========

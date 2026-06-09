@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Mapper;
 
+use JWeiland\Maps2\Configuration\MapProviderEnum;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
@@ -18,5 +19,7 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
  */
 interface MapperInterface
 {
+    public function canProcess(MapProviderEnum $mapProvider): bool;
+
     public function map(array $response): ObjectStorage;
 }

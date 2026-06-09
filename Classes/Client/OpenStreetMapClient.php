@@ -11,15 +11,25 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Client;
 
+use JWeiland\Maps2\Configuration\MapProviderEnum;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
- * Open Street Map Client which will send Requests to Open Street Map Servers
+ * OpenStreetMap Client that will send Requests to OpenStreetMap Servers
  */
-class OpenStreetMapClient extends AbstractClient
+#[AutoconfigureTag(
+    name: 'maps2.client.geocoding',
+)]
+readonly class OpenStreetMapClient extends AbstractClient
 {
-    protected string $title = 'Open Street Map';
+    protected const TITLE = 'Open Street Map';
+
+    public function canProcess(MapProviderEnum $mapProvider): bool
+    {
+        return $mapProvider === MapProviderEnum::OPEN_STREET_MAP;
+    }
 
     protected function checkResponseForErrors(?array $processedResponse): void
     {
@@ -35,7 +45,7 @@ class OpenStreetMapClient extends AbstractClient
                     'error.noPositionsFound.body',
                     'maps2',
                     [
-                        0 => $this->title,
+                        0 => self::TITLE,
                     ],
                 ),
                 LocalizationUtility::translate(

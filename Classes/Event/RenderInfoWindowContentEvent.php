@@ -16,7 +16,7 @@ use Psr\Http\Message\ServerRequestInterface;
 /**
  * Event to render the content of the info window on your own.
  */
-class RenderInfoWindowContentEvent
+final class RenderInfoWindowContentEvent
 {
     private string $infoWindowContent = '';
 

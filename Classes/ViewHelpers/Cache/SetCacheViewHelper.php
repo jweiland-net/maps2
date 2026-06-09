@@ -12,23 +12,23 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\ViewHelpers\Cache;
 
 use JWeiland\Maps2\Service\CacheService;
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * A ViewHelper to set a value to maps2 cache
  */
-class SetCacheViewHelper extends AbstractViewHelper
+final class SetCacheViewHelper extends AbstractViewHelper
 {
-    public function __construct(
-        private readonly CacheService $cacheService,
-        private readonly FrontendInterface $cache,
-    ) {}
-
     /**
      * The result of this ViewHelper should not be escaped
      */
     protected $escapeOutput = false;
+    public function __construct(
+        private readonly CacheService $cacheService,
+        private readonly FrontendInterface $cache,
+    ) {}
 
     public function initializeArguments(): void
     {
@@ -72,14 +72,30 @@ class SetCacheViewHelper extends AbstractViewHelper
     {
         $poiCollectionRecord = $this->arguments['poiCollection'];
 
+        if (!$this->getRequest() instanceof ServerRequestInterface) {
+            return;
+        }
+
         try {
             $this->cache->set(
-                $this->cacheService->getCacheIdentifier($poiCollectionRecord, $this->arguments['prefix']),
+                $this->cacheService->getCacheIdentifier(
+                    $poiCollectionRecord,
+                    $this->arguments['prefix'],
+                    $this->getRequest(),
+                ),
                 $this->arguments['data'],
                 $this->cacheService->getCacheTags($poiCollectionRecord, $this->arguments['tags']),
                 ($this->arguments['lifetime'] === null ? null : (int)$this->arguments['lifetime']),
             );
         } catch (\Exception) {
         }
+    }
+
+    private function getRequest(): ?ServerRequestInterface
+    {
+        if ($this->renderingContext->hasAttribute(ServerRequestInterface::class)) {
+            return $this->renderingContext->getAttribute(ServerRequestInterface::class);
+        }
+        return null;
     }
 }

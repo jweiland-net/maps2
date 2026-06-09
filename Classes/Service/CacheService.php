@@ -11,10 +11,11 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Service;
 
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Crypto\HashAlgo;
 use TYPO3\CMS\Core\Crypto\HashService;
 use TYPO3\CMS\Core\Http\ApplicationType;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * A global accessible class to build Cache Identifier and Tags for Cache Entries.
@@ -22,7 +23,10 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 readonly class CacheService
 {
-    public function __construct(protected HashService $hashService) {}
+    public function __construct(
+        protected HashService $hashService,
+        protected Context $context,
+    ) {}
 
     /**
      * In previous versions our CacheIdentifier was infoWindow{PoiCollectionUid}.
@@ -31,9 +35,12 @@ readonly class CacheService
      *
      * @throws \Exception
      */
-    public function getCacheIdentifier(array $poiCollection, string $prefix = 'infoWindow'): string
-    {
-        if (!$this->isFrontendEnvironment()) {
+    public function getCacheIdentifier(
+        array $poiCollection,
+        string $prefix,
+        ServerRequestInterface $request,
+    ): string {
+        if (!$this->isFrontendEnvironment($request)) {
             throw new \RuntimeException(
                 'getCacheIdentifier can only be called from FE, as we have to add the true language ID to PoiCollection',
                 1733471017,
@@ -41,7 +48,7 @@ readonly class CacheService
         }
 
         // We do not add the original sys_language_uid of PoiCollection, as it can be the same for different languages.
-        $poiCollection['language'] = $this->getLanguageUid();
+        $poiCollection['language'] = $this->getLanguageUid($request);
 
         return sprintf(
             '%s%s',
@@ -49,6 +56,7 @@ readonly class CacheService
             $this->hashService->hmac(
                 \json_encode(array_diff_key($poiCollection, ['uid', 'pid', 'language', 'title', 'address'])),
                 $prefix,
+                HashAlgo::SHA3_256,
             ),
         );
     }
@@ -74,21 +82,20 @@ readonly class CacheService
      *
      * @throws \Exception
      */
-    protected function getLanguageUid(): int
+    protected function getLanguageUid(ServerRequestInterface $request): int
     {
-        if (!$this->isFrontendEnvironment()) {
+        if (!$this->isFrontendEnvironment($request)) {
             throw new \RuntimeException(
                 'getLanguageId can only be called from FE, as we have to add the true language ID to PoiCollection',
                 1733470968,
             );
         }
 
-        return (int)GeneralUtility::makeInstance(Context::class)
-            ->getPropertyFromAspect('language', 'id');
+        return (int)$this->context->getPropertyFromAspect('language', 'id');
     }
 
-    protected function isFrontendEnvironment(): bool
+    protected function isFrontendEnvironment(ServerRequestInterface $request): bool
     {
-        return defined('TYPO3') && ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend();
+        return ApplicationType::fromRequest($request)->isFrontend();
     }
 }
