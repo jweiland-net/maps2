@@ -143,19 +143,18 @@ final readonly class CreateMaps2RecordHook
             return false;
         }
 
-        $isTableLocalizable = $this->tcaSchemaFactory
-            ->get($tableName)
-            ->hasCapability(TcaSchemaCapability::Language);
+        $schema = $this->tcaSchemaFactory->get($tableName);
 
-        $languageField = $this->tcaSchemaFactory
-            ->get($tableName)
+        if (!$schema->hasCapability(TcaSchemaCapability::Language)) {
+            return true;
+        }
+
+        $languageField = $schema
             ->getCapability(TcaSchemaCapability::Language)
             ->getLanguageField()
             ->getName();
 
-        return
-            !$isTableLocalizable
-            || array_key_exists($languageField, $recordFromRequest);
+        return array_key_exists($languageField, $recordFromRequest);
     }
 
     /**

@@ -19,7 +19,7 @@ use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 
 /**
- * Extract address parts from foreign record array and build an address for Google Maps GoeCode requests
+ * Extract address parts from foreign record array and build an address for Google Maps GeoCode requests
  */
 readonly class LinkHelper
 {

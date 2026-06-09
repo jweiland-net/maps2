@@ -19,7 +19,7 @@ use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
  * Check if extension configuration is set
  * and the user has not explicitly allowed map provider requests
  */
-readonly class AllowMapProviderRequestFunctionsProvider implements ExpressionFunctionProviderInterface
+final readonly class AllowMapProviderRequestFunctionsProvider implements ExpressionFunctionProviderInterface
 {
     public function __construct(
         protected MapHelper $mapHelper,

@@ -16,7 +16,7 @@ use TYPO3\CMS\Core\ExpressionLanguage\AbstractProvider;
 /**
  * A condition class that checks if requests to foreign map provider servers are allowed
  */
-class AllowMapProviderRequestConditionProvider extends AbstractProvider
+final class AllowMapProviderRequestConditionProvider extends AbstractProvider
 {
     public function __construct()
     {

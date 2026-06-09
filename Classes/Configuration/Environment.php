@@ -88,7 +88,7 @@ final readonly class Environment implements \JsonSerializable
         if (!$this->hasMapProvider()) {
             return false;
         }
-        // Special case for Google Maps. An API key and Map ID are manatory
+        // Special case for Google Maps. An API key and Map ID are mandatory
         return !($this->getMapProvider() === MapProviderEnum::GOOGLE_MAPS && (($this->settings['googleMapsJavaScriptApiKey'] ?? '') === '' || ($this->settings['googleMapsMapId'] ?? '') === ''));
     }
 

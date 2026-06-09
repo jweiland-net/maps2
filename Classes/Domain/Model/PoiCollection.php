@@ -182,9 +182,9 @@ class PoiCollection extends AbstractEntity
         return $this->latitude;
     }
 
-    public function setLatitude($latitude): void
+    public function setLatitude(float $latitude): void
     {
-        $this->latitude = (float)$latitude;
+        $this->latitude = $latitude;
     }
 
     public function getLongitude(): float
@@ -192,9 +192,9 @@ class PoiCollection extends AbstractEntity
         return $this->longitude;
     }
 
-    public function setLongitude($longitude): void
+    public function setLongitude(float $longitude): void
     {
-        $this->longitude = (float)$longitude;
+        $this->longitude = $longitude;
     }
 
     public function getRadius(): int
@@ -476,8 +476,6 @@ class PoiCollection extends AbstractEntity
      * If the foreign result is empty, you have to apply
      * \JWeiland\Maps2\Service\MapService::addForeignRecordsToPoiCollection
      * on this PoiCollection
-     *
-     * @return array|null
      */
     public function getForeignRecords(): ?array
     {

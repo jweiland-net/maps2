@@ -44,7 +44,7 @@ class PoiCollectionController extends ActionController
 
         if (!$this->environment->getIsMapRenderable()) {
             $this->addFlashMessage(
-                'The map cannot be loaded because the map configuration is incomplete. '
+                'The map cannot be rendered because the map configuration is incomplete. '
                 . 'Please check that the required site set is loaded. '
                 . 'If Google Maps is used, also ensure that the API key and Map ID are configured.',
                 'Map cannot be renderer',
