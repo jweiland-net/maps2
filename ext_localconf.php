@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the package jweiland/maps2.
  *
@@ -66,12 +68,6 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['maps2_cach
     'groups' => ['pages', 'all'],
 ];
 
-$GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1780489740] = [
-    'nodeName' => 'maps2Relation',
-    'priority' => '70',
-    'class' => Maps2RelationElement::class,
-];
-
 // This is a solution to build GET forms.
 $GLOBALS['TYPO3_CONF_VARS']['FE']['cacheHash']['excludedParameters']['maps2'] = 'tx_maps2_citymap[street]';
 
@@ -84,13 +80,21 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1530778687] = [
     'priority' => 40,
     'class' => InfoWindowContent::class,
 ];
+
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1633612058] = [
     'nodeName' => 'maps2ReadOnlyInputText',
     'priority' => 40,
     'class' => ReadOnlyInputTextElement::class,
 ];
+
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeResolver'][1551448205] = [
     'nodeName' => 'maps2MapProvider',
     'priority' => 40,
     'class' => MapProviderResolver::class,
+];
+
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1780489740] = [
+    'nodeName' => 'maps2Relation',
+    'priority' => 70,
+    'class' => Maps2RelationElement::class,
 ];
