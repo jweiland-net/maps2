@@ -10,7 +10,7 @@
 $EM_CONF[$_EXTKEY] = [
     'title' => 'Maps2',
     'description' => 'Create maps with Marker, Area, Routes or Radius based on Google Maps or OpenStreetMap',
-    'version' => '12.1.1',
+    'version' => '13.0.0',
     'category' => 'plugin',
     'state' => 'stable',
     'author' => 'Stefan Froemken',
@@ -18,7 +18,7 @@ $EM_CONF[$_EXTKEY] = [
     'author_company' => 'jweiland.net',
     'constraints' => [
         'depends' => [
-            'typo3' => '13.4.0-13.4.99',
+            'typo3' => '14.3.0-14.3.99',
         ],
         'conflicts' => [
         ],
