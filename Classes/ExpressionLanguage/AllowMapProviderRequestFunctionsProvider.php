@@ -22,7 +22,7 @@ use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
 final readonly class AllowMapProviderRequestFunctionsProvider implements ExpressionFunctionProviderInterface
 {
     public function __construct(
-        protected MapHelper $mapHelper,
+        private MapHelper $mapHelper,
     ) {}
 
     /**
@@ -35,7 +35,7 @@ final readonly class AllowMapProviderRequestFunctionsProvider implements Express
         ];
     }
 
-    protected function getIsRequestToMapProviderAllowed(): ExpressionFunction
+    private function getIsRequestToMapProviderAllowed(): ExpressionFunction
     {
         // Need local variable for static callable
         $mapHelper = $this->mapHelper;
