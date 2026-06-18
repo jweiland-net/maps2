@@ -1,39 +1,36 @@
-## Working with GULP, NPM, and DDEV
+# Working with esbuild, npm, and DDEV
 
-Follow these steps to build fresh JS files:
+Follow these steps to build fresh JavaScript files for the maps2 extension.
 
-- *Step 1: Access the DDEV Container*
+## Step 1: Access the DDEV Container
 
-  If you're working locally with DDEV, you need to jump into the DDEV container
-  using the following command:
+If you are working locally with DDEV, ssh into the DDEV web container:
 
-  ```
-  ddev ssh
-  ```
+```bash
+ddev ssh
+```
 
-- *Step 2: Navigate to the 'maps2' folder*
+## Step 2: Navigate to the Build Directory
 
-  Use the 'cd' command to change the current working directory to the `maps2`
-  folder:
+Change your current working directory to the Build folder of the `maps2` extension:
 
-  ```
-  cd [pathOfMaps2]/Resouces/Private/Build
-  ```
+```bash
+cd [pathOfMaps2]/Resources/Private/Build
+```
 
-- *Step 3: Install Necessary Tools*
+## Step 3: Install Dependencies
 
-  Execute the following command to install necessary tools like `gulp`
-  and `typescript`:
+Execute the following command to install the required build tools (like `esbuild`) and frontend libraries:
 
-  ```
-  npm install
-  ```
+```bash
+npm install
+```
 
-- *Step 4: Build/Compile JS Files & Move them to the appropriate Directory*
+## Step 4: Build and Compile JavaScript Files
 
-  Use the 'gulp' command to build/compile and move the resulting JS files into
-  the `Resources/Public/JavaScript` folder:
+Run the custom build script using Node.js. This will compile, bundle, and minify the JavaScript files and move them directly into the `Resources/Public/JavaScript/` folder:
 
-  ```
-  ./node_modules/.bin/gulp
-  ```
+```bash
+node build.js
+```
+
