@@ -22,7 +22,7 @@ class OpenStreetMap2 {
   }
 
   preparePoiCollection() {
-    this.poiCollections = JSON.parse(this.element.getAttribute("data-pois") || '[]');
+    this.poiCollections = JSON.parse(this.element.getAttribute("data-pois")) ?? [];
   }
 
   setMarkersOnMap() {
