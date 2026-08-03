@@ -7,6 +7,28 @@
 ChangeLog
 =========
 
+Version 13.0.0
+==============
+
+*   Compatibility fixes for TYPO3 14 LTS
+*   Remove TYPO3 13 compatibility
+*   Introduce Environment configuration state and EnvironmentFactory, replacing SettingsHelper
+*   Add MapProviderEnum and MapperFactory to streamline Google Maps / OpenStreetMap handling
+*   Refactor Google Maps initialization to use the async Google Maps JavaScript API
+*   Add support for Google Maps Map ID configuration
+*   Fix OpenStreetMap backend map rendering when switching FormEngine tabs
+*   Replace QueryBuilder injection with ConnectionPool throughout the extension
+*   Migrate sys_category TCA overrides to the current TYPO3 14 API
+*   Add ColumnRegistration to make Maps2Registry storage configuration type-safe
+*   Refactor Maps2Registry to support tx_address in addition to tt_address
+*   Replace useNonce with csp in asset definitions for Content Security Policy compliance
+*   Remove deprecated MapProviderRequestService, GetExtConfTrait and GetTypo3RequestTrait
+*   Replace Extbase @validate annotations with PHP attributes
+*   Declare service, mapper and helper classes as readonly and/or final wherever possible
+*   Rename Fluid templates to use the .fluid.html extension
+*   Introduce Rector configuration under Build/rector for automated code modernization
+*   Update testing-framework dependency to ^9.5.0 and refactor test suite accordingly
+
 Version 12.1.1
 ===============
 
