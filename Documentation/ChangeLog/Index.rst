@@ -7,6 +7,11 @@
 ChangeLog
 =========
 
+Version 13.0.2
+==============
+
+*   BUGFIX: Load assets for embedded map in EditPoiCollection partial
+
 Version 13.0.1
 ==============
 
