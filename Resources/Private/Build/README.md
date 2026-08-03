@@ -22,8 +22,7 @@ Follow these steps to build fresh JS files:
 
 - *Step 3: Install Necessary Tools*
 
-  Execute the following command to install necessary tools like `gulp`
-  and `typescript`:
+  Execute the following command to install necessary tools like `esbuild`:
 
   ```
   npm install
@@ -31,9 +30,9 @@ Follow these steps to build fresh JS files:
 
 - *Step 4: Build/Compile JS Files & Move them to the appropriate Directory*
 
-  Use the 'gulp' command to build/compile and move the resulting JS files into
+  Use the 'build' script to minify and move the resulting JS files into
   the `Resources/Public/JavaScript` folder:
 
   ```
-  ./node_modules/.bin/gulp
+  npm run build
   ```

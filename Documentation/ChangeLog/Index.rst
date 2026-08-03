@@ -7,6 +7,36 @@
 ChangeLog
 =========
 
+Version 13.0.1
+==============
+
+*   BUGFIX: Fix TypeError in OpenStreetMap2 JS when no PoiCollection is assigned
+*   BUGFIX: Fix XSS via category title/uid in OpenStreetMap2 and GoogleMaps2 category checkboxes
+*   TASK: Replace gulp with esbuild for building the JavaScript assets
+
+Version 13.0.0
+==============
+
+*   Compatibility fixes for TYPO3 14 LTS
+*   Remove TYPO3 13 compatibility
+*   Introduce Environment configuration state and EnvironmentFactory, replacing SettingsHelper
+*   Add MapProviderEnum and MapperFactory to streamline Google Maps / OpenStreetMap handling
+*   Refactor Google Maps initialization to use the async Google Maps JavaScript API
+*   Add support for Google Maps Map ID configuration
+*   Fix OpenStreetMap backend map rendering when switching FormEngine tabs
+*   Replace QueryBuilder injection with ConnectionPool throughout the extension
+*   Migrate sys_category TCA overrides to the current TYPO3 14 API
+*   Add ColumnRegistration to make Maps2Registry storage configuration type-safe
+*   Migrate Maps2Registry from a JSON-file-based Singleton registry to a
+    TcaSchemaFactory-driven, cached, event-listener-based column detection
+*   Replace useNonce with csp in asset definitions for Content Security Policy compliance
+*   Remove deprecated MapProviderRequestService, GetExtConfTrait and GetTypo3RequestTrait
+*   Replace Extbase @validate annotations with PHP attributes
+*   Declare service, mapper and helper classes as readonly and/or final wherever possible
+*   Rename Fluid templates to use the .fluid.html extension
+*   Introduce Rector configuration under Build/rector for automated code modernization
+*   Update testing-framework dependency to ^9.5.0 and refactor test suite accordingly
+
 Version 12.1.1
 ===============
 

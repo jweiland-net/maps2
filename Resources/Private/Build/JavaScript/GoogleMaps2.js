@@ -335,10 +335,11 @@ class GoogleMaps2 {
     for (let categoryUid in categories) {
       if (categories.hasOwnProperty(categoryUid)) {
         form.appendChild(this.getCheckbox(categories[categoryUid]));
-        form.querySelector("#checkCategory_" + categoryUid)?.insertAdjacentHTML(
-          "afterend",
-          `<span class="map-category">${categories[categoryUid].title}</span>`
-        );
+
+        const categoryLabel = document.createElement("span");
+        categoryLabel.classList.add("map-category");
+        categoryLabel.textContent = categories[categoryUid].title;
+        form.querySelector("#checkCategory_" + categoryUid)?.insertAdjacentElement("afterend", categoryLabel);
       }
     }
 
@@ -369,14 +370,24 @@ class GoogleMaps2 {
    * @param category
    */
   getCheckbox(category) {
-    let div = document.createElement("div");
+    const div = document.createElement("div");
     div.classList.add("form-group");
-    div.innerHTML = `
-      <div class="checkbox">
-          <label>
-              <input type="checkbox" class="checkCategory" id="checkCategory_${category.uid}" checked="checked" value="${category.uid}">
-          </label>
-      </div>`;
+
+    const checkboxDiv = document.createElement("div");
+    checkboxDiv.classList.add("checkbox");
+
+    const label = document.createElement("label");
+
+    const input = document.createElement("input");
+    input.type = "checkbox";
+    input.classList.add("checkCategory");
+    input.id = "checkCategory_" + category.uid;
+    input.checked = true;
+    input.value = category.uid;
+
+    label.appendChild(input);
+    checkboxDiv.appendChild(label);
+    div.appendChild(checkboxDiv);
 
     return div;
   }
