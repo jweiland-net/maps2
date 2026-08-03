@@ -7,6 +7,12 @@
 ChangeLog
 =========
 
+Version 13.0.1
+==============
+
+*   BUGFIX: Fix TypeError in OpenStreetMap2 JS when no PoiCollection is assigned
+*   TASK: Replace gulp with esbuild for building the JavaScript assets
+
 Version 13.0.0
 ==============
 

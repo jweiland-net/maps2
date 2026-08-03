@@ -61,7 +61,7 @@
 				"providesPackages": {}
 			},
 			"extension-key": "maps2",
-			"version": "13.0.0",
+			"version": "13.0.1",
 			"web-dir": ".Build/public"
 		}
 	}
