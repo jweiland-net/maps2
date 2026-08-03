@@ -11,6 +11,7 @@ Version 13.0.1
 ==============
 
 *   BUGFIX: Fix TypeError in OpenStreetMap2 JS when no PoiCollection is assigned
+*   BUGFIX: Fix XSS via category title/uid in OpenStreetMap2 and GoogleMaps2 category checkboxes
 *   TASK: Replace gulp with esbuild for building the JavaScript assets
 
 Version 13.0.0
