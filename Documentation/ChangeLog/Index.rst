@@ -26,7 +26,8 @@ Version 13.0.0
 *   Replace QueryBuilder injection with ConnectionPool throughout the extension
 *   Migrate sys_category TCA overrides to the current TYPO3 14 API
 *   Add ColumnRegistration to make Maps2Registry storage configuration type-safe
-*   Refactor Maps2Registry to support tx_address in addition to tt_address
+*   Migrate Maps2Registry from a JSON-file-based Singleton registry to a
+    TcaSchemaFactory-driven, cached, event-listener-based column detection
 *   Replace useNonce with csp in asset definitions for Content Security Policy compliance
 *   Remove deprecated MapProviderRequestService, GetExtConfTrait and GetTypo3RequestTrait
 *   Replace Extbase @validate annotations with PHP attributes
