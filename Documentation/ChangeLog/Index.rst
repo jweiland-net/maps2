@@ -7,6 +7,11 @@
 ChangeLog
 =========
 
+Version 12.2.0
+===============
+
+*   FEATURE: Support coalesce/concat resolution strategies for synchronizeColumns foreignColumnName
+
 Version 12.1.2
 ===============
 

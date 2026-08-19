@@ -28,6 +28,7 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Cache\Frontend\VariableFrontend;
+use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -368,5 +369,63 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
             ->willReturn($positionMock);
 
         $this->subject->processDatamap_afterAllOperations($dataHandler);
+    }
+
+    #[Test]
+    public function synchronizeColumnsFromForeignRecordWithPoiCollectionResolvesComposedForeignColumn(): void
+    {
+        $this->importCSVDataSet(__DIR__ . '/../Fixtures/tx_maps2_domain_model_poicollection.csv');
+
+        $foreignLocationRecord = [
+            'uid' => 1,
+            'location' => '',
+            'street' => 'Echterdinger Straße 57',
+            'city' => 'Filderstadt',
+            'tx_maps2_uid' => 1,
+        ];
+
+        $columnOptions = [
+            'synchronizeColumns' => [
+                [
+                    // Prefer the location title. If empty, fall back to the concatenated street and city.
+                    'foreignColumnName' => [
+                        'type' => 'coalesce',
+                        'columns' => [
+                            'location',
+                            [
+                                'type' => 'concat',
+                                'columns' => ['street', 'city'],
+                                'glue' => ', ',
+                            ],
+                        ],
+                    ],
+                    'poiCollectionColumnName' => 'title',
+                ],
+            ],
+        ];
+
+        self::assertTrue(
+            $this->subject->synchronizeColumnsFromForeignRecordWithPoiCollection(
+                $foreignLocationRecord,
+                'tx_events2_domain_model_location',
+                'tx_maps2_uid',
+                $columnOptions,
+            ),
+        );
+
+        $poiCollectionQueryBuilder = $this->getConnectionPool()->getQueryBuilderForTable('tx_maps2_domain_model_poicollection');
+        $poiCollectionTitle = $poiCollectionQueryBuilder
+            ->select('title')
+            ->from('tx_maps2_domain_model_poicollection')
+            ->where(
+                $poiCollectionQueryBuilder->expr()->eq(
+                    'uid',
+                    $poiCollectionQueryBuilder->createNamedParameter(1, Connection::PARAM_INT),
+                ),
+            )
+            ->executeQuery()
+            ->fetchOne();
+
+        self::assertSame('Echterdinger Straße 57, Filderstadt', $poiCollectionTitle);
     }
 }

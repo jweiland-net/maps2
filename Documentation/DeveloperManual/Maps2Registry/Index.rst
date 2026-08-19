@@ -201,3 +201,168 @@ Example for tt_address
             );
         }
     });
+
+..  _developer-maps2registry-synchronize-columns:
+
+Synchronize Composed Values (Coalesce/Concat)
+==============================================
+
+You can add multiple configurations to `synchronizeColumns`. `foreignColumnName`
+does not have to be a plain column name. It also accepts a structured
+configuration to combine several columns of your foreign table into a single
+value, which is resolved before it is written into the POI collection record.
+
+..  _developer-maps2registry-synchronize-columns-coalesce:
+
+Coalesce: Fall Back to Another Column
+--------------------------------------
+
+Use `type` `coalesce` if you want maps2 to try several columns in order and
+use the first one that is not empty. This is useful if your table stores
+either a company name or a person name, for example:
+
+..  code-block:: php
+    :caption: EXT:my_ext/Configuration/TCA/Overrides/tt_address.php
+
+    'synchronizeColumns' => [
+        [
+            'foreignColumnName' => [
+                'type' => 'coalesce',
+                'columns' => [
+                    'company',
+                    'name',
+                ],
+            ],
+            'poiCollectionColumnName' => 'title',
+        ],
+    ],
+
+..  _developer-maps2registry-synchronize-columns-concat:
+
+Concat: Combine Multiple Columns
+---------------------------------
+
+Use `type` `concat` if you want maps2 to join several columns into a single
+value, separated by `glue` (defaults to a single space):
+
+..  code-block:: php
+    :caption: EXT:my_ext/Configuration/TCA/Overrides/tt_address.php
+
+    'synchronizeColumns' => [
+        [
+            'foreignColumnName' => [
+                'type' => 'concat',
+                'columns' => [
+                    'first_name',
+                    'last_name',
+                ],
+                'glue' => ' ',
+            ],
+            'poiCollectionColumnName' => 'title',
+        ],
+    ],
+
+Empty columns are skipped automatically, so a record with only a `last_name`
+will not end up with a leading `glue` in the synchronized value. See
+:ref:`developer-maps2registry-synchronize-columns-resolution-rules` below
+for the exact rules governing empty and blank columns.
+
+..  _developer-maps2registry-synchronize-columns-nesting:
+
+Nesting Coalesce and Concat
+----------------------------
+
+Every entry of `columns` may again be a plain column name or a nested
+`coalesce`/`concat` configuration. This allows you to combine both
+strategies, for example: prefer the `company` column, otherwise fall back to
+the concatenated `first_name` and `last_name` columns:
+
+..  code-block:: php
+    :caption: EXT:my_ext/Configuration/TCA/Overrides/tt_address.php
+
+    'synchronizeColumns' => [
+        [
+            'foreignColumnName' => [
+                'type' => 'coalesce',
+                'columns' => [
+                    'company',
+                    [
+                        'type' => 'concat',
+                        'columns' => [
+                            'first_name',
+                            'last_name',
+                        ],
+                        'glue' => ' ',
+                    ],
+                ],
+            ],
+            'poiCollectionColumnName' => 'title',
+        ],
+    ],
+
+Nesting works symmetrically and at any depth: a `concat` may just as well
+contain a nested `coalesce` (e.g. `concat(first_name, coalesce(company,
+last_name))`), and that combination may again be nested inside another
+`coalesce` or `concat`. How an empty nested `concat` is treated by a
+surrounding `coalesce` is described in
+:ref:`developer-maps2registry-synchronize-columns-resolution-rules` below.
+
+..  _developer-maps2registry-synchronize-columns-shorthand:
+
+Shorthand: Plain List as Coalesce
+-----------------------------------
+
+A plain, non-associative list of column names and/or nested configurations
+(i.e. without `type`/`columns`) is automatically treated as a `coalesce`:
+maps2 tries every entry in order and uses the first one that resolves to a
+non-empty value. This is handy to fall back from one combined strategy to
+another one, for example: prefer `company` or `name`, otherwise fall back to
+the concatenated `first_name` and `last_name` columns:
+
+..  code-block:: php
+    :caption: EXT:my_ext/Configuration/TCA/Overrides/tt_address.php
+
+    'synchronizeColumns' => [
+        [
+            'foreignColumnName' => [
+                [
+                    'type' => 'coalesce',
+                    'columns' => ['company', 'name'],
+                ],
+                [
+                    'type' => 'concat',
+                    'columns' => ['first_name', 'last_name'],
+                ],
+            ],
+            'poiCollectionColumnName' => 'title',
+        ],
+    ],
+
+`type` also accepts a :php:`\JWeiland\Maps2\Tca\ForeignColumnResolveTypeEnum`
+case directly instead of its string value, if you prefer a typed constant
+over a magic string.
+
+..  _developer-maps2registry-synchronize-columns-resolution-rules:
+
+Value Resolution Rules
+-----------------------
+
+The following rules apply consistently to every example above, no matter
+how deeply `coalesce` and `concat` are nested:
+
+#.  Every column value is trimmed before it is evaluated. A column that
+    only contains whitespace (e.g. `"   "` or a tab) is treated exactly
+    like an empty column.
+
+#.  `concat` filters out empty columns *before* joining them with `glue`,
+    it does not join first and clean up afterwards. An empty column can
+    therefore never produce a stray `glue` in the result, neither at the
+    start, the end, nor in the middle. If *every* column of a `concat` is
+    empty, the whole `concat` resolves to an empty string regardless of
+    `glue`: a `, ` glue with all columns empty results in `''`, not in
+    `", , ,"`.
+
+#.  `coalesce` only checks whether a candidate resolved to a non-empty
+    string. A nested `concat` that resolves to an empty string (per rule 2)
+    is therefore treated like any other empty candidate: `coalesce` simply
+    moves on to the next entry of `columns`.
