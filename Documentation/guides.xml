@@ -9,5 +9,5 @@
                project-issues="https://github.com/jweiland-net/maps2/issues"
                edit-on-github-branch="main"
                edit-on-github="jweiland/maps2" typo3-core-preferred="stable"/>
-    <project title="maps2 (Maps2)" release="13.0.2" version="13.0" copyright="since 2013 by jweiland.net"/>
+    <project title="maps2 (Maps2)" release="13.1.0" version="13.1" copyright="since 2013 by jweiland.net"/>
 </guides>

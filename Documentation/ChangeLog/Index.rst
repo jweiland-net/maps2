@@ -7,6 +7,15 @@
 ChangeLog
 =========
 
+Version 13.1.0
+==============
+
+*   FEATURE: Support coalesce/concat resolution strategies for the
+    `foreignColumnName` of `synchronizeColumns`, allowing fallback columns and
+    combined columns (including arbitrary nesting of both strategies)
+*   BUGFIX: Fix TypeError in CreateMaps2RecordHook when synchronizing columns
+    (SynchronizeColumn was accessed via array offset instead of its getters)
+
 Version 13.0.2
 ==============
 
