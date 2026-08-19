@@ -192,15 +192,20 @@ readonly class Maps2Registry
     private function createSynchronizeColumn(array $synchronizeColumnConfiguration): ?SynchronizeColumn
     {
         if (
-            isset($synchronizeColumnConfiguration['foreignColumnName'])
-            && isset($synchronizeColumnConfiguration['poiCollectionColumnName'])
+            !isset($synchronizeColumnConfiguration['foreignColumnName'])
+            || !isset($synchronizeColumnConfiguration['poiCollectionColumnName'])
         ) {
-            return new SynchronizeColumn(
-                foreignColumnName: (string)$synchronizeColumnConfiguration['foreignColumnName'] ?? '',
-                poiCollectionColumnName: (string)$synchronizeColumnConfiguration['poiCollectionColumnName'] ?? '',
-            );
+            return null;
         }
 
-        return null;
+        $foreignColumn = ForeignColumn::createFromConfiguration($synchronizeColumnConfiguration['foreignColumnName']);
+        if (!$foreignColumn instanceof ForeignColumn) {
+            return null;
+        }
+
+        return new SynchronizeColumn(
+            foreignColumn: $foreignColumn,
+            poiCollectionColumnName: (string)$synchronizeColumnConfiguration['poiCollectionColumnName'],
+        );
     }
 }

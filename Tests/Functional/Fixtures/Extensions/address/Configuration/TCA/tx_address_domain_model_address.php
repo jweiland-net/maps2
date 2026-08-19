@@ -79,5 +79,29 @@ return [
                 'default' => 'DE',
             ],
         ],
+        'company' => [
+            'label' => 'Company',
+            'config' => [
+                'type' => 'input',
+                'size' => 30,
+                'eval' => 'trim',
+            ],
+        ],
+        'first_name' => [
+            'label' => 'First name',
+            'config' => [
+                'type' => 'input',
+                'size' => 30,
+                'eval' => 'trim',
+            ],
+        ],
+        'last_name' => [
+            'label' => 'Last name',
+            'config' => [
+                'type' => 'input',
+                'size' => 30,
+                'eval' => 'trim',
+            ],
+        ],
     ],
 ];

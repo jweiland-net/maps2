@@ -28,7 +28,18 @@ ExtensionManagementUtility::addTCAcolumns(
                 'countryColumn' => 'country',
                 'synchronizeColumns' => [
                     0 => [
-                        'foreignColumnName' => 'title',
+                        // Prefer the company name. If empty, fall back to the concatenated first and last name.
+                        'foreignColumnName' => [
+                            'type' => 'coalesce',
+                            'columns' => [
+                                'company',
+                                [
+                                    'type' => 'concat',
+                                    'columns' => ['first_name', 'last_name'],
+                                    'glue' => ' ',
+                                ],
+                            ],
+                        ],
                         'poiCollectionColumnName' => 'title',
                     ],
                     1 => [

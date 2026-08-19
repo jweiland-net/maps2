@@ -14,13 +14,13 @@ namespace JWeiland\Maps2\Tca;
 final readonly class SynchronizeColumn
 {
     public function __construct(
-        private string $foreignColumnName,
+        private ForeignColumn $foreignColumn,
         private string $poiCollectionColumnName,
     ) {}
 
-    public function getForeignColumnName(): string
+    public function getForeignColumn(): ForeignColumn
     {
-        return $this->foreignColumnName;
+        return $this->foreignColumn;
     }
 
     public function getPoiCollectionColumnName(): string
