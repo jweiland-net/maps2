@@ -20,6 +20,7 @@ use JWeiland\Maps2\Helper\MessageHelper;
 use JWeiland\Maps2\Helper\StoragePidHelper;
 use JWeiland\Maps2\Service\GeoCodeService;
 use JWeiland\Maps2\Service\MapService;
+use JWeiland\Maps2\Tca\ForeignColumn;
 use JWeiland\Maps2\Tca\Maps2Registry;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
@@ -483,13 +484,14 @@ class CreateMaps2RecordHook
 
         $tableNeedsUpdate = false;
         foreach ($columnOptions['synchronizeColumns'] as $synchronizeColumns) {
-            if (!$this->isValidSynchronizeConfiguration($synchronizeColumns, $foreignTableName)) {
+            $foreignColumn = $this->getForeignColumnFromSynchronizeConfiguration($synchronizeColumns, $foreignTableName);
+            if (!$foreignColumn instanceof ForeignColumn) {
                 return false;
             }
 
             $queryBuilder = $queryBuilder->set(
                 $synchronizeColumns['poiCollectionColumnName'],
-                $foreignLocationRecord[$synchronizeColumns['foreignColumnName']],
+                $foreignColumn->resolveValue($foreignLocationRecord),
             );
             $tableNeedsUpdate = true;
         }
@@ -506,15 +508,17 @@ class CreateMaps2RecordHook
     }
 
     /**
-     * This method checks the synchronization options itself and if columns are configured in TCA
+     * Builds the ForeignColumn value object for a single `synchronizeColumns` entry and validates
+     * it against the TCA of the foreign table. `foreignColumnName` may either be a plain column name
+     * or a coalesce/concat configuration array resolving several columns of the foreign table, see
+     * ForeignColumn::createFromConfiguration().
      */
-    protected function isValidSynchronizeConfiguration(array $synchronizeColumns, string $foreignTableName): bool
+    protected function getForeignColumnFromSynchronizeConfiguration(array $synchronizeColumns, string $foreignTableName): ?ForeignColumn
     {
         // Check options itself
         if (
             !array_key_exists('foreignColumnName', $synchronizeColumns)
             || !array_key_exists('poiCollectionColumnName', $synchronizeColumns)
-            || !is_string($synchronizeColumns['foreignColumnName'])
             || !is_string($synchronizeColumns['poiCollectionColumnName'])
         ) {
             $this->messageHelper->addFlashMessage(
@@ -523,26 +527,38 @@ class CreateMaps2RecordHook
                 ContextualFeedbackSeverity::ERROR,
             );
 
-            return false;
+            return null;
         }
 
-        // Check, if configured foreign columnName is valid in TCA
-        $foreignColumnName = $synchronizeColumns['foreignColumnName'];
-        if (
-            !array_key_exists($foreignTableName, $GLOBALS['TCA'])
-            || !array_key_exists($foreignColumnName, $GLOBALS['TCA'][$foreignTableName]['columns'])
-            || !is_array($GLOBALS['TCA'][$foreignTableName]['columns'][$foreignColumnName]['config'])
-        ) {
+        $foreignColumn = ForeignColumn::createFromConfiguration($synchronizeColumns['foreignColumnName']);
+        if (!$foreignColumn instanceof ForeignColumn) {
             $this->messageHelper->addFlashMessage(
-                'Error while trying to synchronize columns of your record with maps2 record. It seems that "' . $foreignTableName . '" is not registered as table or "' . $foreignColumnName . '" is not a valid column in ' . $foreignTableName,
-                'Missing table/column in TCA',
+                'Please check your Maps registration. The key foreignColumnName has to be a column name or a valid coalesce/concat configuration.',
+                'Missing registration keys',
                 ContextualFeedbackSeverity::ERROR,
             );
 
-            return false;
+            return null;
         }
 
-        return true;
+        // Check, if every configured foreign columnName is valid in TCA
+        foreach ($foreignColumn->getColumnNames() as $foreignColumnName) {
+            if (
+                !array_key_exists($foreignTableName, $GLOBALS['TCA'])
+                || !array_key_exists($foreignColumnName, $GLOBALS['TCA'][$foreignTableName]['columns'])
+                || !is_array($GLOBALS['TCA'][$foreignTableName]['columns'][$foreignColumnName]['config'])
+            ) {
+                $this->messageHelper->addFlashMessage(
+                    'Error while trying to synchronize columns of your record with maps2 record. It seems that "' . $foreignTableName . '" is not registered as table or "' . $foreignColumnName . '" is not a valid column in ' . $foreignTableName,
+                    'Missing table/column in TCA',
+                    ContextualFeedbackSeverity::ERROR,
+                );
+
+                return null;
+            }
+        }
+
+        return $foreignColumn;
     }
 
     /**
