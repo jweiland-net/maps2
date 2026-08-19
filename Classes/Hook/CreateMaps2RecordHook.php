@@ -460,20 +460,17 @@ final readonly class CreateMaps2RecordHook
                 ),
             );
 
-        $tableNeedsUpdate = false;
         foreach ($columnRegistration->getSynchronizeColumns() as $synchronizeColumns) {
             if (!$this->isValidSynchronizeConfiguration($synchronizeColumns, $foreignTableName)) {
                 return false;
             }
 
             $queryBuilder = $queryBuilder->set(
-                $synchronizeColumns['poiCollectionColumnName'],
-                $foreignLocationRecord[$synchronizeColumns['foreignColumnName']],
+                $synchronizeColumns->getPoiCollectionColumnName(),
+                $synchronizeColumns->getForeignColumn()->resolveValue($foreignLocationRecord),
             );
-            $tableNeedsUpdate = true;
         }
 
-        // Only execute query, if there are columns to update
         $queryBuilder->executeStatement();
 
         return true;
@@ -484,22 +481,23 @@ final readonly class CreateMaps2RecordHook
      */
     private function isValidSynchronizeConfiguration(SynchronizeColumn $synchronizeColumns, string $foreignTableName): bool
     {
-        // Check, if configured foreign columnName is valid in TCA
-        $foreignColumnName = $synchronizeColumns->getForeignColumnName();
-        if (
-            !array_key_exists($foreignTableName, $GLOBALS['TCA'])
-            || !array_key_exists($foreignColumnName, $GLOBALS['TCA'][$foreignTableName]['columns'])
-            || !is_array($GLOBALS['TCA'][$foreignTableName]['columns'][$foreignColumnName]['config'])
-        ) {
-            $this->messageHelper->addFlashMessage(
-                'Error while trying to synchronize columns of your record with maps2 record. It seems that "'
-                . $foreignTableName . '" is not registered as table or "'
-                . $foreignColumnName . '" is not a valid column in ' . $foreignTableName,
-                'Missing table/column in TCA',
-                ContextualFeedbackSeverity::ERROR,
-            );
+        // Check if every configured foreign columnName is valid in TCA
+        foreach ($synchronizeColumns->getForeignColumn()->getColumnNames() as $foreignColumnName) {
+            if (
+                !array_key_exists($foreignTableName, $GLOBALS['TCA'])
+                || !array_key_exists($foreignColumnName, $GLOBALS['TCA'][$foreignTableName]['columns'])
+                || !is_array($GLOBALS['TCA'][$foreignTableName]['columns'][$foreignColumnName]['config'])
+            ) {
+                $this->messageHelper->addFlashMessage(
+                    'Error while trying to synchronize columns of your record with maps2 record. It seems that "'
+                    . $foreignTableName . '" is not registered as table or "'
+                    . $foreignColumnName . '" is not a valid column in ' . $foreignTableName,
+                    'Missing table/column in TCA',
+                    ContextualFeedbackSeverity::ERROR,
+                );
 
-            return false;
+                return false;
+            }
         }
 
         return true;

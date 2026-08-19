@@ -20,11 +20,14 @@ use JWeiland\Maps2\Service\GeoCodeService;
 use JWeiland\Maps2\Service\MapService;
 use JWeiland\Maps2\Tca\ColumnRegistration;
 use JWeiland\Maps2\Tca\ColumnRegistrationStorage;
+use JWeiland\Maps2\Tca\ForeignColumn;
+use JWeiland\Maps2\Tca\SynchronizeColumn;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
+use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Schema\TcaSchemaFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -156,5 +159,85 @@ class CreateMaps2RecordHookTest extends FunctionalTestCase
         );
 
         $subject->processDatamap_afterAllOperations($dataHandler);
+    }
+
+    #[Test]
+    public function synchronizeColumnsFromForeignRecordWithPoiCollectionResolvesComposedForeignColumn(): void
+    {
+        $this->importCSVDataSet(__DIR__ . '/../Fixtures/tx_maps2_domain_model_poicollection.csv');
+
+        $addressQueryBuilder = $this->getConnectionPool()->getQueryBuilderForTable('tx_address_domain_model_address');
+        $foreignLocationRecord = $addressQueryBuilder
+            ->select('*')
+            ->from('tx_address_domain_model_address')
+            ->where(
+                $addressQueryBuilder->expr()->eq(
+                    'uid',
+                    $addressQueryBuilder->createNamedParameter(1, Connection::PARAM_INT),
+                ),
+            )
+            ->executeQuery()
+            ->fetchAssociative();
+
+        self::assertIsArray($foreignLocationRecord);
+
+        $columnRegistration = new ColumnRegistration(
+            tableName: 'tx_address_domain_model_address',
+            columnName: 'tx_maps2_uid',
+            addressColumns: ['street', 'zip', 'city'],
+            synchronizeColumns: [
+                new SynchronizeColumn(
+                    foreignColumn: ForeignColumn::createFromConfiguration([
+                        'type' => 'coalesce',
+                        'columns' => [
+                            'company',
+                            [
+                                'type' => 'concat',
+                                'columns' => ['first_name', 'last_name'],
+                                'glue' => ' ',
+                            ],
+                        ],
+                    ]),
+                    poiCollectionColumnName: 'title',
+                ),
+            ],
+        );
+
+        $subject = new CreateMaps2RecordHook(
+            $this->get(GeoCodeService::class),
+            $this->get(AddressHelper::class),
+            $this->get(MessageHelper::class),
+            $this->get(StoragePidHelper::class),
+            $this->get(MapService::class),
+            new ColumnRegistrationStorage(),
+            $this->get(EventDispatcherInterface::class),
+            $this->get(TcaSchemaFactory::class),
+            $this->get(CacheManager::class),
+            $this->getConnectionPool(),
+        );
+
+        self::assertTrue(
+            $subject->synchronizeColumnsFromForeignRecordWithPoiCollection(
+                $foreignLocationRecord,
+                'tx_address_domain_model_address',
+                'tx_maps2_uid',
+                $columnRegistration,
+            ),
+        );
+
+        $poiCollectionQueryBuilder = $this->getConnectionPool()->getQueryBuilderForTable('tx_maps2_domain_model_poicollection');
+        $poiCollectionTitle = $poiCollectionQueryBuilder
+            ->select('title')
+            ->from('tx_maps2_domain_model_poicollection')
+            ->where(
+                $poiCollectionQueryBuilder->expr()->eq(
+                    'uid',
+                    $poiCollectionQueryBuilder->createNamedParameter(1, Connection::PARAM_INT),
+                ),
+            )
+            ->executeQuery()
+            ->fetchOne();
+
+        self::assertSame('Stefan Froemken', $poiCollectionTitle);
     }
 }
