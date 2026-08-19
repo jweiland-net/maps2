@@ -93,7 +93,7 @@ final readonly class ForeignColumn
     private static function createChildren(array $columns): array
     {
         return array_values(array_filter(array_map(
-            static fn (mixed $column): ?self => self::createFromConfiguration($column),
+            static fn(mixed $column): ?self => self::createFromConfiguration($column),
             $columns,
         )));
     }
@@ -143,10 +143,10 @@ final readonly class ForeignColumn
     {
         $values = array_filter(
             array_map(
-                static fn (self $child): string => $child->resolveValue($record),
+                static fn(self $child): string => $child->resolveValue($record),
                 $this->children,
             ),
-            static fn (string $value): bool => $value !== '',
+            static fn(string $value): bool => $value !== '',
         );
 
         return implode($this->glue, $values);
