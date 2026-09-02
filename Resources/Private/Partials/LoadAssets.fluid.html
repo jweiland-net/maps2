@@ -31,6 +31,17 @@
                             async="0"
                             inline="0"
                             csp="1"/>
+            <f:if condition="{environment.settings.openStreetMap.markerClusterer.enable}">
+                <f:asset.css identifier="maps2-osm-marker-cluster"
+                             href="EXT:maps2/Resources/Public/Css/Leaflet/MarkerCluster.css"
+                             inline="0"
+                             csp="1"/>
+                <f:asset.script identifier="maps2-osm-marker-cluster"
+                                src="EXT:maps2/Resources/Public/JavaScript/leaflet.markercluster.min.js"
+                                async="0"
+                                inline="0"
+                                csp="1"/>
+            </f:if>
             <f:asset.script identifier="maps2-osm"
                             src="EXT:maps2/Resources/Public/JavaScript/OpenStreetMap2.min.js"
                             async="0"

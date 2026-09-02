@@ -154,9 +154,20 @@ Example: `plugin.tx_maps2.settings.markerClusterer.enable = 1`
 
 This value is configurable through TypoScript Constants Editor
 
-If you work with a lot of poi collection records you can activate the marker
-clusterer. The marker clusterer will merge multiple poi collections to 1 icon
-with the contains amount of records.
+If a map has many POI collection records, the marker clusterer can group nearby
+point markers into one icon that shows the number of records.
+
+openStreetMap.markerClusterer.enable
+------------------------------------
+
+Only available for OpenStreetMap
+
+Default: 0
+
+Configure this value for each maps2 content element in its OpenStreetMap tab.
+The marker clusterer groups nearby point markers into one icon that shows the
+number of records. The markers separate as the visitor zooms in. Area, route
+and radius records remain unchanged.
 
 markerClusterer.imagePath
 -------------------------

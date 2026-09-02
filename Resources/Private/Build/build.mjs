@@ -3,8 +3,10 @@ import { mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
 const outDir = '../../Public/JavaScript';
+const cssOutDir = '../../Public/Css/Leaflet';
 
 mkdirSync(outDir, { recursive: true });
+mkdirSync(cssOutDir, { recursive: true });
 
 // Plain global scripts, minified in place. No bundling since none of them use import/require.
 async function minifySingleFile(entry, outName) {
@@ -32,6 +34,13 @@ async function concatAndMinify(entries, outName) {
   console.log(`  ${outDir}/${outName}`);
 }
 
+function concatFiles(entries, outDir, outName) {
+  const combined = entries.map((entry) => readFileSync(entry, 'utf8')).join('\n');
+
+  writeFileSync(join(outDir, outName), combined);
+  console.log(`  ${outDir}/${outName}`);
+}
+
 await concatAndMinify(
   [
     'node_modules/leaflet/dist/leaflet.js',
@@ -39,6 +48,20 @@ await concatAndMinify(
     'node_modules/leaflet-editable/src/Leaflet.Editable.js',
   ],
   'leaflet.min.js',
+);
+
+await minifySingleFile(
+  'node_modules/leaflet.markercluster/dist/leaflet.markercluster-src.js',
+  'leaflet.markercluster.min.js',
+);
+
+concatFiles(
+  [
+    'node_modules/leaflet.markercluster/dist/MarkerCluster.css',
+    'node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css',
+  ],
+  cssOutDir,
+  'MarkerCluster.css',
 );
 
 await minifySingleFile('JavaScript/Classes.js', 'Classes.js');

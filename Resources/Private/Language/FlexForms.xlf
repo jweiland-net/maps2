@@ -85,6 +85,9 @@
       <trans-unit id="sheetOpenStreetMapOptions">
         <source>Open Street Map</source>
       </trans-unit>
+      <trans-unit id="openStreetMapMarkerClusterer">
+        <source>Cluster nearby point markers</source>
+      </trans-unit>
       <trans-unit id="mapTile">
         <source>Map Tile URI: Define another external provider to show map with another layout</source>
       </trans-unit>
