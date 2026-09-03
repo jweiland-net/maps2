@@ -196,6 +196,14 @@
                 <sheetTitle>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:sheetOpenStreetMapOptions</sheetTitle>
                 <type>array</type>
                 <el>
+                    <settings.openStreetMap.markerClusterer.enable>
+                        <label>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:openStreetMapMarkerClusterer</label>
+                        <config>
+                            <type>check</type>
+                            <renderType>checkboxToggle</renderType>
+                            <default>0</default>
+                        </config>
+                    </settings.openStreetMap.markerClusterer.enable>
                     <settings.mapTile>
                         <label>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:mapTile</label>
                         <config>

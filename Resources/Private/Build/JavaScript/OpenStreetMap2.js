@@ -5,9 +5,11 @@ class OpenStreetMap2 {
   bounds = {};
 
   allMarkers = [];
+  pointMarkers = [];
   categorizedMarkers = {};
   poiCollections = [];
   map = {};
+  markerClusterGroup = null;
 
   constructor(element, environment) {
     this.element = element;
@@ -18,6 +20,7 @@ class OpenStreetMap2 {
     this.preparePoiCollection();
     this.setMapDimensions();
     this.createMap();
+    this.createMarkerClusterGroup();
     this.setMarkersOnMap();
   }
 
@@ -59,6 +62,8 @@ class OpenStreetMap2 {
 
   createMarkerBasedOnPOICollections() {
     this.createPointByCollectionType();
+    this.addMarkerClusterGroupToMap();
+
     if (this.countObjectProperties(this.categorizedMarkers) > 1) {
       this.showSwitchableCategories();
     }
@@ -135,6 +140,36 @@ class OpenStreetMap2 {
       attribution: this.getSettings().mapTileAttribution,
       maxZoom: 20
     }).addTo(this.map);
+  }
+
+  createMarkerClusterGroup() {
+    if (
+      !this.editable
+      && parseInt(this.getSettings().openStreetMap?.markerClusterer?.enable) === 1
+      && typeof L.markerClusterGroup === "function"
+    ) {
+      this.markerClusterGroup = L.markerClusterGroup();
+    }
+  }
+
+  addMarkerClusterGroupToMap() {
+    if (this.markerClusterGroup !== null) {
+      this.markerClusterGroup.addTo(this.map);
+    }
+  }
+
+  setMarkerVisibility(marker, isVisible) {
+    let layerContainer = this.map;
+
+    if (this.markerClusterGroup !== null && this.pointMarkers.includes(marker)) {
+      layerContainer = this.markerClusterGroup;
+    }
+
+    if (isVisible) {
+      layerContainer.addLayer(marker);
+    } else {
+      layerContainer.removeLayer(marker);
+    }
   }
 
   /**
@@ -245,11 +280,7 @@ class OpenStreetMap2 {
         let markers = this.getMarkersToChangeVisibilityFor(categoryUid, form, isChecked);
 
         markers.forEach((marker) => {
-          if (isChecked) {
-            this.map.addLayer(marker);
-          } else {
-            this.map.removeLayer(marker);
-          }
+          this.setMarkerVisibility(marker, isChecked);
         });
       });
     });
@@ -375,7 +406,7 @@ class OpenStreetMap2 {
       {
         'draggable': this.editable
       }
-    ).addTo(this.map);
+    );
 
     if (poiCollection.hasOwnProperty("markerIcon") && poiCollection.markerIcon !== "") {
       const markerIconWidth = poiCollection.markerIconWidth || this.getExtConf().markerIconWidth;
@@ -399,6 +430,9 @@ class OpenStreetMap2 {
       });
       marker.setIcon(icon);
     }
+
+    this.pointMarkers.push(marker);
+    this.setMarkerVisibility(marker, true);
 
     this.bounds.extend(marker.getLatLng());
 
