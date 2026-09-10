@@ -7,6 +7,15 @@
 ChangeLog
 =========
 
+Version 13.1.1
+==============
+
+*   BUGFIX: Point the default info window template setting to the existing
+    `InfoWindowContent.fluid.html` template
+*   BUGFIX: Render info window content with `f:format.html`. `f:transform.html`
+    requires `$GLOBALS['TYPO3_REQUEST']`, which the info window middleware does
+    not set
+
 Version 13.1.0
 ==============
 

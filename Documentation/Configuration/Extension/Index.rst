@@ -132,7 +132,7 @@ activation of Google Maps for current browser session.
 infoWindowContentTemplatePath
 -----------------------------
 
-Default: `EXT:maps2/Resources/Private/Templates/InfoWindowContent.html`
+Default: `EXT:maps2/Resources/Private/Templates/InfoWindowContent.fluid.html`
 
 You can define your own default template for the info window content when
 clicking on a marker. Further you can override this template path again with
