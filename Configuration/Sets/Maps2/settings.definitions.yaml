@@ -35,7 +35,7 @@ settings:
     category: 'Maps2.templates.infoWindowContent'
     description: 'If you click on a marker (POI) a little info window will appear. With this setting you can change the template to your own needs.'
     type: string
-    default: 'EXT:maps2/Resources/Private/Templates/InfoWindowContent.html'
+    default: 'EXT:maps2/Resources/Private/Templates/InfoWindowContent.fluid.html'
   maps2.infoWindowContent.imageHeight:
     label: 'Image Height'
     category: 'Maps2.templates.infoWindowContent'
