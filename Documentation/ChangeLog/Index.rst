@@ -7,6 +7,12 @@
 ChangeLog
 =========
 
+Version 13.1.1
+==============
+
+*   BUGFIX: Fix TypeError when rendering internal page links in info window content
+*   BUGFIX: Use fluid.html file ending in default info window template path
+
 Version 13.1.0
 ==============
 
