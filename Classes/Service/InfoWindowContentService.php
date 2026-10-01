@@ -80,7 +80,23 @@ readonly class InfoWindowContentService
         $view = $this->createView($maps2TypoScript, $siteSettings, $request);
         $view->assignMultiple($variables);
 
-        return $view->render();
+        return $this->renderView($view, $request);
+    }
+
+    /**
+     * ToDo: Remove with TYPO3 15. f:transform.html calls LinkFactory::createUri() without cObj, which falls back
+     *       to $GLOBALS['TYPO3_REQUEST']. It is not set within middlewares yet. Check, if f:format.html is an option.
+     */
+    private function renderView(ViewInterface $view, ServerRequestInterface $request): string
+    {
+        $previousRequest = $GLOBALS['TYPO3_REQUEST'] ?? null;
+        $GLOBALS['TYPO3_REQUEST'] = $request;
+
+        try {
+            return $view->render();
+        } finally {
+            $GLOBALS['TYPO3_REQUEST'] = $previousRequest;
+        }
     }
 
     private function createView(
