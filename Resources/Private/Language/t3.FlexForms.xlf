@@ -58,6 +58,26 @@
         <source>Show full screen Control</source>
         <target>crwdns307972:0crwdne307972:0</target>
       </trans-unit>
+      <trans-unit id="markerClusterer.override">
+        <source>Marker Clusterer</source>
+        <target>crwdns414739:0crwdne414739:0</target>
+      </trans-unit>
+      <trans-unit id="markerClusterer.override.description">
+        <source>Join nearby markers to a single cluster icon (Google Maps and OpenStreetMap). With the default option, the site setting "Enable Marker Clusterer" (TypoScript: settings.markerClusterer.enable) is used.</source>
+        <target>crwdns414741:0crwdne414741:0</target>
+      </trans-unit>
+      <trans-unit id="markerClusterer.override.default">
+        <source>Use default (site settings / TypoScript)</source>
+        <target>crwdns414743:0crwdne414743:0</target>
+      </trans-unit>
+      <trans-unit id="markerClusterer.override.enabled">
+        <source>Enabled</source>
+        <target>crwdns414745:0crwdne414745:0</target>
+      </trans-unit>
+      <trans-unit id="markerClusterer.override.disabled">
+        <source>Disabled</source>
+        <target>crwdns414747:0crwdne414747:0</target>
+      </trans-unit>
       <trans-unit id="sheetGoogleMapsOptions">
         <source>Google Maps</source>
         <target>crwdns307974:0crwdne307974:0</target>
