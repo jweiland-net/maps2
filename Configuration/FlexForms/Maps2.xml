@@ -122,6 +122,29 @@
                             <default>1</default>
                         </config>
                     </settings.fullScreenControl>
+                    <settings.markerClusterer.override>
+                        <label>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:markerClusterer.override</label>
+                        <description>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:markerClusterer.override.description</description>
+                        <config>
+                            <type>select</type>
+                            <renderType>selectSingle</renderType>
+                            <default></default>
+                            <items type="array">
+                                <numIndex index="0" type="array">
+                                    <label>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:markerClusterer.override.default</label>
+                                    <value></value>
+                                </numIndex>
+                                <numIndex index="1" type="array">
+                                    <label>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:markerClusterer.override.enabled</label>
+                                    <value>1</value>
+                                </numIndex>
+                                <numIndex index="2" type="array">
+                                    <label>LLL:EXT:maps2/Resources/Private/Language/FlexForms.xlf:markerClusterer.override.disabled</label>
+                                    <value>0</value>
+                                </numIndex>
+                            </items>
+                        </config>
+                    </settings.markerClusterer.override>
                 </el>
             </ROOT>
         </sMapOptions>

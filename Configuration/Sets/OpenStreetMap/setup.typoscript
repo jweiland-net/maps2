@@ -1,6 +1,3 @@
-# Prevent including both static maps of map providers on one page
-page.includeJSFooterlibs.markerClustererForMaps2 >
-
 [isRequestToMapProviderAllowed()]
 [ELSE]
   # Requests to OpenStreetMap are not allowed. Inform the user about cookies and request permissions for 3rd party.
@@ -14,5 +11,11 @@ plugin.tx_maps2 {
     mapProvider = osm
     mapTile = {$maps2.mapTile}
     mapTileAttribution = {$maps2.mapTileAttribution}
+    markerClusterer {
+      # Theme stylesheet for the cluster icons of Leaflet.markercluster.
+      # Set your own stylesheet or clear the value to style the
+      # ".marker-cluster" CSS classes within your own site package.
+      styleSheet = EXT:maps2/Resources/Public/Css/Leaflet/MarkerCluster.Default.css
+    }
   }
 }

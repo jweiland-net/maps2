@@ -9,6 +9,16 @@
             <f:comment><!-- async has to be activated. Else "initMap" could not be found --></f:comment>
             <f:comment><!-- What a dump solution to add the nonce attribute to all dynamically generated style tags by Google Maps API --></f:comment>
             <f:asset.css identifier="maps2-google-maps" csp="1" priority="1">;</f:asset.css>
+            <f:comment><!-- "settings" contains the FlexForm override of the maps2 plugin, "environment.settings" the TypoScript defaults --></f:comment>
+            <f:comment><!-- Load MarkerClusterer in head (priority), so it is available before the async Google Maps scripts call "initMap", even if a later plugin on the page registers it. It needs "google.maps" on instantiation only --></f:comment>
+            <f:if condition="{settings.markerClusterer.enable} || {environment.settings.markerClusterer.enable}">
+                <f:asset.script identifier="maps2-google-maps-marker-clusterer"
+                                src="EXT:maps2/Resources/Public/JavaScript/markerclusterer.min.js"
+                                async="0"
+                                inline="0"
+                                priority="1"
+                                csp="1"/>
+            </f:if>
             <f:asset.script identifier="maps2-google-maps-api"
                             src="https://maps.googleapis.com/maps/api/js?key={environment.settings.googleMapsJavaScriptApiKey}&libraries=places&callback=initMap&loading=async"
                             async="1"
@@ -31,6 +41,24 @@
                             async="0"
                             inline="0"
                             csp="1"/>
+            <f:comment><!-- "settings" contains the FlexForm override of the maps2 plugin, "environment.settings" the TypoScript defaults --></f:comment>
+            <f:if condition="{settings.markerClusterer.enable} || {environment.settings.markerClusterer.enable}">
+                <f:asset.css identifier="maps2-osm-marker-cluster"
+                             href="EXT:maps2/Resources/Public/Css/Leaflet/MarkerCluster.css"
+                             inline="0"
+                             csp="1"/>
+                <f:if condition="{environment.settings.markerClusterer.styleSheet}">
+                    <f:asset.css identifier="maps2-osm-marker-cluster-theme"
+                                 href="{environment.settings.markerClusterer.styleSheet}"
+                                 inline="0"
+                                 csp="1"/>
+                </f:if>
+                <f:asset.script identifier="maps2-osm-marker-cluster"
+                                src="EXT:maps2/Resources/Public/JavaScript/leaflet.markercluster.min.js"
+                                async="0"
+                                inline="0"
+                                csp="1"/>
+            </f:if>
             <f:asset.script identifier="maps2-osm"
                             src="EXT:maps2/Resources/Public/JavaScript/OpenStreetMap2.min.js"
                             async="0"

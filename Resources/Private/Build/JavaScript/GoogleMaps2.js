@@ -2,6 +2,7 @@ class GoogleMaps2 {
   allMarkers = [];
   categorizedMarkers = {};
   pointMarkers = [];
+  markerClusterer = null;
   bounds = {};
   infoWindow = {};
   poiCollections = {};
@@ -47,16 +48,7 @@ class GoogleMaps2 {
       }
     } else {
       await this.createPointByCollectionType(element, environment);
-      if (
-        typeof environment.settings.markerClusterer !== 'undefined'
-        && environment.settings.markerClusterer.enable === 1
-      ) {
-        new MarkerClusterer(
-          this.map,
-          this.pointMarkers,
-          { imagePath: environment.settings.markerClusterer.imagePath }
-        );
-      }
+      this.createMarkerClusterer(environment.settings);
 
       if (this.countObjectProperties(this.categorizedMarkers) > 1) {
         this.showSwitchableCategories(element, environment);
@@ -68,6 +60,66 @@ class GoogleMaps2 {
         this.map.setCenter(new google.maps.LatLng(this.poiCollections[0].latitude, this.poiCollections[0].longitude));
       }
     }
+  }
+
+  /**
+   * Cluster the point markers with the official @googlemaps/markerclusterer library
+   *
+   * @param {Settings} settings
+   */
+  createMarkerClusterer = settings => {
+    if (
+      this.editable
+      || typeof settings.markerClusterer === 'undefined'
+      || settings.markerClusterer.enable !== 1
+      || typeof markerClusterer === 'undefined'
+    ) {
+      return;
+    }
+
+    this.markerClusterer = new markerClusterer.MarkerClusterer({
+      map: this.map,
+      markers: this.pointMarkers,
+      renderer: this.getClusterRenderer(settings.markerClusterer.imagePath),
+    });
+  }
+
+  /**
+   * Render clusters with the images m1.png to m5.png of the configured imagePath.
+   * Image sizes and index calculation are taken from the former MarkerClusterer v1.
+   *
+   * @param {string} imagePath
+   * @return {object}
+   */
+  getClusterRenderer = imagePath => {
+    const imageSizes = [53, 56, 66, 78, 90];
+
+    return {
+      render: ({ count, position }) => {
+        const index = Math.min(String(count).length, imageSizes.length);
+        const size = imageSizes[index - 1];
+        const content = document.createElement('div');
+
+        content.classList.add('maps2-marker-cluster');
+        content.textContent = String(count);
+        content.style.width = size + 'px';
+        content.style.height = size + 'px';
+        content.style.lineHeight = size + 'px';
+        content.style.backgroundImage = 'url("' + imagePath + index + '.png")';
+        content.style.textAlign = 'center';
+        content.style.fontSize = '11px';
+        content.style.fontWeight = 'bold';
+        content.style.color = '#000';
+        content.style.cursor = 'pointer';
+        content.style.transform = 'translateY(50%)';
+
+        return new google.maps.marker.AdvancedMarkerElement({
+          position: position,
+          content: content,
+          zIndex: 1000 + count,
+        });
+      },
+    };
   }
 
   /**
@@ -350,7 +402,13 @@ class GoogleMaps2 {
         let markers = this.getMarkersToChangeVisibilityFor(categoryUid, form, isChecked);
 
         markers.forEach((marker) => {
-          if (typeof marker.setVisible === 'function') {
+          if (this.markerClusterer !== null && this.pointMarkers.includes(marker)) {
+            if (isChecked) {
+              this.markerClusterer.addMarker(marker);
+            } else {
+              this.markerClusterer.removeMarker(marker);
+            }
+          } else if (typeof marker.setVisible === 'function') {
             marker.setVisible(isChecked);
           } else if (typeof marker.setMap === 'function') {
             marker.setMap(isChecked ? this.map : null);
