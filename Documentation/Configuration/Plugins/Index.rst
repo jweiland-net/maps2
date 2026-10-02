@@ -82,6 +82,23 @@ Default: true
 
 Show control to toggle between normal and full screen mode.
 
+..  _plugins-show-map-marker-clusterer:
+
+markerClusterer.override
+------------------------
+
+Default: Use default (site settings / TypoScript)
+
+Enable or disable marker clustering for this content element only. This option
+applies to Google Maps and OpenStreetMap. With the default option the value of
+site setting `maps2.enableMarkerClusterer` (TypoScript
+`plugin.tx_maps2.settings.markerClusterer.enable`) is used.
+
+The required JavaScript libraries are loaded automatically, if at least one map
+on the page uses marker clustering. The cluster icons are configured with
+TypoScript `markerClusterer.imagePath` (Google Maps) and
+`markerClusterer.styleSheet` (OpenStreetMap).
+
 mapTypeId
 ---------
 

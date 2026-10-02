@@ -146,17 +146,36 @@ Set the maximum height of images within the InfoWindow PopUp
 markerClusterer.enable
 ----------------------
 
-Only available for Google Maps
+Available for Google Maps and OpenStreetMap
 
 Default: 0
 
 Example: `plugin.tx_maps2.settings.markerClusterer.enable = 1`
 
-This value is configurable through TypoScript Constants Editor
+This value is configurable through the site setting
+`maps2.enableMarkerClusterer` ("Enable Marker Clusterer") of site set
+`Maps2 - Default Set`.
 
 If you work with a lot of poi collection records you can activate the marker
-clusterer. The marker clusterer will merge multiple poi collections to 1 icon
-with the contains amount of records.
+clusterer. The marker clusterer will merge multiple nearby poi collections to
+1 icon showing the amount of contained records. The markers separate as the
+visitor zooms in.
+
+For Google Maps the library `MarkerClusterer` is used. For OpenStreetMap the
+official Leaflet plugin
+`Leaflet.markercluster <https://github.com/Leaflet/Leaflet.markercluster>`__
+is used. With OpenStreetMap only point markers are clustered. Areas, routes and
+radius records are always shown as they are. While editing a marker in
+frontend, clustering is not used.
+
+This TypoScript value is the source of truth. It also applies to maps
+which are rendered by foreign extensions through the maps2 Fluid partials.
+
+..  hint::
+
+    Editors can override this value per content element in the "Map Options"
+    tab of the maps2 plugin. See
+    :ref:`markerClusterer.override <plugins-show-map-marker-clusterer>`.
 
 markerClusterer.imagePath
 -------------------------
@@ -169,6 +188,30 @@ Example: `plugin.tx_maps2.settings.markerClusterer.imagePath = EXT:my_sitepackag
 
 If you don't like the icons of Marker Clusterer you can choose a different path for your own
 images.
+
+markerClusterer.styleSheet
+--------------------------
+
+Only available for OpenStreetMap
+
+Default: `EXT:maps2/Resources/Public/Css/Leaflet/MarkerCluster.Default.css`
+
+Example: `plugin.tx_maps2.settings.markerClusterer.styleSheet = EXT:my_sitepackage/Resources/Public/Css/MarkerCluster.css`
+
+Leaflet.markercluster does not work with images like the Google Maps
+MarkerClusterer. The cluster icons are HTML elements which are styled by CSS
+classes `marker-cluster`, `marker-cluster-small` (less than 10 markers),
+`marker-cluster-medium` (less than 100 markers) and `marker-cluster-large`.
+
+By default, maps2 loads the default theme `MarkerCluster.Default.css` of
+Leaflet.markercluster. If you don't like the cluster icons, copy that file to
+your site package, adapt it (colors, sizes, background images, ...) and set
+the path to your own file here. If you clear this value, no theme stylesheet
+will be loaded at all and you can style these CSS classes within the
+stylesheets of your site package.
+
+The required base stylesheet `MarkerCluster.css` (animations) is always loaded,
+if marker clustering is enabled.
 
 
 ..  _typoScript-local-lang:

@@ -1,11 +1,4 @@
-# Prevent including both static maps of map providers on one page
-page.includeJSFooterlibs.markerClustererForMaps2 >
-
 [isRequestToMapProviderAllowed()]
-  page.includeJSFooterlibs {
-    markerClustererForMaps2 = EXT:maps2/Resources/Public/JavaScript/MarkerClusterer.js
-    markerClustererForMaps2.if.isTrue = {$maps2.enableMarkerClusterer}
-  }
 [ELSE]
   # Requests to Google Maps are not allowed. Inform the user about cookies and request permissions for 3rd party.
   tt_content.maps2_maps2.20.pluginName = Overlay
@@ -24,7 +17,6 @@ plugin.tx_maps2 {
     googleMapsMapId = {$maps2.googleMapsMapId}
     mapTypeId = google.maps.MapTypeId.ROADMAP
     markerClusterer {
-      enable = {$maps2.enableMarkerClusterer}
       imagePath = EXT:maps2/Resources/Public/Icons/MarkerClusterer/m
     }
   }

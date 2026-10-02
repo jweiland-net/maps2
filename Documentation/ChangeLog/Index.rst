@@ -7,6 +7,25 @@
 ChangeLog
 =========
 
+Version 13.2.0
+==============
+
+*   FEATURE: Add marker clustering for OpenStreetMap based on
+    Leaflet.markercluster
+*   FEATURE: Add FlexForm option to enable or disable marker clustering per
+    content element for Google Maps and OpenStreetMap
+*   FEATURE: Add TypoScript setting `markerClusterer.styleSheet` to replace the
+    cluster icon theme of Leaflet.markercluster
+*   TASK: Move site setting `maps2.enableMarkerClusterer` from site set
+    `Maps2 - Google Maps` into `Maps2 - Default Set`. The setting key is
+    unchanged.
+*   BUGFIX: Fix marker clustering for Google Maps. The outdated MarkerClusterer
+    v1 does not support `AdvancedMarkerElement` and was replaced by the official
+    library `@googlemaps/markerclusterer`. The cluster images of
+    `markerClusterer.imagePath` are still used.
+*   TASK: Load the Google Maps marker clusterer on demand via AssetCollector
+    in partial LoadAssets instead of `page.includeJSFooterlibs`
+
 Version 13.1.1
 ==============
 

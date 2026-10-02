@@ -10,6 +10,9 @@ categories:
   Maps2.pages:
     label: 'Pages'
     parent: 'Maps2'
+  Maps2.markerClusterer:
+    label: 'Marker Clusterer'
+    parent: 'Maps2'
 
 settings:
   maps2.templateRootPath:
@@ -55,3 +58,10 @@ settings:
     description: 'Folder that stores all POIs'
     type: int
     default: 0
+
+  maps2.enableMarkerClusterer:
+    label: 'Enable Marker Clusterer'
+    category: 'Maps2.markerClusterer'
+    description: 'If you have a lot of POIs, nearby POIs will be joined to a single cluster icon with the amount of joined POIs as label. Applies to Google Maps and OpenStreetMap.'
+    type: bool
+    default: false

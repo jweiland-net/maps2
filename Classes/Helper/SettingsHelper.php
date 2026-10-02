@@ -60,6 +60,7 @@ readonly class SettingsHelper
         $settings['forceZoom'] = (bool)($settings['forceZoom'] ?? false);
 
         $this->prepareMapTileForOpenStreetMap($settings);
+        $this->prepareMarkerClusterer($settings);
         $this->prepareImagePathForMarkerClusterer($settings, $request);
 
         return $settings;
@@ -75,6 +76,27 @@ readonly class SettingsHelper
                 $settings['mapTile'],
             );
         }
+    }
+
+    /**
+     * The FlexForm of the maps2 plugin offers "markerClusterer.override" to enable ("1") or
+     * disable ("0") marker clustering per content element for all map providers. An empty
+     * value keeps the value of the site setting / TypoScript, which stays the source of truth.
+     */
+    protected function prepareMarkerClusterer(array &$settings): void
+    {
+        if (!is_array($settings['markerClusterer'] ?? null)) {
+            return;
+        }
+
+        $override = (string)($settings['markerClusterer']['override'] ?? '');
+        unset($settings['markerClusterer']['override']);
+
+        if ($override === '0' || $override === '1') {
+            $settings['markerClusterer']['enable'] = $override;
+        }
+
+        $settings['markerClusterer']['enable'] = (int)($settings['markerClusterer']['enable'] ?? 0);
     }
 
     protected function prepareImagePathForMarkerClusterer(array &$settings, ServerRequestInterface $request): void
