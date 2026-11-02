@@ -11,15 +11,19 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Tests\Unit\Service;
 
+use JWeiland\Maps2\Client\ClientError;
+use JWeiland\Maps2\Client\ClientErrorEnum;
+use JWeiland\Maps2\Client\ClientInterface;
+use JWeiland\Maps2\Client\ClientResult;
 use JWeiland\Maps2\Client\GoogleMapsClient;
 use JWeiland\Maps2\Client\Request\GoogleMaps\GeocodeRequest;
 use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Mapper\GoogleMapsMapper;
 use JWeiland\Maps2\Service\GeoCodeService;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 /**
@@ -27,13 +31,22 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
  */
 class GeoCodeServiceTest extends UnitTestCase
 {
+    private const RESPONSE = [
+        'results' => [
+            0 => [
+                'formatted_address' => 'My street 123, 12345 somewhere',
+            ],
+            1 => [
+                'formatted_address' => 'Other street 1, 12345 somewhere',
+            ],
+        ],
+    ];
+
     protected GeoCodeService $subject;
 
-    protected MockObject $mapProviderClient;
+    protected GoogleMapsClient|MockObject $mapProviderClient;
 
-    protected MockObject $mapperFactoryMock;
-
-    protected MockObject $gmGeocodeRequestMock;
+    protected GeocodeRequest|MockObject $gmGeocodeRequestMock;
 
     protected function setUp(): void
     {
@@ -62,111 +75,173 @@ class GeoCodeServiceTest extends UnitTestCase
         parent::tearDown();
     }
 
-    #[Test]
-    public function getPositionsByAddressWithEmptyAddressWillReturnEmptyObjectStorage(): void
+    public static function emptyAddressDataProvider(): array
     {
-        $objectStorage = new ObjectStorage();
-
-        $positions = $this->subject->getPositionsByAddress('');
-
-        self::assertSame(
-            $objectStorage->toArray(),
-            $positions->toArray(),
-        );
+        return [
+            'empty string' => [''],
+            'spaces only' => ['    '],
+        ];
     }
 
     #[Test]
-    public function getPositionsByAddressWithAddressFilledWithSpacesWillReturnEmptyObjectStorage(): void
+    #[DataProvider('emptyAddressDataProvider')]
+    public function getGeoCodeResultWithEmptyAddressWillReturnEmptyResultWithoutError(string $address): void
     {
-        $objectStorage = new ObjectStorage();
+        $this->mapProviderClient
+            ->expects($this->never())
+            ->method('getResult');
+        $this->mapProviderClient
+            ->expects($this->never())
+            ->method('processRequest');
 
-        $positions = $this->subject->getPositionsByAddress('    ');
+        $result = $this->subject->getGeoCodeResult($address);
 
+        self::assertCount(0, $result->positions);
+        self::assertNull($result->error);
+        self::assertFalse($result->hasError());
+        self::assertNull($result->getFirstPosition());
+    }
+
+    #[Test]
+    public function getGeoCodeResultWillReturnMappedPositions(): void
+    {
+        $this->mapProviderClient
+            ->expects($this->once())
+            ->method('getResult')
+            ->with($this->gmGeocodeRequestMock, 'My private address')
+            ->willReturn(new ClientResult(self::RESPONSE));
+
+        $result = $this->subject->getGeoCodeResult('My private address');
+
+        self::assertCount(2, $result->positions);
+        self::assertFalse($result->hasError());
         self::assertSame(
-            $objectStorage->toArray(),
-            $positions->toArray(),
+            'My street 123, 12345 somewhere',
+            $result->getFirstPosition()?->getFormattedAddress(),
+        );
+    }
+
+    public static function clientErrorDataProvider(): array
+    {
+        $dataSets = [];
+        foreach (ClientErrorEnum::cases() as $type) {
+            $dataSets[$type->name] = [new ClientError($type, 'Message of ' . $type->name, 'Title')];
+        }
+
+        return $dataSets;
+    }
+
+    #[Test]
+    #[DataProvider('clientErrorDataProvider')]
+    public function getGeoCodeResultWillPassThroughErrorOfClient(ClientError $error): void
+    {
+        $this->mapProviderClient
+            ->expects($this->once())
+            ->method('getResult')
+            ->willReturn(new ClientResult([], $error));
+
+        $result = $this->subject->getGeoCodeResult('My private address');
+
+        self::assertCount(0, $result->positions);
+        self::assertTrue($result->hasError());
+        self::assertSame($error, $result->error);
+        self::assertNull($result->getFirstPosition());
+    }
+
+    #[Test]
+    public function getGeoCodeResultWithClientNotExtendingAbstractClientWillUseProcessRequest(): void
+    {
+        $clientMock = $this->createMock(ClientInterface::class);
+        $clientMock
+            ->expects($this->once())
+            ->method('processRequest')
+            ->with($this->gmGeocodeRequestMock, 'My private address')
+            ->willReturn(self::RESPONSE);
+
+        $subject = new GeoCodeService($clientMock, $this->gmGeocodeRequestMock, new GoogleMapsMapper());
+        $result = $subject->getGeoCodeResult('My private address');
+
+        self::assertCount(2, $result->positions);
+        self::assertNull($result->error);
+    }
+
+    #[Test]
+    public function getGeoCodeResultWithClientNotExtendingAbstractClientWillReturnNoErrorForEmptyResponse(): void
+    {
+        $clientMock = $this->createMock(ClientInterface::class);
+        $clientMock
+            ->expects($this->once())
+            ->method('processRequest')
+            ->willReturn([]);
+
+        $subject = new GeoCodeService($clientMock, $this->gmGeocodeRequestMock, new GoogleMapsMapper());
+        $result = $subject->getGeoCodeResult('My private address');
+
+        self::assertCount(0, $result->positions);
+        self::assertNull($result->error);
+        self::assertFalse($result->hasError());
+    }
+
+    #[Test]
+    #[DataProvider('emptyAddressDataProvider')]
+    public function getPositionsByAddressWithEmptyAddressWillReturnEmptyObjectStorage(string $address): void
+    {
+        self::assertCount(
+            0,
+            $this->subject->getPositionsByAddress($address),
         );
     }
 
     #[Test]
     public function getPositionsByAddressWithEmptyResponseWillReturnEmptyObjectStorage(): void
     {
-        $address = 'test street 123, 12345 city';
-        $objectStorage = new ObjectStorage();
-
         $this->mapProviderClient
             ->expects($this->atLeastOnce())
-            ->method('processRequest')
+            ->method('getResult')
             ->with($this->gmGeocodeRequestMock)
-            ->willReturn([]);
+            ->willReturn(new ClientResult());
 
-        $positions = $this->subject->getPositionsByAddress($address);
-
-        self::assertSame(
-            $objectStorage->toArray(),
-            $positions->toArray(),
+        self::assertCount(
+            0,
+            $this->subject->getPositionsByAddress('test street 123, 12345 city'),
         );
     }
 
     #[Test]
     public function getPositionsByAddressWillReturnFilledObjectStorage(): void
     {
-        $positions = new ObjectStorage();
-        GeneralUtility::addInstance(ObjectStorage::class, $positions);
-
-        $response = [
-            'results' => [
-                0 => [
-                    'formatted_address' => 'My street 123, 12345 somewhere',
-                ],
-            ],
-        ];
-
         $this->mapProviderClient
             ->expects($this->atLeastOnce())
-            ->method('processRequest')
+            ->method('getResult')
             ->with($this->gmGeocodeRequestMock)
-            ->willReturn($response);
+            ->willReturn(new ClientResult(self::RESPONSE));
 
         self::assertCount(
-            1,
+            2,
             $this->subject->getPositionsByAddress('My private address'),
         );
     }
 
     #[Test]
-    public function getFirstFoundPositionByAddressWithEmptyAddressWillReturnNull(): void
+    #[DataProvider('emptyAddressDataProvider')]
+    public function getFirstFoundPositionByAddressWithEmptyAddressWillReturnNull(string $address): void
     {
-        $objectStorage = new ObjectStorage();
-        GeneralUtility::addInstance(ObjectStorage::class, $objectStorage);
-
         self::assertNull(
-            $this->subject->getFirstFoundPositionByAddress(''),
+            $this->subject->getFirstFoundPositionByAddress($address),
         );
     }
 
     #[Test]
-    public function getFirstFoundPositionByAddressWithAddressFilledWithSpacesWillReturnNull(): void
+    public function getFirstFoundPositionByAddressWithErrorWillReturnNull(): void
     {
-        $objectStorage = new ObjectStorage();
-        GeneralUtility::addInstance(ObjectStorage::class, $objectStorage);
-
-        self::assertNull(
-            $this->subject->getFirstFoundPositionByAddress('     '),
-        );
-    }
-
-    #[Test]
-    public function getFirstFoundPositionByAddressWithAddressWillReturnNull(): void
-    {
-        $objectStorage = new ObjectStorage();
-        GeneralUtility::addInstance(ObjectStorage::class, $objectStorage);
-
         $this->mapProviderClient
             ->expects($this->atLeastOnce())
-            ->method('processRequest')
+            ->method('getResult')
             ->with($this->gmGeocodeRequestMock)
-            ->willReturn([]);
+            ->willReturn(new ClientResult(
+                [],
+                new ClientError(ClientErrorEnum::NO_POSITIONS_FOUND, 'Nothing found', 'Error'),
+            ));
 
         self::assertNull(
             $this->subject->getFirstFoundPositionByAddress('My private address'),
@@ -174,27 +249,16 @@ class GeoCodeServiceTest extends UnitTestCase
     }
 
     #[Test]
-    public function getFirstFoundPositionByAddressWillReturnRadiusResult(): void
+    public function getFirstFoundPositionByAddressWillReturnFirstPosition(): void
     {
         $expectedPosition = new Position();
         $expectedPosition->setFormattedAddress('My street 123, 12345 somewhere');
 
-        $objectStorage = new ObjectStorage();
-        GeneralUtility::addInstance(ObjectStorage::class, $objectStorage);
-
-        $response = [
-            'results' => [
-                0 => [
-                    'formatted_address' => 'My street 123, 12345 somewhere',
-                ],
-            ],
-        ];
-
         $this->mapProviderClient
             ->expects($this->atLeastOnce())
-            ->method('processRequest')
+            ->method('getResult')
             ->with($this->gmGeocodeRequestMock)
-            ->willReturn($response);
+            ->willReturn(new ClientResult(self::RESPONSE));
 
         self::assertEquals(
             $expectedPosition,

@@ -13,7 +13,6 @@ namespace JWeiland\Maps2\Client;
 
 use JWeiland\Maps2\Configuration\MapProviderEnum;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
-use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
@@ -31,29 +30,24 @@ readonly class OpenStreetMapClient extends AbstractClient
         return $mapProvider === MapProviderEnum::OPEN_STREET_MAP;
     }
 
-    protected function checkResponseForErrors(?array $processedResponse): void
+    protected function getResponseError(?array $processedResponse): ?ClientError
     {
         if ($processedResponse === null) {
-            $this->messageHelper->addFlashMessage(
+            return new ClientError(
+                ClientErrorEnum::INVALID_RESPONSE,
                 'The response of Open Street Map was not a valid JSON response.',
                 'Invalid JSON response',
-                ContextualFeedbackSeverity::ERROR,
-            );
-        } elseif ($processedResponse === []) {
-            $this->messageHelper->addFlashMessage(
-                LocalizationUtility::translate(
-                    'error.noPositionsFound.body',
-                    'maps2',
-                    [
-                        0 => self::TITLE,
-                    ],
-                ),
-                LocalizationUtility::translate(
-                    'error.noPositionsFound.title',
-                    'maps2',
-                ),
-                ContextualFeedbackSeverity::ERROR,
             );
         }
+
+        if ($processedResponse === []) {
+            return new ClientError(
+                ClientErrorEnum::NO_POSITIONS_FOUND,
+                LocalizationUtility::translate('error.noPositionsFound.body', 'maps2', [0 => self::TITLE]) ?? '',
+                LocalizationUtility::translate('error.noPositionsFound.title', 'maps2') ?? '',
+            );
+        }
+
+        return null;
     }
 }

@@ -27,6 +27,52 @@ getPositionsByAddress
 Give it an address (string) as first argument and you will get all found results
 from geocoding service as Position object in an ObjectStorage.
 
+getGeoCodeResult
+----------------
+
+Same as ``getPositionsByAddress``, but returns a ``GeoCodeResult`` value object
+containing the found positions or the error, why the address could not be
+geocoded. Use it, if you want to show a meaningful message to your users.
+
+``$result->error->type`` is a case of the provider independent enum
+``\JWeiland\Maps2\Client\ClientErrorEnum``:
+
+``NO_POSITIONS_FOUND``
+    The map provider did not find the address. Ask the user to check the
+    input.
+
+``REQUEST_DENIED``
+    The map provider rejected the request, e.g. because of an invalid API key or
+    because the API key is restricted to other IP addresses.
+
+``QUOTA_EXCEEDED``
+    The request limit or the quota of the map provider was exceeded.
+
+``INVALID_REQUEST``
+    The map provider did not accept the request.
+
+``INVALID_RESPONSE``
+    The response of the map provider is not valid JSON.
+
+``SERVICE_ERROR``
+    The map provider could not be reached or answered with an unknown error.
+
+Only ``NO_POSITIONS_FOUND`` is caused by the user input. ``$result->error->message``
+contains the technical message of the map provider. Please don't show it to
+frontend users, as it may contain sensitive data like the IP address of your
+server.
+
+..  code-block:: php
+
+    $result = $this->geoCodeService->getGeoCodeResult($address);
+    $position = $result->getFirstPosition();
+    if ($position === null) {
+        $message = match ($result->error?->type) {
+            ClientErrorEnum::NO_POSITIONS_FOUND => 'Please check your address',
+            default => 'Address lookup is currently not possible',
+        };
+    }
+
 MapService
 ==========
 
