@@ -11,9 +11,13 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Service;
 
+use JWeiland\Maps2\Client\AbstractClient;
 use JWeiland\Maps2\Client\ClientFactory;
 use JWeiland\Maps2\Client\ClientInterface;
+use JWeiland\Maps2\Client\ClientResult;
 use JWeiland\Maps2\Client\Request\RequestFactory;
+use JWeiland\Maps2\Client\Request\RequestInterface;
+use JWeiland\Maps2\Domain\Model\GeoCodeResult;
 use JWeiland\Maps2\Domain\Model\Position;
 use JWeiland\Maps2\Mapper\MapperFactory;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
@@ -40,40 +44,39 @@ class GeoCodeService implements SingletonInterface
     }
 
     /**
-     * @return ObjectStorage|Position[]
-     * @throws \Exception
+     * Returns all found positions of the address or the error, why the
+     * address could not be geocoded.
      */
-    public function getPositionsByAddress(string $address): ObjectStorage
+    public function getGeoCodeResult(string $address): GeoCodeResult
     {
-        $positions = new ObjectStorage();
-
         // Prevent calls to Map Providers GeoCode API, if address is empty
         if (trim($address) === '') {
-            return $positions;
+            return new GeoCodeResult();
         }
 
         $geocodeRequest = $this->requestFactory->create('GeocodeRequest');
         $geocodeRequest->addParameter('address', $address);
 
-        $response = $this->client->processRequest($geocodeRequest);
-        if ($response !== []) {
-            $positions = $this->mapperFactory->create()->map($response);
+        $clientResult = $this->getClientResult($geocodeRequest);
+        if ($clientResult->response === []) {
+            return new GeoCodeResult(error: $clientResult->error);
         }
 
-        return $positions;
+        return new GeoCodeResult($this->mapperFactory->create()->map($clientResult->response));
+    }
+
+    /**
+     * @return ObjectStorage|Position[]
+     * @throws \Exception
+     */
+    public function getPositionsByAddress(string $address): ObjectStorage
+    {
+        return $this->getGeoCodeResult($address)->positions;
     }
 
     public function getFirstFoundPositionByAddress(string $address): ?Position
     {
-        $position = null;
-        $positions = $this->getPositionsByAddress($address);
-        if ($positions->count() !== 0) {
-            $positions->rewind();
-            /** @var Position $position */
-            $position = $positions->current();
-        }
-
-        return $position;
+        return $this->getGeoCodeResult($address)->getFirstPosition();
     }
 
     public function hasErrors(): bool
@@ -87,5 +90,17 @@ class GeoCodeService implements SingletonInterface
     public function getErrors(): array
     {
         return $this->client->getErrors();
+    }
+
+    /**
+     * Custom clients implementing ClientInterface only can not return an error
+     */
+    protected function getClientResult(RequestInterface $geocodeRequest): ClientResult
+    {
+        if ($this->client instanceof AbstractClient) {
+            return $this->client->getResult($geocodeRequest);
+        }
+
+        return new ClientResult($this->client->processRequest($geocodeRequest));
     }
 }
