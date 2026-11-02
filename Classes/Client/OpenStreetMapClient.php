@@ -11,7 +11,6 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Client;
 
-use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
@@ -21,29 +20,24 @@ class OpenStreetMapClient extends AbstractClient
 {
     protected string $title = 'Open Street Map';
 
-    protected function checkResponseForErrors(?array $processedResponse): void
+    protected function getResponseError(?array $processedResponse): ?ClientError
     {
         if ($processedResponse === null) {
-            $this->messageHelper->addFlashMessage(
+            return new ClientError(
+                ClientErrorEnum::INVALID_RESPONSE,
                 'The response of Open Street Map was not a valid JSON response.',
                 'Invalid JSON response',
-                ContextualFeedbackSeverity::ERROR,
-            );
-        } elseif ($processedResponse === []) {
-            $this->messageHelper->addFlashMessage(
-                LocalizationUtility::translate(
-                    'error.noPositionsFound.body',
-                    'maps2',
-                    [
-                        0 => $this->title,
-                    ],
-                ),
-                LocalizationUtility::translate(
-                    'error.noPositionsFound.title',
-                    'maps2',
-                ),
-                ContextualFeedbackSeverity::ERROR,
             );
         }
+
+        if ($processedResponse === []) {
+            return new ClientError(
+                ClientErrorEnum::NO_POSITIONS_FOUND,
+                LocalizationUtility::translate('error.noPositionsFound.body', 'maps2', [0 => $this->title]) ?? '',
+                LocalizationUtility::translate('error.noPositionsFound.title', 'maps2') ?? '',
+            );
+        }
+
+        return null;
     }
 }

@@ -7,6 +7,28 @@
 ChangeLog
 =========
 
+Version 12.2.1
+===============
+
+*   BUGFIX: Add `GeoCodeService::getGeoCodeResult()`, which returns the found
+    positions or an error with the provider independent enum `ClientErrorEnum`.
+    Extensions can now tell a not found address apart from a rejected request
+    (e.g. an API key restricted to other IP addresses), an exceeded quota or an
+    unreachable map provider, without parsing the English messages of the map
+    provider.
+*   DEPRECATION: `AbstractClient::checkResponseForErrors()` is not abstract
+    anymore and will be removed with the next major version. Custom clients
+    should implement `getResponseError()` instead. `GeoCodeService` calls
+    `AbstractClient::getResult()` now. If your custom client overrides
+    `processRequest()`, override `getResult()` instead.
+*   BUGFIX: Do not throw an exception, if the map provider answers with a HTTP
+    status code 4xx/5xx or can not be reached. An error message will be added
+    instead.
+*   BUGFIX: Add an error message instead of throwing a `JsonException`, if the
+    map provider returns invalid JSON
+*   BUGFIX: Do not add the request URI to error messages, as it contains the
+    API key
+
 Version 12.2.0
 ===============
 
