@@ -11,16 +11,20 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Tests\Functional\Client;
 
+use JWeiland\Maps2\Client\ClientError;
+use JWeiland\Maps2\Client\ClientErrorEnum;
 use JWeiland\Maps2\Client\OpenStreetMapClient;
 use JWeiland\Maps2\Client\Request\OpenStreetMap\GeocodeRequest;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Helper\MessageHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
 use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Http\RequestFactory;
+use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Http\Uri;
 use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
@@ -194,6 +198,108 @@ class OpenStreetMapClientTest extends FunctionalTestCase
                 'status' => 'OK',
             ],
             $this->subject->processRequest($geocodeRequest, '12345'),
+        );
+    }
+
+    #[Test]
+    public function getResultWithResultsWillReturnResponseWithoutError(): void
+    {
+        $response = [
+            [
+                'lat' => '48.6609',
+                'lon' => '9.2193',
+                'display_name' => 'Filderstadt, Germany',
+            ],
+        ];
+
+        $this->requestFactoryMock
+            ->expects($this->once())
+            ->method('request')
+            ->willReturn(new JsonResponse($response, 200));
+
+        $this->messageHelperMock
+            ->expects($this->never())
+            ->method('addFlashMessage');
+
+        $result = $this->subject->getResult(new GeocodeRequest(new ExtConf()), 'Filderstadt');
+
+        self::assertSame($response, $result->response);
+        self::assertNull($result->error);
+        self::assertFalse($result->hasError());
+    }
+
+    #[Test]
+    public function getResultWithEmptyResultWillReturnNoPositionsFoundError(): void
+    {
+        $this->requestFactoryMock
+            ->expects($this->once())
+            ->method('request')
+            ->willReturn(new JsonResponse([], 200));
+
+        $this->messageHelperMock
+            ->expects($this->once())
+            ->method('addFlashMessage')
+            ->with(
+                'Open Street Map can\'t find any position. Please check your input and try again',
+                'No positions found',
+                ContextualFeedbackSeverity::ERROR,
+            );
+
+        $result = $this->subject->getResult(new GeocodeRequest(new ExtConf()), 'Filderstadt');
+
+        self::assertSame([], $result->response);
+        self::assertTrue($result->hasError());
+        self::assertEquals(
+            new ClientError(
+                ClientErrorEnum::NO_POSITIONS_FOUND,
+                'Open Street Map can\'t find any position. Please check your input and try again',
+                'No positions found',
+            ),
+            $result->error,
+        );
+    }
+
+    public static function invalidJsonDataProvider(): array
+    {
+        return [
+            'HTML instead of JSON' => ['<html lang="en"><body>Error</body></html>'],
+            'empty body' => [''],
+            'broken JSON' => ['[{"lat": "48.6609"'],
+            'JSON string instead of array' => ['"OK"'],
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('invalidJsonDataProvider')]
+    public function getResultWithInvalidJsonWillReturnInvalidResponseError(string $body): void
+    {
+        $response = new Response();
+        $response->getBody()->write($body);
+
+        $this->requestFactoryMock
+            ->expects($this->once())
+            ->method('request')
+            ->willReturn($response);
+
+        $this->messageHelperMock
+            ->expects($this->once())
+            ->method('addFlashMessage')
+            ->with(
+                'The response of Open Street Map was not a valid JSON response.',
+                'Invalid JSON response',
+                ContextualFeedbackSeverity::ERROR,
+            );
+
+        $result = $this->subject->getResult(new GeocodeRequest(new ExtConf()), 'Filderstadt');
+
+        self::assertSame([], $result->response);
+        self::assertEquals(
+            new ClientError(
+                ClientErrorEnum::INVALID_RESPONSE,
+                'The response of Open Street Map was not a valid JSON response.',
+                'Invalid JSON response',
+            ),
+            $result->error,
         );
     }
 }

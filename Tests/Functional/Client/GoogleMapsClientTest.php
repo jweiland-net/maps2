@@ -11,16 +11,20 @@ declare(strict_types=1);
 
 namespace JWeiland\Maps2\Tests\Functional\Client;
 
+use JWeiland\Maps2\Client\ClientError;
+use JWeiland\Maps2\Client\ClientErrorEnum;
 use JWeiland\Maps2\Client\GoogleMapsClient;
 use JWeiland\Maps2\Client\Request\GoogleMaps\GeocodeRequest;
 use JWeiland\Maps2\Configuration\ExtConf;
 use JWeiland\Maps2\Helper\MessageHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
 use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Http\RequestFactory;
+use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Http\Uri;
 use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
@@ -85,10 +89,6 @@ class GoogleMapsClientTest extends FunctionalTestCase
     #[Test]
     public function processRequestWillAddFlashMessageBecauseOfClientError(): void
     {
-        $geocodeRequest = new GeocodeRequest(new ExtConf(
-            googleMapsGeocodeApiKey: 'ApiKey',
-        ));
-
         $this->requestFactoryMock
             ->expects($this->atLeastOnce())
             ->method('request')
@@ -108,17 +108,13 @@ class GoogleMapsClientTest extends FunctionalTestCase
 
         self::assertSame(
             [],
-            $this->subject->processRequest($geocodeRequest, 'Filderstadt'),
+            $this->subject->processRequest($this->createGeocodeRequest(), 'Filderstadt'),
         );
     }
 
     #[Test]
     public function processRequestWillAddFlashMessageBecauseOfZeroResults(): void
     {
-        $geocodeRequest = new GeocodeRequest(new ExtConf(
-            googleMapsGeocodeApiKey: 'ApiKey',
-        ));
-
         $this->requestFactoryMock
             ->expects($this->atLeastOnce())
             ->method('request')
@@ -141,21 +137,16 @@ class GoogleMapsClientTest extends FunctionalTestCase
                 ContextualFeedbackSeverity::ERROR,
             );
 
+        // The response is empty now, even if the flash message queue is mocked
         self::assertSame(
-            [
-                'status' => 'ZERO_RESULTS',
-            ],
-            $this->subject->processRequest($geocodeRequest, 'Filderstadt'),
+            [],
+            $this->subject->processRequest($this->createGeocodeRequest(), 'Filderstadt'),
         );
     }
 
     #[Test]
     public function processRequestWillAddFlashMessageBecauseOfOtherErrors(): void
     {
-        $geocodeRequest = new GeocodeRequest(new ExtConf(
-            googleMapsGeocodeApiKey: 'ApiKey',
-        ));
-
         $this->requestFactoryMock
             ->expects($this->atLeastOnce())
             ->method('request')
@@ -180,21 +171,14 @@ class GoogleMapsClientTest extends FunctionalTestCase
             );
 
         self::assertSame(
-            [
-                'status' => 'INVALID_API_KEY',
-                'error_message' => 'Invalid API key',
-            ],
-            $this->subject->processRequest($geocodeRequest, 'Filderstadt'),
+            [],
+            $this->subject->processRequest($this->createGeocodeRequest(), 'Filderstadt'),
         );
     }
 
     #[Test]
     public function processRequestWillRawUrlEncodeAddress(): void
     {
-        $geocodeRequest = new GeocodeRequest(new ExtConf(
-            googleMapsGeocodeApiKey: 'ApiKey',
-        ));
-
         $this->requestFactoryMock
             ->expects($this->atLeastOnce())
             ->method('request')
@@ -212,17 +196,13 @@ class GoogleMapsClientTest extends FunctionalTestCase
             [
                 'status' => 'OK',
             ],
-            $this->subject->processRequest($geocodeRequest, 'Köln Bonn'),
+            $this->subject->processRequest($this->createGeocodeRequest(), 'Köln Bonn'),
         );
     }
 
     #[Test]
     public function processRequestWillAddDefaultCountryForZipAddress(): void
     {
-        $geocodeRequest = new GeocodeRequest(new ExtConf(
-            googleMapsGeocodeApiKey: 'ApiKey',
-        ));
-
         $this->requestFactoryMock
             ->expects($this->atLeastOnce())
             ->method('request')
@@ -240,7 +220,183 @@ class GoogleMapsClientTest extends FunctionalTestCase
             [
                 'status' => 'OK',
             ],
-            $this->subject->processRequest($geocodeRequest, '12345'),
+            $this->subject->processRequest($this->createGeocodeRequest(), '12345'),
         );
+    }
+
+    #[Test]
+    public function getResultWithStatusOkWillReturnResponseWithoutError(): void
+    {
+        $this->requestFactoryMock
+            ->expects($this->once())
+            ->method('request')
+            ->willReturn(new JsonResponse(['status' => 'OK', 'results' => []], 200));
+
+        $this->messageHelperMock
+            ->expects($this->never())
+            ->method('addFlashMessage');
+
+        $result = $this->subject->getResult($this->createGeocodeRequest(), 'Filderstadt');
+
+        self::assertSame(
+            ['status' => 'OK', 'results' => []],
+            $result->response,
+        );
+        self::assertNull($result->error);
+        self::assertFalse($result->hasError());
+    }
+
+    #[Test]
+    public function getResultWithZeroResultsWillReturnNoPositionsFoundError(): void
+    {
+        $this->requestFactoryMock
+            ->expects($this->once())
+            ->method('request')
+            ->willReturn(new JsonResponse(['status' => 'ZERO_RESULTS'], 200));
+
+        $this->messageHelperMock
+            ->expects($this->once())
+            ->method('addFlashMessage')
+            ->with(
+                'Google Maps can\'t find any position. Please check your input and try again',
+                'No positions found',
+                ContextualFeedbackSeverity::ERROR,
+            );
+
+        $result = $this->subject->getResult($this->createGeocodeRequest(), 'Filderstadt');
+
+        self::assertSame([], $result->response);
+        self::assertTrue($result->hasError());
+        self::assertEquals(
+            new ClientError(
+                ClientErrorEnum::NO_POSITIONS_FOUND,
+                'Google Maps can\'t find any position. Please check your input and try again',
+                'No positions found',
+            ),
+            $result->error,
+        );
+    }
+
+    public static function googleErrorStatusDataProvider(): array
+    {
+        return [
+            'REQUEST_DENIED' => ['REQUEST_DENIED', ClientErrorEnum::REQUEST_DENIED],
+            'OVER_QUERY_LIMIT' => ['OVER_QUERY_LIMIT', ClientErrorEnum::QUOTA_EXCEEDED],
+            'OVER_DAILY_LIMIT' => ['OVER_DAILY_LIMIT', ClientErrorEnum::QUOTA_EXCEEDED],
+            'INVALID_REQUEST' => ['INVALID_REQUEST', ClientErrorEnum::INVALID_REQUEST],
+            'UNKNOWN_ERROR' => ['UNKNOWN_ERROR', ClientErrorEnum::SERVICE_ERROR],
+            'unknown status' => ['FOO_BAR', ClientErrorEnum::SERVICE_ERROR],
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('googleErrorStatusDataProvider')]
+    public function getResultWithErrorStatusWillReturnError(string $status, ClientErrorEnum $expectedType): void
+    {
+        $this->requestFactoryMock
+            ->expects($this->once())
+            ->method('request')
+            ->willReturn(new JsonResponse(
+                [
+                    'status' => $status,
+                    'error_message' => 'Message of Google Maps',
+                ],
+                200,
+            ));
+
+        $this->messageHelperMock
+            ->expects($this->once())
+            ->method('addFlashMessage')
+            ->with(
+                'Message of Google Maps',
+                'Error',
+                ContextualFeedbackSeverity::ERROR,
+            );
+
+        $result = $this->subject->getResult($this->createGeocodeRequest(), 'Filderstadt');
+
+        self::assertSame([], $result->response);
+        self::assertEquals(
+            new ClientError($expectedType, 'Message of Google Maps', 'Error'),
+            $result->error,
+        );
+    }
+
+    #[Test]
+    #[DataProvider('googleErrorStatusDataProvider')]
+    public function getResultWithErrorStatusWithoutErrorMessageWillUseStatusAsMessage(
+        string $status,
+        ClientErrorEnum $expectedType,
+    ): void {
+        $this->requestFactoryMock
+            ->expects($this->once())
+            ->method('request')
+            ->willReturn(new JsonResponse(['status' => $status], 200));
+
+        $this->messageHelperMock
+            ->expects($this->once())
+            ->method('addFlashMessage')
+            ->with(
+                $status,
+                'Error',
+                ContextualFeedbackSeverity::ERROR,
+            );
+
+        self::assertEquals(
+            new ClientError($expectedType, $status, 'Error'),
+            $this->subject->getResult($this->createGeocodeRequest(), 'Filderstadt')->error,
+        );
+    }
+
+    public static function invalidJsonDataProvider(): array
+    {
+        return [
+            'HTML instead of JSON' => ['<html lang="en"><body>Error</body></html>'],
+            'empty body' => [''],
+            'broken JSON' => ['{"status": "OK"'],
+            'JSON string instead of object' => ['"OK"'],
+            'JSON number instead of object' => ['123'],
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('invalidJsonDataProvider')]
+    public function getResultWithInvalidJsonWillReturnInvalidResponseError(string $body): void
+    {
+        $response = new Response();
+        $response->getBody()->write($body);
+
+        $this->requestFactoryMock
+            ->expects($this->once())
+            ->method('request')
+            ->willReturn($response);
+
+        $this->messageHelperMock
+            ->expects($this->once())
+            ->method('addFlashMessage')
+            ->with(
+                'The response of Google Maps was not a valid JSON response.',
+                'Invalid JSON response',
+                ContextualFeedbackSeverity::ERROR,
+            );
+
+        $result = $this->subject->getResult($this->createGeocodeRequest(), 'Filderstadt');
+
+        self::assertSame([], $result->response);
+        self::assertEquals(
+            new ClientError(
+                ClientErrorEnum::INVALID_RESPONSE,
+                'The response of Google Maps was not a valid JSON response.',
+                'Invalid JSON response',
+            ),
+            $result->error,
+        );
+    }
+
+    private function createGeocodeRequest(): GeocodeRequest
+    {
+        return new GeocodeRequest(new ExtConf(
+            googleMapsGeocodeApiKey: 'ApiKey',
+        ));
     }
 }
