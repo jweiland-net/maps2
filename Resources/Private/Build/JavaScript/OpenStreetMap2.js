@@ -564,29 +564,52 @@ class OpenStreetMap2 {
    */
   addEditListeners(mapContainer, marker, poiCollection) {
     marker.on('dragend', () => {
-      let lat = marker.getLatLng().lat.toFixed(6);
-      let lng = marker.getLatLng().lng.toFixed(6);
-      mapContainer
-        .previousElementSibling
-        ?.querySelector(`input.latitude-${this.getContentRecord().uid}`)
-        .setAttribute("value", lat);
-      mapContainer
-        .previousElementSibling
-        ?.querySelector(`input.longitude-${this.getContentRecord().uid}`)
-        .setAttribute("value", lng);
+      this.updateEditFields(mapContainer, marker.getLatLng().lat, marker.getLatLng().lng);
     });
 
     this.map.on('click', (event) => {
       marker.setLatLng(event.latlng);
-      mapContainer
-        .previousElementSibling
-        ?.querySelector(`input.latitude-${this.getContentRecord().uid}`)
-        .setAttribute("value", event.latlng.lat.toFixed(6));
-      mapContainer
-        .previousElementSibling
-        ?.querySelector(`input.longitude-${this.getContentRecord().uid}`)
-        .setAttribute("value", event.latlng.lng.toFixed(6));
+      this.updateEditFields(mapContainer, event.latlng.lat, event.latlng.lng);
     });
+  }
+
+  /**
+   * Update the latitude/longitude form fields which precede the map container
+   *
+   * @param {HTMLElement} mapContainer
+   * @param {number} lat
+   * @param {number} lng
+   */
+  updateEditFields(mapContainer, lat, lng) {
+    const contentUid = this.getContentRecord().uid;
+    const latitudeField = this.findPreviousInput(mapContainer, `latitude-${contentUid}`);
+    const longitudeField = this.findPreviousInput(mapContainer, `longitude-${contentUid}`);
+
+    if (latitudeField !== null) {
+      latitudeField.value = lat.toFixed(6);
+    }
+    if (longitudeField !== null) {
+      longitudeField.value = lng.toFixed(6);
+    }
+  }
+
+  /**
+   * Returns the nearest preceding sibling input with the given class, or null
+   *
+   * @param {HTMLElement} mapContainer
+   * @param {string} className
+   * @returns {HTMLInputElement|null}
+   */
+  findPreviousInput(mapContainer, className) {
+    let sibling = mapContainer.previousElementSibling;
+    while (sibling !== null) {
+      if (sibling.matches(`input.${className}`)) {
+        return sibling;
+      }
+      sibling = sibling.previousElementSibling;
+    }
+
+    return null;
   }
 
   /**
