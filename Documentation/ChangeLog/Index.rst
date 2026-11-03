@@ -7,6 +7,14 @@
 ChangeLog
 =========
 
+Version 12.2.2
+==============
+
+*   BUGFIX: Update the latitude and longitude fields of the frontend edit maps
+    of GoogleMaps2 and OpenStreetMap2 again, when dragging the marker or
+    clicking into the map. Only the fields of the respective map are updated,
+    so forms with several maps keep the coordinates of the other maps.
+
 Version 12.2.1
 ===============
 
