@@ -674,8 +674,7 @@ class GoogleMaps2 {
   };
 
   /**
-   * Vanilla JS replacement for jQuery prevAll(): returns the nearest
-   * preceding sibling input with the given class, or null
+   * Returns the nearest preceding sibling input with the given class, or null
    *
    * @param {HTMLElement} mapContainer
    * @param {string} className
