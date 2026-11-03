@@ -740,19 +740,58 @@ class GoogleMaps2 {
    * @param environment
    */
   addEditListeners = (mapContainer, marker, poiCollection, environment) => {
+    const contentUid = environment.contentRecord.uid;
+
     google.maps.event.addListener(marker, 'dragend', () => {
-      let position = marker.position;
-      let lat = (typeof position.lat === 'function' ? position.lat() : position.lat).toFixed(6);
-      let lng = (typeof position.lng === 'function' ? position.lng() : position.lng).toFixed(6);
-      mapContainer.prevAll("input.latitude-" + environment.contentRecord.uid).val(lat);
-      mapContainer.prevAll("input.longitude-" + environment.contentRecord.uid).val(lng);
+      const position = marker.position;
+      const lat = typeof position.lat === 'function' ? position.lat() : position.lat;
+      const lng = typeof position.lng === 'function' ? position.lng() : position.lng;
+      this.updateEditFields(mapContainer, contentUid, lat, lng);
     });
 
-    google.maps.event.addListener(this.map, 'click', event => {
+    google.maps.event.addListener(this.map, 'click', (event) => {
       marker.position = event.latLng;
-      mapContainer.prevAll("input.latitude-" + environment.contentRecord.uid).val(event.latLng.lat().toFixed(6));
-      mapContainer.prevAll("input.longitude-" + environment.contentRecord.uid).val(event.latLng.lng().toFixed(6));
+      this.updateEditFields(mapContainer, contentUid, event.latLng.lat(), event.latLng.lng());
     });
+  };
+
+  /**
+   * Update the latitude/longitude form fields which precede the map container
+   *
+   * @param {HTMLElement} mapContainer
+   * @param {number} contentUid
+   * @param {number} lat
+   * @param {number} lng
+   */
+  updateEditFields = (mapContainer, contentUid, lat, lng) => {
+    const latitudeField = this.findPreviousInput(mapContainer, `latitude-${contentUid}`);
+    const longitudeField = this.findPreviousInput(mapContainer, `longitude-${contentUid}`);
+
+    if (latitudeField !== null) {
+      latitudeField.value = lat.toFixed(6);
+    }
+    if (longitudeField !== null) {
+      longitudeField.value = lng.toFixed(6);
+    }
+  };
+
+  /**
+   * Returns the nearest preceding sibling input with the given class, or null
+   *
+   * @param {HTMLElement} mapContainer
+   * @param {string} className
+   * @returns {HTMLInputElement|null}
+   */
+  findPreviousInput = (mapContainer, className) => {
+    let sibling = mapContainer.previousElementSibling;
+    while (sibling !== null) {
+      if (sibling.matches(`input.${className}`)) {
+        return sibling;
+      }
+      sibling = sibling.previousElementSibling;
+    }
+
+    return null;
   };
 }
 
