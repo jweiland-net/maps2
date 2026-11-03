@@ -11,22 +11,20 @@ All values will be trimmed.
 General properties
 ==================
 
-..  t3-field-list-table::
-    :header-rows: 1
+..  confval-menu::
+    :name: confval-trim-explode
+    :display: table
+    :required:
+    :type:
+    :default:
 
--   :Name: Name:
-    :Type: Type:
-        :Description: Description:
-        :Default value: Default value:
+..  confval:: delimiter
+    :name: trim-explode-delimiter
+    :required: false
+    :type: string
+    :default: ,
 
--   :Name:
-    \* delimiter
-    :Type:
-        string
-    :Description:
-        Delimiter
-    :Default value:
-        ,
+    Delimiter
 
 Examples
 ========
