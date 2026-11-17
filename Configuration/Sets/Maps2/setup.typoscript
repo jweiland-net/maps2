@@ -59,3 +59,6 @@ plugin.tx_maps2 {
     }
   }
 }
+
+# Register the form element "Maps2PoiPosition" for forms based on EXT:form
+plugin.tx_form.settings.yamlConfigurations.1763380200 = EXT:maps2/Configuration/Form/FormSetup.yaml

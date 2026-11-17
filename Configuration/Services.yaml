@@ -73,6 +73,14 @@ services:
   JWeiland\Maps2\Hook\CreateMaps2RecordHook:
     public: true
 
+  # Called by makeInstance in EXT:form
+  JWeiland\Maps2\Hook\Form\NormalizePoiPositionHook:
+    public: true
+
+  # Called by makeInstance in EXT:form
+  JWeiland\Maps2\Hook\Form\PoiPositionMapHook:
+    public: true
+
   # Called by makeInstance in PoiCollection model to add foreign records
   JWeiland\Maps2\Service\MapService:
     public: true

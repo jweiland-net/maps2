@@ -13,6 +13,8 @@ use JWeiland\Maps2\Form\Element\ReadOnlyInputTextElement;
 use JWeiland\Maps2\Form\FieldInformation\InfoWindowContent;
 use JWeiland\Maps2\Form\Resolver\MapProviderResolver;
 use JWeiland\Maps2\Hook\CreateMaps2RecordHook;
+use JWeiland\Maps2\Hook\Form\NormalizePoiPositionHook;
+use JWeiland\Maps2\Hook\Form\PoiPositionMapHook;
 use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
 if (!defined('TYPO3')) {
@@ -95,4 +97,11 @@ call_user_func(static function (): void {
         'priority' => 40,
         'class' => MapProviderResolver::class,
     ];
+
+    // Normalize the submitted position of the EXT:form element "Maps2PoiPosition"
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/form']['afterSubmit'][1763380100]
+        = NormalizePoiPositionHook::class;
+    // Prepare the map of the EXT:form element "Maps2PoiPosition"
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/form']['beforeRendering'][1763380101]
+        = PoiPositionMapHook::class;
 });
