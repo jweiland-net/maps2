@@ -15,7 +15,8 @@ Version 12.3.0
     correct a geocoded position. The value is an array with `latitude` and
     `longitude`. The element respects the consent for requests to the map
     provider and renders the position as text on the summary page. See
-    :ref:`developer-form-element`.
+    :ref:`configuration-form-element` for the configuration and
+    :ref:`developer-form-element` for the integration in your extension.
 *   TASK: The marker of the frontend edit maps of GoogleMaps2 and
     OpenStreetMap2 shows the title of the POI collection on mouse over.
 

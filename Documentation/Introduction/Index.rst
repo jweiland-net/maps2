@@ -17,6 +17,11 @@ maps2 is an extension for TYPO3 CMS. It can render you a map based on Google Map
 want, you can create Markers, Routes, Area and Radius overlays. Assign these overlays to categories to
 build a map, with all points based on selected category.
 
+For forms based on the TYPO3 form framework (EXT:form), maps2 provides the
+form element `Maps2PoiPosition`. It shows a map with a draggable marker, so
+frontend users can correct the position of a geocoded address. See
+:ref:`configuration-form-element`.
+
 
 ..  _screenshots:
 

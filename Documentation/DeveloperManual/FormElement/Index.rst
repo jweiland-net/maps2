@@ -1,291 +1,570 @@
+:navigation-title: Form element
+
 ..  include:: /Includes.rst.txt
-
-
 ..  _developer-form-element:
 
-=====================================
-Form element "Maps2PoiPosition"
-=====================================
+======================================================
+Integrate the form element "Maps2PoiPosition" in code
+======================================================
 
-The form element `Maps2PoiPosition` adds a map with a draggable marker
-to forms based on EXT:form. Frontend users can correct a position, which
-was found by geocoding an address. Dragging the marker or clicking into the
-map moves the marker and updates the position.
+..  versionadded:: 12.3.0
 
-The element does not geocode and does not store anything. Your extension
-sets the initial position (e.g. in a form hook after geocoding) and stores
-the submitted position (e.g. in a finisher).
+    maps2 provides the form element `Maps2PoiPosition` for forms based on
+    the TYPO3 form framework (EXT:form).
+
+The form element `Maps2PoiPosition` shows a map with a draggable marker,
+so frontend users can correct a position, which your extension has found
+by geocoding an address. The chapter :ref:`configuration-form-element`
+describes the requirements, the properties and the output of the element.
+
+This chapter is for developers of extensions, which use the element. It
+describes the value of the element, its validation and a complete example:
+a form, which geocodes the entered address and stores the corrected
+position.
 
 ..  contents::
     :local:
 
 
-Requirements
-============
+..  _developer-form-element-responsibilities:
 
-*   EXT:form (`typo3/cms-form`) is installed.
-*   The site set "Maps2 - Default Set" (`jweiland/maps2-default`) is
-    included, directly or as dependency of the sets
-    `jweiland/maps2-googlemaps` or `jweiland/maps2-openstreetmap`.
-    It registers the form setup
-    `EXT:maps2/Configuration/Form/FormSetup.yaml` with
-    `plugin.tx_form.settings.yamlConfigurations.1763380200`.
+Tasks of maps2 and of your extension
+====================================
 
-The element is not available in the backend form editor. Use it in form
-definitions, which are shipped as YAML files by your extension.
+maps2 renders the map, writes the position of the marker into the form and
+validates the submitted position.
+
+Your extension
+
+*   ships the form definition with the element,
+*   sets the initial position, for example after geocoding an address,
+*   stores the submitted position, for example in a finisher.
 
 
-Value
-=====
+..  _developer-form-element-value:
 
-The value of the element is an array with the latitude and longitude as
-numeric strings:
+Value of the form element "Maps2PoiPosition"
+============================================
+
+The value of the element is an array with the keys `latitude` and
+`longitude`. Both values are numeric strings:
 
 ..  code-block:: php
+    :caption: Value of the form element "Maps2PoiPosition"
 
     [
         'latitude' => '48.663012',
         'longitude' => '9.218945',
     ]
 
-The template renders two hidden fields
-`tx_form_formframework[<form identifier>][<element identifier>][latitude]`
-and `...[longitude]`. The JavaScript of maps2 writes the position of the
-marker with 6 decimals into these fields.
+The template of the element renders two hidden fields, which the
+JavaScript of maps2 updates with the position of the marker, rounded to 6
+decimals:
 
-*   Submitted values are trimmed and reduced to the keys `latitude` and
-    `longitude`.
-*   Empty coordinates (marker not placed) result in `null`.
-*   The validator `Maps2PoiPosition` is added to each element automatically.
-    It requires numeric values, a latitude between -90 and 90 and a
-    longitude between -180 and 180. Error codes: `1763380001` (not numeric),
-    `1763380002` (latitude out of range), `1763380003` (longitude out of
-    range).
-*   Add the validator `NotEmpty` to require a position.
+..  code-block:: text
 
+    tx_form_formframework[<form identifier>][<element identifier>][latitude]
+    tx_form_formframework[<form identifier>][<element identifier>][longitude]
 
-Initial position
-================
+After the submit, maps2 normalizes the value in an `afterSubmit` hook of
+EXT:form:
 
-The map shows the value of the element in the form state (e.g. the
-submitted value or a value, which a hook writes into the form state) or
-else the default value of the element. Both have the same array format.
+*   Both values are trimmed. Other keys than `latitude` and `longitude` are
+    removed.
+*   If both values are empty (the marker was not placed), the value is
+    `null`. So the validator `NotEmpty` applies.
 
-Without a valid position, the marker is shown at the default latitude and
-longitude of the extension settings of maps2, but the hidden fields stay
-empty. So a required element is invalid until the user places the marker.
+The class :php:`\JWeiland\Maps2\Form\PoiPosition\PoiPosition` converts
+between a position and the value of the element:
 
+..  code-block:: php
+    :caption: Convert a position from and to the value of the element
 
-Properties
-==========
+    use JWeiland\Maps2\Form\PoiPosition\PoiPosition;
 
-..  confval:: mapProvider
-    :name: form-element-mapProvider
-    :type: string
-    :Default: '' (map provider of the extension settings)
+    // Returns null, if the value is not an array with numeric coordinates
+    $position = PoiPosition::fromFormValue($formValues['position'] ?? null);
+    $latitude = $position?->latitude;
 
-    `gm` (Google Maps) or `osm` (OpenStreetMap). Respected only, if the
-    extension setting `mapProvider` is `both`. Else the map provider of the
-    extension settings is used. An empty or invalid value uses
-    `defaultMapProvider`.
-
-..  confval:: zoom
-    :name: form-element-zoom
-    :type: int
-    :Default: 15
-
-    Zoom level of the map (0 to 20).
-
-..  confval:: height
-    :name: form-element-height
-    :type: int|string
-    :Default: 400
-
-    Height of the map. A number (pixels) or a number with one of the units
-    `px`, `em`, `rem`, `vh` or `%`. The width of the map is always `100%`.
-
-..  confval:: markerTitle
-    :name: form-element-markerTitle
-    :type: string
-    :Default: ''
-
-    Title of the marker, which is shown on mouse over.
-
-Other properties like `elementDescription` work as for other elements.
-Additional properties of your own extension are ignored by maps2.
-
-The TypoScript settings `plugin.tx_maps2.settings` of the site sets of
-maps2 are used for the map: `mapTile` and `mapTileAttribution`
-(OpenStreetMap), `googleMapsJavaScriptApiKey` (Google Maps, fallback: the
-extension setting), `mapTypeId`, `zoomControl`, `mapTypeControl`,
-`scaleControl`, `streetViewControl`, `fullScreenControl`,
-`activateScrollWheel` and `styles`.
+    // ['latitude' => '48.663012', 'longitude' => '9.218945']
+    $value = (new PoiPosition(48.6630123, 9.2189451))->toFormValue();
 
 
-Consent for requests to the map provider
-========================================
+..  _developer-form-element-initial-position:
 
-If the extension setting `explicitAllowMapProviderRequests` is enabled and
-the user has not agreed yet, the element shows the same information as the
-overlay of the maps2 plugins and a button to show the map. The button
-submits the form to its current page again. Its URI contains the parameter
-`tx_maps2_maps2[mapProviderRequestsAllowedForMaps2]=1`. So the form state
-and the entered values are kept. The hidden fields with the position are
-rendered in both cases.
+Initial position of the map
+===========================
 
-The assets of the map provider are loaded on form pages with the map only
-and only after consent.
+The map shows the value of the element in the following order:
 
+#.  The value in the form state, for example the submitted value or a value,
+    which a hook has written into the form state.
+#.  The default value of the element: `defaultValue` in the form definition
+    or a value set with :php:`setDefaultValue()`.
 
-Summary page
-============
+Both use the array format of the value. Only a valid position (numeric,
+latitude -90 to 90, longitude -180 to 180) is used.
 
-maps2 overrides the partial `SummaryPage` of EXT:form (partial root path
-key `15`, and `16` for the template variant `version2`) and renders the
-position as text: "Latitude: 48.663012, Longitude: 9.218945". If your site
-package overrides `SummaryPage.html` with a higher key, add a condition for
-the element type `Maps2PoiPosition` and render the partial
-`Maps2PoiPosition/SummaryValue` with the argument `position`.
-
-The email templates of EXT:form render the value as a list of the two
-coordinates.
+Without a valid position, the marker is shown at the default position of
+the :ref:`extension settings <extensionSettings>` (`defaultLatitude`,
+`defaultLongitude`), but the hidden fields stay empty. So the element has no
+value, until the user places the marker.
 
 
-Integration example
-===================
+..  _developer-form-element-validation:
 
-Form definition with a page for the address and a page with the map:
+Validation of the form element "Maps2PoiPosition"
+=================================================
+
+maps2 adds the validator `Maps2PoiPosition` to each element automatically.
+It accepts empty values. Add the validator `NotEmpty` to require a position.
+
+A value, which is not empty, has to fulfill these rules:
+
+..  t3-field-list-table::
+    :header-rows: 1
+
+    -   :Code: Error code
+        :Rule: Rule
+        :Message: Message
+
+    -   :Code: `1763380001`
+        :Rule: Latitude and longitude are numeric.
+        :Message: Please place the marker on the map.
+
+    -   :Code: `1763380002`
+        :Rule: The latitude is between -90 and 90.
+        :Message: The latitude must be between -90 and 90.
+
+    -   :Code: `1763380003`
+        :Rule: The longitude is between -180 and 180.
+        :Message: The longitude must be between -180 and 180.
+
+The messages are defined in
+`EXT:maps2/Resources/Private/Language/locallang.xlf`. The error codes are
+available as constants of
+:php:`\JWeiland\Maps2\Form\Validator\PoiPositionValidator`.
+
+
+..  _developer-form-element-integration:
+
+Integrate the form element "Maps2PoiPosition" step by step
+==========================================================
+
+The following example uses a form with two pages: the user enters the
+address on the first page. When the page is submitted, a hook geocodes the
+address. The second page shows the map with the found position, where the
+user can correct it. After the submit, a finisher stores the position as
+POI collection and another finisher stores the record with a relation to
+the POI collection.
+
+Replace `MyVendor`, `MyExtension` and `my_extension` with the names of
+your extension.
+
+
+..  _developer-form-element-integration-form-definition:
+
+Step 1: Create the form definition
+----------------------------------
 
 ..  code-block:: yaml
-    :caption: EXT:my_extension/Configuration/Form/Company.form.yaml
+    :caption: EXT:my_extension/Resources/Private/Forms/Company.form.yaml
 
-    identifier: company
     type: Form
-    prototypeName: standard
+    identifier: company
     label: 'Company'
+    prototypeName: standard
     renderables:
       - type: Page
         identifier: page-address
         label: 'Address'
+        renderingOptions:
+          nextButtonLabel: 'Next step: position on the map'
         renderables:
           - type: Text
+            identifier: company
+            label: 'Company'
+            validators:
+              - identifier: NotEmpty
+          - type: Text
             identifier: street
-            label: 'Street'
+            label: 'Street and house number'
+            validators:
+              - identifier: NotEmpty
+          - type: Text
+            identifier: zip
+            label: 'ZIP code'
+            validators:
+              - identifier: NotEmpty
           - type: Text
             identifier: city
             label: 'City'
+            validators:
+              - identifier: NotEmpty
       - type: Page
         identifier: page-map
-        label: 'Map'
+        label: 'Position on the map'
         renderables:
           - type: Maps2PoiPosition
             identifier: position
             label: 'Position on the map'
             properties:
-              zoom: 15
-              height: 400
               markerTitle: 'Your company'
               elementDescription: 'Move the marker, if the position is not correct.'
             validators:
               - identifier: NotEmpty
+      - type: SummaryPage
+        identifier: page-summary
+        label: 'Summary'
     finishers:
-      - identifier: SaveCompanyFinisher
+      - identifier: SavePosition
+        options:
+          storagePid: 12
+          title: '{company}'
+      - identifier: SaveToDatabase
+        options:
+          table: tx_myextension_domain_model_company
+          mode: insert
+          elements:
+            company:
+              mapOnDatabaseColumn: title
+            street:
+              mapOnDatabaseColumn: street
+            zip:
+              mapOnDatabaseColumn: zip
+            city:
+              mapOnDatabaseColumn: city
+          databaseColumnMappings:
+            pid:
+              value: 12
+            tx_maps2_uid:
+              value: '{SavePosition.poiCollectionUid}'
 
-Hook, which geocodes the address after the page with the address was
-submitted and writes the position into the form state:
+The column `tx_maps2_uid` is the relation to the POI collection, which you
+can add to your table with the :ref:`Maps2Registry <developer-maps2registry>`.
+
+
+..  _developer-form-element-integration-form-setup:
+
+Step 2: Register the form and the finisher
+------------------------------------------
+
+Allow EXT:form to load forms of your extension and register the finisher
+`SavePosition`:
+
+..  code-block:: yaml
+    :caption: EXT:my_extension/Configuration/Form/FormSetup.yaml
+
+    TYPO3:
+      CMS:
+        Form:
+          persistenceManager:
+            allowedExtensionPaths:
+              1763390000: 'EXT:my_extension/Resources/Private/Forms/'
+          prototypes:
+            standard:
+              finishersDefinition:
+                SavePosition:
+                  implementationClassName: 'MyVendor\MyExtension\Form\Finisher\SavePositionFinisher'
+
+Register the form setup in the site set of your extension, which depends on
+the site set of maps2:
+
+..  code-block:: yaml
+    :caption: EXT:my_extension/Configuration/Sets/MyExtension/config.yaml
+
+    name: my-vendor/my-extension
+    label: 'My extension'
+    dependencies:
+      - typo3/form
+      - jweiland/maps2-default
+
+..  code-block:: typoscript
+    :caption: EXT:my_extension/Configuration/Sets/MyExtension/setup.typoscript
+
+    plugin.tx_form.settings.yamlConfigurations {
+        1763390000 = EXT:my_extension/Configuration/Form/FormSetup.yaml
+    }
+
+
+..  _developer-form-element-integration-geocoding:
+
+Step 3: Geocode the address in a hook
+-------------------------------------
+
+EXT:form calls the hooks `afterSubmit` for the submitted page first and then
+for each element of this page. The following hook reacts to the page with
+the address, geocodes the address with the
+:php:`\JWeiland\Maps2\Service\GeoCodeService` of maps2 and writes the found
+position into the form state. Then the map on the next page shows this
+position.
 
 ..  code-block:: php
     :caption: EXT:my_extension/Classes/Hook/Form/GeocodeAddressHook.php
 
+    <?php
+
+    declare(strict_types=1);
+
+    namespace MyVendor\MyExtension\Hook\Form;
+
     use JWeiland\Maps2\Domain\Model\Position;
+    use JWeiland\Maps2\Form\PoiPosition\PoiPosition;
     use JWeiland\Maps2\Service\GeoCodeService;
+    use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
     use TYPO3\CMS\Form\Domain\Model\FormElements\Page;
     use TYPO3\CMS\Form\Domain\Model\Renderable\RenderableInterface;
     use TYPO3\CMS\Form\Domain\Runtime\FormRuntime;
 
+    /**
+     * Geocodes the address, when the page with the address is submitted,
+     * and sets the found position as value of the element "position".
+     */
+    #[Autoconfigure(public: true)]
     final readonly class GeocodeAddressHook
     {
+        private const ADDRESS_PAGE = 'page-address';
+
+        private const ADDRESS_ELEMENTS = ['street', 'zip', 'city'];
+
+        private const POSITION_ELEMENT = 'position';
+
+        /**
+         * Key in the form state with the last geocoded address
+         */
+        private const GEOCODED_ADDRESS = '__myExtensionGeocodedAddress';
+
         public function __construct(
             private GeoCodeService $geoCodeService,
         ) {}
 
+        /**
+         * @param array<string, mixed> $requestArguments
+         */
         public function afterSubmit(
             FormRuntime $formRuntime,
             RenderableInterface $renderable,
-            mixed $elementValue,
+            mixed $elementValue = null,
             array $requestArguments = [],
         ): mixed {
-            if (!$renderable instanceof Page || $renderable->getIdentifier() !== 'page-address') {
+            $formState = $formRuntime->getFormState();
+            if (!$renderable instanceof Page
+                || $renderable->getIdentifier() !== self::ADDRESS_PAGE
+                || $formState === null
+            ) {
                 return $elementValue;
             }
 
-            $address = trim(($requestArguments['street'] ?? '') . ', ' . ($requestArguments['city'] ?? ''), ' ,');
-            $position = $this->geoCodeService->getFirstFoundPositionByAddress($address);
+            // Geocode an unchanged address not again. So a corrected
+            // position is kept, if the user goes back to the address.
+            $address = $this->buildAddress($requestArguments);
+            if ($address === ''
+                || $address === $formState->getFormValue(self::GEOCODED_ADDRESS)
+            ) {
+                return $elementValue;
+            }
+
+            $position = $this->geoCodeService
+                ->getFirstFoundPositionByAddress($address);
             if ($position instanceof Position) {
-                $formRuntime->getFormState()?->setFormValue('position', [
-                    'latitude' => number_format($position->getLatitude(), 6, '.', ''),
-                    'longitude' => number_format($position->getLongitude(), 6, '.', ''),
-                ]);
+                $poiPosition = new PoiPosition(
+                    $position->getLatitude(),
+                    $position->getLongitude(),
+                );
+                $formState->setFormValue(
+                    self::POSITION_ELEMENT,
+                    $poiPosition->toFormValue(),
+                );
+                $formState->setFormValue(self::GEOCODED_ADDRESS, $address);
             }
 
             return $elementValue;
         }
+
+        /**
+         * @param array<string, mixed> $requestArguments
+         */
+        private function buildAddress(array $requestArguments): string
+        {
+            $parts = [];
+            foreach (self::ADDRESS_ELEMENTS as $identifier) {
+                $value = $requestArguments[$identifier] ?? '';
+                $parts[] = is_string($value) ? trim($value) : '';
+            }
+
+            return trim(sprintf('%s, %s %s', ...$parts), ' ,');
+        }
     }
+
+EXT:form creates hooks with :php:`GeneralUtility::makeInstance()`. The
+attribute :php:`#[Autoconfigure(public: true)]` makes the hook available
+in the dependency injection container, so its constructor arguments are
+injected.
+
+Register the hook:
 
 ..  code-block:: php
     :caption: EXT:my_extension/ext_localconf.php
 
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/form']['afterSubmit'][1763390000]
-        = \MyVendor\MyExtension\Hook\Form\GeocodeAddressHook::class;
+    <?php
 
-To edit an existing record, set the stored position as default value, e.g.
-in a hook `afterBuildingFinished`:
+    declare(strict_types=1);
+
+    use MyVendor\MyExtension\Hook\Form\GeocodeAddressHook;
+
+    defined('TYPO3') or die();
+
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/form']['afterSubmit'][1763390001]
+        = GeocodeAddressHook::class;
+
+If the address can not be geocoded, the map shows the previous position or
+the default position of the extension settings and the user has to place
+the marker. Your hook can add an error to an element of the address page
+instead, so the user stays on the address page:
 
 ..  code-block:: php
+    :caption: Show an error at the element "street"
 
-    $element->setDefaultValue([
-        'latitude' => (string)$poiCollection['latitude'],
-        'longitude' => (string)$poiCollection['longitude'],
-    ]);
+    use TYPO3\CMS\Extbase\Error\Error;
 
-Finisher, which stores the position in the table
-`tx_maps2_domain_model_poicollection`:
+    $formRuntime->getFormDefinition()
+        ->getProcessingRule('street')
+        ->getProcessingMessages()
+        ->addError(new Error('The address was not found.', 1763390002));
+
+The geocoding uses the map provider and the API keys of the
+:ref:`extension settings <extensionSettings>`.
+
+
+..  _developer-form-element-integration-default-value:
+
+Step 4: Show the stored position of an existing record
+------------------------------------------------------
+
+If the form edits an existing record, set the stored position as default
+value of the element. Use a hook, which has access to the request, for
+example `afterInitializeCurrentPage`:
 
 ..  code-block:: php
-    :caption: EXT:my_extension/Classes/Domain/Finisher/SaveCompanyFinisher.php
+    :caption: Set the stored position as default value
 
+    use JWeiland\Maps2\Form\PoiPosition\PoiPosition;
+
+    // $latitude and $longitude of the POI collection of the edited record
+    $position = new PoiPosition($latitude, $longitude);
+    $formRuntime->getFormDefinition()
+        ->getElementByIdentifier('position')
+        ?->setDefaultValue($position->toFormValue());
+
+A value in the form state wins over the default value. So the geocoding
+hook of step 3 replaces the stored position, as soon as the address page is
+submitted. Compare the submitted address with the stored address of the
+record and skip the geocoding, if the address was not changed.
+
+
+..  _developer-form-element-integration-finisher:
+
+Step 5: Store the position in a finisher
+----------------------------------------
+
+The following finisher creates a POI collection of type `Point` with the
+submitted position. It provides the UID of the new record as finisher
+variable `SavePosition.poiCollectionUid` for the following finishers, see
+step 1.
+
+..  code-block:: php
+    :caption: EXT:my_extension/Classes/Form/Finisher/SavePositionFinisher.php
+
+    <?php
+
+    declare(strict_types=1);
+
+    namespace MyVendor\MyExtension\Form\Finisher;
+
+    use JWeiland\Maps2\Form\PoiPosition\PoiPosition;
+    use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
     use TYPO3\CMS\Core\Database\ConnectionPool;
     use TYPO3\CMS\Form\Domain\Finishers\AbstractFinisher;
 
-    class SaveCompanyFinisher extends AbstractFinisher
+    /**
+     * Stores the position of the element "Maps2PoiPosition" as new POI
+     * collection of type "Point".
+     */
+    #[Autoconfigure(public: true, shared: false)]
+    class SavePositionFinisher extends AbstractFinisher
     {
+        private const TABLE = 'tx_maps2_domain_model_poicollection';
+
+        protected $defaultOptions = [
+            'elementIdentifier' => 'position',
+            'storagePid' => 0,
+            'title' => '',
+        ];
+
         public function __construct(
             private readonly ConnectionPool $connectionPool,
         ) {}
 
         protected function executeInternal(): ?string
         {
-            $position = $this->finisherContext->getFormValues()['position'] ?? null;
-            if (!is_array($position)) {
+            $formValues = $this->finisherContext->getFormValues();
+            $position = PoiPosition::fromFormValue(
+                $formValues[(string)$this->parseOption('elementIdentifier')] ?? null,
+            );
+            if ($position === null) {
                 return null;
             }
 
-            $this->connectionPool
-                ->getConnectionForTable('tx_maps2_domain_model_poicollection')
-                ->update(
-                    'tx_maps2_domain_model_poicollection',
-                    [
-                        'latitude' => (float)$position['latitude'],
-                        'longitude' => (float)$position['longitude'],
-                    ],
-                    ['uid' => $this->getPoiCollectionUid()],
-                );
+            $connection = $this->connectionPool->getConnectionForTable(self::TABLE);
+            $connection->insert(self::TABLE, [
+                'pid' => (int)$this->parseOption('storagePid'),
+                'tstamp' => time(),
+                'crdate' => time(),
+                'collection_type' => 'Point',
+                'title' => (string)$this->parseOption('title'),
+                'latitude' => $position->latitude,
+                'longitude' => $position->longitude,
+            ]);
+
+            $this->finisherContext->getFinisherVariableProvider()->add(
+                $this->shortFinisherIdentifier,
+                'poiCollectionUid',
+                (int)$connection->lastInsertId(),
+            );
 
             return null;
         }
     }
 
+To edit an existing record, update the POI collection, which is related to
+the record, instead of creating a new one.
+
 ..  hint::
 
-    Use `DataHandler` instead, if the record has to be created or
-    history and hooks of TYPO3 are needed.
+    The validator `Maps2PoiPosition` has checked the position already.
+    :php:`PoiPosition::fromFormValue()` returns `null`, if the element is
+    optional and the user has not placed the marker.
+
+
+..  _developer-form-element-integration-render:
+
+Step 6: Show the form
+---------------------
+
+Add the content element :guilabel:`Form` to a page and select the form
+:guilabel:`Company`, or render the form in a Fluid template of your
+extension:
+
+..  code-block:: html
+    :caption: EXT:my_extension/Resources/Private/Templates/Company/New.html
+
+    <html xmlns:formvh="http://typo3.org/ns/TYPO3/CMS/Form/ViewHelpers"
+          data-namespace-typo3-fluid="true">
+
+    <formvh:render
+        persistenceIdentifier="EXT:my_extension/Resources/Private/Forms/Company.form.yaml"/>
+
+    </html>
+
+Include the site set of your extension in the site, so the form setup of
+your extension and of maps2 is loaded.
