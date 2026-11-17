@@ -15,5 +15,6 @@ of view.
     :titlesonly:
 
     Api/Index
+    FormElement/Index
     Maps2Registry/Index
     Template/Index
