@@ -362,7 +362,8 @@ class OpenStreetMap2 {
     let marker = L.marker(
       [poiCollection.latitude, poiCollection.longitude],
       {
-        'draggable': this.editable
+        'draggable': this.editable,
+        'title': this.getEditableMarkerTitle(poiCollection)
       }
     ).addTo(this.map);
 
@@ -536,6 +537,16 @@ class OpenStreetMap2 {
     }
 
     return null;
+  }
+
+  /**
+   * The title of the marker is shown in edit mode only
+   *
+   * @param {PoiCollection} poiCollection
+   * @returns {string}
+   */
+  getEditableMarkerTitle(poiCollection) {
+    return this.editable && typeof poiCollection.title === 'string' ? poiCollection.title : '';
   }
 
   /**

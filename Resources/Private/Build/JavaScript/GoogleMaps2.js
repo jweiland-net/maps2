@@ -466,6 +466,11 @@ class GoogleMaps2 {
     });
     marker.setDraggable(this.editable);
 
+    // The title of the marker is shown in edit mode only
+    if (this.editable && typeof poiCollection.title === 'string' && poiCollection.title !== '') {
+      marker.setTitle(poiCollection.title);
+    }
+
     // assign first found marker icon, if available
     if (poiCollection.hasOwnProperty("markerIcon") && poiCollection.markerIcon !== "") {
       let icon = {
