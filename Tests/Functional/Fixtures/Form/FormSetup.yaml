@@ -1,0 +1,6 @@
+TYPO3:
+  CMS:
+    Form:
+      persistenceManager:
+        allowedExtensionPaths:
+          10: EXT:maps2/Tests/Functional/Fixtures/Form/
