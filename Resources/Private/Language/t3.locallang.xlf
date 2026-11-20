@@ -79,6 +79,26 @@
         <source>%1$s can't find any position. Please check your input and try again</source>
         <target>crwdns308038:0%1$scrwdne308038:0</target>
       </trans-unit>
+      <trans-unit id="form.poiPosition.latitude">
+        <source>Latitude</source>
+        <target>crwdns420365:0crwdne420365:0</target>
+      </trans-unit>
+      <trans-unit id="form.poiPosition.longitude">
+        <source>Longitude</source>
+        <target>crwdns420367:0crwdne420367:0</target>
+      </trans-unit>
+      <trans-unit id="validator.poiPosition.notNumeric">
+        <source>Please place the marker on the map.</source>
+        <target>crwdns420369:0crwdne420369:0</target>
+      </trans-unit>
+      <trans-unit id="validator.poiPosition.latitudeOutOfRange">
+        <source>The latitude must be between -90 and 90.</source>
+        <target>crwdns420371:0crwdne420371:0</target>
+      </trans-unit>
+      <trans-unit id="validator.poiPosition.longitudeOutOfRange">
+        <source>The longitude must be between -180 and 180.</source>
+        <target>crwdns420373:0crwdne420373:0</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
