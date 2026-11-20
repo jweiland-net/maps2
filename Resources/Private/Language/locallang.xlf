@@ -64,6 +64,21 @@
       <trans-unit id="error.noPositionsFound.body" approved="yes">
         <source>%1$s can't find any position. Please check your input and try again</source>
       </trans-unit>
+      <trans-unit id="form.poiPosition.latitude" approved="yes">
+        <source>Latitude</source>
+      </trans-unit>
+      <trans-unit id="form.poiPosition.longitude" approved="yes">
+        <source>Longitude</source>
+      </trans-unit>
+      <trans-unit id="validator.poiPosition.notNumeric" approved="yes">
+        <source>Please place the marker on the map.</source>
+      </trans-unit>
+      <trans-unit id="validator.poiPosition.latitudeOutOfRange" approved="yes">
+        <source>The latitude must be between -90 and 90.</source>
+      </trans-unit>
+      <trans-unit id="validator.poiPosition.longitudeOutOfRange" approved="yes">
+        <source>The longitude must be between -180 and 180.</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

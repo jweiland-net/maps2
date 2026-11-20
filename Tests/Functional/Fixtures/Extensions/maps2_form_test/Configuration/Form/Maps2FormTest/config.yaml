@@ -1,0 +1,6 @@
+name: jweiland/maps2-form-test
+label: 'Maps2 - Functional tests'
+
+persistenceManager:
+  allowedExtensionPaths:
+    100: 'EXT:maps2/Tests/Functional/Fixtures/Form/'

@@ -1,0 +1,43 @@
+<html lang="en"
+      xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      xmlns:formvh="http://typo3.org/ns/TYPO3/CMS/Form/ViewHelpers"
+      data-namespace-typo3-fluid="true">
+
+<f:comment><!-- The rendering option "maps2PoiPosition" is prepared by PoiPositionMapHook --></f:comment>
+<formvh:renderRenderable renderable="{element}">
+    <f:variable name="map">{element.renderingOptions.maps2PoiPosition}</f:variable>
+    <f:form.validationResults for="{element.rootForm.identifier}.{element.identifier}">
+        <f:variable name="wrapClass">maps2-poi-position</f:variable>
+        <f:if condition="{validationResults.errors}">
+            <f:variable name="wrapClass">{wrapClass} {element.rootForm.renderingOptions.fieldProperties.errorClassAttribute}</f:variable>
+        </f:if>
+
+        <f:render partial="Field/Field" arguments="{element: element}" contentAs="elementContent">
+            <div class="{wrapClass}">
+                <f:comment><!-- The JavaScript of maps2 updates the preceding hidden fields with the classes "latitude-<uid>" and "longitude-<uid>" --></f:comment>
+                <f:form.hidden property="{element.identifier}.latitude"
+                               id="{element.uniqueIdentifier}-latitude"
+                               class="latitude-{map.mapIdentifier}"
+                               value="{map.latitude}"/>
+                <f:form.hidden property="{element.identifier}.longitude"
+                               id="{element.uniqueIdentifier}-longitude"
+                               class="longitude-{map.mapIdentifier}"
+                               value="{map.longitude}"/>
+                <f:if condition="{map.isRequestToMapProviderAllowed}">
+                    <f:then>
+                        <f:render partial="Maps2PoiPosition/LoadAssets"
+                                  arguments="{mapProvider: map.mapProvider, googleMapsJavaScriptApiKey: map.googleMapsJavaScriptApiKey}"/>
+                        <div id="{element.uniqueIdentifier}"
+                             class="maps2 editMarker"
+                             data-environment="{map.environment}"
+                             data-pois="{map.pois}"></div>
+                    </f:then>
+                    <f:else>
+                        <f:render partial="Maps2PoiPosition/Overlay" arguments="{element: element, map: map}"/>
+                    </f:else>
+                </f:if>
+            </div>
+        </f:render>
+    </f:form.validationResults>
+</formvh:renderRenderable>
+</html>

@@ -7,6 +7,22 @@
 ChangeLog
 =========
 
+Version 13.3.0
+==============
+
+*   FEATURE: Add the form element `Maps2PoiPosition` for forms based on
+    EXT:form. It shows a map with a draggable marker, so frontend users can
+    correct a geocoded position. The value is an array with `latitude` and
+    `longitude`. The element respects the consent for requests to the map
+    provider and renders the position as text on the summary page. Its
+    JavaScript and style sheets are loaded by the overridable partial
+    `Maps2PoiPosition/LoadAssets`. EXT:form discovers the form set
+    `jweiland/maps2` automatically. See
+    :ref:`configuration-form-element` for the configuration and
+    :ref:`developer-form-element` for the integration in your extension.
+*   TASK: The marker of the frontend edit maps of GoogleMaps2 and
+    OpenStreetMap2 shows the title of the POI collection on mouse over.
+
 Version 13.2.2
 ==============
 

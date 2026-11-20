@@ -574,6 +574,11 @@ class GoogleMaps2 {
       }
     }
 
+    // The title of the marker is shown in edit mode only
+    if (this.editable && typeof poiCollection.title === 'string' && poiCollection.title !== '') {
+      markerOptions.title = poiCollection.title;
+    }
+
     let marker = new AdvancedMarkerElement(markerOptions);
 
     this.pointMarkers.push(marker);

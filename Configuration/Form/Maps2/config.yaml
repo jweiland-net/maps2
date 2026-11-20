@@ -1,0 +1,39 @@
+# Form set of maps2. EXT:form discovers it automatically for all sites.
+name: jweiland/maps2
+label: 'Maps2 - Form element Maps2PoiPosition'
+# Loaded after the base configuration of EXT:form (10) and before form sets
+# with the default priority (100), so site packages can override it
+priority: 50
+
+prototypes:
+  standard:
+    validatorsDefinition:
+      Maps2PoiPosition:
+        implementationClassName: 'JWeiland\Maps2\Form\Validator\PoiPositionValidator'
+    formElementsDefinition:
+      Form:
+        renderingOptions:
+          # Templates of Maps2PoiPosition (including Maps2PoiPosition/LoadAssets)
+          # and SummaryPage with the position as readable text
+          partialRootPaths:
+            15: 'EXT:maps2/Resources/Private/FormFramework/Partials/'
+      Maps2PoiPosition:
+        implementationClassName: TYPO3\CMS\Form\Domain\Model\FormElements\GenericFormElement
+        properties:
+          containerClassAttribute: 'form-element form-element-maps2-poi-position mb-3'
+          elementClassAttribute: ''
+          elementErrorClassAttribute: ~
+          labelClassAttribute: form-label
+          # "gm" or "osm". Empty: map provider of the extension settings
+          mapProvider: ''
+          zoom: 15
+          # Number (pixels) or number with unit: px, em, rem, vh or %
+          height: 400
+          markerTitle: ''
+          # Map tile of OpenStreetMap, if the TypoScript setting
+          # plugin.tx_maps2.settings.mapTile is empty
+          defaultMapTile: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+          defaultMapTileAttribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        validators:
+          -
+            identifier: Maps2PoiPosition
