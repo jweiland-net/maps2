@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<xliff version="1.0">
+  <file source-language="en" datatype="plaintext" original="messages" date="2013-02-07T11:13:04Z" product-name="maps2" target-language="de">
+    <header/>
+    <body>
+      <trans-unit id="mapProvider" approved="yes">
+        <source>Choose Map Provider: Maps2 comes with currently two Map Providers. Choose your favorite.</source>
+        <target state="final">Wähle einen Kartenanbieter: Maps2 wird aktuell mit 2 Kartenanbietern ausgeliefert. Wähle Deinen Favoriten.</target>
+      </trans-unit>
+      <trans-unit id="mapProvider.both" approved="yes">
+        <source>Both</source>
+        <target state="final">Beide</target>
+      </trans-unit>
+      <trans-unit id="strokeColor" approved="yes">
+        <source>Stroke Color: You can set a border color for a overly here</source>
+        <target state="final">Randfarbe: Geben Sie eine Randfarbe für den Overlay an.</target>
+      </trans-unit>
+      <trans-unit id="strokeWeight" approved="yes">
+        <source>Stroke Weight (in pixel): How thick the border of the overlay should be? A good value is 1 or 2</source>
+        <target state="final">Randbreite (in Pixel): Wie dick soll der Rand der Ebene sein? Ein Wert von 1 oder 2 ist ganz ok.</target>
+      </trans-unit>
+      <trans-unit id="fillColor" approved="yes">
+        <source>Fill Color: Which color the overlay should have?</source>
+        <target state="final">Füllfarbe: Geben Sie hier eine Füllfarbe für die Ebene an.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

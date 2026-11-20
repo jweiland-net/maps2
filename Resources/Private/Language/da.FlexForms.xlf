@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<xliff version="1.0">
+  <file source-language="en" datatype="plaintext" original="messages" date="2013-02-18T15:03:04Z" product-name="maps2" target-language="da">
+    <header/>
+    <body>
+      <trans-unit id="sheetGeneral" approved="yes">
+        <source>General</source>
+        <target state="final">Generel</target>
+      </trans-unit>
+      <trans-unit id="mapProvider" approved="yes">
+        <source>Map Provider</source>
+        <target state="final">Kortudbyder</target>
+      </trans-unit>
+      <trans-unit id="mapWidth" approved="yes">
+        <source>Map width</source>
+        <target state="final">Kort bredde</target>
+      </trans-unit>
+      <trans-unit id="mapHeight" approved="yes">
+        <source>Map height</source>
+        <target state="final">Kort højde</target>
+      </trans-unit>
+      <trans-unit id="sheetMapOptions" approved="yes">
+        <source>Map Options</source>
+        <target state="final">Kortindstillinger</target>
+      </trans-unit>
+      <trans-unit id="zoom" approved="yes">
+        <source>Default zoom</source>
+        <target state="final">Standard zoom</target>
+      </trans-unit>
+      <trans-unit id="zoomControl" approved="yes">
+        <source>Show Zoom Control</source>
+        <target state="final">Vis zoom kontrol</target>
+      </trans-unit>
+      <trans-unit id="fullScreenControl" approved="yes">
+        <source>Show full screen Control</source>
+        <target state="final">Vis fuld skærms kontrol</target>
+      </trans-unit>
+      <trans-unit id="sheetGoogleMapsOptions" approved="yes">
+        <source>Google Maps</source>
+        <target state="final">Google Maps</target>
+      </trans-unit>
+      <trans-unit id="mapTypeId" approved="yes">
+        <source>Default map view</source>
+        <target state="final">Standard kortvisning</target>
+      </trans-unit>
+      <trans-unit id="mapTypeId.Hybrid" approved="yes">
+        <source>Hybrid</source>
+        <target state="final">Hybrid</target>
+      </trans-unit>
+      <trans-unit id="mapTypeId.RoadMap" approved="yes">
+        <source>Road Map</source>
+        <target state="final">Vejkort</target>
+      </trans-unit>
+      <trans-unit id="mapTypeId.Satellite" approved="yes">
+        <source>Satellite</source>
+        <target state="final">Satellit</target>
+      </trans-unit>
+      <trans-unit id="mapTypeId.Terrain" approved="yes">
+        <source>Terrain</source>
+        <target state="final">Terræn</target>
+      </trans-unit>
+      <trans-unit id="mapTypeControl" approved="yes">
+        <source>Show Map Type Control</source>
+        <target state="final">Vis korttype kontrol</target>
+      </trans-unit>
+      <trans-unit id="scaleControl" approved="yes">
+        <source>Show Scale Control</source>
+        <target state="final">Vis størrelseskontrol</target>
+      </trans-unit>
+      <trans-unit id="streetViewControl" approved="yes">
+        <source>Show StreetView Control</source>
+        <target state="final">Vis StreetView kontrol</target>
+      </trans-unit>
+      <trans-unit id="activateScrollWheel" approved="yes">
+        <source>Activate zoom with mouse scroll wheel</source>
+        <target state="final">Aktivér zoom via mus scroll-hjul</target>
+      </trans-unit>
+      <trans-unit id="styles" approved="yes">
+        <source>Map Style. Have a look at https://snazzymaps.com to copy some cool styles for you map</source>
+        <target state="final">Kortstil. Se mere på https://snazzymaps.com for at kopiere nogle smarte kortstile til dine kort</target>
+      </trans-unit>
+      <trans-unit id="sheetOpenStreetMapOptions" approved="yes">
+        <source>Open Street Map</source>
+        <target state="final">Open Street Map</target>
+      </trans-unit>
+      <trans-unit id="mapTile" approved="yes">
+        <source>Map Tile URI: Define another external provider to show map with another layout</source>
+        <target state="final">Kortudsnit URI: Definér en anden ekstern leverandør for at vise kort med andet layout</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
