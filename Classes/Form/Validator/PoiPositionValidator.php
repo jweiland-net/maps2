@@ -18,6 +18,9 @@ use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
  * Validates the value of the form element "Maps2PoiPosition": an array with
  * numeric "latitude" (-90..90) and "longitude" (-180..180).
  * Empty values are accepted. Use the NotEmpty validator to require a position.
+ *
+ * The error messages are translated with the language file of maps2. Use the
+ * translation files of EXT:form (by error code) to override them.
  */
 class PoiPositionValidator extends AbstractValidator
 {
@@ -26,8 +29,6 @@ class PoiPositionValidator extends AbstractValidator
     public const ERROR_CODE_LATITUDE_OUT_OF_RANGE = 1763380002;
 
     public const ERROR_CODE_LONGITUDE_OUT_OF_RANGE = 1763380003;
-
-    private const LANGUAGE_FILE = 'LLL:EXT:maps2/Resources/Private/Language/locallang.xlf:';
 
     protected function isValid(mixed $value): void
     {
@@ -55,7 +56,7 @@ class PoiPositionValidator extends AbstractValidator
     private function addTranslatedError(string $key, int $code): void
     {
         $this->addError(
-            $this->translateErrorMessage(self::LANGUAGE_FILE . $key, 'maps2'),
+            $this->translateErrorMessage($key, 'maps2'),
             $code,
         );
     }

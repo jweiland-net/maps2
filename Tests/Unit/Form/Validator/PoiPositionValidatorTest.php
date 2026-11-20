@@ -98,7 +98,7 @@ class PoiPositionValidatorTest extends UnitTestCase
         $errors = $this->subject->validate(['latitude' => '91', 'longitude' => '9'])->getErrors();
 
         self::assertSame(
-            'LLL:EXT:maps2/Resources/Private/Language/locallang.xlf:validator.poiPosition.latitudeOutOfRange',
+            'validator.poiPosition.latitudeOutOfRange',
             $errors[0]->getMessage(),
         );
     }
