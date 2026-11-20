@@ -40,6 +40,9 @@ jobs:
         if: ${{ matrix.php <= '8.3' }}
         run: Build/Scripts/runTests.sh -b podman -n -p ${{ matrix.php }} -s cgl
 
+      - name: 'PHPStan'
+        run: Build/Scripts/runTests.sh -b podman -p ${{ matrix.php }} -s phpstan
+
       - name: 'Execute unit tests'
         run: Build/Scripts/runTests.sh -b podman -p ${{ matrix.php }} -s unit
 

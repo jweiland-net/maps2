@@ -1,5 +1,1075 @@
 parameters:
-    excludePaths:
-        - %currentWorkingDirectory%/Classes/Hook/PageLayoutViewHook.php
-        - %currentWorkingDirectory%/Classes/Utility/StringUtility.php
-        - %currentWorkingDirectory%/Classes/Preview/WallsIoBackendPreviewRenderer
+	ignoreErrors:
+		-
+			message: '#^Method JWeiland\\Maps2\\Backend\\Preview\\Maps2PluginPreview\:\:addPoiCollection\(\) has parameter \$piFlexformData with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Backend/Preview/Maps2PluginPreview.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Backend\\Preview\\Maps2PluginPreview\:\:getPiFlexFormData\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Backend/Preview/Maps2PluginPreview.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Client\\AbstractClient\:\:processRequest\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Client/AbstractClient.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Client\\ClientFactory\:\:__construct\(\) has parameter \$mapProviderClients with no value type specified in iterable type iterable\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Client/ClientFactory.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Client\\ClientInterface\:\:processRequest\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Client/ClientInterface.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Client\\Request\\RequestFactory\:\:__construct\(\) has parameter \$mapProviderGeoCodingRequests with no value type specified in iterable type iterable\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Client/Request/RequestFactory.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Configuration\\Environment\:\:getContentRecord\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Configuration/Environment.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Configuration\\Environment\:\:getExtConf\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Configuration/Environment.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Configuration\\Environment\:\:getSettings\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Configuration/Environment.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Configuration\\Environment\:\:jsonSerialize\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Configuration/Environment.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Configuration\\EnvironmentFactory\:\:buildEnvironment\(\) has parameter \$mergedSettingsFromController with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Configuration/EnvironmentFactory.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Configuration\\EnvironmentFactory\:\:getContentRecord\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Configuration/EnvironmentFactory.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Configuration\\EnvironmentFactory\:\:getPreparedSettings\(\) has parameter \$mergedSettingsFromController with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Configuration/EnvironmentFactory.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Configuration\\EnvironmentFactory\:\:getPreparedSettings\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Configuration/EnvironmentFactory.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Controller\\CityMapController\:\:initializeView\(\) has parameter \$view with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: ../../Classes/Controller/CityMapController.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Controller\\PoiCollectionController\:\:initializeView\(\) has parameter \$view with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: ../../Classes/Controller/PoiCollectionController.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Controller\\PoiCollectionController\:\:postProcessAndAssignFluidVariables\(\) has parameter \$variables with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Controller/PoiCollectionController.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Controller\\PoiCollectionController\:\:postProcessAndAssignFluidVariables\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Controller/PoiCollectionController.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Domain\\Model\\Category\:\:getMaps2MarkerIcons\(\) return type with generic class TYPO3\\CMS\\Extbase\\Persistence\\ObjectStorage does not specify its types\: TEntity$#'
+			identifier: missingType.generics
+			count: 1
+			path: ../../Classes/Domain/Model/Category.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Domain\\Model\\Category\:\:setMaps2MarkerIcons\(\) has parameter \$maps2MarkerIcons with generic class TYPO3\\CMS\\Extbase\\Persistence\\ObjectStorage but does not specify its types\: TEntity$#'
+			identifier: missingType.generics
+			count: 1
+			path: ../../Classes/Domain/Model/Category.php
+
+		-
+			message: '#^Instanceof between JWeiland\\Maps2\\Domain\\Model\\Category and JWeiland\\Maps2\\Domain\\Model\\Category will always evaluate to true\.$#'
+			identifier: instanceof.alwaysTrue
+			count: 4
+			path: ../../Classes/Domain/Model/PoiCollection.php
+
+		-
+			message: '#^Instanceof between TYPO3\\CMS\\Core\\Resource\\FileReference and TYPO3\\CMS\\Core\\Resource\\FileReference will always evaluate to true\.$#'
+			identifier: instanceof.alwaysTrue
+			count: 1
+			path: ../../Classes/Domain/Model/PoiCollection.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Domain\\Model\\PoiCollection\:\:addForeignRecord\(\) has parameter \$foreignRecord with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Domain/Model/PoiCollection.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Domain\\Model\\PoiCollection\:\:getCategories\(\) return type with generic class TYPO3\\CMS\\Extbase\\Persistence\\ObjectStorage does not specify its types\: TEntity$#'
+			identifier: missingType.generics
+			count: 1
+			path: ../../Classes/Domain/Model/PoiCollection.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Domain\\Model\\PoiCollection\:\:getForeignRecords\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Domain/Model/PoiCollection.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Domain\\Model\\PoiCollection\:\:getInfoWindowImages\(\) return type with generic class TYPO3\\CMS\\Extbase\\Persistence\\ObjectStorage does not specify its types\: TEntity$#'
+			identifier: missingType.generics
+			count: 1
+			path: ../../Classes/Domain/Model/PoiCollection.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Domain\\Model\\PoiCollection\:\:getMarkerIcons\(\) return type with generic class TYPO3\\CMS\\Extbase\\Persistence\\ObjectStorage does not specify its types\: TEntity$#'
+			identifier: missingType.generics
+			count: 1
+			path: ../../Classes/Domain/Model/PoiCollection.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Domain\\Model\\PoiCollection\:\:getPois\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Domain/Model/PoiCollection.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Domain\\Model\\PoiCollection\:\:removeForeignRecord\(\) has parameter \$foreignRecord with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Domain/Model/PoiCollection.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Domain\\Model\\PoiCollection\:\:setCategories\(\) has parameter \$categories with generic class TYPO3\\CMS\\Extbase\\Persistence\\ObjectStorage but does not specify its types\: TEntity$#'
+			identifier: missingType.generics
+			count: 1
+			path: ../../Classes/Domain/Model/PoiCollection.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Domain\\Model\\PoiCollection\:\:setForeignRecords\(\) has parameter \$foreignRecords with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Domain/Model/PoiCollection.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Domain\\Model\\PoiCollection\:\:setInfoWindowImages\(\) has parameter \$infoWindowImages with generic class TYPO3\\CMS\\Extbase\\Persistence\\ObjectStorage but does not specify its types\: TEntity$#'
+			identifier: missingType.generics
+			count: 1
+			path: ../../Classes/Domain/Model/PoiCollection.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Domain\\Model\\PoiCollection\:\:setMarkerIcons\(\) has parameter \$markerIcons with generic class TYPO3\\CMS\\Extbase\\Persistence\\ObjectStorage but does not specify its types\: TEntity$#'
+			identifier: missingType.generics
+			count: 1
+			path: ../../Classes/Domain/Model/PoiCollection.php
+
+		-
+			message: '#^Property JWeiland\\Maps2\\Domain\\Model\\PoiCollection\:\:\$foreignRecords type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Domain/Model/PoiCollection.php
+
+		-
+			message: '#^Right side of && is always true\.$#'
+			identifier: booleanAnd.rightAlwaysTrue
+			count: 1
+			path: ../../Classes/Domain/Model/PoiCollection.php
+
+		-
+			message: '#^Call to an undefined method TYPO3\\CMS\\Extbase\\Persistence\\QueryInterface\<TYPO3\\CMS\\Extbase\\DomainObject\\DomainObjectInterface\>\:\:statement\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: ../../Classes/Domain/Repository/PoiCollectionRepository.php
+
+		-
+			message: '#^Class JWeiland\\Maps2\\Domain\\Repository\\PoiCollectionRepository extends generic class TYPO3\\CMS\\Extbase\\Persistence\\Repository but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: ../../Classes/Domain/Repository/PoiCollectionRepository.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Domain\\Repository\\PoiCollectionRepository\:\:addConstraintForCategories\(\) has parameter \$categories with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Domain/Repository/PoiCollectionRepository.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Domain\\Repository\\PoiCollectionRepository\:\:findPoiCollections\(\) has parameter \$settings with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Domain/Repository/PoiCollectionRepository.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Domain\\Repository\\PoiCollectionRepository\:\:findPoiCollections\(\) return type with generic interface TYPO3\\CMS\\Extbase\\Persistence\\QueryResultInterface does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: ../../Classes/Domain/Repository/PoiCollectionRepository.php
+
+		-
+			message: '#^PHPDoc tag @var for variable \$extbaseQuery contains generic class TYPO3\\CMS\\Extbase\\Persistence\\Generic\\Query but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: ../../Classes/Domain/Repository/PoiCollectionRepository.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Event\\AllowCreationOfPoiCollectionEvent\:\:__construct\(\) has parameter \$foreignLocationRecord with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Event/AllowCreationOfPoiCollectionEvent.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Event\\AllowCreationOfPoiCollectionEvent\:\:getForeignLocationRecord\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Event/AllowCreationOfPoiCollectionEvent.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Event\\ControllerActionEventInterface\:\:getSettings\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Event/ControllerActionEventInterface.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Event\\ModifyQueryOfFindPoiCollectionsEvent\:\:__construct\(\) has parameter \$settings with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Event/ModifyQueryOfFindPoiCollectionsEvent.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Event\\ModifyQueryOfFindPoiCollectionsEvent\:\:getSettings\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Event/ModifyQueryOfFindPoiCollectionsEvent.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Event\\PostProcessFluidVariablesEvent\:\:__construct\(\) has parameter \$fluidVariables with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Event/PostProcessFluidVariablesEvent.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Event\\PostProcessFluidVariablesEvent\:\:__construct\(\) has parameter \$settings with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Event/PostProcessFluidVariablesEvent.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Event\\PostProcessFluidVariablesEvent\:\:addFluidVariable\(\) has parameter \$value with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: ../../Classes/Event/PostProcessFluidVariablesEvent.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Event\\PostProcessFluidVariablesEvent\:\:getFluidVariables\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Event/PostProcessFluidVariablesEvent.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Event\\PostProcessFluidVariablesEvent\:\:getSettings\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Event/PostProcessFluidVariablesEvent.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Event\\PostProcessPoiCollectionRecordEvent\:\:__construct\(\) has parameter \$foreignLocationRecord with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Event/PostProcessPoiCollectionRecordEvent.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Event\\PostProcessPoiCollectionRecordEvent\:\:getForeignLocationRecord\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Event/PostProcessPoiCollectionRecordEvent.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Event\\PreAddForeignRecordEvent\:\:__construct\(\) has parameter \$foreignRecord with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Event/PreAddForeignRecordEvent.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Event\\PreAddForeignRecordEvent\:\:getForeignRecord\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Event/PreAddForeignRecordEvent.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Event\\PreAddForeignRecordEvent\:\:setForeignRecord\(\) has parameter \$foreignRecord with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Event/PreAddForeignRecordEvent.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Event\\RenderInfoWindowContentEvent\:\:__construct\(\) has parameter \$poiCollectionRecord with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Event/RenderInfoWindowContentEvent.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Event\\RenderInfoWindowContentEvent\:\:getPoiCollectionRecord\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Event/RenderInfoWindowContentEvent.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\EventListener\\PrepareTcaEventListener\:\:addMaps2ColumnsToSysCategory\(\) has parameter \$tca with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/EventListener/PrepareTcaEventListener.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\EventListener\\PrepareTcaEventListener\:\:prepareMaps2Relation\(\) has parameter \$tca with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/EventListener/PrepareTcaEventListener.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\EventListener\\PrepareTcaEventListener\:\:setDefaultMapProvider\(\) has parameter \$tca with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/EventListener/PrepareTcaEventListener.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\EventListener\\PrepareTcaEventListener\:\:setDefaultMapType\(\) has parameter \$tca with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/EventListener/PrepareTcaEventListener.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\EventListener\\PrepareTcaEventListener\:\:updateFloatingValuesForPosition\(\) has parameter \$tca with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/EventListener/PrepareTcaEventListener.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Form\\Element\\GoogleMapsElement\:\:cleanUpPoiCollectionRecord\(\) has parameter \$poiCollection with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Form/Element/GoogleMapsElement.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Form\\Element\\GoogleMapsElement\:\:cleanUpPoiCollectionRecord\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Form/Element/GoogleMapsElement.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Form\\Element\\GoogleMapsElement\:\:getMapHtml\(\) has parameter \$poiCollectionRecord with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Form/Element/GoogleMapsElement.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Form\\Element\\GoogleMapsElement\:\:render\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Form/Element/GoogleMapsElement.php
+
+		-
+			message: '#^Property JWeiland\\Maps2\\Form\\Element\\GoogleMapsElement\:\:\$defaultFieldInformation type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Form/Element/GoogleMapsElement.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Form\\Element\\OpenStreetMapElement\:\:cleanUpPoiCollectionRecord\(\) has parameter \$poiCollectionRecord with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Form/Element/OpenStreetMapElement.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Form\\Element\\OpenStreetMapElement\:\:cleanUpPoiCollectionRecord\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Form/Element/OpenStreetMapElement.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Form\\Element\\OpenStreetMapElement\:\:getMapHtml\(\) has parameter \$poiCollectionRecord with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Form/Element/OpenStreetMapElement.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Form\\Element\\OpenStreetMapElement\:\:render\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Form/Element/OpenStreetMapElement.php
+
+		-
+			message: '#^Property JWeiland\\Maps2\\Form\\Element\\OpenStreetMapElement\:\:\$defaultFieldInformation type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Form/Element/OpenStreetMapElement.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Form\\Element\\ReadOnlyInputTextElement\:\:render\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Form/Element/ReadOnlyInputTextElement.php
+
+		-
+			message: '#^Property JWeiland\\Maps2\\Form\\Element\\ReadOnlyInputTextElement\:\:\$defaultFieldInformation type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Form/Element/ReadOnlyInputTextElement.php
+
+		-
+			message: '#^Property JWeiland\\Maps2\\Form\\Element\\ReadOnlyInputTextElement\:\:\$defaultFieldWizard type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Form/Element/ReadOnlyInputTextElement.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Form\\FieldInformation\\InfoWindowContent\:\:render\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Form/FieldInformation/InfoWindowContent.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Form\\Resolver\\MapProviderResolver\:\:__construct\(\) has parameter \$mapProviderFormElements with no value type specified in iterable type iterable\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Form/Resolver/MapProviderResolver.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Form\\Resolver\\MapProviderResolver\:\:setData\(\) has parameter \$data with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Form/Resolver/MapProviderResolver.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Helper\\AddressHelper\:\:getAddress\(\) has parameter \$locationRecordToSave with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Helper/AddressHelper.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Helper\\AddressHelper\:\:getCountryName\(\) has parameter \$record with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Helper/AddressHelper.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Helper\\AddressHelper\:\:isSameAddress\(\) has parameter \$foreignLocationRecord with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Helper/AddressHelper.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Helper\\AddressHelper\:\:isValidOptionConfiguration\(\) has parameter \$options with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Helper/AddressHelper.php
+
+		-
+			message: '#^Call to function is_array\(\) with array will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: ../../Classes/Helper/LinkHelper.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Helper\\LinkHelper\:\:buildUriToCurrentPage\(\) has parameter \$parameters with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Helper/LinkHelper.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Helper\\LinkHelper\:\:getQueryParameters\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Helper/LinkHelper.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Helper\\MapHelper\:\:getMapProvider\(\) has parameter \$databaseRow with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Helper/MapHelper.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Helper\\MapHelper\:\:getMapProviderFromDatabase\(\) has parameter \$databaseRow with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Helper/MapHelper.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Helper\\SettingsHelper\:\:getPluginConfiguration\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Helper/SettingsHelper.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Helper\\SettingsHelper\:\:getPreparedSettings\(\) has parameter \$settings with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Helper/SettingsHelper.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Helper\\SettingsHelper\:\:getPreparedSettings\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Helper/SettingsHelper.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Helper\\SettingsHelper\:\:getTypoScriptSetup\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Helper/SettingsHelper.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Helper\\SettingsHelper\:\:prepareImagePathForMarkerClusterer\(\) has parameter \$settings with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Helper/SettingsHelper.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Helper\\SettingsHelper\:\:prepareMapTileForOpenStreetMap\(\) has parameter \$settings with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Helper/SettingsHelper.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Helper\\SettingsHelper\:\:prepareMarkerClusterer\(\) has parameter \$settings with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Helper/SettingsHelper.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Helper\\SettingsHelper\:\:restoreTypoScriptDefaultsForEmptyFlexFormSettings\(\) has parameter \$mergedSettingsFromController with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Helper/SettingsHelper.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Helper\\SettingsHelper\:\:restoreTypoScriptDefaultsForEmptyFlexFormSettings\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Helper/SettingsHelper.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Helper\\StoragePidHelper\:\:getDefaultStoragePidForNewPoiCollection\(\) has parameter \$foreignLocationRecord with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Helper/StoragePidHelper.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Helper\\StoragePidHelper\:\:getDynamicStoragePidFromMaps2Registry\(\) has parameter \$foreignLocationRecord with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Helper/StoragePidHelper.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Helper\\StoragePidHelper\:\:getTsConfig\(\) has parameter \$locationRecord with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Helper/StoragePidHelper.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Helper\\StoragePidHelper\:\:getTsConfig\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Helper/StoragePidHelper.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Helper\\StoragePidHelper\:\:updateDefaultStoragePidFromPageTsConfig\(\) has parameter \$foreignLocationRecord with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Helper/StoragePidHelper.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Helper\\StoragePidHelper\:\:updateStoragePidFromForeignLocationRecord\(\) has parameter \$foreignLocationRecord with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Helper/StoragePidHelper.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Helper\\StoragePidHelper\:\:updateStoragePidFromMaps2Registry\(\) has parameter \$foreignLocationRecord with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Helper/StoragePidHelper.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Hook\\CreateMaps2RecordHook\:\:clearCacheForPoiCollectionRecords\(\) has parameter \$poiCollections with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Hook/CreateMaps2RecordHook.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Hook\\CreateMaps2RecordHook\:\:createNewMapsRecord\(\) has parameter \$foreignLocationRecord with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Hook/CreateMaps2RecordHook.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Hook\\CreateMaps2RecordHook\:\:emitIsRecordAllowedToCreatePoiCollection\(\) has parameter \$foreignLocationRecord with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Hook/CreateMaps2RecordHook.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Hook\\CreateMaps2RecordHook\:\:emitPostUpdatePoiCollectionEvent\(\) has parameter \$foreignLocationRecord with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Hook/CreateMaps2RecordHook.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Hook\\CreateMaps2RecordHook\:\:getForeignLocationRecord\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Hook/CreateMaps2RecordHook.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Hook\\CreateMaps2RecordHook\:\:getPoiCollection\(\) has parameter \$columnsToSelect with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Hook/CreateMaps2RecordHook.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Hook\\CreateMaps2RecordHook\:\:getPoiCollection\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Hook/CreateMaps2RecordHook.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Hook\\CreateMaps2RecordHook\:\:isForeignLocationRecordAllowedToCreateNewPoiCollectionRecords\(\) has parameter \$foreignLocationRecord with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Hook/CreateMaps2RecordHook.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Hook\\CreateMaps2RecordHook\:\:isValidRecord\(\) has parameter \$recordFromRequest with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Hook/CreateMaps2RecordHook.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Hook\\CreateMaps2RecordHook\:\:synchronizeColumnsFromForeignRecordWithPoiCollection\(\) has parameter \$foreignLocationRecord with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Hook/CreateMaps2RecordHook.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Hook\\CreateMaps2RecordHook\:\:updateAddressInPoiCollectionIfNecessary\(\) has parameter \$foreignLocationRecord with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Hook/CreateMaps2RecordHook.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Hook\\CreateMaps2RecordHook\:\:updateForeignLocationRecordIfPoiCollectionDoesNotExist\(\) has parameter \$foreignLocationRecord with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Hook/CreateMaps2RecordHook.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Mapper\\GoogleMapsMapper\:\:getPosition\(\) has parameter \$data with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Mapper/GoogleMapsMapper.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Mapper\\GoogleMapsMapper\:\:map\(\) has parameter \$response with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Mapper/GoogleMapsMapper.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Mapper\\GoogleMapsMapper\:\:map\(\) return type with generic class TYPO3\\CMS\\Extbase\\Persistence\\ObjectStorage does not specify its types\: TEntity$#'
+			identifier: missingType.generics
+			count: 1
+			path: ../../Classes/Mapper/GoogleMapsMapper.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Mapper\\MapperFactory\:\:__construct\(\) has parameter \$mapper with no value type specified in iterable type iterable\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Mapper/MapperFactory.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Mapper\\MapperInterface\:\:map\(\) has parameter \$response with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Mapper/MapperInterface.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Mapper\\MapperInterface\:\:map\(\) return type with generic class TYPO3\\CMS\\Extbase\\Persistence\\ObjectStorage does not specify its types\: TEntity$#'
+			identifier: missingType.generics
+			count: 1
+			path: ../../Classes/Mapper/MapperInterface.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Mapper\\OpenStreetMapMapper\:\:getCityFromAddress\(\) has parameter \$address with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Mapper/OpenStreetMapMapper.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Mapper\\OpenStreetMapMapper\:\:getFormattedAddress\(\) has parameter \$data with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Mapper/OpenStreetMapMapper.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Mapper\\OpenStreetMapMapper\:\:getPosition\(\) has parameter \$data with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Mapper/OpenStreetMapMapper.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Mapper\\OpenStreetMapMapper\:\:map\(\) has parameter \$response with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Mapper/OpenStreetMapMapper.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Mapper\\OpenStreetMapMapper\:\:map\(\) return type with generic class TYPO3\\CMS\\Extbase\\Persistence\\ObjectStorage does not specify its types\: TEntity$#'
+			identifier: missingType.generics
+			count: 1
+			path: ../../Classes/Mapper/OpenStreetMapMapper.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Middleware\\GetInfoWindowContentMiddleware\:\:getPostData\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Middleware/GetInfoWindowContentMiddleware.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Service\\CacheService\:\:getCacheIdentifier\(\) has parameter \$poiCollection with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Service/CacheService.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Service\\CacheService\:\:getCacheTags\(\) has parameter \$cacheTags with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Service/CacheService.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Service\\CacheService\:\:getCacheTags\(\) has parameter \$poiCollection with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Service/CacheService.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Service\\CacheService\:\:getCacheTags\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Service/CacheService.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Service\\GeoCodeService\:\:getPositionsByAddress\(\) return type with generic class TYPO3\\CMS\\Extbase\\Persistence\\ObjectStorage does not specify its types\: TEntity$#'
+			identifier: missingType.generics
+			count: 1
+			path: ../../Classes/Service/GeoCodeService.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Service\\InfoWindowContentService\:\:createView\(\) has parameter \$maps2TypoScript with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Service/InfoWindowContentService.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Service\\InfoWindowContentService\:\:createView\(\) has parameter \$siteSettings with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Service/InfoWindowContentService.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Service\\InfoWindowContentService\:\:enrichVariablesWithDataProcessors\(\) has parameter \$dataProcessingConfiguration with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Service/InfoWindowContentService.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Service\\InfoWindowContentService\:\:enrichVariablesWithDataProcessors\(\) has parameter \$variables with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Service/InfoWindowContentService.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Service\\InfoWindowContentService\:\:enrichVariablesWithDataProcessors\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Service/InfoWindowContentService.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Service\\InfoWindowContentService\:\:getContentObjectRenderer\(\) has parameter \$poiCollectionRecord with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Service/InfoWindowContentService.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Service\\InfoWindowContentService\:\:getInfoWindowContentFromEventListener\(\) has parameter \$poiCollectionRecord with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Service/InfoWindowContentService.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Service\\InfoWindowContentService\:\:getSiteSettings\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Service/InfoWindowContentService.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Service\\InfoWindowContentService\:\:getTypoScriptByPath\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Service/InfoWindowContentService.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Service\\InfoWindowContentService\:\:getTypoScriptSetup\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Service/InfoWindowContentService.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Service\\InfoWindowContentService\:\:render\(\) has parameter \$poiCollectionRecord with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Service/InfoWindowContentService.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Service\\InfoWindowContentService\:\:renderInfoWindowContent\(\) has parameter \$poiCollectionRecord with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Service/InfoWindowContentService.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Service\\MapService\:\:assignPoiCollectionToForeignRecord\(\) has parameter \$foreignRecord with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Service/MapService.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Service\\MapService\:\:createNewPoiCollection\(\) has parameter \$overrideFieldValues with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Service/MapService.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Service\\MapService\:\:emitPreAddForeignRecordToPoiCollectionEvent\(\) has parameter \$foreignRecord with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Service/MapService.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Service\\MapService\:\:emitPreAddForeignRecordToPoiCollectionEvent\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Service/MapService.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Service\\MapService\:\:getColumnsFromTable\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Service/MapService.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Service\\PoiCollectionService\:\:findByUid\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Service/PoiCollectionService.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Tca\\ColumnRegistration\:\:__construct\(\) has parameter \$addressColumns with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Tca/ColumnRegistration.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Tca\\ColumnRegistration\:\:__construct\(\) has parameter \$columnMatch with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Tca/ColumnRegistration.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Tca\\ColumnRegistration\:\:getAddressColumns\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Tca/ColumnRegistration.php
+
+		-
+			message: '#^Class JWeiland\\Maps2\\Tca\\ColumnRegistrationStorage extends generic class ArrayObject but does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: ../../Classes/Tca/ColumnRegistrationStorage.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Tca\\ForeignColumn\:\:createChildren\(\) has parameter \$columns with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Tca/ForeignColumn.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Tca\\ForeignColumn\:\:resolveCoalesce\(\) has parameter \$record with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Tca/ForeignColumn.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Tca\\ForeignColumn\:\:resolveConcat\(\) has parameter \$record with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Tca/ForeignColumn.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Tca\\ForeignColumn\:\:resolveValue\(\) has parameter \$record with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Tca/ForeignColumn.php
+
+		-
+			message: '#^Expression on left side of \?\? is not nullable\.$#'
+			identifier: nullCoalesce.expr
+			count: 6
+			path: ../../Classes/Tca/Maps2Registry.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Tca\\Maps2Registry\:\:createColumnMatch\(\) has parameter \$columnMatchConfiguration with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Tca/Maps2Registry.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Tca\\Maps2Registry\:\:createStoragePidLocation\(\) has parameter \$storagePidConfiguration with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Tca/Maps2Registry.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Tca\\Maps2Registry\:\:createSynchronizeColumn\(\) has parameter \$synchronizeColumnConfiguration with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Tca/Maps2Registry.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Tca\\Maps2Registry\:\:getColumnMatches\(\) has parameter \$columnMatchConfiguration with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Tca/Maps2Registry.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Tca\\Maps2Registry\:\:getSynchronizeColumn\(\) has parameter \$synchronizeColumnConfiguration with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Tca/Maps2Registry.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Tca\\Type\\FloatType\:\:evaluateFieldValue\(\) has parameter \$is_in with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: ../../Classes/Tca/Type/FloatType.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Tca\\Type\\FloatType\:\:evaluateFieldValue\(\) has parameter \$set with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: ../../Classes/Tca/Type/FloatType.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Update\\MigratePoiRecordsToConfigurationMapUpdate\:\:getPoiRecords\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Update/MigratePoiRecordsToConfigurationMapUpdate.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Update\\MigratePoiRecordsToConfigurationMapUpdate\:\:migratePoiRecords\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Update/MigratePoiRecordsToConfigurationMapUpdate.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Update\\MoveOldFlexFormSettingsUpdate\:\:checkValue_flexArray2Xml\(\) has parameter \$array with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Update/MoveOldFlexFormSettingsUpdate.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Update\\MoveOldFlexFormSettingsUpdate\:\:getTtContentRecordsWithMaps2Plugin\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Update/MoveOldFlexFormSettingsUpdate.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Update\\MoveOldFlexFormSettingsUpdate\:\:moveFieldFromOldToNewSheet\(\) has parameter \$valueFromDatabase with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Update/MoveOldFlexFormSettingsUpdate.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\Update\\MoveOldFlexFormSettingsUpdate\:\:moveSheetDefaultToDef\(\) has parameter \$valueFromDatabase with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: ../../Classes/Update/MoveOldFlexFormSettingsUpdate.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\ViewHelpers\\ConvertToJsonViewHelper\:\:getPoiCollectionsAsJson\(\) has parameter \$poiCollections with generic class TYPO3\\CMS\\Extbase\\Persistence\\ObjectStorage but does not specify its types\: TEntity$#'
+			identifier: missingType.generics
+			count: 1
+			path: ../../Classes/ViewHelpers/ConvertToJsonViewHelper.php
+
+		-
+			message: '#^Method JWeiland\\Maps2\\ViewHelpers\\ConvertToJsonViewHelper\:\:getPoiCollectionsAsJson\(\) has parameter \$poiCollections with generic interface TYPO3\\CMS\\Extbase\\Persistence\\QueryResultInterface but does not specify its types\: TKey, TValue$#'
+			identifier: missingType.generics
+			count: 1
+			path: ../../Classes/ViewHelpers/ConvertToJsonViewHelper.php
+
+		-
+			message: '#^Cannot access offset ''controller'' on int\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: ../../Classes/ViewHelpers/Form/RenderHiddenFieldsForGetViewHelper.php
+
+		-
+			message: '#^Parameter \#1 \$request of method TYPO3\\CMS\\Extbase\\Mvc\\Web\\Routing\\UriBuilder\:\:setRequest\(\) expects TYPO3\\CMS\\Extbase\\Mvc\\RequestInterface, Psr\\Http\\Message\\ServerRequestInterface given\.$#'
+			identifier: argument.type
+			count: 1
+			path: ../../Classes/ViewHelpers/RequestUriForOverlayViewHelper.php
+
+		-
+			message: '#^Strict comparison using \!\=\= between 0 and 0 will always evaluate to false\.$#'
+			identifier: notIdentical.alwaysFalse
+			count: 1
+			path: ../../Classes/ViewHelpers/RequestUriForOverlayViewHelper.php
+
+		-
+			message: '#^Variable \$arguments on left side of \?\? is never defined\.$#'
+			identifier: nullCoalesce.variable
+			count: 1
+			path: ../../Classes/ViewHelpers/RequestUriForOverlayViewHelper.php
