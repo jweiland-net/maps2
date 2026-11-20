@@ -1,0 +1,15 @@
+{
+	"name": "jweiland/maps2-form-test",
+	"description": "Test extension with the form definitions of the functional tests of maps2",
+	"license": "GPL-2.0-or-later",
+	"type": "typo3-cms-extension",
+	"require": {
+		"typo3/cms-core": "^14.3",
+		"typo3/cms-form": "^14.3"
+	},
+	"extra": {
+		"typo3/cms": {
+			"extension-key": "maps2_form_test"
+		}
+	}
+}

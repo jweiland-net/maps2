@@ -1,0 +1,28 @@
+<html lang="en"
+      xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      data-namespace-typo3-fluid="true">
+
+<f:comment>
+    <!--
+    Consent for requests to the map provider. The button submits the form to
+    the current page of the form again. The URI contains the consent parameter
+    of maps2, so the form state and the entered values are kept.
+    -->
+</f:comment>
+<div class="maps2-overlay">
+    <p><strong>{f:translate(key: 'LLL:EXT:maps2/Resources/Private/Language/locallang.xlf:{map.mapProvider}.map')}</strong></p>
+    <p>
+        {f:translate(key: 'LLL:EXT:maps2/Resources/Private/Language/locallang.xlf:{map.mapProvider}.protectData')}<br/>
+        {f:translate(key: 'LLL:EXT:maps2/Resources/Private/Language/locallang.xlf:{map.mapProvider}.explainActivation')}
+    </p>
+    <p>
+        <f:form.button property="__currentPage"
+                       value="{map.currentPageIndex}"
+                       formaction="{f:uri.action(action: element.rootForm.renderingOptions.controllerAction, addQueryString: 'untrusted', argumentsToBeExcludedFromQueryString: {0: 'cHash'}, additionalParams: {tx_maps2_maps2: {mapProviderRequestsAllowedForMaps2: 1}})}"
+                       formnovalidate="formnovalidate"
+                       class="btn btn-secondary maps2-overlay-activate">
+            {f:translate(key: 'LLL:EXT:maps2/Resources/Private/Language/locallang.xlf:{map.mapProvider}.activate')}
+        </f:form.button>
+    </p>
+</div>
+</html>

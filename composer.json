@@ -33,8 +33,12 @@
 	"require-dev": {
 		"ergebnis/composer-normalize": "^2.44",
 		"ssch/typo3-rector": "^3.6",
+		"typo3/cms-form": "^14.3",
 		"typo3/coding-standards": "^0.8",
 		"typo3/testing-framework": "^9.5.0"
+	},
+	"suggest": {
+		"typo3/cms-form": "Install this package, if you want to use the form element Maps2PoiPosition in forms based on EXT:form"
 	},
 	"autoload": {
 		"psr-4": {

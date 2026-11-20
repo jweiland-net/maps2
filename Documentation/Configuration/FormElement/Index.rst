@@ -1,0 +1,386 @@
+:navigation-title: Form element
+
+..  include:: /Includes.rst.txt
+..  _configuration-form-element:
+
+======================================================
+Form element "Maps2PoiPosition" for the form framework
+======================================================
+
+..  versionadded:: 13.3.0
+
+    maps2 provides the form element `Maps2PoiPosition` for forms based on
+    the TYPO3 form framework (EXT:form).
+
+The form element `Maps2PoiPosition` shows a map with a draggable marker in
+a frontend form. Frontend users can correct a position, for example the
+position, which was found by geocoding the address they have entered on a
+previous page of the form. Dragging the marker or clicking into the map
+moves the marker and updates the position.
+
+This chapter describes, how integrators add the element to a form
+definition and configure it. The chapter
+:ref:`developer-form-element` describes the value of the element and how
+an extension geocodes an address and stores the position.
+
+..  contents::
+    :local:
+
+
+..  _configuration-form-element-use-cases:
+
+When to use the form element "Maps2PoiPosition"
+===============================================
+
+Use the element, if frontend users create or edit records with an address
+and the position on the map matters, for example companies, locations or
+events. A geocoded position is not always exact: new buildings, large
+premises or ambiguous addresses result in a marker at the wrong place. With
+the element the user moves the marker to the correct place before the form
+is submitted.
+
+The element does not geocode an address and does not store anything. Your
+extension sets the initial position and stores the submitted position. See
+:ref:`developer-form-element-integration`.
+
+
+..  _configuration-form-element-requirements:
+
+Requirements for the form element "Maps2PoiPosition"
+====================================================
+
+*   The system extension EXT:form (`typo3/cms-form`) is installed.
+*   The site set :guilabel:`Maps2 - Google Maps` (`jweiland/maps2-googlemaps`)
+    or :guilabel:`Maps2 - OpenStreetMap` (`jweiland/maps2-openstreetmap`) is
+    included in the site. They provide the settings of the map, for example
+    the API key and the map ID of Google Maps or the tile server of
+    OpenStreetMap. Both depend on :guilabel:`Maps2 - Default Set`
+    (`jweiland/maps2-default`).
+
+The form element itself needs no registration. maps2 ships the form set
+`jweiland/maps2` in `EXT:maps2/Configuration/Form/Maps2/config.yaml`. EXT:form
+discovers it automatically, as soon as maps2 is installed. The form set has
+the priority `50`: it is loaded after the base configuration of EXT:form
+(priority `10`) and before form sets with the default priority `100`, so
+the form sets of your site package can override it.
+
+To disable the form set, add its name to the disabled form sets of EXT:form:
+
+..  code-block:: php
+    :caption: EXT:my_sitepackage/ext_localconf.php
+
+    $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['form']['disabledSets'][] = 'jweiland/maps2';
+
+If your extension ships a site set with a form, which uses the element, add
+one of the site sets of maps2 to the dependencies of your site set:
+
+..  code-block:: yaml
+    :caption: EXT:my_extension/Configuration/Sets/MyExtension/config.yaml
+
+    name: my-vendor/my-extension
+    label: 'My extension'
+    dependencies:
+      - typo3/form
+      - jweiland/maps2-openstreetmap
+
+
+..  _configuration-form-element-usage:
+
+Add the form element "Maps2PoiPosition" to a form definition
+============================================================
+
+Add an element of type `Maps2PoiPosition` to the form definition (YAML
+file). Add the validator `NotEmpty`, if the user has to place the marker:
+
+..  code-block:: yaml
+    :caption: EXT:my_extension/Resources/Private/Forms/Company.form.yaml
+
+    renderables:
+      - type: Page
+        identifier: page-map
+        label: 'Position on the map'
+        renderables:
+          - type: Maps2PoiPosition
+            identifier: position
+            label: 'Position on the map'
+            properties:
+              markerTitle: 'Your company'
+              zoom: 15
+              height: 400
+              elementDescription: 'Move the marker, if the position is not correct.'
+            validators:
+              - identifier: NotEmpty
+
+The element works without an initial position, too. Then the marker is
+shown at the default position of the
+:ref:`extension settings <extensionSettings>` (`defaultLatitude` and
+`defaultLongitude`) and the user has to place it. As long as the marker was
+not placed, the element has no value and `NotEmpty` fails.
+
+maps2 adds its own validator `Maps2PoiPosition` to each element
+automatically. See :ref:`developer-form-element-validation`.
+
+
+..  _configuration-form-element-properties:
+
+Properties of the form element "Maps2PoiPosition"
+=================================================
+
+Set these properties below `properties` of the element. Common properties
+of form elements like `elementDescription` work as usual. maps2 ignores
+properties it does not know, so your extension can add properties of its
+own.
+
+..  confval-menu::
+    :name: maps2-poi-position-properties
+    :display: table
+    :type:
+    :default:
+
+    ..  confval:: mapProvider
+        :name: maps2-poi-position-map-provider
+        :type: string
+        :default: (empty)
+
+        The map provider of the map: `gm` (Google Maps) or `osm`
+        (OpenStreetMap).
+
+        The property is respected only, if the extension setting
+        `mapProvider` is `both`. Else the map provider of the extension
+        settings is used. An empty or invalid value uses the extension
+        setting `defaultMapProvider`. See :ref:`extensionSettings`.
+
+    ..  confval:: zoom
+        :name: maps2-poi-position-zoom
+        :type: int
+        :default: 15
+
+        The zoom level of the map, from `0` to `20`. Other values use the
+        default `15`. The TypoScript setting
+        `plugin.tx_maps2.settings.zoom` is not used for this element.
+
+    ..  confval:: height
+        :name: maps2-poi-position-height
+        :type: int|string
+        :default: 400
+
+        The height of the map. Use a number (pixels) or a number with one of
+        the units `px`, `em`, `rem`, `vh` or `%`, for example `300`,
+        `25rem` or `50vh`. Invalid values use the default `400`.
+
+        The width of the map is always `100%` of the surrounding element.
+
+    ..  confval:: markerTitle
+        :name: maps2-poi-position-marker-title
+        :type: string
+        :default: (empty)
+
+        The title of the marker, which is shown as tooltip on mouse over.
+
+    ..  confval:: defaultMapTile
+        :name: maps2-poi-position-default-map-tile
+        :type: string
+        :default: https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png
+
+        The tile server of OpenStreetMap, which is used, if the TypoScript
+        setting `plugin.tx_maps2.settings.mapTile` is empty, for example
+        because the site set "Maps2 - OpenStreetMap" is not included.
+
+    ..  confval:: defaultMapTileAttribution
+        :name: maps2-poi-position-default-map-tile-attribution
+        :type: string
+        :default: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors
+
+        The attribution of :confval:`maps2-poi-position-default-map-tile`.
+
+The default values of all properties are defined in the form set of
+maps2 (`EXT:maps2/Configuration/Form/Maps2/config.yaml`, below
+`prototypes.standard.formElementsDefinition.Maps2PoiPosition.properties`).
+Change them in a form set of your site package for all elements or in the
+form definition for a single element.
+
+
+..  _configuration-form-element-map-settings:
+
+Map settings of the form element "Maps2PoiPosition"
+===================================================
+
+The element uses the following TypoScript settings of
+`plugin.tx_maps2.settings`. `mapTile`, `mapTileAttribution`,
+`googleMapsJavaScriptApiKey` and `googleMapsMapId` are set by the site
+settings of the site sets of maps2:
+
+*   `mapTile` and `mapTileAttribution`: the tile server of OpenStreetMap
+    and its attribution. Without a tile server, the properties
+    `defaultMapTile` and `defaultMapTileAttribution` of the element are
+    used.
+*   `googleMapsJavaScriptApiKey`: the API key for Google Maps. Without this
+    setting, the API key of the extension settings is used.
+*   `googleMapsMapId`: the map ID of Google Maps, which the draggable
+    advanced marker requires. Without this setting, the map ID of the
+    extension settings is used.
+*   `mapTypeId`, `zoomControl`, `mapTypeControl`, `scaleControl`,
+    `streetViewControl`, `fullScreenControl`, `activateScrollWheel` and
+    `styles`: the same settings as for the maps of the maps2 plugins.
+
+See :ref:`typoScript`.
+
+
+..  _configuration-form-element-consent:
+
+Consent for requests to the map provider
+========================================
+
+If the extension setting `explicitAllowMapProviderRequests` is enabled and
+the user has not agreed to requests to the map provider yet, the element
+shows the same information as the maps2 plugins and a button to show the
+map instead of the map.
+
+The button submits the form to the current page of the form again and adds
+the parameter `tx_maps2_maps2[mapProviderRequestsAllowedForMaps2]=1` to the
+URI. The form state and all entered values are kept and the user stays on
+the same page of the form.
+
+The button disables the validation of the browser only. EXT:form validates
+the submitted page as usual. So the user may see error messages after the
+consent, for example of the validator `NotEmpty`, if there is no initial
+position yet, or of other required fields on the same page.
+
+..  tip::
+
+    Put the element on a page of its own and set an initial position (see
+    :ref:`developer-form-element-integration`). Then the page is valid
+    already, when it is shown for the first time.
+
+The JavaScript and style sheets of the map provider are loaded only after
+the consent and only on pages of the form, which contain the element. See
+:ref:`configuration-form-element-assets`.
+
+
+..  _configuration-form-element-assets:
+
+JavaScript and style sheets of the map
+======================================
+
+The partial `Maps2PoiPosition/LoadAssets` of the form element loads the
+JavaScript and the style sheets of the map provider with the ViewHelpers
+`f:asset.script` and `f:asset.css`. It is rendered by the partial
+`Maps2PoiPosition`, if requests to the map provider are allowed. The
+assets are added with `csp="1"`, so TYPO3 adds them to the Content
+Security Policy of the page.
+
+The partial gets these arguments:
+
+`mapProvider`
+    The map provider of the element: `gm` or `osm`.
+
+`googleMapsJavaScriptApiKey`
+    The TypoScript setting `plugin.tx_maps2.settings.googleMapsJavaScriptApiKey`
+    or, if empty, the extension setting `googleMapsJavaScriptApiKey`.
+
+The asset identifiers are the same as in the partial `LoadAssets` of the
+maps2 plugins (`maps2-google-maps-api`, `maps2-google-maps`, `maps2-osm`,
+`maps2-osm-leaflet`). So the assets are loaded only once, if a maps2
+plugin is on the same page.
+
+To load the assets from other locations, for example a Leaflet version of
+your own or a CDN, copy the partial to your site package:
+
+..  code-block:: text
+    :caption: Copy of the partial
+
+    EXT:my_sitepackage/Resources/Private/Form/Partials/Maps2PoiPosition/LoadAssets.fluid.html
+
+Register the partial root path with a key higher than `15` in a form set of
+your site package:
+
+..  code-block:: yaml
+    :caption: EXT:my_sitepackage/Configuration/Form/SitePackage/config.yaml
+
+    name: my-vendor/site-package
+    label: 'Site package'
+
+    prototypes:
+      standard:
+        formElementsDefinition:
+          Form:
+            renderingOptions:
+              partialRootPaths:
+                100: 'EXT:my_sitepackage/Resources/Private/Form/Partials/'
+
+Or register it for a single form in its form definition:
+
+..  code-block:: yaml
+    :caption: EXT:my_sitepackage/Resources/Private/Forms/company.form.yaml
+
+    renderingOptions:
+      partialRootPaths:
+        100: 'EXT:my_sitepackage/Resources/Private/Form/Partials/'
+
+The same way you can override the partials `Maps2PoiPosition`,
+`Maps2PoiPosition/Overlay` and `Maps2PoiPosition/SummaryValue`.
+
+
+..  _configuration-form-element-output:
+
+Summary page and emails
+=======================
+
+maps2 overrides the partial `SummaryPage` of EXT:form and shows the
+position as text, for example:
+
+..  code-block:: text
+
+    Latitude: 48.663012, Longitude: 9.218945
+
+The override is registered in the form set of maps2 with the
+`partialRootPaths` key `15`. The site setting
+`form.templates.partialRootPath` of EXT:form uses the key `20` and wins.
+
+The email templates of the email finishers of EXT:form are not overridden.
+They render the value like the value of other elements with multiple
+values: as list with the latitude and the longitude without labels.
+
+
+..  _configuration-form-element-styling:
+
+Styling of the form element "Maps2PoiPosition"
+==============================================
+
+The map and the consent information are wrapped in a `div` with the CSS
+class `maps2-poi-position`. If the validation fails, the error class of the
+form (`fieldProperties.errorClassAttribute`) is added to this `div`. The
+surrounding container has the classes
+`form-element form-element-maps2-poi-position mb-3`.
+
+
+..  _configuration-form-element-limitations:
+
+Limitations of the form element "Maps2PoiPosition"
+==================================================
+
+The element is not available in the backend form editor
+    The form editor does not offer the element. Add the element to form
+    definitions, which your extension or site package ships as YAML files.
+
+An own SummaryPage partial with a higher key wins
+    If your site package overrides `SummaryPage.fluid.html` with a higher
+    `partialRootPaths` key than maps2 (for example with the site setting
+    `form.templates.partialRootPath`), the position is shown as list again.
+    Add a branch for the element type to your partial:
+
+    ..  code-block:: html
+        :caption: EXT:my_sitepackage/Resources/Private/Form/Partials/SummaryPage.fluid.html
+
+        <f:else if="{0: formValue.element.type} == {0: 'Maps2PoiPosition'}">
+            <f:render partial="Maps2PoiPosition/SummaryValue"
+                      arguments="{position: formValue.value}"/>
+        </f:else>
+
+    The partial `Maps2PoiPosition/SummaryValue` is found as long as the
+    partial root path of maps2 (key `15`) is registered.
+
+No geocoding and no storage
+    The element shows and returns a position only. Geocoding an address and
+    storing the position in a record are the job of your extension. See
+    :ref:`developer-form-element-integration`.

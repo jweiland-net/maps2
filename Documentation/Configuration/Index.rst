@@ -31,3 +31,4 @@ maps2 in Site Settings.
     Extension/Index
     Plugins/Index
     TypoScript/Index
+    FormElement/Index
