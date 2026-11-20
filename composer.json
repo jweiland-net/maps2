@@ -34,11 +34,13 @@
 		"ergebnis/composer-normalize": "^2.44",
 		"jweiland/events2": "^10.0",
 		"sjbr/static-info-tables": "^13.4",
+		"typo3/cms-form": "^13.4",
 		"typo3/coding-standards": "^0.8",
 		"typo3/testing-framework": "^9.0.1"
 	},
 	"suggest": {
-		"sjbr/static-info-tables": "Install this package, if you want to choose from contained countries instead of typing them"
+		"sjbr/static-info-tables": "Install this package, if you want to choose from contained countries instead of typing them",
+		"typo3/cms-form": "Install this package, if you want to use the form element Maps2PoiPosition in forms based on EXT:form"
 	},
 	"autoload": {
 		"psr-4": {

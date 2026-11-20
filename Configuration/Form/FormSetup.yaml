@@ -1,0 +1,50 @@
+TYPO3:
+  CMS:
+    Form:
+      prototypes:
+        standard:
+          validatorsDefinition:
+            Maps2PoiPosition:
+              implementationClassName: 'JWeiland\Maps2\Form\Validator\PoiPositionValidator'
+          formElementsDefinition:
+            Form:
+              renderingOptions:
+                # Templates of Maps2PoiPosition (including Maps2PoiPosition/LoadAssets)
+                # and SummaryPage with the position as readable text
+                partialRootPaths:
+                  15: 'EXT:maps2/Resources/Private/FormFramework/Partials/'
+              variants:
+                -
+                  identifier: template-variant
+                  condition: 'getRootFormProperty("renderingOptions.templateVariant") == "version2"'
+                  renderingOptions:
+                    partialRootPaths:
+                      16: 'EXT:maps2/Resources/Private/FormFramework/PartialsVersion2/'
+            Maps2PoiPosition:
+              implementationClassName: TYPO3\CMS\Form\Domain\Model\FormElements\GenericFormElement
+              properties:
+                containerClassAttribute: input
+                elementClassAttribute: ''
+                elementErrorClassAttribute: error
+                # "gm" or "osm". Empty: map provider of the extension settings
+                mapProvider: ''
+                zoom: 15
+                # Number (pixels) or number with unit: px, em, rem, vh or %
+                height: 400
+                markerTitle: ''
+                # Map tile of OpenStreetMap, if the TypoScript setting
+                # plugin.tx_maps2.settings.mapTile is empty
+                defaultMapTile: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+                defaultMapTileAttribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              validators:
+                -
+                  identifier: Maps2PoiPosition
+              variants:
+                -
+                  identifier: template-variant
+                  condition: 'getRootFormProperty("renderingOptions.templateVariant") == "version2"'
+                  properties:
+                    containerClassAttribute: 'form-element form-element-maps2-poi-position mb-3'
+                    elementClassAttribute: ''
+                    elementErrorClassAttribute: ~
+                    labelClassAttribute: form-label

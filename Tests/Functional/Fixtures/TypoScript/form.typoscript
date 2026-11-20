@@ -1,0 +1,29 @@
+config {
+  no_cache = 1
+  debug = 0
+  admPanel = 0
+  disableAllHeaderCode = 0
+  sendCacheHeaders = 0
+}
+
+@import 'EXT:form/Configuration/TypoScript/setup.typoscript'
+
+plugin.tx_form.settings.yamlConfigurations {
+  1763380200 = EXT:maps2/Configuration/Form/FormSetup.yaml
+  1763380300 = EXT:maps2/Tests/Functional/Fixtures/Form/FormSetup.yaml
+}
+
+plugin.tx_maps2.settings {
+  googleMapsJavaScriptApiKey = functional-test-key
+  mapTile = https://tile.example.com/${z}/${x}/${y}.png
+  mapTileAttribution = Example tiles
+}
+
+page = PAGE
+page.typeNum = 0
+page.10 = EXTBASEPLUGIN
+page.10 {
+  extensionName = Form
+  pluginName = Formframework
+  settings.persistenceIdentifier = EXT:maps2/Tests/Functional/Fixtures/Form/PoiPosition.form.yaml
+}

@@ -1,0 +1,24 @@
+identifier: maps2PoiPosition
+type: Form
+prototypeName: standard
+label: 'POI position'
+renderables:
+  -
+    identifier: page-1
+    type: Page
+    label: 'Map'
+    renderables:
+      -
+        identifier: position
+        type: Maps2PoiPosition
+        label: 'Position'
+        defaultValue:
+          latitude: '48.1'
+          longitude: '9.2'
+        properties:
+          markerTitle: 'My company'
+          zoom: 12
+          height: 300
+        validators:
+          -
+            identifier: NotEmpty
