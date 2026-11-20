@@ -9,7 +9,8 @@ TYPO3:
           formElementsDefinition:
             Form:
               renderingOptions:
-                # Template of Maps2PoiPosition and SummaryPage with the position as readable text
+                # Templates of Maps2PoiPosition (including Maps2PoiPosition/LoadAssets)
+                # and SummaryPage with the position as readable text
                 partialRootPaths:
                   15: 'EXT:maps2/Resources/Private/FormFramework/Partials/'
               variants:
@@ -31,6 +32,10 @@ TYPO3:
                 # Number (pixels) or number with unit: px, em, rem, vh or %
                 height: 400
                 markerTitle: ''
+                # Map tile of OpenStreetMap, if the TypoScript setting
+                # plugin.tx_maps2.settings.mapTile is empty
+                defaultMapTile: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+                defaultMapTileAttribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               validators:
                 -
                   identifier: Maps2PoiPosition

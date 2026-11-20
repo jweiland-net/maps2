@@ -36,4 +36,19 @@ class OpenStreetMapPoiPositionTest extends AbstractPoiPositionTestCase
         self::assertStringContainsString('Leaflet.css', $content);
         self::assertStringNotContainsString('GoogleMaps2.min.js', $content);
     }
+
+    #[Test]
+    public function partialWithAssetsCanBeOverridden(): void
+    {
+        $content = $this->renderForm(
+            [],
+            'plugin.tx_form.settings.formDefinitionOverrides.maps2PoiPosition.renderingOptions'
+            . '.partialRootPaths.100 = EXT:maps2/Tests/Functional/Fixtures/FormFramework/Partials/',
+        );
+
+        $this->assertMapIsRendered($content, 'osm');
+        self::assertStringContainsString('src="https://cdn.example.com/osm/custom-map.js"', $content);
+        self::assertStringNotContainsString('OpenStreetMap2.min.js', $content);
+        self::assertStringNotContainsString('leaflet.min.js', $content);
+    }
 }

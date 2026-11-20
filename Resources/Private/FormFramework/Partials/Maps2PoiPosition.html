@@ -25,6 +25,8 @@
                                value="{map.longitude}"/>
                 <f:if condition="{map.isRequestToMapProviderAllowed}">
                     <f:then>
+                        <f:render partial="Maps2PoiPosition/LoadAssets"
+                                  arguments="{mapProvider: map.mapProvider, googleMapsJavaScriptApiKey: map.googleMapsJavaScriptApiKey}"/>
                         <div id="{element.uniqueIdentifier}"
                              class="maps2 editMarker"
                              data-environment="{map.environment}"

@@ -19,11 +19,12 @@ use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Form\Domain\Model\FormElements\FormElementInterface;
 
 /**
- * Prepares the map of the form element "Maps2PoiPosition" for its template
- * and loads the assets of the map provider, if requests to the map provider
- * are allowed. The map is rendered by the frontend JavaScript of maps2 in
- * its "editMarker" mode: the marker is draggable and a click into the map
- * moves the marker. Both update the hidden latitude/longitude fields.
+ * Prepares the map of the form element "Maps2PoiPosition" for its template.
+ * The template loads the assets of the map provider with the partial
+ * "Maps2PoiPosition/LoadAssets", if requests to the map provider are allowed.
+ * The map is rendered by the frontend JavaScript of maps2 in its
+ * "editMarker" mode: the marker is draggable and a click into the map moves
+ * the marker. Both update the hidden latitude/longitude fields.
  *
  * Map provider: property "mapProvider" ("gm" or "osm"). It is respected,
  * if both map providers are allowed in extension settings. Else the map
@@ -49,11 +50,6 @@ readonly class PoiPositionMapConfigurator
 
     private const MAP_WIDTH = '100%';
 
-    private const DEFAULT_MAP_TILE = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-
-    private const DEFAULT_MAP_TILE_ATTRIBUTION = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        . ' contributors';
-
     /**
      * TypoScript settings of plugin.tx_maps2.settings, which are passed to the JavaScript of the map
      */
@@ -73,7 +69,6 @@ readonly class PoiPositionMapConfigurator
     public function __construct(
         private ExtConf $extConf,
         private MapHelper $mapHelper,
-        private PoiPositionAssets $poiPositionAssets,
         private TypoScriptService $typoScriptService,
     ) {}
 
@@ -89,20 +84,13 @@ readonly class PoiPositionMapConfigurator
         $properties = $element->getProperties();
         $typoScriptSettings = $this->getTypoScriptSettings($request);
         $settings = $this->getMapSettings($properties, $typoScriptSettings);
-        $isRequestToMapProviderAllowed = $this->mapHelper->isRequestToMapProviderAllowed();
-        if ($isRequestToMapProviderAllowed) {
-            $this->poiPositionAssets->load(
-                $settings['mapProvider'],
-                $this->getGoogleMapsJavaScriptApiKey($typoScriptSettings),
-            );
-        }
-
         $position = $this->getValidPosition($value);
 
         return array_merge($this->getHiddenFieldValues($position), [
             'mapIdentifier' => $element->getUniqueIdentifier(),
             'mapProvider' => $settings['mapProvider'],
-            'isRequestToMapProviderAllowed' => $isRequestToMapProviderAllowed,
+            'googleMapsJavaScriptApiKey' => $this->getGoogleMapsJavaScriptApiKey($typoScriptSettings),
+            'isRequestToMapProviderAllowed' => $this->mapHelper->isRequestToMapProviderAllowed(),
             'currentPageIndex' => $currentPageIndex,
             'environment' => $this->encode($this->getEnvironment($element->getUniqueIdentifier(), $settings)),
             'pois' => $this->encode([$this->getPoi($position, $properties['markerTitle'] ?? '')]),
@@ -167,18 +155,23 @@ readonly class PoiPositionMapConfigurator
         $settings['mapWidth'] = self::MAP_WIDTH;
         $settings['forceZoom'] = true;
 
-        return $this->addMapTile($settings);
+        return $this->addMapTile($settings, $properties);
     }
 
     /**
+     * Without the TypoScript setting "mapTile" (site set of OpenStreetMap not
+     * included), the properties "defaultMapTile" and "defaultMapTileAttribution"
+     * of the form element are used.
+     *
      * @param array<string, mixed> $settings
+     * @param array<string, mixed> $properties
      * @return array<string, mixed>
      */
-    private function addMapTile(array $settings): array
+    private function addMapTile(array $settings, array $properties): array
     {
         if (!is_string($settings['mapTile'] ?? null) || $settings['mapTile'] === '') {
-            $settings['mapTile'] = self::DEFAULT_MAP_TILE;
-            $settings['mapTileAttribution'] = self::DEFAULT_MAP_TILE_ATTRIBUTION;
+            $settings['mapTile'] = $this->getStringProperty($properties, 'defaultMapTile');
+            $settings['mapTileAttribution'] = $this->getStringProperty($properties, 'defaultMapTileAttribution');
         }
 
         // Leaflet does not support the placeholders "${x}" of the OpenStreetMap wiki
@@ -189,6 +182,14 @@ readonly class PoiPositionMapConfigurator
         );
 
         return $settings;
+    }
+
+    /**
+     * @param array<string, mixed> $properties
+     */
+    private function getStringProperty(array $properties, string $name): string
+    {
+        return is_string($properties[$name] ?? null) ? $properties[$name] : '';
     }
 
     /**

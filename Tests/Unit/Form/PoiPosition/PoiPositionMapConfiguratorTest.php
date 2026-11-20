@@ -12,12 +12,10 @@ declare(strict_types=1);
 namespace JWeiland\Maps2\Tests\Unit\Form\PoiPosition;
 
 use JWeiland\Maps2\Configuration\ExtConf;
-use JWeiland\Maps2\Form\PoiPosition\PoiPositionAssets;
 use JWeiland\Maps2\Form\PoiPosition\PoiPositionMapConfigurator;
 use JWeiland\Maps2\Helper\MapHelper;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\TypoScript\AST\Node\RootNode;
 use TYPO3\CMS\Core\TypoScript\FrontendTypoScript;
@@ -29,13 +27,10 @@ class PoiPositionMapConfiguratorTest extends UnitTestCase
 {
     private const POSITION = ['latitude' => '48.123456', 'longitude' => '9.654321'];
 
-    private PoiPositionAssets&MockObject $assets;
-
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->assets = $this->createMock(PoiPositionAssets::class);
         $GLOBALS['TYPO3_REQUEST'] = new ServerRequest('https://example.com/', 'GET');
     }
 
@@ -49,8 +44,6 @@ class PoiPositionMapConfiguratorTest extends UnitTestCase
     #[Test]
     public function configureReturnsHiddenFieldValuesAndMapData(): void
     {
-        $this->assets->expects(self::once())->method('load')->with('osm', 'ts-key');
-
         $result = $this->createSubject(new ExtConf(mapProvider: 'osm'))->configure(
             $this->createElement(['markerTitle' => 'My company', 'zoom' => 12, 'height' => '50vh']),
             self::POSITION,
@@ -65,6 +58,7 @@ class PoiPositionMapConfiguratorTest extends UnitTestCase
         self::assertSame('9.654321', $result['longitude']);
         self::assertSame('form-1-position', $result['mapIdentifier']);
         self::assertSame('osm', $result['mapProvider']);
+        self::assertSame('ts-key', $result['googleMapsJavaScriptApiKey']);
         self::assertTrue($result['isRequestToMapProviderAllowed']);
         self::assertSame(2, $result['currentPageIndex']);
 
@@ -123,10 +117,8 @@ class PoiPositionMapConfiguratorTest extends UnitTestCase
     }
 
     #[Test]
-    public function configureWithoutConsentDoesNotLoadAssets(): void
+    public function configureWithoutConsentDisallowsRequestsToMapProvider(): void
     {
-        $this->assets->expects(self::never())->method('load');
-
         $result = $this->createSubject(new ExtConf(explicitAllowMapProviderRequests: true))->configure(
             $this->createElement([]),
             self::POSITION,
@@ -139,11 +131,10 @@ class PoiPositionMapConfiguratorTest extends UnitTestCase
     }
 
     #[Test]
-    public function configureWithConsentParameterLoadsAssets(): void
+    public function configureWithConsentParameterAllowsRequestsToMapProvider(): void
     {
         $GLOBALS['TYPO3_REQUEST'] = (new ServerRequest('https://example.com/', 'POST'))
             ->withQueryParams(['tx_maps2_maps2' => ['mapProviderRequestsAllowedForMaps2' => '1']]);
-        $this->assets->expects(self::once())->method('load');
 
         $result = $this->createSubject(new ExtConf(explicitAllowMapProviderRequests: true))->configure(
             $this->createElement([]),
@@ -158,29 +149,47 @@ class PoiPositionMapConfiguratorTest extends UnitTestCase
     #[Test]
     public function configureFallsBackToApiKeyOfExtensionSettings(): void
     {
-        $this->assets->expects(self::once())->method('load')->with('gm', 'ext-conf-key');
-
-        $this->createSubject(new ExtConf(mapProvider: 'gm', googleMapsJavaScriptApiKey: 'ext-conf-key'))->configure(
+        $result = $this->createSubject(new ExtConf(mapProvider: 'gm', googleMapsJavaScriptApiKey: 'ext-conf-key'))->configure(
             $this->createElement([]),
             self::POSITION,
             $this->createRequest([]),
             0,
         );
+
+        self::assertSame('ext-conf-key', $result['googleMapsJavaScriptApiKey']);
     }
 
     #[Test]
-    public function configureWithoutMapTileUsesDefaultMapTile(): void
+    public function configureWithoutMapTileUsesDefaultMapTileOfElement(): void
     {
         $result = $this->createSubject(new ExtConf(mapProvider: 'osm'))->configure(
-            $this->createElement([]),
+            $this->createElement([
+                'defaultMapTile' => 'https://${s}.default.example.com/${z}/${x}/${y}.png',
+                'defaultMapTileAttribution' => 'Default tiles',
+            ]),
             self::POSITION,
             new ServerRequest('https://example.com/', 'GET'),
             0,
         );
 
         $settings = json_decode($result['environment'], true)['settings'];
-        self::assertSame('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', $settings['mapTile']);
-        self::assertStringContainsString('OpenStreetMap', $settings['mapTileAttribution']);
+        self::assertSame('https://{s}.default.example.com/{z}/{x}/{y}.png', $settings['mapTile']);
+        self::assertSame('Default tiles', $settings['mapTileAttribution']);
+    }
+
+    #[Test]
+    public function configurePrefersMapTileOfTypoScript(): void
+    {
+        $result = $this->createSubject(new ExtConf(mapProvider: 'osm'))->configure(
+            $this->createElement(['defaultMapTile' => 'https://default.example.com/{z}/{x}/{y}.png']),
+            self::POSITION,
+            $this->createRequest(['mapTile' => 'https://ts.example.com/{z}/{x}/{y}.png', 'mapTileAttribution' => 'TS tiles']),
+            0,
+        );
+
+        $settings = json_decode($result['environment'], true)['settings'];
+        self::assertSame('https://ts.example.com/{z}/{x}/{y}.png', $settings['mapTile']);
+        self::assertSame('TS tiles', $settings['mapTileAttribution']);
     }
 
     public static function mapProviderDataProvider(): array
@@ -252,7 +261,7 @@ class PoiPositionMapConfiguratorTest extends UnitTestCase
 
     private function createSubject(ExtConf $extConf): PoiPositionMapConfigurator
     {
-        return new PoiPositionMapConfigurator($extConf, new MapHelper($extConf), $this->assets, new TypoScriptService());
+        return new PoiPositionMapConfigurator($extConf, new MapHelper($extConf), new TypoScriptService());
     }
 
     /**
