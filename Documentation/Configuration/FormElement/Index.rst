@@ -173,6 +173,28 @@ own.
 
         The title of the marker, which is shown as tooltip on mouse over.
 
+    ..  confval:: defaultMapTile
+        :name: maps2-poi-position-default-map-tile
+        :type: string
+        :default: https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png
+
+        The tile server of OpenStreetMap, which is used, if the TypoScript
+        setting `plugin.tx_maps2.settings.mapTile` is empty, for example
+        because the site set "Maps2 - OpenStreetMap" is not included.
+
+    ..  confval:: defaultMapTileAttribution
+        :name: maps2-poi-position-default-map-tile-attribution
+        :type: string
+        :default: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors
+
+        The attribution of :confval:`maps2-poi-position-default-map-tile`.
+
+The default values of all properties are defined in the form setup of
+maps2 (`EXT:maps2/Configuration/Form/FormSetup.yaml`, below
+`prototypes.standard.formElementsDefinition.Maps2PoiPosition.properties`).
+Change them in the form setup of your site package for all elements or in
+the form definition for a single element.
+
 
 ..  _configuration-form-element-map-settings:
 
@@ -185,8 +207,9 @@ The element uses the following TypoScript settings of
 of maps2:
 
 *   `mapTile` and `mapTileAttribution`: the tile server of OpenStreetMap
-    and its attribution. Without a tile server, the tiles of
-    `tile.openstreetmap.org` are used.
+    and its attribution. Without a tile server, the properties
+    `defaultMapTile` and `defaultMapTileAttribution` of the element are
+    used.
 *   `googleMapsJavaScriptApiKey`: the API key for Google Maps. Without this
     setting, the API key of the extension settings is used.
 *   `mapTypeId`, `zoomControl`, `mapTypeControl`, `scaleControl`,
@@ -223,7 +246,68 @@ position yet, or of other required fields on the same page.
     already, when it is shown for the first time.
 
 The JavaScript and style sheets of the map provider are loaded only after
-the consent and only on pages of the form, which contain the element.
+the consent and only on pages of the form, which contain the element. See
+:ref:`configuration-form-element-assets`.
+
+
+..  _configuration-form-element-assets:
+
+JavaScript and style sheets of the map
+======================================
+
+The partial `Maps2PoiPosition/LoadAssets` of the form element loads the
+JavaScript and the style sheets of the map provider with the ViewHelpers
+`f:asset.script` and `f:asset.css`. It is rendered by the partial
+`Maps2PoiPosition`, if requests to the map provider are allowed, and is
+used for both template variants of EXT:form.
+
+The partial gets these arguments:
+
+`mapProvider`
+    The map provider of the element: `gm` or `osm`.
+
+`googleMapsJavaScriptApiKey`
+    The TypoScript setting `plugin.tx_maps2.settings.googleMapsJavaScriptApiKey`
+    or, if empty, the extension setting `googleMapsJavaScriptApiKey`.
+
+The asset identifiers are the same as in the partial `LoadAssets` of the
+maps2 plugins (`maps2-google-maps-api`, `maps2-google-maps`, `maps2-osm`,
+`maps2-osm-leaflet`). So the assets are loaded only once, if a maps2
+plugin is on the same page.
+
+To load the assets from other locations, for example a Leaflet version of
+your own or a CDN, copy the partial to your site package:
+
+..  code-block:: text
+    :caption: Copy of the partial
+
+    EXT:my_sitepackage/Resources/Private/Form/Partials/Maps2PoiPosition/LoadAssets.html
+
+Register the partial root path with a key higher than `16` in the form
+setup of your site package:
+
+..  code-block:: yaml
+    :caption: EXT:my_sitepackage/Configuration/Form/FormSetup.yaml
+
+    prototypes:
+      standard:
+        formElementsDefinition:
+          Form:
+            renderingOptions:
+              partialRootPaths:
+                100: 'EXT:my_sitepackage/Resources/Private/Form/Partials/'
+
+Or register it for a single form in its form definition:
+
+..  code-block:: yaml
+    :caption: EXT:my_sitepackage/Resources/Private/Forms/company.form.yaml
+
+    renderingOptions:
+      partialRootPaths:
+        100: 'EXT:my_sitepackage/Resources/Private/Form/Partials/'
+
+The same way you can override the partials `Maps2PoiPosition`,
+`Maps2PoiPosition/Overlay` and `Maps2PoiPosition/SummaryValue`.
 
 
 ..  _configuration-form-element-output:

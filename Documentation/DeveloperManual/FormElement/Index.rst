@@ -140,10 +140,49 @@ A value, which is not empty, has to fulfill these rules:
         :Rule: The longitude is between -180 and 180.
         :Message: The longitude must be between -180 and 180.
 
-The messages are defined in
-`EXT:maps2/Resources/Private/Language/locallang.xlf`. The error codes are
-available as constants of
+The validator translates the messages with the keys
+`validator.poiPosition.notNumeric`, `validator.poiPosition.latitudeOutOfRange`
+and `validator.poiPosition.longitudeOutOfRange` of the language file of
+maps2. The error codes are available as constants of
 :php:`\JWeiland\Maps2\Form\Validator\PoiPositionValidator`.
+
+Override a message for your forms with the error code in a translation
+file of EXT:form, for example `validation.error.1763380001` (all forms) or
+`<form identifier>.validation.error.<element identifier>.1763380001`
+(a single element). Register the translation file with
+`renderingOptions.translation.translationFiles` of the form.
+
+
+..  _developer-form-element-templates:
+
+Templates of the form element "Maps2PoiPosition"
+================================================
+
+All paths of templates, JavaScript, style sheets and URLs are defined in
+Fluid templates and in the form setup, not in PHP. The partials are in
+`EXT:maps2/Resources/Private/FormFramework/Partials/` (partial root path key
+`15`, key `16` for the `SummaryPage` of the template variant `version2`):
+
+`Maps2PoiPosition`
+    The element: hidden fields with the position and the map or the
+    consent information.
+
+`Maps2PoiPosition/LoadAssets`
+    JavaScript and style sheets of the map provider. See
+    :ref:`configuration-form-element-assets`.
+
+`Maps2PoiPosition/Overlay`
+    Consent information with the button to show the map.
+
+`Maps2PoiPosition/SummaryValue`
+    The position as text on the summary page.
+
+The hook :php:`\JWeiland\Maps2\Hook\Form\PoiPositionMapHook` prepares the
+data of the map in the rendering option `maps2PoiPosition` of the element:
+`latitude`, `longitude` (values of the hidden fields), `mapIdentifier`,
+`mapProvider`, `googleMapsJavaScriptApiKey`,
+`isRequestToMapProviderAllowed`, `currentPageIndex`, `environment` and
+`pois` (JSON for the JavaScript of maps2).
 
 
 ..  _developer-form-element-integration:
